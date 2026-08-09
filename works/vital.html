@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="バイタル記録ノートの制作事例。">
+  <title>バイタル記録ノート | 増渕 敦</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@500;700&family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../style.css">
+  <script src="../script.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#main">本文へスキップ</a>
+
+  <header class="site-header">
+    <div class="shell header-inner">
+      <a class="logo" href="../index.html">増渕 敦</a>
+      <button type="button" class="nav-toggle" aria-expanded="false" aria-controls="site-nav">
+        <span class="nav-toggle-label">メニュー</span>
+      </button>
+      <nav id="site-nav" class="site-nav" aria-label="メイン">
+        <a href="../index.html#about">About</a>
+        <a href="../index.html#works">Works</a>
+        <a href="../index.html#contact">Contact</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main" class="case">
+    <div class="shell">
+      <p class="crumb"><a href="../index.html#works">Works</a> / バイタル記録ノート</p>
+      <p class="section-label">Work</p>
+      <h1>バイタル記録ノート</h1>
+      <p class="case-lead">
+        血圧・脈拍・体重・体温をスマートフォンで記録し、履歴を振り返るための軽量Webアプリです。
+      </p>
+
+      <dl class="meta-grid">
+        <div>
+          <dt>担当</dt>
+          <dd>企画・画面構成・UIデザイン・コーディング</dd>
+        </div>
+        <div>
+          <dt>技術</dt>
+          <dd>HTML / CSS / JavaScript、PWA（manifest / service worker）</dd>
+        </div>
+        <div>
+          <dt>公開</dt>
+          <dd>リンク準備中</dd>
+        </div>
+      </dl>
+
+      <figure class="shot-placeholder" aria-label="スクリーンショット枠">
+        <figcaption>スクショ枠 — 記録画面／履歴</figcaption>
+      </figure>
+
+      <section class="case-block" aria-labelledby="problem-title">
+        <h2 id="problem-title">課題</h2>
+        <p>紙やメモアプリだと続きにくく、数値の推移も見づらい。スマホですぐ付けたい。</p>
+      </section>
+
+      <section class="case-block" aria-labelledby="approach-title">
+        <h2 id="approach-title">工夫した点</h2>
+        <ul>
+          <li>「記録する／見る」の2画面に絞り、操作を単純にする</li>
+          <li>スマホ表示を前提に、入力しやすいレイアウトにする</li>
+          <li>ホーム画面追加を見据えたPWA対応</li>
+        </ul>
+      </section>
+
+      <section class="case-block" aria-labelledby="result-title">
+        <h2 id="result-title">ポイント</h2>
+        <p>
+          日常の記録に特化したシンプルなUIです。
+          サイト制作とは別に、アプリ寄りの画面設計の事例として掲載しています。
+        </p>
+      </section>
+
+      <p class="case-nav">
+        <a href="../index.html#works">← Works一覧</a>
+        <a href="aisin.html">次：株式投資管理アプリ →</a>
+      </p>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="shell footer-inner">
+      <p>© 増渕 敦（マスブチ アツシ）</p>
+    </div>
+  </footer>
+</body>
+</html>

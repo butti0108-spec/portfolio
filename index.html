@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="増渕 敦（マスブチ アツシ）のポートフォリオ。Web Designer。">
+  <title>増渕 敦 | Web Designer</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@500;700&family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <script src="script.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#main">本文へスキップ</a>
+
+  <header class="site-header">
+    <div class="shell header-inner">
+      <a class="logo" href="index.html">増渕 敦</a>
+      <button type="button" class="nav-toggle" aria-expanded="false" aria-controls="site-nav">
+        <span class="nav-toggle-label">メニュー</span>
+      </button>
+      <nav id="site-nav" class="site-nav" aria-label="メイン">
+        <a href="#about">About</a>
+        <a href="#works">Works</a>
+        <a href="#contact">Contact</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main">
+    <section class="hero" aria-labelledby="hero-title">
+      <div class="shell hero-inner">
+        <p class="hero-brand">増渕　敦</p>
+        <p class="hero-kana">マスブチ　アツシ</p>
+        <h1 id="hero-title">Web Designer</h1>
+        <p class="hero-lead">
+          ウェブサイトのデザインと制作を行っています。
+          見やすさ・使いやすさを大切に、HTML / CSS / JavaScript で形にします。
+        </p>
+        <div class="hero-actions">
+          <a class="btn btn-primary" href="#works">作品を見る</a>
+          <a class="btn btn-ghost" href="#contact">お問い合わせ</a>
+        </div>
+      </div>
+    </section>
+
+    <section id="about" class="section about" aria-labelledby="about-title">
+      <div class="shell">
+        <p class="section-label">About</p>
+        <h2 id="about-title">About</h2>
+        <p class="section-lead">
+          Web Designer の増渕 敦です。
+          コーポレートやサービス紹介などのサイト制作にくわえ、
+          記録・管理系のWebアプリUIにも取り組んでいます。
+        </p>
+        <ul class="about-points">
+          <li>
+            <strong>できること</strong>
+            <span>サイトの構成・デザイン、コーディング（HTML / CSS / JavaScript）</span>
+          </li>
+          <li>
+            <strong>得意</strong>
+            <span>情報の整理、画面の見やすさ、スマホ表示を意識したUI</span>
+          </li>
+          <li>
+            <strong>制作環境</strong>
+            <span>静的サイトを中心に、ブラウザだけで動くシンプルな構成</span>
+          </li>
+        </ul>
+      </div>
+    </section>
+
+    <section id="works" class="section works" aria-labelledby="works-title">
+      <div class="shell">
+        <p class="section-label">Works</p>
+        <h2 id="works-title">Works</h2>
+        <p class="section-lead">制作したサイト・Webアプリの一部です。</p>
+
+        <ul class="work-list">
+          <li class="work-item work-item-feature">
+            <a href="works/vital.html">
+              <span class="work-tag">Web App</span>
+              <h3>バイタル記録ノート</h3>
+              <p>血圧・脈拍・体重・体温をスマホで記録し、履歴を振り返るツール。</p>
+              <span class="work-link">詳細を見る</span>
+            </a>
+          </li>
+          <li class="work-item">
+            <a href="works/aisin.html">
+              <span class="work-tag">Web App</span>
+              <h3>株式投資管理アプリ</h3>
+              <p>買付・保有・決済の記録と集計ができる管理用Webアプリ（汎用版）。</p>
+              <span class="work-link">詳細を見る</span>
+            </a>
+          </li>
+          <li class="work-item work-item-muted">
+            <a href="#works">
+              <span class="work-tag">Website</span>
+              <h3>サイト制作（追加予定）</h3>
+              <p>レイアウト・デザイン寄りのサイト作品を掲載予定です。</p>
+              <span class="work-link">準備中</span>
+            </a>
+          </li>
+        </ul>
+      </div>
+    </section>
+
+    <section id="contact" class="section contact" aria-labelledby="contact-title">
+      <div class="shell">
+        <p class="section-label">Contact</p>
+        <h2 id="contact-title">Contact</h2>
+        <p class="section-lead">制作のご相談・ご依頼はこちらからご連絡ください。</p>
+        <ul class="contact-list">
+          <li><span>Email</span> <a href="mailto:example@example.com">example@example.com</a></li>
+          <li><span>GitHub</span> <a href="#">準備中</a></li>
+          <li><span>X / note</span> <a href="#">準備中</a></li>
+        </ul>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="shell footer-inner">
+      <p>© 増渕 敦（マスブチ アツシ）</p>
+    </div>
+  </footer>
+</body>
+</html>

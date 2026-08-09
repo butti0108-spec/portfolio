@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="株式投資管理アプリの制作事例。">
+  <title>株式投資管理アプリ | 増渕 敦</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@500;700&family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../style.css">
+  <script src="../script.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#main">本文へスキップ</a>
+
+  <header class="site-header">
+    <div class="shell header-inner">
+      <a class="logo" href="../index.html">増渕 敦</a>
+      <button type="button" class="nav-toggle" aria-expanded="false" aria-controls="site-nav">
+        <span class="nav-toggle-label">メニュー</span>
+      </button>
+      <nav id="site-nav" class="site-nav" aria-label="メイン">
+        <a href="../index.html#about">About</a>
+        <a href="../index.html#works">Works</a>
+        <a href="../index.html#contact">Contact</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main" class="case">
+    <div class="shell">
+      <p class="crumb"><a href="../index.html#works">Works</a> / 株式投資管理アプリ</p>
+      <p class="section-label">Work</p>
+      <h1>株式投資管理アプリ</h1>
+      <p class="case-lead">
+        買付・保有・決済の記録から集計・振り返りまでを、ブラウザだけで行える管理用Webアプリです。
+      </p>
+
+      <dl class="meta-grid">
+        <div>
+          <dt>担当</dt>
+          <dd>企画・情報設計・UIデザイン・コーディング</dd>
+        </div>
+        <div>
+          <dt>技術</dt>
+          <dd>HTML / CSS / JavaScript、localStorage、Chart.js</dd>
+        </div>
+        <div>
+          <dt>公開</dt>
+          <dd>デモ／GitHubリンク準備中</dd>
+        </div>
+      </dl>
+
+      <figure class="shot-placeholder" aria-label="スクリーンショット枠">
+        <figcaption>スクショ枠 — ホーム／保有／実績など</figcaption>
+      </figure>
+
+      <section class="case-block" aria-labelledby="problem-title">
+        <h2 id="problem-title">課題</h2>
+        <p>取引の記録と成績の振り返りがバラバラになりやすく、スマホでも続けやすい形にしたい。</p>
+      </section>
+
+      <section class="case-block" aria-labelledby="approach-title">
+        <h2 id="approach-title">工夫した点</h2>
+        <ul>
+          <li>サーバーなしで動く構成にし、導入のハードルを下げる</li>
+          <li>記録・一覧・集計の画面を分け、目的ごとに迷いにくくする</li>
+          <li>損益の色は意味のある場所だけに使い、ナビは落ち着いたトーンに統一</li>
+          <li>CSVでバックアップ／復元できるようにする</li>
+        </ul>
+      </section>
+
+      <section class="case-block" aria-labelledby="result-title">
+        <h2 id="result-title">ポイント</h2>
+        <p>
+          デザインとフロントエンド実装を一体で進め、日常的に使える記録UIに仕上げています。
+          公開用は汎用の管理アプリとして整理したバージョンを掲載予定です。
+        </p>
+      </section>
+
+      <p class="case-nav">
+        <a href="vital.html">← バイタル記録ノート</a>
+        <a href="../index.html#works">Works一覧 →</a>
+      </p>
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="shell footer-inner">
+      <p>© 増渕 敦（マスブチ アツシ）</p>
+    </div>
+  </footer>
+</body>
+</html>

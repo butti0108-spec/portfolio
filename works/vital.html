@@ -38,6 +38,23 @@
         家族が毎日続けやすいよう、入力と確認の画面をシンプルに分けています。
       </p>
 
+      <div class="shot-gallery" aria-label="画面イメージ">
+        <figure class="shot-card shot-card-feature">
+          <figcaption>記録する</figcaption>
+          <img src="../assets/images/vital/record.png" alt="バイタル記録ノートの記録画面。血圧と脈拍を入力するスマホUI。" width="390" height="317" loading="eager">
+        </figure>
+        <div class="shot-gallery-pair">
+          <figure class="shot-card">
+            <figcaption>カレンダーで振り返る</figcaption>
+            <img src="../assets/images/vital/calendar.png" alt="カレンダーで日付を選び、その日の記録を確認する画面。" width="405" height="808" loading="lazy">
+          </figure>
+          <figure class="shot-card">
+            <figcaption>グラフで推移を確認</figcaption>
+            <img src="../assets/images/vital/graphs.png" alt="血圧・脈拍・体重の推移グラフ画面。" width="390" height="665" loading="lazy">
+          </figure>
+        </div>
+      </div>
+
       <dl class="meta-grid">
         <div>
           <dt>担当</dt>
@@ -49,26 +66,19 @@
         </div>
         <div>
           <dt>公開</dt>
-          <dd>
-            <a href="../assets/vital-demo-sample.csv">デモ用CSV</a>
-          </dd>
+          <dd>リンク準備中</dd>
         </div>
       </dl>
 
-      <div class="shot-gallery" aria-label="画面イメージ">
-        <figure class="shot-card">
-          <img src="../assets/images/vital/record.png" alt="バイタル記録ノートの記録画面。血圧と脈拍を入力するスマホUI。" width="390" height="317" loading="lazy">
-          <figcaption>記録する</figcaption>
-        </figure>
-        <figure class="shot-card">
-          <img src="../assets/images/vital/calendar.png" alt="カレンダーで日付を選び、その日の記録を確認する画面。" width="405" height="808" loading="lazy">
-          <figcaption>カレンダーで振り返る</figcaption>
-        </figure>
-        <figure class="shot-card">
-          <img src="../assets/images/vital/graphs.png" alt="血圧・脈拍・体重の推移グラフ画面。" width="390" height="665" loading="lazy">
-          <figcaption>グラフで推移を確認</figcaption>
-        </figure>
-      </div>
+      <section class="case-block" aria-labelledby="demo-title">
+        <h2 id="demo-title">サンプルデータ</h2>
+        <p>
+          架空のデモ用CSVです。アプリの「CSVから戻す」からインポートすると、記録・カレンダー・グラフの動作確認ができます。
+        </p>
+        <p>
+          <a class="btn btn-primary" href="../assets/vital-demo-sample.csv" download="vital-demo-sample.csv">デモ用CSVをダウンロード</a>
+        </p>
+      </section>
 
       <section class="case-block" aria-labelledby="problem-title">
         <h2 id="problem-title">課題</h2>
@@ -81,7 +91,7 @@
           <li>「記録する／見る」の2画面に絞り、操作を単純にする</li>
           <li>スマホ表示を前提に、入力しやすいレイアウトにする</li>
           <li>ホーム画面追加を見据えたPWA対応</li>
-          <li>CSVでバックアップ／復元。デモ用のサンプルCSVも用意</li>
+          <li>CSVでバックアップ／復元できる（下のデモ用CSVで動作確認可）</li>
           <li>選択した期間のまとめ・グラフ・測定一覧をPDFとして保存・印刷できる</li>
         </ul>
       </section>

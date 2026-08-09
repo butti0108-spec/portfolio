@@ -448,6 +448,21 @@ a {
   margin: 0 0 2.5rem;
 }
 
+.work-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin: 0 0 2rem;
+}
+
+.shot-note {
+  margin: 0;
+  max-width: 40rem;
+  font-size: 0.85rem;
+  color: var(--muted);
+  line-height: 1.6;
+}
+
 .shot-card {
   margin: 0;
   text-align: center;

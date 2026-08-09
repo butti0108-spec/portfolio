@@ -35,7 +35,9 @@
     <div class="lightbox-dialog" role="dialog" aria-modal="true" aria-label="画像の拡大表示">
       <button type="button" class="lightbox-close" data-lightbox-close aria-label="閉じる">×</button>
       <div class="lightbox-stage">
-        <img class="lightbox-image" alt="">
+        <div class="lightbox-canvas">
+          <img class="lightbox-image" alt="">
+        </div>
       </div>
       <div class="lightbox-toolbar">
         <button type="button" class="lightbox-zoom-out" aria-label="縮小">−</button>
@@ -46,31 +48,71 @@
   `;
   document.body.appendChild(lightbox);
 
+  const stageEl = lightbox.querySelector(".lightbox-stage");
   const imageEl = lightbox.querySelector(".lightbox-image");
   const zoomLabel = lightbox.querySelector(".lightbox-zoom-label");
   const zoomInBtn = lightbox.querySelector(".lightbox-zoom-in");
   const zoomOutBtn = lightbox.querySelector(".lightbox-zoom-out");
 
+  let baseWidth = 0;
+
+  const measureBaseWidth = () => {
+    imageEl.style.width = "";
+    imageEl.style.maxWidth = "";
+    imageEl.style.maxHeight = "";
+    const rect = imageEl.getBoundingClientRect();
+    baseWidth = Math.max(rect.width, 1);
+  };
+
   const applyZoom = () => {
-    imageEl.style.transform = `scale(${zoom})`;
+    if (baseWidth > 0) {
+      imageEl.style.maxWidth = "none";
+      imageEl.style.maxHeight = "none";
+      imageEl.style.width = `${baseWidth * zoom}px`;
+    }
     zoomLabel.textContent = `${Math.round(zoom * 100)}%`;
     zoomOutBtn.disabled = zoom <= MIN_ZOOM;
     zoomInBtn.disabled = zoom >= MAX_ZOOM;
   };
 
   const setZoom = (next) => {
+    const previous = zoom;
     zoom = Math.min(MAX_ZOOM, Math.max(MIN_ZOOM, next));
     applyZoom();
+
+    if (zoom !== previous) {
+      const ratio = stageEl.scrollTop / Math.max(stageEl.scrollHeight - stageEl.clientHeight, 1);
+      requestAnimationFrame(() => {
+        const maxScroll = Math.max(stageEl.scrollHeight - stageEl.clientHeight, 0);
+        stageEl.scrollTop = ratio * maxScroll;
+      });
+    }
   };
 
   const openLightbox = (sourceImg) => {
     lastFocus = document.activeElement;
-    imageEl.src = sourceImg.currentSrc || sourceImg.src;
+    zoom = 1;
+    baseWidth = 0;
+    imageEl.style.width = "";
+    imageEl.style.maxWidth = "";
+    imageEl.style.maxHeight = "";
     imageEl.alt = sourceImg.alt || "";
-    setZoom(1);
+
+    const reveal = () => {
+      measureBaseWidth();
+      applyZoom();
+      stageEl.scrollTop = 0;
+      lightbox.querySelector(".lightbox-close").focus();
+    };
+
+    imageEl.addEventListener("load", reveal, { once: true });
+    imageEl.src = sourceImg.currentSrc || sourceImg.src;
     lightbox.hidden = false;
     document.body.classList.add("lightbox-open");
-    lightbox.querySelector(".lightbox-close").focus();
+
+    if (imageEl.complete && imageEl.naturalWidth > 0) {
+      reveal();
+    }
   };
 
   const closeLightbox = () => {
@@ -78,6 +120,10 @@
     lightbox.hidden = true;
     document.body.classList.remove("lightbox-open");
     imageEl.removeAttribute("src");
+    imageEl.style.width = "";
+    imageEl.style.maxWidth = "";
+    imageEl.style.maxHeight = "";
+    baseWidth = 0;
     if (lastFocus && typeof lastFocus.focus === "function") {
       lastFocus.focus();
     }
@@ -107,12 +153,14 @@
   zoomInBtn.addEventListener("click", () => setZoom(zoom + ZOOM_STEP));
   zoomOutBtn.addEventListener("click", () => setZoom(zoom - ZOOM_STEP));
 
-  lightbox.querySelector(".lightbox-stage").addEventListener(
+  stageEl.addEventListener(
     "wheel",
     (event) => {
       if (lightbox.hidden) return;
-      event.preventDefault();
-      setZoom(zoom + (event.deltaY < 0 ? ZOOM_STEP : -ZOOM_STEP));
+      if (event.ctrlKey || event.metaKey) {
+        event.preventDefault();
+        setZoom(zoom + (event.deltaY < 0 ? ZOOM_STEP : -ZOOM_STEP));
+      }
     },
     { passive: false }
   );

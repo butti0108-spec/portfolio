@@ -43,6 +43,7 @@
         <button type="button" class="lightbox-zoom-out" aria-label="縮小">−</button>
         <span class="lightbox-zoom-label">100%</span>
         <button type="button" class="lightbox-zoom-in" aria-label="拡大">＋</button>
+        <span class="lightbox-hint">Ctrl＋ホイールでもズーム（Macは Command）</span>
       </div>
     </div>
   `;

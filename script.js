@@ -4,6 +4,7 @@
   if (toggle && nav) {
     const setOpen = (open) => {
       toggle.setAttribute("aria-expanded", String(open));
+      toggle.setAttribute("aria-label", open ? "メニューを閉じる" : "メニューを開く");
       nav.classList.toggle("is-open", open);
     };
 
@@ -14,6 +15,23 @@
 
     nav.querySelectorAll("a").forEach((link) => {
       link.addEventListener("click", () => setOpen(false));
+    });
+  }
+
+  // Contact form（見た目確認用。WordPress化後は CF7 に置き換え）
+  const contactForm = document.querySelector("#contact-form");
+  const contactStatus = document.querySelector("#contact-status");
+  if (contactForm && contactStatus) {
+    contactForm.addEventListener("submit", (event) => {
+      event.preventDefault();
+      if (!contactForm.checkValidity()) {
+        contactForm.reportValidity();
+        return;
+      }
+      contactStatus.hidden = false;
+      contactStatus.textContent =
+        "送信内容を受け付けました（確認用メッセージです。実際の送信はまだ行われません）。";
+      contactForm.reset();
     });
   }
 

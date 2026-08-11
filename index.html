@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="増渕 敦（マスブチ アツシ）のポートフォリオ。Web Designer。">
+  <meta name="description" content="増渕 敦（マスブチ アツシ）のポートフォリオ。見やすく使いやすいWebサイトのデザインと制作。">
   <title>増渕 敦 | Web Designer</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -18,7 +18,12 @@
   <header class="site-header">
     <div class="shell header-inner">
       <a class="logo" href="index.html">増渕 敦</a>
-      <button type="button" class="nav-toggle" aria-expanded="false" aria-controls="site-nav">
+      <button type="button" class="nav-toggle" aria-expanded="false" aria-controls="site-nav" aria-label="メニューを開く">
+        <span class="nav-toggle-bars" aria-hidden="true">
+          <span></span>
+          <span></span>
+          <span></span>
+        </span>
         <span class="nav-toggle-label">メニュー</span>
       </button>
       <nav id="site-nav" class="site-nav" aria-label="メイン">
@@ -32,17 +37,35 @@
   <main id="main">
     <section class="hero" aria-labelledby="hero-title">
       <div class="shell hero-inner">
-        <p class="hero-brand">
-          <span class="hero-name-ja">増渕 敦</span>
-          <span class="hero-name-sep" aria-hidden="true">/</span>
-          <span class="hero-name-en">Atsushi Masubuchi</span>
-        </p>
-        <h1 id="hero-title">Web Designer</h1>
-        <p class="hero-lead">ウェブサイトのデザインと制作を行っています。</p>
-        <p class="hero-lead">見やすさ・使いやすさを大切に、<span class="text-keep">HTML / CSS / JavaScript</span> で形にします。</p>
-        <div class="hero-actions">
-          <a class="btn btn-primary" href="#works">作品を見る</a>
-          <a class="btn btn-ghost" href="#contact">お問い合わせ</a>
+        <div class="hero-copy">
+          <p class="hero-brand">
+            <span class="hero-name-ja">増渕 敦</span>
+            <span class="hero-name-sep" aria-hidden="true">/</span>
+            <span class="hero-name-en">Atsushi Masubuchi</span>
+          </p>
+          <h1 id="hero-title">Web Designer</h1>
+          <p class="hero-lead">見やすさ・使いやすさを大切に、ウェブサイトのデザインと制作を行っています。</p>
+          <p class="hero-lead">依頼者の目的を整理し、<span class="text-keep">HTML / CSS / JavaScript</span> と<span class="text-keep">WordPress</span>で形にします。</p>
+          <div class="hero-actions">
+            <a class="btn btn-primary" href="#works">作品を見る</a>
+            <a class="btn btn-ghost" href="#contact">お問い合わせ</a>
+          </div>
+        </div>
+        <div class="hero-visual" aria-hidden="true">
+          <img
+            class="hero-visual-main"
+            src="assets/images/works/vital-thumb.png"
+            alt=""
+            width="1200"
+            height="750"
+          >
+          <img
+            class="hero-visual-sub"
+            src="assets/images/works/gnamgnam-thumb.png"
+            alt=""
+            width="1200"
+            height="750"
+          >
         </div>
       </div>
     </section>
@@ -51,21 +74,107 @@
       <div class="shell">
         <p class="section-label">About</p>
         <h2 id="about-title">Profile</h2>
-        <p class="section-lead">Web Designer の増渕 敦です。コーポレートやサービス紹介などのサイト制作にくわえ、記録・管理系の<span class="text-keep">WebアプリUI</span>にも取り組んでいます。</p>
-        <ul class="about-points">
-          <li>
-            <strong>できること</strong>
-            <span>サイトの構成・デザイン、コーディング（HTML / CSS / JavaScript）</span>
+        <p class="section-lead">お客様の立場に立って考える Web Designer です。声になっていない要望にも耳を傾け、「何を作りたいか」だけでなく「なぜそれを作りたいのか」まで整理しながら、見やすく・使いやすいサイトを形にします。</p>
+
+        <ul class="skill-cards">
+          <li class="skill-card">
+            <img class="skill-card-img" src="assets/images/works/gnamgnam-thumb.png" alt="" width="1200" height="750" loading="lazy">
+            <div class="skill-card-body">
+              <h3>Webデザイン</h3>
+              <p>見やすさ・伝わりやすさ</p>
+            </div>
           </li>
-          <li>
-            <strong>得意</strong>
-            <span>情報の整理、画面の見やすさ、スマホ表示を意識したUI</span>
+          <li class="skill-card">
+            <img class="skill-card-img" src="assets/images/works/taro-thumb.png" alt="" width="1200" height="750" loading="lazy">
+            <div class="skill-card-body">
+              <h3>コーディング</h3>
+              <p>HTML / CSS / JavaScript</p>
+            </div>
           </li>
-          <li>
-            <strong>制作環境</strong>
-            <span>静的サイトを中心に、ブラウザだけで動くシンプルな構成</span>
+          <li class="skill-card">
+            <img class="skill-card-img" src="assets/images/works/vital-thumb.png" alt="" width="1200" height="750" loading="lazy">
+            <div class="skill-card-body">
+              <h3>課題から設計</h3>
+              <p>使う人を想定したUI</p>
+            </div>
+          </li>
+          <li class="skill-card">
+            <img class="skill-card-img" src="assets/images/vital/graphs.png" alt="" width="900" height="1600" loading="lazy">
+            <div class="skill-card-body">
+              <h3>WordPress</h3>
+              <p>更新しやすいサイトへ</p>
+            </div>
           </li>
         </ul>
+
+        <div class="accordion-list">
+          <details class="accordion" open>
+            <summary>ご依頼できること</summary>
+            <div class="accordion-body">
+              <p class="offer-lead">こんな制作をお受けできます。</p>
+              <ol class="offer-list">
+                <li>小規模なコーポレートサイト</li>
+                <li>店舗・サービス紹介サイト</li>
+                <li>LP（ランディングページ）</li>
+                <li>既存サイトの修正・スマホ対応</li>
+                <li>WordPress での小規模サイト構築</li>
+                <li>お問い合わせフォーム</li>
+              </ol>
+            </div>
+          </details>
+
+          <details class="accordion">
+            <summary>大切にしていること</summary>
+            <div class="accordion-body">
+              <ul class="value-list">
+                <li><span class="value-mark">【見やすさ】</span>分かりやすさ・使いやすさ</li>
+                <li><span class="value-mark">【迷わない操作】</span>利用者がすぐ使えること</li>
+                <li><span class="value-mark">【統一感】</span>サイト全体のトーンをそろえる</li>
+                <li><span class="value-mark">【使う人基準】</span>見た目だけでなく実感で設計</li>
+              </ul>
+            </div>
+          </details>
+
+          <details class="accordion">
+            <summary>強み</summary>
+            <div class="accordion-body">
+              <ul class="strength-list">
+                <li>
+                  <span class="strength-label">課題から設計する力</span>
+                  <span class="strength-text">「バイタル記録ノート」は、実際の困りごとから機能・構成・UIを一から構想しました。</span>
+                </li>
+                <li>
+                  <span class="strength-label">ヒアリングと整理</span>
+                  <span class="strength-text">お客様の話を聞き、要望を整理して分かりやすく提案します。</span>
+                </li>
+                <li>
+                  <span class="strength-label">目的に合わせた提案</span>
+                  <span class="strength-text">目的に合ったレイアウト・機能・構成を一緒に考えます。</span>
+                </li>
+              </ul>
+            </div>
+          </details>
+
+          <details class="accordion">
+            <summary>よくある質問</summary>
+            <div class="accordion-body">
+              <dl class="about-qa">
+                <div>
+                  <dt>制作でいちばん大切にしていることは？</dt>
+                  <dd>見やすさ・分かりやすさ・使いやすさです。使う人が迷わない設計を基準にします。</dd>
+                </div>
+                <div>
+                  <dt>バイタル記録ノートで伝えたいことは？</dt>
+                  <dd>実際の困りごとから、必要な機能とUIを一から構想した点です。使う人を想定した画面設計を大切にしています。</dd>
+                </div>
+                <div>
+                  <dt>これまでの経験はどう活きますか？</dt>
+                  <dd>お客様の話を聞き、何に困っているかを整理し、分かりやすく伝える力です。Web制作のヒアリングと提案に活かします。</dd>
+                </div>
+              </dl>
+            </div>
+          </details>
+        </div>
       </div>
     </section>
 
@@ -73,7 +182,7 @@
       <div class="shell">
         <p class="section-label">Works</p>
         <h2 id="works-title">Selected Works</h2>
-        <p class="section-lead">制作したサイト・<span class="text-keep">Webアプリ</span>の一部です。</p>
+        <p class="section-lead">制作したサイト・<span class="text-keep">Webアプリ</span>の一部です。カードから詳細や実サイトを確認できます。</p>
 
         <ul class="work-list">
           <li class="work-item">
@@ -125,11 +234,30 @@
       <div class="shell contact-band-inner">
         <p class="section-label">Contact</p>
         <h2 id="contact-title">制作のご相談はお気軽に</h2>
-        <p class="contact-band-lead">サイト制作・UIの改善など、ご依頼やご質問があればメールでご連絡ください。</p>
+        <p class="contact-band-lead">サイト制作・UI改善・<span class="text-keep">WordPress</span>構築など、ご依頼やご質問はフォームからどうぞ。</p>
         <p class="contact-band-lead">内容を確認のうえ、折り返しご連絡します。</p>
-        <a class="btn btn-primary contact-mail" href="mailto:atsushi.masubuchi.work@gmail.com">
-          atsushi.masubuchi.work@gmail.com
-        </a>
+
+        <form class="contact-form" id="contact-form" action="#" method="post" novalidate>
+          <div class="contact-form-row">
+            <label for="contact-name">お名前 <span class="req">必須</span></label>
+            <input id="contact-name" name="your-name" type="text" autocomplete="name" required>
+          </div>
+          <div class="contact-form-row">
+            <label for="contact-email">メールアドレス <span class="req">必須</span></label>
+            <input id="contact-email" name="your-email" type="email" autocomplete="email" required>
+          </div>
+          <div class="contact-form-row">
+            <label for="contact-subject">件名</label>
+            <input id="contact-subject" name="your-subject" type="text">
+          </div>
+          <div class="contact-form-row">
+            <label for="contact-message">お問い合わせ内容 <span class="req">必須</span></label>
+            <textarea id="contact-message" name="your-message" rows="6" required></textarea>
+          </div>
+          <button class="btn btn-primary contact-submit" type="submit">送信する</button>
+          <p class="contact-form-note">※ 現在は見た目確認用です。<span class="text-keep">WordPress</span>化後に Contact Form 7 で送信できるようにします。</p>
+          <p class="contact-form-status" id="contact-status" role="status" aria-live="polite" hidden></p>
+        </form>
       </div>
     </section>
   </main>

@@ -178,4 +178,5 @@
       setZoom(zoom - ZOOM_STEP);
     }
   });
+
 })();

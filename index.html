@@ -9,6 +9,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@500;700&family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css">
+  <script>document.documentElement.classList.add("js");</script>
   <script src="script.js" defer></script>
 </head>
 <body>
@@ -50,11 +51,7 @@
       <div class="shell">
         <p class="section-label">About</p>
         <h2 id="about-title">Profile</h2>
-        <p class="section-lead">
-          Web Designer の増渕 敦です。
-          コーポレートやサービス紹介などのサイト制作にくわえ、
-          記録・管理系のWebアプリUIにも取り組んでいます。
-        </p>
+        <p class="section-lead">Web Designer の増渕 敦です。コーポレートやサービス紹介などのサイト制作にくわえ、記録・管理系の<span class="text-keep">WebアプリUI</span>にも取り組んでいます。</p>
         <ul class="about-points">
           <li>
             <strong>できること</strong>
@@ -79,28 +76,45 @@
         <p class="section-lead">制作したサイト・<span class="text-keep">Webアプリ</span>の一部です。</p>
 
         <ul class="work-list">
-          <li class="work-item work-item-feature">
+          <li class="work-item">
             <a href="works/vital.html">
-              <span class="work-tag">Web App</span>
-              <h3>バイタル記録ノート</h3>
-              <p>血圧・脈拍・体重・体温をスマホで記録し、カレンダーとグラフで振り返る軽量<span class="text-keep">Webアプリ</span>。</p>
-              <span class="work-link">詳細を見る</span>
+              <img class="work-thumb" src="assets/images/works/vital-thumb.png" alt="バイタル記録ノートの画面キャプチャ" width="1200" height="750" loading="lazy">
+              <div class="work-item-body">
+                <span class="work-tag">Web App</span>
+                <h3>バイタル記録ノート</h3>
+                <div class="work-item-copy">
+                  <p>血圧・脈拍・体重・体温をスマホで記録。</p>
+                  <p>カレンダーとグラフで振り返る軽量<span class="text-keep">Webアプリ</span>。</p>
+                </div>
+                <span class="work-link">詳細を見る</span>
+              </div>
             </a>
           </li>
           <li class="work-item">
             <a href="https://butti0108-spec.github.io/taro/" target="_blank" rel="noopener noreferrer">
-              <span class="work-tag">Website</span>
-              <h3>Taro's Scenery</h3>
-              <p>フォトグラファー紹介の模写コーディング。ABOUT／WORKS構成の静的サイト。</p>
-              <span class="work-link">サイトを見る</span>
+              <img class="work-thumb" src="assets/images/works/taro-thumb.png" alt="Taro's Scenery のサイトキャプチャ" width="1200" height="750" loading="lazy">
+              <div class="work-item-body">
+                <span class="work-tag">Website</span>
+                <h3>Taro's Scenery</h3>
+                <div class="work-item-copy">
+                  <p>フォトグラファー紹介の模写コーディング。</p>
+                  <p><span class="text-keep">ABOUT／WORKS</span>構成の静的サイト。</p>
+                </div>
+                <span class="work-link">サイトを見る</span>
+              </div>
             </a>
           </li>
           <li class="work-item">
             <a href="https://butti0108-spec.github.io/GnamGnam/" target="_blank" rel="noopener noreferrer">
-              <span class="work-tag">Website</span>
-              <h3>Gnam gnam</h3>
-              <p>イタリアンレストランの模写コーディング。コンセプト・メニュー・店舗情報の構成。</p>
-              <span class="work-link">サイトを見る</span>
+              <img class="work-thumb" src="assets/images/works/gnamgnam-thumb.png" alt="Gnam gnam のサイトキャプチャ" width="1200" height="750" loading="lazy">
+              <div class="work-item-body">
+                <span class="work-tag">Website</span>
+                <h3>Gnam gnam</h3>
+                <div class="work-item-copy">
+                  <p>イタリアンレストランの模写コーディング。<br>コンセプト・メニュー・店舗情報の構成。</p>
+                </div>
+                <span class="work-link">サイトを見る</span>
+              </div>
             </a>
           </li>
         </ul>

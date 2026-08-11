@@ -1,3 +1,4 @@
+
 :root {
   /* ゆうさんの植木屋さん寄り：明るいリーフグリーン */
   --bg: #f7fbf4;
@@ -12,8 +13,8 @@
   --brand-muted: #4f8f3a;
   --line: rgba(57, 157, 38, 0.18);
   --accent-wash: rgba(57, 157, 38, 0.1);
-  --shell: 68rem;
-  --gutter: clamp(1.25rem, 4vw, 2rem);
+  --shell: 76rem;
+  --gutter: clamp(1.25rem, 5vw, 2.5rem);
   --font-display: "Shippori Mincho", "Hiragino Mincho ProN", serif;
   --font-body: "Zen Kaku Gothic New", "Hiragino Sans", sans-serif;
 }
@@ -132,8 +133,12 @@ a {
 }
 
 .hero {
-  padding: clamp(3.5rem, 10vw, 6.5rem) 0 clamp(3rem, 8vw, 5rem);
+  padding:  clamp(2.5rem, 3vw, 2rem) 0 clamp(1rem, 4vw, 5rem);
   border-bottom: 1px solid var(--line);
+}
+
+.hero-inner {
+  text-align: center;
 }
 
 .hero-brand {
@@ -141,7 +146,8 @@ a {
   display: flex;
   flex-wrap: wrap;
   align-items: baseline;
-  gap: 0.65rem 0.85rem;
+  justify-content: center;
+  gap: 0.35rem 0.5rem;
   font-family: var(--font-display);
   font-size: clamp(2rem, 5vw, 3rem);
   font-weight: 700;
@@ -165,19 +171,20 @@ a {
 }
 
 .hero h1 {
-  margin: 0 0 1.25rem;
+  margin: 0 0 2rem;
   font-family: var(--font-display);
   font-weight: 500;
   font-size: clamp(1.35rem, 3.2vw, 1.85rem);
   line-height: 1.45;
   color: var(--ink);
-  max-width: 18em;
+  max-width: none;
 }
 
 .hero-lead,
 .section-lead,
 .contact-band-lead,
 .work-item p,
+.work-item-copy p,
 .case-lead,
 .case-block p,
 .case-block li,
@@ -197,7 +204,8 @@ a {
 
 .hero-lead {
   margin: 0;
-  max-width: 36rem;
+  max-width: 38rem;
+  margin-inline: auto;
   color: var(--muted);
   font-size: 1.05rem;
   line-height: 1.75;
@@ -214,7 +222,8 @@ a {
 .hero-actions {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.75rem;
+  gap: 0.5rem;
+  justify-content: center;
 }
 
 .btn {
@@ -227,6 +236,7 @@ a {
   text-decoration: none;
   font-weight: 700;
   font-size: 0.95rem;
+  transition: background 0.2s ease, color 0.2s ease, box-shadow 0.2s ease, transform 0.15s ease;
   border: 1px solid transparent;
 }
 
@@ -237,6 +247,8 @@ a {
 
 .btn-primary:hover {
   background: var(--brand-deep);
+  box-shadow: 0 4px 12px rgba(57, 157, 38, 0.3);
+  transform: translateY(-1px);
 }
 
 .btn-ghost {
@@ -247,6 +259,7 @@ a {
 
 .btn-ghost:hover {
   background: var(--accent-wash);
+  transform: translateY(-1px);
 }
 
 .btn-disabled,
@@ -267,8 +280,8 @@ a {
 }
 
 .section {
-  padding: clamp(3.5rem, 9vw, 5.5rem) 0;
-  border-bottom: 1px solid rgba(57, 157, 38, 0.28);
+  padding: clamp(3.5rem, 9vw, 5.5rem) 0 clamp(2.5rem, 6vw, 4rem);
+  border-bottom: 1px solid var(--line);
 }
 
 .section-label {
@@ -301,7 +314,7 @@ a {
 
 .section-lead {
   margin: 0 0 2rem;
-  max-width: 40rem;
+  max-width: none;
   color: var(--muted);
 }
 
@@ -322,8 +335,6 @@ a {
 
 .works .section-lead {
   margin-bottom: 2.5rem;
-  padding-bottom: 1.5rem;
-  border-bottom: 1px solid rgba(57, 157, 38, 0.22);
 }
 
 .about-points {
@@ -331,7 +342,15 @@ a {
   margin: 0;
   padding: 0;
   display: grid;
-  gap: 1rem;
+  gap: 0;
+  grid-template-columns: 1fr;
+}
+
+@media (min-width: 60rem) {
+  .about-points {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 0 2rem;
+  }
 }
 
 .about-points li {
@@ -341,9 +360,6 @@ a {
   border-top: 1px solid var(--line);
 }
 
-.about-points li:last-child {
-  border-bottom: 1px solid var(--line);
-}
 
 .about-points strong {
   font-family: var(--font-display);
@@ -363,32 +379,62 @@ a {
 .work-list {
   list-style: none;
   margin: 0;
-  padding: 0.35rem 0 0;
+  padding: 0;
   display: grid;
-  gap: 0.35rem;
+  gap: 1.25rem;
+  grid-template-columns: 1fr;
+}
+
+@media (min-width: 60rem) {
+  .work-list {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
 }
 
 .work-item a,
 .work-item-pending {
-  display: block;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
   text-decoration: none;
   color: inherit;
-  padding: 1.35rem 0;
-  border-top: 1px solid var(--line);
+  border: 1px solid rgba(57, 157, 38, 0.22);
+  border-radius: 0.6rem;
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.72);
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.22s ease;
 }
 
-.work-item:last-child a,
-.work-item:last-child .work-item-pending {
-  border-bottom: 1px solid var(--line);
+.work-item a:hover {
+  border-color: rgba(57, 157, 38, 0.42);
+  box-shadow: 0 8px 24px rgba(57, 157, 38, 0.12);
+  transform: translateY(-4px);
 }
 
 .work-item a:hover h3 {
   opacity: 0.7;
 }
 
+.work-thumb {
+  display: block;
+  width: 100%;
+  height: 11.5rem;
+  object-fit: cover;
+  object-position: top center;
+  background: #fff;
+  border-bottom: 1px solid var(--line);
+}
+
+.work-item-body {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  padding: 1.1rem 1.15rem 1.25rem;
+}
+
 .work-item-feature a {
-  padding-top: 1.75rem;
-  padding-bottom: 1.75rem;
+  padding-top: 0;
+  padding-bottom: 0;
 }
 
 .work-tag {
@@ -408,18 +454,34 @@ a {
   color: var(--ink);
 }
 
+.work-item-copy {
+  flex: 1;
+  display: grid;
+  gap: 0.35rem;
+  margin-bottom: 0.75rem;
+}
+
+.work-item-copy p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.92rem;
+  line-height: 1.65;
+}
+
 .work-item p {
   margin: 0 0 0.75rem;
   color: var(--muted);
-  max-width: 40rem;
+  max-width: none;
+  flex: 1;
 }
 
 .work-link {
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  align-self: flex-start;
   min-height: 2.4rem;
-  margin-top: 0.35rem;
+  margin-top: auto;
   padding: 0.4rem 1.1rem;
   border-radius: 0.35rem;
   border: 1px solid var(--brand);
@@ -451,7 +513,8 @@ a {
 }
 
 .contact-band-inner {
-  max-width: 40rem;
+  max-width: none;
+  text-align: center;
 }
 
 .contact-band .section-label {
@@ -473,13 +536,15 @@ a {
   width: 2.5rem;
   height: 3px;
   margin-top: 0.55rem;
+  margin-inline: auto;
   background: #fff;
 }
 
 .contact-band-lead {
   margin: 0;
   color: rgba(255, 255, 255, 0.92);
-  max-width: 34rem;
+  max-width: 38rem;
+  margin-inline: auto;
   line-height: 1.75;
 }
 
@@ -498,6 +563,7 @@ a {
   background: #111111;
   color: #fff;
   border-color: #111111;
+  margin-inline: auto;
 }
 
 .contact-band .contact-mail.btn-primary:hover {
@@ -990,5 +1056,26 @@ body.lightbox-open {
     padding: 0.75rem 0;
     border-bottom: 1px solid rgba(255, 255, 255, 0.12);
     color: rgba(255, 255, 255, 0.92);
+  }
+}
+
+/* Work card hover: lift effect is handled in the base .work-item a rule above */
+
+/* ============================================================
+   Animations（.js クラスがあるときだけ有効 → JS無効時は全部表示）
+   ============================================================ */
+
+@keyframes heroFadeUp {
+  from { opacity: 0; transform: translateY(16px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .js .hero-brand {
+    animation: heroFadeUp 0.7s 0.05s ease both;
+  }
+
+  .js .hero h1 {
+    animation: heroFadeUp 0.7s 0.2s ease both;
   }
 }

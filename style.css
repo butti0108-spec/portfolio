@@ -174,11 +174,41 @@ a {
   max-width: 18em;
 }
 
+.hero-lead,
+.section-lead,
+.contact-band-lead,
+.work-item p,
+.case-lead,
+.case-block p,
+.case-block li,
+.case-point-text,
+.case-cta,
+.shot-note,
+.meta-grid dd {
+  word-break: keep-all;
+  line-break: strict;
+  overflow-wrap: break-word;
+  text-wrap: pretty;
+}
+
+.text-keep {
+  white-space: nowrap;
+}
+
 .hero-lead {
-  margin: 0 0 1.75rem;
+  margin: 0;
   max-width: 36rem;
   color: var(--muted);
   font-size: 1.05rem;
+  line-height: 1.75;
+}
+
+.hero-lead + .hero-lead {
+  margin-top: 0.35rem;
+}
+
+.hero-lead:last-of-type {
+  margin-bottom: 1.75rem;
 }
 
 .hero-actions {
@@ -269,11 +299,25 @@ a {
   background: var(--brand-deep);
 }
 
-.section-lead,
-.case-lead {
+.section-lead {
   margin: 0 0 2rem;
   max-width: 40rem;
   color: var(--muted);
+}
+
+.case-lead {
+  margin: 0;
+  max-width: 40rem;
+  color: var(--muted);
+  line-height: 1.75;
+}
+
+.case-lead + .case-lead {
+  margin-top: 0.35rem;
+}
+
+.case-lead:last-of-type {
+  margin-bottom: 2rem;
 }
 
 .works .section-lead {
@@ -433,9 +477,18 @@ a {
 }
 
 .contact-band-lead {
-  margin: 0 0 1.75rem;
+  margin: 0;
   color: rgba(255, 255, 255, 0.92);
   max-width: 34rem;
+  line-height: 1.75;
+}
+
+.contact-band-lead + .contact-band-lead {
+  margin-top: 0.35rem;
+}
+
+.contact-band-lead:last-of-type {
+  margin-bottom: 1.75rem;
 }
 
 .contact-band .contact-mail.btn-primary {
@@ -588,6 +641,12 @@ a {
   font-weight: 700;
   color: var(--ink);
   line-height: 1.65;
+}
+
+.shot-note + .shot-note {
+  margin-top: 0.35rem;
+  padding-top: 0;
+  border-top: none;
 }
 
 .shot-card {

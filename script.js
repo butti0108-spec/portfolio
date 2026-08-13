@@ -16,6 +16,16 @@
     nav.querySelectorAll("a").forEach((link) => {
       link.addEventListener("click", () => setOpen(false));
     });
+
+    const desktopNav = window.matchMedia("(min-width: 48rem)");
+    const closeOnDesktop = () => {
+      if (desktopNav.matches) setOpen(false);
+    };
+    if (desktopNav.addEventListener) {
+      desktopNav.addEventListener("change", closeOnDesktop);
+    } else {
+      desktopNav.addListener(closeOnDesktop);
+    }
   }
 
   // Contact form（見た目確認用。WordPress化後は CF7 に置き換え）

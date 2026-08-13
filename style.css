@@ -1,9 +1,12 @@
 
 :root {
   /* ゆうさんの植木屋さん寄り：明るいリーフグリーン */
-  --bg: #f7fbf4;
-  --bg-mid: #e4f0dc;
-  --bg-deep: #cfe3c2;
+  /* 上＝白寄り → 下＝Contact直前の緑へ滑らかに */
+  --bg: #fcfdfb;
+  --bg-soft: #f3f8ef;
+  --bg-mid: #dcead1;
+  --bg-deep: #b7d4a4;
+  --bg-end: #8fbf78;
   --surface: #ffffff;
   --ink: #111111;
   --muted: #333333;
@@ -30,8 +33,13 @@ html {
 }
 
 ::selection {
-  color: var(--brand-bright);
-  background: rgba(69, 190, 46, 0.12);
+  color: #111111;
+  background: #cfd4d0;
+}
+
+::-moz-selection {
+  color: #111111;
+  background: #cfd4d0;
 }
 
 body {
@@ -42,8 +50,10 @@ body {
   background: linear-gradient(
     180deg,
     var(--bg) 0%,
+    var(--bg-soft) 22%,
     var(--bg-mid) 52%,
-    var(--bg-deep) 100%
+    var(--bg-deep) 78%,
+    var(--bg-end) 100%
   );
   line-height: 1.7;
   font-size: 1rem;
@@ -208,7 +218,7 @@ a {
   position: relative;
   width: 100%;
   overflow: hidden;
-  background: #f7fbf4;
+  background: var(--bg);
 }
 
 .hero-photo {
@@ -489,6 +499,16 @@ a {
   border: 1px solid rgba(17, 17, 17, 0.12);
   border-radius: 0.6rem;
   overflow: hidden;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+.accordion::selection,
+.accordion *::selection,
+.accordion::-moz-selection,
+.accordion *::-moz-selection {
+  color: #111111;
+  background: #cfd4d0;
 }
 
 .accordion summary {
@@ -514,7 +534,7 @@ a {
   flex: 0 0 auto;
   font-size: 1.25rem;
   font-weight: 500;
-  color: var(--brand-deep);
+  color: var(--ink);
   line-height: 1;
 }
 
@@ -530,7 +550,8 @@ a {
 .offer-lead {
   margin: 1rem 0 1.25rem;
   font-size: 0.95rem;
-  color: var(--muted);
+  color: var(--ink);
+  font-weight: 400;
 }
 
 .offer-list {
@@ -604,7 +625,8 @@ a {
   border: 1px solid rgba(17, 17, 17, 0.1);
   border-radius: 0.45rem;
   background: rgba(247, 251, 244, 0.65);
-  color: var(--muted);
+  color: var(--ink);
+  font-weight: 400;
   line-height: 1.7;
   font-size: 0.95rem;
 }
@@ -637,7 +659,8 @@ a {
 
 .strength-text {
   display: block;
-  color: var(--muted);
+  color: var(--ink);
+  font-weight: 400;
   line-height: 1.7;
   font-size: 0.95rem;
 }
@@ -669,7 +692,8 @@ a {
 
 .about-qa dd {
   margin: 0;
-  color: var(--muted);
+  color: var(--ink);
+  font-weight: 400;
   line-height: 1.75;
 }
 
@@ -842,7 +866,8 @@ a {
   border-bottom: none;
   background: linear-gradient(
     180deg,
-    var(--brand) 0%,
+    var(--bg-end) 0%,
+    var(--brand) 38%,
     var(--brand-deep) 100%
   );
   color: #fff;

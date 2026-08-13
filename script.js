@@ -35,7 +35,7 @@
     });
   }
 
-  const galleryImages = document.querySelectorAll(".shot-gallery img");
+  const galleryImages = document.querySelectorAll(".shot-gallery img, .case-zigzag-shot img");
   if (!galleryImages.length) return;
 
   const MIN_ZOOM = 1;
@@ -94,17 +94,19 @@
     zoomInBtn.disabled = zoom >= MAX_ZOOM;
   };
 
+  const centerScroll = () => {
+    requestAnimationFrame(() => {
+      stageEl.scrollLeft = Math.max((stageEl.scrollWidth - stageEl.clientWidth) / 2, 0);
+      stageEl.scrollTop = Math.max((stageEl.scrollHeight - stageEl.clientHeight) / 2, 0);
+    });
+  };
+
   const setZoom = (next) => {
     const previous = zoom;
     zoom = Math.min(MAX_ZOOM, Math.max(MIN_ZOOM, next));
     applyZoom();
-
     if (zoom !== previous) {
-      const ratio = stageEl.scrollTop / Math.max(stageEl.scrollHeight - stageEl.clientHeight, 1);
-      requestAnimationFrame(() => {
-        const maxScroll = Math.max(stageEl.scrollHeight - stageEl.clientHeight, 0);
-        stageEl.scrollTop = ratio * maxScroll;
-      });
+      centerScroll();
     }
   };
 
@@ -120,7 +122,7 @@
     const reveal = () => {
       measureBaseWidth();
       applyZoom();
-      stageEl.scrollTop = 0;
+      centerScroll();
       lightbox.querySelector(".lightbox-close").focus();
     };
 

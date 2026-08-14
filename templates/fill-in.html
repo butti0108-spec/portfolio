@@ -16,8 +16,9 @@
     <div class="shell header-inner">
       <a class="logo" href="../index.html">増渕 敦</a>
       <nav class="site-nav" aria-label="メイン">
-        <a href="compare.html">見比べ</a>
-        <a href="fill-in-sample.html">見本の枠</a>
+        <a href="../index.html#about">About</a>
+        <a href="../index.html#works">Works</a>
+        <a href="../index.html#contact">Contact</a>
       </nav>
     </div>
   </header>
@@ -25,12 +26,10 @@
     <div class="shell">
       <p class="section-label">1万円プラン</p>
       <h1>記入用（空欄）</h1>
-      <p class="wf-lead">番号を見比べて書いてください。送るときは「PDFで保存」。紙で見るときは「印刷」。画面を閉じると入力は消えます。リンクが無いときは「なし」。写真は 02.jpg のように番号のファイル名で共有フォルダへ入れてください。</p>
+      <p class="wf-lead">このサイトと同じ番号の場所に書いてください。送るときは「PDFで保存」。紙で見るときは「印刷」。画面を閉じると入力は消えます。リンクが無いときは「なし」。写真は 02.jpg のように番号のファイル名で共有フォルダへ入れてください。</p>
       <p class="wf-nav no-print">
-        <a href="compare.html">見比べ</a>
-        <a href="fill-in-sample.html">見本の枠</a>
-        <a href="fill-in.csv">Excel 用 CSV</a>
         <a href="../index.html#pricing">料金へ戻る</a>
+        <a href="fill-in.csv">Excel 用 CSV</a>
       </p>
 
       <form>
@@ -89,25 +88,35 @@
                 <input name="06-link" type="text" placeholder="リンク">
               </label>
             </div>
-            <div class="wf-grid wf-row-3">
-              <label class="wf-box">
-                <span class="wf-num">07a</span>
-                <span class="wf-name">3つの箱（左）</span>
-                <textarea name="07a-text" placeholder="見出しと短い説明"></textarea>
-                <input name="07a-link" type="text" value="なし" placeholder="リンク（なければなし）">
-              </label>
-              <label class="wf-box">
-                <span class="wf-num">07b</span>
-                <span class="wf-name">3つの箱（中）</span>
-                <textarea name="07b-text" placeholder="見出しと短い説明"></textarea>
-                <input name="07b-link" type="text" value="なし" placeholder="リンク（なければなし）">
-              </label>
-              <label class="wf-box">
-                <span class="wf-num">07c</span>
-                <span class="wf-name">3つの箱（右）</span>
-                <textarea name="07c-text" placeholder="見出しと短い説明"></textarea>
-                <input name="07c-link" type="text" value="なし" placeholder="リンク（なければなし）">
-              </label>
+            <div class="wf-repeat-wrap">
+              <div class="wf-grid wf-repeat" data-repeat="07" data-max="3" data-count="1">
+                <label class="wf-box">
+                  <span class="wf-num">07a</span>
+                  <span class="wf-name">箱1（左）</span>
+                  <textarea name="07a-text" placeholder="見出しと短い説明"></textarea>
+                  <input name="07a-link" type="text" value="なし" placeholder="リンク（なければなし）">
+                </label>
+                <label class="wf-box" hidden>
+                  <span class="wf-num">07b</span>
+                  <span class="wf-name">箱2（中）</span>
+                  <textarea name="07b-text" placeholder="見出しと短い説明"></textarea>
+                  <input name="07b-link" type="text" value="なし" placeholder="リンク（なければなし）">
+                </label>
+                <label class="wf-box" hidden>
+                  <span class="wf-num">07c</span>
+                  <span class="wf-name">箱3（右）</span>
+                  <textarea name="07c-text" placeholder="見出しと短い説明"></textarea>
+                  <input name="07c-link" type="text" value="なし" placeholder="リンク（なければなし）">
+                </label>
+              </div>
+              <p class="wf-repeat-bar no-print">
+                <span class="wf-repeat-label">07を足す</span>
+                <span class="wf-stepper">
+                  <button type="button" data-remove aria-label="07を減らす">−</button>
+                  <button type="button" data-add aria-label="07を足す">＋</button>
+                </span>
+                <span data-remain>あと2つ足せます</span>
+              </p>
             </div>
           </div>
         </section>
@@ -127,55 +136,75 @@
               <textarea name="09-text" placeholder="2〜4行"></textarea>
               <input name="09-link" type="text" value="なし" placeholder="リンク（なければなし）">
             </label>
-            <div class="wf-grid wf-row-4">
-              <label class="wf-box">
-                <span class="wf-num">10a</span>
-                <span class="wf-name">絵1</span>
-                <input name="10a-file" type="text" placeholder="写真のファイル名">
-              </label>
-              <label class="wf-box">
-                <span class="wf-num">10b</span>
-                <span class="wf-name">絵2</span>
-                <input name="10b-file" type="text" placeholder="写真のファイル名">
-              </label>
-              <label class="wf-box">
-                <span class="wf-num">10c</span>
-                <span class="wf-name">絵3</span>
-                <input name="10c-file" type="text" placeholder="写真のファイル名">
-              </label>
-              <label class="wf-box">
-                <span class="wf-num">10d</span>
-                <span class="wf-name">絵4</span>
-                <input name="10d-file" type="text" placeholder="写真のファイル名">
-              </label>
+            <div class="wf-repeat-wrap">
+              <div class="wf-grid wf-repeat" data-repeat="10" data-max="4" data-count="1">
+                <label class="wf-box">
+                  <span class="wf-num">10a</span>
+                  <span class="wf-name">絵1</span>
+                  <input name="10a-file" type="text" placeholder="写真のファイル名">
+                </label>
+                <label class="wf-box" hidden>
+                  <span class="wf-num">10b</span>
+                  <span class="wf-name">絵2</span>
+                  <input name="10b-file" type="text" placeholder="写真のファイル名">
+                </label>
+                <label class="wf-box" hidden>
+                  <span class="wf-num">10c</span>
+                  <span class="wf-name">絵3</span>
+                  <input name="10c-file" type="text" placeholder="写真のファイル名">
+                </label>
+                <label class="wf-box" hidden>
+                  <span class="wf-num">10d</span>
+                  <span class="wf-name">絵4</span>
+                  <input name="10d-file" type="text" placeholder="写真のファイル名">
+                </label>
+              </div>
+              <p class="wf-repeat-bar no-print">
+                <span class="wf-repeat-label">10を足す</span>
+                <span class="wf-stepper">
+                  <button type="button" data-remove aria-label="10を減らす">−</button>
+                  <button type="button" data-add aria-label="10を足す">＋</button>
+                </span>
+                <span data-remain>あと3つ足せます</span>
+              </p>
             </div>
           </div>
         </section>
 
         <section class="wf-block" aria-labelledby="wf-works">
           <h2 id="wf-works">Works</h2>
-          <div class="wf-grid wf-row-3">
-            <label class="wf-box">
-              <span class="wf-num">11</span>
-              <span class="wf-name">作品のカード1</span>
-              <textarea name="11-text" placeholder="短い文"></textarea>
-              <input name="11-file" type="text" placeholder="写真のファイル名">
-              <input name="11-link" type="text" placeholder="リンク（なければなし）">
-            </label>
-            <label class="wf-box">
-              <span class="wf-num">12</span>
-              <span class="wf-name">作品のカード2</span>
-              <textarea name="12-text" placeholder="短い文"></textarea>
-              <input name="12-file" type="text" placeholder="写真のファイル名">
-              <input name="12-link" type="text" placeholder="リンク（なければなし）">
-            </label>
-            <label class="wf-box">
-              <span class="wf-num">13</span>
-              <span class="wf-name">作品のカード3</span>
-              <textarea name="13-text" placeholder="短い文"></textarea>
-              <input name="13-file" type="text" placeholder="写真のファイル名">
-              <input name="13-link" type="text" placeholder="リンク（なければなし）">
-            </label>
+          <div class="wf-repeat-wrap">
+            <div class="wf-grid wf-repeat" data-repeat="works" data-max="3" data-count="1">
+              <label class="wf-box">
+                <span class="wf-num">11</span>
+                <span class="wf-name">作品のカード1</span>
+                <textarea name="11-text" placeholder="短い文"></textarea>
+                <input name="11-file" type="text" placeholder="写真のファイル名">
+                <input name="11-link" type="text" placeholder="リンク（なければなし）">
+              </label>
+              <label class="wf-box" hidden>
+                <span class="wf-num">12</span>
+                <span class="wf-name">作品のカード2</span>
+                <textarea name="12-text" placeholder="短い文"></textarea>
+                <input name="12-file" type="text" placeholder="写真のファイル名">
+                <input name="12-link" type="text" placeholder="リンク（なければなし）">
+              </label>
+              <label class="wf-box" hidden>
+                <span class="wf-num">13</span>
+                <span class="wf-name">作品のカード3</span>
+                <textarea name="13-text" placeholder="短い文"></textarea>
+                <input name="13-file" type="text" placeholder="写真のファイル名">
+                <input name="13-link" type="text" placeholder="リンク（なければなし）">
+              </label>
+            </div>
+            <p class="wf-repeat-bar no-print">
+              <span class="wf-repeat-label">作品を足す</span>
+              <span class="wf-stepper">
+                <button type="button" data-remove aria-label="作品を減らす">−</button>
+                <button type="button" data-add aria-label="作品を足す">＋</button>
+              </span>
+              <span data-remain>あと2つ足せます</span>
+            </p>
           </div>
         </section>
 

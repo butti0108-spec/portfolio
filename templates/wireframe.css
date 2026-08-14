@@ -26,9 +26,67 @@
   font-size: 1.15rem;
 }
 
-.wf-grid {
+.wf-repeat-wrap {
   display: grid;
   gap: 0.65rem;
+}
+
+.wf-repeat-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.45rem 0.65rem;
+  margin: 0.15rem 0 0;
+  font-size: 0.88rem;
+}
+
+.wf-stepper {
+  display: flex;
+  gap: 0.25rem;
+}
+
+.wf-repeat-bar button {
+  width: 2rem;
+  height: 2rem;
+  padding: 0;
+  border: 1px solid rgba(17, 17, 17, 0.28);
+  border-radius: 0.25rem;
+  background: #fff;
+  color: var(--ink);
+  font: inherit;
+  font-size: 1.2rem;
+  font-weight: 700;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.wf-repeat-bar button:disabled {
+  opacity: 0.35;
+  cursor: default;
+}
+
+.wf-repeat-label {
+  font-weight: 700;
+}
+
+.wf-repeat-bar [data-remain] {
+  color: var(--muted);
+}
+
+.wf-repeat[data-count="1"] {
+  grid-template-columns: 1fr;
+}
+
+.wf-repeat[data-count="2"] {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.wf-repeat[data-count="3"] {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.wf-repeat[data-count="4"] {
+  grid-template-columns: repeat(4, minmax(0, 1fr));
 }
 
 .wf-hero {
@@ -57,6 +115,11 @@
   border: 1px dashed rgba(17, 17, 17, 0.35);
   background: #fff;
   box-sizing: border-box;
+}
+
+.wf-box[hidden],
+.wf-repeat-bar [hidden] {
+  display: none !important;
 }
 
 .wf-num {
@@ -165,7 +228,10 @@ body.pdf-export .wf-box textarea::placeholder {
 @media (max-width: 48rem) {
   .wf-row-2,
   .wf-row-3,
-  .wf-row-4 {
+  .wf-row-4,
+  .wf-repeat[data-count="2"],
+  .wf-repeat[data-count="3"],
+  .wf-repeat[data-count="4"] {
     grid-template-columns: 1fr;
   }
 }

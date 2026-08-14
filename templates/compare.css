@@ -1,0 +1,120 @@
+html,
+body {
+  height: 100%;
+  margin: 0;
+  overflow: hidden;
+}
+
+body {
+  background: var(--bg-soft);
+}
+
+.compare {
+  display: grid;
+  grid-template-rows: auto 1fr;
+  height: 100%;
+}
+
+.compare-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.65rem 1rem;
+  padding: 0.65rem var(--gutter);
+  border-bottom: 1px solid var(--line);
+  background: #fff;
+}
+
+.compare-title {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: 1.05rem;
+  font-weight: 700;
+}
+
+.compare-hint {
+  margin: 0;
+  flex: 1 1 16rem;
+  font-size: 0.82rem;
+  line-height: 1.5;
+  color: var(--muted);
+}
+
+.compare-bar nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1rem;
+  margin-left: auto;
+  font-size: 0.88rem;
+}
+
+.compare-panes {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  min-height: 0;
+}
+
+.compare-pane {
+  display: grid;
+  grid-template-rows: auto 1fr;
+  min-width: 0;
+  min-height: 0;
+}
+
+.compare-pane + .compare-pane {
+  border-left: 1px solid var(--line);
+}
+
+.compare-pane-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.4rem 0.75rem;
+  padding: 0.45rem 0.75rem;
+  background: #fff;
+  border-bottom: 1px solid var(--line);
+  font-size: 0.82rem;
+}
+
+.compare-pane-head strong {
+  font-family: var(--font-display);
+}
+
+.compare-pane-head button {
+  font: inherit;
+  font-size: 0.82rem;
+  padding: 0.15rem 0.55rem;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: #fff;
+  cursor: pointer;
+}
+
+.compare-pane-head button[aria-pressed="true"] {
+  background: var(--accent-wash);
+  border-color: var(--brand);
+  font-weight: 700;
+}
+
+.compare-pane iframe {
+  width: 100%;
+  height: 100%;
+  border: 0;
+  background: #fff;
+}
+
+@media (max-width: 48rem) {
+  .compare-panes {
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr 1fr;
+  }
+
+  .compare-pane + .compare-pane {
+    border-left: 0;
+    border-top: 1px solid var(--line);
+  }
+
+  .compare-bar nav {
+    margin-left: 0;
+  }
+}

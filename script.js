@@ -45,6 +45,40 @@
     });
   }
 
+  const openHashTarget = (hash) => {
+    if (!hash || hash === "#") return;
+    const id = decodeURIComponent(hash.slice(1));
+    const target = document.getElementById(id);
+    if (!target) return;
+
+    let node = target;
+    while (node) {
+      if (node.tagName === "DETAILS") {
+        node.open = true;
+      }
+      node = node.parentElement;
+    }
+
+    target.scrollIntoView({ behavior: "smooth", block: "start" });
+  };
+
+  document.addEventListener("click", (event) => {
+    const link = event.target.closest('a[href^="#"]');
+    if (!link) return;
+    const href = link.getAttribute("href");
+    if (!href || href === "#") return;
+    const id = decodeURIComponent(href.slice(1));
+    if (!document.getElementById(id)) return;
+    event.preventDefault();
+    history.pushState(null, "", href);
+    openHashTarget(href);
+  });
+
+  window.addEventListener("hashchange", () => openHashTarget(location.hash));
+  if (location.hash) {
+    openHashTarget(location.hash);
+  }
+
   const galleryImages = document.querySelectorAll(".shot-gallery img, .case-zigzag-shot img");
   if (!galleryImages.length) return;
 

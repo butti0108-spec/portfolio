@@ -941,21 +941,30 @@ a {
   counter-reset: offer 3;
 }
 
-.price-item {
+.price-addon li::before {
+  content: "";
+  width: 0;
+  flex: 0 0 0;
+}
+
+.price-item,
+.offer-item {
   display: flex;
   flex-direction: column;
   gap: 0.3rem;
   min-width: 0;
 }
 
-.price-amount {
+.price-amount,
+.offer-title {
   font-family: var(--font-display);
   font-size: 1.05rem;
   font-weight: 700;
   line-height: 1.4;
 }
 
-.price-note {
+.price-note,
+.offer-note {
   font-size: 0.88rem;
   font-weight: 400;
   line-height: 1.65;
@@ -971,6 +980,57 @@ a {
 
 .offer-foot + .offer-foot {
   margin-top: 0.65rem;
+}
+
+.accordion-jumps {
+  margin: 1.1rem 0 0;
+  font-size: 0.88rem;
+  line-height: 1.7;
+  color: var(--muted);
+}
+
+.accordion-jumps a {
+  color: var(--ink);
+  text-decoration: underline;
+  text-underline-offset: 0.18em;
+}
+
+.faq-list {
+  margin: 1rem 0 0;
+  padding: 0;
+  display: grid;
+  gap: 0.35rem;
+}
+
+.faq-list > div {
+  padding: 1.35rem 0;
+  border-bottom: 1px solid var(--line);
+}
+
+.faq-list > div:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+}
+
+.faq-list dt {
+  margin: 0 0 0.45rem;
+  font-family: var(--font-display);
+  font-weight: 700;
+  color: var(--ink);
+  line-height: 1.5;
+}
+
+.faq-list dd {
+  margin: 0;
+  color: var(--ink);
+  font-weight: 400;
+  line-height: 1.75;
+}
+
+.faq-list a {
+  color: var(--ink);
+  text-decoration: underline;
+  text-underline-offset: 0.18em;
 }
 
 .value-list {

@@ -19,6 +19,7 @@
         <a href="../index.html#about">About</a>
         <a href="../index.html#works">Works</a>
         <a href="../index.html#contact">Contact</a>
+        <a href="../mentor.html">確認用</a>
       </nav>
     </div>
   </header>
@@ -26,7 +27,7 @@
     <div class="shell">
       <p class="section-label">1万円プラン</p>
       <h1>記入用（空欄）</h1>
-      <p class="wf-lead">このサイトと同じ番号の場所に書いてください。送るときは「PDFで保存」。紙で見るときは「印刷」。画面を閉じると入力は消えます。リンクが無いときは「なし」。写真は 02.jpg のように番号のファイル名で共有フォルダへ入れてください。</p>
+      <p class="wf-lead">このサイトと同じ番号の場所に書いてください。色は下の見た目から選んでください。送るときは「PDFで保存」。紙で見るときは「印刷」。画面を閉じると入力は消えます。リンクが無いときは「なし」。写真は 02.jpg のように番号のファイル名で共有フォルダへ入れてください。</p>
       <p class="wf-nav no-print">
         <a href="../index.html#pricing">料金へ戻る</a>
         <a href="fill-in.csv">Excel 用 CSV</a>
@@ -41,6 +42,135 @@
           <button type="button" class="btn-secondary" id="print-page">印刷</button>
           <span>送るならPDF。紙で見るなら印刷。</span>
         </p>
+
+        <section class="wf-block" aria-labelledby="wf-look">
+          <h2 id="wf-look">見た目（全体の色）</h2>
+          <p class="wf-look-lead">ページ全体でそろえます。右の見本は色と文字だけです。写真や本番レイアウトではありません。選べない色は相談欄へ。</p>
+
+          <div class="wf-look-layout">
+            <div class="wf-look-controls">
+              <fieldset class="wf-fieldset">
+                <legend>パターン</legend>
+                <div class="wf-choice-list">
+                  <label class="wf-choice">
+                    <input type="radio" name="look-pattern" value="same" checked>
+                    <span>このサイトと同じ</span>
+                  </label>
+                  <label class="wf-choice">
+                    <input type="radio" name="look-pattern" value="solid">
+                    <span>単色</span>
+                  </label>
+                  <label class="wf-choice">
+                    <input type="radio" name="look-pattern" value="gradient">
+                    <span>グラデーション</span>
+                  </label>
+                  <label class="wf-choice">
+                    <input type="radio" name="look-pattern" value="consult">
+                    <span>相談（自由記入）</span>
+                  </label>
+                </div>
+              </fieldset>
+
+              <fieldset class="wf-fieldset" data-look-for="solid gradient">
+                <legend>背景色</legend>
+                <div class="wf-palette">
+                  <label class="wf-swatch">
+                    <input type="radio" name="look-base" value="green" checked>
+                    <span class="wf-swatch-chip" style="--chip:#8fbf78"></span>
+                    <span class="wf-swatch-name">緑</span>
+                  </label>
+                  <label class="wf-swatch">
+                    <input type="radio" name="look-base" value="teal">
+                    <span class="wf-swatch-chip" style="--chip:#6fafa3"></span>
+                    <span class="wf-swatch-name">ティール</span>
+                  </label>
+                  <label class="wf-swatch">
+                    <input type="radio" name="look-base" value="blue">
+                    <span class="wf-swatch-chip" style="--chip:#7aa7c7"></span>
+                    <span class="wf-swatch-name">青</span>
+                  </label>
+                  <label class="wf-swatch">
+                    <input type="radio" name="look-base" value="beige">
+                    <span class="wf-swatch-chip" style="--chip:#d4c4a8"></span>
+                    <span class="wf-swatch-name">ベージュ</span>
+                  </label>
+                  <label class="wf-swatch">
+                    <input type="radio" name="look-base" value="coral">
+                    <span class="wf-swatch-chip" style="--chip:#d4a090"></span>
+                    <span class="wf-swatch-name">コーラル</span>
+                  </label>
+                  <label class="wf-swatch">
+                    <input type="radio" name="look-base" value="light-gray">
+                    <span class="wf-swatch-chip" style="--chip:#d5d9de"></span>
+                    <span class="wf-swatch-name">薄いグレー</span>
+                  </label>
+                  <label class="wf-swatch">
+                    <input type="radio" name="look-base" value="gray">
+                    <span class="wf-swatch-chip" style="--chip:#9aa3ad"></span>
+                    <span class="wf-swatch-name">グレー</span>
+                  </label>
+                  <label class="wf-swatch">
+                    <input type="radio" name="look-base" value="dark">
+                    <span class="wf-swatch-chip" style="--chip:#3a3f45"></span>
+                    <span class="wf-swatch-name">ダーク</span>
+                  </label>
+                </div>
+              </fieldset>
+
+              <fieldset class="wf-fieldset" data-look-for="solid gradient">
+                <legend>文字色</legend>
+                <div class="wf-choice-list">
+                  <label class="wf-choice">
+                    <input type="radio" name="look-ink" value="black" checked>
+                    <span>黒</span>
+                  </label>
+                  <label class="wf-choice">
+                    <input type="radio" name="look-ink" value="white">
+                    <span>白（暗い背景向け）</span>
+                  </label>
+                </div>
+              </fieldset>
+
+              <fieldset class="wf-fieldset" data-look-for="gradient" hidden>
+                <legend>グラデーションの向き</legend>
+                <div class="wf-choice-list">
+                  <label class="wf-choice">
+                    <input type="radio" name="look-gradient-dir" value="top-dark" checked>
+                    <span>上が濃い</span>
+                  </label>
+                  <label class="wf-choice">
+                    <input type="radio" name="look-gradient-dir" value="bottom-dark">
+                    <span>下が濃い</span>
+                  </label>
+                  <label class="wf-choice">
+                    <input type="radio" name="look-gradient-dir" value="left-dark">
+                    <span>左が濃い</span>
+                  </label>
+                  <label class="wf-choice">
+                    <input type="radio" name="look-gradient-dir" value="right-dark">
+                    <span>右が濃い</span>
+                  </label>
+                </div>
+              </fieldset>
+
+              <label class="wf-box" data-look-for="consult" hidden>
+                <span class="wf-name">相談・希望（自由記入）</span>
+                <textarea name="look-note" placeholder="例：お店の看板に近い色、写真の色に合わせたい、など"></textarea>
+              </label>
+            </div>
+
+            <aside class="wf-preview" id="look-preview" aria-label="色の見本">
+              <p class="wf-preview-badge">見本です</p>
+              <div class="wf-preview-stage">
+                <p class="wf-preview-title">見出しの見本</p>
+                <p class="wf-preview-text">ここに短い文章が入ります。</p>
+                <span class="wf-preview-blank">空欄</span>
+              </div>
+              <p class="wf-preview-note">色と文字だけの確認用です。</p>
+            </aside>
+          </div>
+        </section>
+
         <section class="wf-block" aria-labelledby="wf-header">
           <h2 id="wf-header">Header（一番上の細い帯）</h2>
           <div class="wf-grid wf-row-2">

@@ -1,0 +1,51 @@
+.mentor-page {
+  padding: 2rem 0 4rem;
+}
+
+.mentor-shell {
+  max-width: 40rem;
+}
+
+.mentor-lead {
+  margin: 0 0 2rem;
+  line-height: 1.8;
+}
+
+.mentor-block {
+  margin: 0 0 2rem;
+}
+
+.mentor-block h2 {
+  margin: 0 0 0.65rem;
+  font-family: var(--font-display);
+  font-size: 1.15rem;
+}
+
+.mentor-block p,
+.mentor-block li {
+  line-height: 1.75;
+}
+
+.mentor-block ul,
+.mentor-block ol {
+  margin: 0;
+  padding-left: 1.25rem;
+}
+
+.mentor-block li + li {
+  margin-top: 0.4rem;
+}
+
+.mentor-links {
+  list-style: none;
+  padding-left: 0;
+}
+
+.mentor-links li + li {
+  margin-top: 0.5rem;
+}
+
+.mentor-links a {
+  font-weight: 700;
+  text-underline-offset: 0.18em;
+}

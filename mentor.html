@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex">
+  <title>確認用（メンター） | 増渕 敦</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@500;700&family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="mentor.css">
+  <script>document.documentElement.classList.add("js");</script>
+  <script src="script.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#main">本文へスキップ</a>
+
+  <header class="site-header">
+    <div class="shell header-inner">
+      <a class="logo" href="index.html">増渕 敦</a>
+      <button type="button" class="nav-toggle" aria-expanded="false" aria-controls="site-nav" aria-label="メニューを開く">
+        <span class="nav-toggle-bars" aria-hidden="true">
+          <span></span>
+          <span></span>
+          <span></span>
+        </span>
+        <span class="nav-toggle-label">メニュー</span>
+      </button>
+      <nav id="site-nav" class="site-nav" aria-label="メイン">
+        <a href="index.html#about">About</a>
+        <a href="index.html#works">Works</a>
+        <a href="index.html#contact">Contact</a>
+        <a href="mentor.html" aria-current="page">確認用</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main" class="mentor-page">
+    <div class="shell mentor-shell">
+      <p class="section-label">Mentor</p>
+      <h1>確認用</h1>
+      <p class="mentor-lead">メンター向けのまとめです。GitHub のコミットを1件ずつ見なくても、主な変更が分かるようにしています。</p>
+
+      <section class="mentor-block" aria-labelledby="mentor-now">
+        <h2 id="mentor-now">いま見てほしいこと</h2>
+        <ul>
+          <li>トップページ全体の見やすさ（ヒーロー・Profile・Works・Contact）</li>
+          <li>料金：1万円を主軸にした見せ方</li>
+          <li>1万円プランの<a href="templates/fill-in.html">記入用</a>（色の見本つき）</li>
+          <li>Contact は見た目確認用。送信はまだ動きません</li>
+        </ul>
+      </section>
+
+      <section class="mentor-block" aria-labelledby="mentor-history">
+        <h2 id="mentor-history">主な変更</h2>
+        <ol>
+          <li>文章を増やし、ヒーロー写真を入れた</li>
+          <li>Profile・Works・スマホ表示を整えた</li>
+          <li>バイタル事例ページを追加した</li>
+          <li>料金を整理した（1万円主軸、WordPress加算、そのほか）</li>
+          <li>1万円用の記入ページを作った（色選択・見本・PDF／印刷）</li>
+        </ol>
+      </section>
+
+      <section class="mentor-block" aria-labelledby="mentor-intent">
+        <h2 id="mentor-intent">意識したこと</h2>
+        <ul>
+          <li>見やすさ・迷わなさを優先した</li>
+          <li>1万円を料金の主軸にして、案内リンクが埋もれないようにした</li>
+          <li>色はページ全体でそろえ、パレットは少なくした（緑→ティール→青の順）</li>
+          <li>文字色は黒と白だけにした</li>
+          <li>見本は色と文字の確認だけにした（本番サイトの真似まではしない）</li>
+          <li>ポートフォリオ本体と、この確認用ページは分けた</li>
+          <li>WordPress化・送信フォームはこれから、と分かるようにした</li>
+        </ul>
+      </section>
+
+      <section class="mentor-block" aria-labelledby="mentor-wp">
+        <h2 id="mentor-wp">WordPress について</h2>
+        <p>このサイトは、あとで WordPress にする前提です。Contact Form 7 で問い合わせを送れるようにするのは、これから対応します。</p>
+      </section>
+
+      <section class="mentor-block" aria-labelledby="mentor-links">
+        <h2 id="mentor-links">リンク</h2>
+        <ul class="mentor-links">
+          <li><a href="index.html">トップページ</a></li>
+          <li><a href="index.html#pricing">料金の目安</a></li>
+          <li><a href="templates/fill-in.html">記入用</a></li>
+          <li><a href="works/vital.html">バイタル事例</a></li>
+        </ul>
+      </section>
+    </div>
+  </main>
+</body>
+</html>

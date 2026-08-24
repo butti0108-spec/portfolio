@@ -1,3 +1,10 @@
+/*
+Theme Name: 増渕 敦 Portfolio
+Author: 増渕 敦
+Description: 静的ポートフォリオと同じ見た目のクラシックテーマ。
+Version: 1.1.25
+Text Domain: masubuchi-portfolio
+*/
 
 :root {
   /* ゆうさんの植木屋さん寄り：明るいリーフグリーン */
@@ -34,6 +41,11 @@
 
 html {
   scroll-behavior: smooth;
+  font-size: calc(100% * var(--font-scale, 1));
+}
+
+html.jump-hash {
+  scroll-behavior: auto;
 }
 
 ::selection {
@@ -91,6 +103,16 @@ a {
 .skip-link:focus {
   left: 0.75rem;
   top: 0.75rem;
+}
+
+.admin-bar .site-header {
+  top: 32px;
+}
+
+@media screen and (max-width: 782px) {
+  .admin-bar .site-header {
+    top: 46px;
+  }
 }
 
 .site-header {
@@ -278,9 +300,54 @@ a {
   z-index: 0;
 }
 
-.hero-copy {
+/* グロー層：同じ虹をぼかして光のにじみを演出 */
+.hero-stage::before {
+  content: "";
   grid-area: 1 / 1;
   z-index: 1;
+  pointer-events: none;
+  background: radial-gradient(
+    ellipse 130% 80% at 50% 108%,
+    transparent 36%,
+    oklch(55% 0.28 20)  42%,
+    oklch(72% 0.22 55)  47%,
+    oklch(90% 0.20 100) 52%,
+    oklch(72% 0.22 148) 57%,
+    oklch(55% 0.25 255) 62%,
+    oklch(45% 0.30 300) 67%,
+    transparent 72%
+  );
+  mix-blend-mode: screen;
+  filter: blur(14px);
+  opacity: 0;
+  clip-path: inset(0 100% 0 0);
+}
+
+/* シャープな虹本体 */
+.hero-stage::after {
+  content: "";
+  grid-area: 1 / 1;
+  z-index: 1;
+  pointer-events: none;
+  background: radial-gradient(
+    ellipse 130% 80% at 50% 108%,
+    transparent 36%,
+    oklch(55% 0.28 20)  40%,
+    oklch(72% 0.22 55)  44%,
+    oklch(90% 0.20 100) 48%,
+    oklch(72% 0.22 148) 52%,
+    oklch(55% 0.25 255) 56%,
+    oklch(45% 0.30 300) 60%,
+    transparent 64%
+  );
+  mix-blend-mode: screen;
+  opacity: 0;
+  clip-path: inset(0 100% 0 0);
+}
+
+.hero-copy {
+  grid-area: 1 / 1;
+  z-index: 2;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -615,16 +682,8 @@ a {
 }
 
 .section {
-  padding: clamp(2.5rem, 6vw, 4rem) 0 clamp(2rem, 5vw, 3rem);
+  padding: clamp(4.5rem, 8vw, 6.25rem) 0;
   border-bottom: none;
-}
-
-.about {
-  padding-bottom: 1.25rem;
-}
-
-.works {
-  padding-top: 1.25rem;
 }
 
 /* 緑背景に乗る本文・見出し（白カード内は対象外） */
@@ -632,6 +691,14 @@ a {
 .section > .shell > h2,
 .section > .shell > .profile-name,
 .section > .shell > .section-lead,
+.section > .shell > .reveal-group > .section-label,
+.section > .shell > .reveal-group > h2,
+.section > .shell > .reveal-group > .profile-name,
+.section > .shell > .reveal-group > .section-lead,
+.section > .shell > .reveal-group > [data-reveal-trigger] > .section-label,
+.section > .shell > .reveal-group > [data-reveal-trigger] > h2,
+.section > .shell > .reveal-group > [data-reveal-trigger] > .profile-name,
+.section > .shell > .reveal-group > [data-reveal-trigger] > .section-lead,
 .case-block h2,
 .case-block p,
 .case-block li,
@@ -650,6 +717,9 @@ a {
 
 .section > .shell > h2,
 .section > .shell > .profile-name,
+.section > .shell > .reveal-group > h2,
+.section > .shell > .reveal-group > .profile-name,
+.section > .shell > .reveal-group > [data-reveal-trigger] > h2,
 .case-block h2,
 .shot-card figcaption,
 .section-label,
@@ -661,6 +731,21 @@ a {
 .works > .shell > .section-label,
 .works > .shell > h2,
 .works > .shell > .section-lead,
+.works > .shell > .reveal-group > .section-label,
+.works > .shell > .reveal-group > h2,
+.works > .shell > .reveal-group > .section-lead,
+.works > .shell > .reveal-group > [data-reveal-trigger] > .section-label,
+.works > .shell > .reveal-group > [data-reveal-trigger] > h2,
+.works > .shell > .reveal-group > [data-reveal-trigger] > .section-lead,
+.offer > .shell > .reveal-group > [data-reveal-trigger] > .section-label,
+.offer > .shell > .reveal-group > [data-reveal-trigger] > h2,
+.offer > .shell > .reveal-group > [data-reveal-trigger] > .section-lead,
+.pricing > .shell > .reveal-group > [data-reveal-trigger] > .section-label,
+.pricing > .shell > .reveal-group > [data-reveal-trigger] > h2,
+.pricing > .shell > .reveal-group > [data-reveal-trigger] > .section-lead,
+.faq > .shell > .reveal-group > [data-reveal-trigger] > .section-label,
+.faq > .shell > .reveal-group > [data-reveal-trigger] > h2,
+.faq > .shell > .reveal-group > [data-reveal-trigger] > .section-lead,
 .case-block h2,
 .case-block p,
 .case-block li,
@@ -746,7 +831,9 @@ a {
   margin-bottom: 2.5rem;
 }
 
-.works .section-lead {
+.works .section-lead,
+.offer .section-lead,
+.pricing .section-lead {
   margin-bottom: 1.5rem;
   overflow-wrap: anywhere;
 }
@@ -865,6 +952,12 @@ a {
 .accordion-body {
   padding: 0 1.35rem 1.35rem;
   border-top: 1px solid rgba(17, 17, 17, 0.08);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .accordion[open] > .accordion-body {
+    animation: accordionIn 0.38s ease both;
+  }
 }
 
 .offer-lead {
@@ -1001,6 +1094,139 @@ a {
 
 .price-block > .price-main-note + .price-main-note {
   margin-top: 0.45rem;
+}
+
+.offer-panel {
+  margin: 0;
+  padding: 1.35rem 1.35rem 1.5rem;
+  border: 1px solid rgba(17, 17, 17, 0.12);
+  border-radius: 0.6rem;
+  background: #fff;
+}
+
+.offer-anchor {
+  position: relative;
+  top: -4.5rem;
+  height: 0;
+  pointer-events: none;
+}
+
+.price-card-fee {
+  margin: 0 0 0.4rem;
+  font-family: var(--font-display);
+  font-size: 1.02rem;
+  font-weight: 700;
+  line-height: 1.4;
+  color: var(--brand-deep);
+}
+
+.work-list.price-entry-list > .work-item {
+  scroll-margin-top: 4.75rem;
+}
+
+.admin-bar .work-list.price-entry-list > .work-item {
+  scroll-margin-top: calc(4.75rem + 46px);
+}
+
+.price-entry {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.price-plan {
+  padding: clamp(4.5rem, 8vw, 6.25rem) 0;
+}
+
+.price-plan .section-label,
+.price-plan h1 {
+  color: #111111;
+  -webkit-text-fill-color: #111111;
+  -webkit-text-stroke: 0;
+  text-shadow: none;
+}
+
+.price-plan h1 {
+  margin: 0 0 1.25rem;
+  font-family: var(--font-display);
+  font-size: clamp(1.6rem, 4vw, 2.1rem);
+}
+
+.price-plan .case-nav {
+  justify-content: flex-start;
+}
+
+.price-panel {
+  position: relative;
+  padding: 1.35rem 1.4rem 1.5rem;
+  border: 1px solid rgba(57, 157, 38, 0.22);
+  border-radius: 0.6rem;
+  background: #fff;
+}
+
+.price-panel-copy {
+  max-width: 40rem;
+}
+
+.price-panel-title {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--ink);
+}
+
+.price-panel-sub {
+  margin: 1.35rem 0 0;
+  font-family: var(--font-display);
+  font-size: 1.02rem;
+  font-weight: 700;
+  line-height: 1.45;
+  color: var(--ink);
+}
+
+.price-panel-copy > .price-main-amount:first-child,
+.price-panel-copy > p:first-child {
+  margin-top: 0;
+}
+
+.price-panel-copy p {
+  margin: 0.75rem 0 0;
+  font-size: 0.98rem;
+  line-height: 1.8;
+  color: var(--ink);
+}
+
+.price-points {
+  list-style: none;
+  margin: 0.95rem 0 0;
+  padding: 0;
+  display: grid;
+  gap: 0.45rem;
+}
+
+.price-points li {
+  position: relative;
+  padding-left: 1.2rem;
+  font-size: 0.98rem;
+  line-height: 1.7;
+  color: var(--ink);
+}
+
+.price-points li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.62em;
+  width: 0.42rem;
+  height: 0.42rem;
+  border-radius: 50%;
+  background: var(--brand);
 }
 
 .price-list-plus {
@@ -1230,6 +1456,7 @@ a {
 }
 
 .work-item a,
+.work-item .price-entry,
 .work-item-pending {
   display: flex;
   flex-direction: column;
@@ -1245,13 +1472,22 @@ a {
   transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.22s ease;
 }
 
-.work-item a:hover {
+.work-item a:hover,
+.work-item .price-entry:hover {
   border-color: rgba(57, 157, 38, 0.42);
   box-shadow: 0 8px 24px rgba(57, 157, 38, 0.12);
   transform: translateY(-4px);
 }
 
-.work-item a:hover h3 {
+.work-item .price-entry.is-open {
+  border-color: var(--brand);
+  box-shadow: 0 8px 24px rgba(57, 157, 38, 0.18);
+  transform: translateY(-4px);
+}
+
+.work-item a:hover h3,
+.work-item .price-entry:hover h3,
+.work-item .price-entry.is-open h3 {
   opacity: 0.7;
 }
 
@@ -1345,7 +1581,9 @@ a {
   overflow-wrap: anywhere;
 }
 
-.work-item a:hover .work-link {
+.work-item a:hover .work-link,
+.work-item .price-entry:hover .work-link,
+.work-item .price-entry.is-open .work-link {
   background: var(--brand-deep);
   border-color: var(--brand-deep);
   color: #fff;
@@ -1356,7 +1594,7 @@ a {
 }
 
 .contact-band {
-  padding: clamp(2.5rem, 6vw, 4rem) 0;
+  padding: clamp(4.5rem, 8vw, 6.25rem) 0;
   border-bottom: none;
   background: linear-gradient(
     180deg,
@@ -1477,6 +1715,24 @@ a {
   color: var(--muted);
   word-break: keep-all;
   line-break: strict;
+}
+
+.contact-recaptcha-note a {
+  color: var(--brand-deep);
+  text-decoration: underline;
+  text-underline-offset: 0.12em;
+}
+
+.contact-recaptcha-note a:hover,
+.contact-recaptcha-note a:focus-visible {
+  color: var(--brand);
+}
+
+/* reCAPTCHA v3：バッジ非表示（Contact付近に表記を置く） */
+.grecaptcha-badge {
+  visibility: hidden !important;
+  opacity: 0 !important;
+  pointer-events: none !important;
 }
 
 .contact-form-status {
@@ -2193,8 +2449,203 @@ body.lightbox-open {
   to   { opacity: 1; }
 }
 
+@keyframes heroRainbow {
+  0% {
+    opacity: 1;
+    clip-path: inset(0 100% 0 0);
+  }
+  44% {
+    opacity: 1;
+    clip-path: inset(0 0 0 0);
+  }
+  55% {
+    opacity: 1;
+    clip-path: inset(0 0 0 0);
+  }
+  100% {
+    opacity: 0;
+    clip-path: inset(0 0 0 100%);
+  }
+}
+
+@keyframes heroValueRise {
+  from {
+    opacity: 0;
+    transform: translateY(22px) scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes accordionIn {
+  from {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes revealUp {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 @media (prefers-reduced-motion: no-preference) {
   .js .hero-copy {
     animation: heroFadeUp 0.7s 0.08s ease both;
   }
+
+  .js .hero-stage::before,
+  .js .hero-stage::after {
+    animation: heroRainbow 3.5s ease-in-out 0.12s forwards;
+  }
+
+  .js .hero-value-list li {
+    opacity: 0;
+    transform-origin: 50% 80%;
+    animation: heroValueRise 1.15s 3.4s cubic-bezier(0.16, 1, 0.3, 1) both;
+  }
+
+  .has-reveal [data-reveal-group] [data-reveal] {
+    opacity: 0;
+    transform: translateY(18px);
+    transition:
+      opacity 1.05s cubic-bezier(0.22, 1, 0.36, 1),
+      transform 1.05s cubic-bezier(0.22, 1, 0.36, 1);
+    transition-delay: var(--reveal-delay, 0s);
+  }
+
+  .has-reveal [data-reveal-group] [data-reveal="wave"] {
+    transform: translateX(-16px) translateY(8px);
+  }
+
+  .has-reveal [data-reveal-group] [data-reveal="fade"] {
+    transform: translateY(10px);
+  }
+
+  .has-reveal [data-reveal-group] [data-reveal="work"] {
+    transform: translateX(-18px) translateY(8px);
+    transition-duration: 1.15s;
+  }
+
+  .has-reveal [data-reveal-group] [data-reveal="work"] .work-thumb,
+  .has-reveal [data-reveal-group] [data-reveal="work"] .work-tag,
+  .has-reveal [data-reveal-group] [data-reveal="work"] h3,
+  .has-reveal [data-reveal-group] [data-reveal="work"] .work-item-copy,
+  .has-reveal [data-reveal-group] [data-reveal="work"] .work-link {
+    opacity: 0;
+    transform: translateY(10px);
+    transition:
+      opacity 0.9s cubic-bezier(0.22, 1, 0.36, 1),
+      transform 0.9s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .has-reveal [data-reveal-group].is-revealed [data-reveal] {
+    opacity: 1;
+    transform: none;
+  }
+
+  .has-reveal [data-reveal-group].is-revealed [data-reveal="work"] .work-thumb {
+    opacity: 1;
+    transform: none;
+    transition-delay: calc(var(--reveal-delay, 0s) + 0.04s);
+  }
+
+  .has-reveal [data-reveal-group].is-revealed [data-reveal="work"] .work-tag {
+    opacity: 1;
+    transform: none;
+    transition-delay: calc(var(--reveal-delay, 0s) + 0.16s);
+  }
+
+  .has-reveal [data-reveal-group].is-revealed [data-reveal="work"] h3 {
+    opacity: 1;
+    transform: none;
+    transition-delay: calc(var(--reveal-delay, 0s) + 0.28s);
+  }
+
+  .has-reveal [data-reveal-group].is-revealed [data-reveal="work"] .work-item-copy {
+    opacity: 1;
+    transform: none;
+    transition-delay: calc(var(--reveal-delay, 0s) + 0.4s);
+  }
+
+  .has-reveal [data-reveal-group].is-revealed [data-reveal="work"] .work-link {
+    opacity: 1;
+    transform: none;
+    transition-delay: calc(var(--reveal-delay, 0s) + 0.52s);
+  }
+
+  .has-reveal [data-reveal-group].is-instant [data-reveal],
+  .has-reveal [data-reveal-group].is-instant [data-reveal="work"] .work-thumb,
+  .has-reveal [data-reveal-group].is-instant [data-reveal="work"] .work-tag,
+  .has-reveal [data-reveal-group].is-instant [data-reveal="work"] h3,
+  .has-reveal [data-reveal-group].is-instant [data-reveal="work"] .work-item-copy,
+  .has-reveal [data-reveal-group].is-instant [data-reveal="work"] .work-link {
+    transition: none;
+  }
+
+  @media (min-width: 60rem) {
+    .has-reveal [data-reveal-group] [data-reveal] {
+      transition-duration: 1.2s;
+    }
+
+    .has-reveal [data-reveal-group] [data-reveal="work"] {
+      transition-duration: 1.3s;
+    }
+  }
+}
+
+/* Contact Form 7 を既存フォームの見た目に合わせる */
+.wpcf7 form.wpcf7-form,
+.contact-form .wpcf7-form {
+  margin: 0;
+}
+
+.contact-form .wpcf7-form > p {
+  margin: 0;
+}
+
+.contact-form .wpcf7-not-valid-tip {
+  font-size: 0.8rem;
+  margin-top: 0.25rem;
+}
+
+.contact-form .wpcf7-response-output {
+  margin: 1rem 0 0;
+  padding: 0.75rem 0.9rem;
+  border-radius: 0.35rem;
+  font-size: 0.9rem;
+}
+
+.contact-form input.wpcf7-submit {
+  width: 100%;
+  margin-top: 0.25rem;
+  background: var(--brand);
+  color: #fff;
+  -webkit-text-fill-color: #fff;
+  border-color: transparent;
+  cursor: pointer;
+}
+
+.contact-form input.wpcf7-submit:hover {
+  background: var(--brand-deep);
+  color: #fff;
+  -webkit-text-fill-color: #fff;
+  box-shadow: 0 4px 12px rgba(57, 157, 38, 0.3);
+  transform: translateY(-1px);
+}
+
+.contact-form .wpcf7-spinner {
+  display: none;
 }

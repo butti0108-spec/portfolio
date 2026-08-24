@@ -1,0 +1,10 @@
+# Theme ZIP backups (keep locally / in THEME-ZIP履歴.md only)
+*.zip
+
+# Accidental nested copy
+wp-theme/wp-theme/
+
+# OS junk
+Thumbs.db
+Desktop.ini
+.DS_Store

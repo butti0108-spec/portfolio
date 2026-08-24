@@ -1,0 +1,305 @@
+<section class="wf-block" aria-labelledby="wf-look">
+          <h2 id="wf-look">見た目（全体の色）</h2>
+          <p class="wf-look-lead">ページ全体でそろえます。右の見本は色と文字だけです。写真や本番レイアウトではありません。選べない色は相談欄へ。</p>
+
+          <div class="wf-look-layout">
+            <div class="wf-look-controls">
+              <fieldset class="wf-fieldset">
+                <legend>パターン</legend>
+                <div class="wf-choice-list">
+                  <label class="wf-choice">
+                    <input type="radio" name="look-pattern" value="same" checked>
+                    <span>このサイトと同じ</span>
+                  </label>
+                  <label class="wf-choice">
+                    <input type="radio" name="look-pattern" value="solid">
+                    <span>単色</span>
+                  </label>
+                  <label class="wf-choice">
+                    <input type="radio" name="look-pattern" value="gradient">
+                    <span>グラデーション</span>
+                  </label>
+                  <label class="wf-choice">
+                    <input type="radio" name="look-pattern" value="consult">
+                    <span>相談（自由記入）</span>
+                  </label>
+                </div>
+              </fieldset>
+
+              <fieldset class="wf-fieldset" data-look-for="solid gradient">
+                <legend>背景色</legend>
+                <div class="wf-palette">
+                  <label class="wf-swatch">
+                    <input type="radio" name="look-base" value="green" checked>
+                    <span class="wf-swatch-chip" style="--chip:#8fbf78"></span>
+                    <span class="wf-swatch-name">緑</span>
+                  </label>
+                  <label class="wf-swatch">
+                    <input type="radio" name="look-base" value="teal">
+                    <span class="wf-swatch-chip" style="--chip:#6fafa3"></span>
+                    <span class="wf-swatch-name">ティール</span>
+                  </label>
+                  <label class="wf-swatch">
+                    <input type="radio" name="look-base" value="blue">
+                    <span class="wf-swatch-chip" style="--chip:#7aa7c7"></span>
+                    <span class="wf-swatch-name">青</span>
+                  </label>
+                  <label class="wf-swatch">
+                    <input type="radio" name="look-base" value="beige">
+                    <span class="wf-swatch-chip" style="--chip:#d4c4a8"></span>
+                    <span class="wf-swatch-name">ベージュ</span>
+                  </label>
+                  <label class="wf-swatch">
+                    <input type="radio" name="look-base" value="coral">
+                    <span class="wf-swatch-chip" style="--chip:#d4a090"></span>
+                    <span class="wf-swatch-name">コーラル</span>
+                  </label>
+                  <label class="wf-swatch">
+                    <input type="radio" name="look-base" value="light-gray">
+                    <span class="wf-swatch-chip" style="--chip:#d5d9de"></span>
+                    <span class="wf-swatch-name">薄いグレー</span>
+                  </label>
+                  <label class="wf-swatch">
+                    <input type="radio" name="look-base" value="gray">
+                    <span class="wf-swatch-chip" style="--chip:#9aa3ad"></span>
+                    <span class="wf-swatch-name">グレー</span>
+                  </label>
+                  <label class="wf-swatch">
+                    <input type="radio" name="look-base" value="dark">
+                    <span class="wf-swatch-chip" style="--chip:#3a3f45"></span>
+                    <span class="wf-swatch-name">ダーク</span>
+                  </label>
+                </div>
+              </fieldset>
+
+              <fieldset class="wf-fieldset" data-look-for="solid gradient">
+                <legend>文字色</legend>
+                <div class="wf-choice-list">
+                  <label class="wf-choice">
+                    <input type="radio" name="look-ink" value="black" checked>
+                    <span>黒</span>
+                  </label>
+                  <label class="wf-choice">
+                    <input type="radio" name="look-ink" value="white">
+                    <span>白（暗い背景向け）</span>
+                  </label>
+                </div>
+              </fieldset>
+
+              <fieldset class="wf-fieldset" data-look-for="gradient" hidden>
+                <legend>グラデーションの向き</legend>
+                <div class="wf-choice-list">
+                  <label class="wf-choice">
+                    <input type="radio" name="look-gradient-dir" value="top-dark" checked>
+                    <span>上が濃い</span>
+                  </label>
+                  <label class="wf-choice">
+                    <input type="radio" name="look-gradient-dir" value="bottom-dark">
+                    <span>下が濃い</span>
+                  </label>
+                  <label class="wf-choice">
+                    <input type="radio" name="look-gradient-dir" value="left-dark">
+                    <span>左が濃い</span>
+                  </label>
+                  <label class="wf-choice">
+                    <input type="radio" name="look-gradient-dir" value="right-dark">
+                    <span>右が濃い</span>
+                  </label>
+                </div>
+              </fieldset>
+
+              <label class="wf-box" data-look-for="consult" hidden>
+                <span class="wf-name">相談・希望（自由記入）</span>
+                <textarea name="look-note" placeholder="例：お店の看板に近い色、写真の色に合わせたい、など"></textarea>
+              </label>
+            </div>
+
+            <aside class="wf-preview" id="look-preview" aria-label="色の見本">
+              <p class="wf-preview-badge">見本です</p>
+              <div class="wf-preview-stage">
+                <p class="wf-preview-title">見出しの見本</p>
+                <p class="wf-preview-text">ここに短い文章が入ります。</p>
+                <span class="wf-preview-blank">空欄</span>
+              </div>
+              <p class="wf-preview-note">色と文字だけの確認用です。</p>
+            </aside>
+          </div>
+        </section>
+
+        <section class="wf-block" aria-labelledby="wf-header">
+          <h2 id="wf-header">Header（一番上の細い帯）</h2>
+          <div class="wf-grid wf-row-2">
+            <label class="wf-box">
+              <span class="wf-num">01</span>
+              <span class="wf-name">左上の名前</span>
+              <textarea name="01-text" placeholder="文章"></textarea>
+              <input name="01-link" type="text" placeholder="リンク（なければなし）">
+            </label>
+          </div>
+        </section>
+
+        <section class="wf-block" aria-labelledby="wf-top">
+          <h2 id="wf-top">いちばん上の大きい写真のブロック</h2>
+          <div class="wf-grid">
+            <label class="wf-box wf-hero">
+              <span class="wf-num">02</span>
+              <span class="wf-name">いちばん上の大きい写真（空や葉など）</span>
+              <input name="02-file" type="text" placeholder="写真のファイル名（02.jpg）">
+              <input name="02-link" type="text" value="なし" placeholder="リンク（なければなし）">
+            </label>
+            <label class="wf-box">
+              <span class="wf-num">03</span>
+              <span class="wf-name">大きい写真の上の見出し</span>
+              <input name="03-text" type="text" placeholder="短い見出し">
+              <input name="03-link" type="text" value="なし" placeholder="リンク（なければなし）">
+            </label>
+            <label class="wf-box">
+              <span class="wf-num">04</span>
+              <span class="wf-name">見出しの下の短い文章</span>
+              <textarea name="04-text" placeholder="2〜3行"></textarea>
+              <input name="04-link" type="text" value="なし" placeholder="リンク（なければなし）">
+            </label>
+            <div class="wf-grid wf-row-2">
+              <label class="wf-box">
+                <span class="wf-num">05</span>
+                <span class="wf-name">ボタン「作品を見る」</span>
+                <input name="05-text" type="text" placeholder="ボタンの言葉">
+                <input name="05-link" type="text" placeholder="リンク">
+              </label>
+              <label class="wf-box">
+                <span class="wf-num">06</span>
+                <span class="wf-name">ボタン「お問い合わせ」</span>
+                <input name="06-text" type="text" placeholder="ボタンの言葉">
+                <input name="06-link" type="text" placeholder="リンク">
+              </label>
+            </div>
+            <div class="wf-repeat-wrap">
+              <div class="wf-grid wf-repeat" data-repeat="07" data-max="3" data-count="1">
+                <label class="wf-box">
+                  <span class="wf-num">07a</span>
+                  <span class="wf-name">箱1（左）</span>
+                  <textarea name="07a-text" placeholder="見出しと短い説明"></textarea>
+                  <input name="07a-link" type="text" value="なし" placeholder="リンク（なければなし）">
+                </label>
+                <label class="wf-box" hidden>
+                  <span class="wf-num">07b</span>
+                  <span class="wf-name">箱2（中）</span>
+                  <textarea name="07b-text" placeholder="見出しと短い説明"></textarea>
+                  <input name="07b-link" type="text" value="なし" placeholder="リンク（なければなし）">
+                </label>
+                <label class="wf-box" hidden>
+                  <span class="wf-num">07c</span>
+                  <span class="wf-name">箱3（右）</span>
+                  <textarea name="07c-text" placeholder="見出しと短い説明"></textarea>
+                  <input name="07c-link" type="text" value="なし" placeholder="リンク（なければなし）">
+                </label>
+              </div>
+              <p class="wf-repeat-bar no-print">
+                <span class="wf-repeat-label">上記項目を追加する</span>
+                <span class="wf-stepper">
+                  <button type="button" data-remove aria-label="上記項目を減らす">−</button>
+                  <button type="button" data-add aria-label="上記項目を追加する">＋</button>
+                </span>
+                <span data-remain>あと2つ足せます</span>
+              </p>
+            </div>
+          </div>
+        </section>
+
+        <section class="wf-block" aria-labelledby="wf-about">
+          <h2 id="wf-about">About（Profile）</h2>
+          <div class="wf-grid">
+            <label class="wf-box">
+              <span class="wf-num">08</span>
+              <span class="wf-name">Profile の名前</span>
+              <input name="08-text" type="text" placeholder="名前">
+              <input name="08-link" type="text" value="なし" placeholder="リンク（なければなし）">
+            </label>
+            <label class="wf-box">
+              <span class="wf-num">09</span>
+              <span class="wf-name">名前の下の短い文章</span>
+              <textarea name="09-text" placeholder="2〜4行"></textarea>
+              <input name="09-link" type="text" value="なし" placeholder="リンク（なければなし）">
+            </label>
+            <div class="wf-repeat-wrap">
+              <div class="wf-grid wf-repeat" data-repeat="10" data-max="4" data-count="1">
+                <label class="wf-box">
+                  <span class="wf-num">10a</span>
+                  <span class="wf-name">絵1</span>
+                  <input name="10a-file" type="text" placeholder="写真のファイル名">
+                </label>
+                <label class="wf-box" hidden>
+                  <span class="wf-num">10b</span>
+                  <span class="wf-name">絵2</span>
+                  <input name="10b-file" type="text" placeholder="写真のファイル名">
+                </label>
+                <label class="wf-box" hidden>
+                  <span class="wf-num">10c</span>
+                  <span class="wf-name">絵3</span>
+                  <input name="10c-file" type="text" placeholder="写真のファイル名">
+                </label>
+                <label class="wf-box" hidden>
+                  <span class="wf-num">10d</span>
+                  <span class="wf-name">絵4</span>
+                  <input name="10d-file" type="text" placeholder="写真のファイル名">
+                </label>
+              </div>
+              <p class="wf-repeat-bar no-print">
+                <span class="wf-repeat-label">上記項目を追加する</span>
+                <span class="wf-stepper">
+                  <button type="button" data-remove aria-label="上記項目を減らす">−</button>
+                  <button type="button" data-add aria-label="上記項目を追加する">＋</button>
+                </span>
+                <span data-remain>あと3つ足せます</span>
+              </p>
+            </div>
+          </div>
+        </section>
+
+        <section class="wf-block" aria-labelledby="wf-works">
+          <h2 id="wf-works">Works</h2>
+          <div class="wf-repeat-wrap">
+            <div class="wf-grid wf-repeat" data-repeat="works" data-max="3" data-count="1">
+              <label class="wf-box">
+                <span class="wf-num">11</span>
+                <span class="wf-name">作品のカード1</span>
+                <textarea name="11-text" placeholder="短い文"></textarea>
+                <input name="11-file" type="text" placeholder="写真のファイル名">
+                <input name="11-link" type="text" placeholder="リンク（なければなし）">
+              </label>
+              <label class="wf-box" hidden>
+                <span class="wf-num">12</span>
+                <span class="wf-name">作品のカード2</span>
+                <textarea name="12-text" placeholder="短い文"></textarea>
+                <input name="12-file" type="text" placeholder="写真のファイル名">
+                <input name="12-link" type="text" placeholder="リンク（なければなし）">
+              </label>
+              <label class="wf-box" hidden>
+                <span class="wf-num">13</span>
+                <span class="wf-name">作品のカード3</span>
+                <textarea name="13-text" placeholder="短い文"></textarea>
+                <input name="13-file" type="text" placeholder="写真のファイル名">
+                <input name="13-link" type="text" placeholder="リンク（なければなし）">
+              </label>
+            </div>
+            <p class="wf-repeat-bar no-print">
+              <span class="wf-repeat-label">上記項目を追加する</span>
+              <span class="wf-stepper">
+                <button type="button" data-remove aria-label="上記項目を減らす">−</button>
+                <button type="button" data-add aria-label="上記項目を追加する">＋</button>
+              </span>
+              <span data-remain>あと2つ足せます</span>
+            </p>
+          </div>
+        </section>
+
+        <section class="wf-block" aria-labelledby="wf-contact">
+          <h2 id="wf-contact">Contact（一番下）</h2>
+          <label class="wf-box">
+            <span class="wf-num">14</span>
+            <span class="wf-name">問い合わせ</span>
+            <textarea name="14-text" placeholder="このページの記入欄を使う／別のメールやURL"></textarea>
+            <input name="14-link" type="text" placeholder="リンク（なければなし）">
+          </label>
+        </section>
+      

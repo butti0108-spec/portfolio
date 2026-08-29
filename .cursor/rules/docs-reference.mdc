@@ -17,5 +17,5 @@ alwaysApply: true
 簡単な画面操作の分担は `docs/確定/2026-08-25-手足方式.md` およびルール `hands-mode` に従う。
 ## kuru-hub 同期
 
-`docs/` を更新したら、外からの閲覧用に **kuru-hub へも速やかに同期（copy → commit → push main）** する。
-ポートフォリオの Git だけでは Pages（https://butti0108-spec.github.io/kuru-hub/）に反映されない。
+**都度はしない。** 増渕さんが「クルハブ更新して」「kuru-hub 同期」などと言ったときだけ、portfolio `docs/` → kuru-hub（copy → commit → push main）する。
+普段の docs 更新はポートフォリオ側の commit / push だけでよい（レスポンス優先）。

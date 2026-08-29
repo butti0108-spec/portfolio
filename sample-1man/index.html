@@ -280,7 +280,6 @@
       </div>
     </section>
 
-    <!-- —— 右：ダッシュボード —— -->
     <section class="dash-pane" id="dash-pane" aria-label="注文・設定">
       <header class="dash-header">
         <h1 class="dash-title">サンプル工房・注文画面</h1>
@@ -330,8 +329,8 @@
           <summary>0. はじめに</summary>
           <ol class="hint-list">
             <li>左は納品イメージ。<strong>青＝色・赤＝文字</strong>の番号（それぞれ1から）。確定すると<strong>緑</strong>になります。<strong>0＝はじめに</strong>は上のツールバー（画面外）。</li>
-            <li><strong>あとから直せます。</strong>左の番号を押すとその項目だけ開きます。いまは気軽に選んでください。</li>
-            <li>順番に「次へ」でも、好きな番号から先に触っても大丈夫です。</li>
+            <li>ガイドでは<strong>色（青）→文字（赤）</strong>の順です。色の章が終わるまで文字は後回し。</li>
+            <li><strong>あとから直せます。</strong>確定後は左の番号からその項目だけ直せます。</li>
             <li>画像ファイルは端末に下書き保存できません。再開時は再選択してください。</li>
           </ol>
           <fieldset class="mode-picker" id="mode-picker">
@@ -753,6 +752,10 @@
           <button type="button" class="wizard-btn" id="wizard-back">戻る</button>
           <button type="button" class="wizard-btn" id="wizard-next">次へ</button>
         </nav>
+      </div>
+
+      <div class="wizard-beat-overlay" id="wizard-beat-overlay" hidden aria-modal="true" role="dialog" aria-labelledby="wizard-beat-title">
+        <div class="wizard-beat-card" id="wizard-beat-card"></div>
       </div>
     </section>
   </div>

@@ -877,6 +877,122 @@ body.wizard-mode .dash-block.is-wizard-active {
   overflow: hidden;
   background: #f4f2ee;
   color: #1a1a1a;
+  position: relative;
+}
+
+.wizard-beat-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 60;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.25rem;
+}
+
+.wizard-beat-overlay[hidden] {
+  display: none !important;
+}
+
+.wizard-beat-overlay.is-chapter {
+  background: rgba(42, 62, 78, 0.52);
+  backdrop-filter: blur(3px);
+}
+
+.wizard-beat-overlay.is-finish {
+  background: rgba(58, 36, 32, 0.48);
+  backdrop-filter: blur(3px);
+}
+
+.wizard-beat-card {
+  width: min(100%, 22rem);
+  padding: 1.35rem 1.15rem 1.15rem;
+  border-radius: 0.65rem;
+  box-shadow: 0 10px 36px rgba(0, 0, 0, 0.22);
+}
+
+.wizard-beat-overlay.is-chapter .wizard-beat-card {
+  background: linear-gradient(165deg, #eef5fb 0%, #dceaf5 100%);
+  border: 2px solid #6a9ec4;
+}
+
+.wizard-beat-overlay.is-finish .wizard-beat-card {
+  background: linear-gradient(165deg, #faf4f0 0%, #f0e4dc 100%);
+  border: 2px solid #8b3a2a;
+}
+
+.beat-title {
+  margin: 0 0 0.55rem;
+  font-family: "Shippori Mincho", serif;
+  font-size: 1.12rem;
+  font-weight: 700;
+  line-height: 1.45;
+}
+
+.beat-lead {
+  margin: 0 0 0.45rem;
+  font-size: 0.92rem;
+  line-height: 1.55;
+}
+
+.beat-note {
+  margin: 0;
+  font-size: 0.82rem;
+  line-height: 1.55;
+  color: #444;
+}
+
+.beat-actions {
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+  margin-top: 1.1rem;
+}
+
+.beat-btn {
+  width: 100%;
+  min-height: 2.75rem;
+  padding: 0.6rem 0.85rem;
+  border-radius: 0.5rem;
+  font: inherit;
+  font-size: 0.92rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.beat-btn-primary {
+  border: 1px solid rgba(0, 0, 0, 0.12);
+  background: #6a9ec4;
+  color: #fff;
+}
+
+.beat-btn-primary:hover {
+  background: #5a8eb4;
+}
+
+.wizard-beat-overlay.is-finish .beat-btn-primary {
+  background: #8b3a2a;
+}
+
+.wizard-beat-overlay.is-finish .beat-btn-primary:hover {
+  background: #753125;
+}
+
+.beat-btn-secondary {
+  border: 1px solid rgba(0, 0, 0, 0.18);
+  background: rgba(255, 255, 255, 0.55);
+  color: #333;
+}
+
+.beat-btn-secondary:hover {
+  background: rgba(255, 255, 255, 0.85);
+}
+
+.preview-site .zone-badge.is-chapter-locked {
+  opacity: 0.38;
+  pointer-events: none;
+  filter: grayscale(0.65);
+  cursor: not-allowed;
 }
 
 .dash-header {

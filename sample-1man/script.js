@@ -79,6 +79,16 @@
     });
   }
 
+  const COLOR_STEP_IDS_ORDERED = Object.keys(BADGE_META)
+    .filter((id) => BADGE_META[id].kind === "color")
+    .sort((a, b) => BADGE_META[a].displayNum - BADGE_META[b].displayNum);
+
+  const TEXT_STEP_IDS_ORDERED = Object.keys(BADGE_META)
+    .filter((id) => BADGE_META[id].kind === "text")
+    .sort((a, b) => BADGE_META[a].displayNum - BADGE_META[b].displayNum);
+
+  const GUIDED_STEP_IDS = ["guide"].concat(COLOR_STEP_IDS_ORDERED, TEXT_STEP_IDS_ORDERED);
+
   const COLOR_STEP_FIELDS = {
     "global-preset": ["pageBg", "heroInk", "bodyInk", "chromeBg", "chromeInk", "accent", "cardBg", "valuesBg", "contactBg", "contactInk"],
     "global-bg": ["pageBg"],
@@ -356,11 +366,95 @@
     uiMode: null,
     presetChosen: false,
     chosenPresetKey: null,
-    randomHistory: []
+    randomHistory: [],
+    guidedTextUnlocked: false
   };
 
   let saveTimer = null;
   let suppressSave = false;
+
+  function getFlowSteps() {
+    if (store.uiMode === "guided") {
+      return GUIDED_STEP_IDS.map((id) => STEPS.find((s) => s.id === id)).filter(Boolean);
+    }
+    return STEPS;
+  }
+
+  function getCurrentFlowStep() {
+    const flow = getFlowSteps();
+    return flow[store.wizardStepIndex] || null;
+  }
+
+  function getGuidedChapter() {
+    if (store.uiMode !== "guided") return null;
+    return store.guidedTextUnlocked ? "text" : "color";
+  }
+
+  function canOpenStep(stepId) {
+    if (stepId === "guide") return true;
+    if (store.uiMode !== "guided") return true;
+    const meta = BADGE_META[stepId];
+    if (!meta) return true;
+    if (getGuidedChapter() === "color" && meta.kind === "text") return false;
+    return true;
+  }
+
+  function inferGuidedTextUnlocked() {
+    if (store.uiMode !== "guided") return;
+    if (store.guidedTextUnlocked) return;
+    if (TEXT_STEP_IDS_ORDERED.some((id) => store.confirmed[id])) {
+      store.guidedTextUnlocked = true;
+    }
+  }
+
+  function syncWizardNavVisibility() {
+    const nav = document.getElementById("wizard-nav");
+    const overlay = document.getElementById("wizard-beat-overlay");
+    if (!nav) return;
+    nav.hidden = !!(overlay && !overlay.hidden);
+  }
+
+  function hideBeatOverlay() {
+    const overlay = document.getElementById("wizard-beat-overlay");
+    if (overlay) {
+      overlay.hidden = true;
+      overlay.classList.remove("is-chapter", "is-finish");
+    }
+    const card = document.getElementById("wizard-beat-card");
+    if (card) card.innerHTML = "";
+    syncWizardNavVisibility();
+  }
+
+  function showBeatOverlay(kind, html, bindActions) {
+    const overlay = document.getElementById("wizard-beat-overlay");
+    const card = document.getElementById("wizard-beat-card");
+    if (!overlay || !card) return;
+    overlay.classList.remove("is-chapter", "is-finish");
+    overlay.classList.add("is-" + kind);
+    card.innerHTML = html;
+    overlay.hidden = false;
+    syncWizardNavVisibility();
+    if (typeof bindActions === "function") bindActions(card);
+  }
+
+  function maybeShowFinishBeat() {
+    if (store.uiMode !== "guided") return;
+    const overlay = document.getElementById("wizard-beat-overlay");
+    if (overlay && !overlay.hidden) return;
+    showBeatOverlay(
+      "finish",
+      "<p class=\"beat-title\" id=\"wizard-beat-title\">提出の確認</p>" +
+      "<p class=\"beat-lead\">左のプレビューが納品イメージです。</p>" +
+      "<p class=\"beat-note\">下の4項目にチェックしてから確定してください。ZIPはそのあと保存できます。</p>" +
+      "<div class=\"beat-actions\">" +
+      "<button type=\"button\" class=\"beat-btn beat-btn-primary\" data-finish-go>内容を確認する</button>" +
+      "</div>",
+      (card) => {
+        const go = card.querySelector("[data-finish-go]");
+        if (go) go.addEventListener("click", () => hideBeatOverlay(), { once: true });
+      }
+    );
+  }
 
   function stackFor(value) {
     if (!value) return "'Zen Kaku Gothic New', sans-serif";
@@ -726,7 +820,7 @@
       if (snap && snap.radius) colors.radius = snap.radius;
     });
 
-    const current = STEPS[store.wizardStepIndex];
+    const current = getCurrentFlowStep();
     if (current && COLOR_STEP_FIELDS[current.id]) {
       COLOR_STEP_FIELDS[current.id].forEach((key) => {
         if (store.draftColors[key] != null) colors[key] = store.draftColors[key];
@@ -800,9 +894,11 @@
   }
 
   function showWizardStep(index) {
-    const idx = Math.max(0, Math.min(STEPS.length - 1, index));
+    const flow = getFlowSteps();
+    const idx = Math.max(0, Math.min(flow.length - 1, index));
     store.wizardStepIndex = idx;
-    const step = STEPS[idx];
+    const step = flow[idx];
+    if (!step) return;
     const block = form.querySelector('.dash-block[data-step-id="' + step.id + '"]');
     if (!block) return;
 
@@ -843,7 +939,26 @@
         window.setTimeout(() => hit.classList.remove("is-target-flash"), 600);
       }
     }
+    if (store.uiMode === "guided" && step.id === "finish") {
+      window.setTimeout(() => maybeShowFinishBeat(), 60);
+    }
     scheduleSave();
+  }
+
+  function normalizeWizardStepIndex() {
+    const flow = getFlowSteps();
+    if (store.wizardStepIndex >= 0 && store.wizardStepIndex < flow.length) {
+      return;
+    }
+    const legacy = STEPS[store.wizardStepIndex];
+    if (legacy) {
+      const fi = flow.findIndex((s) => s.id === legacy.id);
+      if (fi >= 0) {
+        store.wizardStepIndex = fi;
+        return;
+      }
+    }
+    store.wizardStepIndex = resolveWizardStepIndex();
   }
 
   function applyUiMode() {
@@ -880,6 +995,9 @@
 
     syncBadgeLabels();
     updateZoneBadgeDoneState();
+    inferGuidedTextUnlocked();
+    normalizeWizardStepIndex();
+    syncWizardNavVisibility();
   }
 
   function readUiModeFromForm() {
@@ -888,8 +1006,10 @@
   }
 
   function restartFromModeSelection() {
+    hideBeatOverlay();
     hideWizardFootPanel();
     store.uiMode = null;
+    store.guidedTextUnlocked = false;
     form.querySelectorAll('input[name="ui_mode"]').forEach((r) => {
       r.checked = false;
     });
@@ -904,40 +1024,58 @@
   }
 
   function showChapterBoundaryPanel(onProceed) {
-    const dock = document.getElementById("wizard-foot-dock");
-    if (dock) dock.classList.add("is-chapter-boundary");
-    showWizardFootPanel(
-      "<p class=\"wizard-foot-panel-text\">色の章が終わりました。文字・画像の章に進みます。</p>" +
-      "<p class=\"wizard-foot-panel-note\">内容はセルフと同じ項目を、1問ずつ大きめの文字で進めます。</p>" +
-      "<div class=\"wizard-foot-panel-actions\">" +
-      "<button type=\"button\" class=\"wizard-btn\" data-chapter-restart>モード選択からやり直す</button>" +
-      "<button type=\"button\" class=\"wizard-btn\" data-chapter-go>進む</button>" +
-      "</div>"
+    showBeatOverlay(
+      "chapter",
+      "<p class=\"beat-title\" id=\"wizard-beat-title\">色の章が終わりました</p>" +
+      "<p class=\"beat-lead\">ここまでで色の調整は一段落です。</p>" +
+      "<p class=\"beat-note\">これからは<strong>文字・画像</strong>を1問ずつ入れていきます。空欄のままでも進めます。</p>" +
+      "<div class=\"beat-actions\">" +
+      "<button type=\"button\" class=\"beat-btn beat-btn-primary\" data-chapter-go>文字の章に進む</button>" +
+      "<button type=\"button\" class=\"beat-btn beat-btn-secondary\" data-chapter-restart>モード選択からやり直す</button>" +
+      "</div>",
+      (card) => {
+        const restart = card.querySelector("[data-chapter-restart]");
+        const go = card.querySelector("[data-chapter-go]");
+        if (restart) {
+          restart.addEventListener("click", () => {
+            restartFromModeSelection();
+          }, { once: true });
+        }
+        if (go) {
+          go.addEventListener("click", () => {
+            store.guidedTextUnlocked = true;
+            hideBeatOverlay();
+            scheduleSave();
+            if (typeof onProceed === "function") onProceed();
+          }, { once: true });
+        }
+      }
     );
-    const panel = document.getElementById("wizard-foot-panel");
-    if (!panel) return;
-    const restart = panel.querySelector("[data-chapter-restart]");
-    const go = panel.querySelector("[data-chapter-go]");
-    if (restart) {
-      restart.addEventListener("click", () => {
-        restartFromModeSelection();
-      }, { once: true });
-    }
-    if (go) {
-      go.addEventListener("click", () => {
-        hideWizardFootPanel();
-        if (typeof onProceed === "function") onProceed();
-      }, { once: true });
-    }
   }
 
   function updateWizardUi() {
-    const step = STEPS[store.wizardStepIndex];
+    const flow = getFlowSteps();
+    const step = getCurrentFlowStep();
     const progress = document.getElementById("wizard-progress");
     const backBtn = document.getElementById("wizard-back");
     const nextBtn = document.getElementById("wizard-next");
     const status = document.getElementById("wizard-status");
-    if (progress && step) progress.textContent = step.num + " / 17 · " + step.label;
+    if (progress && step) {
+      if (store.uiMode === "guided") {
+        const meta = BADGE_META[step.id];
+        if (meta) {
+          const kindLabel = meta.kind === "color" ? "色" : "文字";
+          const kindTotal = meta.kind === "color" ? COLOR_STEP_IDS_ORDERED.length : TEXT_STEP_IDS_ORDERED.length;
+          progress.textContent = kindLabel + " " + meta.displayNum + " / " + kindTotal + " · " + meta.label;
+        } else if (step.id === "guide") {
+          progress.textContent = "はじめに";
+        } else {
+          progress.textContent = step.label;
+        }
+      } else {
+        progress.textContent = step.num + " / 17 · " + step.label;
+      }
+    }
     if (backBtn) backBtn.disabled = store.wizardStepIndex <= 0;
     if (nextBtn) {
       nextBtn.textContent = step && step.id === "finish" ? "提出を確定" : "次へ";
@@ -953,22 +1091,26 @@
   function updatePreviewGuideBtn() {
     const btn = document.getElementById("preview-guide-btn");
     if (!btn) return;
-    const step = STEPS[store.wizardStepIndex];
+    const step = getCurrentFlowStep();
     btn.classList.toggle("is-step-current", !!(step && step.id === "guide"));
     btn.classList.toggle("is-step-done", !!store.confirmed.guide);
   }
 
   function updateZoneBadgeDoneState() {
+    const current = getCurrentFlowStep();
     root.querySelectorAll(".zone-badge[data-open-step]").forEach((btn) => {
       const stepId = btn.getAttribute("data-open-step");
+      const meta = BADGE_META[stepId];
+      const locked = store.uiMode === "guided" && getGuidedChapter() === "color" && meta && meta.kind === "text";
       btn.classList.toggle("is-step-done", !!store.confirmed[stepId]);
-      btn.classList.toggle("is-step-current", STEPS[store.wizardStepIndex] && STEPS[store.wizardStepIndex].id === stepId);
+      btn.classList.toggle("is-step-current", current && current.id === stepId);
+      btn.classList.toggle("is-chapter-locked", locked);
     });
     syncBadgeLabels();
   }
 
   function wizardConfirmCurrentStep() {
-    const step = STEPS[store.wizardStepIndex];
+    const step = getCurrentFlowStep();
     if (!step) return false;
     if (!validateWizardStep(step.id)) return false;
 
@@ -991,15 +1133,16 @@
   }
 
   function wizardNext() {
-    const step = STEPS[store.wizardStepIndex];
+    const flow = getFlowSteps();
+    const step = getCurrentFlowStep();
     if (!step) return;
     if (!wizardConfirmCurrentStep()) return;
-    if (store.wizardStepIndex >= STEPS.length - 1) {
+    if (store.wizardStepIndex >= flow.length - 1) {
       updateWizardUi();
       return;
     }
     const nextIndex = store.wizardStepIndex + 1;
-    if (store.uiMode === "guided" && step.id === LAST_COLOR_STEP_ID) {
+    if (store.uiMode === "guided" && step.id === LAST_COLOR_STEP_ID && !store.guidedTextUnlocked) {
       showChapterBoundaryPanel(() => showWizardStep(nextIndex));
       return;
     }
@@ -1007,7 +1150,7 @@
   }
 
   function wizardBack() {
-    const step = STEPS[store.wizardStepIndex];
+    const step = getCurrentFlowStep();
     if (!step || store.wizardStepIndex <= 0) return;
     if (store.confirmed[step.id]) {
       unconfirmStep(step.id);
@@ -1076,11 +1219,12 @@
   }
 
   function resolveWizardStepIndex() {
+    const flow = getFlowSteps();
     if (Number.isInteger(store.wizardStepIndex) && store.wizardStepIndex >= 0) {
-      return Math.min(store.wizardStepIndex, STEPS.length - 1);
+      return Math.min(store.wizardStepIndex, flow.length - 1);
     }
-    const firstOpen = STEPS.findIndex((s) => !store.confirmed[s.id]);
-    return firstOpen >= 0 ? firstOpen : STEPS.length - 1;
+    const firstOpen = flow.findIndex((s) => !store.confirmed[s.id]);
+    return firstOpen >= 0 ? firstOpen : flow.length - 1;
   }
 
   function setDraftColor(key, value) {
@@ -1100,7 +1244,7 @@
     if (store.confirmed["hero-color"] && store.snapshots["hero-color"] && store.snapshots["hero-color"].headingScale) {
       headingScale = store.snapshots["hero-color"].headingScale;
     }
-    const current = STEPS[store.wizardStepIndex];
+    const current = getCurrentFlowStep();
     if (current && current.id === "hero-color") {
       headingScale = fieldValue("headingScale") || headingScale;
     }
@@ -1991,7 +2135,13 @@
   }
 
   function openStep(stepId) {
-    const idx = STEPS.findIndex((s) => s.id === stepId);
+    if (!canOpenStep(stepId)) {
+      const status = document.getElementById("wizard-status");
+      if (status) status.textContent = "ガイドでは色の章が終わるまで、文字（赤）は後で触れます。";
+      return;
+    }
+    const flow = getFlowSteps();
+    const idx = flow.findIndex((s) => s.id === stepId);
     if (idx < 0) return;
     showWizardStep(idx);
   }
@@ -2106,6 +2256,7 @@
         savedAt: new Date().toISOString(),
         wizardStepIndex: store.wizardStepIndex,
         uiMode: store.uiMode,
+        guidedTextUnlocked: store.guidedTextUnlocked,
         presetChosen: store.presetChosen,
         chosenPresetKey: store.chosenPresetKey,
         randomHistory: store.randomHistory,
@@ -2141,6 +2292,7 @@
         const radio = form.querySelector('input[name="ui_mode"][value="' + data.uiMode + '"]');
         if (radio) radio.checked = true;
       }
+      if (data.guidedTextUnlocked != null) store.guidedTextUnlocked = !!data.guidedTextUnlocked;
       if (data.presetChosen != null) store.presetChosen = !!data.presetChosen;
       if (data.chosenPresetKey != null) store.chosenPresetKey = data.chosenPresetKey;
       if (Array.isArray(data.randomHistory)) store.randomHistory = data.randomHistory.slice(0, 2);

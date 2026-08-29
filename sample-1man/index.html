@@ -1,0 +1,755 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="1万円プラン見本工房。左プレビュー・右で色件数記入。盛り盛り試作。">
+  <meta name="robots" content="noindex,nofollow">
+  <title>【見本工房】サンプル工房｜1万円プラン（盛り盛り試作）</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@500;700&family=Zen+Kaku+Gothic+New:wght@400;500;700&family=Zen+Maru+Gothic:wght@400;700&family=M+PLUS+Rounded+1c:wght@400;700&family=Noto+Sans+JP:wght@400;700&family=Noto+Serif+JP:wght@500;700&family=Sawarabi+Mincho&family=Sawarabi+Gothic&family=Kosugi+Maru&family=Kiwi+Maru:wght@500&family=Yuji+Syuku&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../style.css">
+  <link rel="stylesheet" href="sample-overrides.css">
+  <script>document.documentElement.classList.add("js");</script>
+  <script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js" defer></script>
+  <script src="script.js" defer></script>
+</head>
+<body class="atelier">
+  <div class="atelier-mobile-tabs" role="tablist" aria-label="画面切替">
+    <button type="button" class="atelier-tab is-active" data-tab="preview">見本を見る</button>
+    <button type="button" class="atelier-tab" data-tab="dash">注文・設定</button>
+  </div>
+
+  <div class="atelier-shell">
+    <!-- —— 左：プレビュー（スクロールのみ） —— -->
+    <section class="preview-pane" aria-label="見本プレビュー">
+      <div class="preview-chrome">
+        <p class="preview-banner" role="note">
+          <strong>左＝納品イメージ。</strong>基本は見るだけ。番号や場所をタップすると右の該当入力が開きます。<br>
+          <strong>色</strong>はすぐ反映。<strong>文字・画像</strong>は確定後に反映。
+        </p>
+        <div class="preview-toolbar">
+          <span class="preview-toolbar-label">表示幅</span>
+          <button type="button" class="viewport-btn is-active" data-viewport="desktop">PC</button>
+          <button type="button" class="viewport-btn" data-viewport="mobile">スマホ</button>
+          <label class="toolbar-check">
+            <input type="checkbox" id="toggle-zone-badges" checked>
+            番号を表示
+          </label>
+        </div>
+        <p class="preview-legend" id="preview-legend">
+          <span class="leg-swatch leg-color"></span>青＝色
+          <span class="leg-swatch leg-text"></span>赤＝文字・画像
+          <span class="leg-swatch leg-done"></span>緑＝確定
+        </p>
+      </div>
+
+      <div class="preview-scroll">
+        <div class="preview-viewport is-desktop" id="preview-viewport">
+          <div
+            class="preview-site sample-1man"
+            id="preview-root"
+            aria-hidden="false"
+            style="
+              --page-bg:#e8f2e6;
+              --page-bg-soft:#d2e6ce;
+              --hero-ink:#111111;
+              --body-ink:#333333;
+              --body-muted:#555555;
+              --chrome-bg:#111111;
+              --chrome-ink:#f5f5f5;
+              --accent:#3d8a48;
+              --card-bg:#ffffff;
+              --values-bg:#ffffff;
+              --contact-bg:#2d6a36;
+              --contact-ink:#f4fff6;
+              --radius:0.6rem;
+              --font-display:'Shippori Mincho',serif;
+              --font-body:'Zen Kaku Gothic New',sans-serif;
+              --heading-scale:1;
+            "
+          >
+            <div class="zone-badge-rail" aria-label="全体の色・プリセット">
+              <button type="button" class="zone-badge" data-open-step="global-preset" aria-label="1. プリセット">1</button>
+              <button type="button" class="zone-badge" data-open-step="global-body" aria-label="4. 本文色">4</button>
+            </div>
+            <header class="site-header preview-hit" id="preview-header" data-open-step="global-text" aria-label="ヘッダー。タップで7.ロゴを開く">
+              <button type="button" class="zone-badge" data-open-step="global-chrome" aria-label="3. 帯を開く">3</button>
+              <button type="button" class="zone-badge zone-badge--text" data-open-step="global-text" aria-label="7. ロゴを開く">7</button>
+              <div class="shell header-inner">
+                <span class="logo-wrap">
+                  <img id="preview-logo-img" class="preview-logo-img" alt="" hidden width="120" height="40">
+                  <span class="logo" id="preview-logo-text">サンプル工房</span>
+                </span>
+                <nav class="site-nav preview-nav-static" aria-label="見本サイトの上メニュー（下のタイトルから自動）">
+                  <span id="nav-about">About</span>
+                  <span id="nav-works">Works</span>
+                  <span id="nav-contact">ご連絡</span>
+                </nav>
+              </div>
+            </header>
+
+            <main>
+              <section class="hero preview-hit" id="hero" data-open-step="global-bg" aria-label="背景。タップで2.背景を開く">
+                <button type="button" class="zone-badge zone-badge--bg" data-open-step="global-bg" aria-label="2. 背景を開く">2</button>
+                <div class="shell hero-box">
+                  <div class="hero-stage preview-hit" data-open-step="hero-content" aria-label="キャッチ。タップで9.キャッチを開く">
+                    <button type="button" class="zone-badge" data-open-step="hero-color" aria-label="8. キャッチ色を開く">8</button>
+                    <button type="button" class="zone-badge zone-badge--text" data-open-step="hero-content" aria-label="9. キャッチを開く">9</button>
+                    <img class="hero-photo" src="images/hero.png" data-default-src="images/hero.png" alt="" width="2752" height="1536">
+                    <div class="hero-copy">
+                      <h1 id="hero-title">サンプル工房</h1>
+                      <div id="hero-leads" data-sample-repeat data-min="1" data-max="3" data-count="2">
+                        <p class="hero-lead" data-sample-item>1万円プランのレイアウト見本です。</p>
+                        <p class="hero-lead" data-sample-item>色と件数を右で確認します。</p>
+                        <p class="hero-lead" data-sample-item>（3行目の見本文）</p>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="hero-values-wrap preview-hit" data-open-step="values-content" aria-label="下の枠。タップで11.下の枠文を開く">
+                    <button type="button" class="zone-badge" data-open-step="values-color" aria-label="10. 下の枠色を開く">10</button>
+                    <button type="button" class="zone-badge zone-badge--text" data-open-step="values-content" aria-label="11. 下の枠文を開く">11</button>
+                    <ul id="hero-values" class="hero-value-list" data-sample-repeat data-min="1" data-max="3" data-count="3">
+                      <li data-sample-item>
+                        <p class="hero-value-title">見本1</p>
+                        <p>件数を変えると並びが変わります。</p>
+                      </li>
+                      <li data-sample-item>
+                        <p class="hero-value-title">見本2</p>
+                        <p>ここに短い説明が入ります。</p>
+                      </li>
+                      <li data-sample-item>
+                        <p class="hero-value-title">見本3</p>
+                        <p>レイアウト型はポートフォリオと同じです。</p>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </section>
+
+              <section id="about" class="section about preview-hit" data-open-step="about-content" aria-label="About。タップで12を開く">
+                <button type="button" class="zone-badge" data-open-step="global-accent" aria-label="5. アクセント（見出し下線）">5</button>
+                <button type="button" class="zone-badge zone-badge--card" data-open-step="global-card" aria-label="6. カード・角丸">6</button>
+                <button type="button" class="zone-badge zone-badge--text" data-open-step="about-content" aria-label="12. Aboutを開く">12</button>
+                <div class="shell">
+                  <p class="section-label" id="about-label">About</p>
+                  <h2 id="about-heading">Sample</h2>
+                  <p class="profile-name">サンプル工房（見本）</p>
+                  <p class="section-lead">ここには短い紹介文が入ります。作り込みすぎない見本文です。</p>
+
+                  <div id="about-accordions" class="accordion-list" data-sample-repeat data-min="1" data-max="3" data-count="1">
+                    <details class="accordion" data-sample-item open>
+                      <summary>見本の見出し1</summary>
+                      <div class="accordion-body">
+                        <ul class="value-list">
+                          <li><span class="value-mark">【見本】</span>短い項目が入ります。</li>
+                          <li><span class="value-mark">【見本】</span>レイアウト確認用です。</li>
+                        </ul>
+                      </div>
+                    </details>
+                    <details class="accordion" data-sample-item>
+                      <summary>見本の見出し2</summary>
+                      <div class="accordion-body">
+                        <ul class="value-list">
+                          <li><span class="value-mark">【見本】</span>2つ目の枠です。</li>
+                        </ul>
+                      </div>
+                    </details>
+                    <details class="accordion" data-sample-item>
+                      <summary>見本の見出し3</summary>
+                      <div class="accordion-body">
+                        <ul class="value-list">
+                          <li><span class="value-mark">【見本】</span>3つ目の枠です。</li>
+                        </ul>
+                      </div>
+                    </details>
+                  </div>
+
+                  <ul id="about-photos" class="skill-grid" data-sample-repeat data-min="1" data-max="4" data-count="2">
+                    <li class="skill-card" data-sample-item><img class="skill-card-img" src="images/offer-1.png" data-default-src="images/offer-1.png" alt="" width="1200" height="750" loading="lazy"></li>
+                    <li class="skill-card" data-sample-item><img class="skill-card-img" src="images/offer-2.png" data-default-src="images/offer-2.png" alt="" width="1200" height="750" loading="lazy"></li>
+                    <li class="skill-card" data-sample-item><img class="skill-card-img" src="images/offer-3.png" data-default-src="images/offer-3.png" alt="" width="1200" height="750" loading="lazy"></li>
+                    <li class="skill-card" data-sample-item><img class="skill-card-img" src="images/hero.png" data-default-src="images/hero.png" alt="" width="1200" height="750" loading="lazy"></li>
+                  </ul>
+                </div>
+              </section>
+
+              <section id="works" class="section works preview-hit" data-open-step="works-content" aria-label="Works。タップで13を開く">
+                <button type="button" class="zone-badge zone-badge--card" data-open-step="global-card" aria-label="6. カード・角丸">6</button>
+                <button type="button" class="zone-badge zone-badge--text" data-open-step="works-content" aria-label="13. Worksを開く">13</button>
+                <div class="shell">
+                  <p class="section-label" id="works-label">Works</p>
+                  <h2 id="works-heading">見本カード</h2>
+                  <p class="section-lead" id="works-lead">Worksと同じ並びです。内容は見本用の短い文言です。</p>
+                  <ul id="works-list" class="work-list" data-sample-repeat data-min="1" data-max="3" data-count="2">
+                    <li class="work-item" data-sample-item>
+                      <div class="work-item-static">
+                        <img class="work-thumb" src="images/offer-1.png" data-default-src="images/offer-1.png" alt="" width="1200" height="750" loading="lazy">
+                        <div class="work-item-body">
+                          <span class="work-tag">Sample</span>
+                          <h3>見本カード1</h3>
+                          <div class="work-item-copy"><p>短い説明文の見本です。</p></div>
+                        </div>
+                      </div>
+                    </li>
+                    <li class="work-item" data-sample-item>
+                      <div class="work-item-static">
+                        <img class="work-thumb" src="images/offer-2.png" data-default-src="images/offer-2.png" alt="" width="1200" height="750" loading="lazy">
+                        <div class="work-item-body">
+                          <span class="work-tag">Sample</span>
+                          <h3>見本カード2</h3>
+                          <div class="work-item-copy"><p>件数を変えて確認できます。</p></div>
+                        </div>
+                      </div>
+                    </li>
+                    <li class="work-item" data-sample-item>
+                      <div class="work-item-static">
+                        <img class="work-thumb" src="images/offer-3.png" data-default-src="images/offer-3.png" alt="" width="1200" height="750" loading="lazy">
+                        <div class="work-item-body">
+                          <span class="work-tag">Sample</span>
+                          <h3>見本カード3</h3>
+                          <div class="work-item-copy"><p>3件目の見本です。</p></div>
+                        </div>
+                      </div>
+                    </li>
+                  </ul>
+                </div>
+              </section>
+
+              <section id="hours" class="section sample-extra preview-hit" data-open-step="extra-content" aria-label="追加ブロック。タップで14.追加を開く" hidden data-extra="hours">
+                <button type="button" class="zone-badge zone-badge--text" data-open-step="extra-content" aria-label="14. 追加ブロックを開く">14</button>
+                <div class="shell">
+                  <p class="section-label">Hours</p>
+                  <h2>営業時間（見本）</h2>
+                  <p class="section-lead">平日 10:00–18:00／土日祝 休み（見本）</p>
+                </div>
+              </section>
+
+              <section id="access" class="section sample-extra" hidden data-extra="access">
+                <div class="shell">
+                  <p class="section-label">Access</p>
+                  <h2>アクセス（見本）</h2>
+                  <p class="section-lead">〇〇駅から徒歩5分（見本）</p>
+                </div>
+              </section>
+
+              <section id="map" class="section sample-extra" hidden data-extra="map">
+                <div class="shell">
+                  <p class="section-label">Map</p>
+                  <h2>地図（枠のみ）</h2>
+                  <div class="map-placeholder">地図埋め込み枠（見本）</div>
+                </div>
+              </section>
+
+              <section id="sns" class="section sample-extra" hidden data-extra="sns">
+                <div class="shell">
+                  <p class="section-label">SNS</p>
+                  <h2>SNS（見本）</h2>
+                  <ul class="sns-list" id="sns-list"></ul>
+                </div>
+              </section>
+
+              <section id="contact" class="contact-band preview-hit" data-open-step="contact-content" aria-label="ご連絡。タップで16.ご連絡・文字を開く">
+                <button type="button" class="zone-badge" data-open-step="contact-color" aria-label="15. ご連絡・色を開く">15</button>
+                <button type="button" class="zone-badge zone-badge--text" data-open-step="contact-content" aria-label="16. ご連絡・文字を開く">16</button>
+                <div class="shell contact-band-inner">
+                  <p class="section-label" id="contact-label">Contact</p>
+                  <h2 id="contact-heading">ご連絡</h2>
+                  <p class="contact-band-lead">1万円プランに送信フォームは含まれません。</p>
+                  <p class="contact-band-lead">メール掲載と、コピーできるところまでです。</p>
+                  <p class="sample-mail">sample@example.com</p>
+                </div>
+              </section>
+            </main>
+
+            <footer class="site-footer preview-hit" id="preview-footer" data-open-step="finish" aria-label="フッター。タップで17.提出を開く">
+              <button type="button" class="zone-badge zone-badge--text" data-open-step="extra-content" aria-label="14. 追加ブロックを開く">14</button>
+              <button type="button" class="zone-badge zone-badge--text" data-open-step="finish" aria-label="17. 提出を開く">17</button>
+              <div class="shell footer-inner">
+                <p>© サンプル工房（1万円プラン見本）SAMPLE</p>
+              </div>
+            </footer>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- —— 右：ダッシュボード —— -->
+    <section class="dash-pane" id="dash-pane" aria-label="注文・設定">
+      <header class="dash-header">
+        <h1 class="dash-title">サンプル工房・注文画面</h1>
+        <p class="dash-lead">盛り盛り試作。後から引き算します。空欄は見本どおりで提出できます。</p>
+        <p class="resume-banner" id="resume-banner" hidden>続きから再開しています（画像ファイルは再選択が必要です）</p>
+      </header>
+
+      <div class="dash-body">
+        <nav class="make-flow" id="make-flow" aria-label="制作フロー" hidden>
+          <h2 class="make-flow-title">制作フロー <span class="flow-tap-icon" title="押せます" aria-hidden="true">👆</span></h2>
+          <p class="flow-hint">番号を押すと、その入力が開きます。</p>
+          <p class="flow-legend">
+            <span class="leg-swatch leg-color"></span>青＝色（すぐ反映・確定なし）
+            <span class="leg-swatch leg-text"></span>茶＝文字・画像（まだ）
+            <span class="leg-swatch leg-done"></span>緑＝文字・画像を確定済み（茶だけが緑になります）
+          </p>
+          <ol class="make-flow-steps">
+            <li data-step="guide"><span class="flow-num">0</span><span class="flow-label">はじめに</span></li>
+            <li data-step="global-preset"><span class="flow-num">1</span><span class="flow-label">プリセット</span></li>
+            <li data-step="global-bg"><span class="flow-num">2</span><span class="flow-label">背景</span></li>
+            <li data-step="global-chrome"><span class="flow-num">3</span><span class="flow-label">帯</span></li>
+            <li data-step="global-body"><span class="flow-num">4</span><span class="flow-label">本文</span></li>
+            <li data-step="global-accent"><span class="flow-num">5</span><span class="flow-label">アクセント</span></li>
+            <li data-step="global-card"><span class="flow-num">6</span><span class="flow-label">カード・角</span></li>
+            <li data-step="global-text"><span class="flow-num">7</span><span class="flow-label">ロゴ</span></li>
+            <li data-step="hero-color"><span class="flow-num">8</span><span class="flow-label">キャッチ</span></li>
+            <li data-step="hero-content"><span class="flow-num">9</span><span class="flow-label">キャッチ文</span></li>
+            <li data-step="values-color"><span class="flow-num">10</span><span class="flow-label">下の枠</span></li>
+            <li data-step="values-content"><span class="flow-num">11</span><span class="flow-label">下の枠文</span></li>
+            <li data-step="about-content"><span class="flow-num">12</span><span class="flow-label">About</span></li>
+            <li data-step="works-content"><span class="flow-num">13</span><span class="flow-label">Works</span></li>
+            <li data-step="extra-content"><span class="flow-num">14</span><span class="flow-label">追加</span></li>
+            <li data-step="contact-color"><span class="flow-num">15</span><span class="flow-label">連絡</span></li>
+            <li data-step="contact-content"><span class="flow-num">16</span><span class="flow-label">連絡文</span></li>
+            <li data-step="finish"><span class="flow-num">17</span><span class="flow-label">提出</span></li>
+          </ol>
+        </nav>
+
+        <div class="wizard-top" id="wizard-top">
+          <p class="wizard-progress" id="wizard-progress" aria-live="polite">0 / 17</p>
+          <p class="wizard-status" id="wizard-status" aria-live="polite"></p>
+        </div>
+
+        <form id="order-form" class="fill-form guide-form">
+
+        <details class="dash-block" data-step-id="guide" data-preview-target="#preview-header">
+          <summary>0. はじめに</summary>
+          <ol class="hint-list">
+            <li>左は納品イメージ。<strong>青＝色・赤＝文字</strong>の番号（それぞれ1から）。確定すると<strong>緑</strong>になります。</li>
+            <li><strong>あとから直せます。</strong>左の番号を押すとその項目だけ開きます。いまは気軽に選んでください。</li>
+            <li>順番に「次へ」でも、好きな番号から先に触っても大丈夫です。</li>
+            <li>画像ファイルは端末に下書き保存できません。再開時は再選択してください。</li>
+          </ol>
+          <fieldset class="mode-picker" id="mode-picker">
+            <legend>作り方を選ぶ</legend>
+            <p class="mode-picker-lead">あとから直せます。いまは気軽に選んでください。</p>
+            <label class="mode-option">
+              <input type="radio" name="ui_mode" value="guided">
+              <span class="mode-option-body">
+                <strong>ガイド</strong>
+                <span class="mode-option-note">1問ずつ・大きめ文字。色→文字の順。途中で左の番号から直せます。</span>
+              </span>
+            </label>
+            <label class="mode-option">
+              <input type="radio" name="ui_mode" value="self">
+              <span class="mode-option-body">
+                <strong>セルフ</strong>
+                <span class="mode-option-note">一覧を縦スクロール。好きな順番・速度で触れます。</span>
+              </span>
+            </label>
+          </fieldset>
+          <p class="dash-note warn-note">この端末のブラウザに下書き保存。電源OFF後も同じブラウザなら続き可。キャッシュ削除・別端末では消える</p>
+          <ul class="faq-mini">
+            <li><strong>フォームはある？</strong> 1万円プランに送信フォームは含みません。</li>
+            <li><strong>修正は？</strong> 左プレビューで確認してから提出。追加の直しは例外対応です。</li>
+            <li><strong>レイアウトは？</strong> 型は固定。色と中身を指定どおりにします。</li>
+          </ul>
+          <div class="confirm-row">
+            <button type="button" class="btn-confirm" data-confirm-step>確定する</button>
+            <button type="button" class="btn-unconfirm" data-unconfirm-step>取り消し・訂正</button>
+            <p class="confirm-status" data-confirm-status>未確定</p>
+          </div>
+        </details>
+
+        <details class="dash-block" data-step-id="global-preset" data-preview-target="#preview-root">
+          <summary>1. 全体色・プリセット</summary>
+          <p class="dash-note">色はすぐ左に反映</p>
+          <p class="dash-subhead">雰囲気プリセット（押すとすぐ左に反映）</p>
+          <div class="preset-row" id="preset-row">
+            <button type="button" data-preset="green">落ち着き緑</button>
+            <button type="button" data-preset="clinic">クリニック白</button>
+            <button type="button" data-preset="cafe">暖色カフェ</button>
+            <button type="button" data-preset="ink">墨モダン</button>
+            <button type="button" data-preset="ocean">海青</button>
+          </div>
+          <div class="btn-row">
+            <button type="button" class="btn btn-primary" id="btn-random">ランダム配色</button>
+            <button type="button" class="btn-ghost-dash" id="btn-random-undo-1" disabled>1つ前のランダム</button>
+            <button type="button" class="btn-ghost-dash" id="btn-random-undo-2" disabled>2つ前のランダム</button>
+            <button type="button" class="btn-ghost-dash" id="btn-reset">初期色に戻す</button>
+          </div>
+          <p class="dash-note" id="preset-gate-note" hidden>プリセットまたはランダムを選んでから「次へ」</p>
+        </details>
+
+        <details class="dash-block" data-step-id="global-bg" data-preview-target="#hero">
+          <summary>2. 全体色・背景</summary>
+          <p class="dash-note">色はすぐ左に反映</p>
+          <div class="color-field" data-color-key="pageBg">
+            <label class="color-label">ページ全体の背景</label>
+            <div class="color-simple">
+              <div class="swatch-row" data-swatches="pageBg"></div>
+              <button type="button" class="btn-ghost-dash" data-color-mode="detail">カラーパレットで詳しく選ぶ</button>
+            </div>
+            <div class="color-detail" hidden></div>
+          </div>
+        </details>
+
+        <details class="dash-block" data-step-id="global-chrome" data-preview-target="#preview-header">
+          <summary>3. 全体色・帯</summary>
+          <p class="dash-note">色はすぐ左に反映</p>
+          <div class="color-field" data-color-key="chromeBg">
+            <label class="color-label">ヘッダー／フッター（帯）の背景</label>
+            <div class="color-simple">
+              <div class="swatch-row" data-swatches="chromeBg"></div>
+              <button type="button" class="btn-ghost-dash" data-color-mode="detail">カラーパレットで詳しく選ぶ</button>
+            </div>
+            <div class="color-detail" hidden></div>
+          </div>
+          <div class="color-field" data-color-key="chromeInk">
+            <label class="color-label">帯の文字色</label>
+            <div class="color-simple">
+              <div class="swatch-row" data-swatches="chromeInk"></div>
+              <button type="button" class="btn-ghost-dash" data-color-mode="detail">カラーパレットで詳しく選ぶ</button>
+            </div>
+            <div class="color-detail" hidden></div>
+          </div>
+        </details>
+
+        <details class="dash-block" data-step-id="global-body" data-preview-target="#preview-root">
+          <summary>4. 全体色・本文</summary>
+          <p class="dash-note">色はすぐ左に反映</p>
+          <div class="color-field" data-color-key="bodyInk">
+            <label class="color-label">本文の基本文字色</label>
+            <div class="color-simple">
+              <div class="swatch-row" data-swatches="bodyInk"></div>
+              <button type="button" class="btn-ghost-dash" data-color-mode="detail">カラーパレットで詳しく選ぶ</button>
+            </div>
+            <div class="color-detail" hidden></div>
+          </div>
+        </details>
+
+        <details class="dash-block" data-step-id="global-accent" data-preview-target="#about">
+          <summary>5. 全体色・アクセント</summary>
+          <p class="dash-note">色はすぐ左に反映</p>
+          <div class="color-field" data-color-key="accent">
+            <label class="color-label">アクセント（見出し下線など）</label>
+            <div class="color-simple">
+              <div class="swatch-row" data-swatches="accent"></div>
+              <button type="button" class="btn-ghost-dash" data-color-mode="detail">カラーパレットで詳しく選ぶ</button>
+            </div>
+            <div class="color-detail" hidden></div>
+          </div>
+        </details>
+
+        <details class="dash-block" data-step-id="global-card" data-preview-target="#about">
+          <summary>6. 全体色・カード／角丸</summary>
+          <p class="dash-note">色はすぐ左に反映</p>
+          <div class="color-field" data-color-key="cardBg">
+            <label class="color-label">枠・カードの背景色</label>
+            <div class="color-simple">
+              <div class="swatch-row" data-swatches="cardBg"></div>
+              <button type="button" class="btn-ghost-dash" data-color-mode="detail">カラーパレットで詳しく選ぶ</button>
+            </div>
+            <div class="color-detail" hidden></div>
+          </div>
+          <fieldset class="inline-fieldset">
+            <legend>カード・枠の角（ページ全体）</legend>
+            <label><input type="radio" name="radius" value="0.2rem"> シャープ</label>
+            <label><input type="radio" name="radius" value="0.6rem" checked> ふつう</label>
+            <label><input type="radio" name="radius" value="1.1rem"> 丸め</label>
+          </fieldset>
+        </details>
+
+        <details class="dash-block" data-step-id="global-text" data-preview-target="#preview-header">
+          <summary>7. 全体・文字・ロゴ</summary>
+          <p class="dash-note">書体・文字・画像は「確定する」まで左に反映しません。</p>
+          <label>ブランド名・ロゴ文字 <input name="brand_name" type="text" value="" placeholder="サンプル工房"></label>
+          <label>ロゴ画像（任意） <input name="logo_image" type="file" accept="image/*"></label>
+          <label class="stack-label">見出し・ロゴ用書体
+            <select id="font-display" name="font_display" data-font-select data-font-default="Shippori Mincho"></select>
+          </label>
+          <label class="stack-label">本文用書体
+            <select id="font-body" name="font_body" data-font-select data-font-default="Zen Kaku Gothic New"></select>
+          </label>
+          <label class="stack-label">リスト外の希望（任意）
+            <input type="text" id="font-other-note" name="font_other_note" placeholder="Webで使える範囲で近いものに調整する場合があります">
+          </label>
+          <p class="font-preview" id="font-preview">書体プレビュー：あいうえお サンプル工房</p>
+          <div class="confirm-row">
+            <button type="button" class="btn-confirm" data-confirm-step>確定する</button>
+            <button type="button" class="btn-unconfirm" data-unconfirm-step>取り消し・訂正</button>
+            <p class="confirm-status" data-confirm-status>未確定</p>
+          </div>
+        </details>
+
+        <details class="dash-block" data-step-id="hero-color" data-preview-target="#hero">
+          <summary>8. キャッチ・色</summary>
+          <p class="dash-note">色はすぐ左に反映</p>
+          <div class="color-field" data-color-key="heroInk">
+            <label class="color-label">キャッチ画像の中の文字色</label>
+            <div class="color-simple">
+              <div class="swatch-row" data-swatches="heroInk"></div>
+              <button type="button" class="btn-ghost-dash" data-color-mode="detail">カラーパレットで詳しく選ぶ</button>
+            </div>
+            <div class="color-detail" hidden></div>
+          </div>
+          <fieldset class="inline-fieldset">
+            <legend>キャッチ見出しの大きさ</legend>
+            <label><input type="radio" name="headingScale" value="0.92"> 小さめ</label>
+            <label><input type="radio" name="headingScale" value="1" checked> 標準</label>
+            <label><input type="radio" name="headingScale" value="1.12"> 大きめ</label>
+          </fieldset>
+        </details>
+
+        <details class="dash-block" data-step-id="hero-content" data-preview-target="#hero">
+          <summary>9. キャッチ・文字・画像</summary>
+          <p class="dash-note">書体・文字・画像は「確定する」まで左に反映しません。</p>
+          <label class="stack-label">このセクションの書体
+            <select id="font-catch" name="font_catch" data-font-select data-font-default="Shippori Mincho"></select>
+          </label>
+          <div class="count-row" data-count-for="hero-leads">
+            <span>キャッチ下の行数</span>
+            <button type="button" data-step="-1">−</button>
+            <span data-count-label>2 / 3</span>
+            <button type="button" data-step="1">＋</button>
+          </div>
+          <fieldset class="fill-block">
+            <legend>記入</legend>
+            <label>タイトル <input name="hero_title" type="text" value="" placeholder="サンプル工房"></label>
+            <label>文言1 <input name="hero_lead_1" type="text" value="" placeholder="1万円プランのレイアウト見本です。"></label>
+            <label data-fill-for="hero-leads" data-fill-at="2">文言2 <input name="hero_lead_2" type="text" value="" placeholder="色と件数を右で確認します。"></label>
+            <label data-fill-for="hero-leads" data-fill-at="3">文言3 <input name="hero_lead_3" type="text" value="" placeholder="（3行目の見本文）"></label>
+            <label>キャッチ画像 <input name="hero_image" type="file" accept="image/*"></label>
+          </fieldset>
+          <div class="confirm-row">
+            <button type="button" class="btn-confirm" data-confirm-step>確定する</button>
+            <button type="button" class="btn-unconfirm" data-unconfirm-step>取り消し・訂正</button>
+            <p class="confirm-status" data-confirm-status>未確定</p>
+          </div>
+        </details>
+
+        <details class="dash-block" data-step-id="values-color" data-preview-target="#hero-values">
+          <summary>10. 下の枠・色</summary>
+          <p class="dash-note">色はすぐ左に反映。キャッチ下の3つの枠の背景です。</p>
+          <div class="color-field" data-color-key="valuesBg">
+            <label class="color-label">下の枠の背景色</label>
+            <div class="color-simple">
+              <div class="swatch-row" data-swatches="valuesBg"></div>
+              <button type="button" class="btn-ghost-dash" data-color-mode="detail">カラーパレットで詳しく選ぶ</button>
+            </div>
+            <div class="color-detail" hidden></div>
+          </div>
+        </details>
+
+        <details class="dash-block" data-step-id="values-content" data-preview-target="#hero-values">
+          <summary>11. 下の枠・文字</summary>
+          <p class="dash-note">書体・文字・画像は「確定する」まで左に反映しません。</p>
+          <div class="count-row" data-count-for="hero-values">
+            <span>枠の数</span>
+            <button type="button" data-step="-1">−</button>
+            <span data-count-label>3 / 3</span>
+            <button type="button" data-step="1">＋</button>
+          </div>
+          <fieldset class="fill-block">
+            <legend>記入</legend>
+            <label>枠1 見出し <input name="value_1_title" type="text" value="" placeholder="見本1"></label>
+            <label>枠1 文 <input name="value_1_text" type="text" value="" placeholder="件数を変えると並びが変わります。"></label>
+            <label data-fill-for="hero-values" data-fill-at="2">枠2 見出し <input name="value_2_title" type="text" value="" placeholder="見本2"></label>
+            <label data-fill-for="hero-values" data-fill-at="2">枠2 文 <input name="value_2_text" type="text" value="" placeholder="ここに短い説明が入ります。"></label>
+            <label data-fill-for="hero-values" data-fill-at="3">枠3 見出し <input name="value_3_title" type="text" value="" placeholder="見本3"></label>
+            <label data-fill-for="hero-values" data-fill-at="3">枠3 文 <input name="value_3_text" type="text" value="" placeholder="レイアウト型はポートフォリオと同じです。"></label>
+          </fieldset>
+          <div class="confirm-row">
+            <button type="button" class="btn-confirm" data-confirm-step>確定する</button>
+            <button type="button" class="btn-unconfirm" data-unconfirm-step>取り消し・訂正</button>
+            <p class="confirm-status" data-confirm-status>未確定</p>
+          </div>
+        </details>
+
+        <details class="dash-block" data-step-id="about-content" data-preview-target="#about">
+          <summary>12. About・文字・画像</summary>
+          <p class="dash-note">書体・文字・画像は「確定する」まで左に反映しません。</p>
+          <label class="stack-label">このセクションの書体
+            <select id="font-about" name="font_about" data-font-select data-font-default="Zen Kaku Gothic New"></select>
+          </label>
+          <div class="count-row" data-count-for="about-accordions">
+            <span>アコーディオン数</span>
+            <button type="button" data-step="-1">−</button>
+            <span data-count-label>1 / 3</span>
+            <button type="button" data-step="1">＋</button>
+          </div>
+          <div class="count-row" data-count-for="about-photos">
+            <span>写真枚数</span>
+            <button type="button" data-step="-1">−</button>
+            <span data-count-label>2 / 4</span>
+            <button type="button" data-step="1">＋</button>
+          </div>
+          <fieldset class="fill-block">
+            <legend>記入</legend>
+            <label>このかたまりの名前（見本サイトの上メニューにも出ます） <input name="about_section_name" type="text" value="" placeholder="About"></label>
+            <label>大見出し <input name="about_heading" type="text" value="" placeholder="Sample"></label>
+            <label>名前 <input name="about_name" type="text" value="" placeholder="サンプル工房（見本）"></label>
+            <label>紹介文 <textarea name="about_lead" rows="3" placeholder="ここには短い紹介文が入ります。作り込みすぎない見本文です。"></textarea></label>
+            <label>見出し1 <input name="acc_1_title" type="text" value="" placeholder="見本の見出し1"></label>
+            <label>内容1 <textarea name="acc_1_body" rows="2" placeholder="【見本】短い項目が入ります。／【見本】レイアウト確認用です。"></textarea></label>
+            <label data-fill-for="about-accordions" data-fill-at="2">見出し2 <input name="acc_2_title" type="text" value="" placeholder="見本の見出し2"></label>
+            <label data-fill-for="about-accordions" data-fill-at="2">内容2 <textarea name="acc_2_body" rows="2" placeholder="【見本】2つ目の枠です。"></textarea></label>
+            <label data-fill-for="about-accordions" data-fill-at="3">見出し3 <input name="acc_3_title" type="text" value="" placeholder="見本の見出し3"></label>
+            <label data-fill-for="about-accordions" data-fill-at="3">内容3 <textarea name="acc_3_body" rows="2" placeholder="【見本】3つ目の枠です。"></textarea></label>
+            <label>写真1 <input name="about_image_1" type="file" accept="image/*"></label>
+            <label data-fill-for="about-photos" data-fill-at="2">写真2 <input name="about_image_2" type="file" accept="image/*"></label>
+            <label data-fill-for="about-photos" data-fill-at="3">写真3 <input name="about_image_3" type="file" accept="image/*"></label>
+            <label data-fill-for="about-photos" data-fill-at="4">写真4 <input name="about_image_4" type="file" accept="image/*"></label>
+          </fieldset>
+          <div class="confirm-row">
+            <button type="button" class="btn-confirm" data-confirm-step>確定する</button>
+            <button type="button" class="btn-unconfirm" data-unconfirm-step>取り消し・訂正</button>
+            <p class="confirm-status" data-confirm-status>未確定</p>
+          </div>
+        </details>
+
+        <details class="dash-block" data-step-id="works-content" data-preview-target="#works">
+          <summary>13. Works・文字・画像</summary>
+          <p class="dash-note">書体・文字・画像は「確定する」まで左に反映しません。</p>
+          <label class="stack-label">このセクションの書体
+            <select id="font-works" name="font_works" data-font-select data-font-default="Zen Kaku Gothic New"></select>
+          </label>
+          <div class="count-row" data-count-for="works-list">
+            <span>カード件数</span>
+            <button type="button" data-step="-1">−</button>
+            <span data-count-label>2 / 3</span>
+            <button type="button" data-step="1">＋</button>
+          </div>
+          <fieldset class="fill-block">
+            <legend>記入</legend>
+            <label>このかたまりの名前（見本サイトの上メニューにも出ます） <input name="works_section_name" type="text" value="" placeholder="Works"></label>
+            <label>大見出し <input name="works_heading" type="text" value="" placeholder="見本カード"></label>
+            <label>リード文 <input name="works_lead" type="text" value="" placeholder="Worksと同じ並びです。内容は見本用の短い文言です。"></label>
+            <label>カード1 見出し <input name="work_1_title" type="text" value="" placeholder="見本カード1"></label>
+            <label>カード1 文 <input name="work_1_text" type="text" value="" placeholder="短い説明文の見本です。"></label>
+            <label>カード1 画像 <input name="work_1_image" type="file" accept="image/*"></label>
+            <label data-fill-for="works-list" data-fill-at="2">カード2 見出し <input name="work_2_title" type="text" value="" placeholder="見本カード2"></label>
+            <label data-fill-for="works-list" data-fill-at="2">カード2 文 <input name="work_2_text" type="text" value="" placeholder="件数を変えて確認できます。"></label>
+            <label data-fill-for="works-list" data-fill-at="2">カード2 画像 <input name="work_2_image" type="file" accept="image/*"></label>
+            <label data-fill-for="works-list" data-fill-at="3">カード3 見出し <input name="work_3_title" type="text" value="" placeholder="見本カード3"></label>
+            <label data-fill-for="works-list" data-fill-at="3">カード3 文 <input name="work_3_text" type="text" value="" placeholder="3件目の見本です。"></label>
+            <label data-fill-for="works-list" data-fill-at="3">カード3 画像 <input name="work_3_image" type="file" accept="image/*"></label>
+          </fieldset>
+          <div class="confirm-row">
+            <button type="button" class="btn-confirm" data-confirm-step>確定する</button>
+            <button type="button" class="btn-unconfirm" data-unconfirm-step>取り消し・訂正</button>
+            <p class="confirm-status" data-confirm-status>未確定</p>
+          </div>
+        </details>
+
+        <details class="dash-block" data-step-id="extra-content" data-preview-target="#hours">
+          <summary>14. 追加ブロック</summary>
+          <p class="dash-note">書体・文字・画像は「確定する」まで左に反映しません。</p>
+          <label><input type="checkbox" data-extra-toggle="hours" name="extra_hours" value="1"> 営業時間を出す</label>
+          <label><input type="checkbox" data-extra-toggle="access" name="extra_access" value="1"> アクセス文を出す</label>
+          <label><input type="checkbox" data-extra-toggle="map" name="extra_map" value="1"> 地図枠を出す</label>
+          <label class="stack-label">SNSリンク数（下のURL欄の数が揃います。左は確定後）
+            <select id="sns-count" name="sns_count">
+              <option value="0" selected>0</option>
+              <option value="1">1</option>
+              <option value="2">2</option>
+              <option value="3">3</option>
+            </select>
+          </label>
+          <fieldset class="fill-block">
+            <legend>記入</legend>
+            <label>営業時間文 <input name="hours_text" type="text" value="" placeholder="平日 10:00–18:00／土日祝 休み（見本）"></label>
+            <label>アクセス文 <input name="access_text" type="text" value="" placeholder="〇〇駅から徒歩5分（見本）"></label>
+            <label data-sns-for="1">SNS1 URL <input name="sns_1" type="url" placeholder="https://"></label>
+            <label data-sns-for="2">SNS2 URL <input name="sns_2" type="url" placeholder="https://"></label>
+            <label data-sns-for="3">SNS3 URL <input name="sns_3" type="url" placeholder="https://"></label>
+          </fieldset>
+          <div class="confirm-row">
+            <button type="button" class="btn-confirm" data-confirm-step>確定する</button>
+            <button type="button" class="btn-unconfirm" data-unconfirm-step>取り消し・訂正</button>
+            <p class="confirm-status" data-confirm-status>未確定</p>
+          </div>
+        </details>
+
+        <details class="dash-block" data-step-id="contact-color" data-preview-target="#contact">
+          <summary>15. ご連絡・色</summary>
+          <p class="dash-note">色はすぐ左に反映</p>
+          <div class="color-field" data-color-key="contactBg">
+            <label class="color-label">帯の背景</label>
+            <div class="color-simple">
+              <div class="swatch-row" data-swatches="contactBg"></div>
+              <button type="button" class="btn-ghost-dash" data-color-mode="detail">カラーパレットで詳しく選ぶ</button>
+            </div>
+            <div class="color-detail" hidden></div>
+          </div>
+          <div class="color-field" data-color-key="contactInk">
+            <label class="color-label">帯の文字</label>
+            <div class="color-simple">
+              <div class="swatch-row" data-swatches="contactInk"></div>
+              <button type="button" class="btn-ghost-dash" data-color-mode="detail">カラーパレットで詳しく選ぶ</button>
+            </div>
+            <div class="color-detail" hidden></div>
+          </div>
+        </details>
+
+        <details class="dash-block" data-step-id="contact-content" data-preview-target="#contact">
+          <summary>16. ご連絡・文字</summary>
+          <p class="dash-note">書体・文字・画像は「確定する」まで左に反映しません。</p>
+          <fieldset class="fill-block">
+            <legend>記入</legend>
+            <label>このかたまりの名前（見本サイトの上メニューにも出ます） <input name="contact_section_name" type="text" value="" placeholder="ご連絡"></label>
+            <label>ラベル（小さめ） <input name="contact_label" type="text" value="" placeholder="Contact"></label>
+            <label>掲載メール <input name="contact_email" type="email" value="" placeholder="sample@example.com"></label>
+            <label>補足1 <input name="contact_note_1" type="text" value="" placeholder="1万円プランに送信フォームは含まれません。"></label>
+            <label>補足2 <input name="contact_note_2" type="text" value="" placeholder="メール掲載と、コピーできるところまでです。"></label>
+          </fieldset>
+          <div class="confirm-row">
+            <button type="button" class="btn-confirm" data-confirm-step>確定する</button>
+            <button type="button" class="btn-unconfirm" data-unconfirm-step>取り消し・訂正</button>
+            <p class="confirm-status" data-confirm-status>未確定</p>
+          </div>
+        </details>
+
+        <details class="dash-block" data-step-id="finish" data-preview-target="#preview-footer">
+          <summary>17. 提出</summary>
+          <p class="dash-note">左プレビュー＝納品イメージです。内容を確認してから提出してください。</p>
+          <label>参考サイトURL <input name="ref_url" type="url" placeholder="見た目の参考（文言は作りません）"></label>
+          <label>使いたくない色・雰囲気 <textarea name="avoid_mood" rows="2" placeholder="例：紫は避けたい、派手すぎない など"></textarea></label>
+          <label>納品希望日 <input name="due_date" type="date"></label>
+          <label>連絡手段 <input name="contact_method" type="text" placeholder="メール / ココナラDM など"></label>
+          <fieldset class="fill-block">
+            <legend>範囲の確認（提出確定に必須）</legend>
+            <label class="check"><input type="checkbox" name="scope_layout_fixed" value="1"> レイアウト型は固定だと理解した</label>
+            <label class="check"><input type="checkbox" name="scope_no_copy" value="1"> 文章の作成代行は含まないと理解した</label>
+            <label class="check"><input type="checkbox" name="scope_no_form" value="1"> 送信フォームは含まないと理解した</label>
+            <label class="check"><input type="checkbox" name="scope_update" value="1"> 公開後の継続更新は含まないと理解した</label>
+          </fieldset>
+          <div class="confirm-row">
+            <button type="button" class="btn-confirm" data-confirm-step>確定する</button>
+            <button type="button" class="btn-unconfirm" data-unconfirm-step>取り消し・訂正</button>
+            <p class="confirm-status" data-confirm-status>未確定</p>
+          </div>
+          <div class="fill-actions">
+            <button type="button" class="btn btn-primary" id="btn-copy-settings">設定JSONをコピー</button>
+            <button type="button" class="btn btn-primary btn-zip" id="btn-zip" disabled>OKしてZIPを保存</button>
+            <p id="zip-missing" class="zip-missing" aria-live="polite"></p>
+            <p id="zip-status" class="zip-status" aria-live="polite"></p>
+            <p class="dash-note">ZIPボタンは、文字・画像の確定がすべて終わると押せます。左プレビューが納品イメージです。</p>
+            <p class="dash-note">作成後の追加修正は原則1回のみ（例外対応）。</p>
+            <p class="dash-note">写真が重いと送れないことがあります（目安20MB超）。そのときはクラウドで送ってください。</p>
+            <button type="button" class="btn-ghost-dash btn-reset-draft" id="btn-reset-draft">最初からやり直す（この端末の下書きを消す）</button>
+          </div>
+        </details>
+
+        </form>
+
+        <div class="wizard-foot-panel" id="wizard-foot-panel" hidden role="alert"></div>
+        <nav class="wizard-foot" id="wizard-nav" aria-label="作成ステップ">
+          <button type="button" class="wizard-btn" id="wizard-back">戻る</button>
+          <button type="button" class="wizard-btn" id="wizard-next">次へ</button>
+        </nav>
+      </div>
+    </section>
+  </div>
+</body>
+</html>

@@ -5,6 +5,11 @@
 
 アプリ: https://butti0108-spec.github.io/kuru-hub/
 
+## kuru-hub への反映
+
+この `docs/` を直しただけでは、外からの閲覧アプリには届かない。
+**ポートフォリオの push に加えて、kuru-hub へ同期（commit / push）**すること。詳細は [`確定/2026-08-25-Drive同期.md`](./確定/2026-08-25-Drive同期.md)。
+
 ---
 Cursorのメモリ／チャット履歴とは別に、**決まったこと・TODO・優先・進行中の計画**をここに残す。
 

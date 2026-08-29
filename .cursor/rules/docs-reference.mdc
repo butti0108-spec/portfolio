@@ -1,0 +1,21 @@
+---
+description: 計画・確定事項は docs/ を参照（詳細の再掲を避ける）
+alwaysApply: true
+---
+
+# ドキュメント参照
+
+ポートフォリオの方針・受注・TODO・優先・キャンペーンなど、議論で固まったことはチャットやメモリに長文で抱えず、リポジトリの `docs/` を正とする。
+
+- 外からの閲覧・編集アプリ（正本寄り）: https://github.com/butti0108-spec/kuru-hub （Pages: https://butti0108-spec.github.io/kuru-hub/）
+- ポートフォリオ控え: `docs/README.md` / `docs/運用ボード.md` / `docs/確定/` / `docs/進行中/`
+
+作業前に関連ドキュメント（とくに運用ボード）を読み、矛盾する指示があればドキュメントを優先するか、増渕さんに確認する。
+方針が固まったら `docs/確定/`、TODOや優先が変わったら `運用ボード.md` を更新する。メモリには「docs を参照」程度に留める。
+時刻アラームが必要な予定だけ、必要に応じて外部カレンダーと併用してよい。
+
+簡単な画面操作の分担は `docs/確定/2026-08-25-手足方式.md` およびルール `hands-mode` に従う。
+## kuru-hub 同期
+
+`docs/` を更新したら、外からの閲覧用に **kuru-hub へも速やかに同期（copy → commit → push main）** する。
+ポートフォリオの Git だけでは Pages（https://butti0108-spec.github.io/kuru-hub/）に反映されない。

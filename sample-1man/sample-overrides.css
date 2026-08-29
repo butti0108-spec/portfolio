@@ -594,12 +594,37 @@ body.hide-zone-badges .zone-badge-rail {
   line-height: 1.45;
 }
 
+.dash-body {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-x: hidden;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  overscroll-behavior: contain;
+  padding: 0.75rem 1rem 0.75rem;
+}
+
+.wizard-foot-dock {
+  flex: 0 0 auto;
+  padding: 0.5rem 1rem 0.65rem;
+  background: #f4f2ee;
+  border-top: 1px solid rgba(0, 0, 0, 0.12);
+  box-shadow: 0 -6px 16px rgba(0, 0, 0, 0.06);
+}
+
 .wizard-foot-panel {
-  margin-top: 0.75rem;
+  margin: 0 0 0.5rem;
   padding: 0.85rem;
   background: #fff;
   border: 1px solid rgba(0, 0, 0, 0.12);
   border-radius: 0.5rem;
+}
+
+.wizard-foot-panel[hidden] {
+  display: none !important;
+  margin: 0;
+  padding: 0;
+  border: 0;
 }
 
 .wizard-foot-panel-text {
@@ -799,15 +824,12 @@ body.mode-guided #wizard-back {
 .wizard-foot {
   display: flex;
   flex-direction: row;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
   gap: 0.5rem;
-  padding: 0.75rem 0 0;
-  margin-top: 0.75rem;
-  border-top: 1px solid rgba(0, 0, 0, 0.1);
-  position: sticky;
-  bottom: 0;
-  background: linear-gradient(180deg, rgba(244, 242, 238, 0) 0%, #f4f2ee 28%);
-  padding-bottom: 0.25rem;
+  margin: 0;
+  padding: 0;
+  border-top: 0;
+  background: transparent;
 }
 
 .wizard-foot #wizard-back,
@@ -888,16 +910,6 @@ body.wizard-mode .dash-block.is-wizard-active {
   background: #fff3cd;
   border: 1px solid #e0c36a;
   border-radius: 4px;
-}
-
-.dash-body {
-  flex: 1 1 auto;
-  min-height: 0;
-  overflow-x: hidden;
-  overflow-y: auto;
-  -webkit-overflow-scrolling: touch;
-  overscroll-behavior: contain;
-  padding: 0.75rem 1rem 2rem;
 }
 
 /* —— 制作フロー —— */

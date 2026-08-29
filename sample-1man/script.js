@@ -824,7 +824,11 @@
         d.classList.remove("is-wizard-active");
       });
       block.open = true;
-      block.scrollIntoView({ behavior: "smooth", block: "nearest" });
+      const dashBody = document.querySelector(".dash-body");
+      if (dashBody) {
+        const blockTop = block.offsetTop;
+        dashBody.scrollTo({ top: Math.max(0, blockTop - 12), behavior: "smooth" });
+      }
     } else {
       form.querySelectorAll(":scope > details.dash-block").forEach((d) => {
         const active = d === block;
@@ -1035,7 +1039,6 @@
     if (!panel) return;
     panel.innerHTML = html;
     panel.hidden = false;
-    panel.scrollIntoView({ behavior: "smooth", block: "nearest" });
   }
 
   function resetAllDraft() {

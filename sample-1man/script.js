@@ -751,9 +751,7 @@
       btn.classList.toggle("is-active", btn.getAttribute("data-preset") === key);
     });
     const randomBtn = document.getElementById("btn-random");
-    if (randomBtn) randomBtn.classList.toggle("is-active", key === "random");
-    const gate = document.getElementById("preset-gate-note");
-    if (gate) gate.hidden = true;
+    if (randomBtn) randomBtn.classList.remove("is-active");
     scheduleSave();
   }
 
@@ -786,13 +784,6 @@
     if (stepId === "guide" && !readUiModeFromForm()) {
       const status = document.getElementById("wizard-status");
       if (status) status.textContent = "ガイドかセルフを選んでから「次へ」";
-      return false;
-    }
-    if (stepId === "global-preset" && !store.presetChosen) {
-      const gate = document.getElementById("preset-gate-note");
-      if (gate) gate.hidden = false;
-      const status = document.getElementById("wizard-status");
-      if (status) status.textContent = "プリセットまたはランダムを選んでください。";
       return false;
     }
     if (stepId === "finish" && !validateFinish()) {
@@ -955,8 +946,6 @@
     if (status && step && step.id !== "global-preset") {
       /* keep validation message until next action */
     }
-    const gate = document.getElementById("preset-gate-note");
-    if (gate) gate.hidden = !(step && step.id === "global-preset" && !store.presetChosen);
     updatePreviewGuideBtn();
     updateZoneBadgeDoneState();
   }
@@ -1029,6 +1018,8 @@
   }
 
   function hideWizardFootPanel() {
+    const dock = document.getElementById("wizard-foot-dock");
+    if (dock) dock.classList.remove("is-chapter-boundary");
     const panel = document.getElementById("wizard-foot-panel");
     if (panel) {
       panel.hidden = true;
@@ -1918,8 +1909,6 @@
       const randomBtn = document.getElementById("btn-random");
       if (randomBtn) randomBtn.classList.remove("is-active");
       updateRandomUndoUi();
-      const gate = document.getElementById("preset-gate-note");
-      if (gate) gate.hidden = !store.presetChosen;
     }
     applyAllConfirmed();
     applyLiveColors(false);
@@ -2372,8 +2361,6 @@
     document.querySelectorAll("[data-preset]").forEach((btn) => {
       btn.classList.toggle("is-active", btn.getAttribute("data-preset") === store.chosenPresetKey);
     });
-    const randomBtn = document.getElementById("btn-random");
-    if (randomBtn) randomBtn.classList.toggle("is-active", store.chosenPresetKey === "random");
   }
   applyUiMode();
   showWizardStep(resolveWizardStepIndex());

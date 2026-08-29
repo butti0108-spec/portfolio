@@ -800,10 +800,9 @@ body.mode-guided #wizard-back {
   right: 0.5rem;
 }
 
-.preset-row button.is-active,
-#btn-random.is-active {
-  outline: 2px solid #3d8a48;
-  outline-offset: 2px;
+.preset-row button.is-active {
+  background: #ebe8e2;
+  border-color: rgba(0, 0, 0, 0.32);
 }
 
 .wizard-top {

@@ -37,6 +37,10 @@
             <input type="checkbox" id="toggle-zone-badges" checked>
             番号を表示
           </label>
+          <button type="button" class="preview-guide-btn" id="preview-guide-btn" data-open-step="guide" aria-label="0. はじめにを開く">
+            <span class="preview-guide-num">0</span>
+            <span class="preview-guide-label">はじめに</span>
+          </button>
         </div>
         <p class="preview-legend" id="preview-legend">
           <span class="leg-swatch leg-color"></span>青＝色
@@ -322,10 +326,10 @@
 
         <form id="order-form" class="fill-form guide-form">
 
-        <details class="dash-block" data-step-id="guide" data-preview-target="#preview-header">
+        <details class="dash-block" data-step-id="guide">
           <summary>0. はじめに</summary>
           <ol class="hint-list">
-            <li>左は納品イメージ。<strong>青＝色・赤＝文字</strong>の番号（それぞれ1から）。確定すると<strong>緑</strong>になります。</li>
+            <li>左は納品イメージ。<strong>青＝色・赤＝文字</strong>の番号（それぞれ1から）。確定すると<strong>緑</strong>になります。<strong>0＝はじめに</strong>は上のツールバー（画面外）。</li>
             <li><strong>あとから直せます。</strong>左の番号を押すとその項目だけ開きます。いまは気軽に選んでください。</li>
             <li>順番に「次へ」でも、好きな番号から先に触っても大丈夫です。</li>
             <li>画像ファイルは端末に下書き保存できません。再開時は再選択してください。</li>

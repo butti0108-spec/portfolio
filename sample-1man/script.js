@@ -838,13 +838,15 @@
     applyLiveColors(false);
     applyAllConfirmed();
 
-    const sel = block.getAttribute("data-preview-target");
-    if (sel) window.setTimeout(() => scrollPreviewTo(sel), 50);
-    const hit = root.querySelector('[data-open-step="' + step.id + '"].preview-hit') ||
-      root.querySelector('.preview-hit[data-open-step="' + step.id + '"]');
-    if (hit) {
-      hit.classList.add("is-target-flash");
-      window.setTimeout(() => hit.classList.remove("is-target-flash"), 600);
+    if (step.id !== "guide") {
+      const sel = block.getAttribute("data-preview-target");
+      if (sel) window.setTimeout(() => scrollPreviewTo(sel), 50);
+      const hit = root.querySelector('[data-open-step="' + step.id + '"].preview-hit') ||
+        root.querySelector('.preview-hit[data-open-step="' + step.id + '"]');
+      if (hit) {
+        hit.classList.add("is-target-flash");
+        window.setTimeout(() => hit.classList.remove("is-target-flash"), 600);
+      }
     }
     scheduleSave();
   }
@@ -949,7 +951,16 @@
     }
     const gate = document.getElementById("preset-gate-note");
     if (gate) gate.hidden = !(step && step.id === "global-preset" && !store.presetChosen);
+    updatePreviewGuideBtn();
     updateZoneBadgeDoneState();
+  }
+
+  function updatePreviewGuideBtn() {
+    const btn = document.getElementById("preview-guide-btn");
+    if (!btn) return;
+    const step = STEPS[store.wizardStepIndex];
+    btn.classList.toggle("is-step-current", !!(step && step.id === "guide"));
+    btn.classList.toggle("is-step-done", !!store.confirmed.guide);
   }
 
   function updateZoneBadgeDoneState() {
@@ -2004,7 +2015,7 @@
   }
 
   function setupPreviewHits() {
-    root.querySelectorAll("[data-open-step]").forEach((el) => {
+    document.querySelectorAll("[data-open-step]").forEach((el) => {
       el.addEventListener("click", (e) => {
         e.preventDefault();
         e.stopPropagation();

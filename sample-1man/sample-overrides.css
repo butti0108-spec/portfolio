@@ -83,7 +83,54 @@ body.atelier {
 .preview-toolbar {
   display: flex;
   align-items: center;
+  flex-wrap: wrap;
   gap: 0.4rem;
+}
+
+.preview-guide-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  margin-left: auto;
+  padding: 0.15rem 0.5rem 0.15rem 0.2rem;
+  border: 1px solid rgba(255, 255, 255, 0.28);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.06);
+  color: #f2f2f0;
+  font: inherit;
+  font-size: 0.76rem;
+  cursor: pointer;
+}
+
+.preview-guide-btn:hover {
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.preview-guide-num {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.45rem;
+  height: 1.45rem;
+  border-radius: 999px;
+  background: #5a5f5c;
+  border: 2px solid rgba(255, 255, 255, 0.85);
+  font-size: 0.72rem;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.preview-guide-label {
+  padding-right: 0.15rem;
+  white-space: nowrap;
+}
+
+.preview-guide-btn.is-step-current .preview-guide-num {
+  box-shadow: 0 0 0 2px #151716, 0 0 0 4px #3d8a48;
+}
+
+.preview-guide-btn.is-step-done .preview-guide-num {
+  background: #3d8a48;
 }
 
 .preview-toolbar-label {

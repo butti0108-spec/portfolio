@@ -612,6 +612,14 @@ body.hide-zone-badges .zone-badge-rail {
   box-shadow: 0 -6px 16px rgba(0, 0, 0, 0.06);
 }
 
+.wizard-foot-dock.is-chapter-boundary .wizard-foot {
+  display: none;
+}
+
+.wizard-foot-dock.is-chapter-boundary .wizard-foot-panel {
+  margin-bottom: 0;
+}
+
 .wizard-foot-panel {
   margin: 0 0 0.5rem;
   padding: 0.85rem;

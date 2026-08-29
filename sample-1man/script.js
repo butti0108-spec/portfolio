@@ -913,6 +913,8 @@
   }
 
   function showChapterBoundaryPanel(onProceed) {
+    const dock = document.getElementById("wizard-foot-dock");
+    if (dock) dock.classList.add("is-chapter-boundary");
     showWizardFootPanel(
       "<p class=\"wizard-foot-panel-text\">色の章が終わりました。文字・画像の章に進みます。</p>" +
       "<p class=\"wizard-foot-panel-note\">内容はセルフと同じ項目を、1問ずつ大きめの文字で進めます。</p>" +

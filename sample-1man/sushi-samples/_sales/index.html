@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>見本30 営業一覧（下地）</title>
+  <style>
+    body { font-family: system-ui, sans-serif; margin: 1.5rem; background: #f6f4f1; color: #222; }
+    h1 { font-size: 1.25rem; }
+    p { color: #555; }
+    .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 1rem; }
+    .card { background: #fff; border: 1px solid #ddd; border-radius: 8px; padding: 0.75rem; }
+    .card strong { display: block; margin-bottom: 0.35rem; }
+    .card span { font-size: 0.85rem; color: #666; }
+  </style>
+</head>
+<body>
+  <h1>見本30 営業一覧</h1>
+  <p>採用後に packs/NN/preview.png を置き、このページからリンクする。今は下地のみ。</p>
+  <div class="grid" id="grid"></div>
+  <script>
+    const ids = Array.from({length: 30}, (_, i) => String(i + 1).padStart(2, '0'));
+    const grid = document.getElementById('grid');
+    ids.forEach((id) => {
+      const el = document.createElement('div');
+      el.className = 'card';
+      el.innerHTML = '<strong>No.' + id + '</strong><span>packs に preview を追加後、ここへ表示</span>';
+      grid.appendChild(el);
+    });
+  </script>
+</body>
+</html>

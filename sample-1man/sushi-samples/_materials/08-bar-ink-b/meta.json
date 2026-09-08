@@ -1,0 +1,44 @@
+{
+    "id":  "08",
+    "folder":  "08-bar-ink-b",
+    "band":  "N",
+    "layoutPattern":  "a",
+    "layoutOrder":  [
+                        "hero",
+                        "accordions",
+                        "values",
+                        "photos",
+                        "works",
+                        "hours",
+                        "address",
+                        "contact"
+                    ],
+    "photoPack":  "P1",
+    "headingPack":  "H3",
+    "colorKey":  "cafe",
+    "fontMood":  "mincho",
+    "fonts":  {
+                  "catch":  "Shippori Mincho",
+                  "body":  "Zen Kaku Gothic New",
+                  "display":  "Shippori Mincho"
+              },
+    "scene":  "宿・客室",
+    "counts":  {
+                   "hero-leads":  2,
+                   "hero-values":  2,
+                   "about-accordions":  1,
+                   "about-photos":  1,
+                   "works-list":  1
+               },
+    "extras":  {
+                   "hours":  true,
+                   "access":  false,
+                   "address":  true
+               },
+    "imageSlots":  [
+                       "hero.jpg",
+                       "about-01.jpg",
+                       "work-01.jpg"
+                   ],
+    "status":  "未着手"
+}

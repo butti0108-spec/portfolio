@@ -86,16 +86,24 @@ $asset = 'mbp_asset';
 
         <ul class="skill-cards" data-reveal-group>
           <li class="skill-card" data-reveal="wave">
-            <img class="skill-card-img" src="<?php echo esc_url(mbp_mod_image_url('mbp_img_profile_1', 'assets/images/works/web-design-3000-1.png')); ?>" alt="Webデザイン：見やすさ・伝わりやすさ" width="3000" height="2250" loading="lazy">
+            <button type="button" class="skill-card-btn" data-skill-popup="design" aria-haspopup="dialog" aria-controls="skill-dialog">
+              <img class="skill-card-img" src="<?php echo esc_url(mbp_mod_image_url('mbp_img_profile_1', 'assets/images/works/web-design-3000-1.png')); ?>" alt="" width="3000" height="2250" loading="lazy">
+            </button>
           </li>
           <li class="skill-card" data-reveal="wave" style="--reveal-delay: 0.16s">
-            <img class="skill-card-img" src="<?php echo esc_url(mbp_mod_image_url('mbp_img_profile_2', 'assets/images/works/web-design-3000-2.png')); ?>" alt="コーディング：HTML / CSS / JavaScript" width="3000" height="2250" loading="lazy">
+            <button type="button" class="skill-card-btn" data-skill-popup="code" aria-haspopup="dialog" aria-controls="skill-dialog">
+              <img class="skill-card-img" src="<?php echo esc_url(mbp_mod_image_url('mbp_img_profile_2', 'assets/images/works/web-design-3000-2.png')); ?>" alt="" width="3000" height="2250" loading="lazy">
+            </button>
           </li>
           <li class="skill-card" data-reveal="wave" style="--reveal-delay: 0.32s">
-            <img class="skill-card-img" src="<?php echo esc_url(mbp_mod_image_url('mbp_img_profile_3', 'assets/images/works/web-design-3000-3.png')); ?>" alt="課題から設計：使う人を想定したUI" width="3000" height="2250" loading="lazy">
+            <button type="button" class="skill-card-btn" data-skill-popup="ai" aria-haspopup="dialog" aria-controls="skill-dialog">
+              <img class="skill-card-img" src="<?php echo esc_url(mbp_mod_image_url('mbp_img_profile_3', 'assets/images/works/web-design-3000-3.png')); ?>" alt="" width="3000" height="2250" loading="lazy">
+            </button>
           </li>
           <li class="skill-card" data-reveal="wave" style="--reveal-delay: 0.48s">
-            <img class="skill-card-img" src="<?php echo esc_url(mbp_mod_image_url('mbp_img_profile_4', 'assets/images/works/web-design-3000-4.png')); ?>" alt="WordPress：更新しやすいサイトへ" width="3000" height="2250" loading="lazy">
+            <button type="button" class="skill-card-btn" data-skill-popup="wordpress" aria-haspopup="dialog" aria-controls="skill-dialog">
+              <img class="skill-card-img" src="<?php echo esc_url(mbp_mod_image_url('mbp_img_profile_4', 'assets/images/works/web-design-3000-4.png')); ?>" alt="" width="3000" height="2250" loading="lazy">
+            </button>
           </li>
         </ul>
       </div>
@@ -151,7 +159,7 @@ $asset = 'mbp_asset';
                 <div class="work-item-body">
                   <p class="price-card-fee">1万円</p>
                   <h3>1万円プラン</h3>
-                  <p>まずは案内用の1ページが欲しい方へ。見た目はこのページと同じ作りです。</p>
+                  <p>まずは案内用の静的1ページ。完成イメージは見本サイトでご案内します（このWPサイト本体とは別です）。</p>
                   <span class="work-link">くわしく見る</span>
                 </div>
               </a>
@@ -210,16 +218,16 @@ $asset = 'mbp_asset';
                 <p class="offer-foot">お見積もりです。今のサイトを、自分で更新できる形にします。このウェブサイトと同じ見た目にする必要はありません。移す範囲を聞いてから金額をお伝えします。</p>
               </div>
             </details>
-            <details class="accordion">
+            <details class="accordion" id="faq-1man-form">
               <summary>1万円のプランに、入力して送れる問い合わせ欄は含まれますか？</summary>
               <div class="accordion-body">
-                <p class="offer-foot">含まれません。1万円はメールアドレスの掲載と、押すとコピーできるところまでです。送れる欄が必要な場合は、オプションまたは WordPress で対応します。金額は内容を聞いてからお伝えします。</p>
+                <p class="offer-foot">含まれません。メール掲載とコピーできるところまでです。<a href="<?php echo esc_url(home_url('/sample-1man/help.html#faq')); ?>">くわしく</a></p>
               </div>
             </details>
-            <details class="accordion">
+            <details class="accordion" id="faq-1man-revision">
               <summary>直しは何回までですか？</summary>
               <div class="accordion-body">
-                <p class="offer-foot">1万円のプランは1回までです。2回目から別料金です。オプションや WordPress は、相談して決めます。</p>
+                <p class="offer-foot">1万円のプランは1回までです（納品後30日以内）。2回目から別料金です。<a href="<?php echo esc_url(home_url('/sample-1man/help.html#faq')); ?>">くわしく</a></p>
               </div>
             </details>
             <details class="accordion">

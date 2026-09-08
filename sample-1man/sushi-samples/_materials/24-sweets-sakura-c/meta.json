@@ -1,0 +1,46 @@
+{
+    "id":  "24",
+    "folder":  "24-sweets-sakura-c",
+    "band":  "A",
+    "layoutPattern":  "b",
+    "layoutOrder":  [
+                        "hero",
+                        "values",
+                        "accordions",
+                        "photos",
+                        "works",
+                        "hours",
+                        "address",
+                        "contact"
+                    ],
+    "photoPack":  "P2",
+    "headingPack":  "H3",
+    "colorKey":  "clinic",
+    "fontMood":  "gothic",
+    "fonts":  {
+                  "catch":  "Zen Kaku Gothic New",
+                  "body":  "Noto Sans JP",
+                  "display":  "Zen Kaku Gothic New"
+              },
+    "scene":  "診療所",
+    "counts":  {
+                   "hero-leads":  2,
+                   "hero-values":  2,
+                   "about-accordions":  1,
+                   "about-photos":  2,
+                   "works-list":  2
+               },
+    "extras":  {
+                   "hours":  true,
+                   "access":  false,
+                   "address":  true
+               },
+    "imageSlots":  [
+                       "hero.jpg",
+                       "about-01.jpg",
+                       "about-02.jpg",
+                       "work-01.jpg",
+                       "work-02.jpg"
+                   ],
+    "status":  "未着手"
+}

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="640" height="800" viewBox="0 0 640 800">
+  <rect width="640" height="800" fill="#fff6ee"/>
+  <rect x="0" y="0" width="640" height="52" fill="#e07020"/>
+  <text x="24" y="34" fill="#fff8f0" font-size="18" font-family="Yuji Syuku, serif">赤提灯や</text>
+  <rect x="24" y="72" width="592" height="200" fill="#e07020"/>
+  <text x="40" y="150" fill="#8a3a10" font-size="28" font-weight="700" font-family="Yuji Syuku, serif">今日の一杯を</text>
+  <text x="40" y="190" fill="#8a3a10" font-size="15" font-family="Yuji Syuku, serif" opacity="0.9">串と提灯の気軽な夜</text>
+  <text x="40" y="250" fill="#8a3a10" font-size="12" opacity="0.75">写真世界観: 提灯・串</text>
+  <rect x="24" y="300" width="286" height="100" fill="#fffaf5" stroke="#f08a28" stroke-width="2"/>
+  <text x="40" y="355" fill="#3a2418" font-size="14" font-family="Yuji Syuku, serif">串</text>
+  <rect x="330" y="300" width="286" height="100" fill="#ffffff" stroke="#f08a28" stroke-width="2"/>
+  <text x="346" y="355" fill="#3a2418" font-size="14" font-family="Yuji Syuku, serif">串盛り</text>
+  <rect x="24" y="416" width="592" height="100" fill="#ffe4cc"/>
+  <text x="40" y="456" fill="#3a2418" font-size="14" font-family="Yuji Syuku, serif">赤提灯の下で串焼きを楽しむ居酒屋。今日の一杯と、気軽な会話の場です。</text>
+  <text x="40" y="486" fill="#6a4a38" font-size="12">17:00–23:30／日曜定休</text>
+  <rect x="24" y="620" width="592" height="110" fill="#d46818"/>
+  <text x="40" y="665" fill="#fff8f0" font-size="18" font-family="Yuji Syuku, serif">ご連絡</text>
+  <text x="40" y="698" fill="#fff8f0" font-size="13" opacity="0.9">席のみ予約可</text>
+  <text x="24" y="780" fill="#6a4a38" font-size="12">No.26 ﾂｷ layout C ﾂｷ brick</text>
+</svg>

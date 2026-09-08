@@ -81,6 +81,7 @@
         <p class="profile-name">増渕 敦（Atsushi Masubuchi）</p>
         <p class="section-lead">お客様の立場に立って考える Web Designer です。声になっていない要望にも耳を傾け、「何を作りたいか」だけでなく「なぜそれを作りたいのか」まで整理します。</p>
 
+        <p class="tap-hint">白い見出しをタップすると、中身が開きます。</p>
         <div class="accordion-list">
           <details class="accordion">
             <summary>大切にしていること</summary>
@@ -117,19 +118,29 @@
 
         <ul class="skill-cards">
           <li class="skill-card">
-            <img class="skill-card-img" src="assets/images/works/web-design-3000-1.png" alt="Webデザイン：見やすさ・伝わりやすさ" width="3000" height="2250" loading="lazy">
+            <button type="button" class="skill-card-btn" data-skill-popup="design" aria-haspopup="dialog" aria-controls="skill-dialog" aria-label="Webデザインの説明を開く">
+              <img class="skill-card-img" src="assets/images/works/web-design-3000-1.png" alt="" width="3000" height="2250" loading="lazy">
+            </button>
           </li>
           <li class="skill-card">
-            <img class="skill-card-img" src="assets/images/works/web-design-3000-2.png" alt="コーディング：HTML / CSS / JavaScript" width="3000" height="2250" loading="lazy">
+            <button type="button" class="skill-card-btn" data-skill-popup="code" aria-haspopup="dialog" aria-controls="skill-dialog" aria-label="コーディングの説明を開く">
+              <img class="skill-card-img" src="assets/images/works/web-design-3000-2.png" alt="" width="3000" height="2250" loading="lazy">
+            </button>
           </li>
           <li class="skill-card">
-            <img class="skill-card-img" src="assets/images/works/web-design-3000-3.png" alt="課題から設計：使う人を想定したUI" width="3000" height="2250" loading="lazy">
+            <button type="button" class="skill-card-btn" data-skill-popup="ai" aria-haspopup="dialog" aria-controls="skill-dialog" aria-label="AI活用の説明を開く">
+              <img class="skill-card-img" src="assets/images/works/web-design-3000-3.png" alt="" width="3000" height="2250" loading="lazy">
+            </button>
           </li>
           <li class="skill-card">
-            <img class="skill-card-img" src="assets/images/works/web-design-3000-4.png" alt="WordPress：更新しやすいサイトへ" width="3000" height="2250" loading="lazy">
+            <button type="button" class="skill-card-btn" data-skill-popup="wordpress" aria-haspopup="dialog" aria-controls="skill-dialog" aria-label="WordPressの説明を開く">
+              <img class="skill-card-img" src="assets/images/works/web-design-3000-4.png" alt="" width="3000" height="2250" loading="lazy">
+            </button>
           </li>
         </ul>
+        <p class="tap-hint tap-hint--skills">画像をタップすると、それぞれの説明が開きます。</p>
 
+        <p class="tap-hint">白い見出しをタップすると、中身が開きます。</p>
         <div class="accordion-list">
           <details class="accordion" id="offer">
             <summary>ご依頼できること</summary>
@@ -180,11 +191,13 @@
                   <div class="price-block price-main">
                     <p class="offer-subhead">1万円プラン</p>
                     <p class="price-main-amount">1万円</p>
-                    <p class="price-main-note">このページと同じ見た目です。文章と写真はお客様にご用意いただきます。直しは1回です。</p>
+                    <p class="price-main-note">注文画面の見本サイトで完成イメージを確認できます。文章と写真はお客様にご用意いただきます。直しは1回です。</p>
                     <p class="price-main-note">問い合わせは、メールアドレスの掲載と、押すとコピーできるところまでです。</p>
+                    <p class="price-main-note">住所を出す場合は、住所文をタップするとGoogleマップが開くリンクにします（地図の埋め込みは含みません）。</p>
                     <p class="price-main-action">
-                      <a class="price-main-link" href="templates/fill-in.html">記入用を見る</a>
+                      <a class="price-main-link" href="sample-1man/index.html">注文画面を開く</a>
                     </p>
+                    <p class="offer-foot">操作のくわしい説明は <a href="sample-1man/help.html">ヘルプ</a> にあります。</p>
                   </div>
 
                   <div class="price-block">
@@ -256,16 +269,16 @@
                   <p class="offer-foot">要相談です。今のサイトを、自分で更新できる形にします。このウェブサイトと同じ見た目にする必要はありません。</p>
                 </div>
               </details>
-              <details class="accordion accordion-nested">
+              <details class="accordion accordion-nested" id="faq-1man-form">
                 <summary>1万円のプランに、入力して送れる問い合わせ欄は含まれますか？</summary>
                 <div class="accordion-body">
-                  <p class="offer-foot">含まれません。1万円はメールアドレスの掲載と、押すとコピーできるところまでです。送れる欄は要相談です。</p>
+                  <p class="offer-foot">含まれません。メール掲載とコピーできるところまでです。<a href="sample-1man/help.html#faq">くわしく</a></p>
                 </div>
               </details>
-              <details class="accordion accordion-nested">
+              <details class="accordion accordion-nested" id="faq-1man-revision">
                 <summary>直しは何回までですか？</summary>
                 <div class="accordion-body">
-                  <p class="offer-foot">1万円のプランは1回までです。2回目から別料金です。オプションや WordPress は、相談して決めます。</p>
+                  <p class="offer-foot">1万円のプランは1回まで（納品後30日以内）です。2回目から別料金です。<a href="sample-1man/help.html#faq">くわしく</a></p>
                 </div>
               </details>
               <details class="accordion accordion-nested">

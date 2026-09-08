@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="640" height="800" viewBox="0 0 640 800">
+  <rect width="640" height="800" fill="#fff6ee"/>
+  <rect x="0" y="0" width="640" height="52" fill="#e07020"/>
+  <text x="24" y="34" fill="#fff8f0" font-size="18" font-family="Sawarabi Gothic, sans-serif">レンガベーカリー</text>
+  <rect x="24" y="72" width="592" height="200" fill="#e07020"/>
+  <text x="40" y="150" fill="#8a3a10" font-size="28" font-weight="700" font-family="Sawarabi Gothic, sans-serif">焼きたてを、毎日</text>
+  <text x="40" y="190" fill="#8a3a10" font-size="15" font-family="Sawarabi Gothic, sans-serif" opacity="0.9">朝一番の香りをお届け</text>
+  <text x="40" y="250" fill="#8a3a10" font-size="12" opacity="0.75">写真世界観: パン・ガラスケース</text>
+  <rect x="24" y="300" width="592" height="64" fill="#fffaf5" stroke="#f08a28" stroke-width="2"/>
+  <text x="40" y="340" fill="#3a2418" font-size="14" font-family="Sawarabi Gothic, sans-serif">焼きたて / 窯からすぐ並べます</text>
+  <rect x="24" y="376" width="592" height="64" fill="#ffffff" stroke="#f08a28" stroke-width="2"/>
+  <text x="40" y="416" fill="#3a2418" font-size="14" font-family="Sawarabi Gothic, sans-serif">食パン</text>
+  <rect x="24" y="456" width="592" height="100" fill="#ffe4cc"/>
+  <text x="40" y="496" fill="#3a2418" font-size="14" font-family="Sawarabi Gothic, sans-serif">焼きたてパンのベーカリーです。朝からガラスケースに並ぶパンを、その日の気</text>
+  <text x="40" y="526" fill="#6a4a38" font-size="12">7:30–15:00／売り切れ次第終了</text>
+  <rect x="24" y="620" width="592" height="110" fill="#d46818"/>
+  <text x="40" y="665" fill="#fff8f0" font-size="18" font-family="Sawarabi Gothic, sans-serif">ご連絡</text>
+  <text x="40" y="698" fill="#fff8f0" font-size="13" opacity="0.9">予約パンは前日まで</text>
+  <text x="24" y="780" fill="#6a4a38" font-size="12">No.06 ﾂｷ layout A ﾂｷ brick</text>
+</svg>

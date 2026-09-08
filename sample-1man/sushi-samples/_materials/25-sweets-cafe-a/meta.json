@@ -1,0 +1,44 @@
+{
+    "id":  "25",
+    "folder":  "25-sweets-cafe-a",
+    "band":  "A",
+    "layoutPattern":  "a",
+    "layoutOrder":  [
+                        "hero",
+                        "values",
+                        "accordions",
+                        "works",
+                        "photos",
+                        "hours",
+                        "address",
+                        "contact"
+                    ],
+    "photoPack":  "P1",
+    "headingPack":  "H4",
+    "colorKey":  "brick",
+    "fontMood":  "softGothic",
+    "fonts":  {
+                  "catch":  "Sawarabi Gothic",
+                  "body":  "Zen Kaku Gothic New",
+                  "display":  "Sawarabi Gothic"
+              },
+    "scene":  "パン・小麦",
+    "counts":  {
+                   "hero-leads":  3,
+                   "hero-values":  3,
+                   "about-accordions":  2,
+                   "about-photos":  1,
+                   "works-list":  1
+               },
+    "extras":  {
+                   "hours":  true,
+                   "access":  false,
+                   "address":  true
+               },
+    "imageSlots":  [
+                       "hero.jpg",
+                       "about-01.jpg",
+                       "work-01.jpg"
+                   ],
+    "status":  "未着手"
+}

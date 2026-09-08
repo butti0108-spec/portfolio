@@ -79,6 +79,89 @@
     openHashTarget(location.hash);
   }
 
+  const SKILL_POPUPS = {
+    design: {
+      title: "Webデザイン",
+      body:
+        "見た目の飾りから入らず、先に「誰が・何を・どの順で読むか」を決めます。優先順位と余白を先に固め、色や装飾は後から足す順番です。迷わない画面を、引き算で整えます。"
+    },
+    code: {
+      title: "コーディング",
+      body:
+        "骨組み・見た目・動きを分けて作るので、直す場所がはっきりします。見た目だけ・動きだけ、と部分で直せる形にして、あとからの変更に強くします。"
+    },
+    ai: {
+      title: "AI活用",
+      body:
+        "下書き・整理・試し置きなど、下準備に使います。そのまま公開せず、人の目で言葉・見た目・動線を整えてから出す、という使い方です。"
+    },
+    wordpress: {
+      title: "WordPress",
+      body:
+        "ログインして、決まった場所の文章と写真だけ差し替えられる形にします。毎回ゼロから作り直さず、自分で更新できる土台として使います。",
+      link: { href: "#offer", label: "ご依頼できることを見る" }
+    }
+  };
+
+  const skillButtons = document.querySelectorAll(".skill-card-btn[data-skill-popup]");
+  if (skillButtons.length) {
+    const dialog = document.createElement("dialog");
+    dialog.className = "skill-dialog";
+    dialog.id = "skill-dialog";
+    dialog.innerHTML = `
+      <div class="skill-dialog-inner">
+        <button type="button" class="skill-dialog-close" data-skill-close aria-label="閉じる">×</button>
+        <h3 class="skill-dialog-title"></h3>
+        <p class="skill-dialog-body"></p>
+        <p class="skill-dialog-link-wrap" hidden><a class="skill-dialog-link" href="#"></a></p>
+      </div>
+    `;
+    document.body.appendChild(dialog);
+
+    const titleEl = dialog.querySelector(".skill-dialog-title");
+    const bodyEl = dialog.querySelector(".skill-dialog-body");
+    const linkWrap = dialog.querySelector(".skill-dialog-link-wrap");
+    const linkEl = dialog.querySelector(".skill-dialog-link");
+    let lastSkillFocus = null;
+
+    const closeSkillDialog = () => {
+      if (!dialog.open) return;
+      dialog.close();
+      if (lastSkillFocus && typeof lastSkillFocus.focus === "function") {
+        lastSkillFocus.focus();
+      }
+    };
+
+    const openSkillDialog = (key) => {
+      const data = SKILL_POPUPS[key];
+      if (!data) return;
+      lastSkillFocus = document.activeElement;
+      titleEl.textContent = data.title;
+      bodyEl.textContent = data.body;
+      if (data.link) {
+        linkEl.textContent = data.link.label;
+        linkEl.href = data.link.href;
+        linkWrap.hidden = false;
+      } else {
+        linkWrap.hidden = true;
+      }
+      dialog.showModal();
+      dialog.querySelector(".skill-dialog-close").focus();
+    };
+
+    skillButtons.forEach((btn) => {
+      btn.addEventListener("click", () => openSkillDialog(btn.getAttribute("data-skill-popup")));
+    });
+    dialog.querySelector("[data-skill-close]").addEventListener("click", closeSkillDialog);
+    dialog.addEventListener("cancel", (event) => {
+      event.preventDefault();
+      closeSkillDialog();
+    });
+    dialog.addEventListener("click", (event) => {
+      if (event.target === dialog) closeSkillDialog();
+    });
+  }
+
   const galleryImages = document.querySelectorAll(".shot-gallery img, .case-zigzag-shot img");
   if (!galleryImages.length) return;
 

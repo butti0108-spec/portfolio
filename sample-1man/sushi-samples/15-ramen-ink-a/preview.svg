@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="640" height="800" viewBox="0 0 640 800">
+  <rect width="640" height="800" fill="#2e3333"/>
+  <rect x="0" y="0" width="640" height="52" fill="#111111"/>
+  <text x="24" y="34" fill="#f5f5f5" font-size="18" font-family="Yuji Syuku, serif">暖簾そば処</text>
+  <rect x="24" y="72" width="592" height="200" fill="#111111"/>
+  <text x="40" y="150" fill="#ffffff" font-size="28" font-weight="700" font-family="Yuji Syuku, serif">湯気の向こうへ</text>
+  <text x="40" y="190" fill="#ffffff" font-size="15" font-family="Yuji Syuku, serif" opacity="0.9">夜の暖簾と、静かな一杯</text>
+  <text x="40" y="250" fill="#ffffff" font-size="12" opacity="0.75">写真世界観: 暖簾・夜</text>
+  <rect x="24" y="300" width="592" height="64" fill="#1f2424" stroke="#c9a227" stroke-width="2"/>
+  <text x="40" y="340" fill="#f5f5f5" font-size="14" font-family="Yuji Syuku, serif">だし / 毎日引き立て</text>
+  <rect x="24" y="376" width="592" height="64" fill="#1f2424" stroke="#c9a227" stroke-width="2"/>
+  <text x="40" y="416" fill="#f5f5f5" font-size="14" font-family="Yuji Syuku, serif">かけそば</text>
+  <rect x="24" y="456" width="592" height="100" fill="#3a4040"/>
+  <text x="40" y="496" fill="#f5f5f5" font-size="14" font-family="Yuji Syuku, serif">夜営業のそば処です。だしの香りと細い麺で、静かに一杯を楽しむ店です。</text>
+  <text x="40" y="526" fill="#c8c8c8" font-size="12">17:00–23:00／月曜定休</text>
+  <rect x="24" y="620" width="592" height="110" fill="#111111"/>
+  <text x="40" y="665" fill="#f5f5f5" font-size="18" font-family="Yuji Syuku, serif">ご連絡</text>
+  <text x="40" y="698" fill="#f5f5f5" font-size="13" opacity="0.9">予約なし・入店順</text>
+  <text x="24" y="780" fill="#c8c8c8" font-size="12">No.15 ﾂｷ layout A ﾂｷ ink</text>
+</svg>

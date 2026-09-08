@@ -1,0 +1,46 @@
+{
+    "id":  "28",
+    "folder":  "28-gallery-ink-a",
+    "band":  "X",
+    "layoutPattern":  "a",
+    "layoutOrder":  [
+                        "photos",
+                        "values",
+                        "accordions",
+                        "works",
+                        "hero",
+                        "hours",
+                        "address",
+                        "contact"
+                    ],
+    "photoPack":  "P2",
+    "headingPack":  "H3",
+    "colorKey":  "green",
+    "fontMood":  "softGothic",
+    "fonts":  {
+                  "catch":  "Sawarabi Gothic",
+                  "body":  "Zen Kaku Gothic New",
+                  "display":  "Sawarabi Gothic"
+              },
+    "scene":  "ヨガ・スタジオ",
+    "counts":  {
+                   "hero-leads":  2,
+                   "hero-values":  2,
+                   "about-accordions":  1,
+                   "about-photos":  2,
+                   "works-list":  2
+               },
+    "extras":  {
+                   "hours":  true,
+                   "access":  false,
+                   "address":  true
+               },
+    "imageSlots":  [
+                       "hero.jpg",
+                       "about-01.jpg",
+                       "about-02.jpg",
+                       "work-01.jpg",
+                       "work-02.jpg"
+                   ],
+    "status":  "未着手"
+}

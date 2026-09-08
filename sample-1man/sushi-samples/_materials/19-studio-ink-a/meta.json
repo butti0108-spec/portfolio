@@ -1,0 +1,46 @@
+{
+    "id":  "19",
+    "folder":  "19-studio-ink-a",
+    "band":  "N",
+    "layoutPattern":  "b",
+    "layoutOrder":  [
+                        "hero",
+                        "photos",
+                        "accordions",
+                        "values",
+                        "works",
+                        "hours",
+                        "address",
+                        "contact"
+                    ],
+    "photoPack":  "P2",
+    "headingPack":  "H3",
+    "colorKey":  "brick",
+    "fontMood":  "bold",
+    "fonts":  {
+                  "catch":  "Zen Kaku Gothic New",
+                  "body":  "Zen Kaku Gothic New",
+                  "display":  "Dela Gothic One"
+              },
+    "scene":  "ラーメン・暖簾",
+    "counts":  {
+                   "hero-leads":  2,
+                   "hero-values":  2,
+                   "about-accordions":  1,
+                   "about-photos":  2,
+                   "works-list":  2
+               },
+    "extras":  {
+                   "hours":  true,
+                   "access":  false,
+                   "address":  true
+               },
+    "imageSlots":  [
+                       "hero.jpg",
+                       "about-01.jpg",
+                       "about-02.jpg",
+                       "work-01.jpg",
+                       "work-02.jpg"
+                   ],
+    "status":  "未着手"
+}

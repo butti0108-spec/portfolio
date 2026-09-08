@@ -1,0 +1,46 @@
+{
+    "id":  "23",
+    "folder":  "23-cowork-green-a",
+    "band":  "A",
+    "layoutPattern":  "c",
+    "layoutOrder":  [
+                        "hero",
+                        "works",
+                        "values",
+                        "photos",
+                        "accordions",
+                        "hours",
+                        "address",
+                        "contact"
+                    ],
+    "photoPack":  "P2",
+    "headingPack":  "H4",
+    "colorKey":  "cafe",
+    "fontMood":  "mincho",
+    "fonts":  {
+                  "catch":  "Shippori Mincho",
+                  "body":  "Zen Kaku Gothic New",
+                  "display":  "Shippori Mincho"
+              },
+    "scene":  "コワーキング",
+    "counts":  {
+                   "hero-leads":  2,
+                   "hero-values":  3,
+                   "about-accordions":  2,
+                   "about-photos":  2,
+                   "works-list":  2
+               },
+    "extras":  {
+                   "hours":  true,
+                   "access":  false,
+                   "address":  true
+               },
+    "imageSlots":  [
+                       "hero.jpg",
+                       "about-01.jpg",
+                       "about-02.jpg",
+                       "work-01.jpg",
+                       "work-02.jpg"
+                   ],
+    "status":  "未着手"
+}

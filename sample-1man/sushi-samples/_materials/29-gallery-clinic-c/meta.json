@@ -1,0 +1,44 @@
+{
+    "id":  "29",
+    "folder":  "29-gallery-clinic-c",
+    "band":  "X",
+    "layoutPattern":  "b",
+    "layoutOrder":  [
+                        "works",
+                        "hero",
+                        "values",
+                        "photos",
+                        "accordions",
+                        "hours",
+                        "address",
+                        "contact"
+                    ],
+    "photoPack":  "P1",
+    "headingPack":  "H4",
+    "colorKey":  "sakura",
+    "fontMood":  "round",
+    "fonts":  {
+                  "catch":  "Kiwi Maru",
+                  "body":  "M PLUS Rounded 1c",
+                  "display":  "Zen Maru Gothic"
+              },
+    "scene":  "花屋・アレンジ",
+    "counts":  {
+                   "hero-leads":  2,
+                   "hero-values":  3,
+                   "about-accordions":  2,
+                   "about-photos":  1,
+                   "works-list":  1
+               },
+    "extras":  {
+                   "hours":  true,
+                   "access":  false,
+                   "address":  true
+               },
+    "imageSlots":  [
+                       "hero.jpg",
+                       "about-01.jpg",
+                       "work-01.jpg"
+                   ],
+    "status":  "未着手"
+}

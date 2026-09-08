@@ -1,0 +1,48 @@
+{
+    "id":  "18",
+    "folder":  "18-studio-clinic-c",
+    "band":  "N",
+    "layoutPattern":  "b",
+    "layoutOrder":  [
+                        "hero",
+                        "works",
+                        "values",
+                        "accordions",
+                        "photos",
+                        "hours",
+                        "address",
+                        "contact"
+                    ],
+    "photoPack":  "P3",
+    "headingPack":  "H4",
+    "colorKey":  "clinic",
+    "fontMood":  "gothic",
+    "fonts":  {
+                  "catch":  "Zen Kaku Gothic New",
+                  "body":  "Noto Sans JP",
+                  "display":  "Zen Kaku Gothic New"
+              },
+    "scene":  "写真館・余白",
+    "counts":  {
+                   "hero-leads":  2,
+                   "hero-values":  3,
+                   "about-accordions":  2,
+                   "about-photos":  3,
+                   "works-list":  3
+               },
+    "extras":  {
+                   "hours":  true,
+                   "access":  false,
+                   "address":  true
+               },
+    "imageSlots":  [
+                       "hero.jpg",
+                       "about-01.jpg",
+                       "about-02.jpg",
+                       "about-03.jpg",
+                       "work-01.jpg",
+                       "work-02.jpg",
+                       "work-03.jpg"
+                   ],
+    "status":  "未着手"
+}

@@ -19,7 +19,7 @@
   </header>
 
   <main class="help-wrap">
-    <p class="help-lead">注文画面の各項目の説明です。操作は注文画面で行い、くわしい説明はここをご覧ください。長くても削らず書いてあります。困ったら下の検索から探してください。</p>
+    <p class="help-lead">注文画面の各項目の説明です。操作は注文画面で行い、くわしい説明はここをご覧ください。困ったら下の検索から探してください。</p>
 
     <div class="help-search" role="search">
       <label class="help-search-label" for="help-search-input">知りたいことを入力</label>
@@ -27,7 +27,7 @@
         type="search"
         id="help-search-input"
         class="help-search-input"
-        placeholder="例：写真が消えた、ZIP、見た目が違う、番号、文字7"
+        placeholder="例：サンプル、回転寿司、編集、ZIP、写真"
         autocomplete="off"
         enterkeyhint="search"
       >
@@ -35,378 +35,87 @@
       <ul class="help-search-results" id="help-search-results" hidden></ul>
     </div>
 
-    <details class="help-section" id="start" data-help-keywords="画面の見方 進め方 用途 ガイド セルフ 進捗バー 次へ 確定 番号 はじめに イメージ 入り口">
+    <details class="help-section" id="start" data-help-keywords="画面の見方 進め方 サンプル 自分で作る 回転寿司 入り口 はじめに">
       <summary>画面の見方・進め方の基本</summary>
       <div class="help-section-body">
         <a class="help-back-local" href="index.html">← 注文画面に戻る</a>
-        <p class="help-lead-in">見本サイトが、できあがりのイメージです。進み方は色 → 画像 → 文字の順です。</p>
+        <p class="help-lead-in">入口は2つだけです。「サンプルから選ぶ」か「自分で作る」か。</p>
 
-        <article class="help-chunk" data-help-keywords="入り口 イメージ 用途 オーバーレイ 参考">
-          <h3 class="help-chunk-title">最初の入り口（1問ずつ）</h3>
-          <p>初めて開くと、画面全体に入り口が出ます。用途 → レイアウト → 雰囲気（色）の順で、選ぶだけで進みます（まだ決まっていない、も選べます）。雰囲気は6色か「自分で色を決める」です。6色／未定は簡単モードで画像から、自分で決めるはこだわりモードで色から始まります。用途・進め方・レイアウトはあとからメニューで変更できます。下書きの途中から戻ったときは入り口は出ません。「最初に戻す」で消すと、また入り口からになります。</p>
+        <article class="help-chunk" data-help-keywords="入り口 サンプル 自分で作る 2択">
+          <h3 class="help-chunk-title">最初の入り口（2択）</h3>
+          <p>初めて開くと、画面全体に入り口が出ます。<strong>サンプルから選ぶ</strong>か<strong>自分で作る</strong>かを選びます。途中でモードを切り替えるメニューはありません。やり直すときは「最初に戻す」です。</p>
         </article>
 
-        <article class="help-chunk" data-help-keywords="見本サイト 左 タブ">
-          <h3 class="help-chunk-title">見本サイトの場所</h3>
-          <p>PCでは左側、スマホでは「見本サイト」タブに表示されます。</p>
-        </article>
-
-        <article class="help-chunk" data-help-keywords="幅 スマホ タブレット PC プラス マイナス 表示 ドラッグ">
-          <h3 class="help-chunk-title">見本の確認と左右の幅</h3>
-          <p>上の「表示 −／＋」でスマホ・タブレット・PCの見え方を切り替えます（幅はそれぞれ固定。左が狭くても見本は縮めず、足りない分は横スクロールで見ます）。中央の縦線は、作業用に見本と注文の広さを変えるだけです（端末表示とは別です）。注文側を広げると、用途などの選択肢が横に並び、縦スクロールが減りやすくなります。</p>
-        </article>
-
-        <article class="help-chunk" data-help-keywords="はじめに 用途 注文画面 0">
-          <h3 class="help-chunk-title">「はじめに」ボタン</h3>
-          <p>注文画面のタイトル横にある「はじめに」から、用途やレイアウトなど最初の設定へ戻れます。</p>
-        </article>
-
-        <article class="help-chunk" data-help-keywords="次へ 確定 これで確定 緑 完了">
-          <h3 class="help-chunk-title">ボタンの意味</h3>
-          <ul>
-            <li>色・写真・文字・書体 … 選んだ／書いたその場で見本サイトに反映されます。</li>
-            <li>次へ … 用途・進め方では「選んで進む」。それ以外（ガイド）ではこの項目を完了（緑）にして次へ進みます。</li>
-            <li>確定 … セルフでは1項目を完了（緑）にするボタンです。</li>
-            <li>これで確定（色1のみ） … 色2〜10をまとめて完了にし、画像の選択へ進みます。</li>
-          </ul>
-        </article>
-
-        <article class="help-chunk" data-help-keywords="進捗バー 番号 ホバー 色2 ヘッダー背景">
-          <h3 class="help-chunk-title">進捗バーと番号</h3>
-          <p>色つき番号が緑になると、その項目は完了です。上の進捗バーの番号をタップすると、該当項目を開けます。PCでは番号にマウスを乗せると、「色2・ヘッダー背景」のように項目名が出ます（スマホでは見本サイト上の「番号」オンで番号を出せます）。</p>
-        </article>
-
-        <article class="help-chunk" data-help-keywords="用途 仮文 プレースホルダー 例文 入り方 戻る">
-          <h3 class="help-chunk-title">用途を選んだあと</h3>
-          <p>用途を選び「次へ」を押すと、左の見本サイトに仮の文が入ります。入力欄は空のまま灰色の例文が出ます。一文字でも書くと、左はその内容に切り替わります。そのあと進め方（ガイド／セルフ）を選ぶと、すぐに進みます。「← 入り方に戻る」で、最初の入り口（イメージ／用途の二択）に戻れます。</p>
-        </article>
-      </div>
-    </details>
-
-    <details class="help-section" id="layout" data-help-keywords="レイアウト A B C 横長 左右分割 混合 ドラッグ ワイヤー 並び">
-      <summary>レイアウト（枠セットと並び）</summary>
-      <div class="help-section-body">
-        <a class="help-back-local" href="index.html">← 注文画面に戻る</a>
-        <p class="help-lead-in">最初の流れ、またはメニューから枠の種類（A／B／C）を選びます。枠の並びは、メニューの大きなワイヤーをドラッグして入れ替えできます。見本にすぐ反映します。</p>
-
-        <article class="help-chunk" data-help-keywords="横長 横いっぱい">
-          <h3 class="help-chunk-title"><span class="help-pill help-pill-layout">A</span> 横長</h3>
-          <p>横いっぱいの枠だけを縦に積みます。写真も帯のように広がります。</p>
-        </article>
-
-        <article class="help-chunk" data-help-keywords="左右分割 半分">
-          <h3 class="help-chunk-title"><span class="help-pill help-pill-layout">B</span> 左右分割</h3>
-          <p>枠を左右に割って並べます。同じ大きさどうしをドラッグで入れ替えできます。</p>
-        </article>
-
-        <article class="help-chunk" data-help-keywords="混合 横長 左右">
-          <h3 class="help-chunk-title"><span class="help-pill help-pill-layout">C</span> 混合</h3>
-          <p>横長の枠と、左右分割の枠を混ぜます。同じ大きさどうしだけ入れ替えできます。</p>
-        </article>
-
-        <article class="help-chunk" data-help-keywords="ドラッグ ワイヤー 並び 反映">
-          <h3 class="help-chunk-title">枠の並びを入れ替える</h3>
+        <article class="help-chunk" data-help-keywords="サンプル 回転寿司 ストック 見本">
+          <h3 class="help-chunk-title">サンプルから選ぶ（本線）</h3>
           <ol>
-            <li>メニューの「レイアウト」を開く（そのまま大きなワイヤーが出る）</li>
-            <li>A／B／Cを選ぶ</li>
-            <li>ワイヤーの枠をドラッグし、同じ大きさの枠の上で離す</li>
-            <li>見本にすぐ反映する。動かした枠へ見本もスクロールする</li>
-            <li>「完了」で閉じる。「並びを最初に戻す」で初期順に戻せる</li>
+            <li>回転寿司で見本を見て、「ストック」か「これにします」で1件決めます（ストックは最大3）。</li>
+            <li>用途 → 色合い（見本のまま／色だけ変更）を選びます。</li>
+            <li>基本情報 → 枠ごとの文章（5案から選ぶ）→ 画像ワイヤー（位置の目安）→ 作成演出 → 本番プレビュー。</li>
+            <li>「これでいい」で確認・ZIPへ。「編集する」で編集ハブへ。</li>
           </ol>
+          <p>選択・入力のあいだは本番プレビューを出しません。見本はすべてこのメーカーで作成しています。</p>
         </article>
 
-        <article class="help-chunk" data-help-keywords="色2 画像1 文字7 進捗 対応">
-          <h3 class="help-chunk-title">ワイヤーの番号について</h3>
-          <p>カード内の「色2」「画像1」「文字7」などは、注文画面の進捗バー・見本の番号と同じ番号です。横に見比べると、どこを直す項目か分かります。</p>
-        </article>
-      </div>
-    </details>
-
-    <details class="help-section" id="display-width" data-help-keywords="幅 スマホ タブレット PC 見え方 違う 端末 デバイス ドラッグ スプリット 中央 縦線 表示 実機 注意 プラス マイナス">
-      <summary>スマホ・PCで見え方が違うとき</summary>
-      <div class="help-section-body">
-        <a class="help-back-local" href="index.html">← 注文画面に戻る</a>
-        <p class="help-lead-in">端末の見え方の確認と、作業用の左右幅は別操作です。実機と完全に同じにはならない場合があります。</p>
-
-        <article class="help-chunk" data-help-keywords="表示 プラス マイナス スマホ タブレット PC">
-          <h3 class="help-chunk-title">表示（−／＋）</h3>
-          <p>見本の確認用です。スマホ → タブレット → PC と段階で切り替えます。いまの段階名とピクセル目安が横に出ます。</p>
+        <article class="help-chunk" data-help-keywords="自分で作る 編集ハブ 枠の並び">
+          <h3 class="help-chunk-title">自分で作る</h3>
+          <p>用途を選んだあと、編集ハブ（枠の並び）へ進みます。色・文字・画像・枠の増減を自分で触れます。用途を変えるときは「最初に戻す」からやり直してください。</p>
         </article>
 
-        <article class="help-chunk" data-help-keywords="ドラッグ 中央 縦線 作業 注文">
-          <h3 class="help-chunk-title">中央の縦線</h3>
-          <p>見本を広く見るか、注文を広く操作するかの作業用です。ここを動かしても「表示」の段階は変わりません。</p>
-        </article>
-
-        <article class="help-chunk" data-help-keywords="上を閉じる 進捗 折りたたみ">
-          <h3 class="help-chunk-title">上を閉じる／進捗を閉じる</h3>
-          <p>入力スペースを広げたいときに使います。同じ場所をもう一度押すと戻ります。</p>
-        </article>
-
-        <article class="help-chunk" data-help-keywords="端末 機種 ブラウザ 余白 並び 違う">
-          <h3 class="help-chunk-title">実機と違うことがある理由</h3>
+        <article class="help-chunk" data-help-keywords="ひとつ戻る 最初に戻す">
+          <h3 class="help-chunk-title">戻る操作</h3>
           <ul>
-            <li>端末の画面サイズ・向き・拡大率</li>
-            <li>ブラウザの種類や表示設定</li>
-            <li>写真の枚数・文字の量・選んだレイアウト</li>
-          </ul>
-          <p>並びや余白が少し変わることがあります。見本は完成イメージの目安です。</p>
-        </article>
-      </div>
-    </details>
-
-    <details class="help-section" id="badges" data-help-keywords="番号 オン オフ バッジ 色 画像 文字 表示">
-      <summary>番号のオン／オフ</summary>
-      <div class="help-section-body">
-        <a class="help-back-local" href="index.html">← 注文画面に戻る</a>
-        <p class="help-lead-in">見本サイト上の色つき番号の表示を切り替えます。</p>
-        <article class="help-chunk" data-help-keywords="オン 表示">
-          <h3 class="help-chunk-title">オン</h3>
-          <p>見本の上に、色・画像・文字の番号が出ます。進捗バーやレイアウトの「色2」「画像1」などと同じ番号です。どこを直すか探すときに使います。</p>
-        </article>
-        <article class="help-chunk" data-help-keywords="オフ 見た目">
-          <h3 class="help-chunk-title">オフ</h3>
-          <p>番号を隠して、できあがりの見た目に近づけます。最初はオフです。</p>
-        </article>
-      </div>
-    </details>
-
-    <details class="help-section" id="draft" data-help-keywords="下書き 消えた 写真 選び直し 最初に戻す ブラウザ 更新 localStorage">
-      <summary>途中保存・消えたとき</summary>
-      <div class="help-section-body">
-        <a class="help-back-local" href="index.html">← 注文画面に戻る</a>
-        <p class="help-lead-in">途中までの内容は、このブラウザに自動で残ります。写真だけは残りません。</p>
-        <ul>
-          <li>別のブラウザ・別の端末では引き継がれません。</li>
-          <li>同じブラウザなら、ページを更新したり、タブを閉じてあとで開き直したりしても、文字・色・進み方は残ります。</li>
-          <li>写真だけは残りません。更新・開き直しのあとは選び直してください（注文画面上にも注意が出ます）。</li>
-          <li>サーバーへ自動送信はしません。内容は端末内だけです。</li>
-          <li>最初に戻す … 入力をすべて消して、入り方の選択からやり直します（元に戻せません）。</li>
-        </ul>
-      </div>
-    </details>
-
-    <details class="help-section" id="color" data-help-keywords="色 プリセット 濃さ カラーコード ガイド セルフ これで確定 色1 色2 ヘッダー">
-      <summary>色の直し方</summary>
-      <div class="help-section-body">
-        <a class="help-back-local" href="index.html">← 注文画面に戻る</a>
-        <p class="help-lead-in">色は、選んだその場で見本サイトに反映されます。</p>
-
-        <article class="help-chunk" data-help-keywords="12色 濃さ 薄い 濃い">
-          <h3 class="help-chunk-title">基本の選び方</h3>
-          <p>基本は「色を選ぶ」で12色から選び、必要なら濃さを調整します。左が薄め、右が濃いめです。ガイド付きの「12色で自分で選ぶ」も、同じ丸い色ボタンと濃さバーで選べます。</p>
-        </article>
-
-        <article class="help-chunk" data-help-keywords="カラーコード 白 納品">
-          <h3 class="help-chunk-title">カラーコードで指定</h3>
-          <p>そのときは見本サイトでは仮に白くなり、納品時に指定の色へ反映します。形式の正誤は画面では問いません。</p>
-        </article>
-
-        <article class="help-chunk" data-help-keywords="プリセット ランダム 見本デフォルト">
-          <h3 class="help-chunk-title">プリセットとランダム</h3>
-          <p>雰囲気プリセット（簡単6色。こだわりでは同じ6色＋ランダム）から選べます。こだわりでは「直したい場所の色」を押して色選択画面へ。背景色では同じ画面でグラデ向きと相手色も選べます（濃さバーはありません）。文字色ではグラデ不可と表示されます。戻るときは「この色にする」だけです。</p>
-        </article>
-
-        <article class="help-chunk" data-help-keywords="ガイド これで確定 色2 色10">
-          <h3 class="help-chunk-title">ガイドの色1</h3>
-          <p>下の色2〜10をタップして直したいところだけ調整できます。全体OKなら「これで確定」で次へ。1色ずつ全部触る必要はありません。</p>
-        </article>
-
-        <article class="help-chunk" data-help-keywords="セルフ 一覧 確定">
-          <h3 class="help-chunk-title">セルフ</h3>
-          <p>色2〜10を1項目ずつ開いて確定できます。項目一覧は、全部閉じた一覧（表ではありません）から開きます。</p>
-        </article>
-      </div>
-    </details>
-
-    <details class="help-section" id="image" data-help-keywords="画像 写真 トリミング 枚数 キャッチ 枠1 枠2 20MB 選び直し">
-      <summary>写真の入れ方</summary>
-      <div class="help-section-body">
-        <a class="help-back-local" href="index.html">← 注文画面に戻る</a>
-        <p class="help-lead-in">写真を選ぶと、その場で見本サイトへ反映されます。</p>
-
-        <article class="help-chunk" data-help-keywords="トリミング 中央">
-          <h3 class="help-chunk-title">枠と切り抜き</h3>
-          <p>枠の形に合わせて自動でトリミングされます。重要な被写体は、できるだけ中央付近に写してください。</p>
-        </article>
-
-        <article class="help-chunk" data-help-keywords="変更 上書き">
-          <h3 class="help-chunk-title">別の写真に変える</h3>
-          <p>もう一度選び直してください（上書きされます）。</p>
-        </article>
-
-        <article class="help-chunk" data-help-keywords="比率 16:9 4:3">
-          <h3 class="help-chunk-title">目安の比率</h3>
-          <p>キャッチ約16:9（横長）、見本枠1約4:3、見本枠2のカードは横長の枠です。帯写真レイアウトでは、枠1・枠2の写真が横長の帯になります。</p>
-        </article>
-
-        <article class="help-chunk" data-help-keywords="必須 枚数 次へ ZIP">
-          <h3 class="help-chunk-title">枚数と必須</h3>
-          <p>キャッチ画像など1枚の項目は、写真がないと「次へ」は押せません。枚数を選べる項目は、選んだ枚数ぶん必要です。足りないままだと、依頼ファイル（ZIP）も保存できません。</p>
-        </article>
-
-        <article class="help-chunk" data-help-keywords="サイズ 20MB 圧縮">
-          <h3 class="help-chunk-title">大きさ</h3>
-          <p>取り込み時に送信用の大きさへ自動で整えます。依頼ファイルは、おおむね20MB以内を想定しています。</p>
-        </article>
-      </div>
-    </details>
-
-    <details class="help-section" id="text" data-help-keywords="文字 入力 文字数 書体 アコーディオン 枠1 枠2 住所 プラス マイナス 文字7 文字8 文字9">
-      <summary>文字・書体の入れ方</summary>
-      <div class="help-section-body">
-        <a class="help-back-local" href="index.html">← 注文画面に戻る</a>
-        <p class="help-lead-in">書けば左の見本に反映されます。話題ごとに下の見出しを見てください。</p>
-
-        <article class="help-chunk" id="text-count" data-help-keywords="文字数 上限 次へ">
-          <h3 class="help-chunk-title"><span class="help-pill help-pill-text">共通</span> 文字数</h3>
-          <p>各入力欄には文字数の上限があります。欄の下に「いまの文字数 / 上限」が出ます。上限ちょうどまでは入力できます。上限を超えたままだと、「次へ」には進めません。</p>
-        </article>
-
-        <article class="help-chunk" id="text-font" data-help-keywords="書体 見出し キャッチ 本文 任意の追記">
-          <h3 class="help-chunk-title"><span class="help-pill help-pill-text">文字2〜6</span> 書体</h3>
-          <p>書体は見出し・キャッチ・本文の3つから選びます。12種類にない書体は、提出の任意の追記で対象を選び、書体名を入力してください（近いもので調整する場合があります）。</p>
-        </article>
-
-        <article class="help-chunk" id="text-placeholder" data-help-keywords="仮文 例文 用途 灰色">
-          <h3 class="help-chunk-title">仮の文と入力</h3>
-          <p>用途を選ぶと、左の見本サイトに仮の文が出ます。入力欄は空欄のまま灰色の例文です。一文字でも入力すると、左はその入力に切り替わります。</p>
-        </article>
-
-        <article class="help-chunk" id="text-count-controls" data-help-keywords="プラス マイナス 行数 枚数 件数">
-          <h3 class="help-chunk-title">＋／−（行数・枠の数・枚数など）</h3>
-          <p>見本に出す数を変えます。増やすと、下に記入欄が増えます。画像の枚数・カード件数は、選んだ数ぶんすべて必要です。</p>
-        </article>
-
-        <article class="help-chunk" id="text-about" data-help-keywords="文字7 枠1 スラッシュ アコーディオン 見出し">
-          <h3 class="help-chunk-title"><span class="help-pill help-pill-text">文字7</span> 見本枠1の内容</h3>
-          <p>1つだけならそのまま入力します。複数に分けたいときは全角の「／」で区切ります（例：【強み】説明／【実績】10年）。</p>
-          <p>【見出し】のあとに本文を書くと、見本でラベル付きになります。折りたたみブロック自体を増やすのは「アコーディオン数」の＋／−です（内容の／区切りとは別）。</p>
-        </article>
-
-        <article class="help-chunk" id="text-works" data-help-keywords="文字8 枠2 カード件数 画像3">
-          <h3 class="help-chunk-title"><span class="help-pill help-pill-text">文字8</span> 見本枠2</h3>
-          <p>カードの数は「画像3. 見本枠2の画像」のカード件数で変わります。</p>
-        </article>
-
-        <article class="help-chunk" id="text-address" data-help-keywords="文字9 住所 追加 マップ Google 埋め込み">
-          <h3 class="help-chunk-title"><span class="help-pill help-pill-text">文字9</span> 住所・追加ブロック</h3>
-          <p>出すを選ぶと、見本の住所は Googleマップを開くリンクになります（別タブ）。地図の埋め込み（ページ内に地図を表示）は含みません。チェックした項目だけ、見本と記入欄に出ます。</p>
-        </article>
-      </div>
-    </details>
-
-    <details class="help-section" id="card-link" data-help-keywords="カード リンク SNS Instagram URL 任意 文字8 アクセント">
-      <summary>カードにリンクを付ける</summary>
-      <div class="help-section-body">
-        <a class="help-back-local" href="index.html">← 注文画面に戻る</a>
-        <p class="help-lead-in">見本枠2のカードごとに、外部サイトやSNSへのリンクを付けられます（任意）。</p>
-        <ul>
-          <li>リンク先のURLを入れたカードだけ、ボタンが出ます。</li>
-          <li>ボタンの色は色8・アクセントと同じです。</li>
-          <li>リンクの文字（例：Instagramを見る）も任意です。</li>
-          <li>入力は「文字8. 見本枠2」の項目で行います。</li>
-        </ul>
-      </div>
-    </details>
-
-    <details class="help-section" id="zip" data-help-keywords="ZIP 依頼ファイル 保存 送信 メール 添付 提出 確認 一段">
-      <summary>ZIPの保存と送り方</summary>
-      <div class="help-section-body">
-        <a class="help-back-local" href="index.html">← 注文画面に戻る</a>
-        <p class="help-lead-in">色・文字・画像の指定を1つにまとめた提出用のファイルです。保存＝送信ではありません。</p>
-
-        <article class="help-chunk" data-help-keywords="保存 送信 添付 メール">
-          <h3 class="help-chunk-title">保存と送信は別</h3>
-          <p>パソコンに保存するだけです。保存したあと、案内されたメールや返信先に自分で添付して送ってください。送るまで、制作の依頼は始まりません。</p>
-        </article>
-
-        <article class="help-chunk" data-help-keywords="必須 完了 ボタン">
-          <h3 class="help-chunk-title">いつ保存できるか</h3>
-          <p>すべての必須項目が完了すると、保存ボタンが押せます。</p>
-        </article>
-
-        <article class="help-chunk" data-help-keywords="提出 確認 文字11 OK 変更する">
-          <h3 class="help-chunk-title">提出の流れ</h3>
-          <p>プランの確認チェック（5項目）→ 内容の確認 →「この内容でOK・ZIPを保存する」で保存します。確定後に直したいときは「変更する」→直す→「修正」→同じボタンで再保存できます。</p>
-        </article>
-      </div>
-    </details>
-
-    <details class="help-section" id="scope" data-help-keywords="範囲 含まれる 含まれない 固定 レイアウト フォーム 地図 修正 サーバー">
-      <summary>このプランに含まれるもの</summary>
-      <div class="help-section-body">
-        <a class="help-back-local" href="index.html">← 注文画面に戻る</a>
-
-        <article class="help-chunk" data-help-keywords="含まれる HTML レイアウト メール 住所 修正1回">
-          <h3 class="help-chunk-title">含まれるもの</h3>
-          <ul>
-            <li>1ページの案内サイト（静的HTML）</li>
-            <li>注文画面で選んだレイアウト（枠セットA／B／C＋枠の並び）に、色とご提供の文字・画像を載せます</li>
-            <li>メールアドレスの掲載と、押してコピーできるところまで</li>
-            <li>住所を出す場合 … 住所文をタップするとGoogleマップが開くリンク（埋め込み地図は含まない）</li>
-            <li>納品後30日以内の内容修正1回</li>
+            <li>ひとつ戻る … 直前の画面だけ戻します（全部は消しません）。</li>
+            <li>最初に戻す … 進行データをすべて消し、入り口の2択からやり直します。</li>
           </ul>
         </article>
 
-        <article class="help-chunk" data-help-keywords="含まれない 文章作成 フォーム 埋め込み 保守">
-          <h3 class="help-chunk-title">含まれないもの</h3>
-          <ul>
-            <li>文章の作成・推敲（原稿どおりに載せます）</li>
-            <li>入力して送信できるお問い合わせフォーム</li>
-            <li>Googleマップの埋め込み（ページ内に地図を表示すること）</li>
-            <li>公開後の継続更新・保守</li>
-            <li>2回目以降の無料修正（別料金）</li>
-          </ul>
+        <article class="help-chunk" data-help-keywords="見本サイト 左 タブ プレビュー">
+          <h3 class="help-chunk-title">見本サイトの場所</h3>
+          <p>PCでは左側、スマホでは「サンプル画面」タブに表示されます。サンプル本線では、作成演出のあとに本番プレビューが出ます。</p>
+        </article>
+
+        <article class="help-chunk" data-help-keywords="ZIP 確認 送信">
+          <h3 class="help-chunk-title">確認とZIP</h3>
+          <p>最後の確認で内容をチェックし、ZIPを保存します。保存＝送信ではありません。案内された連絡先に自分で添付して送ってください。</p>
         </article>
       </div>
     </details>
 
-    <details class="help-section" id="faq" data-help-keywords="よくある質問 FAQ フォーム 直し 文章 納品 地図 サーバー代 見え方">
-      <summary>よくある質問</summary>
+    <details class="help-section" id="copy" data-help-keywords="文章 5案 セクション 候補">
+      <summary>文章の選び方</summary>
       <div class="help-section-body">
         <a class="help-back-local" href="index.html">← 注文画面に戻る</a>
-
-        <article class="help-chunk help-faq" data-help-keywords="問い合わせフォーム">
-          <h3 class="help-chunk-title">問い合わせフォームは付きますか？</h3>
-          <p>付きません。メール掲載とコピーできるところまでです。</p>
-        </article>
-
-        <article class="help-chunk help-faq" data-help-keywords="直し 修正 回数">
-          <h3 class="help-chunk-title">直しは何回まで？</h3>
-          <p>1回まで（納品後30日以内）。2回目からは別料金です。</p>
-        </article>
-
-        <article class="help-chunk help-faq" data-help-keywords="文章 作成 原稿">
-          <h3 class="help-chunk-title">文章を書いてもらえますか？</h3>
-          <p>書きません。お客様の原稿を載せるプランです。</p>
-        </article>
-
-        <article class="help-chunk help-faq" data-help-keywords="納品 期間 1週間 2週間">
-          <h3 class="help-chunk-title">納品の目安は？</h3>
-          <p>内容確認後、およそ1〜2週間です（日付の指定は不要です）。</p>
-        </article>
-
-        <article class="help-chunk help-faq" data-help-keywords="住所 地図 埋め込み">
-          <h3 class="help-chunk-title">住所は地図付きになりますか？</h3>
-          <p>ページ内に地図を埋め込むことはしません。住所を出す場合は、住所文をタップするとGoogleマップが開くリンクにします。</p>
-        </article>
-
-        <article class="help-chunk help-faq" data-help-keywords="サーバー代 公開">
-          <h3 class="help-chunk-title">サーバー代は含まれますか？</h3>
-          <p>含まれません。公開先の契約はお客様側です。</p>
-        </article>
-
-        <article class="help-chunk help-faq" data-help-keywords="見え方 違う スマホ 実機">
-          <h3 class="help-chunk-title">見本と自分の端末で見え方が違います</h3>
-          <p>端末やブラウザによって、並びや余白が少し変わることがあります。くわしくは <a class="help-inline-link" href="#display-width">スマホ・PCで見え方が違うとき</a> を見てください。</p>
+        <article class="help-chunk" data-help-keywords="文章 5案 相性">
+          <h3 class="help-chunk-title">枠ごとの5案</h3>
+          <p>サンプル本線では、キャッチ・紹介・おすすめ・ご連絡など、枠ごとに「どれにしますか」と5案が出ます。選んだ内容に合わせて候補を作ります（意味検索や外部の文章サービスではありません）。「別の5案を作り直す」も使えます。</p>
         </article>
       </div>
     </details>
 
-    <p class="help-foot">
-      <a id="help-back-foot" href="index.html">注文画面に戻る</a>
-    </p>
+    <details class="help-section" id="images" data-help-keywords="画像 写真 ワイヤー 黄枠">
+      <summary>画像の入れ方</summary>
+      <div class="help-section-body">
+        <a class="help-back-local" href="index.html">← 注文画面に戻る</a>
+        <article class="help-chunk" data-help-keywords="ワイヤー 写真 枚数">
+          <h3 class="help-chunk-title">画像ワイヤー</h3>
+          <p>サンプル本線では、本番見本ではなく位置の目安（ワイヤー）で写真をはめます。キャッチ・写真・カードの3枠です。枚数を増やしたい・枠を変えたい場合は、完成後の「編集する」からできます。</p>
+        </article>
+      </div>
+    </details>
+
+    <details class="help-section" id="hub" data-help-keywords="編集 ハブ ハニカム 色 書体">
+      <summary>編集ハブ（細かく直す）</summary>
+      <div class="help-section-body">
+        <a class="help-back-local" href="index.html">← 注文画面に戻る</a>
+        <article class="help-chunk" data-help-keywords="編集する 枠 色 ハニカム">
+          <h3 class="help-chunk-title">編集する</h3>
+          <p>完成後の「編集する」、または入口の「自分で作る」から、枠の並びに入れます。色の細かい調整はハニカム、書体は「書体を選ぶ」から触れます。画像の±もここです。</p>
+        </article>
+      </div>
+    </details>
+
+    <p class="help-foot"><a href="index.html">注文画面に戻る</a></p>
   </main>
 </body>
 </html>

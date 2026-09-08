@@ -1,0 +1,48 @@
+{
+    "id":  "20",
+    "folder":  "20-pet-cafe-b",
+    "band":  "N",
+    "layoutPattern":  "c",
+    "layoutOrder":  [
+                        "hero",
+                        "values",
+                        "works",
+                        "accordions",
+                        "photos",
+                        "hours",
+                        "address",
+                        "contact"
+                    ],
+    "photoPack":  "P3",
+    "headingPack":  "H4",
+    "colorKey":  "sakura",
+    "fontMood":  "round",
+    "fonts":  {
+                  "catch":  "Kiwi Maru",
+                  "body":  "M PLUS Rounded 1c",
+                  "display":  "Zen Maru Gothic"
+              },
+    "scene":  "スイーツ",
+    "counts":  {
+                   "hero-leads":  2,
+                   "hero-values":  3,
+                   "about-accordions":  2,
+                   "about-photos":  3,
+                   "works-list":  3
+               },
+    "extras":  {
+                   "hours":  true,
+                   "access":  false,
+                   "address":  true
+               },
+    "imageSlots":  [
+                       "hero.jpg",
+                       "about-01.jpg",
+                       "about-02.jpg",
+                       "about-03.jpg",
+                       "work-01.jpg",
+                       "work-02.jpg",
+                       "work-03.jpg"
+                   ],
+    "status":  "未着手"
+}

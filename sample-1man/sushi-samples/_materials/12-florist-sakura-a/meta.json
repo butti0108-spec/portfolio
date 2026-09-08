@@ -1,0 +1,46 @@
+{
+    "id":  "12",
+    "folder":  "12-florist-sakura-a",
+    "band":  "N",
+    "layoutPattern":  "a",
+    "layoutOrder":  [
+                        "hero",
+                        "works",
+                        "photos",
+                        "values",
+                        "accordions",
+                        "hours",
+                        "address",
+                        "contact"
+                    ],
+    "photoPack":  "P2",
+    "headingPack":  "H3",
+    "colorKey":  "sakura",
+    "fontMood":  "round",
+    "fonts":  {
+                  "catch":  "Kiwi Maru",
+                  "body":  "M PLUS Rounded 1c",
+                  "display":  "Zen Maru Gothic"
+              },
+    "scene":  "ペット・散歩",
+    "counts":  {
+                   "hero-leads":  2,
+                   "hero-values":  2,
+                   "about-accordions":  1,
+                   "about-photos":  2,
+                   "works-list":  2
+               },
+    "extras":  {
+                   "hours":  true,
+                   "access":  false,
+                   "address":  true
+               },
+    "imageSlots":  [
+                       "hero.jpg",
+                       "about-01.jpg",
+                       "about-02.jpg",
+                       "work-01.jpg",
+                       "work-02.jpg"
+                   ],
+    "status":  "未着手"
+}

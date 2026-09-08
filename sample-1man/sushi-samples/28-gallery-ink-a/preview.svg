@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="640" height="800" viewBox="0 0 640 800">
+  <rect width="640" height="800" fill="#2e3333"/>
+  <rect x="0" y="0" width="640" height="52" fill="#111111"/>
+  <text x="24" y="34" fill="#f5f5f5" font-size="18" font-family="Shippori Mincho, serif">余白ギャラリー</text>
+  <rect x="24" y="72" width="592" height="200" fill="#111111"/>
+  <text x="40" y="150" fill="#ffffff" font-size="28" font-weight="700" font-family="Shippori Mincho, serif">作品と静かに</text>
+  <text x="40" y="190" fill="#ffffff" font-size="15" font-family="Shippori Mincho, serif" opacity="0.9">余白のある展示空間</text>
+  <text x="40" y="250" fill="#ffffff" font-size="12" opacity="0.75">写真世界観: 余白・作品壁</text>
+  <rect x="24" y="300" width="592" height="64" fill="#1f2424" stroke="#c9a227" stroke-width="2"/>
+  <text x="40" y="340" fill="#f5f5f5" font-size="14" font-family="Shippori Mincho, serif">展示 / 一点一点に余白を</text>
+  <rect x="24" y="376" width="592" height="64" fill="#1f2424" stroke="#c9a227" stroke-width="2"/>
+  <text x="40" y="416" fill="#f5f5f5" font-size="14" font-family="Shippori Mincho, serif">企画展</text>
+  <rect x="24" y="456" width="592" height="100" fill="#3a4040"/>
+  <text x="40" y="496" fill="#f5f5f5" font-size="14" font-family="Shippori Mincho, serif">作品と静かに向き合うギャラリーです。企画展を中心に、余白を活かした展示空</text>
+  <text x="40" y="526" fill="#c8c8c8" font-size="12">12:00–19:00／月曜休廊</text>
+  <rect x="24" y="620" width="592" height="110" fill="#111111"/>
+  <text x="40" y="665" fill="#f5f5f5" font-size="18" font-family="Shippori Mincho, serif">ご連絡</text>
+  <text x="40" y="698" fill="#f5f5f5" font-size="13" opacity="0.9">取材・貸出はメールで</text>
+  <text x="24" y="780" fill="#c8c8c8" font-size="12">No.28 ﾂｷ layout A ﾂｷ ink</text>
+</svg>

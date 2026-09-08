@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="640" height="800" viewBox="0 0 640 800">
+  <rect width="640" height="800" fill="#f5efe4"/>
+  <rect x="0" y="0" width="640" height="52" fill="#5c4033"/>
+  <text x="24" y="34" fill="#fff6e8" font-size="18" font-family="Shippori Mincho, serif">午後の菓子屋</text>
+  <rect x="24" y="72" width="592" height="200" fill="#5c4033"/>
+  <text x="40" y="150" fill="#fff6e8" font-size="28" font-weight="700" font-family="Shippori Mincho, serif">紅茶と一緒に</text>
+  <text x="40" y="190" fill="#fff6e8" font-size="15" font-family="Shippori Mincho, serif" opacity="0.9">焼き菓子と静かなティータイム</text>
+  <text x="40" y="250" fill="#fff6e8" font-size="12" opacity="0.75">写真世界観: ティータイム</text>
+  <rect x="24" y="300" width="592" height="64" fill="#fff8ee" stroke="#c45c26" stroke-width="2"/>
+  <text x="40" y="340" fill="#3e2723" font-size="14" font-family="Shippori Mincho, serif">紅茶 / 茶葉を選べます</text>
+  <rect x="24" y="376" width="592" height="64" fill="#fff8ee" stroke="#c45c26" stroke-width="2"/>
+  <text x="40" y="416" fill="#3e2723" font-size="14" font-family="Shippori Mincho, serif">スコーン</text>
+  <rect x="24" y="456" width="592" height="100" fill="#ebe1d0"/>
+  <text x="40" y="496" fill="#3e2723" font-size="14" font-family="Shippori Mincho, serif">紅茶に合う焼き菓子の店です。午後のティータイム向けに、日持ちする菓子も揃</text>
+  <text x="40" y="526" fill="#6a5340" font-size="12">12:00–18:00／火水定休</text>
+  <rect x="24" y="620" width="592" height="110" fill="#5c4033"/>
+  <text x="40" y="665" fill="#fff6e8" font-size="18" font-family="Shippori Mincho, serif">ご連絡</text>
+  <text x="40" y="698" fill="#fff6e8" font-size="13" opacity="0.9">ギフト包装無料</text>
+  <text x="24" y="780" fill="#6a5340" font-size="12">No.25 ﾂｷ layout A ﾂｷ cafe</text>
+</svg>

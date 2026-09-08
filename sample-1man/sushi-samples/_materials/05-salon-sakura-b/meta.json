@@ -1,0 +1,44 @@
+{
+    "id":  "05",
+    "folder":  "05-salon-sakura-b",
+    "band":  "N",
+    "layoutPattern":  "b",
+    "layoutOrder":  [
+                        "hero",
+                        "works",
+                        "values",
+                        "photos",
+                        "accordions",
+                        "hours",
+                        "address",
+                        "contact"
+                    ],
+    "photoPack":  "P1",
+    "headingPack":  "H3",
+    "colorKey":  "sakura",
+    "fontMood":  "round",
+    "fonts":  {
+                  "catch":  "Kiwi Maru",
+                  "body":  "M PLUS Rounded 1c",
+                  "display":  "Zen Maru Gothic"
+              },
+    "scene":  "スイーツ・パステル",
+    "counts":  {
+                   "hero-leads":  1,
+                   "hero-values":  2,
+                   "about-accordions":  1,
+                   "about-photos":  1,
+                   "works-list":  1
+               },
+    "extras":  {
+                   "hours":  true,
+                   "access":  false,
+                   "address":  true
+               },
+    "imageSlots":  [
+                       "hero.jpg",
+                       "about-01.jpg",
+                       "work-01.jpg"
+                   ],
+    "status":  "未着手"
+}

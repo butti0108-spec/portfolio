@@ -1,0 +1,44 @@
+{
+    "id":  "01",
+    "folder":  "01-cafe-warm-a",
+    "band":  "N",
+    "layoutPattern":  "a",
+    "layoutOrder":  [
+                        "hero",
+                        "values",
+                        "accordions",
+                        "photos",
+                        "works",
+                        "hours",
+                        "address",
+                        "contact"
+                    ],
+    "photoPack":  "P1",
+    "headingPack":  "H3",
+    "colorKey":  "cafe",
+    "fontMood":  "mincho",
+    "fonts":  {
+                  "catch":  "Shippori Mincho",
+                  "body":  "Zen Kaku Gothic New",
+                  "display":  "Shippori Mincho"
+              },
+    "scene":  "カフェ・朝・木目",
+    "counts":  {
+                   "hero-leads":  2,
+                   "hero-values":  2,
+                   "about-accordions":  1,
+                   "about-photos":  1,
+                   "works-list":  1
+               },
+    "extras":  {
+                   "hours":  true,
+                   "access":  false,
+                   "address":  true
+               },
+    "imageSlots":  [
+                       "hero.jpg",
+                       "about-01.jpg",
+                       "work-01.jpg"
+                   ],
+    "status":  "未着手"
+}

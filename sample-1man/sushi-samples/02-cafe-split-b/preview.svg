@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="640" height="800" viewBox="0 0 640 800">
+  <rect width="640" height="800" fill="#e8f2e6"/>
+  <rect x="0" y="0" width="640" height="52" fill="#1f3d18"/>
+  <text x="24" y="34" fill="#f4fff6" font-size="18" font-family="Zen Maru Gothic, sans-serif">ミドリ喫茶</text>
+  <rect x="24" y="72" width="592" height="200" fill="#1f3d18"/>
+  <text x="40" y="150" fill="#111111" font-size="28" font-weight="700" font-family="Zen Maru Gothic, sans-serif">緑のなかで一休み</text>
+  <text x="40" y="190" fill="#111111" font-size="15" font-family="Zen Maru Gothic, sans-serif" opacity="0.9">サラダとハーブティーの店</text>
+  <text x="40" y="250" fill="#111111" font-size="12" opacity="0.75">写真世界観: サラダ・窓辺</text>
+  <rect x="24" y="300" width="286" height="140" fill="#ffffff" stroke="#3d8a48" stroke-width="2"/>
+  <text x="40" y="370" fill="#212121" font-size="14" font-family="Zen Maru Gothic, sans-serif">サラダ</text>
+  <rect x="330" y="300" width="286" height="140" fill="#ffffff" stroke="#3d8a48" stroke-width="2"/>
+  <text x="346" y="370" fill="#212121" font-size="14" font-family="Zen Maru Gothic, sans-serif">グリーンランチ</text>
+  <rect x="24" y="456" width="592" height="100" fill="#d2e6ce"/>
+  <text x="40" y="496" fill="#212121" font-size="14" font-family="Zen Maru Gothic, sans-serif">野菜たっぷりのランチと、ハーブティーが人気の喫茶です。明るい窓辺の席で、</text>
+  <text x="40" y="526" fill="#555555" font-size="12">11:00–19:00／水曜定休</text>
+  <rect x="24" y="620" width="592" height="110" fill="#2d6a36"/>
+  <text x="40" y="665" fill="#f4fff6" font-size="18" font-family="Zen Maru Gothic, sans-serif">ご連絡</text>
+  <text x="40" y="698" fill="#f4fff6" font-size="13" opacity="0.9">テイクアウトのご相談も歓迎</text>
+  <text x="24" y="780" fill="#555555" font-size="12">No.02 ﾂｷ layout B ﾂｷ green</text>
+</svg>

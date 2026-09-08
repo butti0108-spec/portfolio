@@ -227,8 +227,8 @@ add_action('login_head', 'mbp_favicon');
 
 function mbp_scripts() {
   wp_enqueue_style('mbp-fonts', mbp_font_url(), [], null);
-  wp_enqueue_style('mbp-style', get_stylesheet_uri(), ['mbp-fonts'], '1.1.25');
-  wp_enqueue_script('mbp-script', mbp_asset('js/script.js'), [], '1.1.25', true);
+  wp_enqueue_style('mbp-style', get_stylesheet_uri(), ['mbp-fonts'], '1.1.26');
+  wp_enqueue_script('mbp-script', mbp_asset('js/script.js'), [], '1.1.27', true);
 
   if (is_page_template('template-mentor.php')) {
     wp_enqueue_style('mbp-mentor', mbp_asset('css/mentor.css'), ['mbp-style'], '1.0.0');

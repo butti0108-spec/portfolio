@@ -1,0 +1,46 @@
+{
+    "id":  "26",
+    "folder":  "26-izakaya-brick-c",
+    "band":  "A",
+    "layoutPattern":  "a",
+    "layoutOrder":  [
+                        "hero",
+                        "values",
+                        "works",
+                        "photos",
+                        "accordions",
+                        "hours",
+                        "address",
+                        "contact"
+                    ],
+    "photoPack":  "P2",
+    "headingPack":  "H3",
+    "colorKey":  "ink",
+    "fontMood":  "bold",
+    "fonts":  {
+                  "catch":  "Zen Kaku Gothic New",
+                  "body":  "Zen Kaku Gothic New",
+                  "display":  "Dela Gothic One"
+              },
+    "scene":  "写真館・モノクロ",
+    "counts":  {
+                   "hero-leads":  2,
+                   "hero-values":  2,
+                   "about-accordions":  1,
+                   "about-photos":  2,
+                   "works-list":  2
+               },
+    "extras":  {
+                   "hours":  true,
+                   "access":  false,
+                   "address":  true
+               },
+    "imageSlots":  [
+                       "hero.jpg",
+                       "about-01.jpg",
+                       "about-02.jpg",
+                       "work-01.jpg",
+                       "work-02.jpg"
+                   ],
+    "status":  "未着手"
+}

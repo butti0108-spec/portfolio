@@ -1,0 +1,46 @@
+{
+    "id":  "11",
+    "folder":  "11-clinic-clinic-b",
+    "band":  "N",
+    "layoutPattern":  "c",
+    "layoutOrder":  [
+                        "hero",
+                        "values",
+                        "accordions",
+                        "photos",
+                        "works",
+                        "hours",
+                        "address",
+                        "contact"
+                    ],
+    "photoPack":  "P2",
+    "headingPack":  "H4",
+    "colorKey":  "clinic",
+    "fontMood":  "mincho",
+    "fonts":  {
+                  "catch":  "Shippori Mincho",
+                  "body":  "Zen Kaku Gothic New",
+                  "display":  "Shippori Mincho"
+              },
+    "scene":  "診療所・待合",
+    "counts":  {
+                   "hero-leads":  2,
+                   "hero-values":  3,
+                   "about-accordions":  2,
+                   "about-photos":  2,
+                   "works-list":  2
+               },
+    "extras":  {
+                   "hours":  true,
+                   "access":  false,
+                   "address":  true
+               },
+    "imageSlots":  [
+                       "hero.jpg",
+                       "about-01.jpg",
+                       "about-02.jpg",
+                       "work-01.jpg",
+                       "work-02.jpg"
+                   ],
+    "status":  "未着手"
+}

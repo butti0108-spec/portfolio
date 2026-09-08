@@ -4,6 +4,12 @@
 # Accidental nested copy
 wp-theme/wp-theme/
 
+# Local verification / browser profiles (do not mix into product)
+sample-1man/_verify-tmp/
+sample-1man/**/chrome-profile*/
+sample-1man/**/chrome-dbg/
+sample-1man/**/chrome-profile2/
+
 # OS junk
 Thumbs.db
 Desktop.ini

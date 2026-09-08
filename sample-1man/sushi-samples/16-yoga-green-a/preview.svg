@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="640" height="800" viewBox="0 0 640 800">
+  <rect width="640" height="800" fill="#e8f2e6"/>
+  <rect x="0" y="0" width="640" height="52" fill="#1f3d18"/>
+  <text x="24" y="34" fill="#f4fff6" font-size="18" font-family="Sawarabi Gothic, sans-serif">呼吸の庭</text>
+  <rect x="24" y="72" width="592" height="200" fill="#1f3d18"/>
+  <text x="40" y="150" fill="#111111" font-size="28" font-weight="700" font-family="Sawarabi Gothic, sans-serif">からだをほどく時間</text>
+  <text x="40" y="190" fill="#111111" font-size="15" font-family="Sawarabi Gothic, sans-serif" opacity="0.9">初心者歓迎のマットクラス</text>
+  <text x="40" y="250" fill="#111111" font-size="12" opacity="0.75">写真世界観: マット・光</text>
+  <rect x="24" y="300" width="592" height="64" fill="#ffffff" stroke="#3d8a48" stroke-width="2"/>
+  <text x="40" y="340" fill="#212121" font-size="14" font-family="Sawarabi Gothic, sans-serif">呼吸 / 動きと息を合わせる</text>
+  <rect x="24" y="376" width="592" height="64" fill="#ffffff" stroke="#3d8a48" stroke-width="2"/>
+  <text x="40" y="416" fill="#212121" font-size="14" font-family="Sawarabi Gothic, sans-serif">朝クラス</text>
+  <rect x="24" y="456" width="592" height="100" fill="#d2e6ce"/>
+  <text x="40" y="496" fill="#212121" font-size="14" font-family="Sawarabi Gothic, sans-serif">呼吸を大切にするヨガスタジオです。初めての方でも動きやすいクラスを中心に</text>
+  <text x="40" y="526" fill="#555555" font-size="12">クラス制／予約優先</text>
+  <rect x="24" y="620" width="592" height="110" fill="#2d6a36"/>
+  <text x="40" y="665" fill="#f4fff6" font-size="18" font-family="Sawarabi Gothic, sans-serif">ご連絡</text>
+  <text x="40" y="698" fill="#f4fff6" font-size="13" opacity="0.9">体験はWeb予約から</text>
+  <text x="24" y="780" fill="#555555" font-size="12">No.16 ﾂｷ layout A ﾂｷ green</text>
+</svg>

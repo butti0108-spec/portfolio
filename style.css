@@ -730,6 +730,17 @@ a {
   color: var(--ink);
 }
 
+.tap-hint {
+  margin: 0 0 0.75rem;
+  font-size: 0.82rem;
+  line-height: 1.5;
+  color: #666;
+}
+
+.tap-hint--skills {
+  margin: 0.65rem 0 1.75rem;
+}
+
 .case-lead {
   margin: 0;
   max-width: 50rem;
@@ -786,12 +797,88 @@ a {
   background: #111;
 }
 
+.skill-card-btn {
+  display: block;
+  width: 100%;
+  height: 100%;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+}
+
+.skill-card-btn:hover .skill-card-img,
+.skill-card-btn:focus-visible .skill-card-img {
+  transform: scale(1.03);
+}
+
+.skill-card-btn:focus-visible {
+  outline: 2px solid var(--accent, #399d26);
+  outline-offset: 2px;
+}
+
 .skill-card-img {
   display: block;
   width: 100%;
   height: 100%;
   object-fit: cover;
   object-position: center;
+  transition: transform 0.25s ease;
+}
+
+.skill-dialog {
+  width: min(26rem, calc(100vw - 2rem));
+  max-width: none;
+  padding: 0;
+  border: 1px solid rgba(17, 17, 17, 0.12);
+  border-radius: 0.6rem;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.18);
+}
+
+.skill-dialog::backdrop {
+  background: rgba(17, 17, 17, 0.45);
+}
+
+.skill-dialog-inner {
+  position: relative;
+  padding: 1.25rem 1.15rem 1.15rem;
+}
+
+.skill-dialog-close {
+  position: absolute;
+  top: 0.45rem;
+  right: 0.45rem;
+  width: 2rem;
+  height: 2rem;
+  border: 0;
+  border-radius: 999px;
+  background: rgba(17, 17, 17, 0.06);
+  font-size: 1.2rem;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.skill-dialog-title {
+  margin: 0 2rem 0.65rem 0;
+  font-family: "Shippori Mincho", serif;
+  font-size: 1.05rem;
+}
+
+.skill-dialog-body {
+  margin: 0;
+  line-height: 1.75;
+  color: #333;
+}
+
+.skill-dialog-link-wrap {
+  margin: 0.85rem 0 0;
+}
+
+.skill-dialog-link {
+  color: #2d6a36;
+  font-weight: 700;
+  text-decoration: underline;
+  text-underline-offset: 2px;
 }
 
 .accordion-list {

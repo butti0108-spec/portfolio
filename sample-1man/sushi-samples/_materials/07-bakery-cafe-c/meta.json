@@ -1,0 +1,46 @@
+{
+    "id":  "07",
+    "folder":  "07-bakery-cafe-c",
+    "band":  "N",
+    "layoutPattern":  "b",
+    "layoutOrder":  [
+                        "hero",
+                        "values",
+                        "photos",
+                        "works",
+                        "accordions",
+                        "hours",
+                        "address",
+                        "contact"
+                    ],
+    "photoPack":  "P2",
+    "headingPack":  "H4",
+    "colorKey":  "ink",
+    "fontMood":  "brush",
+    "fonts":  {
+                  "catch":  "Yuji Syuku",
+                  "body":  "Sawarabi Gothic",
+                  "display":  "Yuji Syuku"
+              },
+    "scene":  "ラーメン・丼",
+    "counts":  {
+                   "hero-leads":  2,
+                   "hero-values":  3,
+                   "about-accordions":  2,
+                   "about-photos":  2,
+                   "works-list":  2
+               },
+    "extras":  {
+                   "hours":  true,
+                   "access":  false,
+                   "address":  true
+               },
+    "imageSlots":  [
+                       "hero.jpg",
+                       "about-01.jpg",
+                       "about-02.jpg",
+                       "work-01.jpg",
+                       "work-02.jpg"
+                   ],
+    "status":  "未着手"
+}

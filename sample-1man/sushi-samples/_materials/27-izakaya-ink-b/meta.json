@@ -1,0 +1,48 @@
+{
+    "id":  "27",
+    "folder":  "27-izakaya-ink-b",
+    "band":  "A",
+    "layoutPattern":  "b",
+    "layoutOrder":  [
+                        "hero",
+                        "photos",
+                        "works",
+                        "values",
+                        "accordions",
+                        "hours",
+                        "address",
+                        "contact"
+                    ],
+    "photoPack":  "P3",
+    "headingPack":  "H3",
+    "colorKey":  "cafe",
+    "fontMood":  "mincho",
+    "fonts":  {
+                  "catch":  "Shippori Mincho",
+                  "body":  "Zen Kaku Gothic New",
+                  "display":  "Shippori Mincho"
+              },
+    "scene":  "宿・朝",
+    "counts":  {
+                   "hero-leads":  2,
+                   "hero-values":  1,
+                   "about-accordions":  1,
+                   "about-photos":  3,
+                   "works-list":  3
+               },
+    "extras":  {
+                   "hours":  true,
+                   "access":  false,
+                   "address":  true
+               },
+    "imageSlots":  [
+                       "hero.jpg",
+                       "about-01.jpg",
+                       "about-02.jpg",
+                       "about-03.jpg",
+                       "work-01.jpg",
+                       "work-02.jpg",
+                       "work-03.jpg"
+                   ],
+    "status":  "未着手"
+}

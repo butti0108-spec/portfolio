@@ -1,0 +1,44 @@
+{
+    "id":  "10",
+    "folder":  "10-clinic-green-a",
+    "band":  "N",
+    "layoutPattern":  "c",
+    "layoutOrder":  [
+                        "hero",
+                        "photos",
+                        "works",
+                        "values",
+                        "accordions",
+                        "hours",
+                        "address",
+                        "contact"
+                    ],
+    "photoPack":  "P1",
+    "headingPack":  "H3",
+    "colorKey":  "brick",
+    "fontMood":  "bold",
+    "fonts":  {
+                  "catch":  "Zen Kaku Gothic New",
+                  "body":  "Zen Kaku Gothic New",
+                  "display":  "Dela Gothic One"
+              },
+    "scene":  "居酒屋・提灯",
+    "counts":  {
+                   "hero-leads":  1,
+                   "hero-values":  2,
+                   "about-accordions":  1,
+                   "about-photos":  1,
+                   "works-list":  1
+               },
+    "extras":  {
+                   "hours":  true,
+                   "access":  false,
+                   "address":  true
+               },
+    "imageSlots":  [
+                       "hero.jpg",
+                       "about-01.jpg",
+                       "work-01.jpg"
+                   ],
+    "status":  "未着手"
+}

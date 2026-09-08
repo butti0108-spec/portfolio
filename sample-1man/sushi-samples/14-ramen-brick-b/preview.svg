@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="640" height="800" viewBox="0 0 640 800">
+  <rect width="640" height="800" fill="#fff6ee"/>
+  <rect x="0" y="0" width="640" height="52" fill="#e07020"/>
+  <text x="24" y="34" fill="#fff8f0" font-size="18" font-family="Dela Gothic One, sans-serif">炎麺</text>
+  <rect x="24" y="72" width="592" height="200" fill="#e07020"/>
+  <text x="40" y="150" fill="#8a3a10" font-size="28" font-weight="700" font-family="Dela Gothic One, sans-serif">熱々を、一気に</text>
+  <text x="40" y="190" fill="#8a3a10" font-size="15" font-family="Dela Gothic One, sans-serif" opacity="0.9">濃厚スープと太い麺</text>
+  <text x="40" y="250" fill="#8a3a10" font-size="12" opacity="0.75">写真世界観: 湯気・丼</text>
+  <rect x="24" y="300" width="286" height="140" fill="#fffaf5" stroke="#f08a28" stroke-width="2"/>
+  <text x="40" y="370" fill="#3a2418" font-size="14" font-family="Dela Gothic One, sans-serif">スープ</text>
+  <rect x="330" y="300" width="286" height="140" fill="#ffffff" stroke="#f08a28" stroke-width="2"/>
+  <text x="346" y="370" fill="#3a2418" font-size="14" font-family="Dela Gothic One, sans-serif">炎特製</text>
+  <rect x="24" y="456" width="592" height="100" fill="#ffe4cc"/>
+  <text x="40" y="496" fill="#3a2418" font-size="14" font-family="Dela Gothic One, sans-serif">熱々のラーメン専門店。濃厚スープと太麺が看板です。ランチタイムは行列にな</text>
+  <text x="40" y="526" fill="#6a4a38" font-size="12">11:00–15:00／18:00–22:00</text>
+  <rect x="24" y="620" width="592" height="110" fill="#d46818"/>
+  <text x="40" y="665" fill="#fff8f0" font-size="18" font-family="Dela Gothic One, sans-serif">ご連絡</text>
+  <text x="40" y="698" fill="#fff8f0" font-size="13" opacity="0.9">テイクアウト不可</text>
+  <text x="24" y="780" fill="#6a4a38" font-size="12">No.14 ﾂｷ layout B ﾂｷ brick</text>
+</svg>

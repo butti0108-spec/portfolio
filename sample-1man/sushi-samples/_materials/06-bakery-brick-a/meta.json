@@ -1,0 +1,48 @@
+{
+    "id":  "06",
+    "folder":  "06-bakery-brick-a",
+    "band":  "N",
+    "layoutPattern":  "c",
+    "layoutOrder":  [
+                        "hero",
+                        "values",
+                        "accordions",
+                        "works",
+                        "photos",
+                        "hours",
+                        "address",
+                        "contact"
+                    ],
+    "photoPack":  "P3",
+    "headingPack":  "H3",
+    "colorKey":  "brick",
+    "fontMood":  "softGothic",
+    "fonts":  {
+                  "catch":  "Sawarabi Gothic",
+                  "body":  "Zen Kaku Gothic New",
+                  "display":  "Sawarabi Gothic"
+              },
+    "scene":  "パン・ケース",
+    "counts":  {
+                   "hero-leads":  2,
+                   "hero-values":  2,
+                   "about-accordions":  1,
+                   "about-photos":  3,
+                   "works-list":  3
+               },
+    "extras":  {
+                   "hours":  true,
+                   "access":  false,
+                   "address":  true
+               },
+    "imageSlots":  [
+                       "hero.jpg",
+                       "about-01.jpg",
+                       "about-02.jpg",
+                       "about-03.jpg",
+                       "work-01.jpg",
+                       "work-02.jpg",
+                       "work-03.jpg"
+                   ],
+    "status":  "未着手"
+}

@@ -1691,7 +1691,10 @@
     layoutUndoStack: [],
     layoutUndoRestoring: false,
     layoutDragOverKey: null,
-    layoutDragOverPlace: null
+    layoutDragOverPlace: null,
+    hubPlacePickMode: false,
+    hubPlaceSelectedBlockId: null,
+    hubPlaceFitScale: 1
   };
   store.itemLayouts = defaultItemLayouts();
 
@@ -2667,11 +2670,13 @@
       store.uiMode = "self";
       applyUiMode();
     }
+    resetHubPlaceUi({ keepHub: true });
     parkFontPickersInReservoir();
     placeLookControls();
     syncDetailDashVisibility("layout");
     syncGuidedColorTrial();
     renderLayoutArrangeWire();
+    syncHubEntryPanels();
     updateWizardUi();
     const block = form.querySelector('.dash-block[data-step-id="layout"]');
     const dashBody = document.querySelector(".dash-body");
@@ -2680,6 +2685,200 @@
         dashBody.scrollTo({ top: Math.max(0, block.offsetTop - 8), behavior: "smooth" });
       });
     }
+  }
+
+  /** 検証①：場所から編集 → Fit＋ハイライトで場所選択モードか確かめる */
+  function clearHubPlaceFit(opts) {
+    const keepMode = !!(opts && opts.keepMode);
+    const scroll = document.querySelector(".preview-scroll");
+    const vp = viewport;
+    if (!keepMode) document.body.classList.remove("hub-place-pick");
+    if (scroll) {
+      scroll.classList.remove("is-hub-place-fit");
+    }
+    if (vp) {
+      vp.style.removeProperty("transform");
+      vp.style.removeProperty("transform-origin");
+      vp.style.removeProperty("margin-bottom");
+      vp.style.removeProperty("--hub-place-fit-scale");
+    }
+    store.hubPlaceFitScale = 1;
+    root.querySelectorAll("[data-layout-block].is-hub-place-hot").forEach((el) => {
+      el.classList.remove("is-hub-place-hot");
+    });
+    if (!keepMode) {
+      root.querySelectorAll("[data-layout-block].is-hub-place-chosen").forEach((el) => {
+        el.classList.remove("is-hub-place-chosen");
+      });
+    }
+  }
+
+  function applyHubPlaceFit() {
+    const scroll = document.querySelector(".preview-scroll");
+    const vp = viewport;
+    if (!scroll || !vp || !root) return;
+    clearHubPlaceFit({ keepMode: true });
+    document.body.classList.add("hub-place-pick");
+    scroll.classList.add("is-hub-place-fit");
+    scroll.scrollTop = 0;
+    scroll.scrollLeft = 0;
+
+    window.requestAnimationFrame(() => {
+      if (!store.hubPlacePickMode) return;
+      const pad = 20;
+      const availW = Math.max(120, scroll.clientWidth - pad * 2);
+      const availH = Math.max(120, scroll.clientHeight - pad * 2);
+      const fullW = Math.max(1, vp.offsetWidth);
+      const fullH = Math.max(1, root.scrollHeight);
+      const scale = Math.min(availW / fullW, availH / fullH, 1);
+      store.hubPlaceFitScale = scale;
+      vp.style.setProperty("--hub-place-fit-scale", String(scale));
+      vp.style.transformOrigin = "top center";
+      vp.style.transform = "scale(" + scale + ")";
+      vp.style.marginBottom = fullH * scale - fullH + "px";
+
+      root.querySelectorAll("[data-layout-block]").forEach((el) => {
+        const id = el.getAttribute("data-layout-block");
+        const meta = LAYOUT_BLOCKS.find((b) => b.id === id);
+        if (!meta || !isLayoutBlockActive(meta) || el.hidden) {
+          el.classList.remove("is-hub-place-hot");
+          return;
+        }
+        el.classList.add("is-hub-place-hot");
+      });
+    });
+  }
+
+  function syncHubEntryPanels() {
+    const entry = document.getElementById("hub-entry");
+    const pick = document.getElementById("hub-place-pick");
+    const section = document.getElementById("hub-place-section");
+    const stack = document.getElementById("hub-layout-stack");
+    const onLayout =
+      store.siteColorMode === "detail" && store.selfEditingStepId === "layout";
+    const picking = !!store.hubPlacePickMode;
+    const sectionOpen = !!store.hubPlaceSelectedBlockId && !picking;
+
+    if (entry) entry.hidden = !onLayout || picking || sectionOpen;
+    if (pick) pick.hidden = !onLayout || !picking;
+    if (section) section.hidden = !onLayout || !sectionOpen;
+    if (stack) stack.hidden = !onLayout || picking || sectionOpen;
+    document.body.classList.toggle("hub-place-section-open", sectionOpen);
+  }
+
+  function resetHubPlaceUi(opts) {
+    const keepHub = !!(opts && opts.keepHub);
+    store.hubPlacePickMode = false;
+    store.hubPlaceSelectedBlockId = null;
+    clearHubPlaceFit();
+    document.body.classList.remove("hub-place-section-open");
+    const actions = document.getElementById("hub-place-section-actions");
+    if (actions) actions.innerHTML = "";
+    if (keepHub) syncHubEntryPanels();
+  }
+
+  function enterHubPlacePick() {
+    if (store.siteColorMode !== "detail") return;
+    store.hubPlacePickMode = true;
+    store.hubPlaceSelectedBlockId = null;
+    store.selfEditingStepId = "layout";
+    syncDetailDashVisibility("layout");
+    syncHubEntryPanels();
+    applyHubPlaceFit();
+    updateWizardUi();
+  }
+
+  function cancelHubPlacePick() {
+    store.hubPlacePickMode = false;
+    store.hubPlaceSelectedBlockId = null;
+    clearHubPlaceFit();
+    syncHubEntryPanels();
+    updateWizardUi();
+  }
+
+  function renderHubPlaceSectionActions(blockId) {
+    const meta = LAYOUT_BLOCKS.find((b) => b.id === blockId);
+    const title = document.getElementById("hub-place-section-title");
+    const actions = document.getElementById("hub-place-section-actions");
+    if (!meta || !actions) return;
+    if (title) title.textContent = meta.label;
+    actions.innerHTML = "";
+    (meta.links || []).forEach((link) => {
+      const btn = document.createElement("button");
+      btn.type = "button";
+      btn.className = "hub-place-action-btn";
+      btn.setAttribute("data-hub-place-step", link.step);
+      btn.textContent = link.label;
+      actions.appendChild(btn);
+    });
+  }
+
+  function pickHubPlaceBlock(blockId) {
+    const meta = LAYOUT_BLOCKS.find((b) => b.id === blockId);
+    if (!meta || !isLayoutBlockActive(meta)) return;
+    store.hubPlacePickMode = false;
+    store.hubPlaceSelectedBlockId = blockId;
+    clearHubPlaceFit();
+    renderHubPlaceSectionActions(blockId);
+    syncHubEntryPanels();
+
+    const el = root.querySelector('[data-layout-block="' + blockId + '"]');
+    if (el) {
+      el.classList.add("is-hub-place-chosen");
+      window.setTimeout(() => el.classList.remove("is-hub-place-chosen"), 900);
+    }
+    if (meta.selector) {
+      window.setTimeout(() => scrollPreviewTo(meta.selector), 40);
+    }
+    updateWizardUi();
+  }
+
+  function openHubPlaceStep(stepId) {
+    if (!stepId) return;
+    store.hubPlacePickMode = false;
+    store.hubPlaceSelectedBlockId = null;
+    clearHubPlaceFit();
+    syncHubEntryPanels();
+    openSelfStep(stepId);
+  }
+
+  function setupHubPlaceEntry() {
+    const placeBtn = document.getElementById("hub-entry-place");
+    if (placeBtn) {
+      placeBtn.addEventListener("click", () => enterHubPlacePick());
+    }
+    const cancelBtn = document.getElementById("hub-place-cancel");
+    if (cancelBtn) {
+      cancelBtn.addEventListener("click", () => cancelHubPlacePick());
+    }
+    const backBtn = document.getElementById("hub-place-section-back");
+    if (backBtn) {
+      backBtn.addEventListener("click", () => enterHubPlacePick());
+    }
+    const actions = document.getElementById("hub-place-section-actions");
+    if (actions) {
+      actions.addEventListener("click", (e) => {
+        const btn = e.target.closest("[data-hub-place-step]");
+        if (!btn) return;
+        openHubPlaceStep(btn.getAttribute("data-hub-place-step"));
+      });
+    }
+    root.addEventListener(
+      "click",
+      (e) => {
+        if (!store.hubPlacePickMode) return;
+        const block = e.target.closest("#preview-root [data-layout-block]");
+        if (!block) return;
+        e.preventDefault();
+        e.stopPropagation();
+        pickHubPlaceBlock(block.getAttribute("data-layout-block"));
+      },
+      true
+    );
+    window.addEventListener("resize", () => {
+      if (!store.hubPlacePickMode) return;
+      applyHubPlaceFit();
+    });
   }
 
   function syncDetailNoticeCopy() {
@@ -4569,6 +4768,13 @@
     const flow = getFlowSteps();
     const idx = flow.findIndex((s) => s.id === stepId);
     if (idx >= 0) store.wizardStepIndex = idx;
+
+    if (stepId !== "layout" && (store.hubPlacePickMode || store.hubPlaceSelectedBlockId)) {
+      store.hubPlacePickMode = false;
+      store.hubPlaceSelectedBlockId = null;
+      clearHubPlaceFit();
+      document.body.classList.remove("hub-place-section-open");
+    }
 
     switchToDashTab();
     form.querySelectorAll(":scope > details.dash-block").forEach((d) => {
@@ -10299,6 +10505,7 @@
   setupMobileTabs();
   setupExclusiveAccordions();
   setupPreviewHits();
+  setupHubPlaceEntry();
   setupBadgeToggle();
   setupWizard();
   setupGuidedColorTrial();

@@ -11,13 +11,13 @@
   <link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@500;700&family=Zen+Kaku+Gothic+New:wght@400;500;700&family=Zen+Maru+Gothic:wght@400;700&family=M+PLUS+Rounded+1c:wght@400;700&family=Noto+Sans+JP:wght@400;700&family=Noto+Serif+JP:wght@500;700&family=Sawarabi+Mincho&family=Sawarabi+Gothic&family=Kosugi+Maru&family=Kiwi+Maru:wght@500&family=Yuji+Syuku&family=Dela+Gothic+One&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../style.css">
   <link rel="icon" href="brand/mark-favicon.png?v=logo-7" type="image/png">
-  <link rel="stylesheet" href="sample-overrides.css?v=ui-fix-10-hub-view9">
+  <link rel="stylesheet" href="sample-overrides.css?v=ui-fix-10-hub-v1fit">
   <script>document.documentElement.classList.add("js");</script>
   <script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js" defer></script>
   <script src="vibe-dict.js" defer></script>
   <script src="easy-copy-dict.js?v=s5-1" defer></script>
   <script src="sushi-belt.js?v=t30-shots-1" defer></script>
-  <script src="script.js?v=ui-fix-10-hub-view9" defer></script>
+  <script src="script.js?v=ui-fix-10-hub-v1fit" defer></script>
 </head>
 <body class="atelier hide-zone-badges">
   <div class="entry-gate entry-gate--full" id="entry-gate" hidden role="dialog" aria-modal="true" aria-labelledby="entry-gate-title">
@@ -592,7 +592,31 @@
         <details class="dash-block dash-block--settings dash-block--layout-hub" data-step-id="layout" hidden>
           <summary class="visually-hidden">並び替え</summary>
 
-          <div class="hub-layout-stack">
+          <div class="hub-entry" id="hub-entry">
+            <p class="hub-entry-lead visually-hidden">編集の入り口</p>
+            <div class="hub-entry-cards" role="group" aria-label="編集の入り口">
+              <button type="button" class="hub-entry-card" id="hub-entry-place" data-hub-entry="place">
+                <span class="hub-entry-card-title">場所から編集</span>
+                <span class="hub-entry-card-note">ページの場所を選ぶ</span>
+              </button>
+              <button type="button" class="hub-entry-card is-soon" id="hub-entry-task" data-hub-entry="task" disabled>
+                <span class="hub-entry-card-title">やりたいことから編集</span>
+                <span class="hub-entry-card-note">あとで試します</span>
+              </button>
+            </div>
+          </div>
+
+          <div class="hub-place-pick" id="hub-place-pick" hidden>
+            <button type="button" class="gct-btn" id="hub-place-cancel" data-hub-place-cancel>やめる</button>
+          </div>
+
+          <div class="hub-place-section" id="hub-place-section" hidden>
+            <p class="hub-place-section-title" id="hub-place-section-title"></p>
+            <div class="hub-place-section-actions" id="hub-place-section-actions" role="group"></div>
+            <button type="button" class="gct-btn" id="hub-place-section-back" data-hub-place-section-back>場所を選び直す</button>
+          </div>
+
+          <div class="hub-layout-stack" id="hub-layout-stack">
             <div class="hub-wire-block">
               <div class="hub-wire-toolbar">
                 <p class="hub-stack-label hub-stack-label--with-handle">

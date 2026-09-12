@@ -1,5 +1,4 @@
-﻿# メモ — 12-florist-sakura-a
+﻿# NOTES 12-florist-sakura-a
 
-- 帯: N / ABC: a / P2 / H3
-- 世界観: ペット・散歩
-- 採用判断:
+- review round reset 2026-09-09 (complete pack for human review)
+- [2026-09-10 00:14] fix / その他 / note: 真っ赤禁止

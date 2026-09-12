@@ -1,25 +1,14 @@
 {
-    "version":  16,
+    "version":  17,
     "sushiSampleId":  "29",
     "sushiSampleKey":  "gallery-clinic-c",
     "blurb":  "ギャラリー・混合・紺・角ゴ",
-    "scene":  "白い壁・額",
-    "savedAt":  "2026-09-07T21:16:12.9592808Z",
+    "scene":  "花屋・アレンジ",
+    "savedAt":  "2026-09-08T17:09:27.6774146Z",
     "uiMode":  "self",
     "sitePurpose":  "shop",
     "siteColorMode":  "detail",
-    "layoutPattern":  "c",
-    "layoutOrder":  [
-                        "hero",
-                        "values",
-                        "accordions",
-                        "photos",
-                        "works",
-                        "hours",
-                        "access",
-                        "address",
-                        "contact"
-                    ],
+    "layoutPattern":  "a",
     "layoutSelected":  true,
     "layoutSchema":  2,
     "intakeDone":  true,
@@ -27,7 +16,7 @@
     "hubEntrySource":  "sample",
     "easyFlowActive":  false,
     "presetChosen":  true,
-    "chosenPresetKey":  "clinic",
+    "chosenPresetKey":  "sakura",
     "draftColors":  {
                         "cardBg":  "#ffffff",
                         "chromeInk":  "#ffffff",
@@ -39,54 +28,63 @@
                         "bodyInk":  "#212121",
                         "contactInk":  "#ffffff",
                         "valuesBg":  "#ffffff",
-                        "heroInk":  "#1a4d8c",
+                        "heroInk":  "#ffffff",
                         "chromeBg":  "#1a4d8c"
                     },
     "draftCounts":  {
                         "hero-leads":  2,
-                        "hero-values":  2,
+                        "hero-values":  3,
                         "about-accordions":  1,
-                        "about-photos":  1,
-                        "works-list":  2
+                        "about-photos":  3,
+                        "works-list":  3
                     },
     "guidedImageUnlocked":  true,
     "guidedTextUnlocked":  true,
     "fonts":  {
-                  "catch":  "Zen Kaku Gothic New",
-                  "body":  "Noto Sans JP",
-                  "display":  "Zen Kaku Gothic New"
+                  "catch":  "Kiwi Maru",
+                  "body":  "M PLUS Rounded 1c",
+                  "display":  "Zen Maru Gothic"
               },
     "fields":  {
-                   "brand_name":  "WHITE WALL",
-                   "hero_title":  "WHITE WALL",
-                   "hero_lead_1":  "白い壁にのせる",
-                   "hero_lead_2":  "額装と、清潔な展示壁",
-                   "value_1_title":  "壁",
-                   "value_1_text":  "白を基調に整える",
-                   "value_2_title":  "額",
-                   "value_2_text":  "サイズ相談可",
-                   "about_section_name":  "お店",
-                   "about_heading":  "WHITE WALL案内",
-                   "about_name":  "WHITE WALL",
-                   "about_lead":  "白い壁を基調にしたギャラリー。額装作品の展示と、小さな販売会を開催しています。",
-                   "acc_1_title":  "こだわり",
-                   "acc_1_body":  "白い壁を基調にしたギャラリー。額装作品の展示と、小さな販売会を開催しています。",
+                   "brand_name":  "束ね花店",
+                   "hero_title":  "束ねた花を、そのまま持ち帰る。",
+                   "hero_lead_1":  "束ね花店は、持ち帰りやすい束が得意な花屋。置き場所と予算を聞けば、その場でまとめます。",
+                   "hero_lead_2":  "ギフト包装はクラフト紙か透け袋。遠方発送は行っていないので、店頭受け取りが基本です。",
+                   "hero_lead_3":  "",
+                   "value_1_title":  "その日の花",
+                   "value_1_text":  "市場から戻ったら、まず水揚げ。店頭のバケツは色味ごとに分け、選びやすい高さに揃えます。",
+                   "value_2_title":  "アレンジの相談",
+                   "value_2_text":  "用途・予算・色の好みを聞いてから組みます。持ち込みの器にも対応。完成イメージはラフスケッチで共有します。",
+                   "value_3_title":  "配達と受け取り",
+                   "value_3_text":  "近隣配達は午前・午後の二便。店頭受け取りは箱詰め後にメッセージカードを添えられます。",
+                   "about_section_name":  "花屋について",
+                   "about_heading":  "束ねて渡す、花の店",
+                   "about_name":  "束ね花店",
+                   "about_lead":  "駅前通りの花屋です。切り花のほか、テーブルアレンジと小さなブーケを得意にしています。誕生日、お見舞い、開店祝いまでは店内で相談でき、大きな会場装花は提携先と一緒に進めます。",
+                   "acc_1_title":  "注文の流れ",
+                   "acc_1_body":  "店頭でもメールでも受け付けます。希望日の二日前までが安心です。アレルギーで使えない花がある場合は必ずお知らせください。カード決済と振込に対応しています。",
+                   "acc_2_title":  "季節のすすめ",
+                   "acc_2_body":  "春は枝もの、夏は涼しげな単色、秋は実もの、冬は葉と実のコントラストを多めに。週替わりの「小さな束」は価格を抑えた日替わりです。",
                    "works_section_name":  "メニュー",
-                   "works_heading":  "おすすめ",
-                   "works_lead":  "額装と、清潔な展示壁",
-                   "work_1_title":  "グループ展",
-                   "work_1_text":  "応募制",
-                   "work_2_title":  "個展枠",
-                   "work_2_text":  "スケジュール相談",
-                   "hours_text":  "11:00–18:00／火水休廊",
-                   "address_text":  "〇〇区ホワイトビル1F",
+                   "works_heading":  "よく頼まれるもの",
+                   "works_lead":  "手渡しから祝いまで",
+                   "work_1_title":  "テーブルアレンジ",
+                   "work_1_text":  "直径約25cm。食事の邪魔にならない高さ。器込み・持ち込み可。",
+                   "work_2_title":  "玄関のまとまり束",
+                   "work_2_text":  "高さのある花を中心に、左右のバランスを整えたスタンダードサイズ。",
                    "contact_section_name":  "ご連絡",
                    "contact_label":  "ご連絡",
-                   "contact_note_1":  "出展希望はフォームへ",
-                   "contact_note_2":  "11:00–18:00／火水休廊",
-                   "font_display":  "Zen Kaku Gothic New",
-                   "font_catch":  "Zen Kaku Gothic New",
-                   "font_body":  "Noto Sans JP"
+                   "contact_email":  "order@tabane-florist.example",
+                   "font_display":  "Zen Maru Gothic",
+                   "font_catch":  "Kiwi Maru",
+                   "font_body":  "M PLUS Rounded 1c",
+                   "access_text":  "最寄駅から徒歩5分。駐車場は近隣コインパーキングをご利用ください。",
+                   "work_3_title":  "束ね花店の定番",
+                   "work_3_text":  "店の空気が伝わる組み合わせ。詳細は来店時にご案内します。",
+                   "address_text":  "架空市花束通1-8-3 / 最寄駅から徒歩5分。駐車場は近隣コインパーキングをご利用ください。",
+                   "hours_text":  "月〜土 10:00–19:00／日曜・祝 10:00–17:00　／　最終受付は閉店30分前。混雑時はお待ちいただく場合があります。",
+                   "contact_note_1":  "ご予約・お問い合わせはメールにて。希望日時・人数・ご要望を書いてください。折り返しで空き状況とアクセスの補足をご案内します。",
+                   "contact_note_2":  "営業中は店頭優先のため返信が遅れることがあります。2営業日以内を目安にご連絡します。駐車・道順の質問も同アドレスで受け付けます。"
                },
     "confirmed":  {
                       "purpose":  true,
@@ -105,7 +103,50 @@
                   },
     "draftExtras":  {
                         "hours":  true,
-                        "access":  false,
-                        "address":  true
-                    }
+                        "address":  true,
+                        "access":  false
+                    },
+    "heroTextPlate":  "round",
+    "heroTextPlateTone":  "white",
+    "layoutOrder":  [
+                        "hero",
+                        "photos",
+                        "values",
+                        "contact",
+                        "accordions",
+                        "works",
+                        "hours",
+                        "address"
+                    ],
+    "itemLayouts":  {
+                        "about-photos":  {
+                                             "sizes":  [
+                                                           "L",
+                                                           "H",
+                                                           "H"
+                                                       ],
+                                             "gap":  "normal",
+                                             "sizePat":  "S6"
+                                         },
+                        "works-list":  {
+                                           "sizes":  [
+                                                         "L",
+                                                         "L",
+                                                         "L"
+                                                     ],
+                                           "gap":  "loose",
+                                           "sizePat":  "S1"
+                                       }
+                    },
+    "layoutRecipeNote":  "a photo=S6 works=S1 sizes=1",
+    "heroTextOnPhoto":  false,
+    "imagePaths":  {
+                       "work_2_image":  "sushi-samples/29-gallery-clinic-c/images/work-02.jpg?v=dense3",
+                       "about_image_2":  "sushi-samples/29-gallery-clinic-c/images/about-02.jpg?v=dense3",
+                       "hero_image":  "sushi-samples/29-gallery-clinic-c/images/hero.jpg?v=dense3",
+                       "work_1_image":  "sushi-samples/29-gallery-clinic-c/images/work-01.jpg?v=dense3",
+                       "about_image_3":  "sushi-samples/29-gallery-clinic-c/images/about-03.jpg?v=dense3",
+                       "about_image_1":  "sushi-samples/29-gallery-clinic-c/images/about-01.jpg?v=dense3",
+                       "work_3_image":  "sushi-samples/29-gallery-clinic-c/images/work-03.jpg?v=dense3"
+                   }
 }

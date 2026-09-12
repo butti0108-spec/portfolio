@@ -2,17 +2,6 @@
     "id":  "25",
     "folder":  "25-sweets-cafe-a",
     "band":  "A",
-    "layoutPattern":  "a",
-    "layoutOrder":  [
-                        "hero",
-                        "values",
-                        "accordions",
-                        "works",
-                        "photos",
-                        "hours",
-                        "address",
-                        "contact"
-                    ],
     "photoPack":  "P1",
     "headingPack":  "H4",
     "colorKey":  "brick",
@@ -23,22 +12,38 @@
                   "display":  "Sawarabi Gothic"
               },
     "scene":  "パン・小麦",
+    "status":  "text+images",
+    "layoutPattern":  "a",
+    "layoutOrder":  [
+                        "hero",
+                        "accordions",
+                        "values",
+                        "photos",
+                        "works",
+                        "hours",
+                        "access",
+                        "address",
+                        "contact"
+                    ],
     "counts":  {
-                   "hero-leads":  3,
+                   "hero-leads":  2,
                    "hero-values":  3,
                    "about-accordions":  2,
-                   "about-photos":  1,
-                   "works-list":  1
+                   "about-photos":  3,
+                   "works-list":  3
                },
     "extras":  {
                    "hours":  true,
-                   "access":  false,
+                   "access":  true,
                    "address":  true
                },
     "imageSlots":  [
                        "hero.jpg",
                        "about-01.jpg",
-                       "work-01.jpg"
-                   ],
-    "status":  "未着手"
+                       "about-02.jpg",
+                       "about-03.jpg",
+                       "work-01.jpg",
+                       "work-02.jpg",
+                       "work-03.jpg"
+                   ]
 }

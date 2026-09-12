@@ -1,25 +1,14 @@
 {
-    "version":  16,
+    "version":  17,
     "sushiSampleId":  "06",
     "sushiSampleKey":  "bakery-brick-a",
     "blurb":  "パン屋・横長・オレンジ・やわゴ",
-    "scene":  "パン・ガラスケース",
-    "savedAt":  "2026-09-07T21:16:12.9592808Z",
+    "scene":  "パン・ケース",
+    "savedAt":  "2026-09-08T17:08:15.9049766Z",
     "uiMode":  "self",
     "sitePurpose":  "shop",
     "siteColorMode":  "detail",
     "layoutPattern":  "a",
-    "layoutOrder":  [
-                        "hero",
-                        "values",
-                        "accordions",
-                        "photos",
-                        "works",
-                        "hours",
-                        "access",
-                        "address",
-                        "contact"
-                    ],
     "layoutSelected":  true,
     "layoutSchema":  2,
     "intakeDone":  true,
@@ -39,15 +28,15 @@
                         "bodyInk":  "#3a2418",
                         "contactInk":  "#fff8f0",
                         "valuesBg":  "#fffaf5",
-                        "heroInk":  "#8a3a10",
+                        "heroInk":  "#ffffff",
                         "chromeBg":  "#e07020"
                     },
     "draftCounts":  {
                         "hero-leads":  2,
-                        "hero-values":  2,
+                        "hero-values":  3,
                         "about-accordions":  1,
-                        "about-photos":  1,
-                        "works-list":  2
+                        "about-photos":  4,
+                        "works-list":  3
                     },
     "guidedImageUnlocked":  true,
     "guidedTextUnlocked":  true,
@@ -57,36 +46,45 @@
                   "display":  "Sawarabi Gothic"
               },
     "fields":  {
-                   "brand_name":  "レンガベーカリー",
-                   "hero_title":  "レンガベーカリー",
-                   "hero_lead_1":  "焼きたてを、毎日",
-                   "hero_lead_2":  "朝一番の香りをお届け",
-                   "value_1_title":  "焼きたて",
-                   "value_1_text":  "窯からすぐ並べます",
-                   "value_2_title":  "小麦",
-                   "value_2_text":  "産地を掲示しています",
-                   "about_section_name":  "お店",
-                   "about_heading":  "レンガベーカリー案内",
-                   "about_name":  "レンガベーカリー",
-                   "about_lead":  "焼きたてパンのベーカリーです。朝からガラスケースに並ぶパンを、その日の気分で選んでください。",
-                   "acc_1_title":  "こだわり",
-                   "acc_1_body":  "焼きたてパンのベーカリーです。朝からガラスケースに並ぶパンを、その日の気分で選んでください。",
-                   "works_section_name":  "メニュー",
-                   "works_heading":  "おすすめ",
-                   "works_lead":  "朝一番の香りをお届け",
-                   "work_1_title":  "食パン",
-                   "work_1_text":  "朝食用にスライス可",
-                   "work_2_title":  "ハード系",
-                   "work_2_text":  "外は香ばしく中はもち",
-                   "hours_text":  "7:30–15:00／売り切れ次第終了",
-                   "address_text":  "〇〇市本町5-2",
+                   "brand_name":  "レンガ窯パン 麦の窓",
+                   "hero_title":  "ケースの向こうで、パンが休む。",
+                   "hero_lead_1":  "焼きたてを並べたガラスケースと、小麦の匂いが残る店内。朝のうちにふわっとした食感のパンから硬いクラストまで、今日の種類を選べます。",
+                   "hero_lead_2":  "耳まで食べる前提の塩気と、翌日もトーストできる水分量を目指しています。",
+                   "hero_lead_3":  "",
+                   "value_1_title":  "ケースで選ぶ焼き立て",
+                   "value_1_text":  "食パン・総菜・菓子パンをゾーン分け。売り切れの棚は空のままにし、無理に補充しません。",
+                   "value_2_title":  "翌日もおいしい水分",
+                   "value_2_text":  "クラストは香ばしく、中はしっとり。冷蔵より常温の紙袋保存をおすすめしています。",
+                   "about_section_name":  "パン屋について",
+                   "about_heading":  "レンガの壁と、ガラスのケース",
+                   "about_name":  "レンガ窯パン 麦の窓",
+                   "about_lead":  "駅から一本入った通りの、レンガ調の小さな店です。イートインは窓際の立ち飲みスペースのみ。コーヒーはセルフのドリップを用意しています。小麦アレルギー対応の専用ラインはありません。",
+                   "acc_1_title":  "購入のヒント",
+                   "acc_1_body":  "開店直後は食パンが充実、昼過ぎは総菜パンが中心になります。予約は食パンのみ前日まで。現金と主要キャッシュレスに対応しています。",
+                   "acc_2_title":  "",
+                   "acc_2_body":  "",
+                   "works_section_name":  "ケースから",
+                   "works_heading":  "よくなくなる三種",
+                   "works_lead":  "売り切れ次第終了です。",
+                   "work_1_title":  "山型食パン（1.5斤）",
+                   "work_1_text":  "耳は香ばしく、中はふんわり。トースト向きの水分量です。",
+                   "work_2_title":  "チーズと黒胡椒のフォカッチャ",
+                   "work_2_text":  "昼食用。オリーブオイルを控えめにし、胡椒の香りを残しています。",
+                   "work_3_title":  "いちじくとくるみのカンパーニュ",
+                   "work_3_text":  "酸味のある生地にドライいちじく。薄く切ってチーズと合わせても。",
                    "contact_section_name":  "ご連絡",
                    "contact_label":  "ご連絡",
-                   "contact_note_1":  "予約パンは前日まで",
-                   "contact_note_2":  "7:30–15:00／売り切れ次第終了",
+                   "contact_email":  "info@mugi-no-mado.example",
                    "font_display":  "Sawarabi Gothic",
                    "font_catch":  "Sawarabi Gothic",
-                   "font_body":  "Zen Kaku Gothic New"
+                   "font_body":  "Zen Kaku Gothic New",
+                   "value_3_title":  "通いやすい距離感",
+                   "value_3_text":  "初めての方も、常連の方も同じペースで。短時間の立ち寄りにも使いやすい店づくりです。",
+                   "address_text":  "架空市レンガ区麦ノ窓 4-6-2 / 最寄駅から徒歩5分。駐車場は近隣コインパーキングをご利用ください。",
+                   "hours_text":  "火〜日 8:00–17:00（なくなり次第終了）　月曜定休　／　最終受付は閉店30分前。混雑時はお待ちいただく場合があります。",
+                   "access_text":  "最寄駅から徒歩5分。駐車場は近隣コインパーキングをご利用ください。 / Address: 架空市レンガ区麦ノ窓 4-6-2 / 最寄駅から徒歩5分。駐車場は近隣コインパーキングをご利用ください。",
+                   "contact_note_1":  "ご予約・お問い合わせはメールにて。希望日時・人数・ご要望を書いてください。折り返しで空き状況とアクセスの補足をご案内します。",
+                   "contact_note_2":  "営業中は店頭優先のため返信が遅れることがあります。2営業日以内を目安にご連絡します。駐車・道順の質問も同アドレスで受け付けます。"
                },
     "confirmed":  {
                       "purpose":  true,
@@ -105,7 +103,52 @@
                   },
     "draftExtras":  {
                         "hours":  true,
-                        "access":  false,
-                        "address":  true
-                    }
+                        "access":  true,
+                        "address":  false
+                    },
+    "heroTextPlate":  "round",
+    "heroTextPlateTone":  "white",
+    "heroTextOnPhoto":  false,
+    "layoutOrder":  [
+                        "hero",
+                        "photos",
+                        "works",
+                        "values",
+                        "accordions",
+                        "hours",
+                        "access",
+                        "contact"
+                    ],
+    "itemLayouts":  {
+                        "about-photos":  {
+                                             "sizes":  [
+                                                           "L",
+                                                           "L",
+                                                           "H",
+                                                           "H"
+                                                       ],
+                                             "gap":  "loose",
+                                             "sizePat":  "S5"
+                                         },
+                        "works-list":  {
+                                           "sizes":  [
+                                                         "L",
+                                                         "H",
+                                                         "H"
+                                                     ],
+                                           "gap":  "normal",
+                                           "sizePat":  "S6"
+                                       }
+                    },
+    "layoutRecipeNote":  "a photo=S5 works=S6 sizes=1",
+    "imagePaths":  {
+                       "about_image_4":  "sushi-samples/06-bakery-brick-a/images/about-04.jpg?v=dense4",
+                       "about_image_2":  "sushi-samples/06-bakery-brick-a/images/about-02.jpg?v=dense4",
+                       "hero_image":  "sushi-samples/06-bakery-brick-a/images/hero.jpg?v=dense4",
+                       "about_image_3":  "sushi-samples/06-bakery-brick-a/images/about-03.jpg?v=dense4",
+                       "work_2_image":  "sushi-samples/06-bakery-brick-a/images/work-02.jpg?v=dense4",
+                       "about_image_1":  "sushi-samples/06-bakery-brick-a/images/about-01.jpg?v=dense4",
+                       "work_3_image":  "sushi-samples/06-bakery-brick-a/images/work-03.jpg?v=dense4",
+                       "work_1_image":  "sushi-samples/06-bakery-brick-a/images/work-01.jpg?v=dense4"
+                   }
 }

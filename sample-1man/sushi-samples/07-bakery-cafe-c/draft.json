@@ -1,25 +1,14 @@
 {
-    "version":  16,
+    "version":  17,
     "sushiSampleId":  "07",
     "sushiSampleKey":  "bakery-cafe-c",
     "blurb":  "パン屋・混合・ベージュ・明朝",
-    "scene":  "小麦・朝光",
-    "savedAt":  "2026-09-07T21:16:12.9592808Z",
+    "scene":  "ラーメン・丼",
+    "savedAt":  "2026-09-08T17:08:19.7700966Z",
     "uiMode":  "self",
     "sitePurpose":  "shop",
     "siteColorMode":  "detail",
-    "layoutPattern":  "c",
-    "layoutOrder":  [
-                        "hero",
-                        "values",
-                        "accordions",
-                        "photos",
-                        "works",
-                        "hours",
-                        "access",
-                        "address",
-                        "contact"
-                    ],
+    "layoutPattern":  "a",
     "layoutSelected":  true,
     "layoutSchema":  2,
     "intakeDone":  true,
@@ -27,7 +16,7 @@
     "hubEntrySource":  "sample",
     "easyFlowActive":  false,
     "presetChosen":  true,
-    "chosenPresetKey":  "cafe",
+    "chosenPresetKey":  "ink",
     "draftColors":  {
                         "cardBg":  "#fff8ee",
                         "chromeInk":  "#fff6e8",
@@ -44,49 +33,58 @@
                     },
     "draftCounts":  {
                         "hero-leads":  2,
-                        "hero-values":  2,
+                        "hero-values":  3,
                         "about-accordions":  1,
-                        "about-photos":  1,
-                        "works-list":  2
+                        "about-photos":  3,
+                        "works-list":  3
                     },
     "guidedImageUnlocked":  true,
     "guidedTextUnlocked":  true,
     "fonts":  {
-                  "catch":  "Shippori Mincho",
-                  "body":  "Zen Kaku Gothic New",
-                  "display":  "Shippori Mincho"
+                  "catch":  "Yuji Syuku",
+                  "body":  "Sawarabi Gothic",
+                  "display":  "Yuji Syuku"
               },
     "fields":  {
-                   "brand_name":  "小麦の庭",
-                   "hero_title":  "小麦の庭",
-                   "hero_lead_1":  "朝の香りから始まる",
-                   "hero_lead_2":  "天然酵母とゆっくり発酵",
-                   "value_1_title":  "酵母",
-                   "value_1_text":  "自家培養を続けています",
-                   "value_2_title":  "喫茶",
-                   "value_2_text":  "パンと珈琲のセット",
-                   "about_section_name":  "お店",
-                   "about_heading":  "小麦の庭案内",
-                   "about_name":  "小麦の庭",
-                   "about_lead":  "天然酵母のパン屋です。発酵に時間をかけ、朝の光が入る店内でパンと珈琲を楽しめます。",
-                   "acc_1_title":  "こだわり",
-                   "acc_1_body":  "天然酵母のパン屋です。発酵に時間をかけ、朝の光が入る店内でパンと珈琲を楽しめます。",
-                   "works_section_name":  "メニュー",
-                   "works_heading":  "おすすめ",
-                   "works_lead":  "天然酵母とゆっくり発酵",
-                   "work_1_title":  "カンパーニュ",
-                   "work_1_text":  "外は香ばしく",
-                   "work_2_title":  "朝セット",
-                   "work_2_text":  "パン＋ドリップ",
-                   "hours_text":  "8:00–16:00／月曜定休",
-                   "address_text":  "〇〇町畑1-3",
+                   "brand_name":  "丼の湯気 麺場",
+                   "hero_title":  "丼から立ちのぼる、塩と脂の湯気。",
+                   "hero_lead_1":  "カウンター越しに見える寸胴と、熱い丼。醤油と鶏ガラを軸に、その日の脂の量だけを微調整する近所のラーメン店です。",
+                   "hero_lead_2":  "席は回転を意識しつつ、丼が冷める前に食べ切れるペースを大切にしています。",
+                   "hero_lead_3":  "",
+                   "value_1_title":  "湯気が残る提供",
+                   "value_1_text":  "麺は硬め指定にも対応。丼は温めてから盛り、最初の一口で香りが立つ温度を狙います。",
+                   "value_2_title":  "醤油の芯を守る",
+                   "value_2_text":  "派手なトッピングより、タレとスープの比率。香味油は卓上で足せる量に抑えています。",
+                   "value_3_title":  "昼も夜も同じ釜",
+                   "value_3_text":  "ランチと夜で味を分けず、同じ寸胴から提供。混雑時はお呼び出し番号で順番をお知らせします。",
+                   "about_section_name":  "お店について",
+                   "about_heading":  "暖簾の向こうの寸胴",
+                   "about_name":  "丼の湯気 麺場",
+                   "about_lead":  "商店街の突き当たり、のれんが低い店です。食券制で、トッピングは券売機のボタンから。替え玉は一回まで、スープの量が残っている方向けです。",
+                   "acc_1_title":  "初めての方へ",
+                   "acc_1_body":  "迷ったら醤油普通盛・麺かたさ普通。辛さの後載せは卓上の一味で調整できます。お子さま用の小さめ丼もあります。",
+                   "acc_2_title":  "待ち時間の目安",
+                   "acc_2_body":  "昼ピークは15〜25分ほど待つことがあります。テイクアウトはスープ別容器。閉店30分前までのご注文をお願いします。",
+                   "works_section_name":  "丼メニュー",
+                   "works_heading":  "よく頼まれる二杯",
+                   "works_lead":  "まずはここから。",
+                   "work_1_title":  "醤油らーめん",
+                   "work_1_text":  "鶏ガラ醤油。澄んだスープに、チャーシューは薄切り二枚。",
+                   "work_2_title":  "特製丼（味玉・海苔増し）",
+                   "work_2_text":  "味玉と海苔、メンマを足した定番。脂は普通で提供します。",
                    "contact_section_name":  "ご連絡",
                    "contact_label":  "ご連絡",
-                   "contact_note_1":  "店内イートインあり",
-                   "contact_note_2":  "8:00–16:00／月曜定休",
-                   "font_display":  "Shippori Mincho",
-                   "font_catch":  "Shippori Mincho",
-                   "font_body":  "Zen Kaku Gothic New"
+                   "contact_email":  "info@don-yuge.example",
+                   "font_display":  "Yuji Syuku",
+                   "font_catch":  "Yuji Syuku",
+                   "font_body":  "Sawarabi Gothic",
+                   "work_3_title":  "丼の湯気 麺場の定番",
+                   "work_3_text":  "店の空気が伝わる組み合わせ。詳細は来店時にご案内します。",
+                   "address_text":  "架空市湯気町どんぶり通り 9-1 / 最寄駅から徒歩5分。駐車場は近隣コインパーキングをご利用ください。",
+                   "access_text":  "最寄駅から徒歩5分。駐車場は近隣コインパーキングをご利用ください。 / Address: 架空市湯気町どんぶり通り 9-1 / 最寄駅から徒歩5分。駐車場は近隣コインパーキングをご利用ください。",
+                   "hours_text":  "月〜土 11:30–14:30／18:00–22:00（スープ切れ次第終了）　日曜定休　／　最終受付は閉店30分前。混雑時はお待ちいただく場合があります。",
+                   "contact_note_1":  "ご予約・お問い合わせはメールにて。希望日時・人数・ご要望を書いてください。折り返しで空き状況とアクセスの補足をご案内します。",
+                   "contact_note_2":  "営業中は店頭優先のため返信が遅れることがあります。2営業日以内を目安にご連絡します。駐車・道順の質問も同アドレスで受け付けます。"
                },
     "confirmed":  {
                       "purpose":  true,
@@ -105,7 +103,50 @@
                   },
     "draftExtras":  {
                         "hours":  true,
-                        "access":  false,
-                        "address":  true
-                    }
+                        "access":  true,
+                        "address":  false
+                    },
+    "heroTextPlate":  "round",
+    "heroTextPlateTone":  "white",
+    "heroTextOnPhoto":  false,
+    "layoutOrder":  [
+                        "hero",
+                        "values",
+                        "photos",
+                        "works",
+                        "hours",
+                        "access",
+                        "accordions",
+                        "contact"
+                    ],
+    "itemLayouts":  {
+                        "about-photos":  {
+                                             "sizes":  [
+                                                           "L",
+                                                           "H",
+                                                           "H"
+                                                       ],
+                                             "gap":  "normal",
+                                             "sizePat":  "S3"
+                                         },
+                        "works-list":  {
+                                           "sizes":  [
+                                                         "L",
+                                                         "H",
+                                                         "H"
+                                                     ],
+                                           "gap":  "loose",
+                                           "sizePat":  "S5"
+                                       }
+                    },
+    "layoutRecipeNote":  "a photo=S3 works=S5 sizes=1",
+    "imagePaths":  {
+                       "work_2_image":  "sushi-samples/07-bakery-cafe-c/images/work-02.jpg?v=dense4",
+                       "about_image_2":  "sushi-samples/07-bakery-cafe-c/images/about-02.jpg?v=dense4",
+                       "hero_image":  "sushi-samples/07-bakery-cafe-c/images/hero.jpg?v=dense4",
+                       "work_1_image":  "sushi-samples/07-bakery-cafe-c/images/work-01.jpg?v=dense4",
+                       "about_image_3":  "sushi-samples/07-bakery-cafe-c/images/about-03.jpg?v=dense4",
+                       "about_image_1":  "sushi-samples/07-bakery-cafe-c/images/about-01.jpg?v=dense4",
+                       "work_3_image":  "sushi-samples/07-bakery-cafe-c/images/work-03.jpg?v=dense4"
+                   }
 }

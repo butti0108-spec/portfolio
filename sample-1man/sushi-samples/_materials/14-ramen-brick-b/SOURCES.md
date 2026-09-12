@@ -1,5 +1,6 @@
-﻿# 写真出典 — 14-ramen-brick-b
+﻿# Image sources 窶・14-ramen-brick-b
 
-| ファイル | サイト | 作者 | URL | ライセンス | メモ |
-|----------|--------|------|-----|------------|------|
-| hero.jpg | | | | | |
+Theme: gallery | Unique lock assignment (no reuse across 30 samples)
+
+| file | source | key |
+|------|--------|-----|

@@ -1,25 +1,14 @@
 {
-    "version":  16,
+    "version":  17,
     "sushiSampleId":  "08",
     "sushiSampleKey":  "bar-ink-b",
     "blurb":  "バー・左右・墨・筆風",
-    "scene":  "暗がり・グラス",
-    "savedAt":  "2026-09-07T21:16:12.9592808Z",
+    "scene":  "宿・客室",
+    "savedAt":  "2026-09-08T17:08:22.5980399Z",
     "uiMode":  "self",
     "sitePurpose":  "shop",
     "siteColorMode":  "detail",
-    "layoutPattern":  "b",
-    "layoutOrder":  [
-                        "hero",
-                        "values",
-                        "accordions",
-                        "photos",
-                        "works",
-                        "hours",
-                        "access",
-                        "address",
-                        "contact"
-                    ],
+    "layoutPattern":  "a",
     "layoutSelected":  true,
     "layoutSchema":  2,
     "intakeDone":  true,
@@ -27,7 +16,7 @@
     "hubEntrySource":  "sample",
     "easyFlowActive":  false,
     "presetChosen":  true,
-    "chosenPresetKey":  "ink",
+    "chosenPresetKey":  "cafe",
     "draftColors":  {
                         "cardBg":  "#1f2424",
                         "chromeInk":  "#f5f5f5",
@@ -44,49 +33,58 @@
                     },
     "draftCounts":  {
                         "hero-leads":  2,
-                        "hero-values":  2,
+                        "hero-values":  3,
                         "about-accordions":  1,
-                        "about-photos":  1,
-                        "works-list":  2
+                        "about-photos":  3,
+                        "works-list":  3
                     },
     "guidedImageUnlocked":  true,
     "guidedTextUnlocked":  true,
     "fonts":  {
-                  "catch":  "Yuji Syuku",
-                  "body":  "Sawarabi Gothic",
-                  "display":  "Yuji Syuku"
+                  "catch":  "Shippori Mincho",
+                  "body":  "Zen Kaku Gothic New",
+                  "display":  "Shippori Mincho"
               },
     "fields":  {
-                   "brand_name":  "夜咄バー",
-                   "hero_title":  "夜咄バー",
-                   "hero_lead_1":  "静かな夜の会話",
-                   "hero_lead_2":  "クラシックカクテルと暗がり",
-                   "value_1_title":  "カクテル",
-                   "value_1_text":  "定番を丁寧に",
-                   "value_2_title":  "席",
-                   "value_2_text":  "カウンター中心",
-                   "about_section_name":  "お店",
-                   "about_heading":  "夜咄バー案内",
-                   "about_name":  "夜咄バー",
-                   "about_lead":  "静かなバーです。クラシックカクテルを中心に、お客さまの好みに合わせて一杯ずつ作ります。",
-                   "acc_1_title":  "こだわり",
-                   "acc_1_body":  "静かなバーです。クラシックカクテルを中心に、お客さまの好みに合わせて一杯ずつ作ります。",
-                   "works_section_name":  "メニュー",
-                   "works_heading":  "おすすめ",
-                   "works_lead":  "クラシックカクテルと暗がり",
-                   "work_1_title":  "シグネチャー",
-                   "work_1_text":  "店主おまかせ",
-                   "work_2_title":  "ウイスキー",
-                   "work_2_text":  "少量から楽しめます",
-                   "hours_text":  "19:00–翌2:00／日曜定休",
-                   "address_text":  "〇〇市裏通りB1",
+                   "brand_name":  "客室宿 ひなた畳",
+                   "hero_title":  "窓辺の光が、客室の主役。",
+                   "hero_lead_1":  "布団の白と木の床だけを残した、小さな宿。チェックイン後は廊下の足音も少なく、部屋でゆっくり休める静けさを売っています。",
+                   "hero_lead_2":  "食事は朝のみ。近所のパンとコーヒーを、部屋の小さなテーブルへ運びます。",
+                   "hero_lead_3":  "",
+                   "value_1_title":  "客室は光と余白",
+                   "value_1_text":  "テレビは置かず、カーテンは薄い一枚。朝日で自然に目が覚める明るさを大切にしています。",
+                   "value_2_title":  "朝だけの控えめな膳",
+                   "value_2_text":  "ごはん派とパン派を選べる簡易朝食。アレルギーは予約時に一言ください。",
+                   "about_section_name":  "宿について",
+                   "about_heading":  "通りから一歩入った、四室の宿",
+                   "about_name":  "客室宿 ひなた畳",
+                   "about_lead":  "全四室の小さな宿です。大浴場はなく、各室にシャワー付き洗面。チェックインは15時以降、フロントは夕方まで。鍵はスマートロックで、遅い到着にも対応します。",
+                   "acc_1_title":  "ご滞在の流れ",
+                   "acc_1_body":  "予約確定後に入室用コードをお送りします。荷物の預かりはフロント営業時間内のみ。近隣にコインパーキングがあります（提携割引なし）。",
+                   "acc_2_title":  "",
+                   "acc_2_body":  "",
+                   "works_section_name":  "客室タイプ",
+                   "works_heading":  "選べる部屋",
+                   "works_lead":  "いずれも禁煙です。",
+                   "work_1_title":  "ひなた和室（二名まで）",
+                   "work_1_text":  "畳敷きに低いテーブル。窓は南向きで、午前中がいちばん明るい部屋です。",
+                   "work_2_title":  "庭側の静かな部屋",
+                   "work_2_text":  "朝の光が長く入る客室。読書と仮眠向けの静かな配置です。",
+                   "hours_text":  "チェックイン 15:00–20:00／チェックアウト 10:00　通年（不定休・カレンダー確認）",
+                   "address_text":  "架空市ひなた区畳小路 7-3",
                    "contact_section_name":  "ご連絡",
                    "contact_label":  "ご連絡",
-                   "contact_note_1":  "予約席は電話で",
-                   "contact_note_2":  "19:00–翌2:00／日曜定休",
-                   "font_display":  "Yuji Syuku",
-                   "font_catch":  "Yuji Syuku",
-                   "font_body":  "Sawarabi Gothic"
+                   "contact_email":  "stay@hinata-tatami.example",
+                   "contact_note_1":  "ご予約・到着が遅れる場合はメールで。人数と泊数を明記してください。",
+                   "contact_note_2":  "キャンセル規定は返信メールに記載します。",
+                   "font_display":  "Shippori Mincho",
+                   "font_catch":  "Shippori Mincho",
+                   "font_body":  "Zen Kaku Gothic New",
+                   "access_text":  "最寄駅から徒歩5分。駐車場は近隣コインパーキングをご利用ください。",
+                   "value_3_title":  "通いやすい距離感",
+                   "value_3_text":  "初めての方も、常連の方も同じペースで。短時間の立ち寄りにも使いやすい店づくりです。",
+                   "work_3_title":  "客室宿 ひなた畳の定番",
+                   "work_3_text":  "店の空気が伝わる組み合わせ。詳細は来店時にご案内します。"
                },
     "confirmed":  {
                       "purpose":  true,
@@ -105,7 +103,51 @@
                   },
     "draftExtras":  {
                         "hours":  true,
-                        "access":  false,
-                        "address":  true
-                    }
+                        "address":  true,
+                        "access":  true
+                    },
+    "layoutOrder":  [
+                        "hero",
+                        "values",
+                        "accordions",
+                        "photos",
+                        "works",
+                        "hours",
+                        "address",
+                        "access",
+                        "contact"
+                    ],
+    "itemLayouts":  {
+                        "about-photos":  {
+                                             "sizes":  [
+                                                           "H",
+                                                           "H",
+                                                           "L"
+                                                       ],
+                                             "gap":  "normal",
+                                             "sizePat":  "S2"
+                                         },
+                        "works-list":  {
+                                           "sizes":  [
+                                                         "L",
+                                                         "H",
+                                                         "H"
+                                                     ],
+                                           "gap":  "normal",
+                                           "sizePat":  "S6"
+                                       }
+                    },
+    "layoutRecipeNote":  "a photo=S2 works=S6 sizes=1",
+    "heroTextOnPhoto":  true,
+    "heroTextPlate":  "none",
+    "heroTextPlateTone":  "white",
+    "imagePaths":  {
+                       "work_2_image":  "sushi-samples/08-bar-ink-b/images/work-02.jpg?v=dense3",
+                       "about_image_2":  "sushi-samples/08-bar-ink-b/images/about-02.jpg?v=dense3",
+                       "hero_image":  "sushi-samples/08-bar-ink-b/images/hero.jpg?v=dense3",
+                       "work_1_image":  "sushi-samples/08-bar-ink-b/images/work-01.jpg?v=dense3",
+                       "about_image_3":  "sushi-samples/08-bar-ink-b/images/about-03.jpg?v=dense3",
+                       "about_image_1":  "sushi-samples/08-bar-ink-b/images/about-01.jpg?v=dense3",
+                       "work_3_image":  "sushi-samples/08-bar-ink-b/images/work-03.jpg?v=dense3"
+                   }
 }

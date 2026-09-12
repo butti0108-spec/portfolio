@@ -1,48 +1,85 @@
 (() => {
   const params = new URLSearchParams(window.location.search);
   const fromOrder = params.get("return") === "order";
-  const hash = (window.location.hash || "").replace(/^#/, "");
+  const SECTION_IDS = ["start", "why", "scope", "faq", "zip", "hub", "copy", "images", "look"];
 
   const stickyBack = document.getElementById("help-back-sticky");
   const footBack = document.getElementById("help-back-foot");
+  const home = document.getElementById("help-home");
 
-  if (stickyBack) {
-    stickyBack.hidden = fromOrder;
-  }
-  if (footBack) {
-    footBack.hidden = fromOrder;
-  }
+  if (stickyBack) stickyBack.hidden = fromOrder;
+  if (footBack) footBack.hidden = fromOrder;
 
   document.querySelectorAll(".help-back-local").forEach((link) => {
     link.hidden = !fromOrder;
   });
 
-  function openSection(id) {
-    if (!id) return null;
-    const section = document.getElementById(id);
-    if (!section) return null;
-    if (section.classList.contains("help-section")) {
-      section.open = true;
-      return section;
-    }
-    const parent = section.closest(".help-section");
-    if (parent) parent.open = true;
-    return section;
+  function resolveSectionId(id) {
+    if (!id || id === "help-toc" || id === "help-home" || id === "help-search") return null;
+    if (SECTION_IDS.indexOf(id) >= 0) return id;
+    const el = document.getElementById(id);
+    if (!el) return null;
+    const section = el.closest(".help-section");
+    return section && section.id ? section.id : null;
   }
 
-  function scrollToId(id) {
-    const target = openSection(id);
-    if (!target) return;
-    requestAnimationFrame(() => {
-      target.scrollIntoView({ behavior: "smooth", block: "start" });
+  function showHome() {
+    document.body.classList.remove("help-topic-open");
+    if (home) home.hidden = false;
+    document.querySelectorAll(".help-section").forEach((section) => {
+      section.hidden = true;
     });
+    document.querySelectorAll(".help-toc-card").forEach((card) => {
+      card.classList.remove("is-active");
+    });
+    window.scrollTo({ top: 0, behavior: "smooth" });
   }
 
-  if (hash) scrollToId(hash);
+  function showTopic(id) {
+    const sectionId = resolveSectionId(id);
+    if (!sectionId) {
+      showHome();
+      return null;
+    }
+    document.body.classList.add("help-topic-open");
+    if (home) home.hidden = true;
+    let target = null;
+    document.querySelectorAll(".help-section").forEach((section) => {
+      const on = section.id === sectionId;
+      section.hidden = !on;
+      if (on) target = section;
+    });
+    document.querySelectorAll(".help-toc-card").forEach((card) => {
+      card.classList.toggle("is-active", card.getAttribute("data-help-nav") === sectionId);
+    });
+    requestAnimationFrame(() => {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+      if (id !== sectionId) {
+        const chunk = document.getElementById(id);
+        if (chunk) chunk.scrollIntoView({ behavior: "smooth", block: "start" });
+      }
+    });
+    return target;
+  }
 
-  window.addEventListener("hashchange", () => {
-    const next = (window.location.hash || "").replace(/^#/, "");
-    scrollToId(next);
+  function applyHash() {
+    const raw = (window.location.hash || "").replace(/^#/, "");
+    if (!raw || raw === "help-toc" || raw === "help-home") {
+      showHome();
+      return;
+    }
+    showTopic(raw);
+  }
+
+  applyHash();
+  window.addEventListener("hashchange", applyHash);
+
+  document.querySelectorAll(".help-back-toc").forEach((link) => {
+    link.addEventListener("click", (ev) => {
+      ev.preventDefault();
+      history.pushState(null, "", "#help-toc");
+      showHome();
+    });
   });
 
   function normalize(text) {
@@ -55,7 +92,8 @@
 
   function entryText(el) {
     const title =
-      (el.querySelector(".help-chunk-title") || el.querySelector("summary") || {}).textContent || "";
+      (el.querySelector(".help-chunk-title") || el.querySelector(".help-panel-title") || {}).textContent ||
+      "";
     const keywords = el.getAttribute("data-help-keywords") || "";
     const body = el.textContent || "";
     return normalize(title + " " + keywords + " " + body);
@@ -63,23 +101,23 @@
 
   const entries = [];
   document.querySelectorAll(".help-section").forEach((section) => {
-    const summary = section.querySelector("summary");
+    const titleEl = section.querySelector(".help-panel-title");
     entries.push({
       id: section.id,
-      label: summary ? summary.textContent.trim() : section.id,
+      label: titleEl ? titleEl.textContent.trim() : section.id,
       kind: "section",
       hay: entryText(section)
     });
     section.querySelectorAll(".help-chunk[id], .help-chunk[data-help-keywords]").forEach((chunk, idx) => {
-      const titleEl = chunk.querySelector(".help-chunk-title");
-      const label = titleEl ? titleEl.textContent.trim() : "項目";
+      const chunkTitle = chunk.querySelector(".help-chunk-title");
+      const label = chunkTitle ? chunkTitle.textContent.trim() : "項目";
       const id = chunk.id || section.id + "-chunk-" + idx;
       if (!chunk.id) chunk.id = id;
       entries.push({
         id,
-        label: (summary ? summary.textContent.trim() + " ／ " : "") + label,
+        label: (titleEl ? titleEl.textContent.trim() + " ／ " : "") + label,
         kind: "chunk",
-        hay: entryText(chunk) + " " + normalize(summary ? summary.textContent : "")
+        hay: entryText(chunk) + " " + normalize(titleEl ? titleEl.textContent : "")
       });
     });
   });
@@ -126,7 +164,7 @@
       a.addEventListener("click", (ev) => {
         ev.preventDefault();
         history.pushState(null, "", "#" + item.id);
-        scrollToId(item.id);
+        showTopic(item.id);
       });
       li.appendChild(a);
       results.appendChild(li);

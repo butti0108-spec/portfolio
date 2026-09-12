@@ -1,5 +1,4 @@
-﻿# メモ — 17-yoga-sakura-b
+﻿# NOTES 17-yoga-sakura-b
 
-- 帯: N / ABC: a / P2 / H3
-- 世界観: バー・ボトル
-- 採用判断:
+- review round reset 2026-09-09 (complete pack for human review)
+- [2026-09-10 00:16] approve

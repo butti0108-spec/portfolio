@@ -1,5 +1,6 @@
-﻿# 写真出典 — 10-clinic-green-a
+﻿# Image sources 窶・10-clinic-green-a
 
-| ファイル | サイト | 作者 | URL | ライセンス | メモ |
-|----------|--------|------|-----|------------|------|
-| hero.jpg | | | | | |
+Theme: izakaya | Unique lock assignment (no reuse across 30 samples)
+
+| file | source | key |
+|------|--------|-----|

@@ -1,5 +1,5 @@
-﻿# メモ — 01-cafe-warm-a
+﻿# NOTES 01-cafe-warm-a
 
-- 帯: N / ABC: a / P1 / H3
-- 世界観: カフェ・朝・木目
-- 採用判断:
+- review round reset 2026-09-09 (complete pack for human review)
+- [2026-09-09 21:43] fix / 文字が溶けて読めない（色） / note: ヒーロー画像
+- [2026-09-10 00:09] approve

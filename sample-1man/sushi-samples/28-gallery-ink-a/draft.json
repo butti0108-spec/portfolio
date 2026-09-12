@@ -1,25 +1,14 @@
 {
-    "version":  16,
+    "version":  17,
     "sushiSampleId":  "28",
     "sushiSampleKey":  "gallery-ink-a",
     "blurb":  "ギャラリー・横長・墨・明朝",
-    "scene":  "余白・作品壁",
-    "savedAt":  "2026-09-07T21:16:12.9592808Z",
+    "scene":  "ヨガ・スタジオ",
+    "savedAt":  "2026-09-08T17:09:24.5232441Z",
     "uiMode":  "self",
     "sitePurpose":  "shop",
     "siteColorMode":  "detail",
     "layoutPattern":  "a",
-    "layoutOrder":  [
-                        "hero",
-                        "values",
-                        "accordions",
-                        "photos",
-                        "works",
-                        "hours",
-                        "access",
-                        "address",
-                        "contact"
-                    ],
     "layoutSelected":  true,
     "layoutSchema":  2,
     "intakeDone":  true,
@@ -27,7 +16,7 @@
     "hubEntrySource":  "sample",
     "easyFlowActive":  false,
     "presetChosen":  true,
-    "chosenPresetKey":  "ink",
+    "chosenPresetKey":  "green",
     "draftColors":  {
                         "cardBg":  "#1f2424",
                         "chromeInk":  "#f5f5f5",
@@ -44,49 +33,58 @@
                     },
     "draftCounts":  {
                         "hero-leads":  2,
-                        "hero-values":  2,
+                        "hero-values":  3,
                         "about-accordions":  1,
-                        "about-photos":  1,
-                        "works-list":  2
+                        "about-photos":  3,
+                        "works-list":  3
                     },
     "guidedImageUnlocked":  true,
     "guidedTextUnlocked":  true,
     "fonts":  {
-                  "catch":  "Shippori Mincho",
+                  "catch":  "Sawarabi Gothic",
                   "body":  "Zen Kaku Gothic New",
-                  "display":  "Shippori Mincho"
+                  "display":  "Sawarabi Gothic"
               },
     "fields":  {
-                   "brand_name":  "余白ギャラリー",
-                   "hero_title":  "余白ギャラリー",
-                   "hero_lead_1":  "作品と静かに",
-                   "hero_lead_2":  "余白のある展示空間",
-                   "value_1_title":  "展示",
-                   "value_1_text":  "一点一点に余白を",
-                   "value_2_title":  "企画",
-                   "value_2_text":  "月替わりのテーマ",
-                   "about_section_name":  "お店",
-                   "about_heading":  "余白ギャラリー案内",
-                   "about_name":  "余白ギャラリー",
-                   "about_lead":  "作品と静かに向き合うギャラリーです。企画展を中心に、余白を活かした展示空間を整えています。",
-                   "acc_1_title":  "こだわり",
-                   "acc_1_body":  "作品と静かに向き合うギャラリーです。企画展を中心に、余白を活かした展示空間を整えています。",
-                   "works_section_name":  "メニュー",
-                   "works_heading":  "おすすめ",
-                   "works_lead":  "余白のある展示空間",
-                   "work_1_title":  "企画展",
-                   "work_1_text":  "会期と作家紹介",
-                   "work_2_title":  "販売",
-                   "work_2_text":  "作品により対応",
-                   "hours_text":  "12:00–19:00／月曜休廊",
-                   "address_text":  "〇〇市倉庫ギャラリー",
+                   "brand_name":  "葉音ヨガスタジオ",
+                   "hero_title":  "葉音のなかで、呼吸を戻す。",
+                   "hero_lead_1":  "葉音ヨガスタジオは、呼吸を戻すための小さな教室。フローはゆっくりめで、初心者でも追いつけます。",
+                   "hero_lead_2":  "マットレンタルあり。初めての方は体験クラスから。水分補給の休憩をこまめに入れます。",
+                   "hero_lead_3":  "",
+                   "value_1_title":  "光のある部屋",
+                   "value_1_text":  "大きな窓と観葉植物。直射はレースで抑え、朝クラスは明るく、夜クラスは間接照明に切り替えます。",
+                   "value_2_title":  "少人数クラス",
+                   "value_2_text":  "マットは最大八枚。初心者でも講師の声が届く距離感で、無理なポーズは代替を提案します。",
+                   "about_section_name":  "スタジオについて",
+                   "about_heading":  "呼吸のための小さな教室",
+                   "about_name":  "葉音ヨガスタジオ",
+                   "about_lead":  "マンションの一室を改装したヨガスタジオです。ハタヨガとリラックス系を中心に、週ごとのスケジュールで開講。派手な音楽や競技的な流れは控え、日常の疲れをほどく時間にしています。",
+                   "acc_1_title":  "はじめての方へ",
+                   "acc_1_body":  "動きやすい服と水分をご持参ください。マットレンタルあり。初回は体験枠で予約を。妊娠中・けがのある方は事前にメールで状態を書いてください。更衣室とシャワーは簡易です。",
+                   "acc_2_title":  "",
+                   "acc_2_body":  "",
+                   "works_section_name":  "クラス",
+                   "works_heading":  "主なクラス",
+                   "works_lead":  "マットと呼吸から",
+                   "work_1_title":  "朝のリセット",
+                   "work_1_text":  "60分。呼吸と軽い流れ。出勤前の方に。",
+                   "work_2_title":  "夜のリラックス",
+                   "work_2_text":  "75分。ストレッチ多め。寝る前の緊張ほぐし。",
+                   "address_text":  "架空市葉音町4-7-2 201",
                    "contact_section_name":  "ご連絡",
                    "contact_label":  "ご連絡",
-                   "contact_note_1":  "取材・貸出はメールで",
-                   "contact_note_2":  "12:00–19:00／月曜休廊",
-                   "font_display":  "Shippori Mincho",
-                   "font_catch":  "Shippori Mincho",
-                   "font_body":  "Zen Kaku Gothic New"
+                   "contact_email":  "class@haoto-yoga.example",
+                   "contact_note_1":  "体験・定期の申し込みはメールで。希望クラス名を書いてください。",
+                   "contact_note_2":  "キャンセルは前日20時まで。",
+                   "font_display":  "Sawarabi Gothic",
+                   "font_catch":  "Sawarabi Gothic",
+                   "font_body":  "Zen Kaku Gothic New",
+                   "access_text":  "最寄駅から徒歩5分。駐車場は近隣コインパーキングをご利用ください。",
+                   "value_3_title":  "通いやすい距離感",
+                   "value_3_text":  "初めての方も、常連の方も同じペースで。短時間の立ち寄りにも使いやすい店づくりです。",
+                   "work_3_title":  "葉音ヨガスタジオの定番",
+                   "work_3_text":  "店の空気が伝わる組み合わせ。詳細は来店時にご案内します。",
+                   "hours_text":  "クラスにより変動（目安 7:00–21:00）／水曜休館　／　最終受付は閉店30分前。"
                },
     "confirmed":  {
                       "purpose":  true,
@@ -105,7 +103,51 @@
                   },
     "draftExtras":  {
                         "hours":  true,
-                        "access":  false,
-                        "address":  true
-                    }
+                        "address":  true,
+                        "access":  true
+                    },
+    "heroTextPlate":  "round",
+    "heroTextPlateTone":  "white",
+    "layoutOrder":  [
+                        "hero",
+                        "values",
+                        "photos",
+                        "works",
+                        "hours",
+                        "access",
+                        "address",
+                        "contact",
+                        "accordions"
+                    ],
+    "itemLayouts":  {
+                        "about-photos":  {
+                                             "sizes":  [
+                                                           "L",
+                                                           "L",
+                                                           "L"
+                                                       ],
+                                             "gap":  "loose",
+                                             "sizePat":  "S1"
+                                         },
+                        "works-list":  {
+                                           "sizes":  [
+                                                         "L",
+                                                         "H",
+                                                         "H"
+                                                     ],
+                                           "gap":  "normal",
+                                           "sizePat":  "S6"
+                                       }
+                    },
+    "layoutRecipeNote":  "a photo=S1 works=S6 sizes=1",
+    "heroTextOnPhoto":  false,
+    "imagePaths":  {
+                       "work_2_image":  "sushi-samples/28-gallery-ink-a/images/work-02.jpg?v=dense3",
+                       "about_image_2":  "sushi-samples/28-gallery-ink-a/images/about-02.jpg?v=dense3",
+                       "hero_image":  "sushi-samples/28-gallery-ink-a/images/hero.jpg?v=dense3",
+                       "work_1_image":  "sushi-samples/28-gallery-ink-a/images/work-01.jpg?v=dense3",
+                       "about_image_3":  "sushi-samples/28-gallery-ink-a/images/about-03.jpg?v=dense3",
+                       "about_image_1":  "sushi-samples/28-gallery-ink-a/images/about-01.jpg?v=dense3",
+                       "work_3_image":  "sushi-samples/28-gallery-ink-a/images/work-03.jpg?v=dense3"
+                   }
 }

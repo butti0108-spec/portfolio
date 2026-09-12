@@ -14,12 +14,26 @@
 
 ルートの `manifest.json` は寿司UIが読む一覧です。
 
+## レビューダッシュ（簡素）
+
+- 開き方: 静的サーバ起動後  
+  `http://127.0.0.1:PORT/sample-1man/review-dash/index.html`  
+- 見栄えだけ見て **承認 / NG**（詳細ルールは `_plot/quality-bar.md`）  
+- スカスカだけでは落とさない。厚化後に再判定。調整は製品手数のみ  
+- 承認: 全体PNGを `NN/preview.png` と `_sales/packs/NN/` へ保存、STATUS を「営業格納」  
+- NG: 保存PNGを消し、STATUS を「NG」  
+- 似てるかどうかの見比べは、候補がそろってから（後段）  
+- 見栄え確認: **確認（読む）**＝実寸で文字が読める／**撮影（全体）**＝縮小フィット（承認スクショ用）  
+- 既定は確認モード。Ctrl+F5 で開き直す  
+- **NG**: 理由を複数選択＋要修正／本NG＋一言メモ → STATUSメモ列と `_materials/NN/NOTES.md`  
+- **2026-09-09**: 確認/撮影モード＋業種テーマ画像＋NG理由ダイアログ
+
 ## 状態の流れ（1件ずつ）
 
 1. `_plot` の行を確認  
-2. `_materials/NN-…/` に文面・写真を揃える  
-3. `NN-…/draft.json` に反映してプレビュー確認  
-4. 採用したら `preview.png` を置き、`_sales/packs/NN-…/` へコピー  
+2. （任意）`_materials/NN-…/` に文面・写真  
+3. `NN-…/draft.json` をプレビュー（レビューダッシュ可）  
+4. 承認したら `preview.png` ＋ `_sales`  
 5. `_materials/STATUS.md` を更新  
 
 ## 置かないもの

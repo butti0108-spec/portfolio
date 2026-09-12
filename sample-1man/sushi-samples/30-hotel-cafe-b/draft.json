@@ -1,25 +1,14 @@
 {
-    "version":  16,
+    "version":  17,
     "sushiSampleId":  "30",
     "sushiSampleKey":  "hotel-cafe-b",
     "blurb":  "宿・左右・ベージュ・明朝",
-    "scene":  "客室・朝",
-    "savedAt":  "2026-09-07T21:16:12.9592808Z",
+    "scene":  "ギャラリー・額",
+    "savedAt":  "2026-09-08T17:09:29.1674957Z",
     "uiMode":  "self",
     "sitePurpose":  "shop",
     "siteColorMode":  "detail",
-    "layoutPattern":  "b",
-    "layoutOrder":  [
-                        "hero",
-                        "values",
-                        "accordions",
-                        "photos",
-                        "works",
-                        "hours",
-                        "access",
-                        "address",
-                        "contact"
-                    ],
+    "layoutPattern":  "a",
     "layoutSelected":  true,
     "layoutSchema":  2,
     "intakeDone":  true,
@@ -27,7 +16,7 @@
     "hubEntrySource":  "sample",
     "easyFlowActive":  false,
     "presetChosen":  true,
-    "chosenPresetKey":  "cafe",
+    "chosenPresetKey":  "brick",
     "draftColors":  {
                         "cardBg":  "#fff8ee",
                         "chromeInk":  "#fff6e8",
@@ -44,10 +33,10 @@
                     },
     "draftCounts":  {
                         "hero-leads":  2,
-                        "hero-values":  2,
+                        "hero-values":  3,
                         "about-accordions":  1,
-                        "about-photos":  1,
-                        "works-list":  2
+                        "about-photos":  3,
+                        "works-list":  3
                     },
     "guidedImageUnlocked":  true,
     "guidedTextUnlocked":  true,
@@ -57,36 +46,45 @@
                   "display":  "Shippori Mincho"
               },
     "fields":  {
-                   "brand_name":  "朝霧の宿",
-                   "hero_title":  "朝霧の宿",
-                   "hero_lead_1":  "ゆっくり泊まる",
-                   "hero_lead_2":  "朝の光が入る客室",
-                   "value_1_title":  "少室",
-                   "value_1_text":  "静かに過ごせる人数",
-                   "value_2_title":  "朝",
-                   "value_2_text":  "朝食は地元食材",
-                   "about_section_name":  "お店",
-                   "about_heading":  "朝霧の宿案内",
-                   "about_name":  "朝霧の宿",
-                   "about_lead":  "少室数の小さな宿です。朝霧の見える客室で、ゆっくり泊まる時間を大切にしています。",
-                   "acc_1_title":  "こだわり",
-                   "acc_1_body":  "少室数の小さな宿です。朝霧の見える客室で、ゆっくり泊まる時間を大切にしています。",
-                   "works_section_name":  "メニュー",
-                   "works_heading":  "おすすめ",
-                   "works_lead":  "朝の光が入る客室",
-                   "work_1_title":  "素泊まり",
-                   "work_1_text":  "客室のみ",
-                   "work_2_title":  "朝食付き",
-                   "work_2_text":  "朝霧の時間に",
-                   "hours_text":  "チェックイン 15:00–／アウト 10:00",
-                   "address_text":  "〇〇郡朝霧高原",
+                   "brand_name":  "額縁ギャラリー灯",
+                   "hero_title":  "額縁の灯が、作品の距離を縮める。",
+                   "hero_lead_1":  "額縁ギャラリー灯は、作品との距離を縮める小さな展示空間。一点ずつ、灯りと余白で見せます。",
+                   "hero_lead_2":  "企画展は月替わり。購入・貸し出しの相談はメールで。静かに見る時間を大切にしています。",
+                   "hero_lead_3":  "",
+                   "value_1_title":  "額と余白",
+                   "value_1_text":  "展示は詰め込みません。一点ごとに十分な余白を取り、額縁の太さと壁の白が競わない距離を測って掛けます。",
+                   "value_2_title":  "見るための静けさ",
+                   "value_2_text":  "案内は短く、説明文はキャプション程度。音声ガイドはなく、自分のペースで回れる広さです。",
+                   "about_section_name":  "ギャラリーについて",
+                   "about_heading":  "額縁のある小さな展示室",
+                   "about_name":  "額縁ギャラリー灯",
+                   "about_lead":  "路地裏の一室をギャラリーにした空間です。絵画・写真・小さな立体まで、額装された作品を中心に展示します。販売も行いますが、押し売りはせず、気になった一点だけを持ち帰れる空気を大切にしています。",
+                   "acc_1_title":  "展覧会と購入",
+                   "acc_1_body":  "企画展はおおむね三週間交代。オープニングは週末の午後のみ。購入希望は受付で在庫と価格を確認できます。作家へのメッセージはノートに残せます。撮影は作品により可否が異なります。",
+                   "acc_2_title":  "",
+                   "acc_2_body":  "",
+                   "works_section_name":  "展示",
+                   "works_heading":  "いま見られるもの",
+                   "works_lead":  "壁の額から",
+                   "work_1_title":  "企画展（入れ替え）",
+                   "work_1_text":  "絵画・写真を中心に、三点〜八点程度。詳細は店頭とメール案内。",
+                   "work_2_title":  "月替わり小品コーナー",
+                   "work_2_text":  "企画展とは別に、小さな作品を気軽に見られるコーナーです。",
                    "contact_section_name":  "ご連絡",
                    "contact_label":  "ご連絡",
-                   "contact_note_1":  "予約は公式または電話",
-                   "contact_note_2":  "チェックイン 15:00–／アウト 10:00",
+                   "contact_email":  "hello@gakubuchi-gallery.example",
                    "font_display":  "Shippori Mincho",
                    "font_catch":  "Shippori Mincho",
-                   "font_body":  "Zen Kaku Gothic New"
+                   "font_body":  "Zen Kaku Gothic New",
+                   "access_text":  "最寄駅から徒歩5分。駐車場は近隣コインパーキングをご利用ください。",
+                   "value_3_title":  "通いやすい距離感",
+                   "value_3_text":  "初めての方も、常連の方も同じペースで。短時間の立ち寄りにも使いやすい店づくりです。",
+                   "work_3_title":  "額縁ギャラリー灯の定番",
+                   "work_3_text":  "店の空気が伝わる組み合わせ。詳細は来店時にご案内します。",
+                   "address_text":  "架空市額縁小路2-1-4 / 最寄駅から徒歩5分。駐車場は近隣コインパーキングをご利用ください。",
+                   "hours_text":  "水〜日 12:00–19:00／月火休廊（展示替で変動あり）　／　最終受付は閉店30分前。混雑時はお待ちいただく場合があります。",
+                   "contact_note_1":  "ご予約・お問い合わせはメールにて。希望日時・人数・ご要望を書いてください。折り返しで空き状況とアクセスの補足をご案内します。",
+                   "contact_note_2":  "営業中は店頭優先のため返信が遅れることがあります。2営業日以内を目安にご連絡します。駐車・道順の質問も同アドレスで受け付けます。"
                },
     "confirmed":  {
                       "purpose":  true,
@@ -105,7 +103,50 @@
                   },
     "draftExtras":  {
                         "hours":  true,
-                        "access":  false,
-                        "address":  true
-                    }
+                        "address":  true,
+                        "access":  false
+                    },
+    "heroTextPlate":  "round",
+    "heroTextPlateTone":  "white",
+    "layoutOrder":  [
+                        "hero",
+                        "values",
+                        "accordions",
+                        "photos",
+                        "works",
+                        "hours",
+                        "address",
+                        "contact"
+                    ],
+    "itemLayouts":  {
+                        "about-photos":  {
+                                             "sizes":  [
+                                                           "L",
+                                                           "L",
+                                                           "L"
+                                                       ],
+                                             "gap":  "loose",
+                                             "sizePat":  "S1"
+                                         },
+                        "works-list":  {
+                                           "sizes":  [
+                                                         "L",
+                                                         "L",
+                                                         "L"
+                                                     ],
+                                           "gap":  "loose",
+                                           "sizePat":  "S1"
+                                       }
+                    },
+    "layoutRecipeNote":  "a photo=S1 works=S1 sizes=1",
+    "heroTextOnPhoto":  false,
+    "imagePaths":  {
+                       "work_2_image":  "sushi-samples/30-hotel-cafe-b/images/work-02.jpg?v=dense3",
+                       "about_image_2":  "sushi-samples/30-hotel-cafe-b/images/about-02.jpg?v=dense3",
+                       "hero_image":  "sushi-samples/30-hotel-cafe-b/images/hero.jpg?v=dense3",
+                       "work_1_image":  "sushi-samples/30-hotel-cafe-b/images/work-01.jpg?v=dense3",
+                       "about_image_3":  "sushi-samples/30-hotel-cafe-b/images/about-03.jpg?v=dense3",
+                       "about_image_1":  "sushi-samples/30-hotel-cafe-b/images/about-01.jpg?v=dense3",
+                       "work_3_image":  "sushi-samples/30-hotel-cafe-b/images/work-03.jpg?v=dense3"
+                   }
 }

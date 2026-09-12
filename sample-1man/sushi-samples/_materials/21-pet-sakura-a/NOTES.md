@@ -1,5 +1,4 @@
-﻿# メモ — 21-pet-sakura-a
+﻿# NOTES 21-pet-sakura-a
 
-- 帯: N / ABC: a / P1 / H3
-- 世界観: カフェ・窓辺
-- 採用判断:
+- review round reset 2026-09-09 (complete pack for human review)
+- [2026-09-10 00:18] approve

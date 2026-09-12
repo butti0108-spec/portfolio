@@ -1,25 +1,14 @@
 {
-    "version":  16,
+    "version":  17,
     "sushiSampleId":  "03",
     "sushiSampleKey":  "cafe-mix-ink-c",
     "blurb":  "カフェ・混合・墨・太ゴ見出し",
-    "scene":  "夜のカウンター",
-    "savedAt":  "2026-09-07T21:16:12.9592808Z",
+    "scene":  "バー・グラス",
+    "savedAt":  "2026-09-08T17:08:04.9320195Z",
     "uiMode":  "self",
     "sitePurpose":  "shop",
     "siteColorMode":  "detail",
-    "layoutPattern":  "c",
-    "layoutOrder":  [
-                        "hero",
-                        "values",
-                        "accordions",
-                        "photos",
-                        "works",
-                        "hours",
-                        "access",
-                        "address",
-                        "contact"
-                    ],
+    "layoutPattern":  "a",
     "layoutSelected":  true,
     "layoutSchema":  2,
     "intakeDone":  true,
@@ -44,49 +33,58 @@
                     },
     "draftCounts":  {
                         "hero-leads":  2,
-                        "hero-values":  2,
+                        "hero-values":  3,
                         "about-accordions":  1,
-                        "about-photos":  1,
-                        "works-list":  2
+                        "about-photos":  3,
+                        "works-list":  3
                     },
     "guidedImageUnlocked":  true,
     "guidedTextUnlocked":  true,
     "fonts":  {
-                  "catch":  "Dela Gothic One",
+                  "catch":  "Zen Kaku Gothic New",
                   "body":  "Zen Kaku Gothic New",
                   "display":  "Dela Gothic One"
               },
     "fields":  {
-                   "brand_name":  "墨ノ珈琲",
-                   "hero_title":  "墨ノ珈琲",
-                   "hero_lead_1":  "夜のための一杯",
-                   "hero_lead_2":  "カウンターで味わう深夜焙煎",
-                   "value_1_title":  "焙煎",
-                   "value_1_text":  "少量を丁寧に",
-                   "value_2_title":  "夜",
-                   "value_2_text":  "静かな時間帯に営業",
-                   "about_section_name":  "お店",
-                   "about_heading":  "墨ノ珈琲案内",
-                   "about_name":  "墨ノ珈琲",
-                   "about_lead":  "夜開店のスペシャルティコーヒー店。暗がりのカウンターで、一杯ずつ丁寧に淹れます。話し相手が欲しい夜にも。",
-                   "acc_1_title":  "こだわり",
-                   "acc_1_body":  "夜開店のスペシャルティコーヒー店。暗がりのカウンターで、一杯ずつ丁寧に淹れます。話し相手が欲しい夜にも。",
-                   "works_section_name":  "メニュー",
-                   "works_heading":  "おすすめ",
-                   "works_lead":  "カウンターで味わう深夜焙煎",
-                   "work_1_title":  "ナイトブレンド",
-                   "work_1_text":  "苦みを抑えた一杯",
-                   "work_2_title":  "シングルオリジン",
-                   "work_2_text":  "産地を黒板に掲示",
-                   "hours_text":  "18:00–24:00／月曜定休",
-                   "address_text":  "〇〇市駅前2-8",
+                   "brand_name":  "グラスサイド",
+                   "hero_title":  "氷が鳴る、夜のカウンター。",
+                   "hero_lead_1":  "薄暗い店内に、グラスの縁だけが光るバー。クラシックを軸に、その日の柑橘とハーブで少しだけアレンジします。",
+                   "hero_lead_2":  "会話は低く、音楽は控えめ。一人で来る夜も、二人で来る夜も、同じ椅子の高さで迎えします。",
+                   "hero_lead_3":  "",
+                   "value_1_title":  "グラスから決める一杯",
+                   "value_1_text":  "ロック・ストレート・ショート。飲み方の好みを聞いてから、ベースとトニックのバランスを合わせます。",
+                   "value_2_title":  "静かな席の距離感",
+                   "value_2_text":  "カウンター7席と奥の2卓のみ。隣との距離を空け、スマホの着信音はマナーモードをお願いしています。",
+                   "about_section_name":  "バーについて",
+                   "about_heading":  "路地の奥、鍵のかからない扉",
+                   "about_name":  "グラスサイド",
+                   "about_lead":  "ビルの地下一階。看板は小さなネオンだけです。スモークは出さず、柑橘の皮を捻る香りで空気を整えています。フードはナッツとチーズの軽いものに絞り、お酒の味を邪魔しないようにしています。",
+                   "acc_1_title":  "ご利用の目安",
+                   "acc_1_body":  "予約はカウンター席のみ前日まで受付。混雑時は2時間程度の目安をお願いすることがあります。ドレスコードはありませんが、強い香り付きの香水はご遠慮ください。",
+                   "acc_2_title":  "",
+                   "acc_2_body":  "",
+                   "works_section_name":  "今夜のグラス",
+                   "works_heading":  "定番から始める",
+                   "works_lead":  "迷ったら、まずこの二杯。",
+                   "work_1_title":  "ハウス・オールドファッション",
+                   "work_1_text":  "ブラウンシュガーとオレンジピール。氷は大きめのひとつで、ゆっくり溶ける味にしています。",
+                   "work_2_title":  "季節のジン・トニック",
+                   "work_2_text":  "週替わりの柑橘とハーブ。トニックは炭酸を立てすぎず、香りが残る分量で。",
                    "contact_section_name":  "ご連絡",
                    "contact_label":  "ご連絡",
-                   "contact_note_1":  "席数わずか・事前連絡歓迎",
-                   "contact_note_2":  "18:00–24:00／月曜定休",
+                   "contact_email":  "reserve@glass-side.example",
                    "font_display":  "Dela Gothic One",
-                   "font_catch":  "Dela Gothic One",
-                   "font_body":  "Zen Kaku Gothic New"
+                   "font_catch":  "Zen Kaku Gothic New",
+                   "font_body":  "Zen Kaku Gothic New",
+                   "value_3_title":  "通いやすい距離感",
+                   "value_3_text":  "初めての方も、常連の方も同じペースで。短時間の立ち寄りにも使いやすい店づくりです。",
+                   "work_3_title":  "グラスサイドの定番",
+                   "work_3_text":  "店の空気が伝わる組み合わせ。詳細は来店時にご案内します。",
+                   "address_text":  "架空市よるべ区グラス横丁 B1 / 最寄駅から徒歩5分。駐車場は近隣コインパーキングをご利用ください。",
+                   "hours_text":  "火〜日 19:00–26:00（L.O. 25:30）　月曜定休　／　最終受付は閉店30分前。混雑時はお待ちいただく場合があります。",
+                   "access_text":  "最寄駅から徒歩5分。駐車場は近隣コインパーキングをご利用ください。 / Address: 架空市よるべ区グラス横丁 B1 / 最寄駅から徒歩5分。駐車場は近隣コインパーキングをご利用ください。",
+                   "contact_note_1":  "ご予約・お問い合わせはメールにて。希望日時・人数・ご要望を書いてください。折り返しで空き状況とアクセスの補足をご案内します。",
+                   "contact_note_2":  "営業中は店頭優先のため返信が遅れることがあります。2営業日以内を目安にご連絡します。駐車・道順の質問も同アドレスで受け付けます。"
                },
     "confirmed":  {
                       "purpose":  true,
@@ -105,7 +103,50 @@
                   },
     "draftExtras":  {
                         "hours":  true,
-                        "access":  false,
-                        "address":  true
-                    }
+                        "access":  true,
+                        "address":  false
+                    },
+    "heroTextPlate":  "round",
+    "heroTextPlateTone":  "white",
+    "heroTextOnPhoto":  false,
+    "layoutOrder":  [
+                        "hero",
+                        "photos",
+                        "works",
+                        "values",
+                        "accordions",
+                        "hours",
+                        "access",
+                        "contact"
+                    ],
+    "itemLayouts":  {
+                        "about-photos":  {
+                                             "sizes":  [
+                                                           "L",
+                                                           "L",
+                                                           "L"
+                                                       ],
+                                             "gap":  "loose",
+                                             "sizePat":  "S1"
+                                         },
+                        "works-list":  {
+                                           "sizes":  [
+                                                         "H",
+                                                         "H",
+                                                         "L"
+                                                     ],
+                                           "gap":  "normal",
+                                           "sizePat":  "S2"
+                                       }
+                    },
+    "layoutRecipeNote":  "a photo=S1 works=S2 sizes=1",
+    "imagePaths":  {
+                       "work_2_image":  "sushi-samples/03-cafe-mix-ink-c/images/work-02.jpg?v=dense4",
+                       "about_image_2":  "sushi-samples/03-cafe-mix-ink-c/images/about-02.jpg?v=dense4",
+                       "hero_image":  "sushi-samples/03-cafe-mix-ink-c/images/hero.jpg?v=dense4",
+                       "work_1_image":  "sushi-samples/03-cafe-mix-ink-c/images/work-01.jpg?v=dense4",
+                       "about_image_3":  "sushi-samples/03-cafe-mix-ink-c/images/about-03.jpg?v=dense4",
+                       "about_image_1":  "sushi-samples/03-cafe-mix-ink-c/images/about-01.jpg?v=dense4",
+                       "work_3_image":  "sushi-samples/03-cafe-mix-ink-c/images/work-03.jpg?v=dense4"
+                   }
 }

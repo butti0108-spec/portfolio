@@ -1,25 +1,14 @@
 {
-    "version":  16,
+    "version":  17,
     "sushiSampleId":  "11",
     "sushiSampleKey":  "clinic-clinic-b",
     "blurb":  "診療所風・左右・紺・明朝",
-    "scene":  "白衣・受付",
-    "savedAt":  "2026-09-07T21:16:12.9592808Z",
+    "scene":  "診療所・待合",
+    "savedAt":  "2026-09-08T17:08:31.3299819Z",
     "uiMode":  "self",
     "sitePurpose":  "shop",
     "siteColorMode":  "detail",
-    "layoutPattern":  "b",
-    "layoutOrder":  [
-                        "hero",
-                        "values",
-                        "accordions",
-                        "photos",
-                        "works",
-                        "hours",
-                        "access",
-                        "address",
-                        "contact"
-                    ],
+    "layoutPattern":  "a",
     "layoutSelected":  true,
     "layoutSchema":  2,
     "intakeDone":  true,
@@ -39,15 +28,15 @@
                         "bodyInk":  "#212121",
                         "contactInk":  "#ffffff",
                         "valuesBg":  "#ffffff",
-                        "heroInk":  "#1a4d8c",
+                        "heroInk":  "#ffffff",
                         "chromeBg":  "#1a4d8c"
                     },
     "draftCounts":  {
                         "hero-leads":  2,
-                        "hero-values":  2,
+                        "hero-values":  3,
                         "about-accordions":  1,
-                        "about-photos":  1,
-                        "works-list":  2
+                        "about-photos":  3,
+                        "works-list":  3
                     },
     "guidedImageUnlocked":  true,
     "guidedTextUnlocked":  true,
@@ -57,36 +46,45 @@
                   "display":  "Shippori Mincho"
               },
     "fields":  {
-                   "brand_name":  "紺碧クリニック",
-                   "hero_title":  "紺碧クリニック",
-                   "hero_lead_1":  "丁寧な説明を大切に",
-                   "hero_lead_2":  "一人ひとりの不安に寄り添う",
-                   "value_1_title":  "丁寧さ",
-                   "value_1_text":  "質問しやすい空気",
-                   "value_2_title":  "予約",
-                   "value_2_text":  "待ち時間の見える化",
-                   "about_section_name":  "お店",
-                   "about_heading":  "紺碧クリニック案内",
-                   "about_name":  "紺碧クリニック",
-                   "about_lead":  "丁寧な説明を大切にするクリニック案内です。受付・診療・会計の流れを整理し、安心して通える情報をまとめています。",
-                   "acc_1_title":  "こだわり",
-                   "acc_1_body":  "丁寧な説明を大切にするクリニック案内です。受付・診療・会計の流れを整理し、安心して通える情報をまとめています。",
-                   "works_section_name":  "メニュー",
-                   "works_heading":  "おすすめ",
-                   "works_lead":  "一人ひとりの不安に寄り添う",
-                   "work_1_title":  "一般診療",
-                   "work_1_text":  "症状の相談窓口",
-                   "work_2_title":  "健診案内",
-                   "work_2_text":  "日程と持ち物",
-                   "hours_text":  "月〜金 9:00–17:30",
-                   "address_text":  "〇〇市中央メディカル2F",
+                   "brand_name":  "ひなたまち診療所",
+                   "hero_title":  "待合の時計が、ゆっくり進む場所。",
+                   "hero_lead_1":  "白い壁と低い声の受付。一般内科を中心に、近所の方が通いやすい規模の診療所です。",
+                   "hero_lead_2":  "待ち時間の目安は受付でお伝えします。急な体調変化は、無理に順番を待たず申し出てください。",
+                   "hero_lead_3":  "",
+                   "value_1_title":  "わかりやすい受付案内",
+                   "value_1_text":  "初診・再診の動線を分け、問診票は大きな文字。保険証の確認も短く済ませます。",
+                   "value_2_title":  "待合は静かめに",
+                   "value_2_text":  "テレビ音量は抑えめ。通話は廊下側でお願いしています。キッズコーナーは絵本のみです。",
+                   "value_3_title":  "かかりつけとしての継続",
+                   "value_3_text":  "お薬手帳の持参をお願いしています。他院受診中の方も、お薬の重複がないか一緒に確認します。",
+                   "about_section_name":  "診療所について",
+                   "about_heading":  "地域の、小さな窓口",
+                   "about_name":  "ひなたまち診療所",
+                   "about_lead":  "架空市ひなた区の住宅街にある無床の診療所です。発熱外来の時間帯は別枠。予防接種は予約制で、在庫状況を電話またはメールで確認してからご案内します。",
+                   "acc_1_title":  "受診の流れ",
+                   "acc_1_body":  "受付→問診→診察→会計の順です。オンライン資格確認に対応。紹介状が必要な場合は診察後に作成します（日数をいただくことがあります）。",
+                   "acc_2_title":  "初めての方へ",
+                   "acc_2_body":  "保険証・お薬手帳・おくすり情報をお持ちください。マイナンバーカードでの資格確認も可能です。症状が急変したときは救急要請を優先してください。",
+                   "works_section_name":  "主な診療",
+                   "works_heading":  "対応の目安",
+                   "works_lead":  "詳細は受付でご確認ください。",
+                   "work_1_title":  "一般内科（かぜ・生活習慣）",
+                   "work_1_text":  "発熱、のどの痛み、血圧・血糖の相談など。検査が必要な場合は近隣機関をご紹介します。",
+                   "work_2_title":  "予防接種・診断書",
+                   "work_2_text":  "予約枠での接種と、就労・通学向けの簡易な文書作成。内容によりお時間をいただきます。",
+                   "hours_text":  "月・火・木・金 9:00–12:30／15:00–18:30　水 9:00–12:30のみ　土 9:00–12:30　日祝休診",
                    "contact_section_name":  "ご連絡",
                    "contact_label":  "ご連絡",
-                   "contact_note_1":  "初診はお電話ください",
-                   "contact_note_2":  "月〜金 9:00–17:30",
+                   "contact_email":  "info@hinatamachi-clinic.example",
                    "font_display":  "Shippori Mincho",
                    "font_catch":  "Shippori Mincho",
-                   "font_body":  "Zen Kaku Gothic New"
+                   "font_body":  "Zen Kaku Gothic New",
+                   "work_3_title":  "ひなたまち診療所の定番",
+                   "work_3_text":  "店の空気が伝わる組み合わせ。詳細は来店時にご案内します。",
+                   "address_text":  "架空市ひなた区まちかど 1-2-6　ひなたメディカル1F / 最寄駅から徒歩5分。駐車場は近隣コインパーキングをご利用ください。",
+                   "access_text":  "最寄駅から徒歩5分。駐車場は近隣コインパーキングをご利用ください。 / Address: 架空市ひなた区まちかど 1-2-6　ひなたメディカル1F / 最寄駅から徒歩5分。駐車場は近隣コインパーキングをご利用ください。",
+                   "contact_note_1":  "ご予約・お問い合わせはメールにて。希望日時・人数・ご要望を書いてください。折り返しで空き状況とアクセスの補足をご案内します。",
+                   "contact_note_2":  "営業中は店頭優先のため返信が遅れることがあります。2営業日以内を目安にご連絡します。駐車・道順の質問も同アドレスで受け付けます。"
                },
     "confirmed":  {
                       "purpose":  true,
@@ -105,7 +103,50 @@
                   },
     "draftExtras":  {
                         "hours":  true,
-                        "access":  false,
-                        "address":  true
-                    }
+                        "access":  true,
+                        "address":  false
+                    },
+    "heroTextPlate":  "round",
+    "heroTextPlateTone":  "white",
+    "heroTextOnPhoto":  false,
+    "layoutOrder":  [
+                        "hero",
+                        "photos",
+                        "works",
+                        "values",
+                        "accordions",
+                        "hours",
+                        "access",
+                        "contact"
+                    ],
+    "itemLayouts":  {
+                        "about-photos":  {
+                                             "sizes":  [
+                                                           "L",
+                                                           "H",
+                                                           "H"
+                                                       ],
+                                             "gap":  "normal",
+                                             "sizePat":  "S6"
+                                         },
+                        "works-list":  {
+                                           "sizes":  [
+                                                         "H",
+                                                         "H",
+                                                         "L"
+                                                     ],
+                                           "gap":  "normal",
+                                           "sizePat":  "S2"
+                                       }
+                    },
+    "layoutRecipeNote":  "a photo=S6 works=S2 sizes=1",
+    "imagePaths":  {
+                       "work_2_image":  "sushi-samples/11-clinic-clinic-b/images/work-02.jpg?v=dense4",
+                       "about_image_2":  "sushi-samples/11-clinic-clinic-b/images/about-02.jpg?v=dense4",
+                       "hero_image":  "sushi-samples/11-clinic-clinic-b/images/hero.jpg?v=dense4",
+                       "work_1_image":  "sushi-samples/11-clinic-clinic-b/images/work-01.jpg?v=dense4",
+                       "about_image_3":  "sushi-samples/11-clinic-clinic-b/images/about-03.jpg?v=dense4",
+                       "about_image_1":  "sushi-samples/11-clinic-clinic-b/images/about-01.jpg?v=dense4",
+                       "work_3_image":  "sushi-samples/11-clinic-clinic-b/images/work-03.jpg?v=dense4"
+                   }
 }

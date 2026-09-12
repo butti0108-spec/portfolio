@@ -2,17 +2,6 @@
     "id":  "29",
     "folder":  "29-gallery-clinic-c",
     "band":  "X",
-    "layoutPattern":  "b",
-    "layoutOrder":  [
-                        "works",
-                        "hero",
-                        "values",
-                        "photos",
-                        "accordions",
-                        "hours",
-                        "address",
-                        "contact"
-                    ],
     "photoPack":  "P1",
     "headingPack":  "H4",
     "colorKey":  "sakura",
@@ -23,12 +12,24 @@
                   "display":  "Zen Maru Gothic"
               },
     "scene":  "花屋・アレンジ",
+    "status":  "text+images",
+    "layoutPattern":  "a",
+    "layoutOrder":  [
+                        "hero",
+                        "photos",
+                        "values",
+                        "contact",
+                        "accordions",
+                        "works",
+                        "hours",
+                        "address"
+                    ],
     "counts":  {
                    "hero-leads":  2,
                    "hero-values":  3,
-                   "about-accordions":  2,
-                   "about-photos":  1,
-                   "works-list":  1
+                   "about-accordions":  1,
+                   "about-photos":  3,
+                   "works-list":  3
                },
     "extras":  {
                    "hours":  true,
@@ -38,7 +39,10 @@
     "imageSlots":  [
                        "hero.jpg",
                        "about-01.jpg",
-                       "work-01.jpg"
-                   ],
-    "status":  "未着手"
+                       "about-02.jpg",
+                       "about-03.jpg",
+                       "work-01.jpg",
+                       "work-02.jpg",
+                       "work-03.jpg"
+                   ]
 }

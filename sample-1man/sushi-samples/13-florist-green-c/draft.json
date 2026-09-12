@@ -1,25 +1,14 @@
 {
-    "version":  16,
+    "version":  17,
     "sushiSampleId":  "13",
     "sushiSampleKey":  "florist-green-c",
     "blurb":  "花屋・混合・緑・明朝",
-    "scene":  "葉・アレンジ",
-    "savedAt":  "2026-09-07T21:16:12.9592808Z",
+    "scene":  "コワーキング・植物",
+    "savedAt":  "2026-09-08T17:08:37.5346886Z",
     "uiMode":  "self",
     "sitePurpose":  "shop",
     "siteColorMode":  "detail",
-    "layoutPattern":  "c",
-    "layoutOrder":  [
-                        "hero",
-                        "values",
-                        "accordions",
-                        "photos",
-                        "works",
-                        "hours",
-                        "access",
-                        "address",
-                        "contact"
-                    ],
+    "layoutPattern":  "a",
     "layoutSelected":  true,
     "layoutSchema":  2,
     "intakeDone":  true,
@@ -39,15 +28,15 @@
                         "bodyInk":  "#212121",
                         "contactInk":  "#f4fff6",
                         "valuesBg":  "#ffffff",
-                        "heroInk":  "#111111",
+                        "heroInk":  "#ffffff",
                         "chromeBg":  "#1f3d18"
                     },
     "draftCounts":  {
                         "hero-leads":  2,
-                        "hero-values":  2,
+                        "hero-values":  3,
                         "about-accordions":  1,
-                        "about-photos":  1,
-                        "works-list":  2
+                        "about-photos":  4,
+                        "works-list":  3
                     },
     "guidedImageUnlocked":  true,
     "guidedTextUnlocked":  true,
@@ -57,36 +46,45 @@
                   "display":  "Shippori Mincho"
               },
     "fields":  {
-                   "brand_name":  "葉音フラワー",
-                   "hero_title":  "葉音フラワー",
-                   "hero_lead_1":  "緑と花のアレンジ",
-                   "hero_lead_2":  "葉もの中心の空間づくり",
-                   "value_1_title":  "葉もの",
-                   "value_1_text":  "緑のバランスを重視",
-                   "value_2_title":  "装花",
-                   "value_2_text":  "空間に合わせて提案",
-                   "about_section_name":  "お店",
-                   "about_heading":  "葉音フラワー案内",
-                   "about_name":  "葉音フラワー",
-                   "about_lead":  "葉ものを活かしたアレンジが得意な花屋です。店舗ディスプレイやイベント装花もご相談いただけます。",
-                   "acc_1_title":  "こだわり",
-                   "acc_1_body":  "葉ものを活かしたアレンジが得意な花屋です。店舗ディスプレイやイベント装花もご相談いただけます。",
-                   "works_section_name":  "メニュー",
-                   "works_heading":  "おすすめ",
-                   "works_lead":  "葉もの中心の空間づくり",
-                   "work_1_title":  "店内アレンジ",
-                   "work_1_text":  "週替わりディスプレイ",
-                   "work_2_title":  "イベント装花",
-                   "work_2_text":  "下見からの設計",
-                   "hours_text":  "10:00–18:00／水曜定休",
-                   "address_text":  "〇〇市緑園5-7",
+                   "brand_name":  "グリーンデスク コワーキング",
+                   "hero_title":  "席のそばに、葉の緑を。",
+                   "hero_lead_1":  "観葉植物のあいだにデスクが並ぶ、小さなコワーキング。通話ブースは少なく、集中席を多めに取っています。",
+                   "hero_lead_2":  "日中は自然光、夕方は落ち着いた明かり。ドロップインでも、週数回の定期でも使えます。",
+                   "hero_lead_3":  "",
+                   "value_1_title":  "植物のあいだの席",
+                   "value_1_text":  "窓際のグリーンゾーンと、壁際の集中ゾーン。席の移動は空いている範囲で自由です。",
+                   "value_2_title":  "電源とWi-Fiを手前に",
+                   "value_2_text":  "全席にコンセント。Wi-Fiは作業用SSIDを掲示。印刷は受付で枚数精算です。",
+                   "about_section_name":  "スペースについて",
+                   "about_heading":  "緑の多い、静かな仕事場",
+                   "about_name":  "グリーンデスク コワーキング",
+                   "about_lead":  "商店街の三階。ラウンジ型ではなく、デスク中心の構成です。飲食は蓋付きドリンクと匂いの少ない軽食のみ。イベント貸しは週末の一部枠だけ受け付けています。",
+                   "acc_1_title":  "ご利用ルール",
+                   "acc_1_body":  "通話はブースか廊下へ。匂いの強い食事はご遠慮ください。ロッカーは日帰りの空きを受付で案内します。初回は身分証の提示をお願いします。",
+                   "acc_2_title":  "",
+                   "acc_2_body":  "",
+                   "works_section_name":  "席・プラン",
+                   "works_heading":  "使い方の例",
+                   "works_lead":  "当日の空きは受付かWEBで確認できます。",
+                   "work_1_title":  "ドロップイン（1日）",
+                   "work_1_text":  "開館から閉館まで。席指定なし。電源とWi-Fi込みです。",
+                   "work_2_title":  "週3パス",
+                   "work_2_text":  "好きな曜日に週三回まで。ロッカー優先権はありませんが、混雑日の案内メールが届きます。",
+                   "work_3_title":  "固定席（月額）",
+                   "work_3_text":  "窓際または壁際を月単位で確保。モニター持ち込み可（サイズ上限あり）。",
                    "contact_section_name":  "ご連絡",
                    "contact_label":  "ご連絡",
-                   "contact_note_1":  "装花は見積から対応",
-                   "contact_note_2":  "10:00–18:00／水曜定休",
+                   "contact_email":  "desk@greendesk-cowork.example",
                    "font_display":  "Shippori Mincho",
                    "font_catch":  "Shippori Mincho",
-                   "font_body":  "Zen Kaku Gothic New"
+                   "font_body":  "Zen Kaku Gothic New",
+                   "value_3_title":  "通いやすい距離感",
+                   "value_3_text":  "初めての方も、常連の方も同じペースで。短時間の立ち寄りにも使いやすい店づくりです。",
+                   "address_text":  "架空市みどり区デスク通り 8-4-2　グリーンビル3F / 最寄駅から徒歩5分。駐車場は近隣コインパーキングをご利用ください。",
+                   "hours_text":  "平日 9:00–21:00／土 10:00–18:00　日祝休館　／　最終受付は閉店30分前。混雑時はお待ちいただく場合があります。",
+                   "access_text":  "最寄駅から徒歩5分。駐車場は近隣コインパーキングをご利用ください。 / Address: 架空市みどり区デスク通り 8-4-2　グリーンビル3F / 最寄駅から徒歩5分。駐車場は近隣コインパーキングをご利用ください。",
+                   "contact_note_1":  "ご予約・お問い合わせはメールにて。希望日時・人数・ご要望を書いてください。折り返しで空き状況とアクセスの補足をご案内します。",
+                   "contact_note_2":  "営業中は店頭優先のため返信が遅れることがあります。2営業日以内を目安にご連絡します。駐車・道順の質問も同アドレスで受け付けます。"
                },
     "confirmed":  {
                       "purpose":  true,
@@ -105,7 +103,52 @@
                   },
     "draftExtras":  {
                         "hours":  true,
-                        "access":  false,
-                        "address":  true
-                    }
+                        "access":  true,
+                        "address":  false
+                    },
+    "heroTextPlate":  "round",
+    "heroTextPlateTone":  "white",
+    "heroTextOnPhoto":  false,
+    "layoutOrder":  [
+                        "hero",
+                        "photos",
+                        "works",
+                        "values",
+                        "accordions",
+                        "hours",
+                        "access",
+                        "contact"
+                    ],
+    "itemLayouts":  {
+                        "about-photos":  {
+                                             "sizes":  [
+                                                           "H",
+                                                           "H",
+                                                           "L",
+                                                           "L"
+                                                       ],
+                                             "gap":  "normal",
+                                             "sizePat":  "S2"
+                                         },
+                        "works-list":  {
+                                           "sizes":  [
+                                                         "L",
+                                                         "H",
+                                                         "H"
+                                                     ],
+                                           "gap":  "loose",
+                                           "sizePat":  "S5"
+                                       }
+                    },
+    "layoutRecipeNote":  "a photo=S2 works=S5 sizes=1",
+    "imagePaths":  {
+                       "about_image_4":  "sushi-samples/13-florist-green-c/images/about-04.jpg?v=dense4",
+                       "about_image_2":  "sushi-samples/13-florist-green-c/images/about-02.jpg?v=dense4",
+                       "hero_image":  "sushi-samples/13-florist-green-c/images/hero.jpg?v=dense4",
+                       "about_image_3":  "sushi-samples/13-florist-green-c/images/about-03.jpg?v=dense4",
+                       "work_2_image":  "sushi-samples/13-florist-green-c/images/work-02.jpg?v=dense4",
+                       "about_image_1":  "sushi-samples/13-florist-green-c/images/about-01.jpg?v=dense4",
+                       "work_3_image":  "sushi-samples/13-florist-green-c/images/work-03.jpg?v=dense4",
+                       "work_1_image":  "sushi-samples/13-florist-green-c/images/work-01.jpg?v=dense4"
+                   }
 }

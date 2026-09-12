@@ -1,25 +1,14 @@
 {
-    "version":  16,
+    "version":  17,
     "sushiSampleId":  "23",
     "sushiSampleKey":  "cowork-green-a",
     "blurb":  "コワーキング・横長・緑・明朝",
-    "scene":  "共有席・植物",
-    "savedAt":  "2026-09-07T21:16:12.9592808Z",
+    "scene":  "コワーキング",
+    "savedAt":  "2026-09-08T17:09:10.6878170Z",
     "uiMode":  "self",
     "sitePurpose":  "shop",
     "siteColorMode":  "detail",
     "layoutPattern":  "a",
-    "layoutOrder":  [
-                        "hero",
-                        "values",
-                        "accordions",
-                        "photos",
-                        "works",
-                        "hours",
-                        "access",
-                        "address",
-                        "contact"
-                    ],
     "layoutSelected":  true,
     "layoutSchema":  2,
     "intakeDone":  true,
@@ -27,7 +16,7 @@
     "hubEntrySource":  "sample",
     "easyFlowActive":  false,
     "presetChosen":  true,
-    "chosenPresetKey":  "green",
+    "chosenPresetKey":  "cafe",
     "draftColors":  {
                         "cardBg":  "#ffffff",
                         "chromeInk":  "#f4fff6",
@@ -39,15 +28,15 @@
                         "bodyInk":  "#212121",
                         "contactInk":  "#f4fff6",
                         "valuesBg":  "#ffffff",
-                        "heroInk":  "#111111",
+                        "heroInk":  "#ffffff",
                         "chromeBg":  "#1f3d18"
                     },
     "draftCounts":  {
                         "hero-leads":  2,
-                        "hero-values":  2,
+                        "hero-values":  3,
                         "about-accordions":  1,
-                        "about-photos":  1,
-                        "works-list":  2
+                        "about-photos":  3,
+                        "works-list":  3
                     },
     "guidedImageUnlocked":  true,
     "guidedTextUnlocked":  true,
@@ -57,36 +46,45 @@
                   "display":  "Shippori Mincho"
               },
     "fields":  {
-                   "brand_name":  "木陰ワーク",
-                   "hero_title":  "木陰ワーク",
-                   "hero_lead_1":  "植物のある仕事場",
-                   "hero_lead_2":  "共有席と、ゆるやかな会話",
-                   "value_1_title":  "植物",
-                   "value_1_text":  "緑の多い共有スペース",
-                   "value_2_title":  "交流",
-                   "value_2_text":  "イベント月1回",
-                   "about_section_name":  "お店",
-                   "about_heading":  "木陰ワーク案内",
-                   "about_name":  "木陰ワーク",
-                   "about_lead":  "植物に囲まれたコワーキングスペース。共有席中心で、ゆるやかにつながりたい人向けです。",
-                   "acc_1_title":  "こだわり",
-                   "acc_1_body":  "植物に囲まれたコワーキングスペース。共有席中心で、ゆるやかにつながりたい人向けです。",
-                   "works_section_name":  "メニュー",
-                   "works_heading":  "おすすめ",
-                   "works_lead":  "共有席と、ゆるやかな会話",
-                   "work_1_title":  "共有席",
-                   "work_1_text":  "フリーアドレス",
-                   "work_2_title":  "ミーティング",
-                   "work_2_text":  "予約制ルーム",
-                   "hours_text":  "9:00–21:00／日曜休み",
-                   "address_text":  "〇〇区緑地ビル2F",
+                   "brand_name":  "共席ラボ",
+                   "hero_title":  "共に座るラボで、仕事がほどける。",
+                   "hero_lead_1":  "共席ラボは、机を並べて働く小さなワークスペース。電源と静けさを最低限そろえています。",
+                   "hero_lead_2":  "ドロップインと月額の席があります。通話はブース側へ。飲み物はセルフのドリップです。",
+                   "hero_lead_3":  "",
+                   "value_1_title":  "席の種類",
+                   "value_1_text":  "フリー席・固定席・電話ブースの三種類。フリー席は窓際と壁際に分け、視線がぶつかりにくい配置にしています。",
+                   "value_2_title":  "静けさのルール",
+                   "value_2_text":  "通話はブースか廊下。キーボード音は許容、会話は短め。音楽はイヤホンのみ。初めての方にも分かりやすい案内板を入口に置いています。",
+                   "value_3_title":  "飲み物と電源",
+                   "value_3_text":  "ドリップ珈琲とお茶はセルフ。各席に電源とUSB。プリンターは会員カードでカウントします。",
+                   "about_section_name":  "スペースについて",
+                   "about_heading":  "仕事のための共有席",
+                   "about_name":  "共席ラボ",
+                   "about_lead":  "オフィスビルの一角にあるコワーキングスペースです。フリーランス、リモート勤務、試験勉強まで、用途は問いません。カフェより机が広く、自宅より切り替えやすい場所を目指しています。",
+                   "acc_1_title":  "利用の流れ",
+                   "acc_1_body":  "初回は受付で身分確認と利用規約への同意をお願いします。ドロップインは時間課金、月額は固定席かフリーパスを選べます。ロッカーは別料金。夜間は二十二時閉館です。",
+                   "acc_2_title":  "設備メモ",
+                   "acc_2_body":  "Wi-Fiは二系統、会議室は一時間単位で予約。モニター貸出あり。イベントスペースは週末のみ開放し、勉強会や小さな展示に使えます。",
+                   "works_section_name":  "プラン",
+                   "works_heading":  "使い方を選ぶ",
+                   "works_lead":  "半日〜月額まで",
+                   "work_1_title":  "ドロップイン半日",
+                   "work_1_text":  "四時間まで。フリー席・珈琲込み。延長は時間課金。",
+                   "work_2_title":  "月額フリーパス",
+                   "work_2_text":  "開館中いつでもフリー席。ロッカー小が一つ付き。",
                    "contact_section_name":  "ご連絡",
                    "contact_label":  "ご連絡",
-                   "contact_note_1":  "1日券あり",
-                   "contact_note_2":  "9:00–21:00／日曜休み",
+                   "contact_email":  "desk@kyouseki-lab.example",
                    "font_display":  "Shippori Mincho",
                    "font_catch":  "Shippori Mincho",
-                   "font_body":  "Zen Kaku Gothic New"
+                   "font_body":  "Zen Kaku Gothic New",
+                   "work_3_title":  "共席ラボの定番",
+                   "work_3_text":  "店の空気が伝わる組み合わせ。詳細は来店時にご案内します。",
+                   "address_text":  "架空市共創町2-9-8 3F / 最寄駅から徒歩5分。駐車場は近隣コインパーキングをご利用ください。",
+                   "hours_text":  "平日 8:00–22:00／土日 9:00–18:00／年末年始休　／　最終受付は閉店30分前。混雑時はお待ちいただく場合があります。",
+                   "access_text":  "最寄駅から徒歩5分。駐車場は近隣コインパーキングをご利用ください。 / Address: 架空市共創町2-9-8 3F / 最寄駅から徒歩5分。駐車場は近隣コインパーキングをご利用ください。",
+                   "contact_note_1":  "ご予約・お問い合わせはメールにて。希望日時・人数・ご要望を書いてください。折り返しで空き状況とアクセスの補足をご案内します。",
+                   "contact_note_2":  "営業中は店頭優先のため返信が遅れることがあります。2営業日以内を目安にご連絡します。駐車・道順の質問も同アドレスで受け付けます。"
                },
     "confirmed":  {
                       "purpose":  true,
@@ -105,7 +103,50 @@
                   },
     "draftExtras":  {
                         "hours":  true,
-                        "access":  false,
-                        "address":  true
-                    }
+                        "access":  true,
+                        "address":  false
+                    },
+    "heroTextPlate":  "round",
+    "heroTextPlateTone":  "white",
+    "heroTextOnPhoto":  false,
+    "layoutOrder":  [
+                        "hero",
+                        "photos",
+                        "works",
+                        "values",
+                        "accordions",
+                        "hours",
+                        "access",
+                        "contact"
+                    ],
+    "itemLayouts":  {
+                        "about-photos":  {
+                                             "sizes":  [
+                                                           "H",
+                                                           "H",
+                                                           "L"
+                                                       ],
+                                             "gap":  "normal",
+                                             "sizePat":  "S2"
+                                         },
+                        "works-list":  {
+                                           "sizes":  [
+                                                         "L",
+                                                         "H",
+                                                         "H"
+                                                     ],
+                                           "gap":  "normal",
+                                           "sizePat":  "S3"
+                                       }
+                    },
+    "layoutRecipeNote":  "a photo=S2 works=S3 sizes=1",
+    "imagePaths":  {
+                       "work_2_image":  "sushi-samples/23-cowork-green-a/images/work-02.jpg?v=dense4",
+                       "about_image_2":  "sushi-samples/23-cowork-green-a/images/about-02.jpg?v=dense4",
+                       "hero_image":  "sushi-samples/23-cowork-green-a/images/hero.jpg?v=dense4",
+                       "work_1_image":  "sushi-samples/23-cowork-green-a/images/work-01.jpg?v=dense4",
+                       "about_image_3":  "sushi-samples/23-cowork-green-a/images/about-03.jpg?v=dense4",
+                       "about_image_1":  "sushi-samples/23-cowork-green-a/images/about-01.jpg?v=dense4",
+                       "work_3_image":  "sushi-samples/23-cowork-green-a/images/work-03.jpg?v=dense4"
+                   }
 }

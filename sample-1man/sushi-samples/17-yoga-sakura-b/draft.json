@@ -1,25 +1,14 @@
 {
-    "version":  16,
+    "version":  17,
     "sushiSampleId":  "17",
     "sushiSampleKey":  "yoga-sakura-b",
     "blurb":  "ヨガ・左右・桜・丸",
-    "scene":  "スタジオ・窓",
-    "savedAt":  "2026-09-07T21:16:12.9592808Z",
+    "scene":  "バー・ボトル",
+    "savedAt":  "2026-09-08T17:08:50.9933084Z",
     "uiMode":  "self",
     "sitePurpose":  "shop",
     "siteColorMode":  "detail",
-    "layoutPattern":  "b",
-    "layoutOrder":  [
-                        "hero",
-                        "values",
-                        "accordions",
-                        "photos",
-                        "works",
-                        "hours",
-                        "access",
-                        "address",
-                        "contact"
-                    ],
+    "layoutPattern":  "a",
     "layoutSelected":  true,
     "layoutSchema":  2,
     "intakeDone":  true,
@@ -27,7 +16,7 @@
     "hubEntrySource":  "sample",
     "easyFlowActive":  false,
     "presetChosen":  true,
-    "chosenPresetKey":  "sakura",
+    "chosenPresetKey":  "brick",
     "draftColors":  {
                         "cardBg":  "#ffffff",
                         "chromeInk":  "#fff8fa",
@@ -39,54 +28,63 @@
                         "bodyInk":  "#3d2228",
                         "contactInk":  "#fff8fa",
                         "valuesBg":  "#ffffff",
-                        "heroInk":  "#5c2434",
+                        "heroInk":  "#ffffff",
                         "chromeBg":  "#8f4a5a"
                     },
     "draftCounts":  {
                         "hero-leads":  2,
-                        "hero-values":  2,
+                        "hero-values":  3,
                         "about-accordions":  1,
-                        "about-photos":  1,
-                        "works-list":  2
+                        "about-photos":  3,
+                        "works-list":  3
                     },
     "guidedImageUnlocked":  true,
     "guidedTextUnlocked":  true,
     "fonts":  {
-                  "catch":  "Kiwi Maru",
-                  "body":  "M PLUS Rounded 1c",
-                  "display":  "Zen Maru Gothic"
+                  "catch":  "Zen Kaku Gothic New",
+                  "body":  "Zen Kaku Gothic New",
+                  "display":  "Dela Gothic One"
               },
     "fields":  {
-                   "brand_name":  "さくらヨガ",
-                   "hero_title":  "さくらヨガ",
-                   "hero_lead_1":  "やさしく動く",
-                   "hero_lead_2":  "窓辺の光と、やわらかいクラス",
-                   "value_1_title":  "やさしい",
-                   "value_1_text":  "負荷を抑えめに",
-                   "value_2_title":  "光",
-                   "value_2_text":  "明るいスタジオ",
-                   "about_section_name":  "お店",
-                   "about_heading":  "さくらヨガ案内",
-                   "about_name":  "さくらヨガ",
-                   "about_lead":  "やさしい動きを大切にするヨガ教室。窓からの光が入るスタジオで、無理のないペースで進めます。",
-                   "acc_1_title":  "こだわり",
-                   "acc_1_body":  "やさしい動きを大切にするヨガ教室。窓からの光が入るスタジオで、無理のないペースで進めます。",
-                   "works_section_name":  "メニュー",
-                   "works_heading":  "おすすめ",
-                   "works_lead":  "窓辺の光と、やわらかいクラス",
-                   "work_1_title":  "ベーシック",
-                   "work_1_text":  "基本のポーズ",
-                   "work_2_title":  "ママクラス",
-                   "work_2_text":  "育児の合間に",
-                   "hours_text":  "10:00–21:00（クラスにより異なる）",
-                   "address_text":  "〇〇区陽だまり1-5",
+                   "brand_name":  "灯ボトルバー",
+                   "hero_title":  "小さなグラスに、夜の灯りを。",
+                   "hero_lead_1":  "ボトルに閉じ込めた灯りが、カウンターをゆっくり照らすバー。立ち寄りやすい一杯から始められます。",
+                   "hero_lead_2":  "強い演出より、グラスと会話の間。初めての方にも注文しやすい定番を揃えています。",
+                   "hero_lead_3":  "",
+                   "value_1_title":  "ボトル棚",
+                   "value_1_text":  "ウイスキーとジンを中心に、棚一面に並べています。ラベルが見やすい高さに揃えてあるので、指差しでオーダーしやすいです。",
+                   "value_2_title":  "ぬくもりのある照明",
+                   "value_2_text":  "白熱灯寄りの暖色だけを使い、手元とボトルの色が沈みすぎない明るさにしています。長居しても目が疲れにくい設定です。",
+                   "about_section_name":  "バーについて",
+                   "about_heading":  "ボトルが主役の小さな夜",
+                   "about_name":  "灯ボトルバー",
+                   "about_lead":  "駅から徒歩数分の路地にある、席数十二のバーです。カクテルはクラシックを基本に、甘さ控えめのアレンジも用意しています。一人でも、二人でも、カウンターの灯りだけを目安に立ち寄ってください。",
+                   "acc_1_title":  "今夜のすすめ",
+                   "acc_1_body":  "まずはハイボールかジン・トニックで口を慣らし、そのあと好みのボトルを棚から選ぶ流れが人気です。お通しはナッツとオリーブの小皿。禁煙席はありませんが、換気をこまめに回しています。",
+                   "acc_2_title":  "",
+                   "acc_2_body":  "",
+                   "works_section_name":  "ドリンク",
+                   "works_heading":  "定番から",
+                   "works_lead":  "棚のボトルと、グラス一杯",
+                   "work_1_title":  "ハウスハイボール",
+                   "work_1_text":  "深めのグラスに、炭酸多めで。ロックも選べます。",
+                   "work_2_title":  "ボトルキープ",
+                   "work_2_text":  "名入れタグ付き。再訪の方は、前回の好みメモも残します。",
+                   "address_text":  "架空市灯町2-14-5 地下1F",
                    "contact_section_name":  "ご連絡",
                    "contact_label":  "ご連絡",
-                   "contact_note_1":  "月額と都度を選べます",
-                   "contact_note_2":  "10:00–21:00（クラスにより異なる）",
-                   "font_display":  "Zen Maru Gothic",
-                   "font_catch":  "Kiwi Maru",
-                   "font_body":  "M PLUS Rounded 1c"
+                   "contact_email":  "hello@tomoshibi-bar.example",
+                   "contact_note_1":  "貸切・キープのご相談はメールで。人数と希望日を明記してください。",
+                   "contact_note_2":  "当日の空席確認は、開店後にお電話でも大丈夫です（架空番号は掲載しません）。",
+                   "font_display":  "Dela Gothic One",
+                   "font_catch":  "Zen Kaku Gothic New",
+                   "font_body":  "Zen Kaku Gothic New",
+                   "access_text":  "最寄駅から徒歩5分。駐車場は近隣コインパーキングをご利用ください。",
+                   "value_3_title":  "通いやすい距離感",
+                   "value_3_text":  "初めての方も、常連の方も同じペースで。短時間の立ち寄りにも使いやすい店づくりです。",
+                   "work_3_title":  "灯ボトルバーの定番",
+                   "work_3_text":  "店の空気が伝わる組み合わせ。詳細は来店時にご案内します。",
+                   "hours_text":  "火〜日 19:00–25:00（LO 24:30）／月曜定休　／　最終受付は閉店30分前。"
                },
     "confirmed":  {
                       "purpose":  true,
@@ -105,7 +103,51 @@
                   },
     "draftExtras":  {
                         "hours":  true,
-                        "access":  false,
-                        "address":  true
-                    }
+                        "address":  true,
+                        "access":  true
+                    },
+    "heroTextPlate":  "round",
+    "heroTextPlateTone":  "white",
+    "layoutOrder":  [
+                        "hero",
+                        "photos",
+                        "values",
+                        "accordions",
+                        "works",
+                        "hours",
+                        "access",
+                        "address",
+                        "contact"
+                    ],
+    "itemLayouts":  {
+                        "about-photos":  {
+                                             "sizes":  [
+                                                           "L",
+                                                           "H",
+                                                           "H"
+                                                       ],
+                                             "gap":  "loose",
+                                             "sizePat":  "S5"
+                                         },
+                        "works-list":  {
+                                           "sizes":  [
+                                                         "L",
+                                                         "H",
+                                                         "H"
+                                                     ],
+                                           "gap":  "normal",
+                                           "sizePat":  "S6"
+                                       }
+                    },
+    "layoutRecipeNote":  "a photo=S5 works=S6 sizes=1",
+    "heroTextOnPhoto":  false,
+    "imagePaths":  {
+                       "work_2_image":  "sushi-samples/17-yoga-sakura-b/images/work-02.jpg?v=dense3",
+                       "about_image_2":  "sushi-samples/17-yoga-sakura-b/images/about-02.jpg?v=dense3",
+                       "hero_image":  "sushi-samples/17-yoga-sakura-b/images/hero.jpg?v=dense3",
+                       "work_1_image":  "sushi-samples/17-yoga-sakura-b/images/work-01.jpg?v=dense3",
+                       "about_image_3":  "sushi-samples/17-yoga-sakura-b/images/about-03.jpg?v=dense3",
+                       "about_image_1":  "sushi-samples/17-yoga-sakura-b/images/about-01.jpg?v=dense3",
+                       "work_3_image":  "sushi-samples/17-yoga-sakura-b/images/work-03.jpg?v=dense3"
+                   }
 }

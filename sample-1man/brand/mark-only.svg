@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 210" role="img" aria-label="アーチデザイン工房 マーク">
+  <title>Arch Design Kobo Mark</title>
+  <!-- 頂点は1点で閉じる。虹は細帯。アーチ下の白を広く -->
+  <g fill="none" stroke-linecap="butt">
+    <path d="M58 168 A110 78 0 0 1 262 168" stroke="#E53935" stroke-width="3.2"/>
+    <path d="M64 168 A104 73 0 0 1 256 168" stroke="#FB8C00" stroke-width="3.2"/>
+    <path d="M70 168 A98 68 0 0 1 250 168" stroke="#FDD835" stroke-width="3.2"/>
+    <path d="M76 168 A92 63 0 0 1 244 168" stroke="#43A047" stroke-width="3.2"/>
+    <path d="M82 168 A86 58 0 0 1 238 168" stroke="#26C6DA" stroke-width="3.2"/>
+    <path d="M88 168 A80 53 0 0 1 232 168" stroke="#1E88E5" stroke-width="3.2"/>
+    <path d="M94 168 A74 48 0 0 1 226 168" stroke="#8E24AA" stroke-width="3.2"/>
+  </g>
+  <line x1="48" y1="170" x2="272" y2="170" stroke="#1A237E" stroke-width="6" stroke-linecap="square"/>
+  <!-- 左右柱：頂点 (160,28) のみで接する（天辺の水平なし） -->
+  <path fill="#1A237E" d="M160 28 L112 168 H90 L152 42 Z"/>
+  <path fill="#1A237E" d="M160 28 L208 168 H230 L168 42 Z"/>
+</svg>

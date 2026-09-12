@@ -1,25 +1,14 @@
 {
-    "version":  16,
+    "version":  17,
     "sushiSampleId":  "26",
     "sushiSampleKey":  "izakaya-brick-c",
     "blurb":  "居酒屋・混合・レンガ・筆",
-    "scene":  "提灯・串",
-    "savedAt":  "2026-09-07T21:16:12.9592808Z",
+    "scene":  "写真館・モノクロ",
+    "savedAt":  "2026-09-08T17:09:17.6084575Z",
     "uiMode":  "self",
     "sitePurpose":  "shop",
     "siteColorMode":  "detail",
-    "layoutPattern":  "c",
-    "layoutOrder":  [
-                        "hero",
-                        "values",
-                        "accordions",
-                        "photos",
-                        "works",
-                        "hours",
-                        "access",
-                        "address",
-                        "contact"
-                    ],
+    "layoutPattern":  "a",
     "layoutSelected":  true,
     "layoutSchema":  2,
     "intakeDone":  true,
@@ -27,7 +16,7 @@
     "hubEntrySource":  "sample",
     "easyFlowActive":  false,
     "presetChosen":  true,
-    "chosenPresetKey":  "brick",
+    "chosenPresetKey":  "ink",
     "draftColors":  {
                         "cardBg":  "#ffffff",
                         "chromeInk":  "#fff8f0",
@@ -39,54 +28,63 @@
                         "bodyInk":  "#3a2418",
                         "contactInk":  "#fff8f0",
                         "valuesBg":  "#fffaf5",
-                        "heroInk":  "#8a3a10",
+                        "heroInk":  "#ffffff",
                         "chromeBg":  "#e07020"
                     },
     "draftCounts":  {
                         "hero-leads":  2,
-                        "hero-values":  2,
+                        "hero-values":  3,
                         "about-accordions":  1,
-                        "about-photos":  1,
-                        "works-list":  2
+                        "about-photos":  3,
+                        "works-list":  3
                     },
     "guidedImageUnlocked":  true,
     "guidedTextUnlocked":  true,
     "fonts":  {
-                  "catch":  "Yuji Syuku",
-                  "body":  "Sawarabi Gothic",
-                  "display":  "Yuji Syuku"
+                  "catch":  "Zen Kaku Gothic New",
+                  "body":  "Zen Kaku Gothic New",
+                  "display":  "Dela Gothic One"
               },
     "fields":  {
-                   "brand_name":  "赤提灯や",
-                   "hero_title":  "赤提灯や",
-                   "hero_lead_1":  "今日の一杯を",
-                   "hero_lead_2":  "串と提灯の気軽な夜",
-                   "value_1_title":  "串",
-                   "value_1_text":  "その日の仕入れで",
-                   "value_2_title":  "酒",
-                   "value_2_text":  "日本酒とハイボール",
-                   "about_section_name":  "お店",
-                   "about_heading":  "赤提灯や案内",
-                   "about_name":  "赤提灯や",
-                   "about_lead":  "赤提灯の下で串焼きを楽しむ居酒屋。今日の一杯と、気軽な会話の場です。",
-                   "acc_1_title":  "こだわり",
-                   "acc_1_body":  "赤提灯の下で串焼きを楽しむ居酒屋。今日の一杯と、気軽な会話の場です。",
-                   "works_section_name":  "メニュー",
-                   "works_heading":  "おすすめ",
-                   "works_lead":  "串と提灯の気軽な夜",
-                   "work_1_title":  "串盛り",
-                   "work_1_text":  "おまかせ5本",
-                   "work_2_title":  "今日の刺身",
-                   "work_2_text":  "入荷次第",
-                   "hours_text":  "17:00–23:30／日曜定休",
-                   "address_text":  "〇〇市横丁入口",
+                   "brand_name":  "墨白フォト",
+                   "hero_title":  "墨と白の余白で、人を切り取る。",
+                   "hero_lead_1":  "墨と白のトーンで撮るフォトスタジオ。余計な色を足さず、人物の輪郭をはっきり残します。",
+                   "hero_lead_2":  "宣材・ポートレート・作品撮りに対応。撮影後の簡単なレタッチまで含めたコースがあります。",
+                   "hero_lead_3":  "",
+                   "value_1_title":  "モノクロ基調",
+                   "value_1_text":  "カラーも撮れますが、提案の中心はモノクロです。光と影だけで表情を組み立て、あとから色に頼らない写真にします。",
+                   "value_2_title":  "暗い壁の部屋",
+                   "value_2_text":  "スタジオは墨色の壁と白い床。照明はスポット中心で、背景のノイズを消し、被写体の輪郭だけを浮かせます。",
+                   "about_section_name":  "スタジオについて",
+                   "about_heading":  "墨と白で残す写真",
+                   "about_name":  "墨白フォト",
+                   "about_lead":  "モノクロームのポートレートを得意とする写真スタジオです。アーティスト宣材、作家プロフィール、静かな家族写真まで。派手な小道具は使わず、光の当て方で一枚を決めます。",
+                   "acc_1_title":  "撮影メモ",
+                   "acc_1_body":  "服装は無地の黒・白・グレーが映えます。柄物も相談可ですが、まずはシンプルを推奨。データはモノクロ仕上げが基本で、カラー版はオプション。予約は一枠一組、見学は平日のみ受け付けます。",
+                   "acc_2_title":  "",
+                   "acc_2_body":  "",
+                   "works_section_name":  "プラン",
+                   "works_heading":  "撮影メニュー",
+                   "works_lead":  "影と輪郭のための枠",
+                   "work_1_title":  "墨白ポートレート",
+                   "work_1_text":  "50分。半身〜バストアップ中心。データ15カット目安。",
+                   "work_2_title":  "宣材モノクロセット",
+                   "work_2_text":  "70分。立ち・座り・横顔。Web用と印刷用の解像度を分けて納品。",
+                   "address_text":  "架空市墨町8-3-7 地下1F",
                    "contact_section_name":  "ご連絡",
                    "contact_label":  "ご連絡",
-                   "contact_note_1":  "席のみ予約可",
-                   "contact_note_2":  "17:00–23:30／日曜定休",
-                   "font_display":  "Yuji Syuku",
-                   "font_catch":  "Yuji Syuku",
-                   "font_body":  "Sawarabi Gothic"
+                   "contact_email":  "shoot@sumishiro-photo.example",
+                   "contact_note_1":  "ご予約は用途と希望トーンを添えてメールで。",
+                   "contact_note_2":  "キャンセルは3日前まで無料。",
+                   "font_display":  "Dela Gothic One",
+                   "font_catch":  "Zen Kaku Gothic New",
+                   "font_body":  "Zen Kaku Gothic New",
+                   "access_text":  "最寄駅から徒歩5分。駐車場は近隣コインパーキングをご利用ください。",
+                   "value_3_title":  "通いやすい距離感",
+                   "value_3_text":  "初めての方も、常連の方も同じペースで。短時間の立ち寄りにも使いやすい店づくりです。",
+                   "work_3_title":  "墨白フォトの定番",
+                   "work_3_text":  "店の空気が伝わる組み合わせ。詳細は来店時にご案内します。",
+                   "hours_text":  "木〜月 11:00–19:00（予約制）／火水定休　／　最終受付は閉店30分前。"
                },
     "confirmed":  {
                       "purpose":  true,
@@ -105,7 +103,51 @@
                   },
     "draftExtras":  {
                         "hours":  true,
-                        "access":  false,
-                        "address":  true
-                    }
+                        "address":  true,
+                        "access":  true
+                    },
+    "heroTextPlate":  "round",
+    "heroTextPlateTone":  "white",
+    "layoutOrder":  [
+                        "hero",
+                        "photos",
+                        "works",
+                        "accordions",
+                        "values",
+                        "hours",
+                        "access",
+                        "address",
+                        "contact"
+                    ],
+    "itemLayouts":  {
+                        "about-photos":  {
+                                             "sizes":  [
+                                                           "H",
+                                                           "H",
+                                                           "L"
+                                                       ],
+                                             "gap":  "normal",
+                                             "sizePat":  "S2"
+                                         },
+                        "works-list":  {
+                                           "sizes":  [
+                                                         "H",
+                                                         "H",
+                                                         "L"
+                                                     ],
+                                           "gap":  "tight",
+                                           "sizePat":  "S4"
+                                       }
+                    },
+    "layoutRecipeNote":  "a photo=S2 works=S4 sizes=1",
+    "heroTextOnPhoto":  false,
+    "imagePaths":  {
+                       "work_2_image":  "sushi-samples/26-izakaya-brick-c/images/work-02.jpg?v=dense3",
+                       "about_image_2":  "sushi-samples/26-izakaya-brick-c/images/about-02.jpg?v=dense3",
+                       "hero_image":  "sushi-samples/26-izakaya-brick-c/images/hero.jpg?v=dense3",
+                       "work_1_image":  "sushi-samples/26-izakaya-brick-c/images/work-01.jpg?v=dense3",
+                       "about_image_3":  "sushi-samples/26-izakaya-brick-c/images/about-03.jpg?v=dense3",
+                       "about_image_1":  "sushi-samples/26-izakaya-brick-c/images/about-01.jpg?v=dense3",
+                       "work_3_image":  "sushi-samples/26-izakaya-brick-c/images/work-03.jpg?v=dense3"
+                   }
 }

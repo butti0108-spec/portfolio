@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex,nofollow">
+  <title>見本レビュー</title>
+  <link rel="stylesheet" href="review-dash.css?v=nav-fix-1">
+</head>
+<body class="view-read">
+  <header class="bar">
+    <div class="bar-left">
+      <strong>見本レビュー</strong>
+      <span class="mode-group" role="group" aria-label="表示モード">
+        <button type="button" id="btn-mode-read" class="mode is-on">確認（読む）</button>
+        <button type="button" id="btn-mode-capture" class="mode">撮影（全体）</button>
+      </span>
+      <span id="progress">承認 0 / 候補 —</span>
+    </div>
+    <span id="current-label" class="bar-label" title="">読み込み中…</span>
+    <div class="bar-actions" role="group" aria-label="操作">
+      <button type="button" id="btn-prev">前へ</button>
+      <button type="button" id="btn-next">次へ</button>
+      <button type="button" id="btn-reload">再読込</button>
+      <button type="button" id="btn-reject" class="ng">NG</button>
+      <button type="button" id="btn-approve" class="ok">承認</button>
+    </div>
+  </header>
+  <p id="status-line" class="status-line"></p>
+  <div class="stage" id="stage">
+    <div class="frame-wrap" id="frame-wrap">
+      <iframe
+        id="preview-frame"
+        title="プレビュー"
+        src="../index.html?capture=1&review=1&v=item-size-2"
+      ></iframe>
+    </div>
+  </div>
+
+  <div id="ng-modal" class="modal" hidden>
+    <div class="modal-card" role="dialog" aria-labelledby="ng-modal-title">
+      <h2 id="ng-modal-title">NGの内容</h2>
+      <p class="modal-lead">本当に捨てるのか、直して残すのかを分けてください。</p>
+
+      <fieldset class="ng-severity">
+        <legend>判定</legend>
+        <label><input type="radio" name="ng-severity" value="fix" checked> 要修正（残したい・直す）</label>
+        <label><input type="radio" name="ng-severity" value="drop"> 本NG（この版は捨てる）</label>
+      </fieldset>
+
+      <fieldset class="ng-reasons">
+        <legend>理由（複数可・1つ以上）</legend>
+        <label><input type="checkbox" name="ng-reason" value="contrast"> 文字が溶けて読めない（色）</label>
+        <label><input type="checkbox" name="ng-reason" value="photo"> 写真が業種・世界観と合わない</label>
+        <label><input type="checkbox" name="ng-reason" value="layout"> レイアウト／隙間が気持ち悪い</label>
+        <label><input type="checkbox" name="ng-reason" value="copy"> 文章が薄い／業種ずれ</label>
+        <label><input type="checkbox" name="ng-reason" value="other"> その他</label>
+      </fieldset>
+
+      <label class="ng-note-label" for="ng-note">一言メモ（任意）</label>
+      <textarea id="ng-note" rows="3" placeholder="例: ヒーロー見出しが紺地で消える"></textarea>
+
+      <div class="modal-actions">
+        <button type="button" id="ng-cancel">やめる</button>
+        <button type="button" id="ng-submit" class="ng">NGを確定</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="review-dash.js?v=nav-fix-1"></script>
+</body>
+</html>

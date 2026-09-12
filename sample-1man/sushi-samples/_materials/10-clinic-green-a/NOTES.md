@@ -1,5 +1,4 @@
-﻿# メモ — 10-clinic-green-a
+﻿# NOTES 10-clinic-green-a
 
-- 帯: N / ABC: c / P1 / H3
-- 世界観: 居酒屋・提灯
-- 採用判断:
+- review round reset 2026-09-09 (complete pack for human review)
+- [2026-09-10 00:14] fix / レイアウト／隙間が気持ち悪い / note: セクション間隙間空き

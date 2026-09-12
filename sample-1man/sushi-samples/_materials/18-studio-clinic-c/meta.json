@@ -2,17 +2,6 @@
     "id":  "18",
     "folder":  "18-studio-clinic-c",
     "band":  "N",
-    "layoutPattern":  "b",
-    "layoutOrder":  [
-                        "hero",
-                        "works",
-                        "values",
-                        "accordions",
-                        "photos",
-                        "hours",
-                        "address",
-                        "contact"
-                    ],
     "photoPack":  "P3",
     "headingPack":  "H4",
     "colorKey":  "clinic",
@@ -23,26 +12,38 @@
                   "display":  "Zen Kaku Gothic New"
               },
     "scene":  "写真館・余白",
-    "counts":  {
-                   "hero-leads":  2,
-                   "hero-values":  3,
-                   "about-accordions":  2,
-                   "about-photos":  3,
-                   "works-list":  3
-               },
-    "extras":  {
-                   "hours":  true,
-                   "access":  false,
-                   "address":  true
-               },
+    "status":  "text+images",
+    "layoutPattern":  "a",
     "imageSlots":  [
                        "hero.jpg",
                        "about-01.jpg",
                        "about-02.jpg",
                        "about-03.jpg",
+                       "about-04.jpg",
                        "work-01.jpg",
                        "work-02.jpg",
                        "work-03.jpg"
                    ],
-    "status":  "未着手"
+    "layoutOrder":  [
+                        "hero",
+                        "values",
+                        "photos",
+                        "works",
+                        "hours",
+                        "access",
+                        "accordions",
+                        "contact"
+                    ],
+    "extras":  {
+                   "hours":  true,
+                   "access":  true,
+                   "address":  false
+               },
+    "counts":  {
+                   "hero-leads":  2,
+                   "hero-values":  3,
+                   "about-accordions":  1,
+                   "about-photos":  4,
+                   "works-list":  3
+               }
 }

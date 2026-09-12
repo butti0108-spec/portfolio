@@ -1,25 +1,14 @@
 {
-    "version":  16,
+    "version":  17,
     "sushiSampleId":  "25",
     "sushiSampleKey":  "sweets-cafe-a",
     "blurb":  "スイーツ・横長・ベージュ・明朝",
-    "scene":  "ティータイム",
-    "savedAt":  "2026-09-07T21:16:12.9592808Z",
+    "scene":  "パン・小麦",
+    "savedAt":  "2026-09-08T17:09:16.0194979Z",
     "uiMode":  "self",
     "sitePurpose":  "shop",
     "siteColorMode":  "detail",
     "layoutPattern":  "a",
-    "layoutOrder":  [
-                        "hero",
-                        "values",
-                        "accordions",
-                        "photos",
-                        "works",
-                        "hours",
-                        "access",
-                        "address",
-                        "contact"
-                    ],
     "layoutSelected":  true,
     "layoutSchema":  2,
     "intakeDone":  true,
@@ -27,7 +16,7 @@
     "hubEntrySource":  "sample",
     "easyFlowActive":  false,
     "presetChosen":  true,
-    "chosenPresetKey":  "cafe",
+    "chosenPresetKey":  "brick",
     "draftColors":  {
                         "cardBg":  "#fff8ee",
                         "chromeInk":  "#fff6e8",
@@ -44,49 +33,58 @@
                     },
     "draftCounts":  {
                         "hero-leads":  2,
-                        "hero-values":  2,
-                        "about-accordions":  1,
-                        "about-photos":  1,
-                        "works-list":  2
+                        "hero-values":  3,
+                        "about-accordions":  2,
+                        "about-photos":  3,
+                        "works-list":  3
                     },
     "guidedImageUnlocked":  true,
     "guidedTextUnlocked":  true,
     "fonts":  {
-                  "catch":  "Shippori Mincho",
+                  "catch":  "Sawarabi Gothic",
                   "body":  "Zen Kaku Gothic New",
-                  "display":  "Shippori Mincho"
+                  "display":  "Sawarabi Gothic"
               },
     "fields":  {
-                   "brand_name":  "午後の菓子屋",
-                   "hero_title":  "午後の菓子屋",
-                   "hero_lead_1":  "紅茶と一緒に",
-                   "hero_lead_2":  "焼き菓子と静かなティータイム",
-                   "value_1_title":  "紅茶",
-                   "value_1_text":  "茶葉を選べます",
-                   "value_2_title":  "焼き菓子",
-                   "value_2_text":  "ギフト缶あり",
-                   "about_section_name":  "お店",
-                   "about_heading":  "午後の菓子屋案内",
-                   "about_name":  "午後の菓子屋",
-                   "about_lead":  "紅茶に合う焼き菓子の店です。午後のティータイム向けに、日持ちする菓子も揃えています。",
-                   "acc_1_title":  "こだわり",
-                   "acc_1_body":  "紅茶に合う焼き菓子の店です。午後のティータイム向けに、日持ちする菓子も揃えています。",
-                   "works_section_name":  "メニュー",
-                   "works_heading":  "おすすめ",
-                   "works_lead":  "焼き菓子と静かなティータイム",
-                   "work_1_title":  "スコーン",
-                   "work_1_text":  "焼きたて時間あり",
-                   "work_2_title":  "クッキー缶",
-                   "work_2_text":  "手土産に",
-                   "hours_text":  "12:00–18:00／火水定休",
-                   "address_text":  "〇〇町茶屋通り",
+                   "brand_name":  "麦畑ベーカリー",
+                   "hero_title":  "麦畑の香りが、焼き立てになる。",
+                   "hero_lead_1":  "麦畑ベーカリーは、朝の焼き立てが看板。パンの香りのピークは開店直後です。",
+                   "hero_lead_2":  "食パンと総菜パンが中心。売り切れ次第終了なので、早い時間の来店がいちばん確実です。",
+                   "hero_lead_3":  "週末は早めの売り切れに注意",
+                   "value_1_title":  "粉から焼く",
+                   "value_1_text":  "食パンとカンパーニュは店内で成形。小麦の風味が残るよう、砂糖と油脂は控えめにしています。",
+                   "value_2_title":  "朝の焼き上がり",
+                   "value_2_text":  "開店前に一番窯、十一時前後に二番窯。トースト用とサンドイッチ用でスライス厚を変えられます。",
+                   "value_3_title":  "小麦の見える店",
+                   "value_3_text":  "カウンター奥に粉袋と木のボード。作りすぎない量で、午後に残るのは日持ちのする菓子パン中心です。",
+                   "about_section_name":  "パン屋について",
+                   "about_heading":  "小麦の匂いがする朝の店",
+                   "about_name":  "麦畑ベーカリー",
+                   "about_lead":  "住宅地の一角にある小さなパン屋です。看板は食パンとカンパーニュ。クロワッサンや惣菜パンも並びますが、主役はシンプルな小麦パン。イートインは立ち飲み珈琲のカウンターのみです。",
+                   "acc_1_title":  "買い方のヒント",
+                   "acc_1_body":  "人気の山食は整理券になる日があります。予約は食パン・カンパーニュのみ前日まで。アレルギー表示は値札下に。カードと交通系ICが使えます。袋は紙・エコの二種から選べます。",
+                   "acc_2_title":  "お店の一日",
+                   "acc_2_body":  "仕込みは深夜から。開店は八時、焼き上がりの香りが通りに出るころです。閉店は売り切れ次第で早まることがあります。休日は九時開店にずらします。",
+                   "works_section_name":  "パン",
+                   "works_heading":  "今日の焼き立て",
+                   "works_lead":  "小麦のシンプルな味",
+                   "work_1_title":  "麦畑食パン（一斤）",
+                   "work_1_text":  "耳まで柔らかい。トーストにもサンドにも。予約可。",
+                   "work_2_title":  "麦畑食パン1斤",
+                   "work_2_text":  "外は薄く香ばしく、中はしっとり。翌朝のトースト向きです。",
+                   "address_text":  "架空市麦野2-4-6",
                    "contact_section_name":  "ご連絡",
                    "contact_label":  "ご連絡",
-                   "contact_note_1":  "ギフト包装無料",
-                   "contact_note_2":  "12:00–18:00／火水定休",
-                   "font_display":  "Shippori Mincho",
-                   "font_catch":  "Shippori Mincho",
-                   "font_body":  "Zen Kaku Gothic New"
+                   "contact_email":  "reserve@mugibatake-bakery.example",
+                   "contact_note_1":  "食パン・カンパーニュの予約はメールで。希望日と個数を。",
+                   "contact_note_2":  "法人の差し入れ注文も同アドレスで相談可。",
+                   "font_display":  "Sawarabi Gothic",
+                   "font_catch":  "Sawarabi Gothic",
+                   "font_body":  "Zen Kaku Gothic New",
+                   "access_text":  "最寄駅から徒歩5分。駐車場は近隣コインパーキングをご利用ください。",
+                   "work_3_title":  "麦畑ベーカリーの定番",
+                   "work_3_text":  "店の空気が伝わる組み合わせ。詳細は来店時にご案内します。",
+                   "hours_text":  "火〜日 8:00–17:00（売り切れ次第終了）／月曜定休　／　最終受付は閉店30分前。"
                },
     "confirmed":  {
                       "purpose":  true,
@@ -105,7 +103,51 @@
                   },
     "draftExtras":  {
                         "hours":  true,
-                        "access":  false,
-                        "address":  true
-                    }
+                        "address":  true,
+                        "access":  true
+                    },
+    "heroTextPlate":  "round",
+    "heroTextPlateTone":  "white",
+    "layoutOrder":  [
+                        "hero",
+                        "accordions",
+                        "values",
+                        "photos",
+                        "works",
+                        "hours",
+                        "access",
+                        "address",
+                        "contact"
+                    ],
+    "itemLayouts":  {
+                        "about-photos":  {
+                                             "sizes":  [
+                                                           "L",
+                                                           "H",
+                                                           "H"
+                                                       ],
+                                             "gap":  "loose",
+                                             "sizePat":  "S5"
+                                         },
+                        "works-list":  {
+                                           "sizes":  [
+                                                         "L",
+                                                         "H",
+                                                         "H"
+                                                     ],
+                                           "gap":  "loose",
+                                           "sizePat":  "S5"
+                                       }
+                    },
+    "layoutRecipeNote":  "a photo=S5 works=S5 sizes=1",
+    "heroTextOnPhoto":  false,
+    "imagePaths":  {
+                       "work_2_image":  "sushi-samples/25-sweets-cafe-a/images/work-02.jpg?v=dense3",
+                       "about_image_2":  "sushi-samples/25-sweets-cafe-a/images/about-02.jpg?v=dense3",
+                       "hero_image":  "sushi-samples/25-sweets-cafe-a/images/hero.jpg?v=dense3",
+                       "work_1_image":  "sushi-samples/25-sweets-cafe-a/images/work-01.jpg?v=dense3",
+                       "about_image_3":  "sushi-samples/25-sweets-cafe-a/images/about-03.jpg?v=dense3",
+                       "about_image_1":  "sushi-samples/25-sweets-cafe-a/images/about-01.jpg?v=dense3",
+                       "work_3_image":  "sushi-samples/25-sweets-cafe-a/images/work-03.jpg?v=dense3"
+                   }
 }

@@ -1,25 +1,14 @@
 {
-    "version":  16,
+    "version":  17,
     "sushiSampleId":  "01",
     "sushiSampleKey":  "cafe-warm-a",
     "blurb":  "カフェ・横長・ベージュ暖色・明朝",
-    "scene":  "珈琲・木目",
-    "savedAt":  "2026-09-07T21:16:12.9592808Z",
+    "scene":  "カフェ・朝・木目",
+    "savedAt":  "2026-09-08T17:07:57.8391630Z",
     "uiMode":  "self",
     "sitePurpose":  "shop",
     "siteColorMode":  "detail",
     "layoutPattern":  "a",
-    "layoutOrder":  [
-                        "hero",
-                        "values",
-                        "accordions",
-                        "photos",
-                        "works",
-                        "hours",
-                        "access",
-                        "address",
-                        "contact"
-                    ],
     "layoutSelected":  true,
     "layoutSchema":  2,
     "intakeDone":  true,
@@ -44,10 +33,10 @@
                     },
     "draftCounts":  {
                         "hero-leads":  2,
-                        "hero-values":  2,
+                        "hero-values":  3,
                         "about-accordions":  1,
-                        "about-photos":  1,
-                        "works-list":  2
+                        "about-photos":  3,
+                        "works-list":  3
                     },
     "guidedImageUnlocked":  true,
     "guidedTextUnlocked":  true,
@@ -58,35 +47,44 @@
               },
     "fields":  {
                    "brand_name":  "木漏れ日カフェ",
-                   "hero_title":  "木漏れ日カフェ",
-                   "hero_lead_1":  "やさしい時間を、みなさまに",
-                   "hero_lead_2":  "木の香りと、ゆっくりした席",
-                   "value_1_title":  "珈琲",
-                   "value_1_text":  "毎日挽きたて",
-                   "value_2_title":  "席",
-                   "value_2_text":  "窓辺の木漏れ日",
-                   "about_section_name":  "お店",
-                   "about_heading":  "木漏れ日カフェ案内",
+                   "hero_title":  "朝の光が、いちばんおいしい時間。",
+                   "hero_lead_1":  "木枠の窓から差し込む光と、挽きたての香り。近所の人が靴を脱がずに立ち寄れる、小さな朝のカフェです。",
+                   "hero_lead_2":  "ブレンドは毎日少しだけ配合を変え、焼きたてのスコーンは開店と同時にケースへ。忙しい朝でも、深呼吸ひとつ分の余白をどうぞ。",
+                   "hero_lead_3":  "",
+                   "value_1_title":  "木目に映る朝の一杯",
+                   "value_1_text":  "浅煎りから中煎りまで、豆の表情が分かる抽出。ミルクは控えめに、コーヒーの甘みを残す淹れ方を心がけています。",
+                   "value_2_title":  "開店と同時の焼き菓子",
+                   "value_2_text":  "スコーンとパウンドケーキは毎朝店内で仕上げ。売り切れ次第終了なので、早い時間の来店がいちばんの近道です。",
+                   "about_section_name":  "お店について",
+                   "about_heading":  "路地の奥、木漏れ日のテーブル",
                    "about_name":  "木漏れ日カフェ",
-                   "about_lead":  "近所の小さなカフェです。焙煎したての珈琲と、季節の焼き菓子を用意しています。仕事の合間にも、友人とのおしゃべりにもどうぞ。",
-                   "acc_1_title":  "こだわり",
-                   "acc_1_body":  "近所の小さなカフェです。焙煎したての珈琲と、季節の焼き菓子を用意しています。仕事の合間にも、友人とのおしゃべりにもどうぞ。",
-                   "works_section_name":  "メニュー",
-                   "works_heading":  "おすすめ",
-                   "works_lead":  "木の香りと、ゆっくりした席",
-                   "work_1_title":  "本日のブレンド",
-                   "work_1_text":  "深煎りとミルクのバランス",
-                   "work_2_title":  "焼き菓子セット",
-                   "work_2_text":  "珈琲との相性を考えて",
-                   "hours_text":  "平日 9:00–18:00／土日 10:00–17:00",
-                   "address_text":  "〇〇市中央1-2-3",
+                   "about_lead":  "住宅街の角を曲がった先に、古材のカウンターと数脚の椅子だけのお店があります。電源は壁際の二席のみ。仕事の前の一杯にも、休日ののんびり読書にも使っていただけます。看板は控えめですが、窓辺の観葉植物が目印です。",
+                   "acc_1_title":  "はじめての方へ",
+                   "acc_1_body":  "メニューはドリンクと焼き菓子が中心。席は予約なしのゆったり運用で、混雑時はお持ち帰りもご案内します。お子さま連れも歓迎ですが、大声での通話はご遠慮ください。季節のブレンドは黒板にその日の豆を書いています。",
+                   "acc_2_title":  "",
+                   "acc_2_body":  "",
+                   "works_section_name":  "おすすめ",
+                   "works_heading":  "今朝の定番",
+                   "works_lead":  "まずはこの組み合わせから。",
+                   "work_1_title":  "木漏れ日ブレンド＆バタースコーン",
+                   "work_1_text":  "中煎りのブレンドに、塩気のあるバタースコーン。開店直後がいちばん香りが立ちます。",
+                   "work_2_title":  "午後のアイスラテ",
+                   "work_2_text":  "昼すぎは氷で切り替わるラテ。スコーン残りがあればセットにできます。",
+                   "hours_text":  "平日 7:30–16:00（L.O. 15:30）／土日祝 8:00–17:00（L.O. 16:30）　水曜定休",
+                   "address_text":  "架空市ひなた区こもれび通り 3-12　木漏れ日ビル1F",
                    "contact_section_name":  "ご連絡",
                    "contact_label":  "ご連絡",
-                   "contact_note_1":  "ご予約・お問い合わせはメールで",
-                   "contact_note_2":  "平日 9:00–18:00／土日 10:00–17:00",
+                   "contact_email":  "hello@komorebi-cafe.example",
+                   "contact_note_1":  "ご予約・貸切のご相談はメールにて。営業中の電話は混雑時つながりにくいことがあります。",
+                   "contact_note_2":  "取材・撮影のご依頼も同アドレスへ。返信は2営業日以内を目安にしています。",
                    "font_display":  "Shippori Mincho",
                    "font_catch":  "Shippori Mincho",
-                   "font_body":  "Zen Kaku Gothic New"
+                   "font_body":  "Zen Kaku Gothic New",
+                   "access_text":  "最寄駅から徒歩5分。駐車場は近隣コインパーキングをご利用ください。",
+                   "value_3_title":  "通いやすい距離感",
+                   "value_3_text":  "初めての方も、常連の方も同じペースで。短時間の立ち寄りにも使いやすい店づくりです。",
+                   "work_3_title":  "木漏れ日カフェの定番",
+                   "work_3_text":  "店の空気が伝わる組み合わせ。詳細は来店時にご案内します。"
                },
     "confirmed":  {
                       "purpose":  true,
@@ -105,7 +103,51 @@
                   },
     "draftExtras":  {
                         "hours":  true,
-                        "access":  false,
-                        "address":  true
-                    }
+                        "address":  true,
+                        "access":  true
+                    },
+    "layoutOrder":  [
+                        "hero",
+                        "values",
+                        "photos",
+                        "works",
+                        "accordions",
+                        "hours",
+                        "access",
+                        "address",
+                        "contact"
+                    ],
+    "itemLayouts":  {
+                        "about-photos":  {
+                                             "sizes":  [
+                                                           "L",
+                                                           "H",
+                                                           "H"
+                                                       ],
+                                             "gap":  "normal",
+                                             "sizePat":  "S6"
+                                         },
+                        "works-list":  {
+                                           "sizes":  [
+                                                         "H",
+                                                         "H",
+                                                         "L"
+                                                     ],
+                                           "gap":  "tight",
+                                           "sizePat":  "S4"
+                                       }
+                    },
+    "layoutRecipeNote":  "a photo=S6 works=S4 sizes=1",
+    "heroTextOnPhoto":  true,
+    "heroTextPlate":  "round",
+    "heroTextPlateTone":  "white",
+    "imagePaths":  {
+                       "work_2_image":  "sushi-samples/01-cafe-warm-a/images/work-02.jpg?v=dense3",
+                       "about_image_2":  "sushi-samples/01-cafe-warm-a/images/about-02.jpg?v=dense3",
+                       "hero_image":  "sushi-samples/01-cafe-warm-a/images/hero.jpg?v=dense3",
+                       "work_1_image":  "sushi-samples/01-cafe-warm-a/images/work-01.jpg?v=dense3",
+                       "about_image_3":  "sushi-samples/01-cafe-warm-a/images/about-03.jpg?v=dense3",
+                       "about_image_1":  "sushi-samples/01-cafe-warm-a/images/about-01.jpg?v=dense3",
+                       "work_3_image":  "sushi-samples/01-cafe-warm-a/images/work-03.jpg?v=dense3"
+                   }
 }

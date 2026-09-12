@@ -1,25 +1,14 @@
 {
-    "version":  16,
+    "version":  17,
     "sushiSampleId":  "15",
     "sushiSampleKey":  "ramen-ink-a",
     "blurb":  "ラーメン・横長・墨・筆",
-    "scene":  "暖簾・夜",
-    "savedAt":  "2026-09-07T21:16:12.9592808Z",
+    "scene":  "パン屋・朝",
+    "savedAt":  "2026-09-08T17:08:45.5080442Z",
     "uiMode":  "self",
     "sitePurpose":  "shop",
     "siteColorMode":  "detail",
     "layoutPattern":  "a",
-    "layoutOrder":  [
-                        "hero",
-                        "values",
-                        "accordions",
-                        "photos",
-                        "works",
-                        "hours",
-                        "access",
-                        "address",
-                        "contact"
-                    ],
     "layoutSelected":  true,
     "layoutSchema":  2,
     "intakeDone":  true,
@@ -27,7 +16,7 @@
     "hubEntrySource":  "sample",
     "easyFlowActive":  false,
     "presetChosen":  true,
-    "chosenPresetKey":  "ink",
+    "chosenPresetKey":  "cafe",
     "draftColors":  {
                         "cardBg":  "#1f2424",
                         "chromeInk":  "#f5f5f5",
@@ -44,49 +33,58 @@
                     },
     "draftCounts":  {
                         "hero-leads":  2,
-                        "hero-values":  2,
+                        "hero-values":  3,
                         "about-accordions":  1,
-                        "about-photos":  1,
-                        "works-list":  2
+                        "about-photos":  3,
+                        "works-list":  3
                     },
     "guidedImageUnlocked":  true,
     "guidedTextUnlocked":  true,
     "fonts":  {
-                  "catch":  "Yuji Syuku",
-                  "body":  "Sawarabi Gothic",
-                  "display":  "Yuji Syuku"
+                  "catch":  "Kiwi Maru",
+                  "body":  "M PLUS Rounded 1c",
+                  "display":  "Zen Maru Gothic"
               },
     "fields":  {
-                   "brand_name":  "暖簾そば処",
-                   "hero_title":  "暖簾そば処",
-                   "hero_lead_1":  "湯気の向こうへ",
-                   "hero_lead_2":  "夜の暖簾と、静かな一杯",
-                   "value_1_title":  "だし",
-                   "value_1_text":  "毎日引き立て",
-                   "value_2_title":  "夜",
-                   "value_2_text":  "暖簾の向こうで営業",
-                   "about_section_name":  "お店",
-                   "about_heading":  "暖簾そば処案内",
-                   "about_name":  "暖簾そば処",
-                   "about_lead":  "夜営業のそば処です。だしの香りと細い麺で、静かに一杯を楽しむ店です。",
-                   "acc_1_title":  "こだわり",
-                   "acc_1_body":  "夜営業のそば処です。だしの香りと細い麺で、静かに一杯を楽しむ店です。",
-                   "works_section_name":  "メニュー",
-                   "works_heading":  "おすすめ",
-                   "works_lead":  "夜の暖簾と、静かな一杯",
-                   "work_1_title":  "かけそば",
-                   "work_1_text":  "シンプルが一番",
-                   "work_2_title":  "季節の天ぷら",
-                   "work_2_text":  "そばと一緒に",
-                   "hours_text":  "17:00–23:00／月曜定休",
-                   "address_text":  "〇〇町宿3-2",
+                   "brand_name":  "朝焼パン ひかり屋",
+                   "hero_title":  "開店のベルと、焼きたての朝。",
+                   "hero_lead_1":  "まだ薄い陽射しのうちに、オーブンを開けるパン屋。朝食に間に合うサイズのパンを、袋ごと選べる店先販売です。",
+                   "hero_lead_2":  "甘いパンより食事パン多め。コーヒーはテイクアウト用のドリップのみ置いています。",
+                   "hero_lead_3":  "",
+                   "value_1_title":  "朝に間に合う焼き上がり",
+                   "value_1_text":  "食パンとロールを先に出し、菓子パンは少し遅れて並べます。通勤袋に入るサイズを意識しています。",
+                   "value_2_title":  "食事パンを厚く",
+                   "value_2_text":  "サンド用の扁平パンや、スープに合うハード系を多めに。甘さは控えた配合です。",
+                   "about_section_name":  "パン屋について",
+                   "about_heading":  "ベルが鳴る、小さい店先",
+                   "about_name":  "朝焼パン ひかり屋",
+                   "about_lead":  "駅へ向かう道沿いの、イートインなしのパン屋です。ピークは開店から1時間。午後は残り少ない日もあります。アレルギー対応の専用工房ではありません。",
+                   "acc_1_title":  "買い方の目安",
+                   "acc_1_body":  "トングでトレーに取り、レジへ。予約は食パンのみ前夜まで。現金と主要キャッシュレスに対応しています。",
+                   "acc_2_title":  "",
+                   "acc_2_body":  "",
+                   "works_section_name":  "朝のパン",
+                   "works_heading":  "通勤袋に入れるなら",
+                   "works_lead":  "売り切れ次第終了です。",
+                   "work_1_title":  "モーニングロール（プレーン）",
+                   "work_1_text":  "バター感を抑えた小さいロール。そのままでもトーストでも。",
+                   "work_2_title":  "全粒粉のサンドパン",
+                   "work_2_text":  "扁平で具をはさみやすい形。ハムチーズにも野菜多めにも向きます。",
                    "contact_section_name":  "ご連絡",
                    "contact_label":  "ご連絡",
-                   "contact_note_1":  "予約なし・入店順",
-                   "contact_note_2":  "17:00–23:00／月曜定休",
-                   "font_display":  "Yuji Syuku",
-                   "font_catch":  "Yuji Syuku",
-                   "font_body":  "Sawarabi Gothic"
+                   "contact_email":  "hello@hikariya-pan.example",
+                   "font_display":  "Zen Maru Gothic",
+                   "font_catch":  "Kiwi Maru",
+                   "font_body":  "M PLUS Rounded 1c",
+                   "value_3_title":  "通いやすい距離感",
+                   "value_3_text":  "初めての方も、常連の方も同じペースで。短時間の立ち寄りにも使いやすい店づくりです。",
+                   "work_3_title":  "朝焼パン ひかり屋の定番",
+                   "work_3_text":  "店の空気が伝わる組み合わせ。詳細は来店時にご案内します。",
+                   "address_text":  "架空市あさやけ区ひかり通り 5-3 / 最寄駅から徒歩5分。駐車場は近隣コインパーキングをご利用ください。",
+                   "hours_text":  "月〜土 7:00–14:00（なくなり次第終了）　日曜定休　／　最終受付は閉店30分前。混雑時はお待ちいただく場合があります。",
+                   "access_text":  "最寄駅から徒歩5分。駐車場は近隣コインパーキングをご利用ください。 / Address: 架空市あさやけ区ひかり通り 5-3 / 最寄駅から徒歩5分。駐車場は近隣コインパーキングをご利用ください。",
+                   "contact_note_1":  "ご予約・お問い合わせはメールにて。希望日時・人数・ご要望を書いてください。折り返しで空き状況とアクセスの補足をご案内します。",
+                   "contact_note_2":  "営業中は店頭優先のため返信が遅れることがあります。2営業日以内を目安にご連絡します。駐車・道順の質問も同アドレスで受け付けます。"
                },
     "confirmed":  {
                       "purpose":  true,
@@ -105,7 +103,50 @@
                   },
     "draftExtras":  {
                         "hours":  true,
-                        "access":  false,
-                        "address":  true
-                    }
+                        "access":  true,
+                        "address":  false
+                    },
+    "heroTextPlate":  "round",
+    "heroTextPlateTone":  "white",
+    "heroTextOnPhoto":  false,
+    "layoutOrder":  [
+                        "hero",
+                        "values",
+                        "photos",
+                        "works",
+                        "hours",
+                        "access",
+                        "accordions",
+                        "contact"
+                    ],
+    "itemLayouts":  {
+                        "about-photos":  {
+                                             "sizes":  [
+                                                           "L",
+                                                           "H",
+                                                           "H"
+                                                       ],
+                                             "gap":  "normal",
+                                             "sizePat":  "S6"
+                                         },
+                        "works-list":  {
+                                           "sizes":  [
+                                                         "L",
+                                                         "L",
+                                                         "L"
+                                                     ],
+                                           "gap":  "loose",
+                                           "sizePat":  "S1"
+                                       }
+                    },
+    "layoutRecipeNote":  "a photo=S6 works=S1 sizes=1",
+    "imagePaths":  {
+                       "work_2_image":  "sushi-samples/15-ramen-ink-a/images/work-02.jpg?v=dense4",
+                       "about_image_2":  "sushi-samples/15-ramen-ink-a/images/about-02.jpg?v=dense4",
+                       "hero_image":  "sushi-samples/15-ramen-ink-a/images/hero.jpg?v=dense4",
+                       "work_1_image":  "sushi-samples/15-ramen-ink-a/images/work-01.jpg?v=dense4",
+                       "about_image_3":  "sushi-samples/15-ramen-ink-a/images/about-03.jpg?v=dense4",
+                       "about_image_1":  "sushi-samples/15-ramen-ink-a/images/about-01.jpg?v=dense4",
+                       "work_3_image":  "sushi-samples/15-ramen-ink-a/images/work-03.jpg?v=dense4"
+                   }
 }

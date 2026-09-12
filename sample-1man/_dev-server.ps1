@@ -83,7 +83,16 @@ while ($true) {
       }
     }
 
+    # Normalize trailing slash for API routes before rewriting dirs to index.html
+    if ($pathOnly.EndsWith("/") -and $pathOnly.Length -gt 1) {
+      $trimPath = $pathOnly.TrimEnd("/")
+      if ($trimPath -like "*/__capture-save" -or $trimPath -like "*/__review-decision") {
+        $pathOnly = $trimPath
+      }
+    }
+
     if ($pathOnly -eq "/") { $pathOnly = "/sample-1man/index.html" }
+    if ($pathOnly.EndsWith("/")) { $pathOnly = $pathOnly + "index.html" }
 
     if ($method -eq "OPTIONS") {
       Write-Response $stream "204 No Content" "text/plain" ([byte[]]::new(0))
@@ -104,20 +113,134 @@ while ($true) {
         Write-Response $stream "404 Not Found" "application/json; charset=utf-8" ([Text.Encoding]::UTF8.GetBytes('{"ok":false,"reason":"missing-dir"}'))
         continue
       }
-      $shots = Join-Path $sushiRoot "shots"
-      New-Item -ItemType Directory -Force -Path $shots | Out-Null
       $previewPath = Join-Path $dir "preview.png"
-      $shotPath = Join-Path $shots ($key + ".png")
       [IO.File]::WriteAllBytes($previewPath, $bodyIn)
-      [IO.File]::Copy($previewPath, $shotPath, $true)
-      $progress = @{
-        lastOk = [int]($key.Substring(0, 2))
-        lastKey = $key
-        updatedAt = (Get-Date).ToUniversalTime().ToString("o")
-        bytes = $bodyIn.Length
-      } | ConvertTo-Json -Compress
-      [IO.File]::WriteAllText((Join-Path $sushiRoot "_capture-progress.json"), $progress, [Text.UTF8Encoding]::new($false))
+      $salesPack = Join-Path $sushiRoot ("_sales\packs\" + $key)
+      New-Item -ItemType Directory -Force -Path $salesPack | Out-Null
+      [IO.File]::Copy($previewPath, (Join-Path $salesPack "preview.png"), $true)
       $msg = "{`"ok`":true,`"key`":`"$key`",`"bytes`":$($bodyIn.Length)}"
+      Write-Response $stream "200 OK" "application/json; charset=utf-8" ([Text.Encoding]::UTF8.GetBytes($msg))
+      continue
+    }
+
+    if ($method -eq "POST" -and $pathOnly -eq "/sample-1man/sushi-samples/__review-decision") {
+      $key = $null
+      $action = $null
+      foreach ($pair in ($query -split "&")) {
+        if ($pair -like "key=*") { $key = [Uri]::UnescapeDataString($pair.Substring(4)) }
+        if ($pair -like "action=*") { $action = [Uri]::UnescapeDataString($pair.Substring(7)) }
+      }
+      if ([string]::IsNullOrWhiteSpace($key) -or $key -match '[\\/:\*\?\"<>\|]' -or $key.Contains("..")) {
+        Write-Response $stream "400 Bad Request" "application/json; charset=utf-8" ([Text.Encoding]::UTF8.GetBytes('{"ok":false,"reason":"bad-key"}'))
+        continue
+      }
+      if ($action -ne "approve" -and $action -ne "reject") {
+        Write-Response $stream "400 Bad Request" "application/json; charset=utf-8" ([Text.Encoding]::UTF8.GetBytes('{"ok":false,"reason":"bad-action"}'))
+        continue
+      }
+
+      $payload = $null
+      $severity = "drop"
+      $reasons = @()
+      $reasonLabels = @()
+      $note = ""
+      if ($bodyIn.Length -gt 0) {
+        try {
+          $payload = ([Text.Encoding]::UTF8.GetString($bodyIn) | ConvertFrom-Json)
+          if ($payload.severity) { $severity = [string]$payload.severity }
+          if ($payload.note) { $note = [string]$payload.note }
+          if ($payload.reasons) { $reasons = @($payload.reasons | ForEach-Object { [string]$_ }) }
+          if ($payload.reasonLabels) { $reasonLabels = @($payload.reasonLabels | ForEach-Object { [string]$_ }) }
+        } catch {
+          $payload = $null
+        }
+      }
+      if ($severity -ne "fix") { $severity = "drop" }
+
+      # STATUS labels via UTF-8 bytes (PS5 source encoding safe)
+      $stateApprove = [Text.Encoding]::UTF8.GetString([byte[]](0xE5,0x96,0xB6,0xE6,0xA5,0xAD,0xE6,0xA0,0xBC,0xE7,0xB4,0x8D)) # eigyou-kakunou
+      $stateFix = [Text.Encoding]::UTF8.GetString([byte[]](0xE8,0xA6,0x81,0xE4,0xBF,0xAE,0xE6,0xAD,0xA3)) # you-shuusei
+      $stateNg = "NG"
+      if ($action -eq "approve") {
+        $state = $stateApprove
+      } elseif ($severity -eq "fix") {
+        $state = $stateFix
+      } else {
+        $state = $stateNg
+      }
+
+      $memoParts = @()
+      if ($reasonLabels.Count -gt 0) { $memoParts += ($reasonLabels -join "/") }
+      elseif ($reasons.Count -gt 0) { $memoParts += ($reasons -join "/") }
+      if (-not [string]::IsNullOrWhiteSpace($note)) { $memoParts += $note }
+      $memo = ($memoParts -join " | ").Replace("|", "/").Replace("`r", " ").Replace("`n", " ").Trim()
+      if ($memo.Length -gt 120) { $memo = $memo.Substring(0, 120) }
+
+      $statusPath = Join-Path $sushiRoot "_materials\STATUS.md"
+      $statusNote = "ok"
+      if (Test-Path -LiteralPath $statusPath) {
+        try {
+          $utf8 = [Text.UTF8Encoding]::new($false)
+          $text = [IO.File]::ReadAllText($statusPath, $utf8)
+          $pattern = '(?m)^(\|\s*\d+\s*\|\s*' + [regex]::Escape($key) + '\s*\|\s*[^|]*\|)\s*[^|]*\s*\|\s*[^|]*(\s*\|?\s*)$'
+          $replacement = '${1} ' + $state + ' | ' + $memo + ' |'
+          $replaced = [regex]::Replace($text, $pattern, $replacement, 1)
+          if ($replaced -eq $text) {
+            # fallback: state column only
+            $pattern2 = '(?m)^(\|\s*\d+\s*\|\s*' + [regex]::Escape($key) + '\s*\|\s*[^|]*\|)\s*[^|]*(\s*\|.*)$'
+            $replaced = [regex]::Replace($text, $pattern2, ('${1} ' + $state + ' ${2}'), 1)
+            if ($replaced -eq $text) { $statusNote = "row-not-found" }
+          }
+          if ($statusNote -ne "row-not-found") {
+            $written = $false
+            for ($attempt = 1; $attempt -le 5; $attempt++) {
+              try {
+                [IO.File]::WriteAllText($statusPath, $replaced, $utf8)
+                $written = $true
+                break
+              } catch {
+                Start-Sleep -Milliseconds (120 * $attempt)
+              }
+            }
+            if (-not $written) { $statusNote = "status-write-locked" }
+          }
+        } catch {
+          $statusNote = "status-write-failed"
+        }
+      } else {
+        $statusNote = "status-missing"
+      }
+
+      # NOTES.md append (UTF-8 from client labels)
+      try {
+        $notesDir = Join-Path $sushiRoot ("_materials\" + $key)
+        if (Test-Path -LiteralPath $notesDir -PathType Container) {
+          $notesPath = Join-Path $notesDir "NOTES.md"
+          $utf8n = [Text.UTF8Encoding]::new($false)
+          $stamp = [DateTime]::Now.ToString("yyyy-MM-dd HH:mm")
+          $kind = if ($action -eq "approve") { "approve" } elseif ($severity -eq "fix") { "fix" } else { "drop" }
+          $line = "- [$stamp] $kind"
+          if ($reasonLabels.Count -gt 0) { $line += " / " + ($reasonLabels -join ", ") }
+          if (-not [string]::IsNullOrWhiteSpace($note)) { $line += " / note: " + $note.Replace("`r", " ").Replace("`n", " ") }
+          $line += "`n"
+          if (-not (Test-Path -LiteralPath $notesPath)) {
+            $header = "# Review notes - $key`n`n"
+            [IO.File]::WriteAllText($notesPath, $header + $line, $utf8n)
+          } else {
+            [IO.File]::AppendAllText($notesPath, $line, $utf8n)
+          }
+        }
+      } catch {}
+
+      # Only hard-drop deletes saved PNGs. fix keeps them for rework.
+      if ($action -eq "reject" -and $severity -eq "drop") {
+        $salesPng = Join-Path $sushiRoot ("_sales\packs\" + $key + "\preview.png")
+        if (Test-Path -LiteralPath $salesPng) { Remove-Item -LiteralPath $salesPng -Force -ErrorAction SilentlyContinue }
+        $samplePng = Join-Path $sushiRoot ($key + "\preview.png")
+        if (Test-Path -LiteralPath $samplePng) { Remove-Item -LiteralPath $samplePng -Force -ErrorAction SilentlyContinue }
+      }
+
+      $msg = "{`"ok`":true,`"key`":`"$key`",`"action`":`"$action`",`"severity`":`"$severity`",`"status`":`"$statusNote`"}"
       Write-Response $stream "200 OK" "application/json; charset=utf-8" ([Text.Encoding]::UTF8.GetBytes($msg))
       continue
     }
@@ -125,11 +248,15 @@ while ($true) {
     $rel = [Uri]::UnescapeDataString($pathOnly.TrimStart("/")).Replace("/", [IO.Path]::DirectorySeparatorChar)
     $file = [IO.Path]::GetFullPath((Join-Path $rootFull $rel))
     if ($method -ne "GET" -and $method -ne "HEAD") {
-      Write-Response $stream "405 Method Not Allowed" "text/plain; charset=utf-8" ([Text.Encoding]::UTF8.GetBytes("405"))
+      $safePath = $pathOnly.Replace('"', '')
+      $body405 = "{`"ok`":false,`"reason`":`"method-not-allowed`",`"path`":`"$safePath`"}"
+      Write-Response $stream "405 Method Not Allowed" "application/json; charset=utf-8" ([Text.Encoding]::UTF8.GetBytes($body405))
     } elseif (-not $file.StartsWith($rootFull, [StringComparison]::OrdinalIgnoreCase)) {
-      Write-Response $stream "403 Forbidden" "text/plain; charset=utf-8" ([Text.Encoding]::UTF8.GetBytes("403"))
+      Write-Response $stream "403 Forbidden" "application/json; charset=utf-8" ([Text.Encoding]::UTF8.GetBytes("{`"ok`":false,`"reason`":`"forbidden`"}"))
     } elseif (-not (Test-Path -LiteralPath $file -PathType Leaf)) {
-      Write-Response $stream "404 Not Found" "text/plain; charset=utf-8" ([Text.Encoding]::UTF8.GetBytes("404"))
+      $safePath = $pathOnly.Replace('"', '')
+      $body404 = "{`"ok`":false,`"reason`":`"not-found`",`"path`":`"$safePath`"}"
+      Write-Response $stream "404 Not Found" "application/json; charset=utf-8" ([Text.Encoding]::UTF8.GetBytes($body404))
     } else {
       $bytes = [IO.File]::ReadAllBytes($file)
       $ctype = Get-ContentType ([IO.Path]::GetExtension($file))
@@ -141,8 +268,10 @@ while ($true) {
     }
   } catch {
     try {
-      $err = [Text.Encoding]::UTF8.GetBytes(("server-error: " + $_.Exception.Message))
-      Write-Response $stream "500 Internal Server Error" "text/plain; charset=utf-8" $err
+      $safe = ($_.Exception.Message -replace '[\r\n"]', ' ').Trim()
+      if ($safe.Length -gt 180) { $safe = $safe.Substring(0, 180) }
+      $errJson = "{`"ok`":false,`"reason`":`"server-error`",`"detail`":`"$safe`"}"
+      Write-Response $stream "500 Internal Server Error" "application/json; charset=utf-8" ([Text.Encoding]::UTF8.GetBytes($errJson))
     } catch {}
   } finally {
     try { $client.Close() } catch {}

@@ -50,7 +50,9 @@
       { id: "op_calm_4", text: "穏やかな雰囲気の" },
       { id: "op_calm_5", text: "ほっと一息つける" },
       { id: "op_calm_6", text: "やさしい時間を届ける" },
-      { id: "op_calm_7", text: "からだをほどく" }
+      { id: "op_calm_7", text: "からだをほどく" },
+      { id: "op_calm_8", text: "朝の光が差し込む" },
+      { id: "op_calm_9", text: "木枠の窓辺で迎える" }
     ],
     bright: [
       { id: "op_bright_1", text: "明るい空気が広がる" },
@@ -80,7 +82,9 @@
       { id: "op_craft_4", text: "作り手の思いが伝わる" },
       { id: "op_craft_5", text: "一点もの感のある" },
       { id: "op_craft_6", text: "焼きたてを毎日届ける" },
-      { id: "op_craft_7", text: "炭火と会話を楽しむ" }
+      { id: "op_craft_7", text: "炭火と会話を楽しむ" },
+      { id: "op_craft_8", text: "店先に並ぶ切り花の" },
+      { id: "op_craft_9", text: "余白を活かしたポートレートの" }
     ]
   };
 
@@ -91,14 +95,16 @@
       { id: "md_qual_2", text: "品質にこだわった一品を揃えています" },
       { id: "md_qual_3", text: "素材と仕込みに時間をかけています" },
       { id: "md_qual_4", text: "確かな味を大切にしています" },
-      { id: "md_qual_5", text: "満足できる一皿を目指しています" }
+      { id: "md_qual_5", text: "満足できる一皿を目指しています" },
+      { id: "md_qual_6", text: "挽きたての香りを大切にしています" }
     ],
     space: [
       { id: "md_sp_1", text: "居心地のよい空間づくりを大切にしています" },
       { id: "md_sp_2", text: "店内の雰囲気をゆっくり味わえます" },
       { id: "md_sp_3", text: "過ごしやすい店内を心がけています" },
       { id: "md_sp_4", text: "空間の心地よさを大切にしています" },
-      { id: "md_sp_5", text: "落ち着ける席づくりをしています" }
+      { id: "md_sp_5", text: "落ち着ける席づくりをしています" },
+      { id: "md_sp_6", text: "席数を抑えて落ち着ける空間にしています" }
     ],
     care: [
       { id: "md_care_1", text: "あたたかい接客を心がけています" },
@@ -130,7 +136,8 @@
       { id: "cl_loc_2", text: "近くに住む方の味方でありたいです。" },
       { id: "cl_loc_3", text: "地域の方の習慣になる場所を目指します。" },
       { id: "cl_loc_4", text: "ご近所の方に親しまれる店でありたいです。" },
-      { id: "cl_loc_5", text: "近くて便利な一軒としてお待ちしています。" }
+      { id: "cl_loc_5", text: "近くて便利な一軒としてお待ちしています。" },
+      { id: "cl_loc_6", text: "近所の朝の習慣に寄り添います。" }
     ],
     first: [
       { id: "cl_first_1", text: "初めての方にもわかりやすくご案内します。" },
@@ -354,15 +361,43 @@
   ];
 
   /**
+   * 内部タグ（見本世界観）→ 既存3問への既定マップ。UIには出さない。
+   * 正本メモ: _plot/copy-harvest-and-affinity.md
+   */
+  const SCENE_AFFINITY = {
+    cafe: { mood: "calm", focus: "quality", guest: "local" },
+    bakery: { mood: "bright", focus: "menu", guest: "local" },
+    sweets: { mood: "bright", focus: "menu", guest: "with" },
+    bar: { mood: "craft", focus: "space", guest: "solo" },
+    izakaya: { mood: "craft", focus: "menu", guest: "with" },
+    ramen: { mood: "craft", focus: "quality", guest: "local" },
+    salon: { mood: "refined", focus: "care", guest: "first" },
+    yoga: { mood: "calm", focus: "space", guest: "first" },
+    studio: { mood: "refined", focus: "care", guest: "picky" },
+    florist: { mood: "bright", focus: "menu", guest: "first" },
+    gallery: { mood: "craft", focus: "space", guest: "picky" },
+    clinic: { mood: "calm", focus: "care", guest: "first" },
+    cowork: { mood: "casual", focus: "space", guest: "solo" },
+    inn: { mood: "calm", focus: "space", guest: "first" },
+    pet: { mood: "casual", focus: "care", guest: "with" }
+  };
+
+  function affinityForScene(sceneTag) {
+    const key = String(sceneTag || "").trim();
+    return SCENE_AFFINITY[key] || null;
+  }
+
+  /**
    * セクション用5案。ラジオ3は省略時に既定相性を使う。
-   * @param {{ sectionId: string, brandName?: string, mood?: string, focus?: string, guest?: string }} sel
+   * @param {{ sectionId: string, brandName?: string, mood?: string, focus?: string, guest?: string, sceneTag?: string }} sel
    */
   function generateSectionFive(sel) {
     const section = SECTIONS.find((s) => s.id === sel.sectionId) || SECTIONS[0];
+    const fromScene = affinityForScene(sel.sceneTag);
     const base = generateFive({
-      mood: sel.mood || "calm",
-      focus: sel.focus || "quality",
-      guest: sel.guest || "first",
+      mood: sel.mood || (fromScene && fromScene.mood) || "calm",
+      focus: sel.focus || (fromScene && fromScene.focus) || "quality",
+      guest: sel.guest || (fromScene && fromScene.guest) || "first",
       brandName: sel.brandName
     });
     return base.map((c, i) => {
@@ -379,6 +414,8 @@
   global.Sample1manEasyCopy = {
     QUESTIONS: QUESTIONS,
     SECTIONS: SECTIONS,
+    SCENE_AFFINITY: SCENE_AFFINITY,
+    affinityForScene: affinityForScene,
     generateFive: generateFive,
     generateSectionFive: generateSectionFive,
     optionLabel: optionLabel

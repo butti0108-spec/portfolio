@@ -1,25 +1,14 @@
 {
-    "version":  16,
+    "version":  17,
     "sushiSampleId":  "16",
     "sushiSampleKey":  "yoga-green-a",
     "blurb":  "ヨガ・横長・緑・やわゴ",
-    "scene":  "マット・光",
-    "savedAt":  "2026-09-07T21:16:12.9592808Z",
+    "scene":  "サロン・花",
+    "savedAt":  "2026-09-08T17:08:48.3329880Z",
     "uiMode":  "self",
     "sitePurpose":  "shop",
     "siteColorMode":  "detail",
     "layoutPattern":  "a",
-    "layoutOrder":  [
-                        "hero",
-                        "values",
-                        "accordions",
-                        "photos",
-                        "works",
-                        "hours",
-                        "access",
-                        "address",
-                        "contact"
-                    ],
     "layoutSelected":  true,
     "layoutSchema":  2,
     "intakeDone":  true,
@@ -27,7 +16,7 @@
     "hubEntrySource":  "sample",
     "easyFlowActive":  false,
     "presetChosen":  true,
-    "chosenPresetKey":  "green",
+    "chosenPresetKey":  "sakura",
     "draftColors":  {
                         "cardBg":  "#ffffff",
                         "chromeInk":  "#f4fff6",
@@ -39,54 +28,63 @@
                         "bodyInk":  "#212121",
                         "contactInk":  "#f4fff6",
                         "valuesBg":  "#ffffff",
-                        "heroInk":  "#111111",
+                        "heroInk":  "#ffffff",
                         "chromeBg":  "#1f3d18"
                     },
     "draftCounts":  {
                         "hero-leads":  2,
-                        "hero-values":  2,
+                        "hero-values":  3,
                         "about-accordions":  1,
-                        "about-photos":  1,
-                        "works-list":  2
+                        "about-photos":  3,
+                        "works-list":  3
                     },
     "guidedImageUnlocked":  true,
     "guidedTextUnlocked":  true,
     "fonts":  {
-                  "catch":  "Sawarabi Gothic",
-                  "body":  "Zen Kaku Gothic New",
-                  "display":  "Sawarabi Gothic"
+                  "catch":  "Kiwi Maru",
+                  "body":  "M PLUS Rounded 1c",
+                  "display":  "Zen Maru Gothic"
               },
     "fields":  {
-                   "brand_name":  "呼吸の庭",
-                   "hero_title":  "呼吸の庭",
-                   "hero_lead_1":  "からだをほどく時間",
-                   "hero_lead_2":  "初心者歓迎のマットクラス",
-                   "value_1_title":  "呼吸",
-                   "value_1_text":  "動きと息を合わせる",
-                   "value_2_title":  "少人数",
-                   "value_2_text":  "見守りやすい人数",
-                   "about_section_name":  "お店",
-                   "about_heading":  "呼吸の庭案内",
-                   "about_name":  "呼吸の庭",
-                   "about_lead":  "呼吸を大切にするヨガスタジオです。初めての方でも動きやすいクラスを中心に、少人数で指導しています。",
-                   "acc_1_title":  "こだわり",
-                   "acc_1_body":  "呼吸を大切にするヨガスタジオです。初めての方でも動きやすいクラスを中心に、少人数で指導しています。",
+                   "brand_name":  "花綴りサロン",
+                   "hero_title":  "香りと手元で、一日の終わりを整える。",
+                   "hero_lead_1":  "花の香りと、やさしい手元のサロン。カットもカラーも、季節の一輪と同じペースで進めます。",
+                   "hero_lead_2":  "一日の終わりに、自分を整える時間。肩の力を抜いて座れる席と、控えめな香りを用意しています。",
+                   "hero_lead_3":  "",
+                   "value_1_title":  "花のある席",
+                   "value_1_text":  "季節の生花をカウンターと待合に置き、施術室にも控えめな一輪を添えます。香りは強すぎない種類だけを選んでいます。",
+                   "value_2_title":  "手の温度",
+                   "value_2_text":  "シャンプーから仕上げまで、力の入れ方をこまめに確認します。肩や首が凝っている日は、まずほぐしてからカットに入ります。",
+                   "value_3_title":  "帰り際の束",
+                   "value_3_text":  "ご希望の方には、小さな花束をプラスできます。髪と同じトーンで合わせるので、写真にもそのまま残せます。",
+                   "about_section_name":  "サロンについて",
+                   "about_heading":  "花と髪を、同じ手で",
+                   "about_name":  "花綴りサロン",
+                   "about_lead":  "住宅街の角にある小さなヘアサロンです。カットとカラーのほか、季節の花を使った小さなアレンジも扱っています。髪を整える時間を、香りと色でもう少し心地よくしたい——そんな思いで始めました。",
+                   "acc_1_title":  "はじまりの話",
+                   "acc_1_body":  "もともと花屋で働いていたスタッフが、美容師免許を取ったあと「花のある美容室」をつくりました。予約は少なめに取り、一人ひとりのペースで進めます。初めての方も、カウンセリングで好みの長さと雰囲気を一緒に決めます。",
+                   "acc_2_title":  "ご来店の流れ",
+                   "acc_2_body":  "受付でお飲み物と、その日の一輪挿しをご案内します。カット・カラー・トリートメントはメニュー表から選べます。花束やアレンジは、施術の合間に短くご相談いただけます。",
                    "works_section_name":  "メニュー",
-                   "works_heading":  "おすすめ",
-                   "works_lead":  "初心者歓迎のマットクラス",
-                   "work_1_title":  "朝クラス",
-                   "work_1_text":  "からだを起こす",
-                   "work_2_title":  "夜リラックス",
-                   "work_2_text":  "睡眠前のゆるめ",
-                   "hours_text":  "クラス制／予約優先",
-                   "address_text":  "〇〇市庭園ビル3F",
+                   "works_heading":  "よく選ばれるメニュー",
+                   "works_lead":  "髪と、小さな花のセット",
+                   "work_1_title":  "カット＋一輪セット",
+                   "work_1_text":  "カット後に、持ち帰り用の一輪とミニカードをお渡しします。色味は髪色に合わせて選びます。",
+                   "work_2_title":  "カラー＋ミニブーケ",
+                   "work_2_text":  "カラー後に、髪色に寄せた小さな花束をお渡しするオプションです。",
                    "contact_section_name":  "ご連絡",
                    "contact_label":  "ご連絡",
-                   "contact_note_1":  "体験はWeb予約から",
-                   "contact_note_2":  "クラス制／予約優先",
-                   "font_display":  "Sawarabi Gothic",
-                   "font_catch":  "Sawarabi Gothic",
-                   "font_body":  "Zen Kaku Gothic New"
+                   "contact_email":  "reserve@hanatsuzuri-salon.example",
+                   "font_display":  "Zen Maru Gothic",
+                   "font_catch":  "Kiwi Maru",
+                   "font_body":  "M PLUS Rounded 1c",
+                   "work_3_title":  "花綴りサロンの定番",
+                   "work_3_text":  "店の空気が伝わる組み合わせ。詳細は来店時にご案内します。",
+                   "address_text":  "架空市花野町3-8-12 1F / 最寄駅から徒歩5分。駐車場は近隣コインパーキングをご利用ください。",
+                   "hours_text":  "火〜土 10:00–19:00（最終受付 18:00）／日月定休　／　最終受付は閉店30分前。混雑時はお待ちいただく場合があります。",
+                   "access_text":  "最寄駅から徒歩5分。駐車場は近隣コインパーキングをご利用ください。 / Address: 架空市花野町3-8-12 1F / 最寄駅から徒歩5分。駐車場は近隣コインパーキングをご利用ください。",
+                   "contact_note_1":  "ご予約・お問い合わせはメールにて。希望日時・人数・ご要望を書いてください。折り返しで空き状況とアクセスの補足をご案内します。",
+                   "contact_note_2":  "営業中は店頭優先のため返信が遅れることがあります。2営業日以内を目安にご連絡します。駐車・道順の質問も同アドレスで受け付けます。"
                },
     "confirmed":  {
                       "purpose":  true,
@@ -105,7 +103,50 @@
                   },
     "draftExtras":  {
                         "hours":  true,
-                        "access":  false,
-                        "address":  true
-                    }
+                        "access":  true,
+                        "address":  false
+                    },
+    "heroTextPlate":  "round",
+    "heroTextPlateTone":  "white",
+    "heroTextOnPhoto":  false,
+    "layoutOrder":  [
+                        "hero",
+                        "values",
+                        "photos",
+                        "works",
+                        "hours",
+                        "access",
+                        "accordions",
+                        "contact"
+                    ],
+    "itemLayouts":  {
+                        "about-photos":  {
+                                             "sizes":  [
+                                                           "H",
+                                                           "H",
+                                                           "L"
+                                                       ],
+                                             "gap":  "normal",
+                                             "sizePat":  "S2"
+                                         },
+                        "works-list":  {
+                                           "sizes":  [
+                                                         "L",
+                                                         "H",
+                                                         "H"
+                                                     ],
+                                           "gap":  "normal",
+                                           "sizePat":  "S3"
+                                       }
+                    },
+    "layoutRecipeNote":  "a photo=S2 works=S3 sizes=1",
+    "imagePaths":  {
+                       "work_2_image":  "sushi-samples/16-yoga-green-a/images/work-02.jpg?v=dense4",
+                       "about_image_2":  "sushi-samples/16-yoga-green-a/images/about-02.jpg?v=dense4",
+                       "hero_image":  "sushi-samples/16-yoga-green-a/images/hero.jpg?v=dense4",
+                       "work_1_image":  "sushi-samples/16-yoga-green-a/images/work-01.jpg?v=dense4",
+                       "about_image_3":  "sushi-samples/16-yoga-green-a/images/about-03.jpg?v=dense4",
+                       "about_image_1":  "sushi-samples/16-yoga-green-a/images/about-01.jpg?v=dense4",
+                       "work_3_image":  "sushi-samples/16-yoga-green-a/images/work-03.jpg?v=dense4"
+                   }
 }

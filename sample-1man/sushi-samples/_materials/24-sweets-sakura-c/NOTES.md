@@ -1,5 +1,4 @@
-﻿# メモ — 24-sweets-sakura-c
+﻿# NOTES 24-sweets-sakura-c
 
-- 帯: A / ABC: b / P2 / H3
-- 世界観: 診療所
-- 採用判断:
+- review round reset 2026-09-09 (complete pack for human review)
+- [2026-09-10 00:19] fix / その他 / note: 同じようなレイアウトはある

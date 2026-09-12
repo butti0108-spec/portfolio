@@ -6,116 +6,267 @@
   <meta name="description" content="1万円プランの注文画面の説明です。">
   <meta name="robots" content="noindex,nofollow">
   <title>1万円プラン｜ヘルプ</title>
+  <link rel="icon" href="brand/mark-favicon.png?v=logo-7" type="image/png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@700&family=Zen+Kaku+Gothic+New:wght@400;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="help.css">
-  <script src="help.js" defer></script>
+  <link rel="stylesheet" href="help.css?v=ui-fix-9">
+  <script src="help.js?v=ui-fix-9" defer></script>
 </head>
 <body class="help-page">
   <header class="help-topbar">
+    <a class="help-brand help-brand--lockup" href="index.html" aria-label="アーチデザイン工房">
+      <img class="help-brand-lockup" src="brand/logo-color.png?v=logo-6" width="200" height="200" alt="アーチデザイン工房">
+    </a>
     <p class="help-topbar-title">1万円プラン｜ヘルプ</p>
     <a class="help-back-sticky" id="help-back-sticky" href="index.html">注文画面に戻る</a>
   </header>
 
   <main class="help-wrap">
-    <p class="help-lead">注文画面の各項目の説明です。操作は注文画面で行い、くわしい説明はここをご覧ください。困ったら下の検索から探してください。</p>
+    <div class="help-home" id="help-home">
+      <p class="help-lead">迷ったらここをパッと見て、注文画面に戻ってください。本線には説明をバラ撒きません。</p>
 
-    <div class="help-search" role="search">
-      <label class="help-search-label" for="help-search-input">知りたいことを入力</label>
-      <input
-        type="search"
-        id="help-search-input"
-        class="help-search-input"
-        placeholder="例：サンプル、回転寿司、編集、ZIP、写真"
-        autocomplete="off"
-        enterkeyhint="search"
-      >
-      <p class="help-search-hint" id="help-search-hint">キーワードを入れると、関係ありそうな項目が出ます。</p>
-      <ul class="help-search-results" id="help-search-results" hidden></ul>
+      <div class="help-search" id="help-search" role="search">
+        <label class="help-search-label" for="help-search-input">知りたいことを入力</label>
+        <input
+          type="search"
+          id="help-search-input"
+          class="help-search-input"
+          placeholder="例：サンプル、ZIP、写真、1万円、URL"
+          autocomplete="off"
+          enterkeyhint="search"
+        >
+        <p class="help-search-hint" id="help-search-hint">キーワードを入れると、関係ありそうな項目が出ます。</p>
+        <ul class="help-search-results" id="help-search-results" hidden></ul>
+      </div>
+
+      <nav class="help-toc" id="help-toc" aria-label="目次">
+        <p class="help-toc-title">目次</p>
+        <div class="help-toc-grid">
+          <a class="help-toc-card" href="#start" data-help-nav="start">進め方</a>
+          <a class="help-toc-card" href="#why" data-help-nav="why">なぜ1万円</a>
+          <a class="help-toc-card" href="#scope" data-help-nav="scope">プランの範囲</a>
+          <a class="help-toc-card" href="#faq" data-help-nav="faq">よくある質問</a>
+          <a class="help-toc-card" href="#zip" data-help-nav="zip">ZIP・確認</a>
+          <a class="help-toc-card" href="#hub" data-help-nav="hub">編集ハブ</a>
+          <a class="help-toc-card" href="#copy" data-help-nav="copy">文章</a>
+          <a class="help-toc-card" href="#images" data-help-nav="images">画像</a>
+          <a class="help-toc-card" href="#look" data-help-nav="look">色・書体</a>
+        </div>
+      </nav>
     </div>
 
-    <details class="help-section" id="start" data-help-keywords="画面の見方 進め方 サンプル 自分で作る 回転寿司 入り口 はじめに">
-      <summary>画面の見方・進め方の基本</summary>
-      <div class="help-section-body">
-        <a class="help-back-local" href="index.html">← 注文画面に戻る</a>
-        <p class="help-lead-in">入口は2つだけです。「サンプルから選ぶ」か「自分で作る」か。</p>
+    <div class="help-panels" id="help-panels">
+      <section class="help-section" id="start" data-help-keywords="画面の見方 進め方 サンプル 自分で作る 回転寿司 入り口 はじめに" hidden>
+        <header class="help-panel-head">
+          <h2 class="help-panel-title">画面の見方・進め方の基本</h2>
+        </header>
+        <div class="help-section-body">
+          <p class="help-lead-in">入口は2つだけです。「サンプルから選ぶ」か「自分で作る」か。</p>
 
-        <article class="help-chunk" data-help-keywords="入り口 サンプル 自分で作る 2択">
-          <h3 class="help-chunk-title">最初の入り口（2択）</h3>
-          <p>初めて開くと、画面全体に入り口が出ます。<strong>サンプルから選ぶ</strong>か<strong>自分で作る</strong>かを選びます。途中でモードを切り替えるメニューはありません。やり直すときは「最初に戻す」です。</p>
-        </article>
+          <article class="help-chunk" data-help-keywords="入り口 サンプル 自分で作る 2択">
+            <h3 class="help-chunk-title">最初の入り口（2択）</h3>
+            <p>初めて開くと、画面全体に入り口が出ます。<strong>サンプルから選ぶ</strong>か<strong>自分で作る</strong>かを選びます。途中でモードを切り替えるメニューはありません。やり直すときは「最初に戻す」です。</p>
+          </article>
 
-        <article class="help-chunk" data-help-keywords="サンプル 回転寿司 ストック 見本">
-          <h3 class="help-chunk-title">サンプルから選ぶ（本線）</h3>
-          <ol>
-            <li>回転寿司で見本を見て、「ストック」か「これにします」で1件決めます（ストックは最大3）。</li>
-            <li>用途 → 色合い（見本のまま／色だけ変更）を選びます。</li>
-            <li>基本情報 → 枠ごとの文章（5案から選ぶ）→ 画像ワイヤー（位置の目安）→ 作成演出 → 本番プレビュー。</li>
-            <li>「これでいい」で確認・ZIPへ。「編集する」で編集ハブへ。</li>
-          </ol>
-          <p>選択・入力のあいだは本番プレビューを出しません。見本はすべてこのメーカーで作成しています。</p>
-        </article>
+          <article class="help-chunk" data-help-keywords="サンプル 回転寿司 ストック 見本">
+            <h3 class="help-chunk-title">サンプルから選ぶ（本線）</h3>
+            <ol>
+              <li>回転寿司で見本を見て、「ストック」か「これにします」で1件決めます（ストックは最大3）。</li>
+              <li>用途 → 色合い（見本のまま／色だけ変更）を選びます。</li>
+              <li>基本情報 → 枠ごとの文章（5案から選ぶ）→ 画像ワイヤー → 作成演出 → 本番プレビュー。</li>
+              <li>「これでいい」で確認・ZIPへ。「編集する」で編集ハブへ。</li>
+            </ol>
+            <p>選択・入力のあいだは本番プレビューを出しません。</p>
+          </article>
 
-        <article class="help-chunk" data-help-keywords="自分で作る 編集ハブ 枠の並び">
-          <h3 class="help-chunk-title">自分で作る</h3>
-          <p>用途を選んだあと、編集ハブ（枠の並び）へ進みます。色・文字・画像・枠の増減を自分で触れます。用途を変えるときは「最初に戻す」からやり直してください。</p>
-        </article>
+          <article class="help-chunk" data-help-keywords="自分で作る 編集ハブ 枠の並び">
+            <h3 class="help-chunk-title">自分で作る</h3>
+            <p>用途を選んだあと、編集ハブ（並び替え）へ進みます。色・文字・画像・枚数の増減を自分で触れます。</p>
+          </article>
 
-        <article class="help-chunk" data-help-keywords="ひとつ戻る 最初に戻す">
-          <h3 class="help-chunk-title">戻る操作</h3>
-          <ul>
-            <li>ひとつ戻る … 直前の画面だけ戻します（全部は消しません）。</li>
-            <li>最初に戻す … 進行データをすべて消し、入り口の2択からやり直します。</li>
-          </ul>
-        </article>
+          <article class="help-chunk" data-help-keywords="ひとつ戻る 最初に戻す 一つ前">
+            <h3 class="help-chunk-title">戻る操作</h3>
+            <ul>
+              <li>一つ前の作業に戻す … 直前の編集操作を取り消します。</li>
+              <li>並びを最初に戻す … 枠の順番だけ初期に戻します。</li>
+              <li>最初に戻す … 進行データをすべて消し、入り口の2択からやり直します。</li>
+            </ul>
+          </article>
+        </div>
+        <footer class="help-panel-nav help-panel-nav--foot">
+          <a class="help-back-toc" href="#help-toc">一覧に戻る</a>
+          <a class="help-back-local" href="index.html">注文画面に戻る</a>
+        </footer>
+      </section>
 
-        <article class="help-chunk" data-help-keywords="見本サイト 左 タブ プレビュー">
-          <h3 class="help-chunk-title">見本サイトの場所</h3>
-          <p>PCでは左側、スマホでは「サンプル画面」タブに表示されます。サンプル本線では、作成演出のあとに本番プレビューが出ます。</p>
-        </article>
+      <section class="help-section" id="why" data-help-keywords="なぜ1万円 価格 安い 判断 アイシン" hidden>
+        <header class="help-panel-head">
+          <h2 class="help-panel-title">なぜ1万円か</h2>
+        </header>
+        <div class="help-section-body">
+          <article class="help-chunk" data-help-keywords="簡単 ホームページ 範囲">
+            <h3 class="help-chunk-title">簡単なホームページを、簡単に</h3>
+            <p>このプランは「何でも複雑なサイトを安く」ではなく、<strong>簡単なホームページを、簡単につくる</strong>ためのものです。判断材料として、切っている範囲をはっきり見せます。</p>
+          </article>
+          <article class="help-chunk" data-help-keywords="月額 BiNDup ツール">
+            <h3 class="help-chunk-title">月額ツールとの違い</h3>
+            <p>月額のホームページツールは否定しません。ずっと自分で触りたい人には向きます。こちらは<strong>一度つくって納品する</strong>形で、フォーム常設や無制限の直し、独自ドメイン運用などは切っています。</p>
+          </article>
+        </div>
+        <footer class="help-panel-nav help-panel-nav--foot">
+          <a class="help-back-toc" href="#help-toc">一覧に戻る</a>
+          <a class="help-back-local" href="index.html">注文画面に戻る</a>
+        </footer>
+      </section>
 
-        <article class="help-chunk" data-help-keywords="ZIP 確認 送信">
-          <h3 class="help-chunk-title">確認とZIP</h3>
-          <p>最後の確認で内容をチェックし、ZIPを保存します。保存＝送信ではありません。案内された連絡先に自分で添付して送ってください。</p>
-        </article>
-      </div>
-    </details>
+      <section class="help-section" id="scope" data-help-keywords="プランの範囲 含む 含まない チェック" hidden>
+        <header class="help-panel-head">
+          <h2 class="help-panel-title">プランの範囲</h2>
+        </header>
+        <div class="help-section-body">
+          <article class="help-chunk" data-help-keywords="含む 1ページ 写真 文字">
+            <h3 class="help-chunk-title">含むもの</h3>
+            <ul>
+              <li>1ページの案内サイト（見本どおりの骨格）</li>
+              <li>文字・写真の差し替え、枠の並び替え、色・書体の調整</li>
+              <li>納品後の<strong>無料修正1回</strong></li>
+            </ul>
+          </article>
+          <article class="help-chunk" data-help-keywords="含まない フォーム ドメイン">
+            <h3 class="help-chunk-title">含まないもの（切っているもの）</h3>
+            <ul>
+              <li>送信できるお問い合わせフォーム</li>
+              <li>無制限の修正・運用代行</li>
+              <li>独自ドメイン（.com 等）の取得・管理そのもの</li>
+              <li>大幅なレイアウト新造（別料金・おおむね2万円〜）</li>
+            </ul>
+          </article>
+        </div>
+        <footer class="help-panel-nav help-panel-nav--foot">
+          <a class="help-back-toc" href="#help-toc">一覧に戻る</a>
+          <a class="help-back-local" href="index.html">注文画面に戻る</a>
+        </footer>
+      </section>
 
-    <details class="help-section" id="copy" data-help-keywords="文章 5案 セクション 候補">
-      <summary>文章の選び方</summary>
-      <div class="help-section-body">
-        <a class="help-back-local" href="index.html">← 注文画面に戻る</a>
-        <article class="help-chunk" data-help-keywords="文章 5案 相性">
-          <h3 class="help-chunk-title">枠ごとの5案</h3>
-          <p>サンプル本線では、キャッチ・紹介・おすすめ・ご連絡など、枠ごとに「どれにしますか」と5案が出ます。選んだ内容に合わせて候補を作ります（意味検索や外部の文章サービスではありません）。「別の5案を作り直す」も使えます。</p>
-        </article>
-      </div>
-    </details>
+      <section class="help-section" id="faq" data-help-keywords="よくある質問 FAQ URL ローマ字 分からない" hidden>
+        <header class="help-panel-head">
+          <h2 class="help-panel-title">よくある質問</h2>
+        </header>
+        <div class="help-section-body">
+          <article class="help-chunk" data-help-keywords="月額 違い">
+            <h3 class="help-chunk-title">月額ツールとどっちがいい？</h3>
+            <p>自分で毎月触り続けたいなら月額ツールも選択肢です。一度つくって終わりに近いなら、この1万円プランが向きます。</p>
+          </article>
+          <article class="help-chunk" data-help-keywords="無料修正 1回">
+            <h3 class="help-chunk-title">無料修正は何回？</h3>
+            <p>納品後の無料修正は<strong>1回まで</strong>です。それ以降は別料金です。</p>
+          </article>
+          <article class="help-chunk" data-help-keywords="URL ローマ字 パス .com">
+            <h3 class="help-chunk-title">公開URLは .com ですか？</h3>
+            <p>独自の .com ドメインそのものは含みません。確認画面で<strong>ローマ字のパス希望</strong>（例：aisin-cafe）を書けます。日本語や記号は使えません。</p>
+          </article>
+          <article class="help-chunk" data-help-keywords="2万円 カスタム">
+            <h3 class="help-chunk-title">もっと凝りたいとき</h3>
+            <p>フォームやレイアウトの作り直しなどは、おおむね<strong>2万円〜</strong>の別見積になります。</p>
+          </article>
+          <article class="help-chunk" data-help-keywords="分からない 大丈夫">
+            <h3 class="help-chunk-title">パソコンが苦手でも大丈夫？</h3>
+            <p>はい。分からなくてよい空気で進めてください。迷ったらこのヘルプを見て、注文画面に戻るだけで十分です。</p>
+          </article>
+        </div>
+        <footer class="help-panel-nav help-panel-nav--foot">
+          <a class="help-back-toc" href="#help-toc">一覧に戻る</a>
+          <a class="help-back-local" href="index.html">注文画面に戻る</a>
+        </footer>
+      </section>
 
-    <details class="help-section" id="images" data-help-keywords="画像 写真 ワイヤー 黄枠">
-      <summary>画像の入れ方</summary>
-      <div class="help-section-body">
-        <a class="help-back-local" href="index.html">← 注文画面に戻る</a>
-        <article class="help-chunk" data-help-keywords="ワイヤー 写真 枚数">
-          <h3 class="help-chunk-title">画像ワイヤー</h3>
-          <p>サンプル本線では、本番見本ではなく位置の目安（ワイヤー）で写真をはめます。キャッチ・写真・カードの3枠です。枚数を増やしたい・枠を変えたい場合は、完成後の「編集する」からできます。</p>
-        </article>
-      </div>
-    </details>
+      <section class="help-section" id="zip" data-help-keywords="ZIP 確認 送信 保存" hidden>
+        <header class="help-panel-head">
+          <h2 class="help-panel-title">確認とZIP</h2>
+        </header>
+        <div class="help-section-body">
+          <article class="help-chunk" data-help-keywords="ZIP 保存 送信">
+            <h3 class="help-chunk-title">保存＝送信ではありません</h3>
+            <p>最後の確認で内容をチェックし、ZIPをパソコンに保存します。案内された連絡先に、自分で添付して送ってください。</p>
+          </article>
+        </div>
+        <footer class="help-panel-nav help-panel-nav--foot">
+          <a class="help-back-toc" href="#help-toc">一覧に戻る</a>
+          <a class="help-back-local" href="index.html">注文画面に戻る</a>
+        </footer>
+      </section>
 
-    <details class="help-section" id="hub" data-help-keywords="編集 ハブ ハニカム 色 書体">
-      <summary>編集ハブ（細かく直す）</summary>
-      <div class="help-section-body">
-        <a class="help-back-local" href="index.html">← 注文画面に戻る</a>
-        <article class="help-chunk" data-help-keywords="編集する 枠 色 ハニカム">
-          <h3 class="help-chunk-title">編集する</h3>
-          <p>完成後の「編集する」、または入口の「自分で作る」から、枠の並びに入れます。色の細かい調整はハニカム、書体は「書体を選ぶ」から触れます。画像の±もここです。</p>
-        </article>
-      </div>
-    </details>
+      <section class="help-section" id="hub" data-help-keywords="編集 ハブ ハニカム 色 書体 横幅いっぱい 半分" hidden>
+        <header class="help-panel-head">
+          <h2 class="help-panel-title">編集ハブ（細かく直す）</h2>
+        </header>
+        <div class="help-section-body">
+          <article class="help-chunk" data-help-keywords="編集する 枠 色 ハニカム 大小">
+            <h3 class="help-chunk-title">編集する</h3>
+            <p>並び替えに入ります。色はハニカム。書体は各文字入力の画面で、その役だけ選べます（キャッチ画面ならキャッチ書体のみ）。写真・カードを増やすときは<strong>横幅いっぱい／半分</strong>を選びます。隙間（狭い／ふつう／広い）も変えられます。<strong>⋮⋮</strong> をつかんで順番を変えられます。左の見本は見るだけです。</p>
+          </article>
+        </div>
+        <footer class="help-panel-nav help-panel-nav--foot">
+          <a class="help-back-toc" href="#help-toc">一覧に戻る</a>
+          <a class="help-back-local" href="index.html">注文画面に戻る</a>
+        </footer>
+      </section>
 
-    <p class="help-foot"><a href="index.html">注文画面に戻る</a></p>
+      <section class="help-section" id="copy" data-help-keywords="文章 5案 セクション 候補" hidden>
+        <header class="help-panel-head">
+          <h2 class="help-panel-title">文章の選び方</h2>
+        </header>
+        <div class="help-section-body">
+          <article class="help-chunk" data-help-keywords="文章 5案 相性">
+            <h3 class="help-chunk-title">枠ごとの5案</h3>
+            <p>サンプル本線では、枠ごとに5案から選びます。「別の5案を作り直す」も使えます。</p>
+          </article>
+        </div>
+        <footer class="help-panel-nav help-panel-nav--foot">
+          <a class="help-back-toc" href="#help-toc">一覧に戻る</a>
+          <a class="help-back-local" href="index.html">注文画面に戻る</a>
+        </footer>
+      </section>
+
+      <section class="help-section" id="images" data-help-keywords="画像 写真 ワイヤー 黄枠" hidden>
+        <header class="help-panel-head">
+          <h2 class="help-panel-title">画像の入れ方</h2>
+        </header>
+        <div class="help-section-body">
+          <article class="help-chunk" data-help-keywords="ワイヤー 写真 枚数">
+            <h3 class="help-chunk-title">画像ワイヤー</h3>
+            <p>サンプル本線では位置の目安（ワイヤー）で写真をはめます。枚数や枠の変更は完成後の「編集する」からできます。</p>
+          </article>
+        </div>
+        <footer class="help-panel-nav help-panel-nav--foot">
+          <a class="help-back-toc" href="#help-toc">一覧に戻る</a>
+          <a class="help-back-local" href="index.html">注文画面に戻る</a>
+        </footer>
+      </section>
+
+      <section class="help-section" id="look" data-help-keywords="色 書体 ハニカム 見出し キャッチ 本文 フォント" hidden>
+        <header class="help-panel-head">
+          <h2 class="help-panel-title">色・書体</h2>
+        </header>
+        <div class="help-section-body">
+          <article class="help-chunk" data-help-keywords="色 ハニカム">
+            <h3 class="help-chunk-title">色の変え方</h3>
+            <p>編集ハブではハニカムから色を選びます。サンプル本線では入口の色合い選択が中心で、細かい色編集はハブ側です。</p>
+          </article>
+          <article class="help-chunk" data-help-keywords="書体 見出し キャッチ 本文">
+            <h3 class="help-chunk-title">書体の選び方</h3>
+            <p>文字を直す画面の中で、その役の書体だけ選べます（サイト全体で共通の3役：見出し／キャッチ／本文）。キャッチ見出しの大きさは「キャッチ・文字」の中で変えられます。</p>
+          </article>
+        </div>
+        <footer class="help-panel-nav help-panel-nav--foot">
+          <a class="help-back-toc" href="#help-toc">一覧に戻る</a>
+          <a class="help-back-local" href="index.html">注文画面に戻る</a>
+        </footer>
+      </section>
+    </div>
+
+    <p class="help-foot"><a id="help-back-foot" href="index.html">注文画面に戻る</a></p>
   </main>
 </body>
 </html>

@@ -1,5 +1,4 @@
-﻿# メモ — 22-cowork-clinic-b
+﻿# NOTES 22-cowork-clinic-b
 
-- 帯: A / ABC: b / P3 / H3
-- 世界観: 居酒屋・木暖簾
-- 採用判断:
+- review round reset 2026-09-09 (complete pack for human review)
+- [2026-09-10 00:18] fix / レイアウト／隙間が気持ち悪い, その他 / note: ・セクション間隙間空き ・真っ赤禁止

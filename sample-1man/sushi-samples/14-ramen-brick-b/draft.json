@@ -1,25 +1,14 @@
 {
-    "version":  16,
+    "version":  17,
     "sushiSampleId":  "14",
     "sushiSampleKey":  "ramen-brick-b",
     "blurb":  "ラーメン・左右・オレンジ・太ゴ",
-    "scene":  "湯気・丼",
-    "savedAt":  "2026-09-07T21:16:12.9592808Z",
+    "scene":  "ギャラリー・壁",
+    "savedAt":  "2026-09-08T17:08:41.1517531Z",
     "uiMode":  "self",
     "sitePurpose":  "shop",
     "siteColorMode":  "detail",
-    "layoutPattern":  "b",
-    "layoutOrder":  [
-                        "hero",
-                        "values",
-                        "accordions",
-                        "photos",
-                        "works",
-                        "hours",
-                        "access",
-                        "address",
-                        "contact"
-                    ],
+    "layoutPattern":  "a",
     "layoutSelected":  true,
     "layoutSchema":  2,
     "intakeDone":  true,
@@ -27,7 +16,7 @@
     "hubEntrySource":  "sample",
     "easyFlowActive":  false,
     "presetChosen":  true,
-    "chosenPresetKey":  "brick",
+    "chosenPresetKey":  "ink",
     "draftColors":  {
                         "cardBg":  "#ffffff",
                         "chromeInk":  "#fff8f0",
@@ -39,54 +28,63 @@
                         "bodyInk":  "#3a2418",
                         "contactInk":  "#fff8f0",
                         "valuesBg":  "#fffaf5",
-                        "heroInk":  "#8a3a10",
+                        "heroInk":  "#ffffff",
                         "chromeBg":  "#e07020"
                     },
     "draftCounts":  {
                         "hero-leads":  2,
-                        "hero-values":  2,
-                        "about-accordions":  1,
-                        "about-photos":  1,
-                        "works-list":  2
+                        "hero-values":  3,
+                        "about-accordions":  2,
+                        "about-photos":  4,
+                        "works-list":  3
                     },
     "guidedImageUnlocked":  true,
     "guidedTextUnlocked":  true,
     "fonts":  {
-                  "catch":  "Dela Gothic One",
+                  "catch":  "Zen Kaku Gothic New",
                   "body":  "Zen Kaku Gothic New",
                   "display":  "Dela Gothic One"
               },
     "fields":  {
-                   "brand_name":  "炎麺",
-                   "hero_title":  "炎麺",
-                   "hero_lead_1":  "熱々を、一気に",
-                   "hero_lead_2":  "濃厚スープと太い麺",
-                   "value_1_title":  "スープ",
-                   "value_1_text":  "長時間煮込んだコク",
-                   "value_2_title":  "麺",
-                   "value_2_text":  "太麺の歯ごたえ",
-                   "about_section_name":  "お店",
-                   "about_heading":  "炎麺案内",
-                   "about_name":  "炎麺",
-                   "about_lead":  "熱々のラーメン専門店。濃厚スープと太麺が看板です。ランチタイムは行列になりやすいので、時間に余裕を持ってどうぞ。",
-                   "acc_1_title":  "こだわり",
-                   "acc_1_body":  "熱々のラーメン専門店。濃厚スープと太麺が看板です。ランチタイムは行列になりやすいので、時間に余裕を持ってどうぞ。",
-                   "works_section_name":  "メニュー",
-                   "works_heading":  "おすすめ",
-                   "works_lead":  "濃厚スープと太い麺",
-                   "work_1_title":  "炎特製",
-                   "work_1_text":  "看板の濃厚一杯",
-                   "work_2_title":  "つけ麺",
-                   "work_2_text":  "ランチ限定",
-                   "hours_text":  "11:00–15:00／18:00–22:00",
-                   "address_text":  "〇〇市駅南1-9",
+                   "brand_name":  "壁のギャラリー 余白",
+                   "hero_title":  "白い壁に、作品だけを残す。",
+                   "hero_lead_1":  "額の間隔を広めに取った、小さなギャラリー。企画展を中心に、作家と来場者の距離が近い展示室です。",
+                   "hero_lead_2":  "入場は無料の回と、予約制のトーク付きの回があります。壁の色は変えず、光だけで作品を引き立てます。",
+                   "hero_lead_3":  "",
+                   "value_1_title":  "壁の余白を守る展示",
+                   "value_1_text":  "詰め込みすぎない点数。一点一点の前に立つ時間が取れる配置にしています。",
+                   "value_2_title":  "作家の言葉が近い",
+                   "value_2_text":  "キャプションは短く、会期中の在廊日を掲示。質問はスタッフ経由でも伝えられます。",
+                   "value_3_title":  "小品の販売コーナー",
+                   "value_3_text":  "展示作品とは別に、葉書や小ドローイングを手に取れる棚を入口脇に置いています。",
+                   "about_section_name":  "ギャラリーについて",
+                   "about_heading":  "路地の白い一室",
+                   "about_name":  "壁のギャラリー 余白",
+                   "about_lead":  "ビルの一室を改装した企画ギャラリーです。常設コレクションは持たず、会期ごとの入れ替え。写真撮影は作品により可否が異なります。飲食持ち込みは不可です。",
+                   "acc_1_title":  "来場のお願い",
+                   "acc_1_body":  "大きな荷物は受付でお預かりできます。作品への接触はご遠慮ください。小さなお子さま連れは手をつないでの観覧をお願いしています。",
+                   "acc_2_title":  "出品・貸し廊",
+                   "acc_2_body":  "企画応募は年に数回の公募、またはメールでのポートフォリオ送付。貸し廊は会期の空きを見てご相談ください。",
+                   "works_section_name":  "会期の見どころ",
+                   "works_heading":  "いまの壁面から",
+                   "works_lead":  "展示は入れ替わります。雰囲気の参考です。",
+                   "work_1_title":  "平面：余白の多いドローイング",
+                   "work_1_text":  "線の密度を抑え、壁との距離で見せる展示。近距離で見ることを想定しています。",
+                   "work_2_title":  "写真：窓辺の連作",
+                   "work_2_text":  "同じ場所の光の変化を追ったシリーズ。横並びにし、時間の流れが読める配置です。",
+                   "work_3_title":  "小品棚：葉書と小作品",
+                   "work_3_text":  "持ち帰れるサイズ。包装はシンプルな紙袋のみです。",
+                   "address_text":  "架空市よはく区壁通り 2-9-1　余白ビル1F",
                    "contact_section_name":  "ご連絡",
                    "contact_label":  "ご連絡",
-                   "contact_note_1":  "テイクアウト不可",
-                   "contact_note_2":  "11:00–15:00／18:00–22:00",
+                   "contact_email":  "info@yohaku-gallery.example",
+                   "contact_note_1":  "企画応募・取材・貸し廊はメールで。添付は5MB以内を目安に。",
+                   "contact_note_2":  "会期中の在廊確認も同アドレスへ。",
                    "font_display":  "Dela Gothic One",
-                   "font_catch":  "Dela Gothic One",
-                   "font_body":  "Zen Kaku Gothic New"
+                   "font_catch":  "Zen Kaku Gothic New",
+                   "font_body":  "Zen Kaku Gothic New",
+                   "access_text":  "最寄駅から徒歩5分。駐車場は近隣コインパーキングをご利用ください。",
+                   "hours_text":  "水〜日 12:00–19:00　月・火休廊（会期により変更）　／　最終受付は閉店30分前。"
                },
     "confirmed":  {
                       "purpose":  true,
@@ -105,7 +103,53 @@
                   },
     "draftExtras":  {
                         "hours":  true,
-                        "access":  false,
-                        "address":  true
-                    }
+                        "address":  true,
+                        "access":  true
+                    },
+    "heroTextPlate":  "round",
+    "heroTextPlateTone":  "white",
+    "layoutOrder":  [
+                        "hero",
+                        "values",
+                        "photos",
+                        "accordions",
+                        "works",
+                        "contact",
+                        "hours",
+                        "access",
+                        "address"
+                    ],
+    "itemLayouts":  {
+                        "about-photos":  {
+                                             "sizes":  [
+                                                           "L",
+                                                           "H",
+                                                           "H",
+                                                           "L"
+                                                       ],
+                                             "gap":  "normal",
+                                             "sizePat":  "S3"
+                                         },
+                        "works-list":  {
+                                           "sizes":  [
+                                                         "H",
+                                                         "H",
+                                                         "L"
+                                                     ],
+                                           "gap":  "normal",
+                                           "sizePat":  "S2"
+                                       }
+                    },
+    "layoutRecipeNote":  "a photo=S3 works=S2 sizes=1",
+    "heroTextOnPhoto":  false,
+    "imagePaths":  {
+                       "about_image_4":  "sushi-samples/14-ramen-brick-b/images/about-04.jpg?v=dense3",
+                       "about_image_2":  "sushi-samples/14-ramen-brick-b/images/about-02.jpg?v=dense3",
+                       "hero_image":  "sushi-samples/14-ramen-brick-b/images/hero.jpg?v=dense3",
+                       "about_image_3":  "sushi-samples/14-ramen-brick-b/images/about-03.jpg?v=dense3",
+                       "work_2_image":  "sushi-samples/14-ramen-brick-b/images/work-02.jpg?v=dense3",
+                       "about_image_1":  "sushi-samples/14-ramen-brick-b/images/about-01.jpg?v=dense3",
+                       "work_3_image":  "sushi-samples/14-ramen-brick-b/images/work-03.jpg?v=dense3",
+                       "work_1_image":  "sushi-samples/14-ramen-brick-b/images/work-01.jpg?v=dense3"
+                   }
 }

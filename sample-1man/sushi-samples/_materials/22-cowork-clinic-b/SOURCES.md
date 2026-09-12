@@ -1,5 +1,7 @@
-﻿# 写真出典 — 22-cowork-clinic-b
+﻿# Image sources 窶・22-cowork-clinic-b
 
-| ファイル | サイト | 作者 | URL | ライセンス | メモ |
-|----------|--------|------|-----|------------|------|
-| hero.jpg | | | | | |
+Theme: izakaya | Unique lock assignment (no reuse across 30 samples)
+
+| file | source | key |
+|------|--------|-----|
+| hero.jpg | loremflickr:izakaya,japanese-food | lock-50266 |

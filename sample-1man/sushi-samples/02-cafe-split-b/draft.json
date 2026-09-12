@@ -1,25 +1,14 @@
 {
-    "version":  16,
+    "version":  17,
     "sushiSampleId":  "02",
     "sushiSampleKey":  "cafe-split-b",
     "blurb":  "カフェ・左右割・緑・丸ゴ",
-    "scene":  "サラダ・窓辺",
-    "savedAt":  "2026-09-07T21:16:12.9592808Z",
+    "scene":  "花屋・店先",
+    "savedAt":  "2026-09-08T17:08:00.3163234Z",
     "uiMode":  "self",
     "sitePurpose":  "shop",
     "siteColorMode":  "detail",
-    "layoutPattern":  "b",
-    "layoutOrder":  [
-                        "hero",
-                        "values",
-                        "accordions",
-                        "photos",
-                        "works",
-                        "hours",
-                        "access",
-                        "address",
-                        "contact"
-                    ],
+    "layoutPattern":  "a",
     "layoutSelected":  true,
     "layoutSchema":  2,
     "intakeDone":  true,
@@ -39,15 +28,15 @@
                         "bodyInk":  "#212121",
                         "contactInk":  "#f4fff6",
                         "valuesBg":  "#ffffff",
-                        "heroInk":  "#111111",
+                        "heroInk":  "#ffffff",
                         "chromeBg":  "#1f3d18"
                     },
     "draftCounts":  {
                         "hero-leads":  2,
-                        "hero-values":  2,
+                        "hero-values":  3,
                         "about-accordions":  1,
-                        "about-photos":  1,
-                        "works-list":  2
+                        "about-photos":  4,
+                        "works-list":  3
                     },
     "guidedImageUnlocked":  true,
     "guidedTextUnlocked":  true,
@@ -57,36 +46,45 @@
                   "display":  "Zen Maru Gothic"
               },
     "fields":  {
-                   "brand_name":  "ミドリ喫茶",
-                   "hero_title":  "ミドリ喫茶",
-                   "hero_lead_1":  "緑のなかで一休み",
-                   "hero_lead_2":  "サラダとハーブティーの店",
-                   "value_1_title":  "サラダ",
-                   "value_1_text":  "その日の野菜で",
-                   "value_2_title":  "空間",
-                   "value_2_text":  "観葉植物に囲まれて",
-                   "about_section_name":  "お店",
-                   "about_heading":  "ミドリ喫茶案内",
-                   "about_name":  "ミドリ喫茶",
-                   "about_lead":  "野菜たっぷりのランチと、ハーブティーが人気の喫茶です。明るい窓辺の席で、午後のひと息をどうぞ。",
-                   "acc_1_title":  "こだわり",
-                   "acc_1_body":  "野菜たっぷりのランチと、ハーブティーが人気の喫茶です。明るい窓辺の席で、午後のひと息をどうぞ。",
-                   "works_section_name":  "メニュー",
-                   "works_heading":  "おすすめ",
-                   "works_lead":  "サラダとハーブティーの店",
-                   "work_1_title":  "グリーンランチ",
-                   "work_1_text":  "ボウルで選べる",
-                   "work_2_title":  "ハーブティー",
-                   "work_2_text":  "ブレンドは店内で",
-                   "hours_text":  "11:00–19:00／水曜定休",
-                   "address_text":  "〇〇区緑町4-5",
+                   "brand_name":  "花便り 店先",
+                   "hero_title":  "今日の花は、店先から。",
+                   "hero_lead_1":  "朝のうちに水を替えた切り花と、小さな鉢ものが並ぶ路面店。通りがかりの「これ一輪」も、玄関用のまとまりも、同じカウンターで相談できます。",
+                   "hero_lead_2":  "色の好みと置き場所だけ教えてください。季節の花を、持ち帰りやすい束に整えます。",
+                   "hero_lead_3":  "",
+                   "value_1_title":  "店先で選べる鮮度",
+                   "value_1_text":  "毎朝入荷した花を、バケツごと店先に出します。触って香りを確かめてから、本数を決められます。",
+                   "value_2_title":  "置き場所から組む",
+                   "value_2_text":  "玄関・デスク・ギフト用で長さと葉の量を変えます。花瓶がない方には簡易の水袋もお付けします。",
+                   "value_3_title":  "小さな鉢も常備",
+                   "value_3_text":  "切り花と一緒に、窓辺向きの観葉やハーブの小さな鉢も置いています。水やりの目安も口頭でお伝えします。",
+                   "about_section_name":  "花屋について",
+                   "about_heading":  "通りに開いた、短い花の時間",
+                   "about_name":  "花便り 店先",
+                   "about_lead":  "シャッター街の一角で、週六日だけ店先を開けています。大きなアレンジより、家にそのまま置ける束が得意です。看板は手書きの黒板。今日入った花の名前を、読み方つきで書いています。",
+                   "acc_1_title":  "注文の流れ",
+                   "acc_1_body":  "店頭はその日の在庫から。ギフトやイベント用は前日までのご相談が安心です。ラッピングはクラフト紙か透け袋から選べます。遠方への発送は行っていません。",
+                   "acc_2_title":  "枯らさないための一言",
+                   "acc_2_body":  "切り口を斜めに整え、水は毎日替えてください。エアコンの風が当たる場所は避け、葉が水に浸からないよう調整すると持ちがよくなります。",
+                   "works_section_name":  "今日のおすすめ",
+                   "works_heading":  "店先から持ち帰る束",
+                   "works_lead":  "季節と在庫で中身は変わります。雰囲気の参考にしてください。",
+                   "work_1_title":  "朝の一輪セット",
+                   "work_1_text":  "メインの花1本にグリーンを添えた最小サイズ。デスクや洗面まわり向け。",
+                   "work_2_title":  "玄関のまとまり",
+                   "work_2_text":  "高さのある花を中心に、左右のバランスを整えたスタンダード束。",
+                   "work_3_title":  "小さな鉢＋切り花",
+                   "work_3_text":  "枯れにくい鉢ものと、その週の切り花をセット。初めての方にも渡しやすい組み合わせです。",
                    "contact_section_name":  "ご連絡",
                    "contact_label":  "ご連絡",
-                   "contact_note_1":  "テイクアウトのご相談も歓迎",
-                   "contact_note_2":  "11:00–19:00／水曜定休",
+                   "contact_email":  "order@hanadayori-mise.example",
                    "font_display":  "Zen Maru Gothic",
                    "font_catch":  "Kiwi Maru",
-                   "font_body":  "M PLUS Rounded 1c"
+                   "font_body":  "M PLUS Rounded 1c",
+                   "address_text":  "架空市あおば区花便り町 1-8-3 / 最寄駅から徒歩5分。駐車場は近隣コインパーキングをご利用ください。",
+                   "hours_text":  "火〜日 9:00–18:00　月曜定休（祝日は営業、翌火曜休み）　／　最終受付は閉店30分前。混雑時はお待ちいただく場合があります。",
+                   "access_text":  "最寄駅から徒歩5分。駐車場は近隣コインパーキングをご利用ください。 / Address: 架空市あおば区花便り町 1-8-3 / 最寄駅から徒歩5分。駐車場は近隣コインパーキングをご利用ください。",
+                   "contact_note_1":  "ご予約・お問い合わせはメールにて。希望日時・人数・ご要望を書いてください。折り返しで空き状況とアクセスの補足をご案内します。",
+                   "contact_note_2":  "営業中は店頭優先のため返信が遅れることがあります。2営業日以内を目安にご連絡します。駐車・道順の質問も同アドレスで受け付けます。"
                },
     "confirmed":  {
                       "purpose":  true,
@@ -105,7 +103,52 @@
                   },
     "draftExtras":  {
                         "hours":  true,
-                        "access":  false,
-                        "address":  true
-                    }
+                        "access":  true,
+                        "address":  false
+                    },
+    "heroTextPlate":  "round",
+    "heroTextPlateTone":  "white",
+    "heroTextOnPhoto":  false,
+    "layoutOrder":  [
+                        "hero",
+                        "values",
+                        "photos",
+                        "works",
+                        "hours",
+                        "access",
+                        "accordions",
+                        "contact"
+                    ],
+    "itemLayouts":  {
+                        "about-photos":  {
+                                             "sizes":  [
+                                                           "L",
+                                                           "H",
+                                                           "H",
+                                                           "L"
+                                                       ],
+                                             "gap":  "normal",
+                                             "sizePat":  "S3"
+                                         },
+                        "works-list":  {
+                                           "sizes":  [
+                                                         "H",
+                                                         "H",
+                                                         "L"
+                                                     ],
+                                           "gap":  "normal",
+                                           "sizePat":  "S2"
+                                       }
+                    },
+    "layoutRecipeNote":  "a photo=S3 works=S2 sizes=1",
+    "imagePaths":  {
+                       "about_image_4":  "sushi-samples/02-cafe-split-b/images/about-04.jpg?v=dense4",
+                       "about_image_2":  "sushi-samples/02-cafe-split-b/images/about-02.jpg?v=dense4",
+                       "hero_image":  "sushi-samples/02-cafe-split-b/images/hero.jpg?v=dense4",
+                       "about_image_3":  "sushi-samples/02-cafe-split-b/images/about-03.jpg?v=dense4",
+                       "work_2_image":  "sushi-samples/02-cafe-split-b/images/work-02.jpg?v=dense4",
+                       "about_image_1":  "sushi-samples/02-cafe-split-b/images/about-01.jpg?v=dense4",
+                       "work_3_image":  "sushi-samples/02-cafe-split-b/images/work-03.jpg?v=dense4",
+                       "work_1_image":  "sushi-samples/02-cafe-split-b/images/work-01.jpg?v=dense4"
+                   }
 }

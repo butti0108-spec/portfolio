@@ -2,17 +2,6 @@
     "id":  "07",
     "folder":  "07-bakery-cafe-c",
     "band":  "N",
-    "layoutPattern":  "b",
-    "layoutOrder":  [
-                        "hero",
-                        "values",
-                        "photos",
-                        "works",
-                        "accordions",
-                        "hours",
-                        "address",
-                        "contact"
-                    ],
     "photoPack":  "P2",
     "headingPack":  "H4",
     "colorKey":  "ink",
@@ -23,24 +12,37 @@
                   "display":  "Yuji Syuku"
               },
     "scene":  "ラーメン・丼",
-    "counts":  {
-                   "hero-leads":  2,
-                   "hero-values":  3,
-                   "about-accordions":  2,
-                   "about-photos":  2,
-                   "works-list":  2
-               },
-    "extras":  {
-                   "hours":  true,
-                   "access":  false,
-                   "address":  true
-               },
+    "status":  "text+images",
+    "layoutPattern":  "a",
     "imageSlots":  [
                        "hero.jpg",
                        "about-01.jpg",
                        "about-02.jpg",
+                       "about-03.jpg",
                        "work-01.jpg",
-                       "work-02.jpg"
+                       "work-02.jpg",
+                       "work-03.jpg"
                    ],
-    "status":  "未着手"
+    "layoutOrder":  [
+                        "hero",
+                        "values",
+                        "photos",
+                        "works",
+                        "hours",
+                        "access",
+                        "accordions",
+                        "contact"
+                    ],
+    "extras":  {
+                   "hours":  true,
+                   "access":  true,
+                   "address":  false
+               },
+    "counts":  {
+                   "hero-leads":  2,
+                   "hero-values":  3,
+                   "about-accordions":  1,
+                   "about-photos":  3,
+                   "works-list":  3
+               }
 }

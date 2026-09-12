@@ -1,25 +1,14 @@
 {
-    "version":  16,
+    "version":  17,
     "sushiSampleId":  "04",
     "sushiSampleKey":  "salon-clinic-a",
     "blurb":  "サロン・横長・紺きれいめ・明朝",
-    "scene":  "白い施術室",
-    "savedAt":  "2026-09-07T21:16:12.9592808Z",
+    "scene":  "サロン・白",
+    "savedAt":  "2026-09-08T17:08:09.4323921Z",
     "uiMode":  "self",
     "sitePurpose":  "shop",
     "siteColorMode":  "detail",
     "layoutPattern":  "a",
-    "layoutOrder":  [
-                        "hero",
-                        "values",
-                        "accordions",
-                        "photos",
-                        "works",
-                        "hours",
-                        "access",
-                        "address",
-                        "contact"
-                    ],
     "layoutSelected":  true,
     "layoutSchema":  2,
     "intakeDone":  true,
@@ -39,15 +28,15 @@
                         "bodyInk":  "#212121",
                         "contactInk":  "#ffffff",
                         "valuesBg":  "#ffffff",
-                        "heroInk":  "#1a4d8c",
+                        "heroInk":  "#ffffff",
                         "chromeBg":  "#1a4d8c"
                     },
     "draftCounts":  {
                         "hero-leads":  2,
-                        "hero-values":  2,
-                        "about-accordions":  1,
-                        "about-photos":  1,
-                        "works-list":  2
+                        "hero-values":  3,
+                        "about-accordions":  2,
+                        "about-photos":  3,
+                        "works-list":  3
                     },
     "guidedImageUnlocked":  true,
     "guidedTextUnlocked":  true,
@@ -57,36 +46,45 @@
                   "display":  "Shippori Mincho"
               },
     "fields":  {
-                   "brand_name":  "藍のサロン",
-                   "hero_title":  "藍のサロン",
-                   "hero_lead_1":  "整える、静かな時間",
-                   "hero_lead_2":  "清潔な空間でのヘアケア",
-                   "value_1_title":  "予約制",
-                   "value_1_text":  "待ち時間を少なく",
-                   "value_2_title":  "カウンセリング",
-                   "value_2_text":  "仕上がりを一緒に決める",
-                   "about_section_name":  "お店",
-                   "about_heading":  "藍のサロン案内",
-                   "about_name":  "藍のサロン",
-                   "about_lead":  "完全予約制のヘアサロンです。カウンセリングを大切にし、髪の状態に合わせた施術をご提案します。",
-                   "acc_1_title":  "こだわり",
-                   "acc_1_body":  "完全予約制のヘアサロンです。カウンセリングを大切にし、髪の状態に合わせた施術をご提案します。",
-                   "works_section_name":  "メニュー",
-                   "works_heading":  "おすすめ",
-                   "works_lead":  "清潔な空間でのヘアケア",
-                   "work_1_title":  "カット＆ケア",
-                   "work_1_text":  "骨格に合わせた形",
-                   "work_2_title":  "カラー相談",
-                   "work_2_text":  "ダメージを見ながら",
-                   "hours_text":  "10:00–19:00／火曜定休",
-                   "address_text":  "〇〇市青葉3-1",
+                   "brand_name":  "白磁ヘアサロン",
+                   "hero_title":  "白い光のなかで、髪を整える。",
+                   "hero_lead_1":  "余白の多い個室と、明るすぎない照明。カットもカラーも、鏡の前でゆっくり相談してから進めます。",
+                   "hero_lead_2":  "流行の型より、帰宅後に自分でまとめやすい形を大切にしています。",
+                   "hero_lead_3":  "",
+                   "value_1_title":  "カウンセリングを厚く",
+                   "value_1_text":  "クセ・生えグセ・朝の支度時間を聞き、切る量を決めます。写真の共有も歓迎です。",
+                   "value_2_title":  "白を基調にした個室",
+                   "value_2_text":  "完全個室ではありませんが、パーテーションで視線を遮り、隣の会話が聞こえにくい配置にしています。",
+                   "value_3_title":  "帰宅後の再現しやすさ",
+                   "value_3_text":  "ブローの手順を短くメモしてお渡し。使うワックスの量まで、一緒に確認します。",
+                   "about_section_name":  "サロンについて",
+                   "about_heading":  "静かな白の空間で",
+                   "about_name":  "白磁ヘアサロン",
+                   "about_lead":  "住宅街のクリニック並びにある、少人数制のヘアサロンです。香りの強いスプレーは控え、タオルは毎回交換。キッズカットは平日午前のみ受け付けています。",
+                   "acc_1_title":  "ご予約について",
+                   "acc_1_body":  "WEBまたはメールで受付。カラーとカットの同日は余裕を持った枠をご案内します。キャンセルは前日までにご連絡ください。",
+                   "acc_2_title":  "初めてのカラー",
+                   "acc_2_body":  "既往歴やアレルギーがあれば事前にお知らせください。ブリーチを含むメニューはカウンセリング後に可否を判断します。",
+                   "works_section_name":  "メニュー例",
+                   "works_heading":  "よく選ばれる組み合わせ",
+                   "works_lead":  "料金の目安はカウンセリング時に確定します。",
+                   "work_1_title":  "カット＋ブロー",
+                   "work_1_text":  "骨格に合わせたラインと、自宅で乾かしやすい毛流れを整えます。",
+                   "work_2_title":  "グレイカラー＋カット",
+                   "work_2_text":  "白髪の見え方と頭皮の状態を見て、トーンを抑えた仕上がりにします。",
+                   "address_text":  "架空市しろがね区白磁通り 5-2-1　白磁ビル2F",
                    "contact_section_name":  "ご連絡",
                    "contact_label":  "ご連絡",
-                   "contact_note_1":  "LINEまたは電話でご予約",
-                   "contact_note_2":  "10:00–19:00／火曜定休",
+                   "contact_email":  "book@hakuji-salon.example",
+                   "contact_note_1":  "ご予約・変更はメールで。希望日時を第3希望まで書いてください。",
+                   "contact_note_2":  "施術中は返信が遅れることがあります。前日までにご連絡ください。",
                    "font_display":  "Shippori Mincho",
                    "font_catch":  "Shippori Mincho",
-                   "font_body":  "Zen Kaku Gothic New"
+                   "font_body":  "Zen Kaku Gothic New",
+                   "access_text":  "最寄駅から徒歩5分。駐車場は近隣コインパーキングをご利用ください。",
+                   "work_3_title":  "白磁ヘアサロンの定番",
+                   "work_3_text":  "店の空気が伝わる組み合わせ。詳細は来店時にご案内します。",
+                   "hours_text":  "火〜土 10:00–19:00（最終受付 17:30）　日・月定休　／　最終受付は閉店30分前。"
                },
     "confirmed":  {
                       "purpose":  true,
@@ -105,7 +103,51 @@
                   },
     "draftExtras":  {
                         "hours":  true,
-                        "access":  false,
-                        "address":  true
-                    }
+                        "address":  true,
+                        "access":  true
+                    },
+    "heroTextPlate":  "round",
+    "heroTextPlateTone":  "white",
+    "layoutOrder":  [
+                        "hero",
+                        "photos",
+                        "values",
+                        "works",
+                        "hours",
+                        "access",
+                        "address",
+                        "accordions",
+                        "contact"
+                    ],
+    "itemLayouts":  {
+                        "about-photos":  {
+                                             "sizes":  [
+                                                           "H",
+                                                           "H",
+                                                           "L"
+                                                       ],
+                                             "gap":  "normal",
+                                             "sizePat":  "S2"
+                                         },
+                        "works-list":  {
+                                           "sizes":  [
+                                                         "L",
+                                                         "L",
+                                                         "L"
+                                                     ],
+                                           "gap":  "loose",
+                                           "sizePat":  "S1"
+                                       }
+                    },
+    "layoutRecipeNote":  "a photo=S2 works=S1 sizes=1",
+    "heroTextOnPhoto":  false,
+    "imagePaths":  {
+                       "work_2_image":  "sushi-samples/04-salon-clinic-a/images/work-02.jpg?v=dense3",
+                       "about_image_2":  "sushi-samples/04-salon-clinic-a/images/about-02.jpg?v=dense3",
+                       "hero_image":  "sushi-samples/04-salon-clinic-a/images/hero.jpg?v=dense3",
+                       "work_1_image":  "sushi-samples/04-salon-clinic-a/images/work-01.jpg?v=dense3",
+                       "about_image_3":  "sushi-samples/04-salon-clinic-a/images/about-03.jpg?v=dense3",
+                       "about_image_1":  "sushi-samples/04-salon-clinic-a/images/about-01.jpg?v=dense3",
+                       "work_3_image":  "sushi-samples/04-salon-clinic-a/images/work-03.jpg?v=dense3"
+                   }
 }

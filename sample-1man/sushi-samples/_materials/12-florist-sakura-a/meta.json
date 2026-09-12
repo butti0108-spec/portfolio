@@ -2,17 +2,6 @@
     "id":  "12",
     "folder":  "12-florist-sakura-a",
     "band":  "N",
-    "layoutPattern":  "a",
-    "layoutOrder":  [
-                        "hero",
-                        "works",
-                        "photos",
-                        "values",
-                        "accordions",
-                        "hours",
-                        "address",
-                        "contact"
-                    ],
     "photoPack":  "P2",
     "headingPack":  "H3",
     "colorKey":  "sakura",
@@ -23,24 +12,38 @@
                   "display":  "Zen Maru Gothic"
               },
     "scene":  "ペット・散歩",
+    "status":  "text+images",
+    "layoutPattern":  "a",
+    "layoutOrder":  [
+                        "hero",
+                        "photos",
+                        "works",
+                        "values",
+                        "hours",
+                        "access",
+                        "address",
+                        "contact",
+                        "accordions"
+                    ],
     "counts":  {
                    "hero-leads":  2,
-                   "hero-values":  2,
+                   "hero-values":  3,
                    "about-accordions":  1,
-                   "about-photos":  2,
-                   "works-list":  2
+                   "about-photos":  3,
+                   "works-list":  3
                },
     "extras":  {
                    "hours":  true,
-                   "access":  false,
+                   "access":  true,
                    "address":  true
                },
     "imageSlots":  [
                        "hero.jpg",
                        "about-01.jpg",
                        "about-02.jpg",
+                       "about-03.jpg",
                        "work-01.jpg",
-                       "work-02.jpg"
-                   ],
-    "status":  "未着手"
+                       "work-02.jpg",
+                       "work-03.jpg"
+                   ]
 }

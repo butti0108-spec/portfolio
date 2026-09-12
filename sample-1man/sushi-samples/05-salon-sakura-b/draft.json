@@ -1,25 +1,14 @@
 {
-    "version":  16,
+    "version":  17,
     "sushiSampleId":  "05",
     "sushiSampleKey":  "salon-sakura-b",
     "blurb":  "サロン・左右・桜ピンク・丸",
-    "scene":  "花・タオル",
-    "savedAt":  "2026-09-07T21:16:12.9592808Z",
+    "scene":  "スイーツ・パステル",
+    "savedAt":  "2026-09-08T17:08:13.4904659Z",
     "uiMode":  "self",
     "sitePurpose":  "shop",
     "siteColorMode":  "detail",
-    "layoutPattern":  "b",
-    "layoutOrder":  [
-                        "hero",
-                        "values",
-                        "accordions",
-                        "photos",
-                        "works",
-                        "hours",
-                        "access",
-                        "address",
-                        "contact"
-                    ],
+    "layoutPattern":  "a",
     "layoutSelected":  true,
     "layoutSchema":  2,
     "intakeDone":  true,
@@ -39,15 +28,15 @@
                         "bodyInk":  "#3d2228",
                         "contactInk":  "#fff8fa",
                         "valuesBg":  "#ffffff",
-                        "heroInk":  "#5c2434",
+                        "heroInk":  "#ffffff",
                         "chromeBg":  "#8f4a5a"
                     },
     "draftCounts":  {
                         "hero-leads":  2,
-                        "hero-values":  2,
+                        "hero-values":  3,
                         "about-accordions":  1,
-                        "about-photos":  1,
-                        "works-list":  2
+                        "about-photos":  3,
+                        "works-list":  3
                     },
     "guidedImageUnlocked":  true,
     "guidedTextUnlocked":  true,
@@ -57,36 +46,45 @@
                   "display":  "Zen Maru Gothic"
               },
     "fields":  {
-                   "brand_name":  "桜並木サロン",
-                   "hero_title":  "桜並木サロン",
-                   "hero_lead_1":  "やわらかく、きれいに",
-                   "hero_lead_2":  "似合わせと髪質改善",
-                   "value_1_title":  "似合わせ",
-                   "value_1_text":  "顔まわりを丁寧に",
-                   "value_2_title":  "ケア",
-                   "value_2_text":  "髪質に合わせた処方",
-                   "about_section_name":  "お店",
-                   "about_heading":  "桜並木サロン案内",
-                   "about_name":  "桜並木サロン",
-                   "about_lead":  "桜並木のそばにある小さなサロン。やわらかいトーンの店内で、似合わせカットとトリートメントを中心にしています。",
-                   "acc_1_title":  "こだわり",
-                   "acc_1_body":  "桜並木のそばにある小さなサロン。やわらかいトーンの店内で、似合わせカットとトリートメントを中心にしています。",
-                   "works_section_name":  "メニュー",
-                   "works_heading":  "おすすめ",
-                   "works_lead":  "似合わせと髪質改善",
-                   "work_1_title":  "似合わせカット",
-                   "work_1_text":  "前髪・顔まわり重視",
-                   "work_2_title":  "桜ケアコース",
-                   "work_2_text":  "保湿と艶出し",
-                   "hours_text":  "9:30–18:30／水曜定休",
-                   "address_text":  "〇〇区桜通り1-10",
+                   "brand_name":  "パステル菓子工房 うすい",
+                   "hero_title":  "淡い色の、午後の一口。",
+                   "hero_lead_1":  "クリームは甘さ控えめ、生地はしっとり。パステル色のショーケースから、今日の気分で選ぶ小さな菓子屋です。",
+                   "hero_lead_2":  "",
+                   "hero_lead_3":  "",
+                   "value_1_title":  "甘さより香りのバランス",
+                   "value_1_text":  "砂糖を抑え、果物や茶葉の香りが残る配合にしています。食後にも重くならない甘さです。",
+                   "value_2_title":  "持ち帰りやすいサイズ",
+                   "value_2_text":  "カットケーキは一人用。箱はリボンなしの淡色で、職場や手土産にも渡しやすい形です。",
+                   "about_section_name":  "工房について",
+                   "about_heading":  "ショーケースの前で迷っていい",
+                   "about_name":  "パステル菓子工房 うすい",
+                   "about_lead":  "住宅街の角にある、席なしのテイクアウト専門店です。焼成は午前中にまとめ、午後は仕上げと販売に集中。アレルギー表示はケース横のカードに記載しています。",
+                   "acc_1_title":  "ご購入の目安",
+                   "acc_1_body":  "予約なしでも購入できますが、人気のムースは昼前に切れることがあります。複数個のまとめ買いは前日までのメールが確実です。冷蔵が必要なものは保冷剤付きでお渡しします。",
+                   "acc_2_title":  "",
+                   "acc_2_body":  "",
+                   "works_section_name":  "本日の菓子",
+                   "works_heading":  "ショーケースから",
+                   "works_lead":  "季節で色が変わります。",
+                   "work_1_title":  "いちごの淡クリームサンド",
+                   "work_1_text":  "スポンジを薄く重ね、クリームは牛乳感を残した甘さ。午後のおやつ向けです。",
+                   "work_2_title":  "季節の一口プレート",
+                   "work_2_text":  "その週の焼き菓子を小皿に盛った、お茶請け向けのセットです。",
                    "contact_section_name":  "ご連絡",
                    "contact_label":  "ご連絡",
-                   "contact_note_1":  "初回はカウンセリング多めです",
-                   "contact_note_2":  "9:30–18:30／水曜定休",
+                   "contact_email":  "hello@usui-pastel.example",
                    "font_display":  "Zen Maru Gothic",
                    "font_catch":  "Kiwi Maru",
-                   "font_body":  "M PLUS Rounded 1c"
+                   "font_body":  "M PLUS Rounded 1c",
+                   "value_3_title":  "通いやすい距離感",
+                   "value_3_text":  "初めての方も、常連の方も同じペースで。短時間の立ち寄りにも使いやすい店づくりです。",
+                   "work_3_title":  "パステル菓子工房 うすいの定番",
+                   "work_3_text":  "店の空気が伝わる組み合わせ。詳細は来店時にご案内します。",
+                   "address_text":  "架空市さくら区淡色町 2-14 / 最寄駅から徒歩5分。駐車場は近隣コインパーキングをご利用ください。",
+                   "hours_text":  "水〜日 11:00–18:00（なくなり次第終了）　月・火定休　／　最終受付は閉店30分前。混雑時はお待ちいただく場合があります。",
+                   "access_text":  "最寄駅から徒歩5分。駐車場は近隣コインパーキングをご利用ください。 / Address: 架空市さくら区淡色町 2-14 / 最寄駅から徒歩5分。駐車場は近隣コインパーキングをご利用ください。",
+                   "contact_note_1":  "ご予約・お問い合わせはメールにて。希望日時・人数・ご要望を書いてください。折り返しで空き状況とアクセスの補足をご案内します。",
+                   "contact_note_2":  "営業中は店頭優先のため返信が遅れることがあります。2営業日以内を目安にご連絡します。駐車・道順の質問も同アドレスで受け付けます。"
                },
     "confirmed":  {
                       "purpose":  true,
@@ -105,7 +103,50 @@
                   },
     "draftExtras":  {
                         "hours":  true,
-                        "access":  false,
-                        "address":  true
-                    }
+                        "access":  true,
+                        "address":  false
+                    },
+    "heroTextPlate":  "round",
+    "heroTextPlateTone":  "white",
+    "heroTextOnPhoto":  false,
+    "layoutOrder":  [
+                        "hero",
+                        "values",
+                        "photos",
+                        "works",
+                        "hours",
+                        "access",
+                        "accordions",
+                        "contact"
+                    ],
+    "itemLayouts":  {
+                        "about-photos":  {
+                                             "sizes":  [
+                                                           "L",
+                                                           "H",
+                                                           "H"
+                                                       ],
+                                             "gap":  "normal",
+                                             "sizePat":  "S6"
+                                         },
+                        "works-list":  {
+                                           "sizes":  [
+                                                         "H",
+                                                         "H",
+                                                         "L"
+                                                     ],
+                                           "gap":  "normal",
+                                           "sizePat":  "S2"
+                                       }
+                    },
+    "layoutRecipeNote":  "a photo=S6 works=S2 sizes=1",
+    "imagePaths":  {
+                       "work_2_image":  "sushi-samples/05-salon-sakura-b/images/work-02.jpg?v=dense4",
+                       "about_image_2":  "sushi-samples/05-salon-sakura-b/images/about-02.jpg?v=dense4",
+                       "hero_image":  "sushi-samples/05-salon-sakura-b/images/hero.jpg?v=dense4",
+                       "work_1_image":  "sushi-samples/05-salon-sakura-b/images/work-01.jpg?v=dense4",
+                       "about_image_3":  "sushi-samples/05-salon-sakura-b/images/about-03.jpg?v=dense4",
+                       "about_image_1":  "sushi-samples/05-salon-sakura-b/images/about-01.jpg?v=dense4",
+                       "work_3_image":  "sushi-samples/05-salon-sakura-b/images/work-03.jpg?v=dense4"
+                   }
 }

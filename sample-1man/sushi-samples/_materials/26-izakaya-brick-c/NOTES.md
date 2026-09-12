@@ -1,5 +1,4 @@
-﻿# メモ — 26-izakaya-brick-c
+﻿# NOTES 26-izakaya-brick-c
 
-- 帯: A / ABC: a / P2 / H3
-- 世界観: 写真館・モノクロ
-- 採用判断:
+- review round reset 2026-09-09 (complete pack for human review)
+- [2026-09-10 00:19] approve

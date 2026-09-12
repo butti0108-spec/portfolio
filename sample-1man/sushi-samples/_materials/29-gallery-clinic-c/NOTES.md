@@ -1,5 +1,4 @@
-﻿# メモ — 29-gallery-clinic-c
+﻿# NOTES 29-gallery-clinic-c
 
-- 帯: X / ABC: b / P1 / H4
-- 世界観: 花屋・アレンジ
-- 採用判断:
+- review round reset 2026-09-09 (complete pack for human review)
+- [2026-09-10 00:23] fix / レイアウト／隙間が気持ち悪い / note: セクション間隙間空き

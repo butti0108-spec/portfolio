@@ -2,17 +2,6 @@
     "id":  "27",
     "folder":  "27-izakaya-ink-b",
     "band":  "A",
-    "layoutPattern":  "b",
-    "layoutOrder":  [
-                        "hero",
-                        "photos",
-                        "works",
-                        "values",
-                        "accordions",
-                        "hours",
-                        "address",
-                        "contact"
-                    ],
     "photoPack":  "P3",
     "headingPack":  "H3",
     "colorKey":  "cafe",
@@ -23,26 +12,38 @@
                   "display":  "Shippori Mincho"
               },
     "scene":  "宿・朝",
-    "counts":  {
-                   "hero-leads":  2,
-                   "hero-values":  1,
-                   "about-accordions":  1,
-                   "about-photos":  3,
-                   "works-list":  3
-               },
-    "extras":  {
-                   "hours":  true,
-                   "access":  false,
-                   "address":  true
-               },
+    "status":  "text+images",
+    "layoutPattern":  "a",
     "imageSlots":  [
                        "hero.jpg",
                        "about-01.jpg",
                        "about-02.jpg",
                        "about-03.jpg",
+                       "about-04.jpg",
                        "work-01.jpg",
                        "work-02.jpg",
                        "work-03.jpg"
                    ],
-    "status":  "未着手"
+    "layoutOrder":  [
+                        "hero",
+                        "values",
+                        "photos",
+                        "works",
+                        "hours",
+                        "access",
+                        "accordions",
+                        "contact"
+                    ],
+    "extras":  {
+                   "hours":  true,
+                   "access":  true,
+                   "address":  false
+               },
+    "counts":  {
+                   "hero-leads":  2,
+                   "hero-values":  3,
+                   "about-accordions":  1,
+                   "about-photos":  4,
+                   "works-list":  3
+               }
 }

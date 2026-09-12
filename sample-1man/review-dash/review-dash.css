@@ -1,0 +1,186 @@
+/* 確認用＝読める実寸寄り / 撮影用＝全体フィット縮小 */
+* { box-sizing: border-box; }
+html, body {
+  margin: 0;
+  height: 100%;
+  font-family: system-ui, sans-serif;
+  font-size: 14px;
+  background: #f3f5f7;
+  color: #111;
+}
+.bar {
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: center;
+  gap: 0.5rem 0.75rem;
+  padding: 0.5rem 0.75rem;
+  background: #fff;
+  border-bottom: 1px solid #d0d5db;
+  min-height: 2.75rem;
+}
+.bar-left {
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+  gap: 0.5rem 0.75rem;
+  white-space: nowrap;
+}
+.bar strong { margin-right: 0; }
+/* タイトル長で前へ／次へが動かないよう、ラベルは中央で縮め、操作は右端固定 */
+.bar-label {
+  flex: 1 1 auto;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.bar-actions {
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+  gap: 0.5rem;
+  margin-left: auto;
+  white-space: nowrap;
+}
+.mode-group {
+  display: inline-flex;
+  border: 1px solid #888;
+  border-radius: 2px;
+  overflow: hidden;
+}
+button {
+  font: inherit;
+  padding: 0.35rem 0.7rem;
+  cursor: pointer;
+  border: 1px solid #888;
+  background: #f5f5f5;
+}
+.mode-group button.mode {
+  border: 0;
+  border-right: 1px solid #888;
+  border-radius: 0;
+  background: #f0f0f0;
+}
+.mode-group button.mode:last-child { border-right: 0; }
+.mode-group button.mode.is-on {
+  background: #1a4d8c;
+  color: #fff;
+}
+button.ok {
+  background: #1b7a3d;
+  color: #fff;
+  border-color: #155f2f;
+}
+button.ng {
+  background: #8a1f1f;
+  color: #fff;
+  border-color: #6a1515;
+}
+button:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+.status-line {
+  margin: 0;
+  padding: 0.35rem 0.75rem;
+  background: #fafafa;
+  border-bottom: 1px solid #ddd;
+  color: #333;
+  min-height: 1.4em;
+}
+.stage {
+  height: calc(100% - 5.5rem);
+  overflow: auto;
+  background: #ddd;
+}
+.frame-wrap {
+  width: 1200px;
+  margin: 0 auto;
+  transform-origin: top left;
+  background: #fff;
+}
+iframe {
+  display: block;
+  width: 1200px;
+  height: 2400px;
+  border: 0;
+  background: #fff;
+}
+
+/* 確認モード: 縮小しない。横スクロールで全文読める */
+body.view-read .stage {
+  overflow: auto;
+}
+body.view-read .frame-wrap {
+  margin: 12px;
+  transform: none !important;
+  width: 1200px !important;
+  height: auto !important;
+}
+body.view-read .status-line::before {
+  content: none;
+}
+
+/* 撮影モード: 全体フィット縮小（従来） */
+body.view-capture .frame-wrap {
+  transform-origin: top center;
+  margin: 0 auto;
+}
+
+/* NGダイアログ */
+.modal {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  z-index: 50;
+}
+.modal[hidden] { display: none; }
+.modal-card {
+  width: min(420px, 100%);
+  background: #fff;
+  border: 1px solid #999;
+  padding: 1rem 1.1rem;
+  max-height: 90vh;
+  overflow: auto;
+}
+.modal-card h2 {
+  margin: 0 0 0.35rem;
+  font-size: 1.1rem;
+}
+.modal-lead {
+  margin: 0 0 0.85rem;
+  color: #444;
+  font-size: 0.92rem;
+}
+.ng-severity,
+.ng-reasons {
+  border: 1px solid #ccc;
+  margin: 0 0 0.75rem;
+  padding: 0.5rem 0.65rem 0.65rem;
+}
+.ng-severity label,
+.ng-reasons label {
+  display: block;
+  margin: 0.35rem 0;
+}
+.ng-note-label {
+  display: block;
+  margin-bottom: 0.25rem;
+  font-weight: 600;
+}
+#ng-note {
+  width: 100%;
+  font: inherit;
+  padding: 0.4rem;
+  resize: vertical;
+}
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.5rem;
+  margin-top: 0.85rem;
+}

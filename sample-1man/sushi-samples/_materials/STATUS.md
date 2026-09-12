@@ -1,38 +1,42 @@
 # 見本30 進捗
 
-状態: `未着手` → `材料中` → `プレビュー可` → `採用` → `営業格納`
+状態: `未着手` → `材料中` → `文反映・画像入稿` → `完成確認待ち` → `要修正` / `営業格納` / `NG`
 
-品質: `_plot/quality-bar.md`（「どこの店？」基準）
+品質: `_plot/quality-bar.md`
+配置: `_plot/2026-09-09-配置レシピ30.md`
+レビュー: `sample-1man/review-dash/`
+
+**2026-09-09 完成確認ラウンド**: 旧NG/要修正はリセット。表側（キャッチ・特徴・写真・カード・連絡）を厚くした完成品で人目視。アコーディオン中身は表に出ないため薄い／適当で可。
 
 | No | folder | 帯 | 状態 | メモ |
 |----|--------|----|------|------|
-| 01 | 01-cafe-warm-a | N | 未着手 | |
-| 02 | 02-cafe-split-b | N | 未着手 | |
-| 03 | 03-cafe-mix-ink-c | N | 未着手 | |
-| 04 | 04-salon-clinic-a | N | 未着手 | |
-| 05 | 05-salon-sakura-b | N | 未着手 | |
-| 06 | 06-bakery-brick-a | N | 未着手 | |
-| 07 | 07-bakery-cafe-c | N | 未着手 | |
-| 08 | 08-bar-ink-b | N | 未着手 | |
-| 09 | 09-bar-brick-a | N | 未着手 | |
-| 10 | 10-clinic-green-a | N | 未着手 | |
-| 11 | 11-clinic-clinic-b | N | 未着手 | |
-| 12 | 12-florist-sakura-a | N | 未着手 | |
-| 13 | 13-florist-green-c | N | 未着手 | |
-| 14 | 14-ramen-brick-b | N | 未着手 | |
-| 15 | 15-ramen-ink-a | N | 未着手 | |
-| 16 | 16-yoga-green-a | N | 未着手 | |
-| 17 | 17-yoga-sakura-b | N | 未着手 | |
-| 18 | 18-studio-clinic-c | N | 未着手 | |
-| 19 | 19-studio-ink-a | N | 未着手 | |
-| 20 | 20-pet-cafe-b | N | 未着手 | |
-| 21 | 21-pet-sakura-a | N | 未着手 | |
-| 22 | 22-cowork-clinic-b | A | 未着手 | |
-| 23 | 23-cowork-green-a | A | 未着手 | |
-| 24 | 24-sweets-sakura-c | A | 未着手 | |
-| 25 | 25-sweets-cafe-a | A | 未着手 | |
-| 26 | 26-izakaya-brick-c | A | 未着手 | |
-| 27 | 27-izakaya-ink-b | A | 未着手 | |
-| 28 | 28-gallery-ink-a | X | 未着手 | |
-| 29 | 29-gallery-clinic-c | X | 未着手 | |
-| 30 | 30-hotel-cafe-b | X | 未着手 | |
+| 01 | 01-cafe-warm-a | N | 営業格納 |  |
+| 02 | 02-cafe-split-b | N | 営業格納 |  |
+| 03 | 03-cafe-mix-ink-c | N | 要修正 | レイアウト／隙間が気持ち悪い / セクション間隙間空き |
+| 04 | 04-salon-clinic-a | N | 要修正 | その他 / 真っ赤禁止 |
+| 05 | 05-salon-sakura-b | N | 営業格納 |  |
+| 06 | 06-bakery-brick-a | N | 要修正 | レイアウト／隙間が気持ち悪い / セクション間隙間空き |
+| 07 | 07-bakery-cafe-c | N | 要修正 | レイアウト／隙間が気持ち悪い/その他 / ・セクション間隙間空き ・真っ赤禁止 |
+| 08 | 08-bar-ink-b | N | 要修正 | 文字が溶けて読めない（色）/その他 / ・ヒーロー画像文字溶け ・真っ赤禁止 |
+| 09 | 09-bar-brick-a | N | 要修正 | その他 / 真っ赤禁止 |
+| 10 | 10-clinic-green-a | N | 要修正 | レイアウト／隙間が気持ち悪い / セクション間隙間空き |
+| 11 | 11-clinic-clinic-b | N | 要修正 | レイアウト／隙間が気持ち悪い / セクション間隙間空き |
+| 12 | 12-florist-sakura-a | N | 要修正 | その他 / 真っ赤禁止 |
+| 13 | 13-florist-green-c | N | 要修正 | レイアウト／隙間が気持ち悪い / セクション間隙間空き |
+| 14 | 14-ramen-brick-b | N | 営業格納 |  |
+| 15 | 15-ramen-ink-a | N | 要修正 | レイアウト／隙間が気持ち悪い/その他 / ・セクション間隙間空き ・真っ赤禁止 |
+| 16 | 16-yoga-green-a | N | 要修正 | レイアウト／隙間が気持ち悪い/その他 / ・セクション間隙間空き ・真っ赤禁止 |
+| 17 | 17-yoga-sakura-b | N | 営業格納 |  |
+| 18 | 18-studio-clinic-c | N | 要修正 | その他 / 真っ赤禁止 |
+| 19 | 19-studio-ink-a | N | 営業格納 |  |
+| 20 | 20-pet-cafe-b | N | 要修正 | レイアウト／隙間が気持ち悪い / ・セクション間隙間空き ・セクション間隙内空き |
+| 21 | 21-pet-sakura-a | N | 営業格納 |  |
+| 22 | 22-cowork-clinic-b | A | 要修正 | レイアウト／隙間が気持ち悪い/その他 / ・セクション間隙間空き ・真っ赤禁止 |
+| 23 | 23-cowork-green-a | A | 要修正 | レイアウト／隙間が気持ち悪い / ・セクション間隙間空き |
+| 24 | 24-sweets-sakura-c | A | 要修正 | その他 / 同じようなレイアウトはある |
+| 25 | 25-sweets-cafe-a | A | 営業格納 |  |
+| 26 | 26-izakaya-brick-c | A | 営業格納 |  |
+| 27 | 27-izakaya-ink-b | A | 営業格納 |  |
+| 28 | 28-gallery-ink-a | X | 営業格納 |  |
+| 29 | 29-gallery-clinic-c | X | 要修正 | レイアウト／隙間が気持ち悪い / セクション間隙間空き |
+| 30 | 30-hotel-cafe-b | X | 要修正 | レイアウト／隙間が気持ち悪い / セクション間隙間空き |

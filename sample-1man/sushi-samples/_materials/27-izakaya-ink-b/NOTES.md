@@ -1,5 +1,4 @@
-﻿# メモ — 27-izakaya-ink-b
+﻿# NOTES 27-izakaya-ink-b
 
-- 帯: A / ABC: b / P3 / H3
-- 世界観: 宿・朝
-- 採用判断:
+- review round reset 2026-09-09 (complete pack for human review)
+- [2026-09-10 00:19] approve

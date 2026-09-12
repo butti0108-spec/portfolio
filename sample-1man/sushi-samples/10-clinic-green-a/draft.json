@@ -1,25 +1,14 @@
 {
-    "version":  16,
+    "version":  17,
     "sushiSampleId":  "10",
     "sushiSampleKey":  "clinic-green-a",
     "blurb":  "診療所風・横長・緑・角ゴ",
-    "scene":  "清潔・待合",
-    "savedAt":  "2026-09-07T21:16:12.9592808Z",
+    "scene":  "居酒屋・提灯",
+    "savedAt":  "2026-09-08T17:08:29.7344486Z",
     "uiMode":  "self",
     "sitePurpose":  "shop",
     "siteColorMode":  "detail",
     "layoutPattern":  "a",
-    "layoutOrder":  [
-                        "hero",
-                        "values",
-                        "accordions",
-                        "photos",
-                        "works",
-                        "hours",
-                        "access",
-                        "address",
-                        "contact"
-                    ],
     "layoutSelected":  true,
     "layoutSchema":  2,
     "intakeDone":  true,
@@ -27,7 +16,7 @@
     "hubEntrySource":  "sample",
     "easyFlowActive":  false,
     "presetChosen":  true,
-    "chosenPresetKey":  "green",
+    "chosenPresetKey":  "brick",
     "draftColors":  {
                         "cardBg":  "#ffffff",
                         "chromeInk":  "#f4fff6",
@@ -39,54 +28,63 @@
                         "bodyInk":  "#212121",
                         "contactInk":  "#f4fff6",
                         "valuesBg":  "#ffffff",
-                        "heroInk":  "#111111",
+                        "heroInk":  "#ffffff",
                         "chromeBg":  "#1f3d18"
                     },
     "draftCounts":  {
                         "hero-leads":  2,
-                        "hero-values":  2,
+                        "hero-values":  3,
                         "about-accordions":  1,
-                        "about-photos":  1,
-                        "works-list":  2
+                        "about-photos":  3,
+                        "works-list":  3
                     },
     "guidedImageUnlocked":  true,
     "guidedTextUnlocked":  true,
     "fonts":  {
                   "catch":  "Zen Kaku Gothic New",
-                  "body":  "Noto Sans JP",
-                  "display":  "Zen Kaku Gothic New"
+                  "body":  "Zen Kaku Gothic New",
+                  "display":  "Dela Gothic One"
               },
     "fields":  {
-                   "brand_name":  "みどり診療案内",
-                   "hero_title":  "みどり診療案内",
-                   "hero_lead_1":  "安心して通える場所",
-                   "hero_lead_2":  "わかりやすい説明を大切に",
-                   "value_1_title":  "説明",
-                   "value_1_text":  "専門用語を減らして案内",
-                   "value_2_title":  "待合",
-                   "value_2_text":  "清潔で静かな空間",
-                   "about_section_name":  "お店",
-                   "about_heading":  "みどり診療案内案内",
-                   "about_name":  "みどり診療案内",
-                   "about_lead":  "地域の診療案内ページです。初診の流れや診療時間をわかりやすくまとめ、初めての方も迷いなく来院できるようにしています。",
-                   "acc_1_title":  "こだわり",
-                   "acc_1_body":  "地域の診療案内ページです。初診の流れや診療時間をわかりやすくまとめ、初めての方も迷いなく来院できるようにしています。",
-                   "works_section_name":  "メニュー",
-                   "works_heading":  "おすすめ",
-                   "works_lead":  "わかりやすい説明を大切に",
-                   "work_1_title":  "初診の流れ",
-                   "work_1_text":  "受付から会計まで",
-                   "work_2_title":  "予防案内",
-                   "work_2_text":  "定期チェックの目安",
-                   "hours_text":  "9:00–12:00／15:00–18:00",
-                   "address_text":  "〇〇市健康町1-1",
+                   "brand_name":  "提灯の居酒屋 赤のれん",
+                   "hero_title":  "提灯が灯る、路地の一杯。",
+                   "hero_lead_1":  "赤い提灯の下で、串とお酒が並ぶ小さな居酒屋。煙は弱め、隣の席と杯をぶつけない距離感を大切にしています。",
+                   "hero_lead_2":  "",
+                   "hero_lead_3":  "",
+                   "value_1_title":  "提灯の下のカウンター",
+                   "value_1_text":  "席はカウンター中心。注文は短冊に書いて渡す方式で、呼び込みはしません。",
+                   "value_2_title":  "串は焼き立て順",
+                   "value_2_text":  "盛り合わせより一本ずつ。タレと塩を選べ、締めのご飯は小さめお茶碗です。",
+                   "about_section_name":  "お店について",
+                   "about_heading":  "のれんをくぐった先の八席",
+                   "about_name":  "提灯の居酒屋 赤のれん",
+                   "about_lead":  "住宅街の細い路地に、赤い提灯だけが目印の店です。一人飲み歓迎。大きな宴会向きではありませんが、四名までの予約は受け付けています。",
+                   "acc_1_title":  "ご利用のお願い",
+                   "acc_1_body":  "喫煙は店外スペースのみ。大声のカラオケ機器はありません。食材切れの日は黒板でお知らせします。",
+                   "acc_2_title":  "",
+                   "acc_2_body":  "",
+                   "works_section_name":  "おすすめ",
+                   "works_heading":  "まずはこの一本",
+                   "works_lead":  "お酒が決まったら、串から。",
+                   "work_1_title":  "ねぎま塩／つくねタレ",
+                   "work_1_text":  "定番の二本。焼き加減は中まで火を通した安心寄りの仕上がりです。",
+                   "work_2_title":  "お通しの煮込み",
+                   "work_2_text":  "その日の仕込みから出す、小さな煮込み。酒の最初の一口に合わせます。",
                    "contact_section_name":  "ご連絡",
                    "contact_label":  "ご連絡",
-                   "contact_note_1":  "電話予約・Web問診あり",
-                   "contact_note_2":  "9:00–12:00／15:00–18:00",
-                   "font_display":  "Zen Kaku Gothic New",
+                   "contact_email":  "yoyaku@aka-noren.example",
+                   "font_display":  "Dela Gothic One",
                    "font_catch":  "Zen Kaku Gothic New",
-                   "font_body":  "Noto Sans JP"
+                   "font_body":  "Zen Kaku Gothic New",
+                   "value_3_title":  "通いやすい距離感",
+                   "value_3_text":  "初めての方も、常連の方も同じペースで。短時間の立ち寄りにも使いやすい店づくりです。",
+                   "work_3_title":  "提灯の居酒屋 赤のれんの定番",
+                   "work_3_text":  "店の空気が伝わる組み合わせ。詳細は来店時にご案内します。",
+                   "address_text":  "架空市あかり区提灯小路 3-7 / 最寄駅から徒歩5分。駐車場は近隣コインパーキングをご利用ください。",
+                   "hours_text":  "火〜日 17:30–23:30（L.O. 23:00）　月曜定休　／　最終受付は閉店30分前。混雑時はお待ちいただく場合があります。",
+                   "access_text":  "最寄駅から徒歩5分。駐車場は近隣コインパーキングをご利用ください。 / Address: 架空市あかり区提灯小路 3-7 / 最寄駅から徒歩5分。駐車場は近隣コインパーキングをご利用ください。",
+                   "contact_note_1":  "ご予約・お問い合わせはメールにて。希望日時・人数・ご要望を書いてください。折り返しで空き状況とアクセスの補足をご案内します。",
+                   "contact_note_2":  "営業中は店頭優先のため返信が遅れることがあります。2営業日以内を目安にご連絡します。駐車・道順の質問も同アドレスで受け付けます。"
                },
     "confirmed":  {
                       "purpose":  true,
@@ -105,7 +103,50 @@
                   },
     "draftExtras":  {
                         "hours":  true,
-                        "access":  false,
-                        "address":  true
-                    }
+                        "access":  true,
+                        "address":  false
+                    },
+    "heroTextPlate":  "round",
+    "heroTextPlateTone":  "white",
+    "heroTextOnPhoto":  false,
+    "layoutOrder":  [
+                        "hero",
+                        "photos",
+                        "works",
+                        "values",
+                        "accordions",
+                        "hours",
+                        "access",
+                        "contact"
+                    ],
+    "itemLayouts":  {
+                        "about-photos":  {
+                                             "sizes":  [
+                                                           "H",
+                                                           "H",
+                                                           "L"
+                                                       ],
+                                             "gap":  "normal",
+                                             "sizePat":  "S2"
+                                         },
+                        "works-list":  {
+                                           "sizes":  [
+                                                         "L",
+                                                         "H",
+                                                         "H"
+                                                     ],
+                                           "gap":  "normal",
+                                           "sizePat":  "S3"
+                                       }
+                    },
+    "layoutRecipeNote":  "a photo=S2 works=S3 sizes=1",
+    "imagePaths":  {
+                       "work_2_image":  "sushi-samples/10-clinic-green-a/images/work-02.jpg?v=dense4",
+                       "about_image_2":  "sushi-samples/10-clinic-green-a/images/about-02.jpg?v=dense4",
+                       "hero_image":  "sushi-samples/10-clinic-green-a/images/hero.jpg?v=dense4",
+                       "work_1_image":  "sushi-samples/10-clinic-green-a/images/work-01.jpg?v=dense4",
+                       "about_image_3":  "sushi-samples/10-clinic-green-a/images/about-03.jpg?v=dense4",
+                       "about_image_1":  "sushi-samples/10-clinic-green-a/images/about-01.jpg?v=dense4",
+                       "work_3_image":  "sushi-samples/10-clinic-green-a/images/work-03.jpg?v=dense4"
+                   }
 }

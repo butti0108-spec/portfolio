@@ -1,25 +1,14 @@
 {
-    "version":  16,
+    "version":  17,
     "sushiSampleId":  "22",
     "sushiSampleKey":  "cowork-clinic-b",
     "blurb":  "コワーキング・左右・紺・角ゴ",
-    "scene":  "デスク・窓",
-    "savedAt":  "2026-09-07T21:16:12.9592808Z",
+    "scene":  "居酒屋・木暖簾",
+    "savedAt":  "2026-09-08T17:09:07.4688545Z",
     "uiMode":  "self",
     "sitePurpose":  "shop",
     "siteColorMode":  "detail",
-    "layoutPattern":  "b",
-    "layoutOrder":  [
-                        "hero",
-                        "values",
-                        "accordions",
-                        "photos",
-                        "works",
-                        "hours",
-                        "access",
-                        "address",
-                        "contact"
-                    ],
+    "layoutPattern":  "a",
     "layoutSelected":  true,
     "layoutSchema":  2,
     "intakeDone":  true,
@@ -27,7 +16,7 @@
     "hubEntrySource":  "sample",
     "easyFlowActive":  false,
     "presetChosen":  true,
-    "chosenPresetKey":  "clinic",
+    "chosenPresetKey":  "ink",
     "draftColors":  {
                         "cardBg":  "#ffffff",
                         "chromeInk":  "#ffffff",
@@ -39,54 +28,63 @@
                         "bodyInk":  "#212121",
                         "contactInk":  "#ffffff",
                         "valuesBg":  "#ffffff",
-                        "heroInk":  "#1a4d8c",
+                        "heroInk":  "#ffffff",
                         "chromeBg":  "#1a4d8c"
                     },
     "draftCounts":  {
                         "hero-leads":  2,
-                        "hero-values":  2,
+                        "hero-values":  3,
                         "about-accordions":  1,
-                        "about-photos":  1,
-                        "works-list":  2
+                        "about-photos":  4,
+                        "works-list":  3
                     },
     "guidedImageUnlocked":  true,
     "guidedTextUnlocked":  true,
     "fonts":  {
-                  "catch":  "Zen Kaku Gothic New",
-                  "body":  "Noto Sans JP",
-                  "display":  "Zen Kaku Gothic New"
+                  "catch":  "Yuji Syuku",
+                  "body":  "Sawarabi Gothic",
+                  "display":  "Yuji Syuku"
               },
     "fields":  {
-                   "brand_name":  "FOCUS LOUNGE",
-                   "hero_title":  "FOCUS LOUNGE",
-                   "hero_lead_1":  "集中できる席",
-                   "hero_lead_2":  "静かなデスクと高速回線",
-                   "value_1_title":  "集中",
-                   "value_1_text":  "通話ブースあり",
-                   "value_2_title":  "席",
-                   "value_2_text":  "窓際と個室",
-                   "about_section_name":  "お店",
-                   "about_heading":  "FOCUS LOUNGE案内",
-                   "about_name":  "FOCUS LOUNGE",
-                   "about_lead":  "集中作業向けのコワーキングです。静かな席と安定した回線で、日帰りから月額まで選べます。",
-                   "acc_1_title":  "こだわり",
-                   "acc_1_body":  "集中作業向けのコワーキングです。静かな席と安定した回線で、日帰りから月額まで選べます。",
+                   "brand_name":  "木暖簾 いまい",
+                   "hero_title":  "暖簾の向こうは、今日の一献。",
+                   "hero_lead_1":  "木の暖簾が目印の居酒屋。今日の一献と、小皿のつまみをカウンターでゆっくりどうぞ。",
+                   "hero_lead_2":  "予約なしでも入りやすい席割り。日本酒と焼酎を中心に、季節の一品を黒板に書いています。",
+                   "hero_lead_3":  "",
+                   "value_1_title":  "木の暖簾",
+                   "value_1_text":  "入口は古い木の暖簾と板扉。中はカウンター中心で、壁には酒の札。近所の人が「ちょっと寄る」のに使いやすい距離感です。",
+                   "value_2_title":  "炭の串",
+                   "value_2_text":  "焼き鳥は塩とタレの二種。レバーとねぎまは毎日仕込み、焼き上がりを見てから出します。",
+                   "about_section_name":  "お店について",
+                   "about_heading":  "暖簾の向こうの居酒屋",
+                   "about_name":  "木暖簾 いまい",
+                   "about_lead":  "駅裏側の細い通りにある居酒屋です。串焼きとお通し、地酒とハイボールが中心。座敷は小上がり一組のみで、基本はカウンターとテーブル。派手な看板より、暖簾の木目を目印にしてください。",
+                   "acc_1_title":  "席と注文",
+                   "acc_1_body":  "予約は四人以上からメールで。二人までは当日並びでも入れることが多いです。お通しは必ず付き、メニューは黒板の日替わりも見てください。ラストオーダーは閉店30分前。喫煙は屋外スペースのみです。",
+                   "acc_2_title":  "",
+                   "acc_2_body":  "",
                    "works_section_name":  "メニュー",
-                   "works_heading":  "おすすめ",
-                   "works_lead":  "静かなデスクと高速回線",
-                   "work_1_title":  "ドロップイン",
-                   "work_1_text":  "1時間から",
-                   "work_2_title":  "月額プラン",
-                   "work_2_text":  "固定席オプション",
-                   "hours_text":  "8:00–22:00／年中無休",
-                   "address_text":  "〇〇市ビジネス棟7F",
+                   "works_heading":  "今夜の定番",
+                   "works_lead":  "串と杯から",
+                   "work_1_title":  "塩ねぎま二本",
+                   "work_1_text":  "炭火で表面を香ばしく。酒の最初の一本に。",
+                   "work_2_title":  "本日の刺身盛り",
+                   "work_2_text":  "三〜四点。鮮度の良いものだけを小さく。",
+                   "work_3_title":  "今井ハイボール",
+                   "work_3_text":  "強炭酸・レモン多め。おかわりしやすい辛さです。",
                    "contact_section_name":  "ご連絡",
                    "contact_label":  "ご連絡",
-                   "contact_note_1":  "見学は予約制",
-                   "contact_note_2":  "8:00–22:00／年中無休",
-                   "font_display":  "Zen Kaku Gothic New",
-                   "font_catch":  "Zen Kaku Gothic New",
-                   "font_body":  "Noto Sans JP"
+                   "contact_email":  "yoyaku@kinoren-imai.example",
+                   "font_display":  "Yuji Syuku",
+                   "font_catch":  "Yuji Syuku",
+                   "font_body":  "Sawarabi Gothic",
+                   "value_3_title":  "通いやすい距離感",
+                   "value_3_text":  "初めての方も、常連の方も同じペースで。短時間の立ち寄りにも使いやすい店づくりです。",
+                   "address_text":  "架空市木戸町5-6-2 / 最寄駅から徒歩5分。駐車場は近隣コインパーキングをご利用ください。",
+                   "hours_text":  "月〜土 17:30–23:30（LO 23:00）／日曜定休　／　最終受付は閉店30分前。混雑時はお待ちいただく場合があります。",
+                   "access_text":  "最寄駅から徒歩5分。駐車場は近隣コインパーキングをご利用ください。 / Address: 架空市木戸町5-6-2 / 最寄駅から徒歩5分。駐車場は近隣コインパーキングをご利用ください。",
+                   "contact_note_1":  "ご予約・お問い合わせはメールにて。希望日時・人数・ご要望を書いてください。折り返しで空き状況とアクセスの補足をご案内します。",
+                   "contact_note_2":  "営業中は店頭優先のため返信が遅れることがあります。2営業日以内を目安にご連絡します。駐車・道順の質問も同アドレスで受け付けます。"
                },
     "confirmed":  {
                       "purpose":  true,
@@ -105,7 +103,52 @@
                   },
     "draftExtras":  {
                         "hours":  true,
-                        "access":  false,
-                        "address":  true
-                    }
+                        "access":  true,
+                        "address":  false
+                    },
+    "heroTextPlate":  "round",
+    "heroTextPlateTone":  "white",
+    "heroTextOnPhoto":  false,
+    "layoutOrder":  [
+                        "hero",
+                        "values",
+                        "photos",
+                        "works",
+                        "hours",
+                        "access",
+                        "accordions",
+                        "contact"
+                    ],
+    "itemLayouts":  {
+                        "about-photos":  {
+                                             "sizes":  [
+                                                           "L",
+                                                           "H",
+                                                           "H",
+                                                           "L"
+                                                       ],
+                                             "gap":  "normal",
+                                             "sizePat":  "S3"
+                                         },
+                        "works-list":  {
+                                           "sizes":  [
+                                                         "L",
+                                                         "H",
+                                                         "H"
+                                                     ],
+                                           "gap":  "normal",
+                                           "sizePat":  "S6"
+                                       }
+                    },
+    "layoutRecipeNote":  "a photo=S3 works=S6 sizes=1",
+    "imagePaths":  {
+                       "about_image_4":  "sushi-samples/22-cowork-clinic-b/images/about-04.jpg?v=dense4",
+                       "about_image_2":  "sushi-samples/22-cowork-clinic-b/images/about-02.jpg?v=dense4",
+                       "hero_image":  "sushi-samples/22-cowork-clinic-b/images/hero.jpg?v=dense4",
+                       "about_image_3":  "sushi-samples/22-cowork-clinic-b/images/about-03.jpg?v=dense4",
+                       "work_2_image":  "sushi-samples/22-cowork-clinic-b/images/work-02.jpg?v=dense4",
+                       "about_image_1":  "sushi-samples/22-cowork-clinic-b/images/about-01.jpg?v=dense4",
+                       "work_3_image":  "sushi-samples/22-cowork-clinic-b/images/work-03.jpg?v=dense4",
+                       "work_1_image":  "sushi-samples/22-cowork-clinic-b/images/work-01.jpg?v=dense4"
+                   }
 }

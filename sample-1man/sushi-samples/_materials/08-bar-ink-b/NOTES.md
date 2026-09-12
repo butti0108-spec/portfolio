@@ -1,5 +1,4 @@
-﻿# メモ — 08-bar-ink-b
+﻿# NOTES 08-bar-ink-b
 
-- 帯: N / ABC: a / P1 / H3
-- 世界観: 宿・客室
-- 採用判断:
+- review round reset 2026-09-09 (complete pack for human review)
+- [2026-09-10 00:13] fix / 文字が溶けて読めない（色）, その他 / note: ・ヒーロー画像文字溶け ・真っ赤禁止

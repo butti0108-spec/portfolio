@@ -1,25 +1,14 @@
 {
-    "version":  16,
+    "version":  17,
     "sushiSampleId":  "27",
     "sushiSampleKey":  "izakaya-ink-b",
     "blurb":  "居酒屋・左右・墨・太ゴ",
-    "scene":  "木の暖簾",
-    "savedAt":  "2026-09-07T21:16:12.9592808Z",
+    "scene":  "宿・朝",
+    "savedAt":  "2026-09-08T17:09:20.6111827Z",
     "uiMode":  "self",
     "sitePurpose":  "shop",
     "siteColorMode":  "detail",
-    "layoutPattern":  "b",
-    "layoutOrder":  [
-                        "hero",
-                        "values",
-                        "accordions",
-                        "photos",
-                        "works",
-                        "hours",
-                        "access",
-                        "address",
-                        "contact"
-                    ],
+    "layoutPattern":  "a",
     "layoutSelected":  true,
     "layoutSchema":  2,
     "intakeDone":  true,
@@ -27,7 +16,7 @@
     "hubEntrySource":  "sample",
     "easyFlowActive":  false,
     "presetChosen":  true,
-    "chosenPresetKey":  "ink",
+    "chosenPresetKey":  "cafe",
     "draftColors":  {
                         "cardBg":  "#1f2424",
                         "chromeInk":  "#f5f5f5",
@@ -44,49 +33,58 @@
                     },
     "draftCounts":  {
                         "hero-leads":  2,
-                        "hero-values":  2,
+                        "hero-values":  3,
                         "about-accordions":  1,
-                        "about-photos":  1,
-                        "works-list":  2
+                        "about-photos":  4,
+                        "works-list":  3
                     },
     "guidedImageUnlocked":  true,
     "guidedTextUnlocked":  true,
     "fonts":  {
-                  "catch":  "Dela Gothic One",
+                  "catch":  "Shippori Mincho",
                   "body":  "Zen Kaku Gothic New",
-                  "display":  "Dela Gothic One"
+                  "display":  "Shippori Mincho"
               },
     "fields":  {
-                   "brand_name":  "黒木屋",
-                   "hero_title":  "黒木屋",
-                   "hero_lead_1":  "炭火と会話",
-                   "hero_lead_2":  "木の暖簾の奥で焼く",
-                   "value_1_title":  "炭火",
-                   "value_1_text":  "香りを大切に",
-                   "value_2_title":  "個室",
-                   "value_2_text":  "少人数向けあり",
-                   "about_section_name":  "お店",
-                   "about_heading":  "黒木屋案内",
-                   "about_name":  "黒木屋",
-                   "about_lead":  "炭火料理の居酒屋です。木の暖簾をくぐった先で、焼きたてと会話を楽しんでください。",
-                   "acc_1_title":  "こだわり",
-                   "acc_1_body":  "炭火料理の居酒屋です。木の暖簾をくぐった先で、焼きたてと会話を楽しんでください。",
-                   "works_section_name":  "メニュー",
-                   "works_heading":  "おすすめ",
-                   "works_lead":  "木の暖簾の奥で焼く",
-                   "work_1_title":  "炭火盛り合わせ",
-                   "work_1_text":  "人数に合わせて",
-                   "work_2_title":  "日本酒利き",
-                   "work_2_text":  "地酒を中心に",
-                   "hours_text":  "17:30–24:00／月曜定休",
-                   "address_text":  "〇〇市木屋町4",
+                   "brand_name":  "朝露の宿",
+                   "hero_title":  "朝露の宿で、一晩だけ旅をする。",
+                   "hero_lead_1":  "朝露の宿は、一晩だけ旅をする小さな宿。朝の光と静かな庭を、客室の主役にしています。",
+                   "hero_lead_2":  "食事は簡易の朝食のみ。近くの食堂マップをお渡しするので、夕食は街歩きと合わせてどうぞ。",
+                   "hero_lead_3":  "",
+                   "value_1_title":  "朝の空気",
+                   "value_1_text":  "カーテンは薄手。目覚ましより先に光で起きられる部屋づくりです。庭の手入れは毎朝、露が残るうちに済ませます。",
+                   "value_2_title":  "",
+                   "value_2_text":  "",
+                   "about_section_name":  "宿について",
+                   "about_heading":  "朝を大切にする小さな宿",
+                   "about_name":  "朝露の宿",
+                   "about_lead":  "駅から一本入った通りにある、客室六つの小さな宿です。観光の拠点というより、朝の静けさと朝食のために泊まる場所。夜は早めに灯りを落とし、廊下も足音が響きにくい造りにしています。",
+                   "acc_1_title":  "滞在の流れ",
+                   "acc_1_body":  "チェックインは十五時から、チェックアウトは十時。鍵はカード式。朝食は和定食かパンセットを選べます。入浴は共有の浴室を時間制で。近隣の温泉案内もフロントに置いています。",
+                   "acc_2_title":  "",
+                   "acc_2_body":  "",
+                   "works_section_name":  "客室・食事",
+                   "works_heading":  "滞在のすすめ",
+                   "works_lead":  "朝の光と、食卓から",
+                   "work_1_title":  "朝光の和室",
+                   "work_1_text":  "六畳・洗浄機付きトイレ。庭側の窓が朝日向き。",
+                   "work_2_title":  "朝食・和定食",
+                   "work_2_text":  "ご飯・味噌汁・焼き魚または卵。七時半〜九時。",
+                   "work_3_title":  "朝食・パンセット",
+                   "work_3_text":  "トースト・ヨーグルト・サラダ・珈琲または紅茶。",
                    "contact_section_name":  "ご連絡",
                    "contact_label":  "ご連絡",
-                   "contact_note_1":  "個室は予約必須",
-                   "contact_note_2":  "17:30–24:00／月曜定休",
-                   "font_display":  "Dela Gothic One",
-                   "font_catch":  "Dela Gothic One",
-                   "font_body":  "Zen Kaku Gothic New"
+                   "contact_email":  "stay@asatsuyu-inn.example",
+                   "font_display":  "Shippori Mincho",
+                   "font_catch":  "Shippori Mincho",
+                   "font_body":  "Zen Kaku Gothic New",
+                   "value_3_title":  "通いやすい距離感",
+                   "value_3_text":  "初めての方も、常連の方も同じペースで。短時間の立ち寄りにも使いやすい店づくりです。",
+                   "address_text":  "架空市朝丘町3-2-15 / 最寄駅から徒歩5分。駐車場は近隣コインパーキングをご利用ください。",
+                   "access_text":  "最寄駅から徒歩5分。駐車場は近隣コインパーキングをご利用ください。 / Address: 架空市朝丘町3-2-15 / 最寄駅から徒歩5分。駐車場は近隣コインパーキングをご利用ください。",
+                   "hours_text":  "フロント 7:00–21:00／チェックイン 15:00–／チェックアウト ～10:00　／　最終受付は閉店30分前。混雑時はお待ちいただく場合があります。",
+                   "contact_note_1":  "ご予約・お問い合わせはメールにて。希望日時・人数・ご要望を書いてください。折り返しで空き状況とアクセスの補足をご案内します。",
+                   "contact_note_2":  "営業中は店頭優先のため返信が遅れることがあります。2営業日以内を目安にご連絡します。駐車・道順の質問も同アドレスで受け付けます。"
                },
     "confirmed":  {
                       "purpose":  true,
@@ -105,7 +103,52 @@
                   },
     "draftExtras":  {
                         "hours":  true,
-                        "access":  false,
-                        "address":  true
-                    }
+                        "access":  true,
+                        "address":  false
+                    },
+    "heroTextPlate":  "round",
+    "heroTextPlateTone":  "white",
+    "heroTextOnPhoto":  false,
+    "layoutOrder":  [
+                        "hero",
+                        "values",
+                        "photos",
+                        "works",
+                        "hours",
+                        "access",
+                        "accordions",
+                        "contact"
+                    ],
+    "itemLayouts":  {
+                        "about-photos":  {
+                                             "sizes":  [
+                                                           "H",
+                                                           "H",
+                                                           "H",
+                                                           "H"
+                                                       ],
+                                             "gap":  "tight",
+                                             "sizePat":  "S4"
+                                         },
+                        "works-list":  {
+                                           "sizes":  [
+                                                         "L",
+                                                         "H",
+                                                         "H"
+                                                     ],
+                                           "gap":  "normal",
+                                           "sizePat":  "S3"
+                                       }
+                    },
+    "layoutRecipeNote":  "a photo=S4 works=S3 sizes=1",
+    "imagePaths":  {
+                       "about_image_4":  "sushi-samples/27-izakaya-ink-b/images/about-04.jpg?v=dense4",
+                       "about_image_2":  "sushi-samples/27-izakaya-ink-b/images/about-02.jpg?v=dense4",
+                       "hero_image":  "sushi-samples/27-izakaya-ink-b/images/hero.jpg?v=dense4",
+                       "about_image_3":  "sushi-samples/27-izakaya-ink-b/images/about-03.jpg?v=dense4",
+                       "work_2_image":  "sushi-samples/27-izakaya-ink-b/images/work-02.jpg?v=dense4",
+                       "about_image_1":  "sushi-samples/27-izakaya-ink-b/images/about-01.jpg?v=dense4",
+                       "work_3_image":  "sushi-samples/27-izakaya-ink-b/images/work-03.jpg?v=dense4",
+                       "work_1_image":  "sushi-samples/27-izakaya-ink-b/images/work-01.jpg?v=dense4"
+                   }
 }

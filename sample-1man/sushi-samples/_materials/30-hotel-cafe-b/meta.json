@@ -2,17 +2,6 @@
     "id":  "30",
     "folder":  "30-hotel-cafe-b",
     "band":  "X",
-    "layoutPattern":  "c",
-    "layoutOrder":  [
-                        "hero",
-                        "values",
-                        "contact",
-                        "photos",
-                        "accordions",
-                        "works",
-                        "hours",
-                        "address"
-                    ],
     "photoPack":  "P1",
     "headingPack":  "H3",
     "colorKey":  "brick",
@@ -23,12 +12,24 @@
                   "display":  "Shippori Mincho"
               },
     "scene":  "ギャラリー・額",
+    "status":  "text+images",
+    "layoutPattern":  "a",
+    "layoutOrder":  [
+                        "hero",
+                        "values",
+                        "accordions",
+                        "photos",
+                        "works",
+                        "hours",
+                        "address",
+                        "contact"
+                    ],
     "counts":  {
                    "hero-leads":  2,
-                   "hero-values":  2,
+                   "hero-values":  3,
                    "about-accordions":  1,
-                   "about-photos":  1,
-                   "works-list":  1
+                   "about-photos":  3,
+                   "works-list":  3
                },
     "extras":  {
                    "hours":  true,
@@ -38,7 +39,10 @@
     "imageSlots":  [
                        "hero.jpg",
                        "about-01.jpg",
-                       "work-01.jpg"
-                   ],
-    "status":  "未着手"
+                       "about-02.jpg",
+                       "about-03.jpg",
+                       "work-01.jpg",
+                       "work-02.jpg",
+                       "work-03.jpg"
+                   ]
 }

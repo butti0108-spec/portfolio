@@ -1,25 +1,14 @@
 {
-    "version":  16,
+    "version":  17,
     "sushiSampleId":  "20",
     "sushiSampleKey":  "pet-cafe-b",
     "blurb":  "ペット・左右・ベージュ・丸",
-    "scene":  "犬猫・暖色",
-    "savedAt":  "2026-09-07T21:16:12.9592808Z",
+    "scene":  "スイーツ",
+    "savedAt":  "2026-09-08T17:09:01.8890249Z",
     "uiMode":  "self",
     "sitePurpose":  "shop",
     "siteColorMode":  "detail",
-    "layoutPattern":  "b",
-    "layoutOrder":  [
-                        "hero",
-                        "values",
-                        "accordions",
-                        "photos",
-                        "works",
-                        "hours",
-                        "access",
-                        "address",
-                        "contact"
-                    ],
+    "layoutPattern":  "a",
     "layoutSelected":  true,
     "layoutSchema":  2,
     "intakeDone":  true,
@@ -27,7 +16,7 @@
     "hubEntrySource":  "sample",
     "easyFlowActive":  false,
     "presetChosen":  true,
-    "chosenPresetKey":  "cafe",
+    "chosenPresetKey":  "sakura",
     "draftColors":  {
                         "cardBg":  "#fff8ee",
                         "chromeInk":  "#fff6e8",
@@ -44,10 +33,10 @@
                     },
     "draftCounts":  {
                         "hero-leads":  2,
-                        "hero-values":  2,
+                        "hero-values":  3,
                         "about-accordions":  1,
-                        "about-photos":  1,
-                        "works-list":  2
+                        "about-photos":  4,
+                        "works-list":  3
                     },
     "guidedImageUnlocked":  true,
     "guidedTextUnlocked":  true,
@@ -57,36 +46,45 @@
                   "display":  "Zen Maru Gothic"
               },
     "fields":  {
-                   "brand_name":  "しっぽカフェ",
-                   "hero_title":  "しっぽカフェ",
-                   "hero_lead_1":  "わんもねこも歓迎",
-                   "hero_lead_2":  "ペットと過ごすあたたかい席",
-                   "value_1_title":  "同伴",
-                   "value_1_text":  "ペット歓迎席あり",
-                   "value_2_title":  "メニュー",
-                   "value_2_text":  "人用＋ペット用おやつ",
-                   "about_section_name":  "お店",
-                   "about_heading":  "しっぽカフェ案内",
-                   "about_name":  "しっぽカフェ",
-                   "about_lead":  "ペット同伴OKのカフェです。わんちゃん・ねこちゃんと一緒に、あたたかい席でお茶できます。",
-                   "acc_1_title":  "こだわり",
-                   "acc_1_body":  "ペット同伴OKのカフェです。わんちゃん・ねこちゃんと一緒に、あたたかい席でお茶できます。",
+                   "brand_name":  "砂糖屋パルフェ",
+                   "hero_title":  "砂糖屋のパルフェは、午後のご褒美。",
+                   "hero_lead_1":  "砂糖屋パルフェは、午後のご褒美のための小さな店。甘さは控えめで、食感の層を楽しむ作りです。",
+                   "hero_lead_2":  "席数は少なめ。テイクアウト用のカップも用意しているので、散歩の途中にも立ち寄りやすいです。",
+                   "hero_lead_3":  "",
+                   "value_1_title":  "その日のケーキ",
+                   "value_1_text":  "ショーケースは毎朝並べ替えます。スポンジはしっとり系、クリームは甘さ控えめ。写真映えより、フォークが進むバランスを優先しています。",
+                   "value_2_title":  "パステルの席",
+                   "value_2_text":  "壁とクロスは淡い色だけ。長居しても目がチカチカしない明るさで、ティータイム向けの二人席を多めにしています。",
+                   "value_3_title":  "季節の一皿",
+                   "value_3_text":  "フルーツやジャムは旬のものに差し替え。誕生日プレートは前日までの予約で文字入れできます。",
+                   "about_section_name":  "お店について",
+                   "about_heading":  "甘い時間のための小さな店",
+                   "about_name":  "砂糖屋パルフェ",
+                   "about_lead":  "商店街の二階にあるスイーツ店です。ホールケーキより、カットケーキとパフェを中心にしています。お茶は紅茶と珈琲のセットが多く、午後の待ち合わせや、自分へのご褒美に選ばれています。",
+                   "acc_1_title":  "注文のしかた",
+                   "acc_1_body":  "席についてからメニュー表で選ぶか、ケースを見て番号を伝えてください。テイクアウトは箱代込み。アレルギー表示はケース下のカードに書いてあります。混雑時はお一人様一品からのご注文をお願いしています。",
+                   "acc_2_title":  "予約と持ち帰り",
+                   "acc_2_body":  "ホールケーキとバースデー飾りは前日17時までにメールで。カットケーキの予約は不要ですが、人気の日は早めに売り切れます。保冷剤付き袋も用意しています。",
                    "works_section_name":  "メニュー",
-                   "works_heading":  "おすすめ",
-                   "works_lead":  "ペットと過ごすあたたかい席",
-                   "work_1_title":  "同伴ランチ",
-                   "work_1_text":  "席指定できます",
-                   "work_2_title":  "しっぽおやつ",
-                   "work_2_text":  "店内限定",
-                   "hours_text":  "10:00–18:00／木曜定休",
-                   "address_text":  "〇〇区公園前2-6",
+                   "works_heading":  "おすすめの甘いもの",
+                   "works_lead":  "ケースとパフェから",
+                   "work_1_title":  "季節のショート",
+                   "work_1_text":  "スポンジ二枚・クリーム控えめ。トッピングは旬のフルーツ。",
+                   "work_2_title":  "パルフェ・オ・レ",
+                   "work_2_text":  "プリン・アイス・ホイップの三段。珈琲セットが人気です。",
+                   "work_3_title":  "焼菓子アソート",
+                   "work_3_text":  "クッキーとフィナンシェの詰め合わせ。お茶請けにどうぞ。",
                    "contact_section_name":  "ご連絡",
                    "contact_label":  "ご連絡",
-                   "contact_note_1":  "大型犬は事前連絡を",
-                   "contact_note_2":  "10:00–18:00／木曜定休",
+                   "contact_email":  "order@satouya-parfait.example",
                    "font_display":  "Zen Maru Gothic",
                    "font_catch":  "Kiwi Maru",
-                   "font_body":  "M PLUS Rounded 1c"
+                   "font_body":  "M PLUS Rounded 1c",
+                   "address_text":  "架空市砂糖町7-3-1 2F / 最寄駅から徒歩5分。駐車場は近隣コインパーキングをご利用ください。",
+                   "hours_text":  "水〜月 11:00–18:00（LO 17:30）／火曜定休　／　最終受付は閉店30分前。混雑時はお待ちいただく場合があります。",
+                   "access_text":  "最寄駅から徒歩5分。駐車場は近隣コインパーキングをご利用ください。 / Address: 架空市砂糖町7-3-1 2F / 最寄駅から徒歩5分。駐車場は近隣コインパーキングをご利用ください。",
+                   "contact_note_1":  "ご予約・お問い合わせはメールにて。希望日時・人数・ご要望を書いてください。折り返しで空き状況とアクセスの補足をご案内します。",
+                   "contact_note_2":  "営業中は店頭優先のため返信が遅れることがあります。2営業日以内を目安にご連絡します。駐車・道順の質問も同アドレスで受け付けます。"
                },
     "confirmed":  {
                       "purpose":  true,
@@ -105,7 +103,52 @@
                   },
     "draftExtras":  {
                         "hours":  true,
-                        "access":  false,
-                        "address":  true
-                    }
+                        "access":  true,
+                        "address":  false
+                    },
+    "heroTextPlate":  "round",
+    "heroTextPlateTone":  "white",
+    "heroTextOnPhoto":  false,
+    "layoutOrder":  [
+                        "hero",
+                        "photos",
+                        "works",
+                        "values",
+                        "accordions",
+                        "hours",
+                        "access",
+                        "contact"
+                    ],
+    "itemLayouts":  {
+                        "about-photos":  {
+                                             "sizes":  [
+                                                           "H",
+                                                           "H",
+                                                           "H",
+                                                           "H"
+                                                       ],
+                                             "gap":  "tight",
+                                             "sizePat":  "S4"
+                                         },
+                        "works-list":  {
+                                           "sizes":  [
+                                                         "H",
+                                                         "H",
+                                                         "L"
+                                                     ],
+                                           "gap":  "normal",
+                                           "sizePat":  "S2"
+                                       }
+                    },
+    "layoutRecipeNote":  "a photo=S4 works=S2 sizes=1",
+    "imagePaths":  {
+                       "about_image_4":  "sushi-samples/20-pet-cafe-b/images/about-04.jpg?v=dense4",
+                       "about_image_2":  "sushi-samples/20-pet-cafe-b/images/about-02.jpg?v=dense4",
+                       "hero_image":  "sushi-samples/20-pet-cafe-b/images/hero.jpg?v=dense4",
+                       "about_image_3":  "sushi-samples/20-pet-cafe-b/images/about-03.jpg?v=dense4",
+                       "work_2_image":  "sushi-samples/20-pet-cafe-b/images/work-02.jpg?v=dense4",
+                       "about_image_1":  "sushi-samples/20-pet-cafe-b/images/about-01.jpg?v=dense4",
+                       "work_3_image":  "sushi-samples/20-pet-cafe-b/images/work-03.jpg?v=dense4",
+                       "work_1_image":  "sushi-samples/20-pet-cafe-b/images/work-01.jpg?v=dense4"
+                   }
 }

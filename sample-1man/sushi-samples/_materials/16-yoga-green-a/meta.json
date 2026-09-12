@@ -2,17 +2,6 @@
     "id":  "16",
     "folder":  "16-yoga-green-a",
     "band":  "N",
-    "layoutPattern":  "b",
-    "layoutOrder":  [
-                        "hero",
-                        "accordions",
-                        "photos",
-                        "values",
-                        "works",
-                        "hours",
-                        "address",
-                        "contact"
-                    ],
     "photoPack":  "P1",
     "headingPack":  "H4",
     "colorKey":  "sakura",
@@ -23,22 +12,37 @@
                   "display":  "Zen Maru Gothic"
               },
     "scene":  "サロン・花",
-    "counts":  {
-                   "hero-leads":  2,
-                   "hero-values":  3,
-                   "about-accordions":  2,
-                   "about-photos":  1,
-                   "works-list":  1
-               },
-    "extras":  {
-                   "hours":  true,
-                   "access":  false,
-                   "address":  true
-               },
+    "status":  "text+images",
+    "layoutPattern":  "a",
     "imageSlots":  [
                        "hero.jpg",
                        "about-01.jpg",
-                       "work-01.jpg"
+                       "about-02.jpg",
+                       "about-03.jpg",
+                       "work-01.jpg",
+                       "work-02.jpg",
+                       "work-03.jpg"
                    ],
-    "status":  "未着手"
+    "layoutOrder":  [
+                        "hero",
+                        "values",
+                        "photos",
+                        "works",
+                        "hours",
+                        "access",
+                        "accordions",
+                        "contact"
+                    ],
+    "extras":  {
+                   "hours":  true,
+                   "access":  true,
+                   "address":  false
+               },
+    "counts":  {
+                   "hero-leads":  2,
+                   "hero-values":  3,
+                   "about-accordions":  1,
+                   "about-photos":  3,
+                   "works-list":  3
+               }
 }

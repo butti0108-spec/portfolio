@@ -2,17 +2,6 @@
     "id":  "09",
     "folder":  "09-bar-brick-a",
     "band":  "N",
-    "layoutPattern":  "a",
-    "layoutOrder":  [
-                        "hero",
-                        "values",
-                        "works",
-                        "accordions",
-                        "photos",
-                        "hours",
-                        "address",
-                        "contact"
-                    ],
     "photoPack":  "P3",
     "headingPack":  "H4",
     "colorKey":  "green",
@@ -23,16 +12,29 @@
                   "display":  "Sawarabi Gothic"
               },
     "scene":  "ヨガ・光",
+    "status":  "text+images",
+    "layoutPattern":  "a",
+    "layoutOrder":  [
+                        "hero",
+                        "works",
+                        "photos",
+                        "values",
+                        "accordions",
+                        "hours",
+                        "access",
+                        "address",
+                        "contact"
+                    ],
     "counts":  {
                    "hero-leads":  2,
                    "hero-values":  3,
                    "about-accordions":  2,
-                   "about-photos":  3,
+                   "about-photos":  4,
                    "works-list":  3
                },
     "extras":  {
                    "hours":  true,
-                   "access":  false,
+                   "access":  true,
                    "address":  true
                },
     "imageSlots":  [
@@ -40,9 +42,9 @@
                        "about-01.jpg",
                        "about-02.jpg",
                        "about-03.jpg",
+                       "about-04.jpg",
                        "work-01.jpg",
                        "work-02.jpg",
                        "work-03.jpg"
-                   ],
-    "status":  "未着手"
+                   ]
 }

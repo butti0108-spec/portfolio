@@ -1,25 +1,14 @@
 {
-    "version":  16,
+    "version":  17,
     "sushiSampleId":  "18",
     "sushiSampleKey":  "studio-clinic-c",
     "blurb":  "写真館・混合・紺・明朝",
-    "scene":  "ポートレート余白",
-    "savedAt":  "2026-09-07T21:16:12.9592808Z",
+    "scene":  "写真館・余白",
+    "savedAt":  "2026-09-08T17:08:53.8504552Z",
     "uiMode":  "self",
     "sitePurpose":  "shop",
     "siteColorMode":  "detail",
-    "layoutPattern":  "c",
-    "layoutOrder":  [
-                        "hero",
-                        "values",
-                        "accordions",
-                        "photos",
-                        "works",
-                        "hours",
-                        "access",
-                        "address",
-                        "contact"
-                    ],
+    "layoutPattern":  "a",
     "layoutSelected":  true,
     "layoutSchema":  2,
     "intakeDone":  true,
@@ -39,54 +28,63 @@
                         "bodyInk":  "#212121",
                         "contactInk":  "#ffffff",
                         "valuesBg":  "#ffffff",
-                        "heroInk":  "#1a4d8c",
+                        "heroInk":  "#ffffff",
                         "chromeBg":  "#1a4d8c"
                     },
     "draftCounts":  {
                         "hero-leads":  2,
-                        "hero-values":  2,
+                        "hero-values":  3,
                         "about-accordions":  1,
-                        "about-photos":  1,
-                        "works-list":  2
+                        "about-photos":  4,
+                        "works-list":  3
                     },
     "guidedImageUnlocked":  true,
     "guidedTextUnlocked":  true,
     "fonts":  {
-                  "catch":  "Shippori Mincho",
-                  "body":  "Zen Kaku Gothic New",
-                  "display":  "Shippori Mincho"
+                  "catch":  "Zen Kaku Gothic New",
+                  "body":  "Noto Sans JP",
+                  "display":  "Zen Kaku Gothic New"
               },
     "fields":  {
-                   "brand_name":  "余白フォト",
-                   "hero_title":  "余白フォト",
-                   "hero_lead_1":  "残したい一瞬を",
-                   "hero_lead_2":  "余白のあるポートレート",
-                   "value_1_title":  "余白",
-                   "value_1_text":  "被写体を引き立てる",
-                   "value_2_title":  "トーン",
-                   "value_2_text":  "落ち着いた色味",
-                   "about_section_name":  "お店",
-                   "about_heading":  "余白フォト案内",
-                   "about_name":  "余白フォト",
-                   "about_lead":  "余白を活かしたポートレートが得意な写真館です。家族写真から個人の宣材まで、落ち着いたトーンで残します。",
-                   "acc_1_title":  "こだわり",
-                   "acc_1_body":  "余白を活かしたポートレートが得意な写真館です。家族写真から個人の宣材まで、落ち着いたトーンで残します。",
-                   "works_section_name":  "メニュー",
-                   "works_heading":  "おすすめ",
-                   "works_lead":  "余白のあるポートレート",
-                   "work_1_title":  "家族撮影",
-                   "work_1_text":  "スタジオまたは出張",
-                   "work_2_title":  "宣材ポートレート",
-                   "work_2_text":  "用途に合わせて構図",
-                   "hours_text":  "予約制 10:00–18:00",
-                   "address_text":  "〇〇市スタジオ棟2F",
+                   "brand_name":  "余白フォトスタジオ",
+                   "hero_title":  "余白のある写真で、人を残す。",
+                   "hero_lead_1":  "余白を大切にしたフォトスタジオ。人物も空間も、情報を詰め込みすぎない構図で撮ります。",
+                   "hero_lead_2":  "家族・宣材・作品撮りまで。事前の打ち合わせで、必要なカット数だけに絞れます。",
+                   "hero_lead_3":  "",
+                   "value_1_title":  "白いスペース",
+                   "value_1_text":  "背景は白と薄いグレーのみ。小道具は必要最小限にして、人の表情と姿勢が主役になる構図を取ります。",
+                   "value_2_title":  "予約制の静けさ",
+                   "value_2_text":  "同時に複数組は入れません。着替えと休憩の時間も含めて、ゆっくり撮れる枠を確保しています。",
+                   "value_3_title":  "トーン統一",
+                   "value_3_text":  "色補正は落ち着いたトーンに揃え、プリントとデータで見た目がぶれないように仕上げます。",
+                   "about_section_name":  "スタジオについて",
+                   "about_heading":  "余白で、残す写真",
+                   "about_name":  "余白フォトスタジオ",
+                   "about_lead":  "ポートレート専門の小さな写真館です。家族写真、入学・就職の証明、仕事用の宣材まで、白い壁のスタジオで撮影します。派手な演出より、あとから見返しても疲れない写真を目指しています。",
+                   "acc_1_title":  "撮影の進め方",
+                   "acc_1_body":  "事前に用途と枚数目安をメールで伺い、当日は服装と立ち位置の確認から始めます。子ども連れの方には休憩用の椅子と水を用意しています。データは翌日以降のダウンロード、プリントは別途お申し込みです。",
+                   "acc_2_title":  "プランの考え方",
+                   "acc_2_body":  "時間枠と納品形式で料金が分かれます。証明写真は短時間枠、家族撮影は長めの枠がおすすめです。出張撮影は近隣のみ、別見積もりになります。",
+                   "works_section_name":  "プラン",
+                   "works_heading":  "主な撮影プラン",
+                   "works_lead":  "用途に合わせて枠を選ぶ",
+                   "work_1_title":  "家族ポートレート",
+                   "work_1_text":  "60分枠。白い壁と窓際の自然光で、2〜4名まで。データ20カット目安。",
+                   "work_2_title":  "宣材・プロフィール",
+                   "work_2_text":  "45分枠。スーツ・カジュアル各数カット。SNS用と名刺用の比率を相談できます。",
+                   "work_3_title":  "入学・就職証明",
+                   "work_3_text":  "20分枠。規定サイズのデータと、希望があれば紙焼き1枚付き。",
                    "contact_section_name":  "ご連絡",
                    "contact_label":  "ご連絡",
-                   "contact_note_1":  "見積は用途を添えて",
-                   "contact_note_2":  "予約制 10:00–18:00",
-                   "font_display":  "Shippori Mincho",
-                   "font_catch":  "Shippori Mincho",
-                   "font_body":  "Zen Kaku Gothic New"
+                   "contact_email":  "book@yohaku-photo.example",
+                   "font_display":  "Zen Kaku Gothic New",
+                   "font_catch":  "Zen Kaku Gothic New",
+                   "font_body":  "Noto Sans JP",
+                   "address_text":  "架空市白壁町1-5-3 スタジオ棟2F / 最寄駅から徒歩5分。駐車場は近隣コインパーキングをご利用ください。",
+                   "hours_text":  "水〜日 10:00–18:00（予約制）／月火定休　／　最終受付は閉店30分前。混雑時はお待ちいただく場合があります。",
+                   "access_text":  "最寄駅から徒歩5分。駐車場は近隣コインパーキングをご利用ください。 / Address: 架空市白壁町1-5-3 スタジオ棟2F / 最寄駅から徒歩5分。駐車場は近隣コインパーキングをご利用ください。",
+                   "contact_note_1":  "ご予約・お問い合わせはメールにて。希望日時・人数・ご要望を書いてください。折り返しで空き状況とアクセスの補足をご案内します。",
+                   "contact_note_2":  "営業中は店頭優先のため返信が遅れることがあります。2営業日以内を目安にご連絡します。駐車・道順の質問も同アドレスで受け付けます。"
                },
     "confirmed":  {
                       "purpose":  true,
@@ -105,7 +103,52 @@
                   },
     "draftExtras":  {
                         "hours":  true,
-                        "access":  false,
-                        "address":  true
-                    }
+                        "access":  true,
+                        "address":  false
+                    },
+    "heroTextPlate":  "round",
+    "heroTextPlateTone":  "white",
+    "heroTextOnPhoto":  false,
+    "layoutOrder":  [
+                        "hero",
+                        "values",
+                        "photos",
+                        "works",
+                        "hours",
+                        "access",
+                        "accordions",
+                        "contact"
+                    ],
+    "itemLayouts":  {
+                        "about-photos":  {
+                                             "sizes":  [
+                                                           "L",
+                                                           "H",
+                                                           "H",
+                                                           "L"
+                                                       ],
+                                             "gap":  "normal",
+                                             "sizePat":  "S3"
+                                         },
+                        "works-list":  {
+                                           "sizes":  [
+                                                         "L",
+                                                         "H",
+                                                         "H"
+                                                     ],
+                                           "gap":  "loose",
+                                           "sizePat":  "S5"
+                                       }
+                    },
+    "layoutRecipeNote":  "a photo=S3 works=S5 sizes=1",
+    "imagePaths":  {
+                       "about_image_4":  "sushi-samples/18-studio-clinic-c/images/about-04.jpg?v=dense4",
+                       "about_image_2":  "sushi-samples/18-studio-clinic-c/images/about-02.jpg?v=dense4",
+                       "hero_image":  "sushi-samples/18-studio-clinic-c/images/hero.jpg?v=dense4",
+                       "about_image_3":  "sushi-samples/18-studio-clinic-c/images/about-03.jpg?v=dense4",
+                       "work_2_image":  "sushi-samples/18-studio-clinic-c/images/work-02.jpg?v=dense4",
+                       "about_image_1":  "sushi-samples/18-studio-clinic-c/images/about-01.jpg?v=dense4",
+                       "work_3_image":  "sushi-samples/18-studio-clinic-c/images/work-03.jpg?v=dense4",
+                       "work_1_image":  "sushi-samples/18-studio-clinic-c/images/work-01.jpg?v=dense4"
+                   }
 }

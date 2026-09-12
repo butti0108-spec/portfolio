@@ -2,17 +2,6 @@
     "id":  "28",
     "folder":  "28-gallery-ink-a",
     "band":  "X",
-    "layoutPattern":  "a",
-    "layoutOrder":  [
-                        "photos",
-                        "values",
-                        "accordions",
-                        "works",
-                        "hero",
-                        "hours",
-                        "address",
-                        "contact"
-                    ],
     "photoPack":  "P2",
     "headingPack":  "H3",
     "colorKey":  "green",
@@ -23,24 +12,38 @@
                   "display":  "Sawarabi Gothic"
               },
     "scene":  "ヨガ・スタジオ",
+    "status":  "text+images",
+    "layoutPattern":  "a",
+    "layoutOrder":  [
+                        "hero",
+                        "values",
+                        "photos",
+                        "works",
+                        "hours",
+                        "access",
+                        "address",
+                        "contact",
+                        "accordions"
+                    ],
     "counts":  {
                    "hero-leads":  2,
-                   "hero-values":  2,
+                   "hero-values":  3,
                    "about-accordions":  1,
-                   "about-photos":  2,
-                   "works-list":  2
+                   "about-photos":  3,
+                   "works-list":  3
                },
     "extras":  {
                    "hours":  true,
-                   "access":  false,
+                   "access":  true,
                    "address":  true
                },
     "imageSlots":  [
                        "hero.jpg",
                        "about-01.jpg",
                        "about-02.jpg",
+                       "about-03.jpg",
                        "work-01.jpg",
-                       "work-02.jpg"
-                   ],
-    "status":  "未着手"
+                       "work-02.jpg",
+                       "work-03.jpg"
+                   ]
 }

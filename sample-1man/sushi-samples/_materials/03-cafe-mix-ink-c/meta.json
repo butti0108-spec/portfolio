@@ -2,17 +2,6 @@
     "id":  "03",
     "folder":  "03-cafe-mix-ink-c",
     "band":  "N",
-    "layoutPattern":  "c",
-    "layoutOrder":  [
-                        "hero",
-                        "values",
-                        "works",
-                        "photos",
-                        "accordions",
-                        "hours",
-                        "address",
-                        "contact"
-                    ],
     "photoPack":  "P2",
     "headingPack":  "H3",
     "colorKey":  "ink",
@@ -23,24 +12,37 @@
                   "display":  "Dela Gothic One"
               },
     "scene":  "バー・グラス",
-    "counts":  {
-                   "hero-leads":  2,
-                   "hero-values":  2,
-                   "about-accordions":  1,
-                   "about-photos":  2,
-                   "works-list":  2
-               },
-    "extras":  {
-                   "hours":  true,
-                   "access":  false,
-                   "address":  true
-               },
+    "status":  "text+images",
+    "layoutPattern":  "a",
     "imageSlots":  [
                        "hero.jpg",
                        "about-01.jpg",
                        "about-02.jpg",
+                       "about-03.jpg",
                        "work-01.jpg",
-                       "work-02.jpg"
+                       "work-02.jpg",
+                       "work-03.jpg"
                    ],
-    "status":  "未着手"
+    "layoutOrder":  [
+                        "hero",
+                        "photos",
+                        "works",
+                        "values",
+                        "accordions",
+                        "hours",
+                        "access",
+                        "contact"
+                    ],
+    "extras":  {
+                   "hours":  true,
+                   "access":  true,
+                   "address":  false
+               },
+    "counts":  {
+                   "hero-leads":  2,
+                   "hero-values":  3,
+                   "about-accordions":  1,
+                   "about-photos":  3,
+                   "works-list":  3
+               }
 }

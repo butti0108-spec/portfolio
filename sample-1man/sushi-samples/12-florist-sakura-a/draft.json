@@ -1,25 +1,14 @@
 {
-    "version":  16,
+    "version":  17,
     "sushiSampleId":  "12",
     "sushiSampleKey":  "florist-sakura-a",
     "blurb":  "花屋・横長・桜・丸",
-    "scene":  "花束・店先",
-    "savedAt":  "2026-09-07T21:16:12.9592808Z",
+    "scene":  "ペット・散歩",
+    "savedAt":  "2026-09-08T17:08:33.9173465Z",
     "uiMode":  "self",
     "sitePurpose":  "shop",
     "siteColorMode":  "detail",
     "layoutPattern":  "a",
-    "layoutOrder":  [
-                        "hero",
-                        "values",
-                        "accordions",
-                        "photos",
-                        "works",
-                        "hours",
-                        "access",
-                        "address",
-                        "contact"
-                    ],
     "layoutSelected":  true,
     "layoutSchema":  2,
     "intakeDone":  true,
@@ -39,15 +28,15 @@
                         "bodyInk":  "#3d2228",
                         "contactInk":  "#fff8fa",
                         "valuesBg":  "#ffffff",
-                        "heroInk":  "#5c2434",
+                        "heroInk":  "#ffffff",
                         "chromeBg":  "#8f4a5a"
                     },
     "draftCounts":  {
                         "hero-leads":  2,
-                        "hero-values":  2,
+                        "hero-values":  3,
                         "about-accordions":  1,
-                        "about-photos":  1,
-                        "works-list":  2
+                        "about-photos":  3,
+                        "works-list":  3
                     },
     "guidedImageUnlocked":  true,
     "guidedTextUnlocked":  true,
@@ -57,36 +46,45 @@
                   "display":  "Zen Maru Gothic"
               },
     "fields":  {
-                   "brand_name":  "花便り",
-                   "hero_title":  "花便り",
-                   "hero_lead_1":  "季節の花を玄関に",
-                   "hero_lead_2":  "ギフトと日常の花束",
-                   "value_1_title":  "季節",
-                   "value_1_text":  "週替わりの入荷",
-                   "value_2_title":  "ギフト",
-                   "value_2_text":  "用途に合わせて包装",
-                   "about_section_name":  "お店",
-                   "about_heading":  "花便り案内",
-                   "about_name":  "花便り",
-                   "about_lead":  "季節の切り花とアレンジメントの花屋です。ギフト用の花束から、玄関に飾る小さなブーケまでご相談ください。",
-                   "acc_1_title":  "こだわり",
-                   "acc_1_body":  "季節の切り花とアレンジメントの花屋です。ギフト用の花束から、玄関に飾る小さなブーケまでご相談ください。",
-                   "works_section_name":  "メニュー",
-                   "works_heading":  "おすすめ",
-                   "works_lead":  "ギフトと日常の花束",
-                   "work_1_title":  "花束",
-                   "work_1_text":  "予算と色味で相談",
-                   "work_2_title":  "定期便",
-                   "work_2_text":  "週1のお届けプラン",
-                   "hours_text":  "10:00–19:00／火曜定休",
-                   "address_text":  "〇〇区花町3-4",
+                   "brand_name":  "おさんぽペットケア みずき",
+                   "hero_title":  "リードの先で、今日の散歩を。",
+                   "hero_lead_1":  "犬の散歩代行と、短時間の預かりを組み合わせた小さなペットケア。飼い主さんの生活リズムに合わせて、近所のルートを歩きます。",
+                   "hero_lead_2":  "初めての子は、相性とクセを見るための短いトライアルから。無理な引っ張りはせず、安全な距離で進めます。",
+                   "hero_lead_3":  "",
+                   "value_1_title":  "近所ルートの散歩代行",
+                   "value_1_text":  "公園まわりと住宅街の静かな道を組み合わせ。排泄の記録を写真付きで共有します。",
+                   "value_2_title":  "短時間のおあずかり",
+                   "value_2_text":  "半日までの室内預かり。他の子との相性を見て、同時預かりの可否を判断します。",
+                   "about_section_name":  "サービスについて",
+                   "about_heading":  "飼い主さんの代わりに、足元から",
+                   "about_name":  "おさんぽペットケア みずき",
+                   "about_lead":  "個人運営の訪問型ペットケアです。店舗型のトリミング室はありません。ワクチン証明書の確認後にご契約。猫の訪問は別メニューです。",
+                   "acc_1_title":  "ご利用の流れ",
+                   "acc_1_body":  "メールで顔合わせ→トライアル散歩→定期プランの順。鍵の預かりは専用ボックスまたはスマートロック推奨。キャンセルは前日までにお願いします。",
+                   "acc_2_title":  "",
+                   "acc_2_body":  "",
+                   "works_section_name":  "プラン例",
+                   "works_heading":  "よく選ばれる二つ",
+                   "works_lead":  "犬種・年齢で時間は調整します。",
+                   "work_1_title":  "平日おさんぽ（30分）",
+                   "work_1_text":  "排泄と軽い運動が中心。終了後にメモと写真を送ります。",
+                   "work_2_title":  "半日おあずかり",
+                   "work_2_text":  "室内での休憩と短い散歩を組み合わせ。お迎え時間は事前に固定します。",
+                   "address_text":  "架空市みずき区おさんぽ通り 6-11（訪問拠点・店舗販売なし）",
                    "contact_section_name":  "ご連絡",
                    "contact_label":  "ご連絡",
-                   "contact_note_1":  "当日受け取りは午前中までに",
-                   "contact_note_2":  "10:00–19:00／火曜定休",
+                   "contact_email":  "walk@mizuki-pet.example",
+                   "contact_note_1":  "顔合わせのご依頼はメールで。犬種・年齢・気になるクセを書いてください。",
+                   "contact_note_2":  "緊急時の連絡先は契約時に共有します。診療行為は行いません。",
                    "font_display":  "Zen Maru Gothic",
                    "font_catch":  "Kiwi Maru",
-                   "font_body":  "M PLUS Rounded 1c"
+                   "font_body":  "M PLUS Rounded 1c",
+                   "access_text":  "最寄駅から徒歩5分。駐車場は近隣コインパーキングをご利用ください。",
+                   "value_3_title":  "通いやすい距離感",
+                   "value_3_text":  "初めての方も、常連の方も同じペースで。短時間の立ち寄りにも使いやすい店づくりです。",
+                   "work_3_title":  "おさんぽペットケア みずきの定番",
+                   "work_3_text":  "店の空気が伝わる組み合わせ。詳細は来店時にご案内します。",
+                   "hours_text":  "月〜土 8:00–18:00（訪問枠による）　日曜・祝日は要相談　／　最終受付は閉店30分前。"
                },
     "confirmed":  {
                       "purpose":  true,
@@ -105,7 +103,51 @@
                   },
     "draftExtras":  {
                         "hours":  true,
-                        "access":  false,
-                        "address":  true
-                    }
+                        "address":  true,
+                        "access":  true
+                    },
+    "heroTextPlate":  "round",
+    "heroTextPlateTone":  "white",
+    "layoutOrder":  [
+                        "hero",
+                        "photos",
+                        "works",
+                        "values",
+                        "hours",
+                        "access",
+                        "address",
+                        "contact",
+                        "accordions"
+                    ],
+    "itemLayouts":  {
+                        "about-photos":  {
+                                             "sizes":  [
+                                                           "L",
+                                                           "L",
+                                                           "L"
+                                                       ],
+                                             "gap":  "loose",
+                                             "sizePat":  "S1"
+                                         },
+                        "works-list":  {
+                                           "sizes":  [
+                                                         "H",
+                                                         "H",
+                                                         "L"
+                                                     ],
+                                           "gap":  "tight",
+                                           "sizePat":  "S4"
+                                       }
+                    },
+    "layoutRecipeNote":  "a photo=S1 works=S4 sizes=1",
+    "heroTextOnPhoto":  false,
+    "imagePaths":  {
+                       "work_2_image":  "sushi-samples/12-florist-sakura-a/images/work-02.jpg?v=dense3",
+                       "about_image_2":  "sushi-samples/12-florist-sakura-a/images/about-02.jpg?v=dense3",
+                       "hero_image":  "sushi-samples/12-florist-sakura-a/images/hero.jpg?v=dense3",
+                       "work_1_image":  "sushi-samples/12-florist-sakura-a/images/work-01.jpg?v=dense3",
+                       "about_image_3":  "sushi-samples/12-florist-sakura-a/images/about-03.jpg?v=dense3",
+                       "about_image_1":  "sushi-samples/12-florist-sakura-a/images/about-01.jpg?v=dense3",
+                       "work_3_image":  "sushi-samples/12-florist-sakura-a/images/work-03.jpg?v=dense3"
+                   }
 }

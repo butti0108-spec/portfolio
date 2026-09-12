@@ -1,5 +1,6 @@
-﻿# 写真出典 — 30-hotel-cafe-b
+﻿# Image sources 窶・30-hotel-cafe-b
 
-| ファイル | サイト | 作者 | URL | ライセンス | メモ |
-|----------|--------|------|-----|------------|------|
-| hero.jpg | | | | | |
+Theme: gallery | Unique lock assignment (no reuse across 30 samples)
+
+| file | source | key |
+|------|--------|-----|

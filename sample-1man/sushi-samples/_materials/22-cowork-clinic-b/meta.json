@@ -2,17 +2,6 @@
     "id":  "22",
     "folder":  "22-cowork-clinic-b",
     "band":  "A",
-    "layoutPattern":  "b",
-    "layoutOrder":  [
-                        "hero",
-                        "photos",
-                        "values",
-                        "works",
-                        "accordions",
-                        "hours",
-                        "address",
-                        "contact"
-                    ],
     "photoPack":  "P3",
     "headingPack":  "H3",
     "colorKey":  "ink",
@@ -23,26 +12,38 @@
                   "display":  "Yuji Syuku"
               },
     "scene":  "居酒屋・木暖簾",
-    "counts":  {
-                   "hero-leads":  2,
-                   "hero-values":  2,
-                   "about-accordions":  1,
-                   "about-photos":  3,
-                   "works-list":  3
-               },
-    "extras":  {
-                   "hours":  true,
-                   "access":  false,
-                   "address":  true
-               },
+    "status":  "text+images",
+    "layoutPattern":  "a",
     "imageSlots":  [
                        "hero.jpg",
                        "about-01.jpg",
                        "about-02.jpg",
                        "about-03.jpg",
+                       "about-04.jpg",
                        "work-01.jpg",
                        "work-02.jpg",
                        "work-03.jpg"
                    ],
-    "status":  "未着手"
+    "layoutOrder":  [
+                        "hero",
+                        "values",
+                        "photos",
+                        "works",
+                        "hours",
+                        "access",
+                        "accordions",
+                        "contact"
+                    ],
+    "extras":  {
+                   "hours":  true,
+                   "access":  true,
+                   "address":  false
+               },
+    "counts":  {
+                   "hero-leads":  2,
+                   "hero-values":  3,
+                   "about-accordions":  1,
+                   "about-photos":  4,
+                   "works-list":  3
+               }
 }

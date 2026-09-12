@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="?????????">
+  <title>Arch Design Kobo Favicon</title>
+  <g fill="none" stroke-linecap="butt">
+    <path d="M5 51 A27 20 0 0 1 59 51" stroke="#E53935" stroke-width="2.8"/>
+    <path d="M10 51 A22 16 0 0 1 54 51" stroke="#FDD835" stroke-width="2.8"/>
+    <path d="M15 51 A17 12 0 0 1 49 51" stroke="#43A047" stroke-width="2.8"/>
+    <path d="M20 51 A12 8 0 0 1 44 51" stroke="#1E88E5" stroke-width="2.8"/>
+    <path d="M25 51 A7 5 0 0 1 39 51" stroke="#8E24AA" stroke-width="2.8"/>
+  </g>
+  <line x1="3" y1="53" x2="61" y2="53" stroke="#1A237E" stroke-width="4" stroke-linecap="square"/>
+  <path fill="#1A237E" d="M32 6 L16 51 H7 L28 14 Z"/>
+  <path fill="#1A237E" d="M32 6 L48 51 H57 L36 14 Z"/>
+</svg>

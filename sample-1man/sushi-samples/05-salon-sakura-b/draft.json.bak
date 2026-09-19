@@ -1,0 +1,152 @@
+{
+    "version":  17,
+    "sushiSampleId":  "05",
+    "sushiSampleKey":  "salon-sakura-b",
+    "blurb":  "サロン・左右・桜ピンク・丸",
+    "scene":  "スイーツ・パステル",
+    "savedAt":  "2026-09-08T17:08:13.4904659Z",
+    "uiMode":  "self",
+    "sitePurpose":  "shop",
+    "siteColorMode":  "detail",
+    "layoutPattern":  "a",
+    "layoutSelected":  true,
+    "layoutSchema":  2,
+    "intakeDone":  true,
+    "entryBranch":  "sample",
+    "hubEntrySource":  "sample",
+    "easyFlowActive":  false,
+    "presetChosen":  true,
+    "chosenPresetKey":  "sakura",
+    "draftColors":  {
+                        "cardBg":  "#ffffff",
+                        "chromeInk":  "#fff8fa",
+                        "accent":  "#c95d7a",
+                        "pageBgSoft":  "#f5e4e8",
+                        "bodyMuted":  "#6a454d",
+                        "contactBg":  "#8f4a5a",
+                        "pageBg":  "#fdf5f6",
+                        "bodyInk":  "#3d2228",
+                        "contactInk":  "#fff8fa",
+                        "valuesBg":  "#ffffff",
+                        "heroInk":  "#ffffff",
+                        "chromeBg":  "#8f4a5a"
+                    },
+    "draftCounts":  {
+                        "hero-leads":  2,
+                        "hero-values":  3,
+                        "about-accordions":  1,
+                        "about-photos":  3,
+                        "works-list":  3
+                    },
+    "guidedImageUnlocked":  true,
+    "guidedTextUnlocked":  true,
+    "fonts":  {
+                  "catch":  "Kiwi Maru",
+                  "body":  "M PLUS Rounded 1c",
+                  "display":  "Zen Maru Gothic"
+              },
+    "fields":  {
+                   "brand_name":  "パステル菓子工房 うすい",
+                   "hero_title":  "淡い色の、午後の一口。",
+                   "hero_lead_1":  "クリームは甘さ控えめ、生地はしっとり。パステル色のショーケースから、今日の気分で選ぶ小さな菓子屋です。",
+                   "hero_lead_2":  "",
+                   "hero_lead_3":  "",
+                   "value_1_title":  "甘さより香りのバランス",
+                   "value_1_text":  "砂糖を抑え、果物や茶葉の香りが残る配合にしています。食後にも重くならない甘さです。",
+                   "value_2_title":  "持ち帰りやすいサイズ",
+                   "value_2_text":  "カットケーキは一人用。箱はリボンなしの淡色で、職場や手土産にも渡しやすい形です。",
+                   "about_section_name":  "工房について",
+                   "about_heading":  "ショーケースの前で迷っていい",
+                   "about_name":  "パステル菓子工房 うすい",
+                   "about_lead":  "住宅街の角にある、席なしのテイクアウト専門店です。焼成は午前中にまとめ、午後は仕上げと販売に集中。アレルギー表示はケース横のカードに記載しています。",
+                   "acc_1_title":  "ご購入の目安",
+                   "acc_1_body":  "予約なしでも購入できますが、人気のムースは昼前に切れることがあります。複数個のまとめ買いは前日までのメールが確実です。冷蔵が必要なものは保冷剤付きでお渡しします。",
+                   "acc_2_title":  "",
+                   "acc_2_body":  "",
+                   "works_section_name":  "本日の菓子",
+                   "works_heading":  "ショーケースから",
+                   "works_lead":  "季節で色が変わります。",
+                   "work_1_title":  "いちごの淡クリームサンド",
+                   "work_1_text":  "スポンジを薄く重ね、クリームは牛乳感を残した甘さ。午後のおやつ向けです。",
+                   "work_2_title":  "季節の一口プレート",
+                   "work_2_text":  "その週の焼き菓子を小皿に盛った、お茶請け向けのセットです。",
+                   "contact_section_name":  "ご連絡",
+                   "contact_label":  "ご連絡",
+                   "contact_email":  "hello@usui-pastel.example",
+                   "font_display":  "Zen Maru Gothic",
+                   "font_catch":  "Kiwi Maru",
+                   "font_body":  "M PLUS Rounded 1c",
+                   "value_3_title":  "通いやすい距離感",
+                   "value_3_text":  "初めての方も、常連の方も同じペースで。短時間の立ち寄りにも使いやすい店づくりです。",
+                   "work_3_title":  "パステル菓子工房 うすいの定番",
+                   "work_3_text":  "店の空気が伝わる組み合わせ。詳細は来店時にご案内します。",
+                   "address_text":  "架空市さくら区淡色町 2-14 / 最寄駅から徒歩5分。駐車場は近隣コインパーキングをご利用ください。",
+                   "hours_text":  "水〜日 11:00–18:00（なくなり次第終了）　月・火定休　／　最終受付は閉店30分前。混雑時はお待ちいただく場合があります。",
+                   "access_text":  "最寄駅から徒歩5分。駐車場は近隣コインパーキングをご利用ください。 / Address: 架空市さくら区淡色町 2-14 / 最寄駅から徒歩5分。駐車場は近隣コインパーキングをご利用ください。",
+                   "contact_note_1":  "ご予約・お問い合わせはメールにて。希望日時・人数・ご要望を書いてください。折り返しで空き状況とアクセスの補足をご案内します。",
+                   "contact_note_2":  "営業中は店頭優先のため返信が遅れることがあります。2営業日以内を目安にご連絡します。駐車・道順の質問も同アドレスで受け付けます。"
+               },
+    "confirmed":  {
+                      "purpose":  true,
+                      "layout":  true,
+                      "guide":  true,
+                      "global-preset":  true,
+                      "logo-text":  true,
+                      "hero-text":  true,
+                      "values-text":  true,
+                      "about-text":  true,
+                      "works-text":  true,
+                      "contact-text":  true,
+                      "hours-text":  true,
+                      "address-text":  true,
+                      "site-fonts":  true
+                  },
+    "draftExtras":  {
+                        "hours":  true,
+                        "access":  true,
+                        "address":  false
+                    },
+    "heroTextPlate":  "round",
+    "heroTextPlateTone":  "white",
+    "heroTextOnPhoto":  false,
+    "layoutOrder":  [
+                        "hero",
+                        "values",
+                        "photos",
+                        "works",
+                        "hours",
+                        "access",
+                        "accordions",
+                        "contact"
+                    ],
+    "itemLayouts":  {
+                        "about-photos":  {
+                                             "sizes":  [
+                                                           "L",
+                                                           "H",
+                                                           "H"
+                                                       ],
+                                             "gap":  "normal",
+                                             "sizePat":  "S6"
+                                         },
+                        "works-list":  {
+                                           "sizes":  [
+                                                         "H",
+                                                         "H",
+                                                         "L"
+                                                     ],
+                                           "gap":  "normal",
+                                           "sizePat":  "S2"
+                                       }
+                    },
+    "layoutRecipeNote":  "a photo=S6 works=S2 sizes=1",
+    "imagePaths":  {
+                       "work_2_image":  "sushi-samples/05-salon-sakura-b/images/work-02.jpg?v=dense4",
+                       "about_image_2":  "sushi-samples/05-salon-sakura-b/images/about-02.jpg?v=dense4",
+                       "hero_image":  "sushi-samples/05-salon-sakura-b/images/hero.jpg?v=dense4",
+                       "work_1_image":  "sushi-samples/05-salon-sakura-b/images/work-01.jpg?v=dense4",
+                       "about_image_3":  "sushi-samples/05-salon-sakura-b/images/about-03.jpg?v=dense4",
+                       "about_image_1":  "sushi-samples/05-salon-sakura-b/images/about-01.jpg?v=dense4",
+                       "work_3_image":  "sushi-samples/05-salon-sakura-b/images/work-03.jpg?v=dense4"
+                   }
+}

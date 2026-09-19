@@ -1,0 +1,11 @@
+done 16 touched=7
+done 10 touched=7
+FAIL 04/work-01.jpg
+done 04 touched=2
+FAIL 09/about-01.jpg
+FAIL 09/work-02.jpg
+done 09 touched=5
+done 28 touched=7
+done 15 touched=2
+done 06 touched=3
+done 21 touched=1

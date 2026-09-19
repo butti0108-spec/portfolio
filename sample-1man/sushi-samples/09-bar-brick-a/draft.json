@@ -1,134 +1,43 @@
 {
     "version":  17,
-    "sushiSampleId":  "09",
-    "sushiSampleKey":  "bar-brick-a",
-    "blurb":  "バー・横長・レンガ暖色・太ゴ",
-    "scene":  "ヨガ・光",
-    "savedAt":  "2026-09-08T17:08:24.5597488Z",
+    "savedAt":  "2026-09-19T06:36:12.117Z",
     "uiMode":  "self",
     "sitePurpose":  "shop",
-    "siteColorMode":  "detail",
     "layoutPattern":  "a",
-    "layoutSelected":  true,
-    "layoutSchema":  2,
-    "intakeDone":  true,
-    "entryBranch":  "sample",
-    "hubEntrySource":  "sample",
-    "easyFlowActive":  false,
-    "presetChosen":  true,
-    "chosenPresetKey":  "green",
-    "draftColors":  {
-                        "cardBg":  "#ffffff",
-                        "chromeInk":  "#fff8f0",
-                        "accent":  "#f08a28",
-                        "pageBgSoft":  "#ffe4cc",
-                        "bodyMuted":  "#6a4a38",
-                        "contactBg":  "#d46818",
-                        "pageBg":  "#fff6ee",
-                        "bodyInk":  "#3a2418",
-                        "contactInk":  "#fff8f0",
-                        "valuesBg":  "#fffaf5",
-                        "heroInk":  "#ffffff",
-                        "chromeBg":  "#e07020"
-                    },
-    "draftCounts":  {
-                        "hero-leads":  2,
-                        "hero-values":  3,
-                        "about-accordions":  2,
-                        "about-photos":  4,
-                        "works-list":  3
-                    },
-    "guidedImageUnlocked":  true,
-    "guidedTextUnlocked":  true,
-    "fonts":  {
-                  "catch":  "Sawarabi Gothic",
-                  "body":  "Zen Kaku Gothic New",
-                  "display":  "Sawarabi Gothic"
-              },
-    "fields":  {
-                   "brand_name":  "光のヨガスタジオ あさひ",
-                   "hero_title":  "床に落ちる光で、呼吸をそろえる。",
-                   "hero_lead_1":  "大きな窓から入る自然光だけのスタジオ。音楽は控えめに、インストラクターの声と自分の呼吸が聞こえるレッスンです。",
-                   "hero_lead_2":  "初めての方はマットの置き方から一緒に確認します。柔軟の上手い・下手は問いません。",
-                   "hero_lead_3":  "",
-                   "value_1_title":  "光を遮らない部屋",
-                   "value_1_text":  "カーテンはレースのみ。季節の日差しに合わせて、ポーズの向きを少し変えます。",
-                   "value_2_title":  "少人数で声が届く",
-                   "value_2_text":  "一クラス最大8名。矯正のタッチは事前同意のある方のみ行います。",
-                   "value_3_title":  "マットレンタルあり",
-                   "value_3_text":  "手ぶら来店OK。靴下着用のクラスもあり、更衣室にシャワーはありません（手洗いのみ）。",
-                   "about_section_name":  "スタジオについて",
-                   "about_heading":  "朝と夕方、光の違う二枠",
-                   "about_name":  "光のヨガスタジオ あさひ",
-                   "about_lead":  "商店街の二階。エレベーターはありません。初心者向けとほぐし中心のクラスを軸に、週末だけゆったり流の枠を増やしています。会員制ですが、体験は月に数枠開放しています。",
-                   "acc_1_title":  "はじめての方",
-                   "acc_1_body":  "動きやすい服装でお越しください。食事はレッスンの直前を避け、水分は蓋付きボトルをご持参ください。妊娠中の方は医師の許可を得てからご相談ください。",
-                   "acc_2_title":  "予約とキャンセル",
-                   "acc_2_body":  "WEB予約が基本。キャンセルは3時間前まで。当日欠席が続く場合は、次回枠を調整させていただくことがあります。",
-                   "works_section_name":  "レッスン枠",
-                   "works_heading":  "主なクラス",
-                   "works_lead":  "週によって時間は前後します。",
-                   "work_1_title":  "朝の光フロー（60分）",
-                   "work_1_text":  "呼吸に合わせたゆっくりめの流れ。出勤前の方にも合わせた終了時刻です。",
-                   "work_2_title":  "ほぐし＆ストレッチ（45分）",
-                   "work_2_text":  "肩甲骨と股関節中心。ポーズの完成度より、可動域の確認を大切にします。",
-                   "work_3_title":  "週末ゆるり（75分）",
-                   "work_3_text":  "床のポーズ多め。途中で休憩を入れ、寝たまま終わるクールダウン付きです。",
-                   "address_text":  "架空市あさひ区光が丘 2-5-8　光が丘ビル2F",
-                   "contact_section_name":  "ご連絡",
-                   "contact_label":  "ご連絡",
-                   "contact_email":  "hello@asahi-yoga.example",
-                   "contact_note_1":  "体験・会員のご相談はメールで。希望クラス名を書いてください。",
-                   "contact_note_2":  "体調面のご相談も同アドレスへ。個人情報はレッスン運営以外に使いません。",
-                   "font_display":  "Sawarabi Gothic",
-                   "font_catch":  "Sawarabi Gothic",
-                   "font_body":  "Zen Kaku Gothic New",
-                   "access_text":  "最寄駅から徒歩5分。駐車場は近隣コインパーキングをご利用ください。",
-                   "hours_text":  "火〜日 7:00–21:00（クラス時間割による）　月曜定休　／　最終受付は閉店30分前。"
-               },
-    "confirmed":  {
-                      "purpose":  true,
-                      "layout":  true,
-                      "guide":  true,
-                      "global-preset":  true,
-                      "logo-text":  true,
-                      "hero-text":  true,
-                      "values-text":  true,
-                      "about-text":  true,
-                      "works-text":  true,
-                      "contact-text":  true,
-                      "hours-text":  true,
-                      "address-text":  true,
-                      "site-fonts":  true
-                  },
-    "draftExtras":  {
-                        "hours":  true,
-                        "address":  true,
-                        "access":  true
-                    },
-    "heroTextPlate":  "round",
-    "heroTextPlateTone":  "white",
     "layoutOrder":  [
-                        "hero",
-                        "works",
                         "photos",
                         "values",
-                        "accordions",
                         "hours",
+                        "contact",
+                        "hero",
                         "access",
                         "address",
-                        "contact"
+                        "accordions",
+                        "works"
                     ],
+    "layoutSelected":  true,
+    "layoutSchema":  2,
     "itemLayouts":  {
                         "about-photos":  {
                                              "sizes":  [
-                                                           "H",
-                                                           "H",
-                                                           "H",
-                                                           "H"
+                                                           "L",
+                                                           "L",
+                                                           "L"
                                                        ],
                                              "gap":  "tight",
-                                             "sizePat":  "S4"
+                                             "growDirs":  [
+
+                                                          ],
+                                             "focalYs":  [
+                                                             5,
+                                                             55,
+                                                             90
+                                                         ],
+                                             "focalXs":  [
+                                                             50,
+                                                             50,
+                                                             50
+                                                         ]
                                          },
                         "works-list":  {
                                            "sizes":  [
@@ -137,19 +46,178 @@
                                                          "L"
                                                      ],
                                            "gap":  "loose",
-                                           "sizePat":  "S1"
+                                           "growDirs":  [
+
+                                                        ],
+                                           "focalYs":  [
+                                                           50,
+                                                           50,
+                                                           50
+                                                       ],
+                                           "focalXs":  [
+                                                           50,
+                                                           50,
+                                                           50
+                                                       ]
                                        }
                     },
-    "layoutRecipeNote":  "a photo=S4 works=S1 sizes=1",
     "heroTextOnPhoto":  false,
+    "heroFocalX":  50,
+    "heroFocalY":  60,
+    "aboutItemsDisplay":  "accordion",
+    "heroTextPlate":  "round",
+    "heroTextPlateTone":  "white",
+    "guidedImageUnlocked":  true,
+    "guidedTextUnlocked":  false,
+    "presetChosen":  true,
+    "chosenPresetKey":  "green",
+    "intakeDone":  true,
+    "entryBranch":  "detail",
+    "hubEntrySource":  "detail-entry",
+    "easyFlowActive":  false,
+    "sushiSampleId":  "09",
+    "sushiSampleKey":  "bar-brick-a",
+    "siteColorMode":  "detail",
+    "slotGradients":  {
+
+                      },
+    "slotGradientPartners":  {
+
+                             },
+    "draftColors":  {
+                        "pageBg":  "#e8f2e6",
+                        "pageBgSoft":  "#d2e6ce",
+                        "heroInk":  "#ffffff",
+                        "bodyInk":  "#212121",
+                        "bodyMuted":  "#555555",
+                        "chromeBg":  "#1f3d18",
+                        "chromeInk":  "#f4fff6",
+                        "accent":  "#3d8a48",
+                        "cardBg":  "#ffffff",
+                        "valuesBg":  "#ffffff",
+                        "contactBg":  "#2d6a36",
+                        "contactInk":  "#f4fff6",
+                        "radius":  "0.6rem",
+                        "headingScale":  "1",
+                        "accentBar":  "mid"
+                    },
+    "draftCounts":  {
+                        "hero-leads":  2,
+                        "hero-values":  3,
+                        "about-accordions":  2,
+                        "about-photos":  3,
+                        "works-list":  3
+                    },
+    "draftExtras":  {
+                        "hours":  true,
+                        "access":  true,
+                        "address":  true
+                    },
+    "layoutBlockOff":  {
+                           "works":  true
+                       },
+    "confirmed":  {
+                      "easy-basics":  false,
+                      "easy-sec-hero":  false,
+                      "easy-sec-about":  false,
+                      "easy-sec-works":  false,
+                      "easy-sec-contact":  false,
+                      "easy-img-wire":  false,
+                      "easy-loading":  false,
+                      "easy-done":  false,
+                      "purpose":  true,
+                      "layout":  true,
+                      "guide":  true,
+                      "global-preset":  true,
+                      "global-chrome-bg":  true,
+                      "global-chrome-ink":  true,
+                      "global-bg":  true,
+                      "hero-color":  true,
+                      "values-color":  true,
+                      "global-body":  true,
+                      "global-accent":  true,
+                      "global-card":  true,
+                      "contact-color":  true,
+                      "hero-image":  false,
+                      "about-images":  false,
+                      "works-images":  false,
+                      "logo-text":  false,
+                      "site-fonts":  true,
+                      "hero-text":  false,
+                      "values-text":  false,
+                      "about-text":  false,
+                      "works-text":  false,
+                      "hours-text":  false,
+                      "access-text":  false,
+                      "address-text":  false,
+                      "contact-text":  false,
+                      "finish":  false
+                  },
+    "fields":  {
+                   "brand_name":  "光のヨガスタジオ あさひ",
+                   "hero_title":  "床に落ちる光で、呼吸をそろえる。",
+                   "hero_lead_1":  "大きな窓から入る自然光だけのスタジオ。音楽は控えめに、声と自分の呼吸が聞こえるレッスンです。",
+                   "hero_lead_2":  "初めての方はマットの置き方から一緒に確認します。柔軟の上手い・下手は問いません。",
+                   "hero_lead_3":  "",
+                   "value_1_title":  "光を遮らない部屋",
+                   "value_1_text":  "カーテンはレースのみ。季節の日差しに合わせて、ポーズの向きを少し変えます。",
+                   "value_2_title":  "少人数で声が届く",
+                   "value_2_text":  "一クラス最大8名。体に触れるサポートは、事前に同意のある方のみ行います。",
+                   "value_3_title":  "マットレンタルあり",
+                   "value_3_text":  "手ぶら来店OK。靴下着用のクラスもあり、更衣室にシャワーはありません（手洗いのみ）。",
+                   "about_section_name":  "スタジオについて",
+                   "about_heading":  "朝と夕方、光の違う二枠",
+                   "about_name":  "光のヨガスタジオ あさひ",
+                   "about_lead":  "商店街の二階。エレベーターはありません。初心者向けとほぐし中心のクラスを軸に、週末だけゆったり流の枠を増やしています。会員制ですが、体験は月に数枠開放しています。",
+                   "acc_1_title":  "はじめての方",
+                   "acc_1_body":  "動きやすい服装でお越しください。食事はレッスンの直前を避け、水分は蓋付きボトルをご持参ください。体調に不安がある方は事前にご相談ください。",
+                   "acc_2_title":  "予約とキャンセル",
+                   "acc_2_body":  "WEB予約が基本。キャンセルは3時間前まで。当日欠席が続く場合は、次回枠を調整させていただくことがあります。",
+                   "works_section_name":  "レッスン枠",
+                   "works_heading":  "主なクラス",
+                   "works_lead":  "週によって時間は前後します。",
+                   "work_1_title":  "朝の光フロー（60分）",
+                   "work_1_text":  "呼吸に合わせたゆっくりめの流れ。出勤前の方にも合わせた終了時刻です。",
+                   "work_2_title":  "ほぐし＆ストレッチ（45分）",
+                   "work_2_text":  "肩と股関節まわりを中心に。ポーズの完成度より、動きやすさの確認を大切にします。",
+                   "work_3_title":  "週末ゆるり（75分）",
+                   "work_3_text":  "床のポーズ多め。途中で休憩を入れ、寝たまま終わるクールダウン付きです。",
+                   "hours_text":  "火〜日 7:00–21:00（クラス時間割による）　月曜定休　／　最終受付は閉店30分前。",
+                   "address_text":  "架空市あさひ区光が丘 2-5-8　光が丘ビル2F",
+                   "access_text":  "最寄駅から徒歩5分。駐車場は近隣コインパーキングをご利用ください。",
+                   "contact_section_name":  "ご連絡",
+                   "contact_label":  "ご連絡",
+                   "contact_email":  "hello@asahi-yoga.example",
+                   "contact_note_1":  "体験・クラス申込はメールで。希望クラス名を書いてください。",
+                   "contact_note_2":  "キャンセルは前日20時まで。返信は2営業日以内を目安にします。"
+               },
+    "fonts":  {
+                  "display":  "Sawarabi Gothic",
+                  "catch":  "Sawarabi Gothic",
+                  "body":  "Zen Kaku Gothic New"
+              },
     "imagePaths":  {
-                       "about_image_4":  "sushi-samples/09-bar-brick-a/images/about-04.jpg?v=dense3",
-                       "about_image_2":  "sushi-samples/09-bar-brick-a/images/about-02.jpg?v=dense3",
-                       "hero_image":  "sushi-samples/09-bar-brick-a/images/hero.jpg?v=dense3",
-                       "about_image_3":  "sushi-samples/09-bar-brick-a/images/about-03.jpg?v=dense3",
-                       "work_2_image":  "sushi-samples/09-bar-brick-a/images/work-02.jpg?v=dense3",
-                       "about_image_1":  "sushi-samples/09-bar-brick-a/images/about-01.jpg?v=dense3",
-                       "work_3_image":  "sushi-samples/09-bar-brick-a/images/work-03.jpg?v=dense3",
-                       "work_1_image":  "sushi-samples/09-bar-brick-a/images/work-01.jpg?v=dense3"
-                   }
+                       "about_image_2":  "sushi-samples/09-bar-brick-a/images/about-02.jpg?v=1789805671211",
+                       "about_image_1":  "sushi-samples/09-bar-brick-a/images/about-01.jpg?v=1789805671211",
+                       "hero_image":  "sushi-samples/09-bar-brick-a/images/hero.jpg?v=1789805671211",
+                       "work_1_image":  "sushi-samples/09-bar-brick-a/images/work-01.jpg?v=1789813090878",
+                       "work_2_image":  "sushi-samples/09-bar-brick-a/images/work-02.jpg?v=1789813090878",
+                       "work_3_image":  "sushi-samples/09-bar-brick-a/images/work-03.jpg?v=1789820307966",
+                       "about_image_3":  "sushi-samples/09-bar-brick-a/images/about-03.jpg?v=1789820760687"
+                   },
+    "blurb":  "床光ヨガ。体験／呼吸。床・窓光・マット",
+    "scene":  "ヨガ・光",
+    "layoutRecipeNote":  "rebuild floor-light yoga green-softGothic",
+    "brushUpStructure":  "2026-09-14-v01",
+    "brushUpMeaning":  "2026-09-15-v01",
+    "photoGenBatch":  "ai-full-replace",
+    "designBrief":  {
+                        "who":  "朝と夕方に光の違うレッスンを開く小さなヨガスタジオ",
+                        "purpose":  "体験と呼吸をそろえる時間を予約してもらう",
+                        "show":  "床に落ちる光・窓・マット・静けさ",
+                        "colorIntent":  "緑のやわらかさにソフトゴシック",
+                        "worldviewOneLiner":  "床に落ちる光で呼吸をそろえる"
+                    },
+    "brushUpCopy":  "2026-09-19-restore-from-copy",
+    "brushUpPhoto":  "2026-09-19-title-match-fix3"
 }

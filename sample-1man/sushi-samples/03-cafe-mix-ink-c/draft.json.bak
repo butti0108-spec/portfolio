@@ -1,0 +1,152 @@
+{
+    "version":  17,
+    "sushiSampleId":  "03",
+    "sushiSampleKey":  "cafe-mix-ink-c",
+    "blurb":  "カフェ・混合・墨・太ゴ見出し",
+    "scene":  "バー・グラス",
+    "savedAt":  "2026-09-08T17:08:04.9320195Z",
+    "uiMode":  "self",
+    "sitePurpose":  "shop",
+    "siteColorMode":  "detail",
+    "layoutPattern":  "a",
+    "layoutSelected":  true,
+    "layoutSchema":  2,
+    "intakeDone":  true,
+    "entryBranch":  "sample",
+    "hubEntrySource":  "sample",
+    "easyFlowActive":  false,
+    "presetChosen":  true,
+    "chosenPresetKey":  "ink",
+    "draftColors":  {
+                        "cardBg":  "#1f2424",
+                        "chromeInk":  "#f5f5f5",
+                        "accent":  "#c9a227",
+                        "pageBgSoft":  "#3a4040",
+                        "bodyMuted":  "#c8c8c8",
+                        "contactBg":  "#111111",
+                        "pageBg":  "#2e3333",
+                        "bodyInk":  "#f5f5f5",
+                        "contactInk":  "#f5f5f5",
+                        "valuesBg":  "#1f2424",
+                        "heroInk":  "#ffffff",
+                        "chromeBg":  "#111111"
+                    },
+    "draftCounts":  {
+                        "hero-leads":  2,
+                        "hero-values":  3,
+                        "about-accordions":  1,
+                        "about-photos":  3,
+                        "works-list":  3
+                    },
+    "guidedImageUnlocked":  true,
+    "guidedTextUnlocked":  true,
+    "fonts":  {
+                  "catch":  "Zen Kaku Gothic New",
+                  "body":  "Zen Kaku Gothic New",
+                  "display":  "Dela Gothic One"
+              },
+    "fields":  {
+                   "brand_name":  "グラスサイド",
+                   "hero_title":  "氷が鳴る、夜のカウンター。",
+                   "hero_lead_1":  "薄暗い店内に、グラスの縁だけが光るバー。クラシックを軸に、その日の柑橘とハーブで少しだけアレンジします。",
+                   "hero_lead_2":  "会話は低く、音楽は控えめ。一人で来る夜も、二人で来る夜も、同じ椅子の高さで迎えします。",
+                   "hero_lead_3":  "",
+                   "value_1_title":  "グラスから決める一杯",
+                   "value_1_text":  "ロック・ストレート・ショート。飲み方の好みを聞いてから、ベースとトニックのバランスを合わせます。",
+                   "value_2_title":  "静かな席の距離感",
+                   "value_2_text":  "カウンター7席と奥の2卓のみ。隣との距離を空け、スマホの着信音はマナーモードをお願いしています。",
+                   "about_section_name":  "バーについて",
+                   "about_heading":  "路地の奥、鍵のかからない扉",
+                   "about_name":  "グラスサイド",
+                   "about_lead":  "ビルの地下一階。看板は小さなネオンだけです。スモークは出さず、柑橘の皮を捻る香りで空気を整えています。フードはナッツとチーズの軽いものに絞り、お酒の味を邪魔しないようにしています。",
+                   "acc_1_title":  "ご利用の目安",
+                   "acc_1_body":  "予約はカウンター席のみ前日まで受付。混雑時は2時間程度の目安をお願いすることがあります。ドレスコードはありませんが、強い香り付きの香水はご遠慮ください。",
+                   "acc_2_title":  "",
+                   "acc_2_body":  "",
+                   "works_section_name":  "今夜のグラス",
+                   "works_heading":  "定番から始める",
+                   "works_lead":  "迷ったら、まずこの二杯。",
+                   "work_1_title":  "ハウス・オールドファッション",
+                   "work_1_text":  "ブラウンシュガーとオレンジピール。氷は大きめのひとつで、ゆっくり溶ける味にしています。",
+                   "work_2_title":  "季節のジン・トニック",
+                   "work_2_text":  "週替わりの柑橘とハーブ。トニックは炭酸を立てすぎず、香りが残る分量で。",
+                   "contact_section_name":  "ご連絡",
+                   "contact_label":  "ご連絡",
+                   "contact_email":  "reserve@glass-side.example",
+                   "font_display":  "Dela Gothic One",
+                   "font_catch":  "Zen Kaku Gothic New",
+                   "font_body":  "Zen Kaku Gothic New",
+                   "value_3_title":  "通いやすい距離感",
+                   "value_3_text":  "初めての方も、常連の方も同じペースで。短時間の立ち寄りにも使いやすい店づくりです。",
+                   "work_3_title":  "グラスサイドの定番",
+                   "work_3_text":  "店の空気が伝わる組み合わせ。詳細は来店時にご案内します。",
+                   "address_text":  "架空市よるべ区グラス横丁 B1 / 最寄駅から徒歩5分。駐車場は近隣コインパーキングをご利用ください。",
+                   "hours_text":  "火〜日 19:00–26:00（L.O. 25:30）　月曜定休　／　最終受付は閉店30分前。混雑時はお待ちいただく場合があります。",
+                   "access_text":  "最寄駅から徒歩5分。駐車場は近隣コインパーキングをご利用ください。 / Address: 架空市よるべ区グラス横丁 B1 / 最寄駅から徒歩5分。駐車場は近隣コインパーキングをご利用ください。",
+                   "contact_note_1":  "ご予約・お問い合わせはメールにて。希望日時・人数・ご要望を書いてください。折り返しで空き状況とアクセスの補足をご案内します。",
+                   "contact_note_2":  "営業中は店頭優先のため返信が遅れることがあります。2営業日以内を目安にご連絡します。駐車・道順の質問も同アドレスで受け付けます。"
+               },
+    "confirmed":  {
+                      "purpose":  true,
+                      "layout":  true,
+                      "guide":  true,
+                      "global-preset":  true,
+                      "logo-text":  true,
+                      "hero-text":  true,
+                      "values-text":  true,
+                      "about-text":  true,
+                      "works-text":  true,
+                      "contact-text":  true,
+                      "hours-text":  true,
+                      "address-text":  true,
+                      "site-fonts":  true
+                  },
+    "draftExtras":  {
+                        "hours":  true,
+                        "access":  true,
+                        "address":  false
+                    },
+    "heroTextPlate":  "round",
+    "heroTextPlateTone":  "white",
+    "heroTextOnPhoto":  false,
+    "layoutOrder":  [
+                        "hero",
+                        "photos",
+                        "works",
+                        "values",
+                        "accordions",
+                        "hours",
+                        "access",
+                        "contact"
+                    ],
+    "itemLayouts":  {
+                        "about-photos":  {
+                                             "sizes":  [
+                                                           "L",
+                                                           "L",
+                                                           "L"
+                                                       ],
+                                             "gap":  "loose",
+                                             "sizePat":  "S1"
+                                         },
+                        "works-list":  {
+                                           "sizes":  [
+                                                         "H",
+                                                         "H",
+                                                         "L"
+                                                     ],
+                                           "gap":  "normal",
+                                           "sizePat":  "S2"
+                                       }
+                    },
+    "layoutRecipeNote":  "a photo=S1 works=S2 sizes=1",
+    "imagePaths":  {
+                       "work_2_image":  "sushi-samples/03-cafe-mix-ink-c/images/work-02.jpg?v=dense4",
+                       "about_image_2":  "sushi-samples/03-cafe-mix-ink-c/images/about-02.jpg?v=dense4",
+                       "hero_image":  "sushi-samples/03-cafe-mix-ink-c/images/hero.jpg?v=dense4",
+                       "work_1_image":  "sushi-samples/03-cafe-mix-ink-c/images/work-01.jpg?v=dense4",
+                       "about_image_3":  "sushi-samples/03-cafe-mix-ink-c/images/about-03.jpg?v=dense4",
+                       "about_image_1":  "sushi-samples/03-cafe-mix-ink-c/images/about-01.jpg?v=dense4",
+                       "work_3_image":  "sushi-samples/03-cafe-mix-ink-c/images/work-03.jpg?v=dense4"
+                   }
+}

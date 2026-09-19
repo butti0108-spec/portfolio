@@ -12,8 +12,29 @@
                   "display":  "Zen Maru Gothic"
               },
     "scene":  "花屋・店先",
-    "status":  "text+images",
+    "status":  "rebuild-02-2026-09-19",
     "layoutPattern":  "a",
+    "layoutOrder":  [
+                        "photos",
+                        "works",
+                        "hero",
+                        "hours",
+                        "access",
+                        "address",
+                        "contact"
+                    ],
+    "counts":  {
+                   "hero-leads":  2,
+                   "hero-values":  3,
+                   "about-accordions":  1,
+                   "about-photos":  4,
+                   "works-list":  3
+               },
+    "extras":  {
+                   "hours":  true,
+                   "access":  true,
+                   "address":  true
+               },
     "imageSlots":  [
                        "hero.jpg",
                        "about-01.jpg",
@@ -24,26 +45,15 @@
                        "work-02.jpg",
                        "work-03.jpg"
                    ],
-    "layoutOrder":  [
-                        "hero",
-                        "values",
-                        "photos",
-                        "works",
-                        "hours",
-                        "access",
-                        "accordions",
-                        "contact"
-                    ],
-    "extras":  {
-                   "hours":  true,
-                   "access":  true,
-                   "address":  false
-               },
-    "counts":  {
-                   "hero-leads":  2,
-                   "hero-values":  3,
-                   "about-accordions":  1,
-                   "about-photos":  4,
-                   "works-list":  3
-               }
+    "layoutBlockOff":  [
+                           "values",
+                           "accordions"
+                       ],
+    "designBrief":  {
+                        "who":  "路面で切り花と小さな鉢を出す花屋の店主",
+                        "purpose":  "通りがかりに一輪／玄関のまとまりを持ち帰ってもらう",
+                        "show":  "店先のバケツ・束・小さな鉢・手書き黒板",
+                        "colorIntent":  "緑の爽やかさ・白い余白",
+                        "worldviewOneLiner":  "今日の花は、店先から持ち帰る"
+                    }
 }

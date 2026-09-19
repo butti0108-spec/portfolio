@@ -12,37 +12,44 @@
                   "display":  "Zen Maru Gothic"
               },
     "scene":  "サロン・花",
-    "status":  "text+images",
+    "status":  "rebuild-2026-09-19",
     "layoutPattern":  "a",
-    "imageSlots":  [
-                       "hero.jpg",
-                       "about-01.jpg",
-                       "about-02.jpg",
-                       "about-03.jpg",
-                       "work-01.jpg",
-                       "work-02.jpg",
-                       "work-03.jpg"
-                   ],
     "layoutOrder":  [
                         "hero",
-                        "values",
+                        "accordions",
                         "photos",
+                        "values",
                         "works",
                         "hours",
                         "access",
-                        "accordions",
+                        "address",
                         "contact"
                     ],
     "extras":  {
                    "hours":  true,
                    "access":  true,
-                   "address":  false
+                   "address":  true
                },
     "counts":  {
-                   "hero-leads":  2,
+                   "works-list":  3,
                    "hero-values":  3,
-                   "about-accordions":  1,
-                   "about-photos":  3,
-                   "works-list":  3
-               }
+                   "hero-leads":  2,
+                   "about-photos":  2,
+                   "about-accordions":  1
+               },
+    "imageSlots":  [
+                       "hero.jpg",
+                       "about-01.jpg",
+                       "about-02.jpg",
+                       "work-01.jpg",
+                       "work-02.jpg",
+                       "work-03.jpg"
+                   ],
+    "designBrief":  {
+                        "colorIntent":  "桜色のやわらかさ・温かみ",
+                        "who":  "花のある小さなヘアサロン",
+                        "purpose":  "予約の温度を感じてもらう／髪を整える",
+                        "worldviewOneLiner":  "花と髪を同じ手で整える",
+                        "show":  "切り花＋サロン空間"
+                    }
 }

@@ -12,30 +12,30 @@
                   "display":  "Zen Maru Gothic"
               },
     "scene":  "ペット・散歩",
-    "status":  "text+images",
+    "status":  "rebuild-2026-09-19",
     "layoutPattern":  "a",
     "layoutOrder":  [
                         "hero",
-                        "photos",
                         "works",
+                        "photos",
                         "values",
+                        "accordions",
                         "hours",
                         "access",
                         "address",
-                        "contact",
-                        "accordions"
+                        "contact"
                     ],
-    "counts":  {
-                   "hero-leads":  2,
-                   "hero-values":  3,
-                   "about-accordions":  1,
-                   "about-photos":  3,
-                   "works-list":  3
-               },
     "extras":  {
                    "hours":  true,
                    "access":  true,
                    "address":  true
+               },
+    "counts":  {
+                   "works-list":  3,
+                   "hero-values":  3,
+                   "hero-leads":  2,
+                   "about-photos":  3,
+                   "about-accordions":  1
                },
     "imageSlots":  [
                        "hero.jpg",
@@ -45,5 +45,12 @@
                        "work-01.jpg",
                        "work-02.jpg",
                        "work-03.jpg"
-                   ]
+                   ],
+    "designBrief":  {
+                        "colorIntent":  "桜色のやわらかさ・丸み",
+                        "who":  "訪問型のおさんぽペットケア（犬の散歩代行・短時間預かり）",
+                        "purpose":  "預けて安心／生活リズムに合わせた散歩を任せる",
+                        "worldviewOneLiner":  "リードの先の散歩を任せられる",
+                        "show":  "リード・散歩道・やさしい手元"
+                    }
 }

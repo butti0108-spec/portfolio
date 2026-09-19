@@ -1,124 +1,22 @@
 {
     "version":  17,
-    "sushiSampleId":  "22",
-    "sushiSampleKey":  "cowork-clinic-b",
-    "blurb":  "コワーキング・左右・紺・角ゴ",
-    "scene":  "居酒屋・木暖簾",
-    "savedAt":  "2026-09-08T17:09:07.4688545Z",
+    "savedAt":  "2026-09-19T12:25:44.603Z",
     "uiMode":  "self",
     "sitePurpose":  "shop",
-    "siteColorMode":  "detail",
     "layoutPattern":  "a",
-    "layoutSelected":  true,
-    "layoutSchema":  2,
-    "intakeDone":  true,
-    "entryBranch":  "sample",
-    "hubEntrySource":  "sample",
-    "easyFlowActive":  false,
-    "presetChosen":  true,
-    "chosenPresetKey":  "ink",
-    "draftColors":  {
-                        "cardBg":  "#ffffff",
-                        "chromeInk":  "#ffffff",
-                        "accent":  "#1a4d8c",
-                        "pageBgSoft":  "#f3f6f8",
-                        "bodyMuted":  "#555555",
-                        "contactBg":  "#1a4d8c",
-                        "pageBg":  "#ffffff",
-                        "bodyInk":  "#212121",
-                        "contactInk":  "#ffffff",
-                        "valuesBg":  "#ffffff",
-                        "heroInk":  "#ffffff",
-                        "chromeBg":  "#1a4d8c"
-                    },
-    "draftCounts":  {
-                        "hero-leads":  2,
-                        "hero-values":  3,
-                        "about-accordions":  1,
-                        "about-photos":  4,
-                        "works-list":  3
-                    },
-    "guidedImageUnlocked":  true,
-    "guidedTextUnlocked":  true,
-    "fonts":  {
-                  "catch":  "Yuji Syuku",
-                  "body":  "Sawarabi Gothic",
-                  "display":  "Yuji Syuku"
-              },
-    "fields":  {
-                   "brand_name":  "木暖簾 いまい",
-                   "hero_title":  "暖簾の向こうは、今日の一献。",
-                   "hero_lead_1":  "木の暖簾が目印の居酒屋。今日の一献と、小皿のつまみをカウンターでゆっくりどうぞ。",
-                   "hero_lead_2":  "予約なしでも入りやすい席割り。日本酒と焼酎を中心に、季節の一品を黒板に書いています。",
-                   "hero_lead_3":  "",
-                   "value_1_title":  "木の暖簾",
-                   "value_1_text":  "入口は古い木の暖簾と板扉。中はカウンター中心で、壁には酒の札。近所の人が「ちょっと寄る」のに使いやすい距離感です。",
-                   "value_2_title":  "炭の串",
-                   "value_2_text":  "焼き鳥は塩とタレの二種。レバーとねぎまは毎日仕込み、焼き上がりを見てから出します。",
-                   "about_section_name":  "お店について",
-                   "about_heading":  "暖簾の向こうの居酒屋",
-                   "about_name":  "木暖簾 いまい",
-                   "about_lead":  "駅裏側の細い通りにある居酒屋です。串焼きとお通し、地酒とハイボールが中心。座敷は小上がり一組のみで、基本はカウンターとテーブル。派手な看板より、暖簾の木目を目印にしてください。",
-                   "acc_1_title":  "席と注文",
-                   "acc_1_body":  "予約は四人以上からメールで。二人までは当日並びでも入れることが多いです。お通しは必ず付き、メニューは黒板の日替わりも見てください。ラストオーダーは閉店30分前。喫煙は屋外スペースのみです。",
-                   "acc_2_title":  "",
-                   "acc_2_body":  "",
-                   "works_section_name":  "メニュー",
-                   "works_heading":  "今夜の定番",
-                   "works_lead":  "串と杯から",
-                   "work_1_title":  "塩ねぎま二本",
-                   "work_1_text":  "炭火で表面を香ばしく。酒の最初の一本に。",
-                   "work_2_title":  "本日の刺身盛り",
-                   "work_2_text":  "三〜四点。鮮度の良いものだけを小さく。",
-                   "work_3_title":  "今井ハイボール",
-                   "work_3_text":  "強炭酸・レモン多め。おかわりしやすい辛さです。",
-                   "contact_section_name":  "ご連絡",
-                   "contact_label":  "ご連絡",
-                   "contact_email":  "yoyaku@kinoren-imai.example",
-                   "font_display":  "Yuji Syuku",
-                   "font_catch":  "Yuji Syuku",
-                   "font_body":  "Sawarabi Gothic",
-                   "value_3_title":  "通いやすい距離感",
-                   "value_3_text":  "初めての方も、常連の方も同じペースで。短時間の立ち寄りにも使いやすい店づくりです。",
-                   "address_text":  "架空市木戸町5-6-2 / 最寄駅から徒歩5分。駐車場は近隣コインパーキングをご利用ください。",
-                   "hours_text":  "月〜土 17:30–23:30（LO 23:00）／日曜定休　／　最終受付は閉店30分前。混雑時はお待ちいただく場合があります。",
-                   "access_text":  "最寄駅から徒歩5分。駐車場は近隣コインパーキングをご利用ください。 / Address: 架空市木戸町5-6-2 / 最寄駅から徒歩5分。駐車場は近隣コインパーキングをご利用ください。",
-                   "contact_note_1":  "ご予約・お問い合わせはメールにて。希望日時・人数・ご要望を書いてください。折り返しで空き状況とアクセスの補足をご案内します。",
-                   "contact_note_2":  "営業中は店頭優先のため返信が遅れることがあります。2営業日以内を目安にご連絡します。駐車・道順の質問も同アドレスで受け付けます。"
-               },
-    "confirmed":  {
-                      "purpose":  true,
-                      "layout":  true,
-                      "guide":  true,
-                      "global-preset":  true,
-                      "logo-text":  true,
-                      "hero-text":  true,
-                      "values-text":  true,
-                      "about-text":  true,
-                      "works-text":  true,
-                      "contact-text":  true,
-                      "hours-text":  true,
-                      "address-text":  true,
-                      "site-fonts":  true
-                  },
-    "draftExtras":  {
-                        "hours":  true,
-                        "access":  true,
-                        "address":  false
-                    },
-    "heroTextPlate":  "round",
-    "heroTextPlateTone":  "white",
-    "heroTextOnPhoto":  false,
     "layoutOrder":  [
                         "hero",
-                        "values",
                         "photos",
+                        "values",
                         "works",
                         "hours",
                         "access",
+                        "address",
                         "accordions",
                         "contact"
                     ],
+    "layoutSelected":  true,
+    "layoutSchema":  2,
     "itemLayouts":  {
                         "about-photos":  {
                                              "sizes":  [
@@ -128,27 +26,161 @@
                                                            "L"
                                                        ],
                                              "gap":  "normal",
-                                             "sizePat":  "S3"
+                                             "growDirs":  [
+
+                                                          ],
+                                             "focalYs":  [
+                                                             65,
+                                                             60,
+                                                             75,
+                                                             70
+                                                         ],
+                                             "focalXs":  [
+                                                             50,
+                                                             50,
+                                                             50,
+                                                             50
+                                                         ]
                                          },
                         "works-list":  {
                                            "sizes":  [
-                                                         "L",
                                                          "H",
-                                                         "H"
+                                                         "H",
+                                                         "L"
                                                      ],
                                            "gap":  "normal",
-                                           "sizePat":  "S6"
+                                           "growDirs":  [
+
+                                                        ],
+                                           "focalYs":  [
+                                                           20,
+                                                           15,
+                                                           15
+                                                       ],
+                                           "focalXs":  [
+                                                           50,
+                                                           50,
+                                                           50
+                                                       ]
                                        }
                     },
-    "layoutRecipeNote":  "a photo=S3 works=S6 sizes=1",
+    "heroTextOnPhoto":  true,
+    "heroFocalX":  50,
+    "heroFocalY":  30,
+    "aboutItemsDisplay":  "accordion",
+    "heroTextPlate":  "round",
+    "heroTextPlateTone":  "dark",
+    "guidedImageUnlocked":  true,
+    "guidedTextUnlocked":  false,
+    "presetChosen":  true,
+    "chosenPresetKey":  "ink",
+    "intakeDone":  true,
+    "entryBranch":  "detail",
+    "hubEntrySource":  "detail-entry",
+    "easyFlowActive":  false,
+    "sushiSampleId":  "22",
+    "sushiSampleKey":  "cowork-clinic-b",
+    "siteColorMode":  "detail",
+    "slotGradients":  {
+
+                      },
+    "slotGradientPartners":  {
+
+                             },
+    "draftColors":  {
+                        "pageBg":  "#2e3333",
+                        "pageBgSoft":  "#3a4040",
+                        "heroInk":  "#ffffff",
+                        "bodyInk":  "#f5f5f5",
+                        "bodyMuted":  "#c8c8c8",
+                        "chromeBg":  "#111111",
+                        "chromeInk":  "#f5f5f5",
+                        "accent":  "#c9a227",
+                        "cardBg":  "#1f2424",
+                        "valuesBg":  "#1f2424",
+                        "contactBg":  "#111111",
+                        "contactInk":  "#f5f5f5",
+                        "radius":  "0.6rem",
+                        "headingScale":  "1",
+                        "accentBar":  "mid"
+                    },
+    "draftCounts":  {
+                        "hero-leads":  2,
+                        "hero-values":  3,
+                        "about-accordions":  1,
+                        "about-photos":  4,
+                        "works-list":  3
+                    },
+    "draftExtras":  {
+                        "hours":  true,
+                        "access":  true,
+                        "address":  true
+                    },
+    "layoutBlockOff":  {
+
+                       },
+    "confirmed":  {
+                      "easy-basics":  false,
+                      "easy-sec-hero":  false,
+                      "easy-sec-about":  false,
+                      "easy-sec-works":  false,
+                      "easy-sec-contact":  false,
+                      "easy-img-wire":  false,
+                      "easy-loading":  false,
+                      "easy-done":  false,
+                      "purpose":  true,
+                      "layout":  true,
+                      "guide":  true,
+                      "global-preset":  true,
+                      "global-chrome-bg":  true,
+                      "global-chrome-ink":  true,
+                      "global-bg":  true,
+                      "hero-color":  true,
+                      "values-color":  true,
+                      "global-body":  true,
+                      "global-accent":  true,
+                      "global-card":  true,
+                      "contact-color":  true,
+                      "hero-image":  false,
+                      "about-images":  false,
+                      "works-images":  false,
+                      "logo-text":  false,
+                      "site-fonts":  true,
+                      "hero-text":  false,
+                      "values-text":  false,
+                      "about-text":  false,
+                      "works-text":  false,
+                      "hours-text":  false,
+                      "access-text":  false,
+                      "address-text":  false,
+                      "contact-text":  false,
+                      "finish":  false
+                  },
+    "fields":  {
+                   "hero_title":  "木の暖簾の\n向こうで、\n今夜の一献。",
+                   "headingScale":  "1",
+                   "hero_lead_1":  "古い木の暖簾が目印の居酒屋。カウンターで、串と杯をゆっくりどうぞ。赤提灯の賑わいとは違う、木目の静かな夜です。",
+                   "hero_lead_2":  "日本酒と焼酎を中心に、季節の一品を黒板に書いています。予約なしでも入りやすい席割りです。"
+               },
+    "fonts":  {
+                  "display":  "Yuji Syuku",
+                  "catch":  "Yuji Syuku",
+                  "body":  "Sawarabi Gothic"
+              },
     "imagePaths":  {
-                       "about_image_4":  "sushi-samples/22-cowork-clinic-b/images/about-04.jpg?v=dense4",
-                       "about_image_2":  "sushi-samples/22-cowork-clinic-b/images/about-02.jpg?v=dense4",
-                       "hero_image":  "sushi-samples/22-cowork-clinic-b/images/hero.jpg?v=dense4",
-                       "about_image_3":  "sushi-samples/22-cowork-clinic-b/images/about-03.jpg?v=dense4",
-                       "work_2_image":  "sushi-samples/22-cowork-clinic-b/images/work-02.jpg?v=dense4",
-                       "about_image_1":  "sushi-samples/22-cowork-clinic-b/images/about-01.jpg?v=dense4",
-                       "work_3_image":  "sushi-samples/22-cowork-clinic-b/images/work-03.jpg?v=dense4",
-                       "work_1_image":  "sushi-samples/22-cowork-clinic-b/images/work-01.jpg?v=dense4"
-                   }
+                       "about_image_2":  "sushi-samples/22-cowork-clinic-b/images/about-02.jpg?v=1789820717410",
+                       "about_image_3":  "sushi-samples/22-cowork-clinic-b/images/about-03.jpg?v=1789820717410",
+                       "about_image_4":  "sushi-samples/22-cowork-clinic-b/images/about-04.jpg?v=1789820717410",
+                       "work_1_image":  "sushi-samples/22-cowork-clinic-b/images/work-01.jpg?v=1789820717410",
+                       "work_2_image":  "sushi-samples/22-cowork-clinic-b/images/work-02.jpg?v=1789820717410",
+                       "work_3_image":  "sushi-samples/22-cowork-clinic-b/images/work-03.jpg?v=1789820717410",
+                       "about_image_1":  "sushi-samples/22-cowork-clinic-b/images/about-01.jpg?v=1789821575165",
+                       "hero_image":  "sushi-samples/22-cowork-clinic-b/images/hero.jpg?v=1789821575165"
+                   },
+    "blurb":  "木暖簾居酒屋。今夜の一献。木暖簾・木目",
+    "scene":  "居酒屋・木暖簾",
+    "layoutRecipeNote":  "rebuild-22 wood noren vs 10 lantern",
+    "brushUpStructure":  "2026-09-14-v01",
+    "brushUpMeaning":  "2026-09-19-rebuild",
+    "brushUpPhoto":  "2026-09-19-text-blank-fix"
 }

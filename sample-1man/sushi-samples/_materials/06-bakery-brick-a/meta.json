@@ -12,38 +12,43 @@
                   "display":  "Sawarabi Gothic"
               },
     "scene":  "パン・ケース",
-    "status":  "text+images",
+    "status":  "rebuild-2026-09-19",
     "layoutPattern":  "a",
+    "layoutOrder":  [
+                        "works",
+                        "photos",
+                        "hero",
+                        "hours",
+                        "access",
+                        "contact",
+                        "address"
+                    ],
+    "counts":  {
+                   "hero-leads":  2,
+                   "hero-values":  3,
+                   "about-accordions":  1,
+                   "about-photos":  3,
+                   "works-list":  3
+               },
+    "extras":  {
+                   "hours":  true,
+                   "access":  true,
+                   "address":  true
+               },
     "imageSlots":  [
                        "hero.jpg",
                        "about-01.jpg",
                        "about-02.jpg",
                        "about-03.jpg",
-                       "about-04.jpg",
                        "work-01.jpg",
                        "work-02.jpg",
                        "work-03.jpg"
                    ],
-    "layoutOrder":  [
-                        "hero",
-                        "photos",
-                        "works",
-                        "values",
-                        "accordions",
-                        "hours",
-                        "access",
-                        "contact"
-                    ],
-    "extras":  {
-                   "hours":  true,
-                   "access":  true,
-                   "address":  false
-               },
-    "counts":  {
-                   "hero-leads":  2,
-                   "hero-values":  3,
-                   "about-accordions":  1,
-                   "about-photos":  4,
-                   "works-list":  3
-               }
+    "designBrief":  {
+                        "who":  "駅近のレンガ調の小さな窯パン屋",
+                        "purpose":  "売り切れる前に今日のパンを選んでもらう",
+                        "show":  "ガラスケースのパン・レンガ・焼き立て",
+                        "colorIntent":  "レンガ暖色・やわらかいゴシック",
+                        "worldviewOneLiner":  "ケースの向こうでパンが休む"
+                    }
 }

@@ -1,18 +1,25 @@
-# 見本レビューダッシュ（簡素）
+# 見本レビュー（開発専用）
 
-装飾なし。見栄えの承認／NG専用。
+装飾なし。見栄えの承認／NG専用。  
+**本体プレビューと同一文書**（iframe・外側 scale なし）。
 
 ## 開き方
 
-1. `sample-1man/_dev-server.ps1` を起動（例: ポート 28931）
+1. `sample-1man/_dev-server.ps1` または `_static-server.js` を起動（ポートフォリオ根を配信）
 2. ブラウザで  
-   `http://127.0.0.1:PORT/sample-1man/review-dash/`
+   `http://127.0.0.1:PORT/sample-1man/index.html?review=1`
+
+旧 URL `…/review-dash/` は上記へ自動誘導します。
+
+本番には載せない。一覧は `../PUBLISH.md`。
 
 ## 操作
 
+- **確認（読む）**: メーカー本体と同じ幅ステップで実寸確認
+- **全体俯瞰**: いまの枠に一度だけ縮小（ウィンドウリサイズでは再計算しない）
 - **前へ／次へ**: 候補を移動
-- **再読込**: いまの draft（＋あれば materials の meta/copy）を流し直す
+- **再読込**: draft（＋あれば materials の meta/copy）を流し直す
 - **承認**: 全体スクショを保存し、STATUS を「営業格納」
-- **NG**: 保存画像を消し、STATUS を「NG」
+- **NG**: 保存画像を消し、STATUS を更新
 
 1次判定は「気持ち悪いか／おかしいか」だけ。似てるかどうかは後で。

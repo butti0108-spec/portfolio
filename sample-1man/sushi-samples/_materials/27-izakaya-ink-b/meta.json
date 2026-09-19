@@ -6,14 +6,15 @@
     "headingPack":  "H3",
     "colorKey":  "cafe",
     "fontMood":  "mincho",
-    "fonts":  {
-                  "catch":  "Shippori Mincho",
-                  "body":  "Zen Kaku Gothic New",
-                  "display":  "Shippori Mincho"
-              },
+    "status":  "rebuild-2026-09-19",
     "scene":  "宿・朝",
-    "status":  "text+images",
-    "layoutPattern":  "a",
+    "designBrief":  {
+                        "who":  "朝の光を大切にする小さな旅宿の主人",
+                        "purpose":  "一晩泊まる／朝露と朝光を覚えてもらう",
+                        "show":  "朝光・和室・露の庭・朝食",
+                        "colorIntent":  "ベージュ暖色・木の落ち着き",
+                        "worldviewOneLiner":  "朝露と朝光だけの一晩の旅宿"
+                    },
     "imageSlots":  [
                        "hero.jpg",
                        "about-01.jpg",
@@ -23,27 +24,5 @@
                        "work-01.jpg",
                        "work-02.jpg",
                        "work-03.jpg"
-                   ],
-    "layoutOrder":  [
-                        "hero",
-                        "values",
-                        "photos",
-                        "works",
-                        "hours",
-                        "access",
-                        "accordions",
-                        "contact"
-                    ],
-    "extras":  {
-                   "hours":  true,
-                   "access":  true,
-                   "address":  false
-               },
-    "counts":  {
-                   "hero-leads":  2,
-                   "hero-values":  3,
-                   "about-accordions":  1,
-                   "about-photos":  4,
-                   "works-list":  3
-               }
+                   ]
 }

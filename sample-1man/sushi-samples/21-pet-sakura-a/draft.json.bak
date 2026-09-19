@@ -1,0 +1,153 @@
+{
+    "version":  17,
+    "sushiSampleId":  "21",
+    "sushiSampleKey":  "pet-sakura-a",
+    "blurb":  "ペット・横長・桜・やわゴ",
+    "scene":  "カフェ・窓辺",
+    "savedAt":  "2026-09-08T17:09:05.9599860Z",
+    "uiMode":  "self",
+    "sitePurpose":  "shop",
+    "siteColorMode":  "detail",
+    "layoutPattern":  "a",
+    "layoutSelected":  true,
+    "layoutSchema":  2,
+    "intakeDone":  true,
+    "entryBranch":  "sample",
+    "hubEntrySource":  "sample",
+    "easyFlowActive":  false,
+    "presetChosen":  true,
+    "chosenPresetKey":  "green",
+    "draftColors":  {
+                        "cardBg":  "#ffffff",
+                        "chromeInk":  "#fff8fa",
+                        "accent":  "#c95d7a",
+                        "pageBgSoft":  "#f5e4e8",
+                        "bodyMuted":  "#6a454d",
+                        "contactBg":  "#8f4a5a",
+                        "pageBg":  "#fdf5f6",
+                        "bodyInk":  "#3d2228",
+                        "contactInk":  "#fff8fa",
+                        "valuesBg":  "#ffffff",
+                        "heroInk":  "#ffffff",
+                        "chromeBg":  "#8f4a5a"
+                    },
+    "draftCounts":  {
+                        "hero-leads":  2,
+                        "hero-values":  3,
+                        "about-accordions":  1,
+                        "about-photos":  3,
+                        "works-list":  3
+                    },
+    "guidedImageUnlocked":  true,
+    "guidedTextUnlocked":  true,
+    "fonts":  {
+                  "catch":  "Sawarabi Gothic",
+                  "body":  "Zen Kaku Gothic New",
+                  "display":  "Sawarabi Gothic"
+              },
+    "fields":  {
+                   "brand_name":  "窓辺の緑カフェ",
+                   "hero_title":  "窓辺の緑と、静かな一杯。",
+                   "hero_lead_1":  "窓辺の観葉植物と、静かなカフェ。仕事前の一杯にも、休日の読書にも使っていただけます。",
+                   "hero_lead_2":  "ブレンドは浅煎り寄り。甘いお菓子より、塩気のある焼き菓子を合わせるのがおすすめです。",
+                   "hero_lead_3":  "",
+                   "value_1_title":  "窓際の席",
+                   "value_1_text":  "店内の半分は窓に面しています。観葉植物を並べ、直射をレースでやわらげた席を用意。ノート作業にも話し込みにも使えます。",
+                   "value_2_title":  "緑のプレート",
+                   "value_2_text":  "ランチはサラダボウルとスープが基本。ドレッシングは柑橘とハーブの二種。珈琲は浅煎り寄りで、食後にも飲みやすいです。",
+                   "about_section_name":  "カフェについて",
+                   "about_heading":  "緑と光のある小さな店",
+                   "about_name":  "窓辺の緑カフェ",
+                   "about_lead":  "公園の向かいに開いた、薄緑のトーンのカフェです。朝はトーストと珈琲、昼はサラダランチ、午後はケーキセット。静かめのBGMで、長居しても肩が凝らない空気を目指しています。",
+                   "acc_1_title":  "過ごし方",
+                   "acc_1_body":  "電源は窓際席の一部にあります。通話は短めにお願いしています。ペット同伴はテラスのみ（天候によりクローズ）。テイクアウト珈琲は入口横のカウンターで。混雑時はお一人様一オーダーをお願いします。",
+                   "acc_2_title":  "",
+                   "acc_2_body":  "",
+                   "works_section_name":  "メニュー",
+                   "works_heading":  "窓辺のおすすめ",
+                   "works_lead":  "光の入る席で食べるもの",
+                   "work_1_title":  "緑のサラダランチ",
+                   "work_1_text":  "穀物・豆・葉野菜のボウルにスープ付き。ドリンクセットあり。",
+                   "work_2_title":  "窓辺ブレンド＆塩クッキー",
+                   "work_2_text":  "浅煎りブレンドに、塩気のあるクッキー。甘さを足しすぎません。",
+                   "address_text":  "架空市緑丘1-11-4",
+                   "contact_section_name":  "ご連絡",
+                   "contact_label":  "ご連絡",
+                   "contact_email":  "hello@madobe-midori.example",
+                   "contact_note_1":  "貸切・団体は平日のみ。メールに希望日時と人数を。",
+                   "contact_note_2":  "アレルギー対応は可能な範囲でご相談ください。",
+                   "font_display":  "Sawarabi Gothic",
+                   "font_catch":  "Sawarabi Gothic",
+                   "font_body":  "Zen Kaku Gothic New",
+                   "access_text":  "最寄駅から徒歩5分。駐車場は近隣コインパーキングをご利用ください。",
+                   "value_3_title":  "通いやすい距離感",
+                   "value_3_text":  "初めての方も、常連の方も同じペースで。短時間の立ち寄りにも使いやすい店づくりです。",
+                   "work_3_title":  "窓辺の緑カフェの定番",
+                   "work_3_text":  "店の空気が伝わる組み合わせ。詳細は来店時にご案内します。",
+                   "hours_text":  "火〜日 9:00–17:00／月曜定休　／　最終受付は閉店30分前。　／　最終受付は閉店30分前。"
+               },
+    "confirmed":  {
+                      "purpose":  true,
+                      "layout":  true,
+                      "guide":  true,
+                      "global-preset":  true,
+                      "logo-text":  true,
+                      "hero-text":  true,
+                      "values-text":  true,
+                      "about-text":  true,
+                      "works-text":  true,
+                      "contact-text":  true,
+                      "hours-text":  true,
+                      "address-text":  true,
+                      "site-fonts":  true
+                  },
+    "draftExtras":  {
+                        "hours":  true,
+                        "address":  true,
+                        "access":  true
+                    },
+    "heroTextPlate":  "round",
+    "heroTextPlateTone":  "white",
+    "layoutOrder":  [
+                        "hero",
+                        "values",
+                        "works",
+                        "photos",
+                        "accordions",
+                        "hours",
+                        "access",
+                        "address",
+                        "contact"
+                    ],
+    "itemLayouts":  {
+                        "about-photos":  {
+                                             "sizes":  [
+                                                           "L",
+                                                           "L",
+                                                           "L"
+                                                       ],
+                                             "gap":  "loose",
+                                             "sizePat":  "S1"
+                                         },
+                        "works-list":  {
+                                           "sizes":  [
+                                                         "L",
+                                                         "L",
+                                                         "L"
+                                                     ],
+                                           "gap":  "loose",
+                                           "sizePat":  "S1"
+                                       }
+                    },
+    "layoutRecipeNote":  "a photo=S1 works=S1 sizes=1",
+    "heroTextOnPhoto":  false,
+    "imagePaths":  {
+                       "work_2_image":  "sushi-samples/21-pet-sakura-a/images/work-02.jpg?v=dense3",
+                       "about_image_2":  "sushi-samples/21-pet-sakura-a/images/about-02.jpg?v=dense3",
+                       "hero_image":  "sushi-samples/21-pet-sakura-a/images/hero.jpg?v=dense3",
+                       "work_1_image":  "sushi-samples/21-pet-sakura-a/images/work-01.jpg?v=dense3",
+                       "about_image_3":  "sushi-samples/21-pet-sakura-a/images/about-03.jpg?v=dense3",
+                       "about_image_1":  "sushi-samples/21-pet-sakura-a/images/about-01.jpg?v=dense3",
+                       "work_3_image":  "sushi-samples/21-pet-sakura-a/images/work-03.jpg?v=dense3"
+                   }
+}

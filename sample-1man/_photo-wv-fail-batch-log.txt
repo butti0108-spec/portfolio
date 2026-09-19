@@ -1,0 +1,18 @@
+﻿
+OK 28 hero.jpg yoga meditation seated mat
+OK 28 about-01.jpg yoga mats studio floor
+OK 03 work-01.jpg old fashioned whiskey cocktail
+OK 07 work-03.jpg soft boiled egg ramen
+OK 09 work-02.jpg yoga stretch floor mat
+OK 09 work-03.jpg yoga relaxation pose mat
+OK 12 work-03.jpg dog walking leash park
+OK 13 hero.jpg office desk green plants
+OK 14 work-02.jpg window light photo series
+OK 14 work-03.jpg postcard shelf display
+OK 18 work-03.jpg passport photo studio
+OK 23 work-02.jpg coworking desk laptop
+OK 23 work-03.jpg small meeting room table
+OK 26 work-03.jpg usb flash drive desk
+OK 30 work-03.jpg gallery night lighting art
+FAIL 10 work-03.jpg
+OK 03 work-02.jpg gin tonic citrus ice

@@ -12,24 +12,24 @@
                   "display":  "Shippori Mincho"
               },
     "scene":  "カフェ・朝・木目",
-    "status":  "text+images",
+    "status":  "rebuild-01-2026-09-19",
     "layoutPattern":  "a",
     "layoutOrder":  [
                         "hero",
                         "values",
                         "photos",
                         "works",
-                        "accordions",
                         "hours",
                         "access",
                         "address",
+                        "accordions",
                         "contact"
                     ],
     "counts":  {
                    "hero-leads":  2,
                    "hero-values":  3,
                    "about-accordions":  1,
-                   "about-photos":  3,
+                   "about-photos":  4,
                    "works-list":  3
                },
     "extras":  {
@@ -42,8 +42,16 @@
                        "about-01.jpg",
                        "about-02.jpg",
                        "about-03.jpg",
+                       "about-04.jpg",
                        "work-01.jpg",
                        "work-02.jpg",
                        "work-03.jpg"
-                   ]
+                   ],
+    "designBrief":  {
+                        "who":  "住宅街で小さな朝カフェを営む店主（豆を挽き、焼き菓子を出す）",
+                        "purpose":  "近所の人が朝に立ち寄る／この店の朝を覚えてもらう",
+                        "show":  "木目・窓の朝光・カップ・焼き立てのスコーン",
+                        "colorIntent":  "ベージュ暖色・木の落ち着き",
+                        "worldviewOneLiner":  "朝の木漏れ日のなかで、静かに一杯を愉しむ店"
+                    }
 }

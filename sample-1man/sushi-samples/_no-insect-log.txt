@@ -1,0 +1,2 @@
+OK 01/about-01.jpg (+sync=4)
+OK 30/work-01.jpg (+sync=0)

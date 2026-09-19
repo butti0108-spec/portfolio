@@ -1,0 +1,21 @@
+done 05 touched=6
+done 14 touched=7
+done 18 touched=7
+done 26 touched=6
+FAIL 30/hero.jpg
+done 30 touched=5
+FAIL 09/about-01.jpg
+FAIL 09/work-01.jpg
+FAIL 09/work-03.jpg
+done 09 touched=4
+done 08 touched=8
+FAIL 01/work-03.jpg
+done 01 touched=7
+done 03 touched=7
+FAIL 04/hero.jpg
+FAIL 04/about-01.jpg
+FAIL 04/about-02.jpg
+FAIL 04/work-03.jpg
+done 04 touched=2
+FAIL 23/work-03.jpg
+done 23 touched=5

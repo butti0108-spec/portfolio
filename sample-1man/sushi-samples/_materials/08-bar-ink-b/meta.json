@@ -12,18 +12,16 @@
                   "display":  "Shippori Mincho"
               },
     "scene":  "宿・客室",
-    "status":  "text+images",
+    "status":  "rebuild-2026-09-19",
     "layoutPattern":  "a",
     "layoutOrder":  [
-                        "hero",
-                        "values",
-                        "accordions",
                         "photos",
                         "works",
+                        "contact",
                         "hours",
-                        "address",
                         "access",
-                        "contact"
+                        "address",
+                        "hero"
                     ],
     "counts":  {
                    "hero-leads":  2,
@@ -45,5 +43,12 @@
                        "work-01.jpg",
                        "work-02.jpg",
                        "work-03.jpg"
-                   ]
+                   ],
+    "designBrief":  {
+                        "who":  "全四室の小さな客室宿を営む人",
+                        "purpose":  "窓辺の光が主役の一夜を予約してもらう",
+                        "show":  "畳・窓光・白い布団・静かな客室",
+                        "colorIntent":  "カフェ暖色の落ち着きに明朝",
+                        "worldviewOneLiner":  "窓辺の光が主役の小さな客室宿"
+                    }
 }

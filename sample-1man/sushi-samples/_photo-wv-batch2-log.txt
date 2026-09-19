@@ -1,0 +1,18 @@
+skip 04/work-01.jpg リモート サーバーがエラーを返しました: (404) 見つかりません
+skip 04/work-02.jpg リモート サーバーがエラーを返しました: (404) 見つかりません
+skip 04/work-03.jpg リモート サーバーがエラーを返しました: (404) 見つかりません
+done 04 touched=4
+skip 16/about-03.jpg リモート サーバーがエラーを返しました: (404) 見つかりません
+skip 16/work-01.jpg リモート サーバーがエラーを返しました: (404) 見つかりません
+done 16 touched=5
+skip 06/work-03.jpg リモート サーバーがエラーを返しました: (404) 見つかりません
+done 06 touched=6
+skip 15/about-02.jpg リモート サーバーがエラーを返しました: (404) 見つかりません
+skip 15/work-03.jpg リモート サーバーがエラーを返しました: (404) 見つかりません
+done 15 touched=5
+done 19 touched=7
+skip 10/about-03.jpg リモート サーバーがエラーを返しました: (404) 見つかりません
+done 10 touched=6
+done 11 touched=7
+skip 21/work-01.jpg リモート サーバーがエラーを返しました: (404) 見つかりません
+done 21 touched=6

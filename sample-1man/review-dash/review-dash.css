@@ -92,6 +92,9 @@ button:disabled {
   height: calc(100% - 5.5rem);
   overflow: auto;
   background: #ddd;
+  /* スクロールバーの出し入れで幅が変わってプルプルするのを防ぐ */
+  scrollbar-gutter: stable;
+  overscroll-behavior: contain;
 }
 .frame-wrap {
   width: 1200px;
@@ -102,9 +105,11 @@ button:disabled {
 iframe {
   display: block;
   width: 1200px;
-  height: 2400px;
+  height: 1px;
   border: 0;
   background: #fff;
+  /* 内側スクロールと外枠スクロールの二重化を避ける */
+  overflow: hidden;
 }
 
 /* 確認モード: 縮小しない。横スクロールで全文読める */
@@ -115,7 +120,9 @@ body.view-read .frame-wrap {
   margin: 12px;
   transform: none !important;
   width: 1200px !important;
+  /* JSの高さ指定と !important:auto が競合して揺れるのを止める */
   height: auto !important;
+  overflow: visible;
 }
 body.view-read .status-line::before {
   content: none;
@@ -183,4 +190,13 @@ body.view-capture .frame-wrap {
   justify-content: flex-end;
   gap: 0.5rem;
   margin-top: 0.85rem;
+}
+
+/* 撮影モード: 縮小が端数で1pxはみ出してもスクロールバー往復→プルプルしない */
+body.view-capture .stage {
+  overflow: hidden;
+  scrollbar-gutter: auto;
+}
+body.view-capture .frame-wrap {
+  transition: none !important;
 }

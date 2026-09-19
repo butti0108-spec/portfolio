@@ -6,36 +6,15 @@
     "headingPack":  "H4",
     "colorKey":  "sakura",
     "fontMood":  "round",
-    "fonts":  {
-                  "catch":  "Kiwi Maru",
-                  "body":  "M PLUS Rounded 1c",
-                  "display":  "Zen Maru Gothic"
-              },
+    "status":  "rebuild-2026-09-19",
     "scene":  "花屋・アレンジ",
-    "status":  "text+images",
-    "layoutPattern":  "a",
-    "layoutOrder":  [
-                        "hero",
-                        "photos",
-                        "values",
-                        "contact",
-                        "accordions",
-                        "works",
-                        "hours",
-                        "address"
-                    ],
-    "counts":  {
-                   "hero-leads":  2,
-                   "hero-values":  3,
-                   "about-accordions":  1,
-                   "about-photos":  3,
-                   "works-list":  3
-               },
-    "extras":  {
-                   "hours":  true,
-                   "access":  false,
-                   "address":  true
-               },
+    "designBrief":  {
+                        "who":  "近所で花を整えて渡す小さな花屋の店主",
+                        "purpose":  "選んで帰る／手元のアレンジを覚えてもらう",
+                        "show":  "手元の花・アレンジ・リボン",
+                        "colorIntent":  "桜ピンク・やわらかい余白",
+                        "worldviewOneLiner":  "近くで整えて持ち帰れる花屋"
+                    },
     "imageSlots":  [
                        "hero.jpg",
                        "about-01.jpg",

@@ -1,5 +1,7 @@
 # TcpListener static server (no HttpListener URL ACL). Serves portfolio root.
 # POST /sample-1man/sushi-samples/__capture-save?key=01-cafe-warm-a  (raw PNG body)
+# POST /sample-1man/sushi-samples/__draft-save?key=01-cafe-warm-a   (JSON draft body)
+# POST /sample-1man/sushi-samples/__review-decision?key=...&action=approve|reject
 $ErrorActionPreference = "Stop"
 $sampleRoot = Split-Path -Parent $MyInvocation.MyCommand.Path
 $root = Split-Path -Parent $sampleRoot
@@ -86,7 +88,7 @@ while ($true) {
     # Normalize trailing slash for API routes before rewriting dirs to index.html
     if ($pathOnly.EndsWith("/") -and $pathOnly.Length -gt 1) {
       $trimPath = $pathOnly.TrimEnd("/")
-      if ($trimPath -like "*/__capture-save" -or $trimPath -like "*/__review-decision") {
+      if ($trimPath -like "*/__capture-save" -or $trimPath -like "*/__review-decision" -or $trimPath -like "*/__draft-save") {
         $pathOnly = $trimPath
       }
     }
@@ -114,11 +116,96 @@ while ($true) {
         continue
       }
       $previewPath = Join-Path $dir "preview.png"
-      [IO.File]::WriteAllBytes($previewPath, $bodyIn)
+      $tmpPath = Join-Path $env:TEMP ("sample1man-preview-" + [guid]::NewGuid().ToString("n") + ".png")
+      try {
+        [IO.File]::WriteAllBytes($tmpPath, $bodyIn)
+        Copy-Item -LiteralPath $tmpPath -Destination $previewPath -Force
+      } finally {
+        if (Test-Path -LiteralPath $tmpPath) { Remove-Item -LiteralPath $tmpPath -Force -ErrorAction SilentlyContinue }
+      }
       $salesPack = Join-Path $sushiRoot ("_sales\packs\" + $key)
       New-Item -ItemType Directory -Force -Path $salesPack | Out-Null
-      [IO.File]::Copy($previewPath, (Join-Path $salesPack "preview.png"), $true)
+      Copy-Item -LiteralPath $previewPath -Destination (Join-Path $salesPack "preview.png") -Force
       $msg = "{`"ok`":true,`"key`":`"$key`",`"bytes`":$($bodyIn.Length)}"
+      Write-Response $stream "200 OK" "application/json; charset=utf-8" ([Text.Encoding]::UTF8.GetBytes($msg))
+      continue
+    }
+
+    if ($method -eq "POST" -and $pathOnly -eq "/sample-1man/sushi-samples/__draft-save") {
+      $key = $null
+      foreach ($pair in ($query -split "&")) {
+        if ($pair -like "key=*") { $key = [Uri]::UnescapeDataString($pair.Substring(4)) }
+      }
+      if ([string]::IsNullOrWhiteSpace($key) -or $key -match '[\\/:\*\?\"<>\|]' -or $key.Contains("..")) {
+        Write-Response $stream "400 Bad Request" "application/json; charset=utf-8" ([Text.Encoding]::UTF8.GetBytes('{"ok":false,"reason":"bad-key"}'))
+        continue
+      }
+      $dir = Join-Path $sushiRoot $key
+      if (-not (Test-Path -LiteralPath $dir -PathType Container)) {
+        Write-Response $stream "404 Not Found" "application/json; charset=utf-8" ([Text.Encoding]::UTF8.GetBytes('{"ok":false,"reason":"missing-dir"}'))
+        continue
+      }
+      $raw = if ($bodyIn.Length -gt 0) { [Text.Encoding]::UTF8.GetString($bodyIn) } else { "" }
+      $payload = $null
+      try {
+        $payload = $raw | ConvertFrom-Json
+      } catch {
+        Write-Response $stream "400 Bad Request" "application/json; charset=utf-8" ([Text.Encoding]::UTF8.GetBytes('{"ok":false,"reason":"bad-json"}'))
+        continue
+      }
+      if ($null -eq $payload) {
+        Write-Response $stream "400 Bad Request" "application/json; charset=utf-8" ([Text.Encoding]::UTF8.GetBytes('{"ok":false,"reason":"bad-payload"}'))
+        continue
+      }
+      $kind = $null
+      try { $kind = [string]$payload.kind } catch { $kind = $null }
+      if ($kind -eq "sample1man-studio-pack") {
+        Write-Response $stream "400 Bad Request" "application/json; charset=utf-8" ([Text.Encoding]::UTF8.GetBytes('{"ok":false,"reason":"refuse-studio-pack","detail":"draft body only"}'))
+        continue
+      }
+      if ($kind -eq "sample1man-order") {
+        Write-Response $stream "400 Bad Request" "application/json; charset=utf-8" ([Text.Encoding]::UTF8.GetBytes('{"ok":false,"reason":"refuse-order","detail":"order.json must not overwrite sample draft"}'))
+        continue
+      }
+      $hasFreeRev = $false
+      $hasColorAck = $false
+      try { if ($null -ne $payload.PSObject.Properties["freeRevisionNote"] -and $null -ne $payload.freeRevisionNote) { $hasFreeRev = $true } } catch {}
+      try { if ($null -ne $payload.PSObject.Properties["colorFinalAck"] -and $null -ne $payload.colorFinalAck) { $hasColorAck = $true } } catch {}
+      if ($hasFreeRev -or $hasColorAck) {
+        Write-Response $stream "400 Bad Request" "application/json; charset=utf-8" ([Text.Encoding]::UTF8.GetBytes('{"ok":false,"reason":"refuse-order-shape","detail":"looks like customer order.json"}'))
+        continue
+      }
+      $hasFields = $false
+      $hasColors = $false
+      $hasVersion = $false
+      $hasLayout = $false
+      try { if ($null -ne $payload.PSObject.Properties["fields"] -and $null -ne $payload.fields) { $hasFields = $true } } catch {}
+      try { if ($null -ne $payload.PSObject.Properties["draftColors"] -and $null -ne $payload.draftColors) { $hasColors = $true } } catch {}
+      try { if ($null -ne $payload.PSObject.Properties["version"] -and $null -ne $payload.version) { $hasVersion = $true } } catch {}
+      try { if ($null -ne $payload.PSObject.Properties["layoutPattern"] -and $null -ne $payload.layoutPattern) { $hasLayout = $true } } catch {}
+      if (-not ($hasFields -or $hasColors -or $hasVersion -or $hasLayout)) {
+        Write-Response $stream "400 Bad Request" "application/json; charset=utf-8" ([Text.Encoding]::UTF8.GetBytes('{"ok":false,"reason":"not-draft-shape"}'))
+        continue
+      }
+      $draftPath = Join-Path $dir "draft.json"
+      $utf8 = [Text.UTF8Encoding]::new($false)
+      $textOut = $raw.TrimEnd() + "`n"
+      $written = $false
+      for ($attempt = 1; $attempt -le 5; $attempt++) {
+        try {
+          [IO.File]::WriteAllText($draftPath, $textOut, $utf8)
+          $written = $true
+          break
+        } catch {
+          Start-Sleep -Milliseconds (120 * $attempt)
+        }
+      }
+      if (-not $written) {
+        Write-Response $stream "500 Internal Server Error" "application/json; charset=utf-8" ([Text.Encoding]::UTF8.GetBytes('{"ok":false,"reason":"draft-write-locked"}'))
+        continue
+      }
+      $byteLen = $utf8.GetByteCount($textOut)
+      $msg = "{`"ok`":true,`"key`":`"$key`",`"path`":`"sushi-samples/$key/draft.json`",`"bytes`":$byteLen}"
       Write-Response $stream "200 OK" "application/json; charset=utf-8" ([Text.Encoding]::UTF8.GetBytes($msg))
       continue
     }

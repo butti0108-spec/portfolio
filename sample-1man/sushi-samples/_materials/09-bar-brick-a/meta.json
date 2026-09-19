@@ -12,24 +12,23 @@
                   "display":  "Sawarabi Gothic"
               },
     "scene":  "ヨガ・光",
-    "status":  "text+images",
+    "status":  "rebuild-2026-09-19",
     "layoutPattern":  "a",
     "layoutOrder":  [
-                        "hero",
-                        "works",
                         "photos",
                         "values",
-                        "accordions",
                         "hours",
+                        "contact",
+                        "hero",
                         "access",
                         "address",
-                        "contact"
+                        "accordions"
                     ],
     "counts":  {
                    "hero-leads":  2,
                    "hero-values":  3,
                    "about-accordions":  2,
-                   "about-photos":  4,
+                   "about-photos":  3,
                    "works-list":  3
                },
     "extras":  {
@@ -42,9 +41,15 @@
                        "about-01.jpg",
                        "about-02.jpg",
                        "about-03.jpg",
-                       "about-04.jpg",
                        "work-01.jpg",
                        "work-02.jpg",
                        "work-03.jpg"
-                   ]
+                   ],
+    "designBrief":  {
+                        "who":  "朝と夕方に光の違うレッスンを開く小さなヨガスタジオ",
+                        "purpose":  "体験と呼吸をそろえる時間を予約してもらう",
+                        "show":  "床に落ちる光・窓・マット・静けさ",
+                        "colorIntent":  "緑のやわらかさにソフトゴシック",
+                        "worldviewOneLiner":  "床に落ちる光で呼吸をそろえる"
+                    }
 }

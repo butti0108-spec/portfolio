@@ -1,35 +1,105 @@
 {
     "version":  17,
-    "sushiSampleId":  "04",
-    "sushiSampleKey":  "salon-clinic-a",
-    "blurb":  "サロン・横長・紺きれいめ・明朝",
-    "scene":  "サロン・白",
-    "savedAt":  "2026-09-08T17:08:09.4323921Z",
+    "savedAt":  "2026-09-19T09:30:19.650Z",
     "uiMode":  "self",
     "sitePurpose":  "shop",
-    "siteColorMode":  "detail",
     "layoutPattern":  "a",
+    "layoutOrder":  [
+                        "hours",
+                        "contact",
+                        "hero",
+                        "values",
+                        "works",
+                        "access",
+                        "address",
+                        "accordions",
+                        "photos"
+                    ],
     "layoutSelected":  true,
     "layoutSchema":  2,
-    "intakeDone":  true,
-    "entryBranch":  "sample",
-    "hubEntrySource":  "sample",
-    "easyFlowActive":  false,
+    "itemLayouts":  {
+                        "about-photos":  {
+                                             "sizes":  [
+                                                           "H",
+                                                           "H",
+                                                           "L"
+                                                       ],
+                                             "gap":  "normal",
+                                             "growDirs":  [
+
+                                                          ],
+                                             "focalYs":  [
+                                                             50,
+                                                             50,
+                                                             50
+                                                         ],
+                                             "focalXs":  [
+                                                             50,
+                                                             50,
+                                                             50
+                                                         ]
+                                         },
+                        "works-list":  {
+                                           "sizes":  [
+                                                         "L",
+                                                         "L",
+                                                         "L"
+                                                     ],
+                                           "gap":  "loose",
+                                           "growDirs":  [
+
+                                                        ],
+                                           "focalYs":  [
+                                                           25,
+                                                           45,
+                                                           45
+                                                       ],
+                                           "focalXs":  [
+                                                           50,
+                                                           50,
+                                                           50
+                                                       ]
+                                       }
+                    },
+    "heroTextOnPhoto":  false,
+    "heroFocalX":  50,
+    "heroFocalY":  85,
+    "aboutItemsDisplay":  "accordion",
+    "heroTextPlate":  "round",
+    "heroTextPlateTone":  "white",
+    "guidedImageUnlocked":  true,
+    "guidedTextUnlocked":  false,
     "presetChosen":  true,
     "chosenPresetKey":  "clinic",
+    "intakeDone":  true,
+    "entryBranch":  "detail",
+    "hubEntrySource":  "detail-entry",
+    "easyFlowActive":  false,
+    "sushiSampleId":  "04",
+    "sushiSampleKey":  "salon-clinic-a",
+    "siteColorMode":  "detail",
+    "slotGradients":  {
+
+                      },
+    "slotGradientPartners":  {
+
+                             },
     "draftColors":  {
-                        "cardBg":  "#ffffff",
+                        "pageBg":  "#ffffff",
+                        "pageBgSoft":  "#f3f6f8",
+                        "heroInk":  "#ffffff",
+                        "bodyInk":  "#212121",
+                        "bodyMuted":  "#555555",
+                        "chromeBg":  "#1a4d8c",
                         "chromeInk":  "#ffffff",
                         "accent":  "#1a4d8c",
-                        "pageBgSoft":  "#f3f6f8",
-                        "bodyMuted":  "#555555",
-                        "contactBg":  "#1a4d8c",
-                        "pageBg":  "#ffffff",
-                        "bodyInk":  "#212121",
-                        "contactInk":  "#ffffff",
+                        "cardBg":  "#ffffff",
                         "valuesBg":  "#ffffff",
-                        "heroInk":  "#ffffff",
-                        "chromeBg":  "#1a4d8c"
+                        "contactBg":  "#1a4d8c",
+                        "contactInk":  "#ffffff",
+                        "radius":  "0.6rem",
+                        "headingScale":  "1",
+                        "accentBar":  "mid"
                     },
     "draftCounts":  {
                         "hero-leads":  2,
@@ -38,21 +108,59 @@
                         "about-photos":  3,
                         "works-list":  3
                     },
-    "guidedImageUnlocked":  true,
-    "guidedTextUnlocked":  true,
-    "fonts":  {
-                  "catch":  "Shippori Mincho",
-                  "body":  "Zen Kaku Gothic New",
-                  "display":  "Shippori Mincho"
-              },
+    "draftExtras":  {
+                        "hours":  true,
+                        "access":  true,
+                        "address":  true
+                    },
+    "layoutBlockOff":  {
+                           "photos":  true
+                       },
+    "confirmed":  {
+                      "easy-basics":  false,
+                      "easy-sec-hero":  false,
+                      "easy-sec-about":  false,
+                      "easy-sec-works":  false,
+                      "easy-sec-contact":  false,
+                      "easy-img-wire":  false,
+                      "easy-loading":  false,
+                      "easy-done":  false,
+                      "purpose":  true,
+                      "layout":  true,
+                      "guide":  true,
+                      "global-preset":  true,
+                      "global-chrome-bg":  true,
+                      "global-chrome-ink":  true,
+                      "global-bg":  true,
+                      "hero-color":  true,
+                      "values-color":  true,
+                      "global-body":  true,
+                      "global-accent":  true,
+                      "global-card":  true,
+                      "contact-color":  true,
+                      "hero-image":  false,
+                      "about-images":  false,
+                      "works-images":  false,
+                      "logo-text":  false,
+                      "site-fonts":  true,
+                      "hero-text":  false,
+                      "values-text":  false,
+                      "about-text":  false,
+                      "works-text":  false,
+                      "hours-text":  false,
+                      "access-text":  false,
+                      "address-text":  false,
+                      "contact-text":  false,
+                      "finish":  false
+                  },
     "fields":  {
                    "brand_name":  "白磁ヘアサロン",
                    "hero_title":  "白い光のなかで、髪を整える。",
                    "hero_lead_1":  "余白の多い個室と、明るすぎない照明。カットもカラーも、鏡の前でゆっくり相談してから進めます。",
                    "hero_lead_2":  "流行の型より、帰宅後に自分でまとめやすい形を大切にしています。",
                    "hero_lead_3":  "",
-                   "value_1_title":  "カウンセリングを厚く",
-                   "value_1_text":  "クセ・生えグセ・朝の支度時間を聞き、切る量を決めます。写真の共有も歓迎です。",
+                   "value_1_title":  "相談の時間を厚く",
+                   "value_1_text":  "クセや生えグセ、朝の支度時間を聞いてから切る量を決めます。写真の共有も歓迎です。",
                    "value_2_title":  "白を基調にした個室",
                    "value_2_text":  "完全個室ではありませんが、パーテーションで視線を遮り、隣の会話が聞こえにくい配置にしています。",
                    "value_3_title":  "帰宅後の再現しやすさ",
@@ -64,90 +172,51 @@
                    "acc_1_title":  "ご予約について",
                    "acc_1_body":  "WEBまたはメールで受付。カラーとカットの同日は余裕を持った枠をご案内します。キャンセルは前日までにご連絡ください。",
                    "acc_2_title":  "初めてのカラー",
-                   "acc_2_body":  "既往歴やアレルギーがあれば事前にお知らせください。ブリーチを含むメニューはカウンセリング後に可否を判断します。",
+                   "acc_2_body":  "気になることがあれば事前にお知らせください。ブリーチを含むメニューは相談のうえで可否を決めます。",
                    "works_section_name":  "メニュー例",
                    "works_heading":  "よく選ばれる組み合わせ",
                    "works_lead":  "料金の目安はカウンセリング時に確定します。",
                    "work_1_title":  "カット＋ブロー",
                    "work_1_text":  "骨格に合わせたラインと、自宅で乾かしやすい毛流れを整えます。",
                    "work_2_title":  "グレイカラー＋カット",
-                   "work_2_text":  "白髪の見え方と頭皮の状態を見て、トーンを抑えた仕上がりにします。",
+                   "work_2_text":  "白髪の見え方を見て、トーンを抑えた仕上がりにします。",
+                   "work_3_title":  "トリートメント単品",
+                   "work_3_text":  "カットなしの日も、手元のケアだけ受けられます。所要はメニュー表でご確認ください。",
+                   "hours_text":  "火〜土 10:00–19:00（最終受付 17:30）　日・月定休",
                    "address_text":  "架空市しろがね区白磁通り 5-2-1　白磁ビル2F",
+                   "access_text":  "最寄駅から徒歩5分。駐車場は近隣コインパーキングをご利用ください。",
                    "contact_section_name":  "ご連絡",
                    "contact_label":  "ご連絡",
                    "contact_email":  "book@hakuji-salon.example",
-                   "contact_note_1":  "ご予約・変更はメールで。希望日時を第3希望まで書いてください。",
-                   "contact_note_2":  "施術中は返信が遅れることがあります。前日までにご連絡ください。",
-                   "font_display":  "Shippori Mincho",
-                   "font_catch":  "Shippori Mincho",
-                   "font_body":  "Zen Kaku Gothic New",
-                   "access_text":  "最寄駅から徒歩5分。駐車場は近隣コインパーキングをご利用ください。",
-                   "work_3_title":  "白磁ヘアサロンの定番",
-                   "work_3_text":  "店の空気が伝わる組み合わせ。詳細は来店時にご案内します。",
-                   "hours_text":  "火〜土 10:00–19:00（最終受付 17:30）　日・月定休　／　最終受付は閉店30分前。"
+                   "contact_note_1":  "ご予約はメールで。希望日時とメニューを書いてください。",
+                   "contact_note_2":  "施術中は返信が遅れることがあります。2営業日以内を目安にします。"
                },
-    "confirmed":  {
-                      "purpose":  true,
-                      "layout":  true,
-                      "guide":  true,
-                      "global-preset":  true,
-                      "logo-text":  true,
-                      "hero-text":  true,
-                      "values-text":  true,
-                      "about-text":  true,
-                      "works-text":  true,
-                      "contact-text":  true,
-                      "hours-text":  true,
-                      "address-text":  true,
-                      "site-fonts":  true
-                  },
-    "draftExtras":  {
-                        "hours":  true,
-                        "address":  true,
-                        "access":  true
-                    },
-    "heroTextPlate":  "round",
-    "heroTextPlateTone":  "white",
-    "layoutOrder":  [
-                        "hero",
-                        "photos",
-                        "values",
-                        "works",
-                        "hours",
-                        "access",
-                        "address",
-                        "accordions",
-                        "contact"
-                    ],
-    "itemLayouts":  {
-                        "about-photos":  {
-                                             "sizes":  [
-                                                           "H",
-                                                           "H",
-                                                           "L"
-                                                       ],
-                                             "gap":  "normal",
-                                             "sizePat":  "S2"
-                                         },
-                        "works-list":  {
-                                           "sizes":  [
-                                                         "L",
-                                                         "L",
-                                                         "L"
-                                                     ],
-                                           "gap":  "loose",
-                                           "sizePat":  "S1"
-                                       }
-                    },
-    "layoutRecipeNote":  "a photo=S2 works=S1 sizes=1",
-    "heroTextOnPhoto":  false,
+    "fonts":  {
+                  "display":  "Shippori Mincho",
+                  "catch":  "Shippori Mincho",
+                  "body":  "Zen Kaku Gothic New"
+              },
     "imagePaths":  {
-                       "work_2_image":  "sushi-samples/04-salon-clinic-a/images/work-02.jpg?v=dense3",
-                       "about_image_2":  "sushi-samples/04-salon-clinic-a/images/about-02.jpg?v=dense3",
-                       "hero_image":  "sushi-samples/04-salon-clinic-a/images/hero.jpg?v=dense3",
-                       "work_1_image":  "sushi-samples/04-salon-clinic-a/images/work-01.jpg?v=dense3",
-                       "about_image_3":  "sushi-samples/04-salon-clinic-a/images/about-03.jpg?v=dense3",
-                       "about_image_1":  "sushi-samples/04-salon-clinic-a/images/about-01.jpg?v=dense3",
-                       "work_3_image":  "sushi-samples/04-salon-clinic-a/images/work-03.jpg?v=dense3"
-                   }
+                       "about_image_3":  "sushi-samples/04-salon-clinic-a/images/about-03.jpg?v=1789810128398",
+                       "about_image_2":  "sushi-samples/04-salon-clinic-a/images/about-02.jpg?v=1789810128398",
+                       "about_image_1":  "sushi-samples/04-salon-clinic-a/images/about-01.jpg?v=1789810128398",
+                       "hero_image":  "sushi-samples/04-salon-clinic-a/images/hero.jpg?v=1789810128398",
+                       "work_1_image":  "sushi-samples/04-salon-clinic-a/images/work-01.jpg?v=1789813090077",
+                       "work_2_image":  "sushi-samples/04-salon-clinic-a/images/work-02.jpg?v=1789813090077",
+                       "work_3_image":  "sushi-samples/04-salon-clinic-a/images/work-03.jpg?v=1789813090077"
+                   },
+    "blurb":  "白個室ヘア。相談→予約。白壁・静けさ",
+    "scene":  "サロン・白",
+    "layoutRecipeNote":  "rebuild white quiet salon clinic-mincho",
+    "brushUpStructure":  "2026-09-14-v01",
+    "brushUpMeaning":  "2026-09-15-v01",
+    "designBrief":  {
+                        "who":  "白を基調にした少人数制のヘアサロン（個室寄りの静けさ）",
+                        "purpose":  "相談してから予約してもらう／帰宅後も整えやすい形を伝える",
+                        "show":  "白壁・余白・柔らかい光・静かな個室感",
+                        "colorIntent":  "白磁の余白に紺のきれいめ",
+                        "worldviewOneLiner":  "白い光と余白で髪を整える個室"
+                    },
+    "brushUpCopy":  "2026-09-19-restore-from-copy",
+    "brushUpPhoto":  "2026-09-19-title-match-fix"
 }

@@ -1,0 +1,33 @@
+---
+description: 設計用語メモと図鑑の会話連動（毎回メモ／⭐のみ候補／まとめて反映）
+alwaysApply: true
+---
+
+# 設計用語メモ運用
+
+詳細: `docs/進行中/2026-09-13-Web設計用語チートシート-実装予定.md`  
+図鑑: `tools/web-glossary/`（公開: https://butti0108-spec.github.io/yougo/）
+
+## 回答末尾（毎回）
+
+専門用語を使ったら、その回に出した語だけ末尾に付ける（知っていても出す／毎回全部は出さない）。
+
+```text
+【設計用語メモ】
+- Toggle … （図鑑の oneLiner）
+- System … （図鑑の oneLiner）
+```
+
+- 一言は `tools/web-glossary/terms.json` の **oneLiner** に合わせる（独自定義しない）
+- 図鑑に無い語は「仮」と書き、候補扱いにする
+- 正本は UI分類辞書 → 図鑑の一方向のみ
+
+## 辞書への反映（毎回 Git しない）
+
+```text
+会話 → 【設計用語メモ】 → ⭐語だけ候補 → たまったら／明示時だけ図鑑更新
+```
+
+- ⭐ または敦さんが「辞書に残して」→ `tools/web-glossary/candidates.md` に追記のみ（commit しない）
+- **約10語**たまった、または「まとめて反映」「今すぐ辞書に」→ `terms.json` 更新 → yougo へ反映（このときだけ commit / push 可）
+- 優先: メーカー用語 → 会話頻出 → 一般Web → その他。巨大化させない

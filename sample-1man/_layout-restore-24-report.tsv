@@ -1,0 +1,25 @@
+id	folder	first	off	extrasOff	heroImgOff
+01	01-cafe-warm-a	hero			False
+02	02-cafe-split-b	photos	values,accordions		False
+03	03-cafe-mix-ink-c	hero		access,address	False
+04	04-salon-clinic-a	hours	photos		False
+05	05-salon-sakura-b	hero	accordions		False
+06	06-bakery-brick-a	works	values,accordions		False
+07	07-bakery-cafe-c	hero	accordions	access,address	False
+08	08-bar-ink-b	photos	values,accordions		False
+09	09-bar-brick-a	photos	works		False
+10	10-clinic-green-a	works	values,accordions		False
+11	11-clinic-clinic-b	hours	photos,works		False
+12	12-florist-sakura-a	hero	photos	hours,access,address	False
+13	13-florist-green-c	values	hero		False
+14	14-ramen-brick-b	works	contact,values,accordions	hours	False
+15	15-ramen-ink-a	hero	accordions		False
+16	16-yoga-green-a	hours	photos		False
+18	18-studio-clinic-c	works	hero,values,accordions		False
+19	19-studio-ink-a	works	values,accordions		False
+21	21-pet-sakura-a	hero			True
+23	23-cowork-green-a	values			False
+26	26-izakaya-brick-c	works	contact,values,accordions	hours	False
+28	28-gallery-ink-a	photos	contact,hero,accordions		False
+29	29-gallery-clinic-c	access	values,accordions		False
+30	30-hotel-cafe-b	works		hours	False

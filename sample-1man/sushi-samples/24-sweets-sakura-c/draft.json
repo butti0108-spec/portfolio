@@ -1,114 +1,9 @@
 {
     "version":  17,
-    "sushiSampleId":  "24",
-    "sushiSampleKey":  "sweets-sakura-c",
-    "blurb":  "スイーツ・混合・桜・丸",
-    "scene":  "診療所",
-    "savedAt":  "2026-09-08T17:09:13.6009247Z",
+    "savedAt":  "2026-09-19T12:23:42.690Z",
     "uiMode":  "self",
     "sitePurpose":  "shop",
-    "siteColorMode":  "detail",
     "layoutPattern":  "a",
-    "layoutSelected":  true,
-    "layoutSchema":  2,
-    "intakeDone":  true,
-    "entryBranch":  "sample",
-    "hubEntrySource":  "sample",
-    "easyFlowActive":  false,
-    "presetChosen":  true,
-    "chosenPresetKey":  "clinic",
-    "draftColors":  {
-                        "cardBg":  "#ffffff",
-                        "chromeInk":  "#fff8fa",
-                        "accent":  "#c95d7a",
-                        "pageBgSoft":  "#f5e4e8",
-                        "bodyMuted":  "#6a454d",
-                        "contactBg":  "#8f4a5a",
-                        "pageBg":  "#fdf5f6",
-                        "bodyInk":  "#3d2228",
-                        "contactInk":  "#fff8fa",
-                        "valuesBg":  "#ffffff",
-                        "heroInk":  "#ffffff",
-                        "chromeBg":  "#8f4a5a"
-                    },
-    "draftCounts":  {
-                        "hero-leads":  2,
-                        "hero-values":  3,
-                        "about-accordions":  1,
-                        "about-photos":  3,
-                        "works-list":  3
-                    },
-    "guidedImageUnlocked":  true,
-    "guidedTextUnlocked":  true,
-    "fonts":  {
-                  "catch":  "Zen Kaku Gothic New",
-                  "body":  "Noto Sans JP",
-                  "display":  "Zen Kaku Gothic New"
-              },
-    "fields":  {
-                   "brand_name":  "青葉クリニック",
-                   "hero_title":  "青葉のクリニックで、不安を短く。",
-                   "hero_lead_1":  "青葉クリニックは、近所の通いやすさを大切にした小さな診療所。待ち時間の不安を短くする導線にしています。",
-                   "hero_lead_2":  "初診の方も、事前メールで症状のメモを送っていただければ、当日の説明がスムーズです。",
-                   "hero_lead_3":  "",
-                   "value_1_title":  "受付の案内",
-                   "value_1_text":  "初診・再診の流れを掲示し、問診票は大きな活字にしています。待ち時間の目安も受付でお伝えします。",
-                   "value_2_title":  "説明の時間",
-                   "value_2_text":  "検査結果やお薬の話は、図と紙で残せるようにしています。聞き直しも遠慮なくどうぞ。",
-                   "about_section_name":  "クリニック案内",
-                   "about_heading":  "日常の相談ができる診療所",
-                   "about_name":  "青葉クリニック",
-                   "about_lead":  "内科を中心とした地域のクリニックです。風邪、生活習慣の相談、健康診断の二次検査まで幅広く対応します。清潔な待合と、声のトーンを抑えた案内を心がけています。",
-                   "acc_1_title":  "受診のまえに",
-                   "acc_1_body":  "保険証とお薬手帳をご持参ください。発熱のある方は入口でお声がけを。オンライン予約は再診中心、初診は当日受付も可能です。駐車場は建物裏に五台分あります。",
-                   "acc_2_title":  "",
-                   "acc_2_body":  "",
-                   "works_section_name":  "診療",
-                   "works_heading":  "主なご案内",
-                   "works_lead":  "日常のからだの相談から",
-                   "work_1_title":  "一般内科",
-                   "work_1_text":  "かぜ・腹痛・血圧など。必要に応じて検査・紹介状も。",
-                   "work_2_title":  "健康診断フォロー",
-                   "work_2_text":  "会社健診・住民健診の再検査。結果説明の時間を確保します。",
-                   "hours_text":  "月〜金 9:00–12:30／15:00–18:30／土 9:00–12:30／木午後・日祝休診",
-                   "contact_section_name":  "ご連絡",
-                   "contact_label":  "ご連絡",
-                   "contact_email":  "info@aoba-clinic.example",
-                   "font_display":  "Zen Kaku Gothic New",
-                   "font_catch":  "Zen Kaku Gothic New",
-                   "font_body":  "Noto Sans JP",
-                   "value_3_title":  "通いやすい距離感",
-                   "value_3_text":  "初めての方も、常連の方も同じペースで。短時間の立ち寄りにも使いやすい店づくりです。",
-                   "work_3_title":  "青葉クリニックの定番",
-                   "work_3_text":  "店の空気が伝わる組み合わせ。詳細は来店時にご案内します。",
-                   "address_text":  "架空市青葉台6-1-10 / 最寄駅から徒歩5分。駐車場は近隣コインパーキングをご利用ください。",
-                   "access_text":  "最寄駅から徒歩5分。駐車場は近隣コインパーキングをご利用ください。 / Address: 架空市青葉台6-1-10 / 最寄駅から徒歩5分。駐車場は近隣コインパーキングをご利用ください。",
-                   "contact_note_1":  "ご予約・お問い合わせはメールにて。希望日時・人数・ご要望を書いてください。折り返しで空き状況とアクセスの補足をご案内します。",
-                   "contact_note_2":  "営業中は店頭優先のため返信が遅れることがあります。2営業日以内を目安にご連絡します。駐車・道順の質問も同アドレスで受け付けます。"
-               },
-    "confirmed":  {
-                      "purpose":  true,
-                      "layout":  true,
-                      "guide":  true,
-                      "global-preset":  true,
-                      "logo-text":  true,
-                      "hero-text":  true,
-                      "values-text":  true,
-                      "about-text":  true,
-                      "works-text":  true,
-                      "contact-text":  true,
-                      "hours-text":  true,
-                      "address-text":  true,
-                      "site-fonts":  true
-                  },
-    "draftExtras":  {
-                        "hours":  true,
-                        "access":  true,
-                        "address":  false
-                    },
-    "heroTextPlate":  "round",
-    "heroTextPlateTone":  "white",
-    "heroTextOnPhoto":  false,
     "layoutOrder":  [
                         "hero",
                         "values",
@@ -116,9 +11,12 @@
                         "works",
                         "hours",
                         "access",
+                        "address",
                         "accordions",
                         "contact"
                     ],
+    "layoutSelected":  true,
+    "layoutSchema":  2,
     "itemLayouts":  {
                         "about-photos":  {
                                              "sizes":  [
@@ -127,7 +25,19 @@
                                                            "H"
                                                        ],
                                              "gap":  "normal",
-                                             "sizePat":  "S6"
+                                             "growDirs":  [
+
+                                                          ],
+                                             "focalYs":  [
+                                                             35,
+                                                             40,
+                                                             40
+                                                         ],
+                                             "focalXs":  [
+                                                             50,
+                                                             50,
+                                                             50
+                                                         ]
                                          },
                         "works-list":  {
                                            "sizes":  [
@@ -136,17 +46,137 @@
                                                          "L"
                                                      ],
                                            "gap":  "normal",
-                                           "sizePat":  "S2"
+                                           "growDirs":  [
+
+                                                        ],
+                                           "focalYs":  [
+                                                           50,
+                                                           50,
+                                                           45
+                                                       ],
+                                           "focalXs":  [
+                                                           50,
+                                                           50,
+                                                           50
+                                                       ]
                                        }
                     },
-    "layoutRecipeNote":  "a photo=S6 works=S2 sizes=1",
+    "heroTextOnPhoto":  true,
+    "heroFocalX":  50,
+    "heroFocalY":  0,
+    "aboutItemsDisplay":  "accordion",
+    "heroTextPlate":  "round",
+    "heroTextPlateTone":  "white",
+    "guidedImageUnlocked":  true,
+    "guidedTextUnlocked":  false,
+    "presetChosen":  true,
+    "chosenPresetKey":  "clinic",
+    "intakeDone":  true,
+    "entryBranch":  "detail",
+    "hubEntrySource":  "detail-entry",
+    "easyFlowActive":  false,
+    "sushiSampleId":  "24",
+    "sushiSampleKey":  "sweets-sakura-c",
+    "siteColorMode":  "detail",
+    "slotGradients":  {
+
+                      },
+    "slotGradientPartners":  {
+
+                             },
+    "draftColors":  {
+                        "pageBg":  "#ffffff",
+                        "pageBgSoft":  "#f3f6f8",
+                        "heroInk":  "#1a4d8c",
+                        "bodyInk":  "#212121",
+                        "bodyMuted":  "#555555",
+                        "chromeBg":  "#1a4d8c",
+                        "chromeInk":  "#ffffff",
+                        "accent":  "#1a4d8c",
+                        "cardBg":  "#ffffff",
+                        "valuesBg":  "#ffffff",
+                        "contactBg":  "#1a4d8c",
+                        "contactInk":  "#ffffff",
+                        "radius":  "0.6rem",
+                        "headingScale":  "1",
+                        "accentBar":  "mid"
+                    },
+    "draftCounts":  {
+                        "hero-leads":  2,
+                        "hero-values":  3,
+                        "about-accordions":  1,
+                        "about-photos":  3,
+                        "works-list":  3
+                    },
+    "draftExtras":  {
+                        "hours":  true,
+                        "access":  true,
+                        "address":  true
+                    },
+    "layoutBlockOff":  {
+
+                       },
+    "confirmed":  {
+                      "easy-basics":  false,
+                      "easy-sec-hero":  false,
+                      "easy-sec-about":  false,
+                      "easy-sec-works":  false,
+                      "easy-sec-contact":  false,
+                      "easy-img-wire":  false,
+                      "easy-loading":  false,
+                      "easy-done":  false,
+                      "purpose":  true,
+                      "layout":  true,
+                      "guide":  true,
+                      "global-preset":  true,
+                      "global-chrome-bg":  true,
+                      "global-chrome-ink":  true,
+                      "global-bg":  true,
+                      "hero-color":  true,
+                      "values-color":  true,
+                      "global-body":  true,
+                      "global-accent":  true,
+                      "global-card":  true,
+                      "contact-color":  true,
+                      "hero-image":  false,
+                      "about-images":  false,
+                      "works-images":  false,
+                      "logo-text":  false,
+                      "site-fonts":  true,
+                      "hero-text":  false,
+                      "values-text":  false,
+                      "about-text":  false,
+                      "works-text":  false,
+                      "hours-text":  false,
+                      "access-text":  false,
+                      "address-text":  false,
+                      "contact-text":  false,
+                      "finish":  false
+                  },
+    "fields":  {
+                   "hero_title":  "不安が、短くなる場所へ。",
+                   "headingScale":  "1",
+                   "hero_lead_1":  "近所の通いやすさを大切にした小さな診療所。待ち時間の目安と、やさしい案内で、来院の不安を短くします。",
+                   "hero_lead_2":  "初診の方も、事前メールで気になる点のメモを送っていただければ、当日の説明がスムーズです。"
+               },
+    "fonts":  {
+                  "display":  "Zen Kaku Gothic New",
+                  "catch":  "Zen Kaku Gothic New",
+                  "body":  "Noto Sans JP"
+              },
     "imagePaths":  {
-                       "work_2_image":  "sushi-samples/24-sweets-sakura-c/images/work-02.jpg?v=dense4",
-                       "about_image_2":  "sushi-samples/24-sweets-sakura-c/images/about-02.jpg?v=dense4",
-                       "hero_image":  "sushi-samples/24-sweets-sakura-c/images/hero.jpg?v=dense4",
-                       "work_1_image":  "sushi-samples/24-sweets-sakura-c/images/work-01.jpg?v=dense4",
-                       "about_image_3":  "sushi-samples/24-sweets-sakura-c/images/about-03.jpg?v=dense4",
-                       "about_image_1":  "sushi-samples/24-sweets-sakura-c/images/about-01.jpg?v=dense4",
-                       "work_3_image":  "sushi-samples/24-sweets-sakura-c/images/work-03.jpg?v=dense4"
-                   }
+                       "about_image_2":  "sushi-samples/24-sweets-sakura-c/images/about-02.jpg?v=1789820593571",
+                       "work_1_image":  "sushi-samples/24-sweets-sakura-c/images/work-01.jpg?v=1789820593571",
+                       "work_2_image":  "sushi-samples/24-sweets-sakura-c/images/work-02.jpg?v=1789820593571",
+                       "work_3_image":  "sushi-samples/24-sweets-sakura-c/images/work-03.jpg?v=1789820593571",
+                       "about_image_1":  "sushi-samples/24-sweets-sakura-c/images/about-01.jpg?v=1789821575709",
+                       "about_image_3":  "sushi-samples/24-sweets-sakura-c/images/about-03.jpg?v=1789821575709",
+                       "hero_image":  "sushi-samples/24-sweets-sakura-c/images/hero.jpg?v=1789821575709"
+                   },
+    "blurb":  "青葉クリニック。不安が短くなるていねいな診療所",
+    "scene":  "診療所",
+    "layoutRecipeNote":  "rebuild-24 gentle clinic vs 11 machi waiting",
+    "brushUpStructure":  "2026-09-14-v01",
+    "brushUpMeaning":  "2026-09-19-rebuild",
+    "brushUpPhoto":  "2026-09-19-text-blank-fix"
 }

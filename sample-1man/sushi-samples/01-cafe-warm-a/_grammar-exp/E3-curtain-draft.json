@@ -1,0 +1,182 @@
+﻿{
+    "version":  17,
+    "savedAt":  "2026-09-16T15:56:40.574Z",
+    "uiMode":  "self",
+    "sitePurpose":  "shop",
+    "layoutPattern":  "a",
+    "layoutOrder":  [
+                        "hero",
+                        "values",
+                        "photos",
+                        "works",
+                        "accordions",
+                        "hours",
+                        "access",
+                        "address",
+                        "contact"
+                    ],
+    "layoutSelected":  true,
+    "layoutSchema":  2,
+    "itemLayouts":  {
+                        "about-photos":  {
+                                             "sizes":  [
+                                                           "L",
+                                                           "L",
+                                                           "L",
+                                                           "L"
+                                                       ],
+                                             "gap":  "tight",
+                                             "growDirs":  [
+
+                                                          ],
+                                             "focalYs":  [
+                                                             10,
+                                                             35,
+                                                             60,
+                                                             85
+                                                         ]
+                                         },
+                        "works-list":  {
+                                           "sizes":  [
+                                                         "H",
+                                                         "H",
+                                                         "L"
+                                                     ],
+                                           "gap":  "tight",
+                                           "growDirs":  [
+
+                                                        ],
+                                           "focalYs":  [
+                                                           50,
+                                                           50,
+                                                           70
+                                                       ]
+                                       }
+                    },
+    "heroTextOnPhoto":  true,
+    "heroTextPlate":  "round",
+    "heroTextPlateTone":  "white",
+    "guidedImageUnlocked":  true,
+    "guidedTextUnlocked":  false,
+    "presetChosen":  true,
+    "chosenPresetKey":  "cafe",
+    "intakeDone":  true,
+    "entryBranch":  "detail",
+    "hubEntrySource":  "detail-entry",
+    "easyFlowActive":  false,
+    "sushiSampleId":  "01",
+    "sushiSampleKey":  "cafe-warm-a",
+    "siteColorMode":  "detail",
+    "slotGradients":  {
+
+                      },
+    "slotGradientPartners":  {
+
+                             },
+    "draftColors":  {
+                        "pageBg":  "#f3ebe0",
+                        "pageBgSoft":  "#f7f2eb",
+                        "heroInk":  "#fff6e8",
+                        "bodyInk":  "#3e2723",
+                        "bodyMuted":  "#6a5340",
+                        "chromeBg":  "#5c4033",
+                        "chromeInk":  "#fff6e8",
+                        "accent":  "#b86a32",
+                        "cardBg":  "#fff8ee",
+                        "valuesBg":  "#fff8ee",
+                        "contactBg":  "#5c4033",
+                        "contactInk":  "#fff6e8",
+                        "radius":  "0.6rem",
+                        "headingScale":  "1",
+                        "accentBar":  "mid"
+                    },
+    "draftCounts":  {
+                        "hero-leads":  2,
+                        "hero-values":  3,
+                        "about-accordions":  1,
+                        "about-photos":  4,
+                        "works-list":  3
+                    },
+    "draftExtras":  {
+                        "hours":  true,
+                        "access":  true,
+                        "address":  true
+                    },
+    "layoutBlockOff":  {
+
+                       },
+    "confirmed":  {
+                      "easy-basics":  false,
+                      "easy-sec-hero":  false,
+                      "easy-sec-about":  false,
+                      "easy-sec-works":  false,
+                      "easy-sec-contact":  false,
+                      "easy-img-wire":  false,
+                      "easy-loading":  false,
+                      "easy-done":  false,
+                      "purpose":  true,
+                      "layout":  true,
+                      "guide":  true,
+                      "global-preset":  true,
+                      "global-chrome-bg":  true,
+                      "global-chrome-ink":  true,
+                      "global-bg":  true,
+                      "hero-color":  true,
+                      "values-color":  true,
+                      "global-body":  true,
+                      "global-accent":  true,
+                      "global-card":  true,
+                      "contact-color":  true,
+                      "hero-image":  false,
+                      "about-images":  false,
+                      "works-images":  false,
+                      "logo-text":  false,
+                      "site-fonts":  true,
+                      "hero-text":  false,
+                      "values-text":  false,
+                      "about-text":  false,
+                      "works-text":  false,
+                      "hours-text":  false,
+                      "access-text":  false,
+                      "address-text":  false,
+                      "contact-text":  false,
+                      "finish":  false
+                  },
+    "fields":  {
+                   "hero_title":  "朝の光が、\nいちばん\nおいしい時間",
+                   "headingScale":  "1",
+                   "hero_lead_1":  "木枠の窓から差し込む光と、挽きたての香り。近所の人が靴を脱がずに立ち寄れる、小さな朝のカフェです。",
+                   "hero_lead_2":  "ブレンドは毎日少しだけ配合を変え、焼きたてのスコーンは開店と同時にケースへ。忙しい朝でも、深呼吸ひとつ分の余白をどうぞ。"
+               },
+    "fonts":  {
+                  "display":  "Shippori Mincho",
+                  "catch":  "Shippori Mincho",
+                  "body":  "Zen Kaku Gothic New"
+              },
+    "imagePaths":  {
+                       "hero_image":  "sushi-samples/01-cafe-warm-a/images/hero.jpg?v=grammar-exp-1",
+                       "about_image_2":  "sushi-samples/01-cafe-warm-a/images/about-01.jpg?v=grammar-exp-1",
+                       "work_3_image":  "sushi-samples/01-cafe-warm-a/images/work-03.jpg?v=1789574138678",
+                       "about_image_3":  "sushi-samples/01-cafe-warm-a/images/about-01.jpg?v=grammar-exp-1",
+                       "about_image_4":  "sushi-samples/01-cafe-warm-a/images/about-01.jpg?v=grammar-exp-1",
+                       "work_1_image":  "sushi-samples/01-cafe-warm-a/images/work-01.jpg?v=1789574138678",
+                       "work_2_image":  "sushi-samples/01-cafe-warm-a/images/work-02.jpg?v=1789574138678",
+                       "about_image_1":  "sushi-samples/01-cafe-warm-a/images/about-01.jpg?v=grammar-exp-1"
+                   },
+    "blurb":  "カフェ・横長・ベージュ暖色・明朝",
+    "scene":  "カフェ・朝・木目",
+    "layoutRecipeNote":  "grammar-exp E3 curtain same-file focalY",
+    "brushUpHero":  "2026-09-13-v01",
+    "brushUpStructure":  "2026-09-14-v01",
+    "brushUpMeaning":  "2026-09-15-v01",
+    "brushUpFocal":  "2026-09-15-v01",
+    "brushUpPhoto":  "2026-09-17-grammar-E3",
+    "brushUpColor":  "2026-09-16-6x4-v1",
+    "structureRole":  "catch",
+    "structureFace":  "catch",
+    "structureInvite":  "end",
+    "structureMemory":  "朝の静かな一杯",
+    "structureAbsent":  [
+
+                        ]
+}

@@ -12,30 +12,30 @@
                   "display":  "Dela Gothic One"
               },
     "scene":  "バー・ボトル",
-    "status":  "text+images",
+    "status":  "rebuild-2026-09-19",
     "layoutPattern":  "a",
     "layoutOrder":  [
                         "hero",
-                        "photos",
                         "values",
                         "accordions",
                         "works",
+                        "photos",
                         "hours",
                         "access",
                         "address",
                         "contact"
                     ],
-    "counts":  {
-                   "hero-leads":  2,
-                   "hero-values":  3,
-                   "about-accordions":  1,
-                   "about-photos":  3,
-                   "works-list":  3
-               },
     "extras":  {
                    "hours":  true,
                    "access":  true,
                    "address":  true
+               },
+    "counts":  {
+                   "works-list":  3,
+                   "hero-values":  3,
+                   "hero-leads":  2,
+                   "about-photos":  3,
+                   "about-accordions":  1
                },
     "imageSlots":  [
                        "hero.jpg",
@@ -45,5 +45,12 @@
                        "work-01.jpg",
                        "work-02.jpg",
                        "work-03.jpg"
-                   ]
+                   ],
+    "designBrief":  {
+                        "colorIntent":  "レンガ暖色・夜の熱",
+                        "who":  "ボトル棚の灯りが主役の夜バー（貸切可）",
+                        "purpose":  "今夜の一杯／少人数の貸切",
+                        "worldviewOneLiner":  "ボトルの灯が灯る貸切したくなる夜",
+                        "show":  "ボトル棚の灯・暖色の夜"
+                    }
 }

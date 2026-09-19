@@ -1,0 +1,339 @@
+/* 同一文書レビュー（?review=1）— iframe／外側 scale なし。本体プレビュー共用 */
+#review-chrome {
+  display: none;
+  flex-direction: column;
+  flex: 0 0 auto;
+  background: #fff;
+  border-bottom: 1px solid #d0d5db;
+  font-family: system-ui, sans-serif;
+  font-size: 14px;
+  color: #111;
+  z-index: 40;
+}
+
+html.is-review-mode,
+html.is-review-mode body.atelier {
+  height: 100%;
+  overflow: hidden;
+}
+
+html.is-review-mode #review-chrome,
+body.is-review-mode #review-chrome {
+  display: flex;
+}
+
+body.is-review-mode {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  max-height: 100vh;
+  overflow: hidden;
+  margin: 0;
+}
+
+body.is-review-mode #entry-gate,
+body.is-review-mode .dash-pane,
+body.is-review-mode #split-handle,
+body.is-review-mode .atelier-menu,
+body.is-review-mode .draft-notice,
+body.is-review-mode .chrome-help-btn,
+body.is-review-mode .dash-reset-btn,
+body.is-review-mode .atelier-preview-guide,
+body.is-review-mode .zone-badge-rail,
+body.is-review-mode .zone-badge {
+  display: none !important;
+}
+
+body.is-review-mode .atelier-shell {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+  min-height: 0;
+  height: auto;
+  max-height: none;
+  overflow: hidden;
+}
+
+body.is-review-mode .atelier-chrome {
+  flex: 0 0 auto;
+  border-bottom: 1px solid #e2e6ea;
+}
+
+body.is-review-mode .atelier-chrome-right {
+  display: none !important;
+}
+
+body.is-review-mode .atelier-split {
+  display: block !important;
+  flex: 1 1 auto;
+  min-height: 0;
+  height: auto !important;
+  overflow: hidden;
+}
+
+body.is-review-mode .preview-pane {
+  display: flex !important;
+  flex-direction: column;
+  width: 100% !important;
+  max-width: none !important;
+  height: 100% !important;
+  min-height: 0 !important;
+  border: 0 !important;
+  box-shadow: none !important;
+}
+
+body.is-review-mode .preview-scroll {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow: auto;
+  scrollbar-gutter: stable;
+  background: #ddd;
+}
+
+body.is-review-mode.review-view-fit .preview-scroll {
+  overflow: hidden;
+}
+
+/* 幅アニメが再適用と重なると縮み伸びて見える */
+body.is-review-mode .preview-viewport {
+  transition: none !important;
+}
+
+/* ハブ用の肌色幅バーは出さない（ロゴ横の1本だけ） */
+body.is-review-mode #preview-width-rail,
+body.is-review-mode #dash-width-rail {
+  display: none !important;
+}
+
+#review-chrome .review-bar {
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: center;
+  gap: 0.5rem 0.75rem;
+  padding: 0.5rem 0.75rem;
+  min-height: 2.75rem;
+}
+
+#review-chrome .review-bar-left {
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+  gap: 0.5rem 0.75rem;
+  white-space: nowrap;
+}
+
+#review-chrome .review-bar-label {
+  flex: 1 1 auto;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+#review-chrome .review-bar-actions {
+  display: inline-flex;
+  flex: 0 0 auto;
+  align-items: center;
+  gap: 0.5rem;
+  margin-left: auto;
+  white-space: nowrap;
+}
+
+#review-chrome .review-mode-group {
+  display: inline-flex;
+  border: 1px solid #888;
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+#review-chrome button {
+  font: inherit;
+  padding: 0.35rem 0.7rem;
+  cursor: pointer;
+  border: 1px solid #888;
+  background: #f5f5f5;
+}
+
+#review-chrome .review-mode-group button.mode {
+  border: 0;
+  border-right: 1px solid #888;
+  border-radius: 0;
+  background: #f0f0f0;
+}
+
+#review-chrome .review-mode-group button.mode:last-child {
+  border-right: 0;
+}
+
+#review-chrome .review-mode-group button.mode.is-on {
+  background: #1a4d8c;
+  color: #fff;
+}
+
+#review-chrome button.ok {
+  background: #1b7a3d;
+  color: #fff;
+  border-color: #155f2f;
+}
+
+#review-chrome button.primary-action {
+  background: #1a4d8c;
+  color: #fff;
+  border-color: #143a6a;
+}
+
+#review-chrome button.ng {
+  background: #8a1f1f;
+  color: #fff;
+  border-color: #6a1515;
+}
+
+#review-chrome button:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+#review-chrome .review-status {
+  margin: 0;
+  padding: 0.35rem 0.75rem;
+  background: #fafafa;
+  border-top: 1px solid #eee;
+  color: #333;
+  min-height: 1.4em;
+}
+
+#review-chrome .review-json-sub {
+  margin: 0;
+  padding: 0.25rem 0.75rem 0.45rem;
+  background: #f7f7f7;
+  border-top: 1px solid #eee;
+  font-size: 0.86rem;
+}
+
+#review-chrome .review-json-sub summary {
+  cursor: pointer;
+  color: #44515c;
+}
+
+#review-chrome .review-json-sub-body {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.45rem 0.6rem;
+  margin-top: 0.4rem;
+}
+
+#review-chrome .review-json-sub-note {
+  flex: 1 1 100%;
+  margin: 0;
+  color: #5a6570;
+  line-height: 1.45;
+}
+
+.review-edit-bar {
+  position: sticky;
+  top: 0;
+  z-index: 55;
+  background: #1a1f1c;
+  color: #f5f2ea;
+  border-bottom: 1px solid #333;
+}
+
+.review-edit-bar[hidden] {
+  display: none !important;
+}
+
+.review-edit-bar-inner {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem 0.75rem;
+  padding: 0.5rem 0.75rem;
+}
+
+.review-edit-bar .review-bar-label {
+  flex: 1 1 auto;
+  min-width: 8rem;
+  opacity: 0.9;
+}
+
+.review-edit-bar .review-bar-actions {
+  display: inline-flex;
+  gap: 0.5rem;
+  margin-left: auto;
+}
+
+.review-edit-bar button {
+  font: inherit;
+  padding: 0.35rem 0.7rem;
+  cursor: pointer;
+  border: 1px solid #888;
+  background: #f5f5f5;
+}
+
+.review-edit-bar button.ok {
+  background: #1b7a3d;
+  color: #fff;
+  border-color: #155f2f;
+}
+
+body.is-review-editing #review-chrome {
+  display: none !important;
+}
+
+#review-ng-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 80;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.35);
+}
+
+#review-ng-modal[hidden] {
+  display: none !important;
+}
+
+#review-ng-modal .modal-card {
+  width: min(28rem, 92vw);
+  max-height: 90vh;
+  overflow: auto;
+  background: #fff;
+  border: 1px solid #ccc;
+  padding: 1rem 1.1rem;
+}
+
+#review-ng-modal h2 {
+  margin: 0 0 0.5rem;
+  font-size: 1.1rem;
+}
+
+#review-ng-modal .modal-lead {
+  margin: 0 0 0.75rem;
+  color: #444;
+}
+
+#review-ng-modal fieldset {
+  border: 1px solid #ddd;
+  margin: 0 0 0.75rem;
+  padding: 0.5rem 0.65rem;
+}
+
+#review-ng-modal label {
+  display: block;
+  margin: 0.25rem 0;
+}
+
+#review-ng-modal textarea {
+  width: 100%;
+  font: inherit;
+  margin-top: 0.25rem;
+}
+
+#review-ng-modal .modal-actions {
+  display: flex;
+  gap: 0.5rem;
+  justify-content: flex-end;
+  margin-top: 0.75rem;
+}

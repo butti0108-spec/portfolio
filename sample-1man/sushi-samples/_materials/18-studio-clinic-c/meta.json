@@ -12,38 +12,45 @@
                   "display":  "Zen Kaku Gothic New"
               },
     "scene":  "写真館・余白",
-    "status":  "text+images",
+    "status":  "rebuild-2026-09-19",
     "layoutPattern":  "a",
-    "imageSlots":  [
-                       "hero.jpg",
-                       "about-01.jpg",
-                       "about-02.jpg",
-                       "about-03.jpg",
-                       "about-04.jpg",
-                       "work-01.jpg",
-                       "work-02.jpg",
-                       "work-03.jpg"
-                   ],
     "layoutOrder":  [
                         "hero",
-                        "values",
-                        "photos",
                         "works",
+                        "values",
+                        "accordions",
+                        "photos",
                         "hours",
                         "access",
-                        "accordions",
+                        "address",
                         "contact"
                     ],
     "extras":  {
                    "hours":  true,
                    "access":  true,
-                   "address":  false
+                   "address":  true
                },
     "counts":  {
-                   "hero-leads":  2,
+                   "works-list":  3,
                    "hero-values":  3,
-                   "about-accordions":  1,
-                   "about-photos":  4,
-                   "works-list":  3
-               }
+                   "hero-leads":  2,
+                   "about-photos":  3,
+                   "about-accordions":  1
+               },
+    "imageSlots":  [
+                       "hero.jpg",
+                       "about-01.jpg",
+                       "about-02.jpg",
+                       "about-03.jpg",
+                       "work-01.jpg",
+                       "work-02.jpg",
+                       "work-03.jpg"
+                   ],
+    "designBrief":  {
+                        "colorIntent":  "白と紺・きれいめ",
+                        "who":  "白い床と余白のフォトスタジオ",
+                        "purpose":  "撮ってほしい／作例で雰囲気を伝える",
+                        "worldviewOneLiner":  "余白の多い写真で人を撮る",
+                        "show":  "白床の作例・余白構図"
+                    }
 }

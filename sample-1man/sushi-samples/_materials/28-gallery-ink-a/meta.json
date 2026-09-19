@@ -6,37 +6,15 @@
     "headingPack":  "H3",
     "colorKey":  "green",
     "fontMood":  "softGothic",
-    "fonts":  {
-                  "catch":  "Sawarabi Gothic",
-                  "body":  "Zen Kaku Gothic New",
-                  "display":  "Sawarabi Gothic"
-              },
+    "status":  "rebuild-2026-09-19",
     "scene":  "ヨガ・スタジオ",
-    "status":  "text+images",
-    "layoutPattern":  "a",
-    "layoutOrder":  [
-                        "hero",
-                        "values",
-                        "photos",
-                        "works",
-                        "hours",
-                        "access",
-                        "address",
-                        "contact",
-                        "accordions"
-                    ],
-    "counts":  {
-                   "hero-leads":  2,
-                   "hero-values":  3,
-                   "about-accordions":  1,
-                   "about-photos":  3,
-                   "works-list":  3
-               },
-    "extras":  {
-                   "hours":  true,
-                   "access":  true,
-                   "address":  true
-               },
+    "designBrief":  {
+                        "who":  "葉の音のなかで呼吸をそろえる小さなヨガ教室の講師",
+                        "purpose":  "静かな呼吸のクラスに来てもらう／葉と光のスタジオを覚えてもらう",
+                        "show":  "葉・光・マット（虫は被写体にしない）",
+                        "colorIntent":  "薄い緑・白い余白",
+                        "worldviewOneLiner":  "葉の音のなかで呼吸する静かなヨガ"
+                    },
     "imageSlots":  [
                        "hero.jpg",
                        "about-01.jpg",

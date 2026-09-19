@@ -1,133 +1,40 @@
 {
     "version":  17,
-    "sushiSampleId":  "16",
-    "sushiSampleKey":  "yoga-green-a",
-    "blurb":  "ヨガ・横長・緑・やわゴ",
-    "scene":  "サロン・花",
-    "savedAt":  "2026-09-08T17:08:48.3329880Z",
+    "savedAt":  "2026-09-19T07:01:36.760Z",
     "uiMode":  "self",
     "sitePurpose":  "shop",
-    "siteColorMode":  "detail",
     "layoutPattern":  "a",
-    "layoutSelected":  true,
-    "layoutSchema":  2,
-    "intakeDone":  true,
-    "entryBranch":  "sample",
-    "hubEntrySource":  "sample",
-    "easyFlowActive":  false,
-    "presetChosen":  true,
-    "chosenPresetKey":  "sakura",
-    "draftColors":  {
-                        "cardBg":  "#ffffff",
-                        "chromeInk":  "#f4fff6",
-                        "accent":  "#3d8a48",
-                        "pageBgSoft":  "#d2e6ce",
-                        "bodyMuted":  "#555555",
-                        "contactBg":  "#2d6a36",
-                        "pageBg":  "#e8f2e6",
-                        "bodyInk":  "#212121",
-                        "contactInk":  "#f4fff6",
-                        "valuesBg":  "#ffffff",
-                        "heroInk":  "#ffffff",
-                        "chromeBg":  "#1f3d18"
-                    },
-    "draftCounts":  {
-                        "hero-leads":  2,
-                        "hero-values":  3,
-                        "about-accordions":  1,
-                        "about-photos":  3,
-                        "works-list":  3
-                    },
-    "guidedImageUnlocked":  true,
-    "guidedTextUnlocked":  true,
-    "fonts":  {
-                  "catch":  "Kiwi Maru",
-                  "body":  "M PLUS Rounded 1c",
-                  "display":  "Zen Maru Gothic"
-              },
-    "fields":  {
-                   "brand_name":  "花綴りサロン",
-                   "hero_title":  "香りと手元で、一日の終わりを整える。",
-                   "hero_lead_1":  "花の香りと、やさしい手元のサロン。カットもカラーも、季節の一輪と同じペースで進めます。",
-                   "hero_lead_2":  "一日の終わりに、自分を整える時間。肩の力を抜いて座れる席と、控えめな香りを用意しています。",
-                   "hero_lead_3":  "",
-                   "value_1_title":  "花のある席",
-                   "value_1_text":  "季節の生花をカウンターと待合に置き、施術室にも控えめな一輪を添えます。香りは強すぎない種類だけを選んでいます。",
-                   "value_2_title":  "手の温度",
-                   "value_2_text":  "シャンプーから仕上げまで、力の入れ方をこまめに確認します。肩や首が凝っている日は、まずほぐしてからカットに入ります。",
-                   "value_3_title":  "帰り際の束",
-                   "value_3_text":  "ご希望の方には、小さな花束をプラスできます。髪と同じトーンで合わせるので、写真にもそのまま残せます。",
-                   "about_section_name":  "サロンについて",
-                   "about_heading":  "花と髪を、同じ手で",
-                   "about_name":  "花綴りサロン",
-                   "about_lead":  "住宅街の角にある小さなヘアサロンです。カットとカラーのほか、季節の花を使った小さなアレンジも扱っています。髪を整える時間を、香りと色でもう少し心地よくしたい——そんな思いで始めました。",
-                   "acc_1_title":  "はじまりの話",
-                   "acc_1_body":  "もともと花屋で働いていたスタッフが、美容師免許を取ったあと「花のある美容室」をつくりました。予約は少なめに取り、一人ひとりのペースで進めます。初めての方も、カウンセリングで好みの長さと雰囲気を一緒に決めます。",
-                   "acc_2_title":  "ご来店の流れ",
-                   "acc_2_body":  "受付でお飲み物と、その日の一輪挿しをご案内します。カット・カラー・トリートメントはメニュー表から選べます。花束やアレンジは、施術の合間に短くご相談いただけます。",
-                   "works_section_name":  "メニュー",
-                   "works_heading":  "よく選ばれるメニュー",
-                   "works_lead":  "髪と、小さな花のセット",
-                   "work_1_title":  "カット＋一輪セット",
-                   "work_1_text":  "カット後に、持ち帰り用の一輪とミニカードをお渡しします。色味は髪色に合わせて選びます。",
-                   "work_2_title":  "カラー＋ミニブーケ",
-                   "work_2_text":  "カラー後に、髪色に寄せた小さな花束をお渡しするオプションです。",
-                   "contact_section_name":  "ご連絡",
-                   "contact_label":  "ご連絡",
-                   "contact_email":  "reserve@hanatsuzuri-salon.example",
-                   "font_display":  "Zen Maru Gothic",
-                   "font_catch":  "Kiwi Maru",
-                   "font_body":  "M PLUS Rounded 1c",
-                   "work_3_title":  "花綴りサロンの定番",
-                   "work_3_text":  "店の空気が伝わる組み合わせ。詳細は来店時にご案内します。",
-                   "address_text":  "架空市花野町3-8-12 1F / 最寄駅から徒歩5分。駐車場は近隣コインパーキングをご利用ください。",
-                   "hours_text":  "火〜土 10:00–19:00（最終受付 18:00）／日月定休　／　最終受付は閉店30分前。混雑時はお待ちいただく場合があります。",
-                   "access_text":  "最寄駅から徒歩5分。駐車場は近隣コインパーキングをご利用ください。 / Address: 架空市花野町3-8-12 1F / 最寄駅から徒歩5分。駐車場は近隣コインパーキングをご利用ください。",
-                   "contact_note_1":  "ご予約・お問い合わせはメールにて。希望日時・人数・ご要望を書いてください。折り返しで空き状況とアクセスの補足をご案内します。",
-                   "contact_note_2":  "営業中は店頭優先のため返信が遅れることがあります。2営業日以内を目安にご連絡します。駐車・道順の質問も同アドレスで受け付けます。"
-               },
-    "confirmed":  {
-                      "purpose":  true,
-                      "layout":  true,
-                      "guide":  true,
-                      "global-preset":  true,
-                      "logo-text":  true,
-                      "hero-text":  true,
-                      "values-text":  true,
-                      "about-text":  true,
-                      "works-text":  true,
-                      "contact-text":  true,
-                      "hours-text":  true,
-                      "address-text":  true,
-                      "site-fonts":  true
-                  },
-    "draftExtras":  {
-                        "hours":  true,
-                        "access":  true,
-                        "address":  false
-                    },
-    "heroTextPlate":  "round",
-    "heroTextPlateTone":  "white",
-    "heroTextOnPhoto":  false,
     "layoutOrder":  [
                         "hero",
-                        "values",
+                        "accordions",
                         "photos",
+                        "values",
                         "works",
                         "hours",
                         "access",
-                        "accordions",
+                        "address",
                         "contact"
                     ],
+    "layoutSelected":  true,
+    "layoutSchema":  2,
     "itemLayouts":  {
                         "about-photos":  {
                                              "sizes":  [
                                                            "H",
-                                                           "H",
-                                                           "L"
+                                                           "H"
                                                        ],
-                                             "gap":  "normal",
-                                             "sizePat":  "S2"
+                                             "gap":  "tight",
+                                             "growDirs":  [
+
+                                                          ],
+                                             "focalYs":  [
+                                                             90,
+                                                             55
+                                                         ],
+                                             "focalXs":  [
+                                                             50,
+                                                             50
+                                                         ]
                                          },
                         "works-list":  {
                                            "sizes":  [
@@ -136,17 +43,177 @@
                                                          "H"
                                                      ],
                                            "gap":  "normal",
-                                           "sizePat":  "S3"
+                                           "growDirs":  [
+
+                                                        ],
+                                           "focalYs":  [
+                                                           20,
+                                                           5,
+                                                           15
+                                                       ],
+                                           "focalXs":  [
+                                                           50,
+                                                           50,
+                                                           50
+                                                       ]
                                        }
                     },
-    "layoutRecipeNote":  "a photo=S2 works=S3 sizes=1",
+    "heroTextOnPhoto":  false,
+    "heroFocalX":  50,
+    "heroFocalY":  60,
+    "aboutItemsDisplay":  "accordion",
+    "heroTextPlate":  "round",
+    "heroTextPlateTone":  "white",
+    "guidedImageUnlocked":  true,
+    "guidedTextUnlocked":  false,
+    "presetChosen":  true,
+    "chosenPresetKey":  "sakura",
+    "intakeDone":  true,
+    "entryBranch":  "detail",
+    "hubEntrySource":  "detail-entry",
+    "easyFlowActive":  false,
+    "sushiSampleId":  "16",
+    "sushiSampleKey":  "yoga-green-a",
+    "siteColorMode":  "detail",
+    "slotGradients":  {
+
+                      },
+    "slotGradientPartners":  {
+
+                             },
+    "draftColors":  {
+                        "pageBg":  "#fdf5f6",
+                        "pageBgSoft":  "#f5e4e8",
+                        "heroInk":  "#ffffff",
+                        "bodyInk":  "#3d2228",
+                        "bodyMuted":  "#6a454d",
+                        "chromeBg":  "#8f4a5a",
+                        "chromeInk":  "#fff8fa",
+                        "accent":  "#c95d7a",
+                        "cardBg":  "#ffffff",
+                        "valuesBg":  "#ffffff",
+                        "contactBg":  "#8f4a5a",
+                        "contactInk":  "#fff8fa",
+                        "radius":  "0.6rem",
+                        "headingScale":  "1",
+                        "accentBar":  "mid"
+                    },
+    "draftCounts":  {
+                        "hero-leads":  2,
+                        "hero-values":  3,
+                        "about-accordions":  1,
+                        "about-photos":  2,
+                        "works-list":  3
+                    },
+    "draftExtras":  {
+                        "hours":  true,
+                        "access":  true,
+                        "address":  true
+                    },
+    "layoutBlockOff":  {
+
+                       },
+    "confirmed":  {
+                      "easy-basics":  false,
+                      "easy-sec-hero":  false,
+                      "easy-sec-about":  false,
+                      "easy-sec-works":  false,
+                      "easy-sec-contact":  false,
+                      "easy-img-wire":  false,
+                      "easy-loading":  false,
+                      "easy-done":  false,
+                      "purpose":  true,
+                      "layout":  true,
+                      "guide":  true,
+                      "global-preset":  true,
+                      "global-chrome-bg":  true,
+                      "global-chrome-ink":  true,
+                      "global-bg":  true,
+                      "hero-color":  true,
+                      "values-color":  true,
+                      "global-body":  true,
+                      "global-accent":  true,
+                      "global-card":  true,
+                      "contact-color":  true,
+                      "hero-image":  false,
+                      "about-images":  false,
+                      "works-images":  false,
+                      "logo-text":  false,
+                      "site-fonts":  true,
+                      "hero-text":  false,
+                      "values-text":  false,
+                      "about-text":  false,
+                      "works-text":  false,
+                      "hours-text":  false,
+                      "access-text":  false,
+                      "address-text":  false,
+                      "contact-text":  false,
+                      "finish":  false
+                  },
+    "fields":  {
+                   "brand_name":  "花綴りサロン",
+                   "hero_title":  "花と髪を、同じ手で。",
+                   "hero_lead_1":  "切り花が迎える個室寄りのヘアサロン。カットもカラーも、話す速さはお客様のペースに合わせます。",
+                   "hero_lead_2":  "予約はメールかフォームで。当日の空きは電話でも確認できます。派手な店頭演出はありません。",
+                   "hero_lead_3":  "",
+                   "value_1_title":  "花のあるカウンセリング",
+                   "value_1_text":  "鏡の横に小さな花。髪の悩みを短く聞いてから、カットの方針を決めます。",
+                   "value_2_title":  "静かな個室感",
+                   "value_2_text":  "席の間隔を空け、隣の会話が混ざりにくい配置です。",
+                   "value_3_title":  "帰宅後も続く整え",
+                   "value_3_text":  "ホームケアは押しつけず、今あるボトルで続けやすい方法だけお伝えします。",
+                   "about_section_name":  "サロンについて",
+                   "about_heading":  "花を添えながら、髪を整える",
+                   "about_name":  "花綴りサロン",
+                   "about_lead":  "架空市はなつづり区の2階にある小さなサロンです。スタイリストは少人数。キッズカットは要相談。駐車場はありません。",
+                   "acc_1_title":  "ご予約について",
+                   "acc_1_body":  "カット／カラー／トリートメントの所要目安をメールでご案内します。キャンセルは前日までにお願いします。",
+                   "acc_2_title":  "",
+                   "acc_2_body":  "",
+                   "works_section_name":  "メニュー例",
+                   "works_heading":  "よく選ばれる整え",
+                   "works_lead":  "詳細な料金は来店時にご案内します。",
+                   "work_1_title":  "カット＆ブロー",
+                   "work_1_text":  "骨格に合わせた長さ決め。花の話をしながら進めても大丈夫です。",
+                   "work_2_title":  "カラー（ワンカラー）",
+                   "work_2_text":  "派手すぎない色味を中心に。白髪ぼかしも相談可。",
+                   "work_3_title":  "季節のヘッドスパ",
+                   "work_3_text":  "短いコース。肩の力を落とす時間です。",
+                   "hours_text":  "火〜土 10:00–19:00（最終受付 18:00）　日月定休",
+                   "address_text":  "架空市はなつづり区サロン小路 5-2　花綴りビル2F",
+                   "access_text":  "最寄駅から徒歩6分。エレベーターあり。",
+                   "contact_section_name":  "ご連絡",
+                   "contact_label":  "ご連絡",
+                   "contact_email":  "reserve@hanatsuzuri-salon.example",
+                   "contact_note_1":  "ご予約は希望日時を2案書いてメールで。",
+                   "contact_note_2":  "施術中は返信が遅れることがあります。当日の変更はお電話を。"
+               },
+    "fonts":  {
+                  "display":  "Zen Maru Gothic",
+                  "catch":  "Kiwi Maru",
+                  "body":  "M PLUS Rounded 1c"
+              },
     "imagePaths":  {
-                       "work_2_image":  "sushi-samples/16-yoga-green-a/images/work-02.jpg?v=dense4",
-                       "about_image_2":  "sushi-samples/16-yoga-green-a/images/about-02.jpg?v=dense4",
-                       "hero_image":  "sushi-samples/16-yoga-green-a/images/hero.jpg?v=dense4",
-                       "work_1_image":  "sushi-samples/16-yoga-green-a/images/work-01.jpg?v=dense4",
-                       "about_image_3":  "sushi-samples/16-yoga-green-a/images/about-03.jpg?v=dense4",
-                       "about_image_1":  "sushi-samples/16-yoga-green-a/images/about-01.jpg?v=dense4",
-                       "work_3_image":  "sushi-samples/16-yoga-green-a/images/work-03.jpg?v=dense4"
-                   }
+                       "about_image_1":  "sushi-samples/16-yoga-green-a/images/about-01.jpg?v=1789806470594",
+                       "about_image_2":  "sushi-samples/16-yoga-green-a/images/about-02.jpg?v=1789806470594",
+                       "hero_image":  "sushi-samples/16-yoga-green-a/images/hero.jpg?v=1789806470594",
+                       "work_1_image":  "sushi-samples/16-yoga-green-a/images/work-01.jpg?v=1789814037920",
+                       "work_3_image":  "sushi-samples/16-yoga-green-a/images/work-03.jpg?v=1789814037920",
+                       "work_2_image":  "sushi-samples/16-yoga-green-a/images/work-02.jpg?v=1789820308119"
+                   },
+    "blurb":  "サロン・花",
+    "scene":  "サロン・花",
+    "layoutRecipeNote":  "rebuild-2026-09-19 花と髪を同じ手で整える",
+    "brushUpStructure":  "2026-09-14-v01",
+    "brushUpMeaning":  "2026-09-19-rebuild",
+    "photoGenBatch":  "ai-full-replace",
+    "designBrief":  {
+                        "who":  "花のある小さなヘアサロン",
+                        "purpose":  "予約の温度を感じてもらう／髪を整える",
+                        "show":  "切り花＋サロン空間",
+                        "colorIntent":  "桜色のやわらかさ・温かみ",
+                        "worldviewOneLiner":  "花と髪を同じ手で整える"
+                    },
+    "brushUpCopy":  "2026-09-19-restore-from-copy",
+    "brushUpPhoto":  "2026-09-19-title-match-fix2"
 }

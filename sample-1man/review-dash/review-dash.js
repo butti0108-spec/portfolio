@@ -60,7 +60,7 @@
   function setViewMode(mode) {
     viewMode = mode === "capture" ? "capture" : "read";
     syncModeButtons();
-    scaleFrame(lastPreviewHeight);
+    scaleFrame(lastPreviewHeight, { force: true });
     if (viewMode === "read") {
       setStatus("確認モード: 文字が読める実寸。横・縦にスクロールしてください。");
     } else {
@@ -102,23 +102,65 @@
     el.reload.disabled = busy || !frameReady;
   }
 
-  function scaleFrame(previewHeight) {
-    const h = Math.max(800, Number(previewHeight) || 2400);
-    lastPreviewHeight = h;
-    el.frame.style.height = h + "px";
+  function stageSizeKey(stage) {
+    return Math.round(stage.clientWidth) + "x" + Math.round(stage.clientHeight);
+  }
+
+  function scaleFrame(previewHeight, opts) {
+    const force = !!(opts && opts.force);
+    /* フッター下に空きを作らない。内容高さぴったり */
+    const h = Math.max(1, Math.ceil(Number(previewHeight) || 0));
+    const stage = el.stage || el.wrap.parentElement;
+
     if (viewMode === "read") {
+      lastPreviewHeight = h;
       el.wrap.style.transform = "none";
-      el.wrap.style.height = h + "px";
+      el.wrap.style.height = "";
       el.wrap.style.width = "1200px";
+      el.wrap.style.marginLeft = "";
+      el.wrap.style.marginRight = "";
+      /* +8px: 端数で内側に棒が出て外と奪い合いになるのを防ぐ */
+      el.frame.style.height = h + 8 + "px";
+      delete el.wrap.dataset.scaledFor;
+      delete el.wrap.dataset.scaledStage;
+      delete el.wrap.dataset.scaledScale;
       return;
     }
-    const stage = el.stage || el.wrap.parentElement;
+
+    /* 撮影モード: 縮尺の微小再計算がプルプルの主因。整数px＋閾値で止める */
+    el.frame.style.height = h + "px";
     const availW = Math.max(320, stage.clientWidth - 24);
     const availH = Math.max(320, stage.clientHeight - 16);
-    const scale = Math.min(1, availW / 1200, availH / h);
+    let scale = Math.min(1, availW / 1200, availH / h);
+    /* 0.001刻みに丸める（長い小数の張り直しを防ぐ） */
+    scale = Math.floor(scale * 1000 + 1e-9) / 1000;
+    if (scale < 0.05) scale = 0.05;
+
+    const wrapH = Math.max(1, Math.round(h * scale));
+    const wrapW = Math.max(1, Math.round(1200 * scale));
+    const prevScale = Number(el.wrap.dataset.scaledScale || 0);
+    const prevH = Number(el.wrap.dataset.scaledFor || 0);
+    const prevStage = el.wrap.dataset.scaledStage || "";
+    const stageKey = stageSizeKey(stage);
+
+    if (
+      !force &&
+      el.frame.style.height &&
+      Math.abs(h - prevH) < 4 &&
+      Math.abs(scale - prevScale) < 0.002 &&
+      prevStage === stageKey
+    ) {
+      lastPreviewHeight = h;
+      return;
+    }
+
+    lastPreviewHeight = h;
     el.wrap.style.transform = "scale(" + scale + ")";
-    el.wrap.style.height = h * scale + "px";
-    el.wrap.style.width = 1200 * scale + "px";
+    el.wrap.style.height = wrapH + "px";
+    el.wrap.style.width = wrapW + "px";
+    el.wrap.dataset.scaledFor = String(h);
+    el.wrap.dataset.scaledStage = stageKey;
+    el.wrap.dataset.scaledScale = String(scale);
   }
 
   function waitMessage(type, timeoutMs) {
@@ -264,6 +306,8 @@
       }
       const packed = await buildDraft(sample);
       const appliedWait = waitMessage("sample1man-applied", 15000);
+      /* 再計測は apply 直後に来るので、先に待ち受けを張る */
+      const resizedWait = waitMessage("sample1man-resized", 2000);
       el.frame.contentWindow.postMessage(
         { type: "sample1man-apply", draft: packed.draft },
         "*"
@@ -271,7 +315,18 @@
       const msg = await appliedWait;
       const result = msg.result || {};
       if (!result.ok) throw new Error(result.reason || "apply-failed");
-      scaleFrame(result.height || 2400);
+      let h = result.height || 1;
+      try {
+        const resized = await resizedWait;
+        if (resized.result && resized.result.ok && resized.result.height) {
+          const h2 = resized.result.height;
+          /* 画像読み込み後の数px差は無視。大きい差だけ採用して二重フィットを防ぐ */
+          if (Math.abs(h2 - h) >= 8) h = h2;
+        }
+      } catch (e) {
+        /* 再計測なしでも初回高さで続行 */
+      }
+      scaleFrame(h, { force: true });
       setStatus(
         "表示中: " +
           packed.folder +
@@ -515,8 +570,32 @@
       setViewMode("capture");
     });
   }
+  let resizeTimer = null;
+  let lastResizeStageKey = "";
   window.addEventListener("resize", function () {
-    scaleFrame(lastPreviewHeight);
+    /* スクロールバー出現などの細かいレイアウト揺れで連打しない */
+    if (resizeTimer) clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(function () {
+      resizeTimer = null;
+      if (viewMode !== "capture") return;
+      const stage = el.stage || el.wrap.parentElement;
+      const key = Math.round(stage.clientWidth) + "x" + Math.round(stage.clientHeight);
+      const prev = lastResizeStageKey || el.wrap.dataset.scaledStage || "";
+      if (prev) {
+        const p = prev.split("x").map(Number);
+        const n = key.split("x").map(Number);
+        if (
+          p.length === 2 &&
+          n.length === 2 &&
+          Math.abs(p[0] - n[0]) < 12 &&
+          Math.abs(p[1] - n[1]) < 12
+        ) {
+          return;
+        }
+      }
+      lastResizeStageKey = key;
+      scaleFrame(lastPreviewHeight, { force: true });
+    }, 200);
   });
 
   syncModeButtons();

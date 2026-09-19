@@ -6,36 +6,15 @@
     "headingPack":  "H3",
     "colorKey":  "brick",
     "fontMood":  "mincho",
-    "fonts":  {
-                  "catch":  "Shippori Mincho",
-                  "body":  "Zen Kaku Gothic New",
-                  "display":  "Shippori Mincho"
-              },
+    "status":  "rebuild-2026-09-19",
     "scene":  "ギャラリー・額",
-    "status":  "text+images",
-    "layoutPattern":  "a",
-    "layoutOrder":  [
-                        "hero",
-                        "values",
-                        "accordions",
-                        "photos",
-                        "works",
-                        "hours",
-                        "address",
-                        "contact"
-                    ],
-    "counts":  {
-                   "hero-leads":  2,
-                   "hero-values":  3,
-                   "about-accordions":  1,
-                   "about-photos":  3,
-                   "works-list":  3
-               },
-    "extras":  {
-                   "hours":  true,
-                   "access":  false,
-                   "address":  true
-               },
+    "designBrief":  {
+                        "who":  "額の灯りで作品を見せる小さなギャラリーの主",
+                        "purpose":  "余韻で帰る／額と灯りを覚えてもらう",
+                        "show":  "額・灯り・作品",
+                        "colorIntent":  "レンガ暖色・オレンジの元気",
+                        "worldviewOneLiner":  "額の灯りと作品が残る小さなギャラリー"
+                    },
     "imageSlots":  [
                        "hero.jpg",
                        "about-01.jpg",

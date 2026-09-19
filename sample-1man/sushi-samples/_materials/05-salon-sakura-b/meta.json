@@ -12,8 +12,30 @@
                   "display":  "Zen Maru Gothic"
               },
     "scene":  "スイーツ・パステル",
-    "status":  "text+images",
+    "status":  "rebuild-2026-09-19",
     "layoutPattern":  "a",
+    "layoutOrder":  [
+                        "hero",
+                        "values",
+                        "photos",
+                        "works",
+                        "hours",
+                        "access",
+                        "contact",
+                        "address"
+                    ],
+    "counts":  {
+                   "hero-leads":  2,
+                   "hero-values":  3,
+                   "about-accordions":  1,
+                   "about-photos":  3,
+                   "works-list":  3
+               },
+    "extras":  {
+                   "hours":  true,
+                   "access":  true,
+                   "address":  true
+               },
     "imageSlots":  [
                        "hero.jpg",
                        "about-01.jpg",
@@ -23,26 +45,11 @@
                        "work-02.jpg",
                        "work-03.jpg"
                    ],
-    "layoutOrder":  [
-                        "hero",
-                        "values",
-                        "photos",
-                        "works",
-                        "hours",
-                        "access",
-                        "accordions",
-                        "contact"
-                    ],
-    "extras":  {
-                   "hours":  true,
-                   "access":  true,
-                   "address":  false
-               },
-    "counts":  {
-                   "hero-leads":  2,
-                   "hero-values":  3,
-                   "about-accordions":  1,
-                   "about-photos":  3,
-                   "works-list":  3
-               }
+    "designBrief":  {
+                        "who":  "住宅街でテイクアウト中心の小さな菓子工房を営む人",
+                        "purpose":  "午後に一口のご褒美を買ってもらう",
+                        "show":  "パステル色の菓子・ショーケース・淡い箱",
+                        "colorIntent":  "桜色の淡さ・丸みのあるやさしさ",
+                        "worldviewOneLiner":  "淡い色の午後に一口のご褒美"
+                    }
 }

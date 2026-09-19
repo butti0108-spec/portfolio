@@ -1,7 +1,7 @@
 {
-    "version":  2,
-    "generatedAt":  "2026-09-08T17:10:48.5416759Z",
-    "note":  "copy+images filled; review via review-dash imagePaths",
+    "version":  3,
+    "generatedAt":  "2026-09-19T13:24:56.1819981Z",
+    "note":  "preview.png 1200x1694 refreshed 2026-09-19; lane uses FIRST_TEAM 24",
     "samples":  [
                     {
                         "id":  "01",
@@ -12,9 +12,9 @@
                         "fontMood":  "mincho",
                         "scene":  "カフェ・朝・木目",
                         "brand":  "木漏れ日カフェ",
-                        "hero":  "朝の光が、いちばんおいしい時間。",
+                        "hero":  "朝の光が、\\nいちばん\\nおいしい時間。",
                         "draftPath":  "01-cafe-warm-a/draft.json",
-                        "previewPath":  "01-cafe-warm-a/preview.svg"
+                        "previewPath":  "01-cafe-warm-a/preview.png"
                     },
                     {
                         "id":  "02",
@@ -27,7 +27,7 @@
                         "brand":  "花便り 店先",
                         "hero":  "今日の花は、店先から。",
                         "draftPath":  "02-cafe-split-b/draft.json",
-                        "previewPath":  "02-cafe-split-b/preview.svg"
+                        "previewPath":  "02-cafe-split-b/preview.png"
                     },
                     {
                         "id":  "03",
@@ -38,9 +38,9 @@
                         "fontMood":  "bold",
                         "scene":  "バー・グラス",
                         "brand":  "グラスサイド",
-                        "hero":  "氷が鳴る、夜のカウンター。",
+                        "hero":  "氷の音がする、夜のカウンター。",
                         "draftPath":  "03-cafe-mix-ink-c/draft.json",
-                        "previewPath":  "03-cafe-mix-ink-c/preview.svg"
+                        "previewPath":  "03-cafe-mix-ink-c/preview.png"
                     },
                     {
                         "id":  "04",
@@ -53,7 +53,7 @@
                         "brand":  "白磁ヘアサロン",
                         "hero":  "白い光のなかで、髪を整える。",
                         "draftPath":  "04-salon-clinic-a/draft.json",
-                        "previewPath":  "04-salon-clinic-a/preview.svg"
+                        "previewPath":  "04-salon-clinic-a/preview.png"
                     },
                     {
                         "id":  "05",
@@ -66,7 +66,7 @@
                         "brand":  "パステル菓子工房 うすい",
                         "hero":  "淡い色の、午後の一口。",
                         "draftPath":  "05-salon-sakura-b/draft.json",
-                        "previewPath":  "05-salon-sakura-b/preview.svg"
+                        "previewPath":  "05-salon-sakura-b/preview.png"
                     },
                     {
                         "id":  "06",
@@ -79,7 +79,7 @@
                         "brand":  "レンガ窯パン 麦の窓",
                         "hero":  "ケースの向こうで、パンが休む。",
                         "draftPath":  "06-bakery-brick-a/draft.json",
-                        "previewPath":  "06-bakery-brick-a/preview.svg"
+                        "previewPath":  "06-bakery-brick-a/preview.png"
                     },
                     {
                         "id":  "07",
@@ -90,9 +90,9 @@
                         "fontMood":  "mincho",
                         "scene":  "ラーメン・丼",
                         "brand":  "丼の湯気 麺場",
-                        "hero":  "丼から立ちのぼる、塩と脂の湯気。",
+                        "hero":  "丼から立ちのぼる、湯気の一杯。",
                         "draftPath":  "07-bakery-cafe-c/draft.json",
-                        "previewPath":  "07-bakery-cafe-c/preview.svg"
+                        "previewPath":  "07-bakery-cafe-c/preview.png"
                     },
                     {
                         "id":  "08",
@@ -103,9 +103,9 @@
                         "fontMood":  "brush",
                         "scene":  "宿・客室",
                         "brand":  "客室宿 ひなた畳",
-                        "hero":  "窓辺の光が、客室の主役。",
+                        "hero":  "窓辺の光が、\\n客室の主役。",
                         "draftPath":  "08-bar-ink-b/draft.json",
-                        "previewPath":  "08-bar-ink-b/preview.svg"
+                        "previewPath":  "08-bar-ink-b/preview.png"
                     },
                     {
                         "id":  "09",
@@ -118,7 +118,7 @@
                         "brand":  "光のヨガスタジオ あさひ",
                         "hero":  "床に落ちる光で、呼吸をそろえる。",
                         "draftPath":  "09-bar-brick-a/draft.json",
-                        "previewPath":  "09-bar-brick-a/preview.svg"
+                        "previewPath":  "09-bar-brick-a/preview.png"
                     },
                     {
                         "id":  "10",
@@ -131,7 +131,7 @@
                         "brand":  "提灯の居酒屋 赤のれん",
                         "hero":  "提灯が灯る、路地の一杯。",
                         "draftPath":  "10-clinic-green-a/draft.json",
-                        "previewPath":  "10-clinic-green-a/preview.svg"
+                        "previewPath":  "10-clinic-green-a/preview.png"
                     },
                     {
                         "id":  "11",
@@ -144,7 +144,7 @@
                         "brand":  "ひなたまち診療所",
                         "hero":  "待合の時計が、ゆっくり進む場所。",
                         "draftPath":  "11-clinic-clinic-b/draft.json",
-                        "previewPath":  "11-clinic-clinic-b/preview.svg"
+                        "previewPath":  "11-clinic-clinic-b/preview.png"
                     },
                     {
                         "id":  "12",
@@ -157,7 +157,7 @@
                         "brand":  "おさんぽペットケア みずき",
                         "hero":  "リードの先で、今日の散歩を。",
                         "draftPath":  "12-florist-sakura-a/draft.json",
-                        "previewPath":  "12-florist-sakura-a/preview.svg"
+                        "previewPath":  "12-florist-sakura-a/preview.png"
                     },
                     {
                         "id":  "13",
@@ -170,7 +170,7 @@
                         "brand":  "グリーンデスク コワーキング",
                         "hero":  "席のそばに、葉の緑を。",
                         "draftPath":  "13-florist-green-c/draft.json",
-                        "previewPath":  "13-florist-green-c/preview.svg"
+                        "previewPath":  "13-florist-green-c/preview.png"
                     },
                     {
                         "id":  "14",
@@ -183,7 +183,7 @@
                         "brand":  "壁のギャラリー 余白",
                         "hero":  "白い壁に、作品だけを残す。",
                         "draftPath":  "14-ramen-brick-b/draft.json",
-                        "previewPath":  "14-ramen-brick-b/preview.svg"
+                        "previewPath":  "14-ramen-brick-b/preview.png"
                     },
                     {
                         "id":  "15",
@@ -196,7 +196,7 @@
                         "brand":  "朝焼パン ひかり屋",
                         "hero":  "開店のベルと、焼きたての朝。",
                         "draftPath":  "15-ramen-ink-a/draft.json",
-                        "previewPath":  "15-ramen-ink-a/preview.svg"
+                        "previewPath":  "15-ramen-ink-a/preview.png"
                     },
                     {
                         "id":  "16",
@@ -207,9 +207,9 @@
                         "fontMood":  "softGothic",
                         "scene":  "サロン・花",
                         "brand":  "花綴りサロン",
-                        "hero":  "花綴りサロン",
+                        "hero":  "花と髪を、同じ手で。",
                         "draftPath":  "16-yoga-green-a/draft.json",
-                        "previewPath":  "16-yoga-green-a/preview.svg"
+                        "previewPath":  "16-yoga-green-a/preview.png"
                     },
                     {
                         "id":  "17",
@@ -220,9 +220,9 @@
                         "fontMood":  "round",
                         "scene":  "バー・ボトル",
                         "brand":  "灯ボトルバー",
-                        "hero":  "灯ボトルバー",
+                        "hero":  "ボトルの灯が、貸切したくなる夜。",
                         "draftPath":  "17-yoga-sakura-b/draft.json",
-                        "previewPath":  "17-yoga-sakura-b/preview.svg"
+                        "previewPath":  "17-yoga-sakura-b/preview.png"
                     },
                     {
                         "id":  "18",
@@ -235,7 +235,7 @@
                         "brand":  "余白フォトスタジオ",
                         "hero":  "余白フォトスタジオ",
                         "draftPath":  "18-studio-clinic-c/draft.json",
-                        "previewPath":  "18-studio-clinic-c/preview.svg"
+                        "previewPath":  "18-studio-clinic-c/preview.png"
                     },
                     {
                         "id":  "19",
@@ -248,7 +248,7 @@
                         "brand":  "暖簾ラーメン 麦火",
                         "hero":  "暖簾ラーメン 麦火",
                         "draftPath":  "19-studio-ink-a/draft.json",
-                        "previewPath":  "19-studio-ink-a/preview.svg"
+                        "previewPath":  "19-studio-ink-a/preview.png"
                     },
                     {
                         "id":  "20",
@@ -261,7 +261,7 @@
                         "brand":  "砂糖屋パルフェ",
                         "hero":  "砂糖屋パルフェ",
                         "draftPath":  "20-pet-cafe-b/draft.json",
-                        "previewPath":  "20-pet-cafe-b/preview.svg"
+                        "previewPath":  "20-pet-cafe-b/preview.png"
                     },
                     {
                         "id":  "21",
@@ -272,9 +272,9 @@
                         "fontMood":  "softGothic",
                         "scene":  "カフェ・窓辺",
                         "brand":  "窓辺の緑カフェ",
-                        "hero":  "窓辺の緑カフェ",
+                        "hero":  "窓辺の緑と、\\n静かな一杯。",
                         "draftPath":  "21-pet-sakura-a/draft.json",
-                        "previewPath":  "21-pet-sakura-a/preview.svg"
+                        "previewPath":  "21-pet-sakura-a/preview.png"
                     },
                     {
                         "id":  "22",
@@ -285,9 +285,9 @@
                         "fontMood":  "gothic",
                         "scene":  "居酒屋・木暖簾",
                         "brand":  "木暖簾 いまい",
-                        "hero":  "木暖簾 いまい",
+                        "hero":  "木の暖簾の\\n向こうで、\\n今夜の一献。",
                         "draftPath":  "22-cowork-clinic-b/draft.json",
-                        "previewPath":  "22-cowork-clinic-b/preview.svg"
+                        "previewPath":  "22-cowork-clinic-b/preview.png"
                     },
                     {
                         "id":  "23",
@@ -298,9 +298,9 @@
                         "fontMood":  "mincho",
                         "scene":  "コワーキング",
                         "brand":  "共席ラボ",
-                        "hero":  "共席ラボ",
+                        "hero":  "ひとりでも、\\n隣と座れる仕事場。",
                         "draftPath":  "23-cowork-green-a/draft.json",
-                        "previewPath":  "23-cowork-green-a/preview.svg"
+                        "previewPath":  "23-cowork-green-a/preview.png"
                     },
                     {
                         "id":  "24",
@@ -311,9 +311,9 @@
                         "fontMood":  "round",
                         "scene":  "診療所",
                         "brand":  "青葉クリニック",
-                        "hero":  "青葉クリニック",
+                        "hero":  "不安が、短くなる場所へ。",
                         "draftPath":  "24-sweets-sakura-c/draft.json",
-                        "previewPath":  "24-sweets-sakura-c/preview.svg"
+                        "previewPath":  "24-sweets-sakura-c/preview.png"
                     },
                     {
                         "id":  "25",
@@ -324,9 +324,9 @@
                         "fontMood":  "mincho",
                         "scene":  "パン・小麦",
                         "brand":  "麦畑ベーカリー",
-                        "hero":  "麦畑ベーカリー",
+                        "hero":  "小麦の香りが、\\n焼き立てになる。",
                         "draftPath":  "25-sweets-cafe-a/draft.json",
-                        "previewPath":  "25-sweets-cafe-a/preview.svg"
+                        "previewPath":  "25-sweets-cafe-a/preview.png"
                     },
                     {
                         "id":  "26",
@@ -337,9 +337,9 @@
                         "fontMood":  "brush",
                         "scene":  "写真館・モノクロ",
                         "brand":  "墨白フォト",
-                        "hero":  "墨白フォト",
+                        "hero":  "墨と白だけで、\\n静かに切り取る。",
                         "draftPath":  "26-izakaya-brick-c/draft.json",
-                        "previewPath":  "26-izakaya-brick-c/preview.svg"
+                        "previewPath":  "26-izakaya-brick-c/preview.png"
                     },
                     {
                         "id":  "27",
@@ -350,9 +350,9 @@
                         "fontMood":  "bold",
                         "scene":  "宿・朝",
                         "brand":  "朝露の宿",
-                        "hero":  "朝露の宿",
+                        "hero":  "朝露と\\n朝光だけの\\n一晩",
                         "draftPath":  "27-izakaya-ink-b/draft.json",
-                        "previewPath":  "27-izakaya-ink-b/preview.svg"
+                        "previewPath":  "27-izakaya-ink-b/preview.png"
                     },
                     {
                         "id":  "28",
@@ -363,9 +363,9 @@
                         "fontMood":  "mincho",
                         "scene":  "ヨガ・スタジオ",
                         "brand":  "葉音ヨガスタジオ",
-                        "hero":  "葉音ヨガスタジオ",
+                        "hero":  "葉の音のなかで、呼吸を戻す。",
                         "draftPath":  "28-gallery-ink-a/draft.json",
-                        "previewPath":  "28-gallery-ink-a/preview.svg"
+                        "previewPath":  "28-gallery-ink-a/preview.png"
                     },
                     {
                         "id":  "29",
@@ -376,9 +376,9 @@
                         "fontMood":  "gothic",
                         "scene":  "花屋・アレンジ",
                         "brand":  "束ね花店",
-                        "hero":  "束ね花店",
+                        "hero":  "近くで整えて、\\nそのまま持ち帰る。",
                         "draftPath":  "29-gallery-clinic-c/draft.json",
-                        "previewPath":  "29-gallery-clinic-c/preview.svg"
+                        "previewPath":  "29-gallery-clinic-c/preview.png"
                     },
                     {
                         "id":  "30",
@@ -389,9 +389,9 @@
                         "fontMood":  "mincho",
                         "scene":  "ギャラリー・額",
                         "brand":  "額縁ギャラリー灯",
-                        "hero":  "額縁ギャラリー灯",
+                        "hero":  "額の灯りが、\\n作品を残す。",
                         "draftPath":  "30-hotel-cafe-b/draft.json",
-                        "previewPath":  "30-hotel-cafe-b/preview.svg"
+                        "previewPath":  "30-hotel-cafe-b/preview.png"
                     }
                 ]
 }

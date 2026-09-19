@@ -1,0 +1,24 @@
+continuous 01 n=4
+continuous 03 n=3
+continuous 06 n=3
+continuous 08 n=4
+continuous 09 n=3
+continuous 28 n=3
+insert 05 #FDF5F6
+insert 14 #DAE3EB
+insert 18 #FFFFFF
+insert 26 #816922
+insert 30 #262828
+hh 16
+color-catch 21
+oudo 02
+oudo 04
+oudo 07
+oudo 10
+oudo 11
+oudo 12
+oudo 13
+oudo 15
+oudo 19
+oudo 23
+oudo 29

@@ -6,37 +6,15 @@
     "headingPack":  "H4",
     "colorKey":  "brick",
     "fontMood":  "softGothic",
-    "fonts":  {
-                  "catch":  "Sawarabi Gothic",
-                  "body":  "Zen Kaku Gothic New",
-                  "display":  "Sawarabi Gothic"
-              },
+    "status":  "rebuild-2026-09-19",
     "scene":  "パン・小麦",
-    "status":  "text+images",
-    "layoutPattern":  "a",
-    "layoutOrder":  [
-                        "hero",
-                        "accordions",
-                        "values",
-                        "photos",
-                        "works",
-                        "hours",
-                        "access",
-                        "address",
-                        "contact"
-                    ],
-    "counts":  {
-                   "hero-leads":  2,
-                   "hero-values":  3,
-                   "about-accordions":  2,
-                   "about-photos":  3,
-                   "works-list":  3
-               },
-    "extras":  {
-                   "hours":  true,
-                   "access":  true,
-                   "address":  true
-               },
+    "designBrief":  {
+                        "who":  "小麦のローフを焼く小さなベーカリーの店主",
+                        "purpose":  "焼き立てを買う／小麦の香りを覚えてもらう",
+                        "show":  "小麦・ローフ・粉・木のボード",
+                        "colorIntent":  "レンガ暖色・オレンジの元気",
+                        "worldviewOneLiner":  "小麦の香りがする焼き立て"
+                    },
     "imageSlots":  [
                        "hero.jpg",
                        "about-01.jpg",

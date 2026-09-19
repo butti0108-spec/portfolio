@@ -12,14 +12,14 @@
                   "display":  "Sawarabi Gothic"
               },
     "scene":  "カフェ・窓辺",
-    "status":  "text+images",
+    "status":  "rebuild-2026-09-19",
     "layoutPattern":  "a",
     "layoutOrder":  [
                         "hero",
+                        "accordions",
                         "values",
                         "works",
                         "photos",
-                        "accordions",
                         "hours",
                         "access",
                         "address",
@@ -45,5 +45,12 @@
                        "work-01.jpg",
                        "work-02.jpg",
                        "work-03.jpg"
-                   ]
+                   ],
+    "designBrief":  {
+                        "who":  "公園向かいの小さな窓辺カフェを営む店主（観葉と浅煎り珈琲）",
+                        "purpose":  "静かに座って一杯する／窓辺の緑を覚えてもらう",
+                        "show":  "窓・葉・カップ・レース越しの光",
+                        "colorIntent":  "薄い緑・白い余白",
+                        "worldviewOneLiner":  "窓辺の緑と静かな一杯"
+                    }
 }

@@ -1,48 +1,56 @@
 {
-    "id":  "11",
-    "folder":  "11-clinic-clinic-b",
-    "band":  "N",
-    "photoPack":  "P2",
-    "headingPack":  "H4",
-    "colorKey":  "clinic",
-    "fontMood":  "mincho",
-    "fonts":  {
-                  "catch":  "Shippori Mincho",
-                  "body":  "Zen Kaku Gothic New",
-                  "display":  "Shippori Mincho"
-              },
-    "scene":  "診療所・待合",
-    "status":  "text+images",
-    "layoutPattern":  "a",
-    "imageSlots":  [
-                       "hero.jpg",
-                       "about-01.jpg",
-                       "about-02.jpg",
-                       "about-03.jpg",
-                       "work-01.jpg",
-                       "work-02.jpg",
-                       "work-03.jpg"
-                   ],
-    "layoutOrder":  [
-                        "hero",
-                        "photos",
-                        "works",
-                        "values",
-                        "accordions",
-                        "hours",
-                        "access",
-                        "contact"
-                    ],
-    "extras":  {
-                   "hours":  true,
-                   "access":  true,
-                   "address":  false
-               },
-    "counts":  {
-                   "hero-leads":  2,
-                   "hero-values":  3,
-                   "about-accordions":  1,
-                   "about-photos":  3,
-                   "works-list":  3
-               }
+  "id": "11",
+  "folder": "11-clinic-clinic-b",
+  "band": "N",
+  "photoPack": "P2",
+  "headingPack": "H4",
+  "colorKey": "clinic",
+  "fontMood": "mincho",
+  "fonts": {
+    "catch": "Shippori Mincho",
+    "body": "Zen Kaku Gothic New",
+    "display": "Shippori Mincho"
+  },
+  "scene": "診療所・待合",
+  "status": "rebuild-2026-09-19",
+  "layoutPattern": "a",
+  "layoutOrder": [
+    "hero",
+    "values",
+    "accordions",
+    "photos",
+    "works",
+    "hours",
+    "access",
+    "address",
+    "contact"
+  ],
+  "extras": {
+    "hours": true,
+    "access": true,
+    "address": true
+  },
+  "counts": {
+    "hero-leads": 2,
+    "hero-values": 3,
+    "about-accordions": 1,
+    "about-photos": 3,
+    "works-list": 3
+  },
+  "imageSlots": [
+    "hero.jpg",
+    "about-01.jpg",
+    "about-02.jpg",
+    "about-03.jpg",
+    "work-01.jpg",
+    "work-02.jpg",
+    "work-03.jpg"
+  ],
+  "designBrief": {
+    "who": "住宅街の小さなまち診療所（一般内科・予約案内）",
+    "purpose": "不安を短くする／近所のかかりつけとして通ってもらう",
+    "show": "明るい待合・壁時計・静かな受付",
+    "colorIntent": "白と紺のきれいめ・清潔感",
+    "worldviewOneLiner": "待合の時計がゆっくり進む安心"
+  }
 }

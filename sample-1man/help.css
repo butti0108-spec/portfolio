@@ -45,11 +45,56 @@ body.help-page {
   backdrop-filter: blur(8px);
 }
 
+.help-topbar-center {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.08rem;
+  text-align: center;
+  pointer-events: none;
+  max-width: min(18rem, 52vw);
+}
+
+.help-product-catch {
+  margin: 0;
+  font-size: 0.68rem;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  color: rgba(21, 32, 40, 0.62);
+  white-space: nowrap;
+}
+
+.help-product-name {
+  margin: 0;
+  font-family: var(--help-font-display);
+  font-size: 1.05rem;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+  color: #152028;
+  line-height: 1.2;
+  white-space: nowrap;
+}
+
 .help-topbar-title {
   margin: 0;
   font-family: var(--help-font-display);
   font-size: 1.05rem;
   font-weight: 700;
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
 }
 
 .help-back-sticky {
@@ -515,9 +560,17 @@ body.help-page {
 .help-panel-title {
   margin: 0;
   font-family: var(--help-font-display);
-  font-size: 1.25rem;
+  font-size: 0.98rem;
   font-weight: 700;
   line-height: 1.35;
+  color: #152028;
+}
+.help-chunk-title {
+  margin: 0 0 0.35rem;
+  font-size: 0.9rem;
+  font-weight: 700;
+  line-height: 1.4;
+  color: #1a1f1c;
 }
 .help-panel-nav {
   display: flex;

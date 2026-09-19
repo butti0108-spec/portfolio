@@ -1,0 +1,7 @@
+done 18 touched=3
+done 30 touched=2
+FAIL 08/about-01.jpg
+done 08 touched=4
+done 09 touched=4
+FAIL 04/about-01.jpg
+done 04 touched=1

@@ -12,8 +12,20 @@
                   "display":  "Yuji Syuku"
               },
     "scene":  "居酒屋・木暖簾",
-    "status":  "text+images",
+    "status":  "rebuild-2026-09-19",
     "layoutPattern":  "a",
+    "counts":  {
+                   "hero-leads":  2,
+                   "hero-values":  3,
+                   "about-accordions":  1,
+                   "about-photos":  4,
+                   "works-list":  3
+               },
+    "extras":  {
+                   "hours":  true,
+                   "access":  true,
+                   "address":  true
+               },
     "imageSlots":  [
                        "hero.jpg",
                        "about-01.jpg",
@@ -24,26 +36,11 @@
                        "work-02.jpg",
                        "work-03.jpg"
                    ],
-    "layoutOrder":  [
-                        "hero",
-                        "values",
-                        "photos",
-                        "works",
-                        "hours",
-                        "access",
-                        "accordions",
-                        "contact"
-                    ],
-    "extras":  {
-                   "hours":  true,
-                   "access":  true,
-                   "address":  false
-               },
-    "counts":  {
-                   "hero-leads":  2,
-                   "hero-values":  3,
-                   "about-accordions":  1,
-                   "about-photos":  4,
-                   "works-list":  3
-               }
+    "designBrief":  {
+                        "who":  "駅裏通りで木の暖簾を掲げる小さな居酒屋の店主",
+                        "purpose":  "今夜の一献に寄ってもらう／暖簾の向こうを覚えてもらう",
+                        "show":  "木暖簾・木目・杯・串",
+                        "colorIntent":  "墨の暗さ・金のアクセント",
+                        "worldviewOneLiner":  "木の暖簾の向こうで今夜の一献"
+                    }
 }

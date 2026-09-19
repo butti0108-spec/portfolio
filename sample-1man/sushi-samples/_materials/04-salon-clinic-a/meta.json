@@ -12,18 +12,17 @@
                   "display":  "Shippori Mincho"
               },
     "scene":  "サロン・白",
-    "status":  "text+images",
+    "status":  "rebuild-2026-09-19",
     "layoutPattern":  "a",
     "layoutOrder":  [
+                        "hours",
+                        "contact",
                         "hero",
-                        "photos",
                         "values",
                         "works",
-                        "hours",
                         "access",
                         "address",
-                        "accordions",
-                        "contact"
+                        "accordions"
                     ],
     "counts":  {
                    "hero-leads":  2,
@@ -45,5 +44,12 @@
                        "work-01.jpg",
                        "work-02.jpg",
                        "work-03.jpg"
-                   ]
+                   ],
+    "designBrief":  {
+                        "who":  "白を基調にした少人数制のヘアサロン（個室寄りの静けさ）",
+                        "purpose":  "相談してから予約してもらう／帰宅後も整えやすい形を伝える",
+                        "show":  "白壁・余白・柔らかい光・静かな個室感",
+                        "colorIntent":  "白磁の余白に紺のきれいめ",
+                        "worldviewOneLiner":  "白い光と余白で髪を整える個室"
+                    }
 }

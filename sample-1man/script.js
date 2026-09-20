@@ -1965,6 +1965,7 @@
     vibeReasons: [],
     vibeText: "",
     intakeDone: false,
+    saveMode: null,
     entryBranch: null,
     hubEntrySource: null,
     easyFlowActive: false,
@@ -3107,6 +3108,7 @@
     syncGuidedColorTrial();
     renderLayoutArrangeWire();
     syncHubEntryPanels();
+    syncDashResumeNotice();
     updateWizardUi();
     if (typeof window.setPreviewWidthStepById === "function") {
       window.setPreviewWidthStepById("desktop");
@@ -3417,6 +3419,7 @@
       vibeReasons: store.vibeReasons,
       vibeText: store.vibeText,
       intakeDone: store.intakeDone,
+      saveMode: store.saveMode === "folder" || store.saveMode === "browser" ? store.saveMode : null,
       entryBranch: store.entryBranch,
       hubEntrySource: store.hubEntrySource,
       easyFlowActive: !!store.easyFlowActive,
@@ -6799,6 +6802,12 @@
     return true;
   }
 
+  function syncDashResumeNotice() {
+    const notice = document.querySelector(".dash-resume-notice");
+    if (!notice) return;
+    notice.hidden = store.saveMode === "folder";
+  }
+
   function hideEntryGate() {
     const gate = document.getElementById("entry-gate");
     if (gate) gate.hidden = true;
@@ -6806,10 +6815,22 @@
   }
 
   function entryGateCopy(step) {
+    if (step === "save") {
+      return {
+        title: "はじめに",
+        lead: "続きから作りたいときのために、このパソコン内へ制作データを残すかどうかを選んでください。当社のサーバーには保存しません。"
+      };
+    }
     if (step === "branch") {
       return {
         title: "ホームページをつくる",
         lead: "進め方をひとつ選んでください。"
+      };
+    }
+    if (step === "resume-stub") {
+      return {
+        title: "保存したデータから再開する",
+        lead: ""
       };
     }
     if (step === "sushi") {
@@ -6832,18 +6853,29 @@
     };
   }
 
+  function entryGateAllowedSteps() {
+    if (!store.saveMode) return ["save"];
+    if (store.entryBranch === "detail") return ["save", "branch", "purpose"];
+    if (store.entryBranch === "sample") return ["save", "branch", "sushi", "purpose", "color"];
+    if (store.entryBranch === "resume") return ["save", "branch", "resume-stub"];
+    return ["save", "branch"];
+  }
+
   function setEntryGateStep(step) {
     const gate = document.getElementById("entry-gate");
     if (!gate) return;
-    const allowed =
-      store.entryBranch === "detail"
-        ? ["branch", "purpose"]
-        : store.entryBranch === "sample"
-          ? ["branch", "sushi", "purpose", "color"]
-          : ["branch"];
-    const next = allowed.indexOf(step) >= 0 ? step : "branch";
+    const allowed = entryGateAllowedSteps();
+    const fallback = store.saveMode ? "branch" : "save";
+    const next = allowed.indexOf(step) >= 0 ? step : fallback;
     gate.dataset.entryStep = next;
-    gate.dataset.entryPath = store.entryBranch === "detail" ? "detail" : "sample";
+    gate.dataset.entryPath =
+      store.entryBranch === "detail"
+        ? "detail"
+        : store.entryBranch === "resume"
+          ? "resume"
+          : store.entryBranch === "sample"
+            ? "sample"
+            : "";
     gate.querySelectorAll("[data-entry-step]").forEach((el) => {
       el.hidden = el.getAttribute("data-entry-step") !== next;
     });
@@ -6851,7 +6883,10 @@
     const title = document.getElementById("entry-gate-title");
     const lead = document.getElementById("entry-gate-lead");
     if (title) title.textContent = copy.title;
-    if (lead) lead.textContent = copy.lead;
+    if (lead) {
+      lead.textContent = copy.lead;
+      lead.hidden = !copy.lead;
+    }
     if (next === "sushi") {
       if (window.SushiBelt) {
         window.SushiBelt.setup();
@@ -6879,12 +6914,20 @@
       store.pendingSushi = null;
       gate
         .querySelectorAll(
-          'input[name="entry_branch"], input[name="entry_purpose"], input[name="entry_layout"], input[name="entry_color"], input[name="entry_sample_color"]'
+          'input[name="entry_save_mode"], input[name="entry_branch"], input[name="entry_purpose"], input[name="entry_layout"], input[name="entry_color"], input[name="entry_sample_color"]'
         )
         .forEach((r) => {
           r.checked = false;
         });
-      setEntryGateStep("branch");
+      if (store.saveMode) {
+        const saveRadio = gate.querySelector(
+          'input[name="entry_save_mode"][value="' + store.saveMode + '"]'
+        );
+        if (saveRadio) saveRadio.checked = true;
+        setEntryGateStep("branch");
+      } else {
+        setEntryGateStep("save");
+      }
       return;
     }
     setEntryGateStep(startStep);
@@ -8555,9 +8598,23 @@
   function setupEntryGate() {
     const gate = document.getElementById("entry-gate");
     if (!gate) return;
+    gate.querySelectorAll('input[name="entry_save_mode"]').forEach((input) => {
+      input.addEventListener("change", () => {
+        if (!input.checked) return;
+        store.saveMode = input.value === "folder" ? "folder" : "browser";
+        syncDashResumeNotice();
+        scheduleSave();
+        setEntryGateStep("branch");
+      });
+    });
     gate.querySelectorAll('input[name="entry_branch"]').forEach((input) => {
       input.addEventListener("change", () => {
         if (!input.checked) return;
+        if (input.value === "resume") {
+          store.entryBranch = "resume";
+          setEntryGateStep("resume-stub");
+          return;
+        }
         store.entryBranch = input.value === "detail" ? "detail" : "sample";
         if (store.entryBranch === "sample") setEntryGateStep("sushi");
         else setEntryGateStep("purpose");
@@ -8599,6 +8656,18 @@
             r.checked = false;
           });
           setEntryGateStep("branch");
+        } else if (cur === "resume-stub") {
+          store.entryBranch = null;
+          gate.querySelectorAll('input[name="entry_branch"]').forEach((r) => {
+            r.checked = false;
+          });
+          setEntryGateStep("branch");
+        } else if (cur === "branch") {
+          store.entryBranch = null;
+          gate.querySelectorAll('input[name="entry_branch"]').forEach((r) => {
+            r.checked = false;
+          });
+          setEntryGateStep("save");
         }
       });
     });
@@ -8610,6 +8679,7 @@
       });
     });
     setupEasyImagePickers();
+    syncDashResumeNotice();
     if (shouldShowEntryGate()) showEntryGate();
     else {
       hideEntryGate();
@@ -11892,6 +11962,9 @@
       }
       if (data.intakeDone != null) store.intakeDone = !!data.intakeDone;
       else if (data.uiMode || data.sitePurpose) store.intakeDone = true;
+      if (data.saveMode === "folder" || data.saveMode === "browser") {
+        store.saveMode = data.saveMode;
+      }
       if (data.entryBranch === "easy" || data.entryBranch === "detail" || data.entryBranch === "sample") {
         store.entryBranch = data.entryBranch === "easy" ? "sample" : data.entryBranch;
       }

@@ -127,7 +127,26 @@
       <h2 class="entry-gate-title" id="entry-gate-title">ホームページをつくる</h2>
       <p class="entry-gate-lead" id="entry-gate-lead">進め方をひとつ選んでください。</p>
 
-      <fieldset class="entry-intake-block" id="entry-branch-field" data-entry-step="branch">
+      <fieldset class="entry-intake-block" id="entry-save-field" data-entry-step="save">
+        <legend class="visually-hidden">保存のしかた</legend>
+        <div class="entry-branch-grid" role="radiogroup" aria-label="保存のしかた">
+          <label class="entry-branch-card">
+            <input type="radio" name="entry_save_mode" value="folder">
+            <span class="entry-branch-card-inner">
+              <strong role="heading" aria-level="3">このパソコンに残して続ける</strong>
+            </span>
+          </label>
+          <label class="entry-branch-card">
+            <input type="radio" name="entry_save_mode" value="browser">
+            <span class="entry-branch-card-inner">
+              <strong role="heading" aria-level="3">残さず、そのまま作る</strong>
+              <span>残さない場合、ページを更新すると写真は消えることがあります（文章などはブラウザ内に残ることがあります）。</span>
+            </span>
+          </label>
+        </div>
+      </fieldset>
+
+      <fieldset class="entry-intake-block" id="entry-branch-field" data-entry-step="branch" hidden>
         <legend class="visually-hidden">進め方</legend>
         <div class="entry-branch-grid" role="radiogroup" aria-label="進め方">
           <label class="entry-branch-card">
@@ -144,8 +163,22 @@
               <span>用途のあと、色・枠・文字を自分で触れます</span>
             </span>
           </label>
+          <label class="entry-branch-card">
+            <input type="radio" name="entry_branch" value="resume">
+            <span class="entry-branch-card-inner">
+              <strong role="heading" aria-level="3">保存したデータから再開する</strong>
+              <span>前に残した制作データやZIPから続きを開きます</span>
+            </span>
+          </label>
         </div>
         <p class="entry-intake-note entry-hero-text-note">サンプルではキャッチ写真に文字を載せません。写真の上に文字を載せたい人は、「自分で作る」か完成後の「編集する」でできます。</p>
+        <button type="button" class="entry-step-back" data-entry-step-back>← ひとつ戻る</button>
+      </fieldset>
+
+      <fieldset class="entry-intake-block" id="entry-resume-stub-field" data-entry-step="resume-stub" hidden>
+        <legend class="visually-hidden">再開（準備中）</legend>
+        <p class="entry-intake-note">準備中です。次の更新で読み込みが使えるようになります。</p>
+        <button type="button" class="entry-step-back" data-entry-step-back>← ひとつ戻る</button>
       </fieldset>
 
       <fieldset class="entry-intake-block sushi-shelf" id="entry-sushi-field" data-entry-step="sushi" hidden>

@@ -1,0 +1,387 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="増渕 敦（マスブチ アツシ）のポートフォリオ。見やすく使いやすいWebサイトのデザインと制作。">
+  <title>増渕 敦 | Web Designer</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@500;700&family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+  <script>document.documentElement.classList.add("js");</script>
+  <script src="script.js" defer></script>
+</head>
+<body>
+  <a class="skip-link" href="#main">本文へスキップ</a>
+
+  <header class="site-header">
+    <div class="shell header-inner">
+      <a class="logo" href="index.html">増渕 敦</a>
+      <button type="button" class="nav-toggle" aria-expanded="false" aria-controls="site-nav" aria-label="メニューを開く">
+        <span class="nav-toggle-bars" aria-hidden="true">
+          <span></span>
+          <span></span>
+          <span></span>
+        </span>
+        <span class="nav-toggle-label">メニュー</span>
+      </button>
+      <nav id="site-nav" class="site-nav" aria-label="メイン">
+        <a href="#about">About</a>
+        <a href="#works">Works</a>
+        <a href="#contact">Contact</a>
+        <a href="mentor.html">確認用</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main">
+    <section class="hero" aria-labelledby="hero-title">
+      <div class="shell hero-box">
+        <div class="hero-stage">
+          <img
+            class="hero-photo"
+            src="assets/images/hero/leaves-hero.png"
+            alt=""
+            width="2752"
+            height="1536"
+          >
+          <div class="hero-copy">
+            <h1 id="hero-title">Web Designer</h1>
+            <p class="hero-lead">見やすさ・使いやすさを大切に、ウェブサイトのデザインと制作を<span class="phrase-keep">行っています。</span></p>
+            <p class="hero-lead">依頼者の目的を整理し、HTML / CSS / <span class="phrase-keep">JavaScript</span> と</p>
+            <p class="hero-lead"><span class="phrase-keep">WordPress</span> で<span class="phrase-keep">形にします。</span></p>
+            <div class="hero-cta-inner">
+              <a class="btn btn-primary" href="#works">作品を見る</a>
+              <a class="btn btn-ghost" href="#contact">お問い合わせ</a>
+            </div>
+          </div>
+        </div>
+        <ul class="hero-value-list">
+          <li>
+            <p class="hero-value-title">見やすく</p>
+            <p>情報の整理と視線の流れを意識し、ストレスなく伝わるデザインを心がけています。</p>
+          </li>
+          <li>
+            <p class="hero-value-title">使いやすく</p>
+            <p>迷わず操作できることを重視し、直感的に使えるインターフェースを設計します。</p>
+          </li>
+          <li>
+            <p class="hero-value-title">目的をカタチに</p>
+            <p>丁寧なヒアリングで目的を明確にし、最適な構成とデザインで成果につながるサイトを制作します。</p>
+          </li>
+        </ul>
+      </div>
+    </section>
+
+    <section id="about" class="section about" aria-labelledby="about-title">
+      <div class="shell">
+        <p class="section-label">About</p>
+        <h2 id="about-title">Profile</h2>
+        <p class="profile-name">増渕 敦（Atsushi Masubuchi）</p>
+        <p class="section-lead">お客様の立場に立って考える Web Designer です。声になっていない要望にも耳を傾け、「何を作りたいか」だけでなく「なぜそれを作りたいのか」まで整理します。</p>
+
+        <p class="tap-hint">白い見出しをタップすると、中身が開きます。</p>
+        <div class="accordion-list">
+          <details class="accordion">
+            <summary>大切にしていること</summary>
+            <div class="accordion-body">
+              <ul class="value-list">
+                <li><span class="value-mark">【使う人基準】</span>見た目の新しさより、触ったときに迷わないかを先に判断する。</li>
+                <li><span class="value-mark">【優先順位】</span>全部を同じ強さで出さない。先に伝えることを決めてから並べる。</li>
+                <li><span class="value-mark">【統一感】</span>色・見出し・余白のトーンをサイト全体でそろえる。ページごとに印象が割れないこと。</li>
+                <li><span class="value-mark">【引き算】</span>足す前に、無くても伝わるかを見る。装飾だけの要素は置かない。</li>
+              </ul>
+            </div>
+          </details>
+
+          <details class="accordion">
+            <summary>強み</summary>
+            <div class="accordion-body">
+              <ul class="strength-list">
+                <li>
+                  <span class="strength-label">要望を「困りごと」から聞く</span>
+                  <span class="strength-text">作りたい画面から入らず、何に困っているかを先に聞いて、載せる順に分けます。</span>
+                </li>
+                <li>
+                  <span class="strength-label">課題から設計する力</span>
+                  <span class="strength-text">「バイタル記録ノート」は、実際の困りごとから機能・構成・UIを一から構想しました。</span>
+                </li>
+                <li>
+                  <span class="strength-label">実物で判断する</span>
+                  <span class="strength-text">言葉だけで決めず、画面を触ってから直します。このサイトの開閉もその判断です。</span>
+                </li>
+              </ul>
+            </div>
+          </details>
+        </div>
+
+        <ul class="skill-cards">
+          <li class="skill-card">
+            <button type="button" class="skill-card-btn" data-skill-popup="design" aria-haspopup="dialog" aria-controls="skill-dialog" aria-label="Webデザインの説明を開く">
+              <img class="skill-card-img" src="assets/images/works/web-design-3000-1.png" alt="" width="3000" height="2250" loading="lazy">
+            </button>
+          </li>
+          <li class="skill-card">
+            <button type="button" class="skill-card-btn" data-skill-popup="code" aria-haspopup="dialog" aria-controls="skill-dialog" aria-label="コーディングの説明を開く">
+              <img class="skill-card-img" src="assets/images/works/web-design-3000-2.png" alt="" width="3000" height="2250" loading="lazy">
+            </button>
+          </li>
+          <li class="skill-card">
+            <button type="button" class="skill-card-btn" data-skill-popup="ai" aria-haspopup="dialog" aria-controls="skill-dialog" aria-label="AI活用の説明を開く">
+              <img class="skill-card-img" src="assets/images/works/web-design-3000-3.png" alt="" width="3000" height="2250" loading="lazy">
+            </button>
+          </li>
+          <li class="skill-card">
+            <button type="button" class="skill-card-btn" data-skill-popup="wordpress" aria-haspopup="dialog" aria-controls="skill-dialog" aria-label="WordPressの説明を開く">
+              <img class="skill-card-img" src="assets/images/works/web-design-3000-4.png" alt="" width="3000" height="2250" loading="lazy">
+            </button>
+          </li>
+        </ul>
+        <p class="tap-hint tap-hint--skills">画像をタップすると、それぞれの説明が開きます。</p>
+
+        <p class="tap-hint">白い見出しをタップすると、中身が開きます。</p>
+        <div class="accordion-list">
+          <details class="accordion" id="offer">
+            <summary>ご依頼できること</summary>
+            <div class="accordion-body">
+              <p class="offer-lead">こんな制作をお受けできます。</p>
+              <ol class="offer-list">
+                <li>
+                  <span class="offer-item">
+                    <span class="offer-title">会社・教室の紹介</span>
+                    <span class="offer-note">今見ている、このページのような紹介サイト。</span>
+                  </span>
+                </li>
+                <li>
+                  <span class="offer-item">
+                    <span class="offer-title">お店・サービスの案内</span>
+                    <span class="offer-note">このウェブサイトと同じレイアウトで、お店の案内に差し替えたもの。</span>
+                  </span>
+                </li>
+                <li>
+                  <span class="offer-item">
+                    <span class="offer-title">1枚の案内ページ</span>
+                    <span class="offer-note">バイタルの詳細のような、1つの案内に絞ったページ。</span>
+                  </span>
+                </li>
+                <li>
+                  <span class="offer-item">
+                    <span class="offer-title">今あるページの直し</span>
+                    <span class="offer-note">今あるサイトを、このページのように見やすくする。</span>
+                  </span>
+                </li>
+                <li>
+                  <span class="offer-item">
+                    <span class="offer-title">あとから自分で直せる形</span>
+                    <span class="offer-note">文章や写真を、あとから自分で変えられるようにする。要相談です。</span>
+                  </span>
+                </li>
+                <li>
+                  <span class="offer-item">
+                    <span class="offer-title">メールアドレスを載せる</span>
+                    <span class="offer-note">押すとコピーできる形まで。入力して送れる欄は要相談です。</span>
+                  </span>
+                </li>
+              </ol>
+
+              <details class="accordion accordion-nested" id="pricing">
+                <summary>料金の目安</summary>
+                <div class="accordion-body">
+                  <div class="price-block price-main">
+                    <p class="offer-subhead">1万円プラン</p>
+                    <p class="price-main-amount">1万円</p>
+                    <p class="price-main-note">注文画面の見本サイトで完成イメージを確認できます。文章と写真はお客様にご用意いただきます。直しは1回です。</p>
+                    <p class="price-main-note">問い合わせは、メールアドレスの掲載と、押すとコピーできるところまでです。</p>
+                    <p class="price-main-note">住所を出す場合は、住所文をタップするとGoogleマップが開くリンクにします（地図の埋め込みは含みません）。</p>
+                    <p class="price-main-action">
+                      <a class="price-main-link" href="sample-1man/index.html">注文画面を開く</a>
+                    </p>
+                    <p class="offer-foot">操作のくわしい説明は <a href="sample-1man/help.html">ヘルプ</a> にあります。</p>
+                  </div>
+
+                  <div class="price-block">
+                    <p class="offer-subhead">1万円プランのオプション</p>
+                    <p class="price-main-note">基本に足す内容です。どこまで足すかで変わります。通常のサイトに近づけると、2〜3万円が目安です。</p>
+                    <ol class="offer-list price-list">
+                      <li>
+                        <span class="price-item">
+                          <span class="price-amount">目安 2〜3万円</span>
+                          <span class="price-note">ページを足す、文章を整理する、写真の入れ方を増やすなど</span>
+                        </span>
+                      </li>
+                    </ol>
+                  </div>
+
+                  <div class="price-block">
+                    <p class="offer-subhead">WordPress（要相談）</p>
+                    <p class="price-main-note">あとから自分で直せる形や、入力して送れる問い合わせ欄は、使う機能で手間が変わります。金額は内容を聞いてからお伝えします。</p>
+                    <ol class="offer-list price-list">
+                      <li>
+                        <span class="price-item">
+                          <span class="price-amount">要相談</span>
+                          <span class="price-note">入力して送れる問い合わせ欄</span>
+                        </span>
+                      </li>
+                      <li>
+                        <span class="price-item">
+                          <span class="price-amount">要相談</span>
+                          <span class="price-note">あとから文章や写真を自分で直せる形にする</span>
+                        </span>
+                      </li>
+                      <li>
+                        <span class="price-item">
+                          <span class="price-amount">要相談</span>
+                          <span class="price-note">今あるサイトを、自分で更新できる形にする</span>
+                        </span>
+                      </li>
+                      <li>
+                        <span class="price-item">
+                          <span class="price-amount">要相談</span>
+                          <span class="price-note">1から希望どおり作る。このレイアウトに限りません</span>
+                        </span>
+                      </li>
+                    </ol>
+                  </div>
+                </div>
+              </details>
+            </div>
+          </details>
+
+          <details class="accordion" id="faq">
+            <summary>よくある質問</summary>
+            <div class="accordion-body">
+              <details class="accordion accordion-nested">
+                <summary>すでに WordPress を使っています。いくらかかりますか？</summary>
+                <div class="accordion-body">
+                  <p class="offer-foot">要相談です。使う機能によって手間が変わるため、内容を聞いてからお伝えします。</p>
+                </div>
+              </details>
+              <details class="accordion accordion-nested">
+                <summary>まだ WordPress を使っていません。いくらかかりますか？</summary>
+                <div class="accordion-body">
+                  <p class="offer-foot">要相談です。使えるようにするところから、あとから自分で直せる形まで、内容を聞いて決めます。</p>
+                </div>
+              </details>
+              <details class="accordion accordion-nested">
+                <summary>今あるサイトを WordPress にしたいのですが？</summary>
+                <div class="accordion-body">
+                  <p class="offer-foot">要相談です。今のサイトを、自分で更新できる形にします。このウェブサイトと同じ見た目にする必要はありません。</p>
+                </div>
+              </details>
+              <details class="accordion accordion-nested" id="faq-1man-form">
+                <summary>1万円のプランに、入力して送れる問い合わせ欄は含まれますか？</summary>
+                <div class="accordion-body">
+                  <p class="offer-foot">含まれません。メール掲載とコピーできるところまでです。<a href="sample-1man/help.html#faq">くわしく</a></p>
+                </div>
+              </details>
+              <details class="accordion accordion-nested" id="faq-1man-revision">
+                <summary>直しは何回までですか？</summary>
+                <div class="accordion-body">
+                  <p class="offer-foot">1万円のプランは1回まで（納品後30日以内）です。2回目から別料金です。<a href="sample-1man/help.html#faq">くわしく</a></p>
+                </div>
+              </details>
+              <details class="accordion accordion-nested">
+                <summary>サーバー代は、制作費に含まれますか？</summary>
+                <div class="accordion-body">
+                  <p class="offer-foot">含まれません。月々のサーバー代は、お客様の契約です。セキュリティなども同様です。</p>
+                </div>
+              </details>
+              <p class="offer-foot"><a href="#contact">ほかのご質問は、お気軽にお問い合わせください。</a></p>
+            </div>
+          </details>
+        </div>
+      </div>
+    </section>
+
+    <section id="works" class="section works" aria-labelledby="works-title">
+      <div class="shell">
+        <p class="section-label">Works</p>
+        <h2 id="works-title">Selected Works</h2>
+        <p class="section-lead">制作したサイト・<span class="text-keep">Webアプリ</span>の一部です。下の作品を押すと、詳細や実サイトを確認できます。</p>
+
+        <ul class="work-list">
+          <li class="work-item">
+            <a href="works/vital.html">
+              <img class="work-thumb" src="assets/images/works/vital-thumb.png" alt="バイタル記録ノートの画面キャプチャ" width="1200" height="750" loading="lazy">
+              <div class="work-item-body">
+                <span class="work-tag">Web App</span>
+                <h3>バイタル記録ノート</h3>
+                <div class="work-item-copy">
+                  <p>血圧・脈拍・体重・体温をスマホで記録。</p>
+                  <p>カレンダーとグラフで振り返る軽量<span class="text-keep">Webアプリ</span>。</p>
+                </div>
+                <span class="work-link">詳細を見る</span>
+              </div>
+            </a>
+          </li>
+          <li class="work-item">
+            <a href="https://butti0108-spec.github.io/taro/" target="_blank" rel="noopener noreferrer">
+              <img class="work-thumb" src="assets/images/works/taro-thumb.png" alt="Taro's Scenery のサイトキャプチャ" width="1200" height="750" loading="lazy">
+              <div class="work-item-body">
+                <span class="work-tag">Website</span>
+                <h3>Taro's Scenery</h3>
+                <div class="work-item-copy">
+                  <p>フォトグラファー紹介の模写コーディング。</p>
+                  <p><span class="text-keep">ABOUT／WORKS</span>構成の静的サイト。</p>
+                </div>
+                <span class="work-link">サイトを見る</span>
+              </div>
+            </a>
+          </li>
+          <li class="work-item">
+            <a href="https://butti0108-spec.github.io/GnamGnam/" target="_blank" rel="noopener noreferrer">
+              <img class="work-thumb" src="assets/images/works/gnamgnam-thumb.png" alt="Gnam gnam のサイトキャプチャ" width="1200" height="750" loading="lazy">
+              <div class="work-item-body">
+                <span class="work-tag">Website</span>
+                <h3>Gnam gnam</h3>
+                <div class="work-item-copy">
+                  <p>イタリアンレストランの模写コーディング。<br>コンセプト・メニュー・店舗情報の構成。</p>
+                </div>
+                <span class="work-link">サイトを見る</span>
+              </div>
+            </a>
+          </li>
+        </ul>
+      </div>
+    </section>
+
+    <section id="contact" class="contact-band" aria-labelledby="contact-title">
+      <div class="shell contact-band-inner">
+        <p class="section-label">Contact</p>
+        <h2 id="contact-title">制作のご相談はお気軽に</h2>
+        <p class="contact-band-lead">サイト制作・UI改善・<span class="text-keep">WordPress</span>構築など、ご依頼やご質問はフォームからどうぞ。</p>
+        <p class="contact-band-lead">内容を確認のうえ、折り返しご連絡します。</p>
+
+        <form class="contact-form" id="contact-form" action="#" method="post" novalidate>
+          <div class="contact-form-row">
+            <label for="contact-name">お名前 <span class="req">必須</span></label>
+            <input id="contact-name" name="your-name" type="text" autocomplete="name" required>
+          </div>
+          <div class="contact-form-row">
+            <label for="contact-email">メールアドレス <span class="req">必須</span></label>
+            <input id="contact-email" name="your-email" type="email" autocomplete="email" required>
+          </div>
+          <div class="contact-form-row">
+            <label for="contact-subject">件名</label>
+            <input id="contact-subject" name="your-subject" type="text">
+          </div>
+          <div class="contact-form-row">
+            <label for="contact-message">お問い合わせ内容 <span class="req">必須</span></label>
+            <textarea id="contact-message" name="your-message" rows="6" required></textarea>
+          </div>
+          <button class="btn btn-primary contact-submit" type="submit">送信する</button>
+          <p class="contact-form-note">※ 現在は見た目確認用です。<span class="text-keep">WordPress</span>化後に Contact Form 7 で送信できるようにします。</p>
+          <p class="contact-form-status" id="contact-status" role="status" aria-live="polite" hidden></p>
+        </form>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="shell footer-inner">
+      <p>© Atsushi Masubuchi</p>
+    </div>
+  </footer>
+</body>
+</html>

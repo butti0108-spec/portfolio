@@ -3454,7 +3454,7 @@
       draftContact: { ...store.draftContact },
       confirmed: store.confirmed,
       snapshots: store.snapshots,
-      fields: formToObject(),
+      fields: formToObject({ includeHidden: true }),
       fonts: {
         display: fieldValue("font_display"),
         catch: fieldValue("font_catch"),
@@ -6091,7 +6091,8 @@
 
   function inputHasFile(name) {
     const input = form.elements.namedItem(name);
-    return !!(input && input.files && input.files[0]);
+    if (input && input.files && input.files[0]) return true;
+    return !!(store.zipImageFiles && store.zipImageFiles[name]);
   }
 
   function requiredImageInputs() {
@@ -12043,7 +12044,7 @@
         address: !!(store.draftExtras && store.draftExtras.address)
       },
       layoutBlockOff: Object.assign({}, store.layoutBlockOff || {}),
-      fields: formToObject(),
+      fields: formToObject({ includeHidden: true }),
       heroTextOnPhoto: !!store.heroTextOnPhoto,
       heroFocalX: normalizeFocalPercent(store.heroFocalX, HERO_FOCAL_X_DEFAULT),
       heroFocalY: normalizeFocalPercent(store.heroFocalY, HERO_FOCAL_Y_DEFAULT),
@@ -12125,7 +12126,7 @@
         draftContact: { ...store.draftContact },
         confirmed: store.confirmed,
         snapshots: store.snapshots,
-        fields: formToObject()
+        fields: formToObject({ includeHidden: true })
       };
       localStorage.setItem(STORAGE_KEY, JSON.stringify(payload));
     } catch (e) {
@@ -12562,8 +12563,7 @@
   }
 
   form.addEventListener("input", (e) => {
-    if (e.target && !isFieldVisible(e.target)) return;
-    if (e.target && e.target.name) syncCharCounter(e.target);
+    if (e.target && e.target.name && isFieldVisible(e.target)) syncCharCounter(e.target);
     updateFontPreview();
     scheduleSave();
   });

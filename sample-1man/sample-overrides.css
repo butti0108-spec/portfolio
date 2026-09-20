@@ -6042,6 +6042,35 @@ body.gct-preset-phase.mode-guided .dash-block.is-wizard-active .step-help {
   cursor: pointer;
   padding: 0.25rem 0;
 }
+.entry-resume-file {
+  display: grid;
+  gap: 0.45rem;
+  margin: 0.35rem 0 0.75rem;
+  font: inherit;
+}
+.entry-resume-file-label {
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: #2a3340;
+}
+.entry-resume-file input[type="file"] {
+  max-width: 100%;
+  font: inherit;
+}
+.entry-resume-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem 1.1rem;
+  margin-top: 0.35rem;
+}
+.entry-resume-actions .entry-step-back {
+  margin-top: 0;
+}
+.entry-resume-actions .wizard-btn:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
 .entry-layout-grid--2x2 {
   grid-template-columns: 1fr 1fr;
   gap: 0.55rem;

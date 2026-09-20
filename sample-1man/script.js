@@ -1997,6 +1997,7 @@
     hubPlaceFitScale: 1,
     hubUiMode: "home",
     studioImagePaths: null,
+    zipImageFiles: null,
     hubReturnBlockId: null,
     hubEntryRoute: null,
     hubTaskId: null,
@@ -3598,6 +3599,12 @@
     store.easyFlowActive = false;
     store.uiMode = "self";
     store.siteColorMode = draft.siteColorMode === "easy" ? "easy" : "detail";
+    if (draft.sitePurpose) store.sitePurpose = draft.sitePurpose;
+    if (draft.confirmed && typeof draft.confirmed === "object") {
+      Object.keys(draft.confirmed).forEach(function (k) {
+        store.confirmed[k] = !!draft.confirmed[k];
+      });
+    }
     applySushiSampleDraft(draft);
     if (draft.imagePaths && typeof draft.imagePaths === "object") {
       store.studioImagePaths = Object.assign({}, draft.imagePaths);
@@ -3608,6 +3615,181 @@
     applyHeroImageOffState();
     syncPreviewHeaderChrome();
     scheduleSave();
+  }
+
+  function normalizeResumeDraft(raw) {
+    if (!raw || typeof raw !== "object") {
+      throw new Error("order.json が空です");
+    }
+    const draft = Object.assign({}, raw);
+    if (draft.draft && typeof draft.draft === "object" && draft.kind === "sample1man-order") {
+      return normalizeResumeDraft(draft.draft);
+    }
+    if (draft.extras && typeof draft.extras === "object" && !draft.draftExtras) {
+      draft.draftExtras = {
+        hours: !!draft.extras.hours,
+        access: !!draft.extras.access,
+        address: !!draft.extras.address
+      };
+    }
+    if (draft.counts && typeof draft.counts === "object" && !draft.draftCounts) {
+      draft.draftCounts = draft.counts;
+    }
+    if (!draft.siteColorMode) draft.siteColorMode = "detail";
+    if (!draft.sitePurpose) draft.sitePurpose = "shop";
+    return draft;
+  }
+
+  function listOrderFileInputNames() {
+    const names = [];
+    form.querySelectorAll('input[type="file"]').forEach(function (input) {
+      if (!input || !input.name) return;
+      if (input.id === "entry-resume-zip" || input.id === "review-json-import-input") return;
+      names.push(input.name);
+    });
+    names.sort(function (a, b) {
+      return b.length - a.length;
+    });
+    return names;
+  }
+
+  function matchZipImageToInputName(entryName, inputNames) {
+    const base = String(entryName || "")
+      .replace(/\\/g, "/")
+      .replace(/^images\//i, "")
+      .replace(/^.*\//, "");
+    if (!base) return null;
+    for (let i = 0; i < inputNames.length; i += 1) {
+      const name = inputNames[i];
+      if (base === name || base.indexOf(name + "_") === 0) return name;
+    }
+    return null;
+  }
+
+  function assignResumeImageFile(inputName, file) {
+    if (!inputName || !file) return;
+    if (!store.zipImageFiles) store.zipImageFiles = {};
+    store.zipImageFiles[inputName] = file;
+    const input = form.elements.namedItem(inputName);
+    if (input && input.tagName === "INPUT" && input.type === "file") {
+      try {
+        const dt = new DataTransfer();
+        dt.items.add(file);
+        input.files = dt.files;
+      } catch (e) {
+        /* file input へ戻せなくてもプレビュー用に保持 */
+      }
+    }
+    setImageUrl(inputName, file);
+    applyImageSlotByName(inputName, true);
+  }
+
+  async function applyResumeZipImages(zip) {
+    const inputNames = listOrderFileInputNames();
+    const paths = Object.keys(zip.files || {});
+    let applied = 0;
+    for (let i = 0; i < paths.length; i += 1) {
+      const path = paths[i];
+      const entry = zip.files[path];
+      if (!entry || entry.dir) continue;
+      const norm = String(path).replace(/\\/g, "/");
+      if (!/^images\//i.test(norm)) continue;
+      const inputName = matchZipImageToInputName(norm, inputNames);
+      if (!inputName) continue;
+      const blob = await entry.async("blob");
+      const leaf = norm.replace(/^.*\//, "") || inputName + ".img";
+      const fileName = leaf.indexOf(inputName + "_") === 0 ? leaf.slice(inputName.length + 1) : leaf;
+      const type = blob.type || guessImageMime(fileName);
+      const file = new File([blob], fileName || leaf, { type: type });
+      assignResumeImageFile(inputName, file);
+      applied += 1;
+    }
+    syncLogoPresentation();
+    return applied;
+  }
+
+  function guessImageMime(name) {
+    const lower = String(name || "").toLowerCase();
+    if (lower.endsWith(".png")) return "image/png";
+    if (lower.endsWith(".jpg") || lower.endsWith(".jpeg")) return "image/jpeg";
+    if (lower.endsWith(".webp")) return "image/webp";
+    if (lower.endsWith(".gif")) return "image/gif";
+    if (lower.endsWith(".svg")) return "image/svg+xml";
+    return "application/octet-stream";
+  }
+
+  function setEntryResumeStatus(msg) {
+    const el = document.getElementById("entry-resume-status");
+    if (el) el.textContent = msg || "";
+  }
+
+  function syncEntryResumeLoadButton() {
+    const input = document.getElementById("entry-resume-zip");
+    const btn = document.getElementById("entry-resume-load");
+    if (!btn) return;
+    const hasFile = !!(input && input.files && input.files[0]);
+    btn.disabled = !hasFile;
+  }
+
+  async function loadResumeZipFile(file) {
+    if (!file) {
+      throw new Error("ZIPファイルを選んでください。");
+    }
+    if (!window.JSZip) {
+      throw new Error("ZIP用ライブラリの読み込みに失敗しました。");
+    }
+    let zip;
+    try {
+      zip = await window.JSZip.loadAsync(file);
+    } catch (e) {
+      throw new Error("ZIPを開けません。ファイルが違うか、壊れている可能性があります。");
+    }
+    const orderEntry =
+      zip.file("order.json") ||
+      zip.file("Order.json") ||
+      Object.keys(zip.files || {})
+        .filter(function (p) {
+          return /(^|\/)order\.json$/i.test(p) && !zip.files[p].dir;
+        })
+        .map(function (p) {
+          return zip.file(p);
+        })[0];
+    if (!orderEntry) {
+      throw new Error("order.json がありません。制作データのZIPか確認してください。");
+    }
+    let rawText;
+    try {
+      rawText = await orderEntry.async("string");
+    } catch (e) {
+      throw new Error("order.json を読めません。");
+    }
+    let parsed;
+    try {
+      parsed = JSON.parse(rawText);
+    } catch (e) {
+      throw new Error("order.json が壊れているようです。");
+    }
+    let parsedPack;
+    try {
+      parsedPack = parseStudioJson(parsed);
+    } catch (e) {
+      throw new Error("このファイルは制作データとして読めません。");
+    }
+    const draft = normalizeResumeDraft(parsedPack.draft || parsed);
+    if (!draft.fields && !draft.draftColors && !draft.layoutPattern) {
+      throw new Error("このZIPには復元できる設定がありません。");
+    }
+    store.zipImageFiles = {};
+    applyStudioDraft(draft);
+    await applyResumeZipImages(zip);
+    store.hubEntrySource = "detail-entry";
+    store.entryBranch = "detail";
+    store.layoutSelected = true;
+    if (!store.saveMode) store.saveMode = "browser";
+    syncDashResumeNotice();
+    openDetailLayoutHub();
+    scheduleSave();
+    return true;
   }
 
   function downloadStudioPackJson() {
@@ -6827,10 +7009,10 @@
         lead: "進め方をひとつ選んでください。"
       };
     }
-    if (step === "resume-stub") {
+    if (step === "resume") {
       return {
         title: "保存したデータから再開する",
-        lead: ""
+        lead: "以前保存したZIPを選んで読み込みます。"
       };
     }
     if (step === "sushi") {
@@ -6857,7 +7039,7 @@
     if (!store.saveMode) return ["save"];
     if (store.entryBranch === "detail") return ["save", "branch", "purpose"];
     if (store.entryBranch === "sample") return ["save", "branch", "sushi", "purpose", "color"];
-    if (store.entryBranch === "resume") return ["save", "branch", "resume-stub"];
+    if (store.entryBranch === "resume") return ["save", "branch", "resume"];
     return ["save", "branch"];
   }
 
@@ -8607,12 +8789,47 @@
         setEntryGateStep("branch");
       });
     });
+    const resumeZipInput = document.getElementById("entry-resume-zip");
+    const resumeLoadBtn = document.getElementById("entry-resume-load");
+    if (resumeZipInput) {
+      resumeZipInput.addEventListener("change", () => {
+        setEntryResumeStatus("");
+        syncEntryResumeLoadButton();
+      });
+    }
+    if (resumeLoadBtn) {
+      resumeLoadBtn.addEventListener("click", () => {
+        const file = resumeZipInput && resumeZipInput.files && resumeZipInput.files[0];
+        if (!file) {
+          setEntryResumeStatus("ZIPファイルを選んでください。");
+          syncEntryResumeLoadButton();
+          return;
+        }
+        resumeLoadBtn.disabled = true;
+        setEntryResumeStatus("読み込み中…");
+        loadResumeZipFile(file)
+          .then(() => {
+            setEntryResumeStatus("");
+          })
+          .catch((err) => {
+            const msg =
+              err && err.message
+                ? String(err.message)
+                : "読み込みに失敗しました。ファイルが違うか、壊れている可能性があります。";
+            setEntryResumeStatus(msg);
+            syncEntryResumeLoadButton();
+          });
+      });
+    }
+    syncEntryResumeLoadButton();
     gate.querySelectorAll('input[name="entry_branch"]').forEach((input) => {
       input.addEventListener("change", () => {
         if (!input.checked) return;
         if (input.value === "resume") {
           store.entryBranch = "resume";
-          setEntryGateStep("resume-stub");
+          setEntryResumeStatus("");
+          syncEntryResumeLoadButton();
+          setEntryGateStep("resume");
           return;
         }
         store.entryBranch = input.value === "detail" ? "detail" : "sample";
@@ -8656,11 +8873,15 @@
             r.checked = false;
           });
           setEntryGateStep("branch");
-        } else if (cur === "resume-stub") {
+        } else if (cur === "resume") {
           store.entryBranch = null;
           gate.querySelectorAll('input[name="entry_branch"]').forEach((r) => {
             r.checked = false;
           });
+          const zipInput = document.getElementById("entry-resume-zip");
+          if (zipInput) zipInput.value = "";
+          setEntryResumeStatus("");
+          syncEntryResumeLoadButton();
           setEntryGateStep("branch");
         } else if (cur === "branch") {
           store.entryBranch = null;
@@ -12231,9 +12452,13 @@
     const fileInputs = form.querySelectorAll('input[type="file"]');
     for (let i = 0; i < fileInputs.length; i += 1) {
       const input = fileInputs[i];
+      if (input.id === "entry-resume-zip" || input.id === "review-json-import-input") continue;
       const wrap = input.closest("[data-fill-for]");
       if (wrap && wrap.hidden) continue;
-      const file = input.files && input.files[0];
+      const file =
+        (input.files && input.files[0]) ||
+        (store.zipImageFiles && input.name && store.zipImageFiles[input.name]) ||
+        null;
       if (!file) continue;
       const buf = await file.arrayBuffer();
       zip.file("images/" + (input.name || "image") + "_" + file.name, buf);

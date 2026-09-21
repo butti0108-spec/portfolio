@@ -7,7 +7,7 @@ alwaysApply: true
 
 ポートフォリオの方針・受注・TODO・優先・キャンペーンなど、議論で固まったことはチャットやメモリに長文で抱えず、リポジトリの `docs/` を正とする。
 
-- 外からの閲覧・編集アプリ（正本寄り）: https://github.com/butti0108-spec/kuru-hub （Pages: https://butti0108-spec.github.io/kuru-hub/）
+- 外からの閲覧・編集アプリ（製本控え）: https://github.com/butti0108-spec/kuru-hub （Pages: https://butti0108-spec.github.io/kuru-hub/）
 - ポートフォリオ控え: `docs/README.md` / `docs/運用ボード.md` / `docs/確定/` / `docs/進行中/`
 
 作業前に関連ドキュメント（とくに運用ボード）を読み、矛盾する指示があればドキュメントを優先するか、増渕さんに確認する。
@@ -15,7 +15,14 @@ alwaysApply: true
 時刻アラームが必要な予定だけ、必要に応じて外部カレンダーと併用してよい。
 
 簡単な画面操作の分担は `docs/確定/2026-08-25-手足方式.md` およびルール `hands-mode` に従う。
+
 ## kuru-hub 同期
 
-**都度はしない。** 増渕さんが「クルハブ更新して」「kuru-hub 同期」などと言ったときだけ、portfolio `docs/` → kuru-hub（copy → commit → push main）する。
-普段の docs 更新はポートフォリオ側の commit / push だけでよい（レスポンス優先）。
+詳細: `docs/確定/2026-08-25-Drive同期.md`
+
+- **正本** = portfolio `docs/`（実装・判断）
+- **kuru-hub** = 敦さん＋クル確認用の製本控え（写し）
+- **コードだけの修正** → ハブ同期不要
+- **`docs/確定/` の新規・変更**、または**運用ボードの重要方針変更**の区切り → portfolio の commit／push に加え、**同じ区切りで kuru-hub も漏れなく更新**
+- 増渕さんが「クルハブ更新して」と言ったときも同期する
+- CSS 1行ごとの都度同期はしない（レスポンス優先）

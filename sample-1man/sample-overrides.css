@@ -7320,7 +7320,7 @@ body.atelier.color-mode-easy .zone-badge[data-open-step="site-fonts"] {
   --sushi-tile-w: 200px;
   --sushi-tile-h: 282px;
   --sushi-tile-gap: 36px;
-  --sushi-stock-scale: 0.88;
+  --sushi-stock-scale: 0.30;
   --sushi-stock-tile-w: calc(var(--sushi-tile-w) * var(--sushi-stock-scale));
   --sushi-stock-tile-h: calc(var(--sushi-tile-h) * var(--sushi-stock-scale));
   --sushi-zoom-ms: 680ms;
@@ -7378,18 +7378,33 @@ body.atelier.color-mode-easy .zone-badge[data-open-step="site-fonts"] {
   margin: 0;
   max-width: 14rem;
   color: #3a4650;
-  font-size: 0.82rem;
-  line-height: 1.5;
 }
-.sushi-guide p {
-  margin: 0 0 0.35rem;
+.sushi-guide-title {
+  margin: 0 0 0.7rem;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  color: #1a242c;
 }
-.sushi-guide p:last-child {
+.sushi-guide-item {
+  margin: 0 0 0.7rem;
+}
+.sushi-guide-item:last-child {
   margin-bottom: 0;
 }
-.sushi-guide-repath {
-  margin-top: 0.15rem;
-  color: #3a4650;
+.sushi-guide-kicker {
+  margin: 0 0 0.15rem;
+  font-size: 0.9rem;
+  font-weight: 700;
+  line-height: 1.3;
+  color: #1a242c;
+}
+.sushi-guide-body {
+  margin: 0;
+  font-size: 0.8rem;
+  font-weight: 400;
+  line-height: 1.45;
+  color: #5a6570;
 }
 .sushi-rechoose-path {
   display: inline;
@@ -7423,7 +7438,7 @@ body.atelier.color-mode-easy .zone-badge[data-open-step="site-fonts"] {
   justify-content: center;
   align-items: flex-start;
   flex-wrap: nowrap;
-  gap: 1.15rem;
+  gap: 0.85rem;
   margin: 0;
   padding: 0;
   border: 0;
@@ -7515,11 +7530,12 @@ body.atelier.color-mode-easy .zone-badge[data-open-step="site-fonts"] {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 0.45rem;
+  gap: 0.4rem;
   padding: 0;
   flex: 0 0 auto;
   min-width: 0;
   align-self: center;
+  text-align: center;
 }
 .sushi-decide-label {
   margin: 0;
@@ -7529,12 +7545,21 @@ body.atelier.color-mode-easy .zone-badge[data-open-step="site-fonts"] {
   color: #2a333a;
   white-space: nowrap;
 }
+.sushi-decide-hint {
+  margin: 0;
+  max-width: 8.5rem;
+  font-size: 0.78rem;
+  font-weight: 400;
+  line-height: 1.45;
+  color: #55606a;
+}
 .sushi-stock-confirm-row {
   display: flex;
   justify-content: center;
   align-items: center;
   flex-wrap: nowrap;
   gap: 0.45rem;
+  margin-top: 0.1rem;
 }
 .sushi-decide-btn {
   width: 2.55rem;

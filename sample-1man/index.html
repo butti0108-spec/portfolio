@@ -13,7 +13,7 @@
   <link rel="stylesheet" href="../style.css">
   <link rel="stylesheet" href="style.css?v=base-live-1">
   <link rel="icon" href="brand/mark-favicon.png?v=logo-7" type="image/png">
-  <link rel="stylesheet" href="sample-overrides.css?v=sushi-copy-v7">
+  <link rel="stylesheet" href="sample-overrides.css?v=sushi-choice-v1">
   <script>
     (function () {
       var h = location.hostname;
@@ -35,7 +35,7 @@
   <script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js" defer></script>
   <script src="vibe-dict.js" defer></script>
   <script src="easy-copy-dict.js?v=s5-1" defer></script>
-  <script src="sushi-belt.js?v=sushi-copy-v3" defer></script>
+  <script src="sushi-belt.js?v=sushi-choice-v1" defer></script>
   <script src="script.js?v=embed-zoom-v4" defer></script>
   <script>
     (function () {
@@ -155,7 +155,7 @@
             <input type="radio" name="entry_branch" value="sample">
             <span class="entry-branch-card-inner">
               <strong role="heading" aria-level="3">サンプルから選ぶ</strong>
-              <span>見本を見て掴み、あとから自分の内容を入れます</span>
+              <span>サンプルを見て掴み、あとから自分の内容を入れます</span>
             </span>
           </label>
           <label class="entry-branch-card">
@@ -209,23 +209,24 @@
         <div class="sushi-upper">
           <div class="sushi-upper-left">
             <div class="sushi-guide">
-              <p class="sushi-guide-title">使い方</p>
+              <p class="sushi-guide-title">こんなことができます</p>
+              <p class="sushi-guide-lead">お好きな順番で大丈夫です</p>
               <div class="sushi-guide-item">
                 <div class="sushi-guide-head">
-                  <p class="sushi-guide-kicker">気になるところで止める</p>
+                  <p class="sushi-guide-kicker">気になるサンプルを見つける</p>
                   <span class="hub-tip-wrap sushi-guide-tip">
-                    <button type="button" class="hub-tip-btn" data-hub-tip aria-expanded="false" aria-label="気になるところで止めるの説明">?</button>
+                    <button type="button" class="hub-tip-btn" data-hub-tip aria-expanded="false" aria-label="気になるサンプルを見つけるの説明">?</button>
                     <span class="hub-tip-pop" hidden role="tooltip">
-                      パソコンではサンプルにマウスを合わせると、流れが止まります。スマートフォンでは、サンプルを軽くタップするとしばらく止まります。ゆっくり見たいときに使えます。
+                      パソコンではサンプルにマウスを合わせると、流れが止まります。スマートフォンでは、サンプルを軽くタップするとしばらく止まります。ゆっくり探せます。
                     </span>
                   </span>
                 </div>
               </div>
               <div class="sushi-guide-item">
                 <div class="sushi-guide-head">
-                  <p class="sushi-guide-kicker">サンプルを大きく見る</p>
+                  <p class="sushi-guide-kicker">大きく見てみる</p>
                   <span class="hub-tip-wrap sushi-guide-tip">
-                    <button type="button" class="hub-tip-btn" data-hub-tip aria-expanded="false" aria-label="サンプルを大きく見るの説明">?</button>
+                    <button type="button" class="hub-tip-btn" data-hub-tip aria-expanded="false" aria-label="大きく見てみるの説明">?</button>
                     <span class="hub-tip-pop" hidden role="tooltip">
                       各サンプルの虫眼鏡を押すと、大きな画面で全体をゆっくり見られます。雰囲気を確かめたいときに使えます。
                     </span>
@@ -234,11 +235,11 @@
               </div>
               <div class="sushi-guide-item">
                 <div class="sushi-guide-head">
-                  <p class="sushi-guide-kicker">気に入ったサンプルを残す</p>
+                  <p class="sushi-guide-kicker">候補に残す</p>
                   <span class="hub-tip-wrap sushi-guide-tip">
-                    <button type="button" class="hub-tip-btn" data-hub-tip aria-expanded="false" aria-label="気に入ったサンプルを残すの説明">?</button>
+                    <button type="button" class="hub-tip-btn" data-hub-tip aria-expanded="false" aria-label="候補に残すの説明">?</button>
                     <span class="hub-tip-pop" hidden role="tooltip">
-                      レーン上の「↑」を押すと、中央の1・2・3へ候補として残せます。枠の「↓」で外せます。あとで見比べて、ひとつに決めるときに使えます。
+                      レーン上の「↑」を押すと、中央の1・2・3へ候補として残せます。枠の「↓」で外せます。あとで見比べたいときに使えます。
                     </span>
                   </span>
                 </div>
@@ -253,16 +254,15 @@
           </div>
           <div class="sushi-upper-right">
             <div class="sushi-decide-head">
-              <p class="sushi-decide-label">ひとつに決める</p>
+              <p class="sushi-decide-label">お好みのものはどれですか</p>
               <span class="hub-tip-wrap sushi-decide-tip">
-                <button type="button" class="hub-tip-btn" data-hub-tip aria-expanded="false" aria-label="ひとつに決めるの説明">?</button>
+                <button type="button" class="hub-tip-btn" data-hub-tip aria-expanded="false" aria-label="お好みのものはどれですかの説明">?</button>
                 <span class="hub-tip-pop" hidden role="tooltip">
-                  中央に残した候補のうち、これから使うサンプルを右の番号で選びます。決めたあとも、色や文字はあとから整えられます。
+                  中央に残した候補のうち、これから使うサンプルを右の番号で選べます。決めたあとも、色や文字はあとから整えられます。
                 </span>
               </span>
             </div>
-            <p class="sushi-decide-hint">候補の番号から、<br>使うサンプルを選べます。</p>
-            <div class="sushi-stock-confirm-row" id="sushi-stock-confirm-row" role="group" aria-label="ひとつに決める"></div>
+            <div class="sushi-stock-confirm-row" id="sushi-stock-confirm-row" role="group" aria-label="お好みのサンプルを選ぶ"></div>
           </div>
         </div>
         <div class="sushi-lane-wrap">

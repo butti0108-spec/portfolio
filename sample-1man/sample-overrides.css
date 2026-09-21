@@ -7388,12 +7388,19 @@ body.atelier.color-mode-easy .zone-badge[data-open-step="site-fonts"] {
   color: #3a4650;
 }
 .sushi-guide-title {
-  margin: 0 0 0.7rem;
-  font-size: 1.58rem;
+  margin: 0 0 0.35rem;
+  font-size: 1.35rem;
   font-weight: 800;
-  letter-spacing: 0.06em;
-  line-height: 1.2;
+  letter-spacing: 0.04em;
+  line-height: 1.25;
   color: #12181c;
+}
+.sushi-guide-lead {
+  margin: 0 0 0.65rem;
+  font-size: 0.78rem;
+  font-weight: 400;
+  line-height: 1.4;
+  color: #5a6570;
 }
 .sushi-guide-item {
   position: relative;
@@ -7535,6 +7542,14 @@ body.atelier.color-mode-easy .zone-badge[data-open-step="site-fonts"] {
   flex: 0 0 auto;
   transition: transform var(--sushi-stock-in-ms) ease, opacity var(--sushi-stock-out-ms) ease;
 }
+.sushi-stock-slot.is-empty::after {
+  content: "候補";
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  color: #8a939c;
+  pointer-events: none;
+}
 .sushi-stock-slot.is-filled {
   /* 二重枠・枠線ぶんのすき間を消し、中のタイルだけが見える */
   background: transparent;
@@ -7603,12 +7618,14 @@ body.atelier.color-mode-easy .zone-badge[data-open-step="site-fonts"] {
 }
 .sushi-decide-label {
   margin: 0;
-  font-size: 1.22rem;
+  font-size: 1.02rem;
   font-weight: 800;
-  letter-spacing: 0.04em;
-  line-height: 1.25;
+  letter-spacing: 0.02em;
+  line-height: 1.3;
   color: #12181c;
-  white-space: nowrap;
+  white-space: normal;
+  max-width: 8.5rem;
+  text-align: center;
 }
 .sushi-upper-right .sushi-decide-tip.hub-tip-wrap {
   position: relative;
@@ -7734,12 +7751,13 @@ body.atelier.color-mode-easy .zone-badge[data-open-step="site-fonts"] {
   overflow: hidden;
   touch-action: pan-y;
   cursor: grab;
-  padding: 1.35rem 0 1.5rem;
+  padding: 1.35rem calc(var(--sushi-tile-w) * 0.28) 1.5rem;
   user-select: none;
   min-height: calc(var(--sushi-tile-h) + 2.2rem);
   flex: 1 1 auto;
   display: flex;
   align-items: center;
+  max-height: calc(var(--sushi-tile-h) + 5.5rem);
 }
 
 .sushi-lane.is-dragging {
@@ -7752,8 +7770,8 @@ body.atelier.color-mode-easy .zone-badge[data-open-step="site-fonts"] {
   gap: var(--sushi-tile-gap);
   width: max-content;
   will-change: transform;
-  /* 端は半分見え：通路の余白 */
-  padding-inline: calc(var(--sushi-tile-w) * 0.28);
+  /* 端余白は .sushi-lane の padding 側へ（一周計測を単純に保つ） */
+  padding-inline: 0;
 }
 
 .sushi-lane-empty {

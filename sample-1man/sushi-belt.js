@@ -185,18 +185,18 @@
       escapeAttr(sample.brand || "") +
       '" width="' +
       TILE_W +
-      '" decoding="async" loading="lazy">' +
+      '" decoding="async" loading="eager" fetchpriority="low">' +
       "</div>" +
       (opts.stock
         ? '<button type="button" class="sushi-tile-btn sushi-tile-btn--down" data-sushi-act="unstock" data-slot="' +
           opts.slot +
-          '" title="サンプルを戻す" aria-label="サンプルを枠から外す">↓</button>'
+          '" title="候補から外す" aria-label="候補から外す">↓</button>'
         : '<button type="button" class="sushi-tile-btn sushi-tile-btn--up" data-sushi-act="stock" data-id="' +
           escapeAttr(sample.id) +
-          '" title="サンプルを残す" aria-label="サンプルを1・2・3へ残す">↑</button>') +
+          '" title="候補に残す" aria-label="候補に残す">↑</button>') +
       '<button type="button" class="sushi-tile-btn sushi-tile-btn--zoom" data-sushi-act="zoom" data-id="' +
       escapeAttr(sample.id) +
-      '" title="大きく見る" aria-label="サンプルを大きく見る">🔍</button>' +
+      '" title="大きく見てみる" aria-label="大きく見てみる">🔍</button>' +
       labelHtml +
       '<span class="sushi-tile-meta" hidden data-visible-site-h="' +
       visibleSiteH +
@@ -223,7 +223,7 @@
           '<span class="sushi-stock-num" aria-hidden="true">' +
           n +
           "</span>" +
-          '<div class="sushi-stock-slot is-filled" aria-label="選んだサンプル' +
+          '<div class="sushi-stock-slot is-filled" aria-label="候補' +
           n +
           '">' +
           tileHtml(s, { stock: true, slot: i }) +
@@ -231,7 +231,7 @@
         confirmHtml +=
           '<button type="button" class="sushi-decide-btn is-ready" data-sushi-act="confirm" data-slot="' +
           i +
-          '" aria-label="サンプル' +
+          '" aria-label="候補' +
           n +
           'を選ぶ">' +
           n +
@@ -244,15 +244,15 @@
           '<span class="sushi-stock-num" aria-hidden="true">' +
           n +
           "</span>" +
-          '<div class="sushi-stock-slot is-empty" aria-label="選んだサンプル' +
+          '<div class="sushi-stock-slot is-empty" aria-label="候補' +
           n +
-          '（空）"></div></div>';
+          '（まだありません）"></div></div>';
         confirmHtml +=
           '<button type="button" class="sushi-decide-btn" data-sushi-act="confirm" data-slot="' +
           i +
-          '" disabled aria-disabled="true" aria-label="サンプル' +
+          '" disabled aria-disabled="true" aria-label="候補' +
           n +
-          '（空）">' +
+          '（まだありません）">' +
           n +
           "</button>";
       }
@@ -264,6 +264,7 @@
   }
 
   function fallbackLoopWidth() {
+    /* 1周＝タイルn個＋あいだのギャップn個（次コピー先頭までの距離） */
     return Math.max(1, laneSamples.length * (TILE_W + TILE_GAP));
   }
 
@@ -277,7 +278,7 @@
     if (tiles.length >= n * 2 && tiles[0] && tiles[n]) {
       var measured = tiles[n].offsetLeft - tiles[0].offsetLeft;
       if (measured > 0) {
-        loopWidth = measured;
+        loopWidth = Math.round(measured);
         return;
       }
     }
@@ -295,7 +296,8 @@
       applyTrackTransform();
       return;
     }
-    var copies = 2;
+    /* 3本分置くと一周つなぎ時も次コピーが常に先読み済み */
+    var copies = 3;
     var html = "";
     for (var c = 0; c < copies; c++) {
       laneSamples.forEach(function (s) {
@@ -304,26 +306,37 @@
     }
     els.track.innerHTML = html;
     measureLoopWidth();
-    if (!keepOffset) offsetX = 0;
-    if (loopWidth > 0) {
-      offsetX = ((offsetX % loopWidth) + loopWidth) % loopWidth;
+    if (!keepOffset) {
+      offsetX = loopWidth > 0 ? loopWidth : 0;
+    } else if (loopWidth > 0) {
+      offsetX = normalizeLoopOffset(offsetX);
     }
     applyTrackTransform();
     window.requestAnimationFrame(function () {
       var prev = loopWidth;
-      var ratio = prev > 0 ? offsetX / prev : 0;
+      var ratio = prev > 0 ? offsetX / prev : 1;
       measureLoopWidth();
       if (loopWidth > 0) {
-        offsetX = keepOffset ? ratio * loopWidth : offsetX;
-        offsetX = ((offsetX % loopWidth) + loopWidth) % loopWidth;
+        offsetX = keepOffset ? ratio * loopWidth : loopWidth;
+        offsetX = normalizeLoopOffset(offsetX);
       }
       applyTrackTransform();
+      warmVisibleLaneImages();
     });
+  }
+
+  function normalizeLoopOffset(x) {
+    if (!(loopWidth > 0)) return 0;
+    /* 中央コピー帯 [L, 2L) に保ち、一周つなぎを画面の端で飛ばしにくくする */
+    while (x >= loopWidth * 2) x -= loopWidth;
+    while (x < loopWidth) x += loopWidth;
+    return x;
   }
 
   function applyTrackTransform() {
     if (!els.track) return;
-    els.track.style.transform = "translate3d(" + -offsetX + "px,0,0)";
+    var x = Math.round(offsetX * 100) / 100;
+    els.track.style.transform = "translate3d(" + -x + "px,0,0)";
   }
 
   function canAutoScroll() {
@@ -369,7 +382,7 @@
     lastTs = ts;
     if (canAutoScroll()) {
       offsetX += SPEED_PX_S * dt;
-      if (offsetX >= loopWidth) offsetX -= loopWidth;
+      offsetX = normalizeLoopOffset(offsetX);
       applyTrackTransform();
     }
     rafId = window.requestAnimationFrame(tick);
@@ -691,14 +704,31 @@
         return new Promise(function (resolve) {
           var img = new Image();
           var done = function () {
-            resolve();
+            if (img.decode) {
+              img.decode().then(resolve, resolve);
+            } else {
+              resolve();
+            }
           };
           img.onload = done;
-          img.onerror = done;
+          img.onerror = function () {
+            resolve();
+          };
           img.src = url;
         });
       })
     );
+  }
+
+  function warmVisibleLaneImages() {
+    if (!els.track) return;
+    var imgs = els.track.querySelectorAll(".sushi-tile-img");
+    for (var i = 0; i < imgs.length; i++) {
+      var img = imgs[i];
+      if (img.decode && img.complete) {
+        img.decode().catch(function () {});
+      }
+    }
   }
 
   function waitMinMs(ms) {
@@ -730,7 +760,7 @@
       measureLoopWidth();
       if (loopWidth > 0) {
         offsetX = ratio * loopWidth;
-        offsetX = ((offsetX % loopWidth) + loopWidth) % loopWidth;
+        offsetX = normalizeLoopOffset(offsetX);
       }
       applyTrackTransform();
     });
@@ -758,9 +788,7 @@
       var dx = clientX - startX;
       if (Math.abs(dx) > 4) dragMoved = true;
       offsetX = startOffset - dx;
-      if (loopWidth > 0) {
-        offsetX = ((offsetX % loopWidth) + loopWidth) % loopWidth;
-      }
+      offsetX = normalizeLoopOffset(offsetX);
       applyTrackTransform();
     }
 
@@ -895,7 +923,7 @@
     }
     if (!sample) {
       window.alert(
-        "まだ候補がありません。レーンの「↑」で1・2・3へ残してから、右の番号を押してください。"
+        "まだ候補がありません。気になるサンプルで「↑」を押すと、ここに残せます。"
       );
       return;
     }
@@ -957,6 +985,8 @@
       ]);
       await minShow;
       measureLoopWidth();
+      offsetX = normalizeLoopOffset(offsetX || loopWidth);
+      warmVisibleLaneImages();
       applyTrackTransform();
     } catch (e) {
       /* 失敗でもレーンは出す */

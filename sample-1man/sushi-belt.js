@@ -15,7 +15,22 @@
   var MS_STOCK_OUT = 240;
   var MS_ZOOM = 680;
   var MAX_STOCK = 3;
-  var TUTORIAL_KEY = "sample1man-sushi-tutorial-v1";
+  var TUTORIAL_KEY = "sample1man-sushi-tutorial-v2";
+  var TOUCH_PAUSE_MS = 3000;
+
+  function isFineHoverPointer() {
+    return (
+      typeof window.matchMedia === "function" &&
+      window.matchMedia("(hover: hover) and (pointer: fine)").matches
+    );
+  }
+
+  function isCoarsePointer() {
+    return (
+      typeof window.matchMedia === "function" &&
+      window.matchMedia("(pointer: coarse)").matches
+    );
+  }
   /* 一軍24のみ（削除候補 17/20/22/24/25/27 はレーンに出さない） */
   var FIRST_TEAM = {
     "01": 1,
@@ -53,6 +68,9 @@
   var isZoomed = false;
   var isDragging = false;
   var dragMoved = false;
+  var hoverPaused = false;
+  var touchPaused = false;
+  var touchPauseTimer = null;
 
   var offsetX = 0;
   var rafId = 0;
@@ -133,27 +151,26 @@
     els.stockBar = $("sushi-stock-bar");
     els.lane = $("sushi-lane");
     els.track = $("sushi-lane-track");
-    els.pause = $("sushi-pause");
     els.replace = $("sushi-replace-modal");
     els.zoomLayer = $("sushi-zoom-layer");
     els.zoomInner = $("sushi-zoom-inner");
     els.tutorial = $("sushi-tutorial");
     els.help = $("sushi-help-btn");
-    els.helpRail = $("sushi-help-rail");
   }
 
   function tileHtml(sample, opts) {
     opts = opts || {};
     var scale = TILE_W / SITE_DESIGN_W;
     var visibleSiteH = Math.round(TILE_H / scale);
+    var sizeStyle = opts.stock
+      ? ""
+      : ' style="width:' + TILE_W + "px;height:" + TILE_H + 'px"';
     return (
       '<article class="sushi-tile" data-sample-id="' +
       escapeAttr(sample.id) +
-      '" style="width:' +
-      TILE_W +
-      "px;height:" +
-      TILE_H +
-      'px">' +
+      '"' +
+      sizeStyle +
+      ">" +
       '<div class="sushi-tile-clip">' +
       '<img class="sushi-tile-img" src="' +
       escapeAttr(previewUrl(sample)) +
@@ -220,6 +237,27 @@
     els.stockBar.style.setProperty("--sushi-tile-h", TILE_H + "px");
   }
 
+  function fallbackLoopWidth() {
+    return Math.max(1, laneSamples.length * (TILE_W + TILE_GAP));
+  }
+
+  function measureLoopWidth() {
+    if (!els.track || !laneSamples.length) {
+      loopWidth = 0;
+      return;
+    }
+    var tiles = els.track.querySelectorAll(".sushi-tile");
+    var n = laneSamples.length;
+    if (tiles.length >= n * 2 && tiles[0] && tiles[n]) {
+      var measured = tiles[n].offsetLeft - tiles[0].offsetLeft;
+      if (measured > 0) {
+        loopWidth = measured;
+        return;
+      }
+    }
+    loopWidth = fallbackLoopWidth();
+  }
+
   function rebuildLane(keepOffset) {
     laneSamples = laneList();
     if (!els.track) return;
@@ -239,18 +277,62 @@
       });
     }
     els.track.innerHTML = html;
-    var oneSet = laneSamples.length * (TILE_W + TILE_GAP);
-    loopWidth = oneSet;
+    measureLoopWidth();
     if (!keepOffset) offsetX = 0;
     if (loopWidth > 0) {
       offsetX = ((offsetX % loopWidth) + loopWidth) % loopWidth;
     }
     applyTrackTransform();
+    window.requestAnimationFrame(function () {
+      var prev = loopWidth;
+      var ratio = prev > 0 ? offsetX / prev : 0;
+      measureLoopWidth();
+      if (loopWidth > 0) {
+        offsetX = keepOffset ? ratio * loopWidth : offsetX;
+        offsetX = ((offsetX % loopWidth) + loopWidth) % loopWidth;
+      }
+      applyTrackTransform();
+    });
   }
 
   function applyTrackTransform() {
     if (!els.track) return;
     els.track.style.transform = "translate3d(" + -offsetX + "px,0,0)";
+  }
+
+  function canAutoScroll() {
+    return (
+      isPlaying &&
+      !hoverPaused &&
+      !touchPaused &&
+      !isDragging &&
+      !isZoomed &&
+      loopWidth > 0
+    );
+  }
+
+  function clearTouchPause() {
+    touchPaused = false;
+    if (touchPauseTimer) {
+      window.clearTimeout(touchPauseTimer);
+      touchPauseTimer = null;
+    }
+  }
+
+  function armTouchPause() {
+    touchPaused = true;
+    if (touchPauseTimer) window.clearTimeout(touchPauseTimer);
+    touchPauseTimer = window.setTimeout(function () {
+      touchPaused = false;
+      touchPauseTimer = null;
+    }, TOUCH_PAUSE_MS);
+  }
+
+  function shouldArmTouchPause(ev) {
+    if (isFineHoverPointer()) return false;
+    if (ev && ev.pointerType === "touch") return true;
+    if (isCoarsePointer()) return true;
+    return false;
   }
 
   function tick(ts) {
@@ -259,7 +341,7 @@
     if (!lastTs) lastTs = ts;
     var dt = Math.min(64, ts - lastTs) / 1000;
     lastTs = ts;
-    if (isPlaying && !isDragging && !isZoomed && loopWidth > 0) {
+    if (canAutoScroll()) {
       offsetX += SPEED_PX_S * dt;
       if (offsetX >= loopWidth) offsetX -= loopWidth;
       applyTrackTransform();
@@ -277,17 +359,6 @@
     if (rafId) window.cancelAnimationFrame(rafId);
     rafId = 0;
     lastTs = 0;
-  }
-
-  function syncPlayButton() {
-    if (!els.pause) return;
-    els.pause.textContent = isPlaying ? "⏸" : "▶";
-    els.pause.setAttribute("aria-pressed", isPlaying ? "false" : "true");
-    els.pause.setAttribute(
-      "aria-label",
-      isPlaying ? "一時停止" : "再生"
-    );
-    els.pause.title = isPlaying ? "一時停止" : "再生";
   }
 
   function findSample(id) {
@@ -640,11 +711,41 @@
     if (markSeen) setTutorialSeen();
   }
 
+  function setupHoverPause() {
+    if (!els.lane || els.lane.dataset.hoverBound) return;
+    els.lane.dataset.hoverBound = "1";
+    els.lane.addEventListener("pointerenter", function (ev) {
+      if (!isFineHoverPointer()) return;
+      if (ev.pointerType && ev.pointerType !== "mouse") return;
+      hoverPaused = true;
+    });
+    els.lane.addEventListener("pointerleave", function () {
+      hoverPaused = false;
+    });
+  }
+
+  function setupResizeMeasure() {
+    if (window.__sushiResizeBound) return;
+    window.__sushiResizeBound = true;
+    window.addEventListener("resize", function () {
+      if (!els.root || els.root.hidden) return;
+      var prev = loopWidth;
+      var ratio = prev > 0 ? offsetX / prev : 0;
+      measureLoopWidth();
+      if (loopWidth > 0) {
+        offsetX = ratio * loopWidth;
+        offsetX = ((offsetX % loopWidth) + loopWidth) % loopWidth;
+      }
+      applyTrackTransform();
+    });
+  }
+
   function setupDrag() {
     if (!els.lane || els.lane.dataset.dragBound) return;
     els.lane.dataset.dragBound = "1";
     var startX = 0;
     var startOffset = 0;
+    var lastPointerEv = null;
 
     function onDown(clientX) {
       if (isZoomed) return;
@@ -653,6 +754,7 @@
       startX = clientX;
       startOffset = offsetX;
       els.lane.classList.add("is-dragging");
+      clearTouchPause();
     }
 
     function onMove(clientX) {
@@ -670,18 +772,29 @@
       if (!isDragging) return;
       isDragging = false;
       els.lane.classList.remove("is-dragging");
-      /* 手動後の自動再開：一時停止中でなければ継続（既存「paused のまま」に相当＝isPlaying 維持） */
+      if (!dragMoved && shouldArmTouchPause(lastPointerEv)) {
+        armTouchPause();
+      }
     }
 
     els.lane.addEventListener("pointerdown", function (ev) {
       if (ev.target.closest("button")) return;
-      els.lane.setPointerCapture(ev.pointerId);
+      lastPointerEv = ev;
+      try {
+        els.lane.setPointerCapture(ev.pointerId);
+      } catch (err) {
+        /* synthetic / unsupported capture */
+      }
       onDown(ev.clientX);
     });
     els.lane.addEventListener("pointermove", function (ev) {
+      lastPointerEv = ev;
       onMove(ev.clientX);
     });
-    els.lane.addEventListener("pointerup", onUp);
+    els.lane.addEventListener("pointerup", function (ev) {
+      lastPointerEv = ev;
+      onUp();
+    });
     els.lane.addEventListener("pointercancel", onUp);
     els.lane.addEventListener(
       "click",
@@ -805,12 +918,6 @@
     if (!els.root || els.root.dataset.sushiBound === "2") return;
     els.root.dataset.sushiBound = "2";
     els.root.addEventListener("click", onRootClick);
-    if (els.pause) {
-      els.pause.addEventListener("click", function () {
-        isPlaying = !isPlaying;
-        syncPlayButton();
-      });
-    }
 
     if (els.help) {
       els.help.addEventListener("click", function () {
@@ -823,6 +930,8 @@
       });
     }
     setupDrag();
+    setupHoverPause();
+    setupResizeMeasure();
   }
 
   async function mount(opts) {
@@ -845,8 +954,9 @@
       isPlaying = true;
       isZoomed = false;
       isDragging = false;
+      hoverPaused = false;
+      clearTouchPause();
       offsetX = 0;
-      syncPlayButton();
       renderStock();
       rebuildLane(false);
       await Promise.race([
@@ -854,6 +964,8 @@
         waitMinMs(12000)
       ]);
       await minShow;
+      measureLoopWidth();
+      applyTrackTransform();
     } catch (e) {
       /* 失敗でもレーンは出す */
     }
@@ -871,7 +983,6 @@
     startRaf();
     showTutorial(false);
     if (els.help) els.help.hidden = false;
-    if (els.helpRail) els.helpRail.hidden = false;
   }
 
   function unmount() {
@@ -881,8 +992,9 @@
     closeReplaceModal();
     hideTutorial(false);
     isPlaying = false;
+    hoverPaused = false;
+    clearTouchPause();
     if (els.help) els.help.hidden = true;
-    if (els.helpRail) els.helpRail.hidden = true;
   }
 
   /** 監査報告用 */

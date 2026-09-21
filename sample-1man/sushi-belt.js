@@ -894,7 +894,7 @@
       }
     }
     if (!sample) {
-      window.alert("見本を枠に入れてから、右上の番号を押してください。");
+      window.alert("見本を枠に入れてから、右の番号を押してください。");
       return;
     }
     if (!onConfirm) return;

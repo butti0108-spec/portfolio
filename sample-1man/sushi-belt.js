@@ -6,16 +6,16 @@
   "use strict";
 
   /* 本番タイル寸法（監査モック目安に合わせ固定） */
-  var TILE_W = 170;
-  var TILE_H = 240;
-  var TILE_GAP = 18;
+  var TILE_W = 200;
+  var TILE_H = 282;
+  var TILE_GAP = 36;
   var SITE_DESIGN_W = 1200;
   var SPEED_PX_S = 36;
   var MS_STOCK_IN = 360;
   var MS_STOCK_OUT = 240;
   var MS_ZOOM = 680;
   var MAX_STOCK = 3;
-  var TUTORIAL_KEY = "sample1man-sushi-tutorial-v2";
+  var TUTORIAL_KEY = "sample1man-sushi-tutorial-v3";
   var TOUCH_PAUSE_MS = 3000;
 
   function isFineHoverPointer() {

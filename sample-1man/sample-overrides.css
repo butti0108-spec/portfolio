@@ -7290,15 +7290,15 @@ body.atelier.color-mode-easy .zone-badge[data-open-step="site-fonts"] {
   margin-top: 0.65rem;
 }
 
-/* —— 回転寿司（監査図：上ストック3／下レーン） —— */
+/* —— 回転寿司（上ストック＋通路レーン） —— */
 .entry-gate[data-entry-step="sushi"] .entry-gate-panel--full {
   width: min(72rem, 100%);
   max-width: 100%;
-  padding: 0.75rem clamp(0.65rem, 2vw, 1.25rem) 1.25rem;
-}
-.entry-gate[data-entry-step="sushi"] .entry-gate-title {
-  margin: 0 0 0.35rem;
-  font-size: 0.98rem;
+  padding: 0.55rem clamp(0.65rem, 2vw, 1.25rem) 0.85rem;
+  display: flex;
+  flex-direction: column;
+  min-height: 100%;
+  overflow: hidden;
 }
 .entry-gate[data-entry-step="sushi"] .entry-gate-lead:empty {
   display: none;
@@ -7317,10 +7317,10 @@ body.atelier.color-mode-easy .zone-badge[data-open-step="site-fonts"] {
 }
 
 #entry-sushi-field.sushi-shelf {
-  --sushi-tile-w: 170px;
-  --sushi-tile-h: 240px;
-  --sushi-tile-gap: 18px;
-  --sushi-stock-scale: 0.62;
+  --sushi-tile-w: 200px;
+  --sushi-tile-h: 282px;
+  --sushi-tile-gap: 36px;
+  --sushi-stock-scale: 0.48;
   --sushi-stock-tile-w: calc(var(--sushi-tile-w) * var(--sushi-stock-scale));
   --sushi-stock-tile-h: calc(var(--sushi-tile-h) * var(--sushi-stock-scale));
   --sushi-zoom-ms: 680ms;
@@ -7330,33 +7330,92 @@ body.atelier.color-mode-easy .zone-badge[data-open-step="site-fonts"] {
   padding: 0;
   border: 0;
   min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+  flex: 1 1 auto;
+  min-height: 0;
+}
+
+/* 寿司ステップ中は看板・工程タイトルを消し、レーンに余白を寄せる */
+#entry-gate[data-entry-step="sushi"] .entry-gate-banner,
+#entry-gate[data-entry-step="sushi"] .entry-gate-title,
+#entry-gate[data-entry-step="sushi"] .entry-gate-lead {
+  display: none !important;
+}
+#entry-gate[data-entry-step="sushi"] .entry-gate-panel--full {
+  padding-top: 0.55rem;
+  padding-bottom: 0.85rem;
+}
+#entry-gate[data-entry-step="sushi"] #entry-sushi-field {
+  flex: 1 1 auto;
+  min-height: 0;
+}
+
+@media (max-width: 640px) {
+  .sushi-top-rail {
+    grid-template-columns: auto auto;
+    grid-template-rows: auto auto;
+    gap: 0.55rem 0.65rem;
+  }
+  .sushi-top-back { grid-column: 1; grid-row: 1; }
+  .sushi-gate-help { grid-column: 2; grid-row: 1; justify-self: end; }
+  .sushi-stock-bar {
+    grid-column: 1 / -1;
+    grid-row: 2;
+    gap: 0.75rem;
+  }
+}
+
+.sushi-top-rail {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 0.75rem 1rem;
+  margin: 0;
+  padding: 0.15rem 0.1rem 0.25rem;
+}
+
+.sushi-top-back {
+  justify-self: start;
+  min-height: 2.35rem;
+  padding: 0.4rem 0.85rem;
+  font-size: 0.9rem;
+  box-shadow: 0 4px 14px rgba(20, 28, 36, 0.08);
+  white-space: nowrap;
 }
 
 .sushi-stock-bar {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 0.45rem;
-  margin: 0 0 0.55rem;
-  padding: 0.35rem 0.25rem;
+  display: flex;
+  justify-content: center;
+  align-items: stretch;
+  flex-wrap: nowrap;
+  gap: 1.1rem;
+  margin: 0;
+  padding: 0.2rem 0.35rem;
   border: 0;
   border-radius: 0;
   background: transparent;
+  justify-self: center;
+  max-width: 100%;
 }
 
 .sushi-stock-slot {
   display: flex;
   justify-content: center;
   align-items: center;
-  min-height: calc(var(--sushi-stock-tile-h) + 0.85rem);
+  width: calc(var(--sushi-stock-tile-w) + 0.7rem);
+  min-height: calc(var(--sushi-stock-tile-h) + 0.55rem);
   border-radius: 0.45rem;
-  background: rgba(255, 255, 255, 0.55);
-  border: 1px dashed rgba(20, 28, 36, 0.16);
+  background: rgba(255, 255, 255, 0.72);
+  border: 1px dashed rgba(20, 28, 36, 0.14);
   padding: 0.28rem;
+  flex: 0 0 auto;
   transition: transform var(--sushi-stock-in-ms) ease, opacity var(--sushi-stock-out-ms) ease;
 }
 .sushi-stock-slot.is-filled {
   border-style: solid;
-  border-color: rgba(20, 28, 36, 0.12);
+  border-color: rgba(20, 28, 36, 0.1);
 }
 .sushi-stock-slot .sushi-tile {
   width: var(--sushi-stock-tile-w);
@@ -7370,7 +7429,7 @@ body.atelier.color-mode-easy .zone-badge[data-open-step="site-fonts"] {
   border-style: dashed;
   color: #778;
   font-size: 1.05rem;
-  min-height: calc(var(--sushi-stock-tile-h) * 0.72);
+  min-height: calc(var(--sushi-stock-tile-h) * 0.85);
 }
 
 .sushi-stock-slot.is-selected {
@@ -7394,28 +7453,37 @@ body.atelier.color-mode-easy .zone-badge[data-open-step="site-fonts"] {
 
 .sushi-stock-empty-label {
   font-weight: 800;
-  font-size: 1.2rem;
-  opacity: 0.5;
+  font-size: 1.05rem;
+  opacity: 0.45;
 }
 
 .sushi-lane-wrap {
   position: relative;
   margin: 0;
-  border-radius: 0.85rem;
-  background: #dde2df;
-  border: 1px solid rgba(20, 28, 36, 0.1);
+  border-radius: 1rem;
+  /* 大理石の白い床イメージ：明るく・圧を出さない */
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.55), rgba(248, 246, 242, 0.9)),
+    #f3f1ec;
+  border: 1px solid rgba(20, 28, 36, 0.07);
   overflow: hidden;
-  /* 約5枚（170+18）×5 − 18 ≒ 922px が見える幅を確保 */
-  min-height: calc(var(--sushi-tile-h) + 3.6rem);
+  flex: 1 1 auto;
+  min-height: calc(var(--sushi-tile-h) + 3.2rem);
+  display: flex;
+  flex-direction: column;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.8);
 }
 
 .sushi-lane {
   overflow: hidden;
   touch-action: pan-y;
   cursor: grab;
-  padding: 0.85rem 0 3.4rem;
+  padding: 1.35rem 0 1.5rem;
   user-select: none;
-  min-height: calc(var(--sushi-tile-h) + 1.2rem);
+  min-height: calc(var(--sushi-tile-h) + 2.2rem);
+  flex: 1 1 auto;
+  display: flex;
+  align-items: center;
 }
 
 .sushi-lane.is-dragging {
@@ -7428,7 +7496,8 @@ body.atelier.color-mode-easy .zone-badge[data-open-step="site-fonts"] {
   gap: var(--sushi-tile-gap);
   width: max-content;
   will-change: transform;
-  padding-inline: 0.65rem;
+  /* 端は半分見え：通路の余白 */
+  padding-inline: calc(var(--sushi-tile-w) * 0.28);
 }
 
 .sushi-lane-empty {
@@ -7438,61 +7507,43 @@ body.atelier.color-mode-easy .zone-badge[data-open-step="site-fonts"] {
 }
 
 .sushi-gate-help {
-  position: absolute;
-  top: 0.35rem;
-  right: 0.15rem;
+  position: static;
+  justify-self: end;
   z-index: 5;
   width: 2.35rem;
   height: 2.35rem;
   border-radius: 999px;
-  border: 1px solid rgba(20, 28, 36, 0.2);
+  border: 1px solid rgba(20, 28, 36, 0.18);
   background: rgba(255, 255, 255, 0.96);
-  box-shadow: 0 4px 14px rgba(20, 28, 36, 0.12);
+  box-shadow: 0 4px 14px rgba(20, 28, 36, 0.1);
   cursor: pointer;
   font-size: 1.05rem;
   font-weight: 700;
   line-height: 1;
   color: #234;
+  flex: 0 0 auto;
 }
 .sushi-gate-help[hidden] { display: none !important; }
 
-.sushi-lane-footer {
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: 0.35rem;
-  z-index: 4;
-  display: flex;
-  justify-content: flex-start;
-  align-items: center;
-  padding: 0 0.65rem;
-  pointer-events: none;
-}
-.sushi-lane-footer > * { pointer-events: auto; }
-.sushi-lane-footer .sushi-footer-back {
-  min-height: 2.35rem;
-  padding: 0.4rem 0.85rem;
-  font-size: 0.9rem;
-  box-shadow: 0 4px 14px rgba(20, 28, 36, 0.1);
-}
 .sushi-stock-slot.is-filled {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 0.35rem;
-  min-height: calc(var(--sushi-stock-tile-h) + 3.1rem);
+  gap: 0.3rem;
+  width: calc(var(--sushi-stock-tile-w) + 0.7rem);
+  min-height: calc(var(--sushi-stock-tile-h) + 2.85rem);
 }
 .sushi-stock-confirm {
-  width: min(100%, 9.5rem);
-  min-height: 2.45rem;
-  font-size: 1rem;
+  width: min(100%, 8.2rem);
+  min-height: 2.15rem;
+  font-size: 0.88rem;
   font-weight: 700;
-  padding: 0.4rem 0.55rem;
+  padding: 0.32rem 0.4rem;
 }
 .sushi-stock-slot .sushi-tile-label {
-  font-size: 0.8rem;
+  font-size: 0.72rem;
   font-weight: 600;
-  padding: 0.22rem 0.3rem;
+  padding: 0.18rem 0.25rem;
   white-space: normal;
   line-height: 1.2;
   display: -webkit-box;
@@ -7501,9 +7552,9 @@ body.atelier.color-mode-easy .zone-badge[data-open-step="site-fonts"] {
   overflow: hidden;
 }
 .sushi-stock-slot .sushi-tile-btn {
-  width: 1.55rem;
-  height: 1.55rem;
-  font-size: 0.72rem;
+  width: 1.4rem;
+  height: 1.4rem;
+  font-size: 0.68rem;
 }
 .sushi-zoom-frame {
   width: 100%;

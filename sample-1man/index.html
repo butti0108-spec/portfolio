@@ -122,7 +122,6 @@
       <header class="entry-gate-banner" aria-label="商品名">
         <p class="chrome-product-catch">作るも、直すも。</p>
         <h1 class="entry-gate-product-name">かんたんホームページ工房</h1>
-        <button type="button" class="sushi-gate-help" id="sushi-help-btn" title="操作の見方" aria-label="操作の見方" hidden>?</button>
       </header>
       <h2 class="entry-gate-title" id="entry-gate-title">ホームページをつくる</h2>
       <p class="entry-gate-lead" id="entry-gate-lead">進め方をひとつ選んでください。</p>
@@ -205,13 +204,14 @@
             <p id="sushi-boot-loading-msg" class="sushi-boot-loading-msg">ただいまサンプルをレーンに流しています…</p>
           </div>
         </div>
-        <div class="sushi-stock-bar" id="sushi-stock-bar" aria-label="ストック（最大3）"></div>
+        <div class="sushi-top-rail" role="group" aria-label="ストックと操作">
+          <button type="button" class="gct-btn sushi-top-back" data-entry-step-back>← ひとつ戻る</button>
+          <div class="sushi-stock-bar" id="sushi-stock-bar" aria-label="ストック（最大3）"></div>
+          <button type="button" class="sushi-gate-help" id="sushi-help-btn" title="操作の見方" aria-label="操作の見方" hidden>?</button>
+        </div>
         <div class="sushi-lane-wrap">
           <div class="sushi-lane" id="sushi-lane" aria-label="見本レーン（横にドラッグできます）">
             <div class="sushi-lane-track" id="sushi-lane-track"></div>
-          </div>
-          <div class="sushi-lane-footer" role="group" aria-label="レーン操作">
-            <button type="button" class="gct-btn sushi-footer-back" data-entry-step-back>← ひとつ戻る</button>
           </div>
         </div>
 
@@ -237,11 +237,10 @@
               <li><strong>↓</strong> … ストックをレーンへ戻す</li>
               <li><strong>🔍</strong> … 拡大して全体を見る</li>
               <li>レーンを横にドラッグ … 自分で探す</li>
-              <li>マウスをレーンに乗せる … 流れが止まる（PC）</li>
-              <li>レーンをタップ … 約3秒止まる（スマホ）</li>
+              <li><strong>流れを止める</strong> … PCはレーンにマウスを乗せる／スマホはレーンをタップ（約3秒）</li>
               <li><strong>これにします</strong> … ストックした見本を確定する</li>
             </ol>
-            <p class="sushi-tutorial-note">操作がわからなくなったときは、右上の？からいつでもこの操作のしかたをご覧いただけます。</p>
+            <p class="sushi-tutorial-note">操作がわからなくなったときは、右の？からいつでもこの操作のしかたをご覧いただけます。</p>
             <div class="sushi-tutorial-actions">
               <button type="button" class="gct-btn gct-btn-primary" data-sushi-tutorial-ok>理解した</button>
             </div>

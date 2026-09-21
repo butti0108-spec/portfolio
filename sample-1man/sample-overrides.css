@@ -7322,10 +7322,10 @@ body.atelier.color-mode-easy .zone-badge[data-open-step="site-fonts"] {
 }
 
 #entry-sushi-field.sushi-shelf {
-  --sushi-tile-w: 200px;
-  --sushi-tile-h: 282px;
-  --sushi-tile-gap: 36px;
-  --sushi-stock-scale: 0.54;
+  --sushi-tile-w: 260px;
+  --sushi-tile-h: 367px;
+  --sushi-tile-gap: 28px;
+  --sushi-stock-scale: 0.46;
   --sushi-stock-tile-w: calc(var(--sushi-tile-w) * var(--sushi-stock-scale));
   --sushi-stock-tile-h: calc(var(--sushi-tile-h) * var(--sushi-stock-scale));
   --sushi-zoom-ms: 680ms;
@@ -7340,6 +7340,7 @@ body.atelier.color-mode-easy .zone-badge[data-open-step="site-fonts"] {
   gap: 0.4rem;
   flex: 1 1 auto;
   min-height: 0;
+  overflow: visible;
 }
 #entry-sushi-field.sushi-shelf[hidden] {
   display: none !important;
@@ -7352,7 +7353,7 @@ body.atelier.color-mode-easy .zone-badge[data-open-step="site-fonts"] {
   display: none !important;
 }
 #entry-gate[data-entry-step="sushi"] .entry-gate-panel--full {
-  padding-top: 0.4rem;
+  padding-top: 1rem;
   padding-bottom: 0.55rem;
 }
 #entry-gate[data-entry-step="sushi"] #entry-sushi-field {
@@ -7367,9 +7368,10 @@ body.atelier.color-mode-easy .zone-badge[data-open-step="site-fonts"] {
   align-items: center;
   gap: 0.55rem 1rem;
   margin: 0;
-  /* 左右端から、さらに日本語およそ2文字分内側へ */
-  padding: 0.05rem 2.6em 0.05rem;
+  /* 左右端から、さらに日本語およそ2文字分内側へ。上は窮屈にしない */
+  padding: 0.7rem 2.6em 0.25rem;
   min-width: 0;
+  overflow: visible;
 }
 
 .sushi-upper-left {
@@ -7586,15 +7588,18 @@ body.atelier.color-mode-easy .zone-badge[data-open-step="site-fonts"] {
   min-width: 0;
   align-self: center;
   text-align: center;
+  overflow: visible;
 }
 .sushi-decide-head {
   position: relative;
-  display: block;
-  width: 100%;
-  box-sizing: border-box;
+  display: inline-flex;
+  align-items: flex-start;
+  justify-content: center;
+  gap: 0.35rem;
   max-width: 100%;
-  padding-right: 1.35rem;
+  box-sizing: border-box;
   text-align: center;
+  overflow: visible;
 }
 .sushi-decide-label {
   margin: 0;
@@ -7606,23 +7611,25 @@ body.atelier.color-mode-easy .zone-badge[data-open-step="site-fonts"] {
   white-space: nowrap;
 }
 .sushi-upper-right .sushi-decide-tip.hub-tip-wrap {
-  position: absolute;
-  top: 0.05rem;
-  right: 0;
+  position: relative;
+  top: 0.08em;
+  right: auto;
   margin-left: 0;
   display: inline-flex;
+  flex: 0 0 auto;
 }
 .sushi-upper-right .sushi-decide-tip .hub-tip-btn {
   top: 0;
 }
 .sushi-upper-right .hub-tip-pop {
-  left: 50%;
-  right: auto;
+  left: auto;
+  right: 0;
   top: calc(100% + 0.35rem);
   bottom: auto;
-  transform: translateX(-50%);
-  z-index: 30;
-  max-width: min(13.5rem, 72vw);
+  transform: none;
+  z-index: 40;
+  width: max-content;
+  max-width: min(12.5rem, calc(100vw - 2rem));
   text-align: left;
 }
 .sushi-decide-hint {

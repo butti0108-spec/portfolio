@@ -5,10 +5,10 @@
 (function (global) {
   "use strict";
 
-  /* 本番タイル寸法（監査モック目安に合わせ固定） */
-  var TILE_W = 200;
-  var TILE_H = 282;
-  var TILE_GAP = 36;
+  /* 本番タイル寸法（文言短縮後の余白をレーンへ寄せて一段大きく） */
+  var TILE_W = 260;
+  var TILE_H = 367;
+  var TILE_GAP = 28;
   var SITE_DESIGN_W = 1200;
   var SPEED_PX_S = 36;
   var MS_STOCK_IN = 360;

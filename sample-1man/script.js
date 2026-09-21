@@ -13206,7 +13206,8 @@
       keepUnselected: true
     });
     if (typeof window.setPreviewWidthStepById === "function") {
-      window.setPreviewWidthStepById("tablet");
+      /* 虫眼鏡は通常プレビューのPC幅。狭い窓では既存の縮小でその横幅に合わせる */
+      window.setPreviewWidthStepById("desktop");
     }
     applyLiveColors(false);
     if (bootSample && /^[0-9]{2}-[A-Za-z0-9_-]+$/.test(bootSample)) {

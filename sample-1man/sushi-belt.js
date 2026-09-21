@@ -565,7 +565,7 @@
     var src =
       "index.html?embedPreview=1&sample=" +
       encodeURIComponent(folder) +
-      "&v=sushi-zoom-live-v5";
+      "&v=sushi-zoom-live-v6";
     els.zoomInner.innerHTML =
       '<div class="sushi-zoom-frame is-pending">' +
       '<p class="sushi-zoom-pending" aria-live="polite">見本を準備しています…</p>' +

@@ -7795,7 +7795,8 @@ body.atelier.color-mode-easy .zone-badge[data-open-step="site-fonts"] {
 .sushi-zoom-layer[hidden] { display: none !important; }
 
 .sushi-zoom-inner {
-  width: min(100%, 42rem);
+  /* 通常プレビューのPC（1280px）。窓が狭ければその幅まで */
+  width: min(100%, 80rem);
   max-height: min(92vh, 56rem);
   overflow: auto;
   background: #fff;
@@ -9744,6 +9745,16 @@ body.is-embed-preview .atelier-preview {
   pointer-events: auto !important;
   width: 100% !important;
   max-width: none !important;
+  flex: none !important;
+}
+/* 虫眼鏡は注文画面との分割を使わず、見本をPC幅いっぱいに */
+body.is-embed-preview .atelier-split {
+  display: block !important;
+  width: 100% !important;
+}
+body.is-embed-preview .split-handle,
+body.is-embed-preview .dash-pane {
+  display: none !important;
 }
 body.is-embed-preview.sample-flow-hide-preview .atelier-preview,
 body.is-embed-preview.sample-flow-hide-preview .preview-pane,

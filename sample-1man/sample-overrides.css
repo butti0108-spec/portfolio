@@ -19,6 +19,7 @@ body.atelier {
 
 body.atelier.entry-gate-open {
   overflow: hidden;
+  background: #fff;
 }
 
 body.atelier.entry-gate-open .atelier-shell {
@@ -26,7 +27,7 @@ body.atelier.entry-gate-open .atelier-shell {
   pointer-events: none;
 }
 
-/* —— entry gate（フル画面・透過なし） —— */
+/* —— entry gate（フル画面・透過なし・端まで白） —— */
 .entry-gate {
   position: fixed;
   inset: 0;
@@ -35,7 +36,10 @@ body.atelier.entry-gate-open .atelier-shell {
   align-items: stretch;
   justify-content: center;
   padding: 0;
-  background: #f4f1ea;
+  background: #fff;
+  overflow-x: hidden;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
 }
 
 .entry-gate[hidden] {
@@ -53,7 +57,7 @@ body.atelier.entry-gate-open .atelier-shell {
   width: min(56rem, 100%);
   max-height: none;
   min-height: 100%;
-  overflow: auto;
+  overflow: visible;
   margin: 0 auto;
   padding: clamp(1.5rem, 4vw, 2.5rem) clamp(1.15rem, 3vw, 2rem) 2.5rem;
   border: none;
@@ -8451,9 +8455,9 @@ html.is-capture-mode body.sample-flow-hide-preview #preview-root {
   font-weight: 700;
 }
 
-/* 操作UI：白寄りで統一（入口／帯／注文／ヘルプで大きく色を割らない） */
+/* 操作UI：端まで白（ショーケース）。両脇だけ灰／クリームにしない */
 .entry-gate {
-  background: #f3f5f7;
+  background: #fff;
 }
 .entry-gate-panel--full,
 .entry-branch-card-inner {
@@ -8469,7 +8473,7 @@ html.is-capture-mode body.sample-flow-hide-preview #preview-root {
   border-radius: 0.55rem;
 }
 .atelier-chrome {
-  background: #f0f2f4;
+  background: #fff;
   border-bottom: 1px solid rgba(20, 28, 36, 0.1);
   color: #152028;
 }
@@ -8480,10 +8484,10 @@ html.is-capture-mode body.sample-flow-hide-preview #preview-root {
   background: #fff;
 }
 .dash-pane {
-  background: #f5f6f7;
+  background: #fff;
 }
 .preview-pane {
-  background: #eceff2;
+  background: #fff;
 }
 
 .hub-preview-width-block {
@@ -10080,4 +10084,31 @@ body.is-embed-preview .atelier-shell {
 }
 body.is-embed-preview .site-footer {
   margin-bottom: 0 !important;
+}
+
+/* —— メーカー画面・端まで白（ショーケース）2026-09-21 —— */
+body.atelier.entry-gate-open,
+.entry-gate {
+  background: #fff !important;
+}
+.entry-gate {
+  overflow-x: hidden;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
+.entry-gate-panel,
+.entry-gate-panel--full {
+  background: #fff;
+  overflow: visible;
+}
+.entry-gate[data-entry-step="sushi"] .entry-gate-panel--full {
+  overflow: hidden;
+}
+.atelier-chrome,
+.dash-pane,
+.preview-pane,
+.easy-img-wire,
+.sushi-zoom-frame.is-pending,
+.sushi-zoom-pending {
+  background: #fff;
 }

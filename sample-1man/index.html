@@ -204,13 +204,25 @@
             <p id="sushi-boot-loading-msg" class="sushi-boot-loading-msg">ただいまサンプルをレーンに流しています…</p>
           </div>
         </div>
-        <div class="sushi-top-rail" role="group" aria-label="ストックと操作">
-          <button type="button" class="gct-btn sushi-top-back" data-entry-step-back>← ひとつ戻る</button>
-          <div class="sushi-stock-block">
+        <div class="sushi-upper">
+          <div class="sushi-upper-left">
+            <div class="sushi-guide">
+              <p>下のレーンから、気になる見本を上へ最大3つ。</p>
+              <p>番号は枠の上。空いている枠は、まだ置ける数です。</p>
+              <p>決めるときは右上の <strong>1・2・3</strong> を押します（押した番号が最終決定）。</p>
+              <p>流れを止める：パソコンはレーンにマウスを乗せる。スマホはレーンをタップ（約3秒）。</p>
+              <p class="sushi-guide-quiet">虫眼鏡・↓・横ドラッグは、各見本の上の操作のままです。</p>
+              <p class="sushi-guide-repath">
+                進め方を変えるときは
+                <button type="button" class="sushi-rechoose-path" data-entry-step-back>進め方を選び直す</button>
+              </p>
+            </div>
             <div class="sushi-stock-bar" id="sushi-stock-bar" aria-label="ストック（最大3）"></div>
-            <div class="sushi-stock-confirm-row" id="sushi-stock-confirm-row" role="group" aria-label="どれにするか"></div>
           </div>
-          <button type="button" class="sushi-gate-help" id="sushi-help-btn" title="操作の見方" aria-label="操作の見方" hidden>?</button>
+          <div class="sushi-upper-right">
+            <p class="sushi-decide-label">最終決定</p>
+            <div class="sushi-stock-confirm-row" id="sushi-stock-confirm-row" role="group" aria-label="最終決定"></div>
+          </div>
         </div>
         <div class="sushi-lane-wrap">
           <div class="sushi-lane" id="sushi-lane" aria-label="見本レーン（横にドラッグできます）">
@@ -229,25 +241,6 @@
 
         <div id="sushi-zoom-layer" class="sushi-zoom-layer" hidden>
           <div id="sushi-zoom-inner" class="sushi-zoom-inner"></div>
-        </div>
-
-        <div id="sushi-tutorial" class="sushi-tutorial" hidden>
-          <div class="sushi-tutorial-dim" aria-hidden="true"></div>
-          <div class="sushi-tutorial-card" role="dialog" aria-labelledby="sushi-tutorial-title">
-            <h2 id="sushi-tutorial-title">操作のしかた</h2>
-            <ol class="sushi-tutorial-steps">
-              <li><strong>↑</strong> … 気になる見本を上のストックへ</li>
-              <li><strong>↓</strong> … ストックをレーンへ戻す</li>
-              <li><strong>🔍</strong> … 拡大して全体を見る</li>
-              <li>レーンを横にドラッグ … 自分で探す</li>
-              <li><strong>流れを止める</strong> … PCはレーンにマウスを乗せる／スマホはレーンをタップ（約3秒）</li>
-              <li><strong>1にする／2にする／3にする</strong> … ストックした見本を確定する</li>
-            </ol>
-            <p class="sushi-tutorial-note">操作がわからなくなったときは、右の？からいつでもこの操作のしかたをご覧いただけます。</p>
-            <div class="sushi-tutorial-actions">
-              <button type="button" class="gct-btn gct-btn-primary" data-sushi-tutorial-ok>理解した</button>
-            </div>
-          </div>
         </div>
       </fieldset>
 

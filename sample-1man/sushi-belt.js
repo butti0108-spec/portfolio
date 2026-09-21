@@ -15,7 +15,6 @@
   var MS_STOCK_OUT = 240;
   var MS_ZOOM = 680;
   var MAX_STOCK = 3;
-  var TUTORIAL_KEY = "sample1man-sushi-tutorial-v4";
   var TOUCH_PAUSE_MS = 3000;
 
   function isFineHoverPointer() {
@@ -155,8 +154,6 @@
     els.replace = $("sushi-replace-modal");
     els.zoomLayer = $("sushi-zoom-layer");
     els.zoomInner = $("sushi-zoom-inner");
-    els.tutorial = $("sushi-tutorial");
-    els.help = $("sushi-help-btn");
   }
 
   function tileHtml(sample, opts) {
@@ -218,40 +215,46 @@
       var sel = selectedStockSlot === i ? " is-selected" : "";
       if (s) {
         html +=
-          '<div class="sushi-stock-slot is-filled' +
+          '<div class="sushi-stock-col' +
           sel +
           '" data-stock-slot="' +
           i +
-          '" aria-label="ストック枠' +
-          n +
           '">' +
           '<span class="sushi-stock-num" aria-hidden="true">' +
           n +
           "</span>" +
-          tileHtml(s, { stock: true, slot: i }) +
-          "</div>";
-        confirmHtml +=
-          '<button type="button" class="gct-btn gct-btn-primary sushi-stock-confirm" data-sushi-act="confirm" data-slot="' +
-          i +
-          '">' +
+          '<div class="sushi-stock-slot is-filled" aria-label="ストック枠' +
           n +
-          "にする</button>";
+          '">' +
+          tileHtml(s, { stock: true, slot: i }) +
+          "</div></div>";
+        confirmHtml +=
+          '<button type="button" class="sushi-decide-btn is-ready" data-sushi-act="confirm" data-slot="' +
+          i +
+          '" aria-label="' +
+          n +
+          '番を最終決定">' +
+          n +
+          "</button>";
       } else {
         html +=
-          '<div class="sushi-stock-slot is-empty" data-stock-slot="' +
+          '<div class="sushi-stock-col" data-stock-slot="' +
           i +
-          '" aria-label="ストック枠' +
+          '">' +
+          '<span class="sushi-stock-num" aria-hidden="true">' +
           n +
-          '（空）">' +
-          '<span class="sushi-stock-num sushi-stock-num--empty">' +
+          "</span>" +
+          '<div class="sushi-stock-slot is-empty" aria-label="ストック枠' +
           n +
-          "</span></div>";
+          '（空）"></div></div>';
         confirmHtml +=
-          '<button type="button" class="gct-btn sushi-stock-confirm" data-sushi-act="confirm" data-slot="' +
+          '<button type="button" class="sushi-decide-btn" data-sushi-act="confirm" data-slot="' +
           i +
-          '" disabled aria-disabled="true">' +
+          '" disabled aria-disabled="true" aria-label="' +
           n +
-          "にする</button>";
+          '番（空）">' +
+          n +
+          "</button>";
       }
     }
     els.stockBar.innerHTML = html;
@@ -704,36 +707,6 @@
     });
   }
 
-  function tutorialSeen() {
-    try {
-      return localStorage.getItem(TUTORIAL_KEY) === "1";
-    } catch (e) {
-      return false;
-    }
-  }
-
-  function setTutorialSeen() {
-    try {
-      localStorage.setItem(TUTORIAL_KEY, "1");
-    } catch (e) {
-      /* ignore */
-    }
-  }
-
-  function showTutorial(force) {
-    if (!els.tutorial) return;
-    if (!force && tutorialSeen()) return;
-    els.tutorial.hidden = false;
-    els.tutorial.classList.add("is-open");
-  }
-
-  function hideTutorial(markSeen) {
-    if (!els.tutorial) return;
-    els.tutorial.classList.remove("is-open");
-    els.tutorial.hidden = true;
-    if (markSeen) setTutorialSeen();
-  }
-
   function setupHoverPause() {
     if (!els.lane || els.lane.dataset.hoverBound) return;
     els.lane.dataset.hoverBound = "1";
@@ -893,14 +866,13 @@
       return;
     }
 
-    if (t.closest("[data-sushi-tutorial-ok]")) {
-      hideTutorial(true);
-      return;
-    }
-
-    var stockSlot = t.closest(".sushi-stock-slot.is-filled");
-    if (stockSlot && !t.closest("button")) {
-      selectedStockSlot = Number(stockSlot.getAttribute("data-stock-slot"));
+    var stockCol = t.closest(".sushi-stock-col");
+    if (
+      stockCol &&
+      stockCol.querySelector(".sushi-stock-slot.is-filled") &&
+      !t.closest("button")
+    ) {
+      selectedStockSlot = Number(stockCol.getAttribute("data-stock-slot"));
       renderStock();
     }
   }
@@ -922,7 +894,7 @@
       }
     }
     if (!sample) {
-      window.alert("ストックに見本を入れてから、「1にする」などを押してください。");
+      window.alert("見本を枠に入れてから、右上の番号を押してください。");
       return;
     }
     if (!onConfirm) return;
@@ -942,11 +914,6 @@
     els.root.dataset.sushiBound = "2";
     els.root.addEventListener("click", onRootClick);
 
-    if (els.help) {
-      els.help.addEventListener("click", function () {
-        showTutorial(true);
-      });
-    }
     if (els.zoomLayer) {
       els.zoomLayer.addEventListener("click", function (ev) {
         if (ev.target === els.zoomLayer) closeZoom();
@@ -1004,8 +971,6 @@
     }
     hideBootLoading();
     startRaf();
-    showTutorial(false);
-    if (els.help) els.help.hidden = false;
   }
 
   function unmount() {
@@ -1013,11 +978,11 @@
     stopRaf();
     closeZoom();
     closeReplaceModal();
-    hideTutorial(false);
     isPlaying = false;
     hoverPaused = false;
     clearTouchPause();
-    if (els.help) els.help.hidden = true;
+    stock = [null, null, null];
+    selectedStockSlot = -1;
   }
 
   /** 監査報告用 */

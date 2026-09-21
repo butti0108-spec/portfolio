@@ -1998,6 +1998,9 @@
     hubUiMode: "home",
     studioImagePaths: null,
     zipImageFiles: null,
+    folderDirHandle: null,
+    folderDisplayName: "",
+    pendingResumeFolderFiles: null,
     hubReturnBlockId: null,
     hubEntryRoute: null,
     hubTaskId: null,
@@ -3661,7 +3664,9 @@
     if (!base) return null;
     for (let i = 0; i < inputNames.length; i += 1) {
       const name = inputNames[i];
-      if (base === name || base.indexOf(name + "_") === 0) return name;
+      if (base === name) return name;
+      if (base.indexOf(name + "_") === 0) return name;
+      if (base.indexOf(name + ".") === 0) return name;
     }
     return null;
   }
@@ -3721,14 +3726,6 @@
   function setEntryResumeStatus(msg) {
     const el = document.getElementById("entry-resume-status");
     if (el) el.textContent = msg || "";
-  }
-
-  function syncEntryResumeLoadButton() {
-    const input = document.getElementById("entry-resume-zip");
-    const btn = document.getElementById("entry-resume-load");
-    if (!btn) return;
-    const hasFile = !!(input && input.files && input.files[0]);
-    btn.disabled = !hasFile;
   }
 
   async function loadResumeZipFile(file) {
@@ -3791,6 +3788,486 @@
     scheduleSave();
     return true;
   }
+
+  const FOLDER_HANDLE_DB = "sample-1man-fs";
+  const FOLDER_HANDLE_STORE = "handles";
+  const FOLDER_HANDLE_KEY = "projectDir";
+  let folderWriteTimer = null;
+  let folderWriteInFlight = false;
+  let folderWriteQueued = false;
+
+  function supportsDirectoryPicker() {
+    return typeof window.showDirectoryPicker === "function";
+  }
+
+  function openFolderHandleDb() {
+    return new Promise(function (resolve, reject) {
+      const req = indexedDB.open(FOLDER_HANDLE_DB, 1);
+      req.onupgradeneeded = function () {
+        const db = req.result;
+        if (!db.objectStoreNames.contains(FOLDER_HANDLE_STORE)) {
+          db.createObjectStore(FOLDER_HANDLE_STORE);
+        }
+      };
+      req.onsuccess = function () {
+        resolve(req.result);
+      };
+      req.onerror = function () {
+        reject(req.error || new Error("IndexedDBを開けません"));
+      };
+    });
+  }
+
+  async function idbSetFolderHandle(handle) {
+    const db = await openFolderHandleDb();
+    return new Promise(function (resolve, reject) {
+      const tx = db.transaction(FOLDER_HANDLE_STORE, "readwrite");
+      tx.objectStore(FOLDER_HANDLE_STORE).put(handle, FOLDER_HANDLE_KEY);
+      tx.oncomplete = function () {
+        db.close();
+        resolve();
+      };
+      tx.onerror = function () {
+        db.close();
+        reject(tx.error || new Error("フォルダ権限の保存に失敗"));
+      };
+    });
+  }
+
+  async function idbGetFolderHandle() {
+    const db = await openFolderHandleDb();
+    return new Promise(function (resolve, reject) {
+      const tx = db.transaction(FOLDER_HANDLE_STORE, "readonly");
+      const req = tx.objectStore(FOLDER_HANDLE_STORE).get(FOLDER_HANDLE_KEY);
+      req.onsuccess = function () {
+        db.close();
+        resolve(req.result || null);
+      };
+      req.onerror = function () {
+        db.close();
+        reject(req.error || new Error("フォルダ権限の読込に失敗"));
+      };
+    });
+  }
+
+  async function idbClearFolderHandle() {
+    try {
+      const db = await openFolderHandleDb();
+      await new Promise(function (resolve, reject) {
+        const tx = db.transaction(FOLDER_HANDLE_STORE, "readwrite");
+        tx.objectStore(FOLDER_HANDLE_STORE).delete(FOLDER_HANDLE_KEY);
+        tx.oncomplete = function () {
+          db.close();
+          resolve();
+        };
+        tx.onerror = function () {
+          db.close();
+          reject(tx.error);
+        };
+      });
+    } catch (e) {
+      /* ignore */
+    }
+  }
+
+  async function ensureFolderPermission(handle, mode) {
+    if (!handle) return false;
+    const want = mode === "readwrite" ? "readwrite" : "read";
+    try {
+      const q = await handle.queryPermission({ mode: want });
+      if (q === "granted") return true;
+      const r = await handle.requestPermission({ mode: want });
+      return r === "granted";
+    } catch (e) {
+      return false;
+    }
+  }
+
+  async function setProjectFolderHandle(handle, opts) {
+    const options = opts || {};
+    if (!handle) {
+      store.folderDirHandle = null;
+      store.folderDisplayName = "";
+      if (!options.keepIdb) await idbClearFolderHandle();
+      return false;
+    }
+    const mode = options.mode === "read" ? "read" : "readwrite";
+    const ok = await ensureFolderPermission(handle, mode);
+    if (!ok) {
+      throw new Error("フォルダへのアクセスが許可されませんでした。");
+    }
+    store.folderDirHandle = handle;
+    store.folderDisplayName = handle.name || "選択したフォルダ";
+    if (options.persist !== false) {
+      try {
+        await idbSetFolderHandle(handle);
+      } catch (e) {
+        /* 権限はメモリ上で継続 */
+      }
+    }
+    return true;
+  }
+
+  async function pickProjectFolderForSave() {
+    if (!supportsDirectoryPicker()) {
+      throw new Error(
+        "このブラウザではフォルダ保存に対応していません。残さず進むか、あとでZIPで残してください。"
+      );
+    }
+    const handle = await window.showDirectoryPicker({
+      id: "sample-1man-project",
+      mode: "readwrite",
+      startIn: "documents"
+    });
+    await setProjectFolderHandle(handle, { mode: "readwrite", persist: true });
+    return handle;
+  }
+
+  async function pickProjectFolderForResume() {
+    if (supportsDirectoryPicker()) {
+      const handle = await window.showDirectoryPicker({
+        id: "sample-1man-project-resume",
+        mode: "readwrite",
+        startIn: "documents"
+      });
+      await setProjectFolderHandle(handle, { mode: "readwrite", persist: true });
+      store.pendingResumeFolderFiles = null;
+      return { kind: "handle", handle: handle };
+    }
+    const fallback = document.getElementById("entry-resume-folder-fallback");
+    if (!fallback) {
+      throw new Error("このブラウザではフォルダ選択に対応していません。ZIPを選んでください。");
+    }
+    return new Promise(function (resolve, reject) {
+      const onChange = function () {
+        fallback.removeEventListener("change", onChange);
+        const files = fallback.files ? Array.from(fallback.files) : [];
+        if (!files.length) {
+          reject(new Error("フォルダが選ばれていません。"));
+          return;
+        }
+        store.pendingResumeFolderFiles = files;
+        store.folderDirHandle = null;
+        const top = files[0] && files[0].webkitRelativePath
+          ? String(files[0].webkitRelativePath).split("/")[0]
+          : "選択したフォルダ";
+        store.folderDisplayName = top;
+        resolve({ kind: "files", files: files });
+      };
+      fallback.addEventListener("change", onChange);
+      fallback.value = "";
+      fallback.click();
+    });
+  }
+
+  function guessExtFromFile(file, fallback) {
+    const name = (file && file.name) || "";
+    const m = name.match(/\.([a-z0-9]+)$/i);
+    if (m) return m[1].toLowerCase();
+    const type = (file && file.type) || "";
+    if (type.indexOf("png") >= 0) return "png";
+    if (type.indexOf("jpeg") >= 0 || type.indexOf("jpg") >= 0) return "jpg";
+    if (type.indexOf("webp") >= 0) return "webp";
+    if (type.indexOf("gif") >= 0) return "gif";
+    return fallback || "png";
+  }
+
+  async function ensureChildDir(parent, name) {
+    return parent.getDirectoryHandle(name, { create: true });
+  }
+
+  async function writeFileToDir(dirHandle, fileName, data) {
+    const fh = await dirHandle.getFileHandle(fileName, { create: true });
+    const writable = await fh.createWritable();
+    await writable.write(data);
+    await writable.close();
+  }
+
+  async function clearDirectoryFiles(dirHandle) {
+    const names = [];
+    try {
+      for await (const entry of dirHandle.values()) {
+        names.push({ name: entry.name, kind: entry.kind });
+      }
+    } catch (e) {
+      return;
+    }
+    for (let i = 0; i < names.length; i += 1) {
+      try {
+        await dirHandle.removeEntry(names[i].name, { recursive: names[i].kind === "directory" });
+      } catch (e) {
+        /* 個別削除失敗は無視して上書きへ */
+      }
+    }
+  }
+
+  function collectResumeImageFilesMap() {
+    const map = {};
+    listOrderFileInputNames().forEach(function (name) {
+      const fromInput = readFileInput(name);
+      const fromStore = store.zipImageFiles && store.zipImageFiles[name];
+      const file = fromInput || fromStore || null;
+      if (file) map[name] = file;
+    });
+    return map;
+  }
+
+  function buildFolderOrderPayload() {
+    const draft = buildDraftPayload();
+    draft.colorFinalAck = true;
+    draft.freeRevisionNote = "作成後の無料修正は1回のみ";
+    draft.kind = "sample1man-order";
+    draft.saveMode = "folder";
+    return draft;
+  }
+
+  async function writeProjectFolderNow() {
+    if (store.saveMode !== "folder" || !store.folderDirHandle) return { ok: false, reason: "no-folder" };
+    const handle = store.folderDirHandle;
+    const allowed = await ensureFolderPermission(handle, "readwrite");
+    if (!allowed) return { ok: false, reason: "denied" };
+    const payload = buildFolderOrderPayload();
+    const images = collectResumeImageFilesMap();
+    await writeFileToDir(
+      handle,
+      "order.json",
+      new Blob([JSON.stringify(payload, null, 2)], { type: "application/json;charset=utf-8" })
+    );
+    let imgDir;
+    try {
+      imgDir = await ensureChildDir(handle, "images");
+    } catch (e) {
+      return { ok: false, reason: "images-dir" };
+    }
+    const names = Object.keys(images);
+    /* 画像が取れているときだけ差し替え。空のときに images/ を消さない */
+    for (let i = 0; i < names.length; i += 1) {
+      const key = names[i];
+      const file = images[key];
+      try {
+        const ext = guessExtFromFile(file, "png");
+        const outName = key + "." + ext;
+        const buf = await file.arrayBuffer();
+        await writeFileToDir(imgDir, outName, buf);
+        await writeFileToDir(imgDir, key + "_" + (file.name || outName), buf);
+      } catch (e) {
+        /* 1枚失敗しても他は続ける */
+      }
+    }
+    return { ok: true, imageCount: names.length };
+  }
+
+  function scheduleFolderWrite() {
+    if (store.saveMode !== "folder" || !store.folderDirHandle) return;
+    window.clearTimeout(folderWriteTimer);
+    folderWriteTimer = window.setTimeout(function () {
+      flushFolderWrite().catch(function () {
+        /* 次回の保存で再試行 */
+      });
+    }, 700);
+  }
+
+  async function flushFolderWrite() {
+    if (store.saveMode !== "folder" || !store.folderDirHandle) return;
+    if (folderWriteInFlight) {
+      folderWriteQueued = true;
+      return;
+    }
+    folderWriteInFlight = true;
+    try {
+      await writeProjectFolderNow();
+    } finally {
+      folderWriteInFlight = false;
+      if (folderWriteQueued) {
+        folderWriteQueued = false;
+        scheduleFolderWrite();
+      }
+    }
+  }
+
+  function parseOrderTextToDraft(rawText) {
+    let parsed;
+    try {
+      parsed = JSON.parse(rawText);
+    } catch (e) {
+      throw new Error("order.json が壊れているようです。");
+    }
+    let parsedPack;
+    try {
+      parsedPack = parseStudioJson(parsed);
+    } catch (e) {
+      throw new Error("このフォルダは制作データとして読めません。");
+    }
+    const draft = normalizeResumeDraft(parsedPack.draft || parsed);
+    if (!draft.fields && !draft.draftColors && !draft.layoutPattern) {
+      throw new Error("このフォルダには復元できる設定がありません。");
+    }
+    return draft;
+  }
+
+  async function readOrderJsonFromDirHandle(dirHandle) {
+    try {
+      const fh = await dirHandle.getFileHandle("order.json");
+      const file = await fh.getFile();
+      return await file.text();
+    } catch (e) {
+      throw new Error("order.json がありません。制作データのフォルダか確認してください。");
+    }
+  }
+
+  async function applyResumeImagesFromDirHandle(dirHandle) {
+    let imgDir;
+    try {
+      imgDir = await dirHandle.getDirectoryHandle("images");
+    } catch (e) {
+      return 0;
+    }
+    const inputNames = listOrderFileInputNames();
+    let applied = 0;
+    for await (const entry of imgDir.values()) {
+      if (entry.kind !== "file") continue;
+      const inputName = matchZipImageToInputName("images/" + entry.name, inputNames);
+      if (!inputName) continue;
+      const fileHandle = await imgDir.getFileHandle(entry.name);
+      const file = await fileHandle.getFile();
+      assignResumeImageFile(inputName, file);
+      applied += 1;
+    }
+    syncLogoPresentation();
+    return applied;
+  }
+
+  async function applyResumeImagesFromFileList(files) {
+    const inputNames = listOrderFileInputNames();
+    let applied = 0;
+    let orderText = null;
+    files.forEach(function (file) {
+      const rel = String(file.webkitRelativePath || file.name || "").replace(/\\/g, "/");
+      if (/(^|\/)order\.json$/i.test(rel)) orderText = file;
+    });
+    for (let i = 0; i < files.length; i += 1) {
+      const file = files[i];
+      const rel = String(file.webkitRelativePath || file.name || "").replace(/\\/g, "/");
+      if (!/\/images\//i.test("/" + rel) && !/^images\//i.test(rel)) continue;
+      const inputName = matchZipImageToInputName(rel, inputNames);
+      if (!inputName) continue;
+      assignResumeImageFile(inputName, file);
+      applied += 1;
+    }
+    syncLogoPresentation();
+    return { applied: applied, orderFile: orderText };
+  }
+
+  async function loadResumeFromFolderHandle(dirHandle) {
+    const rawText = await readOrderJsonFromDirHandle(dirHandle);
+    const draft = parseOrderTextToDraft(rawText);
+    store.zipImageFiles = {};
+    applyStudioDraft(draft);
+    await applyResumeImagesFromDirHandle(dirHandle);
+    store.saveMode = "folder";
+    store.hubEntrySource = "detail-entry";
+    store.entryBranch = "detail";
+    store.layoutSelected = true;
+    syncDashResumeNotice();
+    openDetailLayoutHub();
+    scheduleSave();
+    scheduleFolderWrite();
+    return true;
+  }
+
+  async function loadResumeFromFolderFiles(files) {
+    const listed = Array.from(files || []);
+    if (!listed.length) throw new Error("フォルダが空です。");
+    let orderFile = null;
+    for (let i = 0; i < listed.length; i += 1) {
+      const rel = String(listed[i].webkitRelativePath || listed[i].name || "").replace(/\\/g, "/");
+      if (/(^|\/)order\.json$/i.test(rel)) {
+        orderFile = listed[i];
+        break;
+      }
+    }
+    if (!orderFile) {
+      throw new Error("order.json がありません。制作データのフォルダか確認してください。");
+    }
+    const rawText = await orderFile.text();
+    const draft = parseOrderTextToDraft(rawText);
+    store.zipImageFiles = {};
+    applyStudioDraft(draft);
+    await applyResumeImagesFromFileList(listed);
+    store.saveMode = supportsDirectoryPicker() ? store.saveMode || "browser" : "browser";
+    /* webkitdirectory のみの場合は以後の自動上書き不可→browser扱い＋注意表示 */
+    if (!store.folderDirHandle) {
+      store.saveMode = "browser";
+    } else {
+      store.saveMode = "folder";
+    }
+    store.hubEntrySource = "detail-entry";
+    store.entryBranch = "detail";
+    store.layoutSelected = true;
+    syncDashResumeNotice();
+    openDetailLayoutHub();
+    scheduleSave();
+    if (store.folderDirHandle) scheduleFolderWrite();
+    return true;
+  }
+
+  async function loadResumeProject() {
+    const zipInput = document.getElementById("entry-resume-zip");
+    const zipFile = zipInput && zipInput.files && zipInput.files[0];
+    if (zipFile) {
+      store.pendingResumeFolderFiles = null;
+      return loadResumeZipFile(zipFile);
+    }
+    if (store.folderDirHandle && !store.pendingResumeFolderFiles) {
+      return loadResumeFromFolderHandle(store.folderDirHandle);
+    }
+    if (store.pendingResumeFolderFiles && store.pendingResumeFolderFiles.length) {
+      return loadResumeFromFolderFiles(store.pendingResumeFolderFiles);
+    }
+    throw new Error("ZIPまたはフォルダを選んでください。");
+  }
+
+  function syncEntryResumeLoadButton() {
+    const input = document.getElementById("entry-resume-zip");
+    const btn = document.getElementById("entry-resume-load");
+    const nameEl = document.getElementById("entry-resume-folder-name");
+    if (nameEl) {
+      if (store.folderDisplayName && (store.folderDirHandle || store.pendingResumeFolderFiles)) {
+        nameEl.hidden = false;
+        nameEl.textContent = "選択中: " + store.folderDisplayName;
+      } else {
+        nameEl.hidden = true;
+        nameEl.textContent = "";
+      }
+    }
+    if (!btn) return;
+    const hasZip = !!(input && input.files && input.files[0]);
+    const hasFolder = !!(
+      store.folderDirHandle ||
+      (store.pendingResumeFolderFiles && store.pendingResumeFolderFiles.length)
+    );
+    btn.disabled = !(hasZip || hasFolder);
+  }
+
+  async function tryRestoreFolderHandleOnBoot() {
+    if (store.saveMode !== "folder") return;
+    if (!supportsDirectoryPicker()) return;
+    try {
+      const handle = await idbGetFolderHandle();
+      if (!handle) return;
+      const ok = await ensureFolderPermission(handle, "readwrite");
+      if (!ok) return;
+      store.folderDirHandle = handle;
+      store.folderDisplayName = handle.name || "保存フォルダ";
+    } catch (e) {
+      /* ignore */
+    }
+  }
+
+  window.__sample1manSupportsFolderSave = supportsDirectoryPicker;
+  window.__sample1manWriteProjectFolder = writeProjectFolderNow;
+  window.__sample1manSetFolderHandle = setProjectFolderHandle;
+  window.__sample1manLoadResumeFromFolderHandle = loadResumeFromFolderHandle;
 
   function downloadStudioPackJson() {
     const pack = buildStudioPack("");
@@ -8784,7 +9261,32 @@
     gate.querySelectorAll('input[name="entry_save_mode"]').forEach((input) => {
       input.addEventListener("change", () => {
         if (!input.checked) return;
-        store.saveMode = input.value === "folder" ? "folder" : "browser";
+        if (input.value === "folder") {
+          pickProjectFolderForSave()
+            .then(function () {
+              store.saveMode = "folder";
+              syncDashResumeNotice();
+              scheduleSave();
+              scheduleFolderWrite();
+              setEntryGateStep("branch");
+            })
+            .catch(function (err) {
+              input.checked = false;
+              store.saveMode = null;
+              const msg =
+                err && err.name === "AbortError"
+                  ? "フォルダ選択をキャンセルしました。もう一度選ぶか、「残さず」を選んでください。"
+                  : err && err.message
+                    ? String(err.message)
+                    : "フォルダを選べませんでした。";
+              window.alert(msg);
+            });
+          return;
+        }
+        store.saveMode = "browser";
+        store.folderDirHandle = null;
+        store.folderDisplayName = "";
+        idbClearFolderHandle();
         syncDashResumeNotice();
         scheduleSave();
         setEntryGateStep("branch");
@@ -8792,25 +9294,49 @@
     });
     const resumeZipInput = document.getElementById("entry-resume-zip");
     const resumeLoadBtn = document.getElementById("entry-resume-load");
+    const resumeFolderPick = document.getElementById("entry-resume-folder-pick");
     if (resumeZipInput) {
       resumeZipInput.addEventListener("change", () => {
+        store.pendingResumeFolderFiles = null;
+        if (resumeZipInput.files && resumeZipInput.files[0]) {
+          store.folderDirHandle = null;
+          store.folderDisplayName = "";
+        }
         setEntryResumeStatus("");
         syncEntryResumeLoadButton();
       });
     }
+    if (resumeFolderPick) {
+      resumeFolderPick.addEventListener("click", () => {
+        setEntryResumeStatus("");
+        pickProjectFolderForResume()
+          .then(function () {
+            if (resumeZipInput) resumeZipInput.value = "";
+            setEntryResumeStatus("");
+            syncEntryResumeLoadButton();
+          })
+          .catch(function (err) {
+            if (err && err.name === "AbortError") {
+              setEntryResumeStatus("フォルダ選択をキャンセルしました。");
+            } else {
+              setEntryResumeStatus(
+                err && err.message
+                  ? String(err.message)
+                  : "フォルダを選べませんでした。"
+              );
+            }
+            syncEntryResumeLoadButton();
+          });
+      });
+    }
     if (resumeLoadBtn) {
       resumeLoadBtn.addEventListener("click", () => {
-        const file = resumeZipInput && resumeZipInput.files && resumeZipInput.files[0];
-        if (!file) {
-          setEntryResumeStatus("ZIPファイルを選んでください。");
-          syncEntryResumeLoadButton();
-          return;
-        }
         resumeLoadBtn.disabled = true;
         setEntryResumeStatus("読み込み中…");
-        loadResumeZipFile(file)
+        loadResumeProject()
           .then(() => {
             setEntryResumeStatus("");
+            store.pendingResumeFolderFiles = null;
           })
           .catch((err) => {
             const msg =
@@ -8823,6 +9349,10 @@
       });
     }
     syncEntryResumeLoadButton();
+    tryRestoreFolderHandleOnBoot().then(function () {
+      syncDashResumeNotice();
+      if (store.saveMode === "folder" && store.folderDirHandle) scheduleFolderWrite();
+    });
     gate.querySelectorAll('input[name="entry_branch"]').forEach((input) => {
       input.addEventListener("change", () => {
         if (!input.checked) return;
@@ -9170,6 +9700,11 @@
     } catch (e) {
       /* ignore */
     }
+    store.folderDirHandle = null;
+    store.folderDisplayName = "";
+    store.pendingResumeFolderFiles = null;
+    store.zipImageFiles = null;
+    idbClearFolderHandle();
   }
 
   function hideResetDraftModal() {
@@ -12057,7 +12592,10 @@
   function scheduleSave() {
     if (suppressSave) return;
     window.clearTimeout(saveTimer);
-    saveTimer = window.setTimeout(saveDraft, 300);
+    saveTimer = window.setTimeout(function () {
+      saveDraft();
+      scheduleFolderWrite();
+    }, 300);
   }
 
   function saveDraft() {
@@ -12093,6 +12631,7 @@
         vibeReasons: store.vibeReasons,
         vibeText: store.vibeText,
         intakeDone: store.intakeDone,
+        saveMode: store.saveMode === "folder" || store.saveMode === "browser" ? store.saveMode : null,
         entryBranch: store.entryBranch,
         hubEntrySource: store.hubEntrySource,
         easyFlowActive: !!store.easyFlowActive,

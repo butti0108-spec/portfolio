@@ -134,6 +134,7 @@
             <input type="radio" name="entry_save_mode" value="folder">
             <span class="entry-branch-card-inner">
               <strong role="heading" aria-level="3">このパソコンに残して続ける</strong>
+              <span>保存先フォルダを選ぶと、変更のたびにこのパソコン内へ上書きします（当社サーバーには保存しません）</span>
             </span>
           </label>
           <label class="entry-branch-card">
@@ -177,10 +178,18 @@
 
       <fieldset class="entry-intake-block" id="entry-resume-field" data-entry-step="resume" hidden>
         <legend class="visually-hidden">保存したデータから再開</legend>
-        <label class="entry-resume-file">
-          <span class="entry-resume-file-label">ZIPファイル</span>
-          <input type="file" id="entry-resume-zip" accept=".zip,application/zip">
-        </label>
+        <div class="entry-resume-sources">
+          <label class="entry-resume-file">
+            <span class="entry-resume-file-label">ZIPファイル</span>
+            <input type="file" id="entry-resume-zip" accept=".zip,application/zip">
+          </label>
+          <div class="entry-resume-folder">
+            <span class="entry-resume-file-label">またはフォルダ</span>
+            <button type="button" class="wizard-btn" id="entry-resume-folder-pick">フォルダを選ぶ</button>
+            <input type="file" id="entry-resume-folder-fallback" webkitdirectory directory multiple hidden>
+            <p class="entry-intake-note entry-resume-folder-name" id="entry-resume-folder-name" hidden></p>
+          </div>
+        </div>
         <p class="entry-intake-note" id="entry-resume-status" role="status" aria-live="polite"></p>
         <div class="entry-resume-actions">
           <button type="button" class="wizard-btn" id="entry-resume-load" disabled>読み込み</button>

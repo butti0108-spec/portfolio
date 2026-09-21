@@ -206,7 +206,10 @@
         </div>
         <div class="sushi-top-rail" role="group" aria-label="ストックと操作">
           <button type="button" class="gct-btn sushi-top-back" data-entry-step-back>← ひとつ戻る</button>
-          <div class="sushi-stock-bar" id="sushi-stock-bar" aria-label="ストック（最大3）"></div>
+          <div class="sushi-stock-block">
+            <div class="sushi-stock-bar" id="sushi-stock-bar" aria-label="ストック（最大3）"></div>
+            <div class="sushi-stock-confirm-row" id="sushi-stock-confirm-row" role="group" aria-label="どれにするか"></div>
+          </div>
           <button type="button" class="sushi-gate-help" id="sushi-help-btn" title="操作の見方" aria-label="操作の見方" hidden>?</button>
         </div>
         <div class="sushi-lane-wrap">
@@ -238,7 +241,7 @@
               <li><strong>🔍</strong> … 拡大して全体を見る</li>
               <li>レーンを横にドラッグ … 自分で探す</li>
               <li><strong>流れを止める</strong> … PCはレーンにマウスを乗せる／スマホはレーンをタップ（約3秒）</li>
-              <li><strong>これにします</strong> … ストックした見本を確定する</li>
+              <li><strong>1にする／2にする／3にする</strong> … ストックした見本を確定する</li>
             </ol>
             <p class="sushi-tutorial-note">操作がわからなくなったときは、右の？からいつでもこの操作のしかたをご覧いただけます。</p>
             <div class="sushi-tutorial-actions">

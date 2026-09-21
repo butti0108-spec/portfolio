@@ -15,7 +15,7 @@
   var MS_STOCK_OUT = 240;
   var MS_ZOOM = 680;
   var MAX_STOCK = 3;
-  var TUTORIAL_KEY = "sample1man-sushi-tutorial-v3";
+  var TUTORIAL_KEY = "sample1man-sushi-tutorial-v4";
   var TOUCH_PAUSE_MS = 3000;
 
   function isFineHoverPointer() {
@@ -149,6 +149,7 @@
   function bindEls() {
     els.root = $("entry-sushi-field");
     els.stockBar = $("sushi-stock-bar");
+    els.stockConfirmRow = $("sushi-stock-confirm-row");
     els.lane = $("sushi-lane");
     els.track = $("sushi-lane-track");
     els.replace = $("sushi-replace-modal");
@@ -165,8 +166,17 @@
     var sizeStyle = opts.stock
       ? ""
       : ' style="width:' + TILE_W + "px;height:" + TILE_H + 'px"';
+    var labelHtml = opts.stock
+      ? ""
+      : '<p class="sushi-tile-label"><strong>No.' +
+        escapeHtml(sample.id) +
+        "</strong> " +
+        escapeHtml(sample.brand || "") +
+        "</p>";
     return (
-      '<article class="sushi-tile" data-sample-id="' +
+      '<article class="sushi-tile' +
+      (opts.stock ? " sushi-tile--stock" : "") +
+      '" data-sample-id="' +
       escapeAttr(sample.id) +
       '"' +
       sizeStyle +
@@ -190,11 +200,7 @@
       '<button type="button" class="sushi-tile-btn sushi-tile-btn--zoom" data-sushi-act="zoom" data-id="' +
       escapeAttr(sample.id) +
       '" title="拡大" aria-label="拡大">🔍</button>' +
-      '<p class="sushi-tile-label"><strong>No.' +
-      escapeHtml(sample.id) +
-      "</strong> " +
-      escapeHtml(sample.brand || "") +
-      "</p>" +
+      labelHtml +
       '<span class="sushi-tile-meta" hidden data-visible-site-h="' +
       visibleSiteH +
       '"></span>' +
@@ -205,8 +211,10 @@
   function renderStock() {
     if (!els.stockBar) return;
     var html = "";
+    var confirmHtml = "";
     for (var i = 0; i < MAX_STOCK; i++) {
       var s = stock[i];
+      var n = i + 1;
       var sel = selectedStockSlot === i ? " is-selected" : "";
       if (s) {
         html +=
@@ -214,27 +222,42 @@
           sel +
           '" data-stock-slot="' +
           i +
+          '" aria-label="ストック枠' +
+          n +
           '">' +
+          '<span class="sushi-stock-num" aria-hidden="true">' +
+          n +
+          "</span>" +
           tileHtml(s, { stock: true, slot: i }) +
+          "</div>";
+        confirmHtml +=
           '<button type="button" class="gct-btn gct-btn-primary sushi-stock-confirm" data-sushi-act="confirm" data-slot="' +
           i +
-          '">これにします</button>' +
-          "</div>";
+          '">' +
+          n +
+          "にする</button>";
       } else {
         html +=
           '<div class="sushi-stock-slot is-empty" data-stock-slot="' +
           i +
           '" aria-label="ストック枠' +
-          (i + 1) +
+          n +
           '（空）">' +
-          '<span class="sushi-stock-empty-label">' +
-          (i + 1) +
+          '<span class="sushi-stock-num sushi-stock-num--empty">' +
+          n +
           "</span></div>";
+        confirmHtml +=
+          '<button type="button" class="gct-btn sushi-stock-confirm" data-sushi-act="confirm" data-slot="' +
+          i +
+          '" disabled aria-disabled="true">' +
+          n +
+          "にする</button>";
       }
     }
     els.stockBar.innerHTML = html;
     els.stockBar.style.setProperty("--sushi-tile-w", TILE_W + "px");
     els.stockBar.style.setProperty("--sushi-tile-h", TILE_H + "px");
+    if (els.stockConfirmRow) els.stockConfirmRow.innerHTML = confirmHtml;
   }
 
   function fallbackLoopWidth() {
@@ -899,7 +922,7 @@
       }
     }
     if (!sample) {
-      window.alert("ストックに見本を入れてから、「これにします」を押してください。");
+      window.alert("ストックに見本を入れてから、「1にする」などを押してください。");
       return;
     }
     if (!onConfirm) return;

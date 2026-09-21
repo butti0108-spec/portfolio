@@ -1,0 +1,21 @@
+﻿{
+    "scenes":  {
+                   "clinic":  "clinic.json",
+                   "gallery":  "gallery.json",
+                   "pet":  "pet.json",
+                   "bar":  "bar.json",
+                   "hotel":  "hotel.json",
+                   "florist":  "florist.json",
+                   "ramen":  "ramen.json",
+                   "izakaya":  "izakaya.json",
+                   "bakery":  "bakery.json",
+                   "salon":  "salon.json",
+                   "cafe":  "cafe.json",
+                   "studio":  "studio.json",
+                   "sweets":  "sweets.json",
+                   "cowork":  "cowork.json",
+                   "yoga":  "yoga.json"
+               },
+    "fallback":  "cafe",
+    "version":  1
+}

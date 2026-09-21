@@ -13,7 +13,7 @@
   <link rel="stylesheet" href="../style.css">
   <link rel="stylesheet" href="style.css?v=base-live-1">
   <link rel="icon" href="brand/mark-favicon.png?v=logo-7" type="image/png">
-  <link rel="stylesheet" href="sample-overrides.css?v=copy-flow-stub-v1">
+  <link rel="stylesheet" href="sample-overrides.css?v=copy-dict-v1">
   <script>
     (function () {
       var h = location.hostname;
@@ -35,8 +35,9 @@
   <script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js" defer></script>
   <script src="vibe-dict.js" defer></script>
   <script src="easy-copy-dict.js?v=s5-1" defer></script>
+  <script src="copy-dict-engine.js?v=copy-dict-v1" defer></script>
   <script src="sushi-belt.js?v=sushi-choice-v1" defer></script>
-  <script src="script.js?v=copy-flow-stub-v1" defer></script>
+  <script src="script.js?v=copy-dict-v1" defer></script>
   <script>
     (function () {
       var h = location.hostname;
@@ -730,22 +731,29 @@
           <p class="dash-subhead" role="heading" aria-level="3">基本情報</p>
           <p class="step-help">お店のページに載せる最低限を入れます。あとから直せます。</p>
           <div class="easy-basics-fields">
-            <label class="easy-field">店名（必須）
-              <input type="text" id="easy-brand-name" name="easy_brand_name" maxlength="20" autocomplete="organization" placeholder="例：〇〇カフェ">
+            <label class="easy-field easy-field--required" for="easy-brand-name">
+              <span class="easy-field-label">店名 <span class="easy-field-req">必須</span></span>
+              <input type="text" id="easy-brand-name" name="easy_brand_name" maxlength="20" autocomplete="organization" placeholder="例：〇〇カフェ" required aria-required="true" aria-describedby="easy-brand-error">
+              <span class="easy-field-error" id="easy-brand-error" hidden role="alert">店名を入れてください。</span>
             </label>
-            <label class="easy-field">紹介（任意）
+            <label class="easy-field" for="easy-intro">
+              <span class="easy-field-label">紹介 <span class="easy-field-opt">任意</span></span>
               <textarea id="easy-intro" name="easy_intro" rows="3" maxlength="200" placeholder="どんなお店か、短く"></textarea>
             </label>
-            <label class="easy-field">連絡先メール（任意）
+            <label class="easy-field" for="easy-email">
+              <span class="easy-field-label">連絡先メール <span class="easy-field-opt">任意</span></span>
               <input type="email" id="easy-email" name="easy_email" maxlength="80" placeholder="info@example.com">
             </label>
-            <label class="easy-field">電話（任意）
+            <label class="easy-field" for="easy-phone">
+              <span class="easy-field-label">電話 <span class="easy-field-opt">任意</span></span>
               <input type="tel" id="easy-phone" name="easy_phone" maxlength="20" placeholder="000-0000-0000">
             </label>
-            <label class="easy-field">営業時間（任意）
+            <label class="easy-field" for="easy-hours">
+              <span class="easy-field-label">営業時間 <span class="easy-field-opt">任意</span></span>
               <input type="text" id="easy-hours" name="easy_hours" maxlength="60" placeholder="例：平日 10:00–18:00／定休 水曜">
             </label>
-            <label class="easy-field">住所（任意）
+            <label class="easy-field" for="easy-address">
+              <span class="easy-field-label">住所 <span class="easy-field-opt">任意</span></span>
               <input type="text" id="easy-address" name="easy_address" maxlength="80" placeholder="例：東京都〇〇区…">
             </label>
           </div>
@@ -755,12 +763,13 @@
           <summary>枠の文章</summary>
           <div class="easy-copy-frame" id="easy-copy-frame-root">
             <p class="dash-subhead" id="easy-copy-frame-title" role="heading" aria-level="3">キャッチ</p>
-            <p class="step-help">左の見本と比べながら、候補を選べます。決めるまで何度でも切り替えられます。</p>
-            <div class="easy-copy-frame-now">
+            <p class="step-help">左の見本と同じ文が「いまの文言」です。下の候補を選ぶと、左にもすぐ反映されます。</p>
+            <div class="easy-copy-frame-now" aria-live="polite">
               <p class="easy-copy-frame-now-label">いまの文言</p>
               <p class="easy-copy-frame-now-text" id="easy-copy-frame-now-text"></p>
             </div>
-            <div class="easy-copy-frame-cands" id="easy-copy-frame-cands" role="listbox" aria-label="文章候補"></div>
+            <p class="easy-copy-frame-cands-label" id="easy-copy-frame-cands-label">候補（どれか選べます）</p>
+            <div class="easy-copy-frame-cands" id="easy-copy-frame-cands" role="listbox" aria-labelledby="easy-copy-frame-cands-label"></div>
             <div class="easy-copy-frame-actions">
               <button type="button" class="gct-btn" id="easy-copy-frame-reroll">別の案を出す</button>
             </div>

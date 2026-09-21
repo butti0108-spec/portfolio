@@ -1,0 +1,65 @@
+﻿{
+    "version":  1,
+    "presets":  [
+                    {
+                        "weight":  2,
+                        "id":  "flow-ease",
+                        "axes":  {
+                                     "works":  "invite",
+                                     "hero":  "ease",
+                                     "contact":  "clear",
+                                     "about":  "warm"
+                                 }
+                    },
+                    {
+                        "weight":  2,
+                        "id":  "flow-bright",
+                        "axes":  {
+                                     "works":  "bright",
+                                     "hero":  "bright",
+                                     "contact":  "clear",
+                                     "about":  "invite"
+                                 }
+                    },
+                    {
+                        "weight":  2,
+                        "id":  "flow-craft",
+                        "axes":  {
+                                     "works":  "craft",
+                                     "hero":  "craft",
+                                     "contact":  "clear",
+                                     "about":  "craft"
+                                 }
+                    },
+                    {
+                        "weight":  2,
+                        "id":  "flow-warm",
+                        "axes":  {
+                                     "works":  "invite",
+                                     "hero":  "warm",
+                                     "contact":  "warm",
+                                     "about":  "warm"
+                                 }
+                    },
+                    {
+                        "weight":  1,
+                        "id":  "flow-clear",
+                        "axes":  {
+                                     "works":  "invite",
+                                     "hero":  "clear",
+                                     "contact":  "clear",
+                                     "about":  "clear"
+                                 }
+                    },
+                    {
+                        "weight":  1,
+                        "id":  "flow-invite",
+                        "axes":  {
+                                     "works":  "invite",
+                                     "hero":  "invite",
+                                     "contact":  "invite",
+                                     "about":  "warm"
+                                 }
+                    }
+                ]
+}

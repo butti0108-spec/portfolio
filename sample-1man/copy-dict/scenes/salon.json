@@ -1,0 +1,1765 @@
+﻿{
+    "parts":  [
+                  {
+                      "id":  "gen_open_craft_1",
+                      "text":  "こだわりを大切にする",
+                      "axisIds":  [
+                                      "craft"
+                                  ],
+                      "weight":  1,
+                      "keywordIds":  [
+                                         "craft"
+                                     ],
+                      "slot":  "open",
+                      "sectionIds":  [
+                                         "hero",
+                                         "about"
+                                     ]
+                  },
+                  {
+                      "id":  "gen_open_craft_2",
+                      "text":  "専門店らしい一軒",
+                      "axisIds":  [
+                                      "craft"
+                                  ],
+                      "weight":  1,
+                      "keywordIds":  [
+                                         "craft"
+                                     ],
+                      "slot":  "open",
+                      "sectionIds":  [
+                                         "hero",
+                                         "about"
+                                     ]
+                  },
+                  {
+                      "id":  "gen_open_craft_3",
+                      "text":  "丁寧な仕事が光る",
+                      "axisIds":  [
+                                      "craft"
+                                  ],
+                      "weight":  1,
+                      "keywordIds":  [
+                                         "craft"
+                                     ],
+                      "slot":  "open",
+                      "sectionIds":  [
+                                         "hero",
+                                         "about"
+                                     ]
+                  },
+                  {
+                      "id":  "gen_open_craft_4",
+                      "text":  "作り手の思いが伝わる",
+                      "axisIds":  [
+                                      "craft"
+                                  ],
+                      "weight":  1,
+                      "keywordIds":  [
+                                         "craft"
+                                     ],
+                      "slot":  "open",
+                      "sectionIds":  [
+                                         "hero",
+                                         "about"
+                                     ]
+                  },
+                  {
+                      "id":  "gen_open_craft_5",
+                      "text":  "一点もの感のある",
+                      "axisIds":  [
+                                      "craft"
+                                  ],
+                      "weight":  1,
+                      "keywordIds":  [
+                                         "craft"
+                                     ],
+                      "slot":  "open",
+                      "sectionIds":  [
+                                         "hero",
+                                         "about"
+                                     ]
+                  },
+                  {
+                      "id":  "gen_open_warm_1",
+                      "text":  "あたたかい空気の",
+                      "axisIds":  [
+                                      "warm"
+                                  ],
+                      "weight":  1,
+                      "keywordIds":  [
+                                         "warm"
+                                     ],
+                      "slot":  "open",
+                      "sectionIds":  [
+                                         "hero",
+                                         "about"
+                                     ]
+                  },
+                  {
+                      "id":  "gen_open_warm_2",
+                      "text":  "ぬくもりのある",
+                      "axisIds":  [
+                                      "warm"
+                                  ],
+                      "weight":  1,
+                      "keywordIds":  [
+                                         "warm"
+                                     ],
+                      "slot":  "open",
+                      "sectionIds":  [
+                                         "hero",
+                                         "about"
+                                     ]
+                  },
+                  {
+                      "id":  "gen_open_warm_3",
+                      "text":  "やさしく迎える",
+                      "axisIds":  [
+                                      "warm"
+                                  ],
+                      "weight":  1,
+                      "keywordIds":  [
+                                         "warm"
+                                     ],
+                      "slot":  "open",
+                      "sectionIds":  [
+                                         "hero",
+                                         "about"
+                                     ]
+                  },
+                  {
+                      "id":  "gen_open_warm_4",
+                      "text":  "心がほどける",
+                      "axisIds":  [
+                                      "warm"
+                                  ],
+                      "weight":  1,
+                      "keywordIds":  [
+                                         "warm"
+                                     ],
+                      "slot":  "open",
+                      "sectionIds":  [
+                                         "hero",
+                                         "about"
+                                     ]
+                  },
+                  {
+                      "id":  "gen_open_refined_1",
+                      "text":  "上品な空間で迎える",
+                      "axisIds":  [
+                                      "clear"
+                                  ],
+                      "weight":  1,
+                      "keywordIds":  [
+                                         "refined"
+                                     ],
+                      "slot":  "open",
+                      "sectionIds":  [
+                                         "hero",
+                                         "about"
+                                     ]
+                  },
+                  {
+                      "id":  "gen_open_refined_2",
+                      "text":  "きれいめな雰囲気の",
+                      "axisIds":  [
+                                      "clear"
+                                  ],
+                      "weight":  1,
+                      "keywordIds":  [
+                                         "refined"
+                                     ],
+                      "slot":  "open",
+                      "sectionIds":  [
+                                         "hero",
+                                         "about"
+                                     ]
+                  },
+                  {
+                      "id":  "gen_open_refined_3",
+                      "text":  "洗練された",
+                      "axisIds":  [
+                                      "clear"
+                                  ],
+                      "weight":  1,
+                      "keywordIds":  [
+                                         "refined"
+                                     ],
+                      "slot":  "open",
+                      "sectionIds":  [
+                                         "hero",
+                                         "about"
+                                     ]
+                  },
+                  {
+                      "id":  "gen_open_refined_4",
+                      "text":  "上質なくつろぎの",
+                      "axisIds":  [
+                                      "clear"
+                                  ],
+                      "weight":  1,
+                      "keywordIds":  [
+                                         "refined"
+                                     ],
+                      "slot":  "open",
+                      "sectionIds":  [
+                                         "hero",
+                                         "about"
+                                     ]
+                  },
+                  {
+                      "id":  "gen_open_refined_5",
+                      "text":  "丁寧な設えの",
+                      "axisIds":  [
+                                      "clear"
+                                  ],
+                      "weight":  1,
+                      "keywordIds":  [
+                                         "refined"
+                                     ],
+                      "slot":  "open",
+                      "sectionIds":  [
+                                         "hero",
+                                         "about"
+                                     ]
+                  },
+                  {
+                      "id":  "gen_open_casual_1",
+                      "text":  "気軽に立ち寄れる",
+                      "axisIds":  [
+                                      "invite"
+                                  ],
+                      "weight":  1,
+                      "keywordIds":  [
+                                         "casual"
+                                     ],
+                      "slot":  "open",
+                      "sectionIds":  [
+                                         "hero",
+                                         "about"
+                                     ]
+                  },
+                  {
+                      "id":  "gen_open_casual_2",
+                      "text":  "カジュアルに楽しむ",
+                      "axisIds":  [
+                                      "invite"
+                                  ],
+                      "weight":  1,
+                      "keywordIds":  [
+                                         "casual"
+                                     ],
+                      "slot":  "open",
+                      "sectionIds":  [
+                                         "hero",
+                                         "about"
+                                     ]
+                  },
+                  {
+                      "id":  "gen_open_casual_3",
+                      "text":  "肩の力が抜ける",
+                      "axisIds":  [
+                                      "invite"
+                                  ],
+                      "weight":  1,
+                      "keywordIds":  [
+                                         "casual"
+                                     ],
+                      "slot":  "open",
+                      "sectionIds":  [
+                                         "hero",
+                                         "about"
+                                     ]
+                  },
+                  {
+                      "id":  "gen_open_casual_4",
+                      "text":  "親しみやすい",
+                      "axisIds":  [
+                                      "invite"
+                                  ],
+                      "weight":  1,
+                      "keywordIds":  [
+                                         "casual"
+                                     ],
+                      "slot":  "open",
+                      "sectionIds":  [
+                                         "hero",
+                                         "about"
+                                     ]
+                  },
+                  {
+                      "id":  "gen_open_casual_5",
+                      "text":  "ふらっと寄れる",
+                      "axisIds":  [
+                                      "invite"
+                                  ],
+                      "weight":  1,
+                      "keywordIds":  [
+                                         "casual"
+                                     ],
+                      "slot":  "open",
+                      "sectionIds":  [
+                                         "hero",
+                                         "about"
+                                     ]
+                  },
+                  {
+                      "id":  "gen_open_calm_1",
+                      "text":  "静かな時間を楽しめる",
+                      "axisIds":  [
+                                      "ease"
+                                  ],
+                      "weight":  1,
+                      "keywordIds":  [
+                                         "calm"
+                                     ],
+                      "slot":  "open",
+                      "sectionIds":  [
+                                         "hero",
+                                         "about"
+                                     ]
+                  },
+                  {
+                      "id":  "gen_open_calm_2",
+                      "text":  "落ち着いて過ごせる",
+                      "axisIds":  [
+                                      "ease"
+                                  ],
+                      "weight":  1,
+                      "keywordIds":  [
+                                         "calm"
+                                     ],
+                      "slot":  "open",
+                      "sectionIds":  [
+                                         "hero",
+                                         "about"
+                                     ]
+                  },
+                  {
+                      "id":  "gen_open_calm_3",
+                      "text":  "ゆったりとした空気の",
+                      "axisIds":  [
+                                      "ease"
+                                  ],
+                      "weight":  1,
+                      "keywordIds":  [
+                                         "calm"
+                                     ],
+                      "slot":  "open",
+                      "sectionIds":  [
+                                         "hero",
+                                         "about"
+                                     ]
+                  },
+                  {
+                      "id":  "gen_open_calm_4",
+                      "text":  "穏やかな雰囲気の",
+                      "axisIds":  [
+                                      "ease"
+                                  ],
+                      "weight":  1,
+                      "keywordIds":  [
+                                         "calm"
+                                     ],
+                      "slot":  "open",
+                      "sectionIds":  [
+                                         "hero",
+                                         "about"
+                                     ]
+                  },
+                  {
+                      "id":  "gen_open_calm_5",
+                      "text":  "ほっと一息つける",
+                      "axisIds":  [
+                                      "ease"
+                                  ],
+                      "weight":  1,
+                      "keywordIds":  [
+                                         "calm"
+                                     ],
+                      "slot":  "open",
+                      "sectionIds":  [
+                                         "hero",
+                                         "about"
+                                     ]
+                  },
+                  {
+                      "id":  "gen_open_calm_6",
+                      "text":  "やさしい時間を届ける",
+                      "axisIds":  [
+                                      "ease"
+                                  ],
+                      "weight":  1,
+                      "keywordIds":  [
+                                         "calm"
+                                     ],
+                      "slot":  "open",
+                      "sectionIds":  [
+                                         "hero",
+                                         "about"
+                                     ]
+                  },
+                  {
+                      "id":  "gen_open_calm_7",
+                      "text":  "朝の光が差し込む",
+                      "axisIds":  [
+                                      "ease"
+                                  ],
+                      "weight":  1,
+                      "keywordIds":  [
+                                         "calm"
+                                     ],
+                      "slot":  "open",
+                      "sectionIds":  [
+                                         "hero",
+                                         "about"
+                                     ]
+                  },
+                  {
+                      "id":  "gen_open_bright_1",
+                      "text":  "明るい空気が広がる",
+                      "axisIds":  [
+                                      "bright"
+                                  ],
+                      "weight":  1,
+                      "keywordIds":  [
+                                         "bright"
+                                     ],
+                      "slot":  "open",
+                      "sectionIds":  [
+                                         "hero",
+                                         "about"
+                                     ]
+                  },
+                  {
+                      "id":  "gen_open_bright_2",
+                      "text":  "にぎやかなひとときを",
+                      "axisIds":  [
+                                      "bright"
+                                  ],
+                      "weight":  1,
+                      "keywordIds":  [
+                                         "bright"
+                                     ],
+                      "slot":  "open",
+                      "sectionIds":  [
+                                         "hero",
+                                         "about"
+                                     ]
+                  },
+                  {
+                      "id":  "gen_open_bright_3",
+                      "text":  "活気のある",
+                      "axisIds":  [
+                                      "bright"
+                                  ],
+                      "weight":  1,
+                      "keywordIds":  [
+                                         "bright"
+                                     ],
+                      "slot":  "open",
+                      "sectionIds":  [
+                                         "hero",
+                                         "about"
+                                     ]
+                  },
+                  {
+                      "id":  "gen_open_bright_4",
+                      "text":  "笑顔が集まる",
+                      "axisIds":  [
+                                      "bright"
+                                  ],
+                      "weight":  1,
+                      "keywordIds":  [
+                                         "bright"
+                                     ],
+                      "slot":  "open",
+                      "sectionIds":  [
+                                         "hero",
+                                         "about"
+                                     ]
+                  },
+                  {
+                      "id":  "gen_open_bright_5",
+                      "text":  "開放感のある",
+                      "axisIds":  [
+                                      "bright"
+                                  ],
+                      "weight":  1,
+                      "keywordIds":  [
+                                         "bright"
+                                     ],
+                      "slot":  "open",
+                      "sectionIds":  [
+                                         "hero",
+                                         "about"
+                                     ]
+                  },
+                  {
+                      "id":  "gen_mid_menu_1",
+                      "text":  "選びやすいメニューをそろえています",
+                      "axisIds":  [
+                                      "invite"
+                                  ],
+                      "weight":  1,
+                      "keywordIds":  [
+                                         "menu"
+                                     ],
+                      "slot":  "mid",
+                      "sectionIds":  [
+                                         "hero",
+                                         "about",
+                                         "works"
+                                     ]
+                  },
+                  {
+                      "id":  "gen_mid_menu_2",
+                      "text":  "季節や定番の品揃えを楽しんでください",
+                      "axisIds":  [
+                                      "invite"
+                                  ],
+                      "weight":  1,
+                      "keywordIds":  [
+                                         "menu"
+                                     ],
+                      "slot":  "mid",
+                      "sectionIds":  [
+                                         "hero",
+                                         "about",
+                                         "works"
+                                     ]
+                  },
+                  {
+                      "id":  "gen_mid_menu_3",
+                      "text":  "おすすめの品をわかりやすく並べています",
+                      "axisIds":  [
+                                      "invite"
+                                  ],
+                      "weight":  1,
+                      "keywordIds":  [
+                                         "menu"
+                                     ],
+                      "slot":  "mid",
+                      "sectionIds":  [
+                                         "hero",
+                                         "about",
+                                         "works"
+                                     ]
+                  },
+                  {
+                      "id":  "gen_mid_space_1",
+                      "text":  "居心地のよい空間づくりを大切にしています",
+                      "axisIds":  [
+                                      "ease"
+                                  ],
+                      "weight":  1,
+                      "keywordIds":  [
+                                         "space"
+                                     ],
+                      "slot":  "mid",
+                      "sectionIds":  [
+                                         "hero",
+                                         "about",
+                                         "works"
+                                     ]
+                  },
+                  {
+                      "id":  "gen_mid_space_2",
+                      "text":  "店内の雰囲気をゆっくり味わえます",
+                      "axisIds":  [
+                                      "ease"
+                                  ],
+                      "weight":  1,
+                      "keywordIds":  [
+                                         "space"
+                                     ],
+                      "slot":  "mid",
+                      "sectionIds":  [
+                                         "hero",
+                                         "about",
+                                         "works"
+                                     ]
+                  },
+                  {
+                      "id":  "gen_mid_space_3",
+                      "text":  "過ごしやすい店内を心がけています",
+                      "axisIds":  [
+                                      "ease"
+                                  ],
+                      "weight":  1,
+                      "keywordIds":  [
+                                         "space"
+                                     ],
+                      "slot":  "mid",
+                      "sectionIds":  [
+                                         "hero",
+                                         "about",
+                                         "works"
+                                     ]
+                  },
+                  {
+                      "id":  "gen_mid_space_4",
+                      "text":  "落ち着ける席づくりをしています",
+                      "axisIds":  [
+                                      "ease"
+                                  ],
+                      "weight":  1,
+                      "keywordIds":  [
+                                         "space"
+                                     ],
+                      "slot":  "mid",
+                      "sectionIds":  [
+                                         "hero",
+                                         "about",
+                                         "works"
+                                     ]
+                  },
+                  {
+                      "id":  "gen_mid_quality_1",
+                      "text":  "丁寧に仕上げた味を届けます",
+                      "axisIds":  [
+                                      "craft"
+                                  ],
+                      "weight":  1,
+                      "keywordIds":  [
+                                         "quality"
+                                     ],
+                      "slot":  "mid",
+                      "sectionIds":  [
+                                         "hero",
+                                         "about",
+                                         "works"
+                                     ]
+                  },
+                  {
+                      "id":  "gen_mid_quality_2",
+                      "text":  "品質にこだわった一品を揃えています",
+                      "axisIds":  [
+                                      "craft"
+                                  ],
+                      "weight":  1,
+                      "keywordIds":  [
+                                         "quality"
+                                     ],
+                      "slot":  "mid",
+                      "sectionIds":  [
+                                         "hero",
+                                         "about",
+                                         "works"
+                                     ]
+                  },
+                  {
+                      "id":  "gen_mid_quality_3",
+                      "text":  "素材と仕込みに時間をかけています",
+                      "axisIds":  [
+                                      "craft"
+                                  ],
+                      "weight":  1,
+                      "keywordIds":  [
+                                         "quality"
+                                     ],
+                      "slot":  "mid",
+                      "sectionIds":  [
+                                         "hero",
+                                         "about",
+                                         "works"
+                                     ]
+                  },
+                  {
+                      "id":  "gen_mid_quality_4",
+                      "text":  "確かな味を大切にしています",
+                      "axisIds":  [
+                                      "craft"
+                                  ],
+                      "weight":  1,
+                      "keywordIds":  [
+                                         "quality"
+                                     ],
+                      "slot":  "mid",
+                      "sectionIds":  [
+                                         "hero",
+                                         "about",
+                                         "works"
+                                     ]
+                  },
+                  {
+                      "id":  "gen_mid_story_1",
+                      "text":  "お店の物語を短い言葉で伝えます",
+                      "axisIds":  [
+                                      "warm"
+                                  ],
+                      "weight":  1,
+                      "keywordIds":  [
+                                         "story"
+                                     ],
+                      "slot":  "mid",
+                      "sectionIds":  [
+                                         "hero",
+                                         "about",
+                                         "works"
+                                     ]
+                  },
+                  {
+                      "id":  "gen_mid_story_2",
+                      "text":  "これまでの歩みを大切にしています",
+                      "axisIds":  [
+                                      "warm"
+                                  ],
+                      "weight":  1,
+                      "keywordIds":  [
+                                         "story"
+                                     ],
+                      "slot":  "mid",
+                      "sectionIds":  [
+                                         "hero",
+                                         "about",
+                                         "works"
+                                     ]
+                  },
+                  {
+                      "id":  "gen_mid_care_1",
+                      "text":  "あたたかい接客を心がけています",
+                      "axisIds":  [
+                                      "warm"
+                                  ],
+                      "weight":  1,
+                      "keywordIds":  [
+                                         "care"
+                                     ],
+                      "slot":  "mid",
+                      "sectionIds":  [
+                                         "hero",
+                                         "about",
+                                         "works"
+                                     ]
+                  },
+                  {
+                      "id":  "gen_mid_care_2",
+                      "text":  "気配りの行き届いた対応を大切にしています",
+                      "axisIds":  [
+                                      "warm"
+                                  ],
+                      "weight":  1,
+                      "keywordIds":  [
+                                         "care"
+                                     ],
+                      "slot":  "mid",
+                      "sectionIds":  [
+                                         "hero",
+                                         "about",
+                                         "works"
+                                     ]
+                  },
+                  {
+                      "id":  "gen_mid_care_3",
+                      "text":  "お客様との会話を大切にしています",
+                      "axisIds":  [
+                                      "warm"
+                                  ],
+                      "weight":  1,
+                      "keywordIds":  [
+                                         "care"
+                                     ],
+                      "slot":  "mid",
+                      "sectionIds":  [
+                                         "hero",
+                                         "about",
+                                         "works"
+                                     ]
+                  },
+                  {
+                      "id":  "gen_mid_care_4",
+                      "text":  "安心してお過ごしいただけるよう努めています",
+                      "axisIds":  [
+                                      "warm"
+                                  ],
+                      "weight":  1,
+                      "keywordIds":  [
+                                         "care"
+                                     ],
+                      "slot":  "mid",
+                      "sectionIds":  [
+                                         "hero",
+                                         "about",
+                                         "works"
+                                     ]
+                  },
+                  {
+                      "id":  "gen_mid_access_1",
+                      "text":  "通いやすい立地でお待ちしています",
+                      "axisIds":  [
+                                      "clear"
+                                  ],
+                      "weight":  1,
+                      "keywordIds":  [
+                                         "access"
+                                     ],
+                      "slot":  "mid",
+                      "sectionIds":  [
+                                         "hero",
+                                         "about",
+                                         "works"
+                                     ]
+                  },
+                  {
+                      "id":  "gen_mid_access_2",
+                      "text":  "気軽に寄れる場所にあります",
+                      "axisIds":  [
+                                      "clear"
+                                  ],
+                      "weight":  1,
+                      "keywordIds":  [
+                                         "access"
+                                     ],
+                      "slot":  "mid",
+                      "sectionIds":  [
+                                         "hero",
+                                         "about",
+                                         "works"
+                                     ]
+                  },
+                  {
+                      "id":  "gen_mid_access_3",
+                      "text":  "日常の動線にちょうどよい場所です",
+                      "axisIds":  [
+                                      "clear"
+                                  ],
+                      "weight":  1,
+                      "keywordIds":  [
+                                         "access"
+                                     ],
+                      "slot":  "mid",
+                      "sectionIds":  [
+                                         "hero",
+                                         "about",
+                                         "works"
+                                     ]
+                  },
+                  {
+                      "id":  "gen_mid_access_4",
+                      "text":  "立ち寄りやすい場所で営業しています",
+                      "axisIds":  [
+                                      "clear"
+                                  ],
+                      "weight":  1,
+                      "keywordIds":  [
+                                         "access"
+                                     ],
+                      "slot":  "mid",
+                      "sectionIds":  [
+                                         "hero",
+                                         "about",
+                                         "works"
+                                     ]
+                  },
+                  {
+                      "id":  "gen_close_solo_1",
+                      "text":  "一人でも気軽にお越しください。",
+                      "axisIds":  [
+                                      "ease"
+                                  ],
+                      "weight":  1,
+                      "keywordIds":  [
+                                         "solo"
+                                     ],
+                      "slot":  "close",
+                      "sectionIds":  [
+                                         "hero",
+                                         "about",
+                                         "works",
+                                         "contact"
+                                     ]
+                  },
+                  {
+                      "id":  "gen_close_solo_2",
+                      "text":  "ひとり時間にもぴったりです。",
+                      "axisIds":  [
+                                      "ease"
+                                  ],
+                      "weight":  1,
+                      "keywordIds":  [
+                                         "solo"
+                                     ],
+                      "slot":  "close",
+                      "sectionIds":  [
+                                         "hero",
+                                         "about",
+                                         "works",
+                                         "contact"
+                                     ]
+                  },
+                  {
+                      "id":  "gen_close_solo_3",
+                      "text":  "一人の来店でも居心地よく過ごせます。",
+                      "axisIds":  [
+                                      "ease"
+                                  ],
+                      "weight":  1,
+                      "keywordIds":  [
+                                         "solo"
+                                     ],
+                      "slot":  "close",
+                      "sectionIds":  [
+                                         "hero",
+                                         "about",
+                                         "works",
+                                         "contact"
+                                     ]
+                  },
+                  {
+                      "id":  "gen_close_with_1",
+                      "text":  "家族や友人との時間にもどうぞ。",
+                      "axisIds":  [
+                                      "warm"
+                                  ],
+                      "weight":  1,
+                      "keywordIds":  [
+                                         "with"
+                                     ],
+                      "slot":  "close",
+                      "sectionIds":  [
+                                         "hero",
+                                         "about",
+                                         "works",
+                                         "contact"
+                                     ]
+                  },
+                  {
+                      "id":  "gen_close_with_2",
+                      "text":  "みんなで過ごすひとときに。",
+                      "axisIds":  [
+                                      "warm"
+                                  ],
+                      "weight":  1,
+                      "keywordIds":  [
+                                         "with"
+                                     ],
+                      "slot":  "close",
+                      "sectionIds":  [
+                                         "hero",
+                                         "about",
+                                         "works",
+                                         "contact"
+                                     ]
+                  },
+                  {
+                      "id":  "gen_close_with_3",
+                      "text":  "連れ立っての来店にも向いています。",
+                      "axisIds":  [
+                                      "warm"
+                                  ],
+                      "weight":  1,
+                      "keywordIds":  [
+                                         "with"
+                                     ],
+                      "slot":  "close",
+                      "sectionIds":  [
+                                         "hero",
+                                         "about",
+                                         "works",
+                                         "contact"
+                                     ]
+                  },
+                  {
+                      "id":  "gen_close_picky_1",
+                      "text":  "こだわりたい方にも応えます。",
+                      "axisIds":  [
+                                      "craft"
+                                  ],
+                      "weight":  1,
+                      "keywordIds":  [
+                                         "picky"
+                                     ],
+                      "slot":  "close",
+                      "sectionIds":  [
+                                         "hero",
+                                         "about",
+                                         "works",
+                                         "contact"
+                                     ]
+                  },
+                  {
+                      "id":  "gen_close_picky_2",
+                      "text":  "細かな好みにも向き合います。",
+                      "axisIds":  [
+                                      "craft"
+                                  ],
+                      "weight":  1,
+                      "keywordIds":  [
+                                         "picky"
+                                     ],
+                      "slot":  "close",
+                      "sectionIds":  [
+                                         "hero",
+                                         "about",
+                                         "works",
+                                         "contact"
+                                     ]
+                  },
+                  {
+                      "id":  "gen_close_picky_3",
+                      "text":  "こだわり派の方にも納得いただける内容です。",
+                      "axisIds":  [
+                                      "craft"
+                                  ],
+                      "weight":  1,
+                      "keywordIds":  [
+                                         "picky"
+                                     ],
+                      "slot":  "close",
+                      "sectionIds":  [
+                                         "hero",
+                                         "about",
+                                         "works",
+                                         "contact"
+                                     ]
+                  },
+                  {
+                      "id":  "gen_close_first_1",
+                      "text":  "初めての方にもわかりやすくご案内します。",
+                      "axisIds":  [
+                                      "clear"
+                                  ],
+                      "weight":  1,
+                      "keywordIds":  [
+                                         "first"
+                                     ],
+                      "slot":  "close",
+                      "sectionIds":  [
+                                         "hero",
+                                         "about",
+                                         "works",
+                                         "contact"
+                                     ]
+                  },
+                  {
+                      "id":  "gen_close_first_2",
+                      "text":  "はじめてでも入りやすいお店です。",
+                      "axisIds":  [
+                                      "clear"
+                                  ],
+                      "weight":  1,
+                      "keywordIds":  [
+                                         "first"
+                                     ],
+                      "slot":  "close",
+                      "sectionIds":  [
+                                         "hero",
+                                         "about",
+                                         "works",
+                                         "contact"
+                                     ]
+                  },
+                  {
+                      "id":  "gen_close_first_3",
+                      "text":  "初めての来店でも安心してお過ごしください。",
+                      "axisIds":  [
+                                      "clear"
+                                  ],
+                      "weight":  1,
+                      "keywordIds":  [
+                                         "first"
+                                     ],
+                      "slot":  "close",
+                      "sectionIds":  [
+                                         "hero",
+                                         "about",
+                                         "works",
+                                         "contact"
+                                     ]
+                  },
+                  {
+                      "id":  "gen_close_local_1",
+                      "text":  "近所の日常に寄り添います。",
+                      "axisIds":  [
+                                      "invite"
+                                  ],
+                      "weight":  1,
+                      "keywordIds":  [
+                                         "local"
+                                     ],
+                      "slot":  "close",
+                      "sectionIds":  [
+                                         "hero",
+                                         "about",
+                                         "works",
+                                         "contact"
+                                     ]
+                  },
+                  {
+                      "id":  "gen_close_local_2",
+                      "text":  "近くに住む方の味方でありたいです。",
+                      "axisIds":  [
+                                      "invite"
+                                  ],
+                      "weight":  1,
+                      "keywordIds":  [
+                                         "local"
+                                     ],
+                      "slot":  "close",
+                      "sectionIds":  [
+                                         "hero",
+                                         "about",
+                                         "works",
+                                         "contact"
+                                     ]
+                  },
+                  {
+                      "id":  "gen_close_local_3",
+                      "text":  "ご近所の方に親しまれる店でありたいです。",
+                      "axisIds":  [
+                                      "invite"
+                                  ],
+                      "weight":  1,
+                      "keywordIds":  [
+                                         "local"
+                                     ],
+                      "slot":  "close",
+                      "sectionIds":  [
+                                         "hero",
+                                         "about",
+                                         "works",
+                                         "contact"
+                                     ]
+                  },
+                  {
+                      "id":  "gen_close_repeat_1",
+                      "text":  "通い続けたくなる場所を目指します。",
+                      "axisIds":  [
+                                      "invite"
+                                  ],
+                      "weight":  1,
+                      "keywordIds":  [
+                                         "repeat"
+                                     ],
+                      "slot":  "close",
+                      "sectionIds":  [
+                                         "hero",
+                                         "about",
+                                         "works",
+                                         "contact"
+                                     ]
+                  },
+                  {
+                      "id":  "gen_close_repeat_2",
+                      "text":  "また来たくなる空気感を大切にします。",
+                      "axisIds":  [
+                                      "invite"
+                                  ],
+                      "weight":  1,
+                      "keywordIds":  [
+                                         "repeat"
+                                     ],
+                      "slot":  "close",
+                      "sectionIds":  [
+                                         "hero",
+                                         "about",
+                                         "works",
+                                         "contact"
+                                     ]
+                  },
+                  {
+                      "id":  "gen_contact_1",
+                      "text":  "ご質問やご予約は",
+                      "axisIds":  [
+                                      "clear"
+                                  ],
+                      "weight":  1,
+                      "keywordIds":  [
+                                         "first"
+                                     ],
+                      "slot":  "open",
+                      "sectionIds":  [
+                                         "contact"
+                                     ]
+                  },
+                  {
+                      "id":  "gen_contact_2",
+                      "text":  "お問い合わせは",
+                      "axisIds":  [
+                                      "clear"
+                                  ],
+                      "weight":  1,
+                      "keywordIds":  [
+                                         "first"
+                                     ],
+                      "slot":  "open",
+                      "sectionIds":  [
+                                         "contact"
+                                     ]
+                  },
+                  {
+                      "id":  "gen_contact_3",
+                      "text":  "気になることがあれば",
+                      "axisIds":  [
+                                      "invite"
+                                  ],
+                      "weight":  1,
+                      "keywordIds":  [
+                                         "casual"
+                                     ],
+                      "slot":  "open",
+                      "sectionIds":  [
+                                         "contact"
+                                     ]
+                  },
+                  {
+                      "id":  "gen_contact_4",
+                      "text":  "メールやお電話で受け付けています",
+                      "axisIds":  [
+                                      "clear"
+                                  ],
+                      "weight":  1,
+                      "keywordIds":  [
+                                         "access"
+                                     ],
+                      "slot":  "mid",
+                      "sectionIds":  [
+                                         "contact"
+                                     ]
+                  },
+                  {
+                      "id":  "gen_contact_5",
+                      "text":  "内容を確認のうえご案内します",
+                      "axisIds":  [
+                                      "warm"
+                                  ],
+                      "weight":  1,
+                      "keywordIds":  [
+                                         "care"
+                                     ],
+                      "slot":  "mid",
+                      "sectionIds":  [
+                                         "contact"
+                                     ]
+                  },
+                  {
+                      "id":  "gen_contact_6",
+                      "text":  "営業時間内であればお返事しやすいです",
+                      "axisIds":  [
+                                      "clear"
+                                  ],
+                      "weight":  1,
+                      "keywordIds":  [
+                                         "access"
+                                     ],
+                      "slot":  "mid",
+                      "sectionIds":  [
+                                         "contact"
+                                     ]
+                  },
+                  {
+                      "id":  "gen_contact_7",
+                      "text":  "お気軽にご連絡ください。",
+                      "axisIds":  [
+                                      "invite"
+                                  ],
+                      "weight":  1,
+                      "keywordIds":  [
+                                         "casual"
+                                     ],
+                      "slot":  "close",
+                      "sectionIds":  [
+                                         "contact"
+                                     ]
+                  },
+                  {
+                      "id":  "gen_contact_8",
+                      "text":  "どうぞお問い合わせください。",
+                      "axisIds":  [
+                                      "clear"
+                                  ],
+                      "weight":  1,
+                      "keywordIds":  [
+                                         "first"
+                                     ],
+                      "slot":  "close",
+                      "sectionIds":  [
+                                         "contact"
+                                     ]
+                  },
+                  {
+                      "id":  "gen_contact_9",
+                      "text":  "小さなことでも相談できます。",
+                      "axisIds":  [
+                                      "warm"
+                                  ],
+                      "weight":  1,
+                      "keywordIds":  [
+                                         "care"
+                                     ],
+                      "slot":  "close",
+                      "sectionIds":  [
+                                         "contact"
+                                     ]
+                  },
+                  {
+                      "id":  "gen_works_1",
+                      "text":  "いちばんのおすすめは",
+                      "axisIds":  [
+                                      "invite"
+                                  ],
+                      "weight":  1,
+                      "keywordIds":  [
+                                         "menu"
+                                     ],
+                      "slot":  "open",
+                      "sectionIds":  [
+                                         "works"
+                                     ]
+                  },
+                  {
+                      "id":  "gen_works_2",
+                      "text":  "まずはこちらから",
+                      "axisIds":  [
+                                      "clear"
+                                  ],
+                      "weight":  1,
+                      "keywordIds":  [
+                                         "first"
+                                     ],
+                      "slot":  "open",
+                      "sectionIds":  [
+                                         "works"
+                                     ]
+                  },
+                  {
+                      "id":  "gen_works_3",
+                      "text":  "季節の定番として",
+                      "axisIds":  [
+                                      "warm"
+                                  ],
+                      "weight":  1,
+                      "keywordIds":  [
+                                         "menu"
+                                     ],
+                      "slot":  "open",
+                      "sectionIds":  [
+                                         "works"
+                                     ]
+                  },
+                  {
+                      "id":  "gen_works_4",
+                      "text":  "多くの方に選ばれています",
+                      "axisIds":  [
+                                      "invite"
+                                  ],
+                      "weight":  1,
+                      "keywordIds":  [
+                                         "repeat"
+                                     ],
+                      "slot":  "mid",
+                      "sectionIds":  [
+                                         "works"
+                                     ]
+                  },
+                  {
+                      "id":  "gen_works_5",
+                      "text":  "初めての方にも分かりやすい内容です",
+                      "axisIds":  [
+                                      "clear"
+                                  ],
+                      "weight":  1,
+                      "keywordIds":  [
+                                         "first"
+                                     ],
+                      "slot":  "mid",
+                      "sectionIds":  [
+                                         "works"
+                                     ]
+                  },
+                  {
+                      "id":  "gen_works_6",
+                      "text":  "店主おすすめの組み合わせです",
+                      "axisIds":  [
+                                      "craft"
+                                  ],
+                      "weight":  1,
+                      "keywordIds":  [
+                                         "quality"
+                                     ],
+                      "slot":  "mid",
+                      "sectionIds":  [
+                                         "works"
+                                     ]
+                  },
+                  {
+                      "id":  "gen_works_7",
+                      "text":  "ぜひ一度お試しください。",
+                      "axisIds":  [
+                                      "invite"
+                                  ],
+                      "weight":  1,
+                      "keywordIds":  [
+                                         "casual"
+                                     ],
+                      "slot":  "close",
+                      "sectionIds":  [
+                                         "works"
+                                     ]
+                  },
+                  {
+                      "id":  "gen_works_8",
+                      "text":  "ご来店のきっかけにどうぞ。",
+                      "axisIds":  [
+                                      "warm"
+                                  ],
+                      "weight":  1,
+                      "keywordIds":  [
+                                         "local"
+                                     ],
+                      "slot":  "close",
+                      "sectionIds":  [
+                                         "works"
+                                     ]
+                  },
+                  {
+                      "id":  "salon_mat_0_1",
+                      "text":  "白い光のなかで、髪を整える。",
+                      "axisIds":  [
+                                      "bright"
+                                  ],
+                      "weight":  1,
+                      "keywordIds":  [
+                                         "bright"
+                                     ],
+                      "slot":  "open",
+                      "sectionIds":  [
+                                         "hero",
+                                         "about"
+                                     ]
+                  },
+                  {
+                      "id":  "salon_mat_0_2",
+                      "text":  "余白の多い個室と、明るすぎない照明。カットもカラーも、鏡の前でゆっくり相談してから進めます。",
+                      "axisIds":  [
+                                      "craft"
+                                  ],
+                      "weight":  1,
+                      "keywordIds":  [
+                                         "craft"
+                                     ],
+                      "slot":  "mid",
+                      "sectionIds":  [
+                                         "hero",
+                                         "about"
+                                     ]
+                  },
+                  {
+                      "id":  "salon_mat_0_3",
+                      "text":  "流行の型より、帰宅後に自分でまとめやすい形を大切にしています。",
+                      "axisIds":  [
+                                      "warm"
+                                  ],
+                      "weight":  1,
+                      "keywordIds":  [
+                                         "warm"
+                                     ],
+                      "slot":  "close",
+                      "sectionIds":  [
+                                         "hero",
+                                         "about"
+                                     ]
+                  },
+                  {
+                      "id":  "salon_mat_0_4",
+                      "text":  "住宅街のクリニック並びにある、少人数制のヘアサロンです。香りの強いスプレーは控え、タオルは毎回交…",
+                      "axisIds":  [
+                                      "clear"
+                                  ],
+                      "weight":  1,
+                      "keywordIds":  [
+                                         "first"
+                                     ],
+                      "slot":  "open",
+                      "sectionIds":  [
+                                         "about"
+                                     ]
+                  },
+                  {
+                      "id":  "salon_mat_0_5",
+                      "text":  "料金の目安はカウンセリング時に確定します。",
+                      "axisIds":  [
+                                      "invite"
+                                  ],
+                      "weight":  1,
+                      "keywordIds":  [
+                                         "local"
+                                     ],
+                      "slot":  "mid",
+                      "sectionIds":  [
+                                         "works",
+                                         "about"
+                                     ]
+                  },
+                  {
+                      "id":  "salon_mat_0_6",
+                      "text":  "骨格に合わせたラインと、自宅で乾かしやすい毛流れを整えます。",
+                      "axisIds":  [
+                                      "ease"
+                                  ],
+                      "weight":  1,
+                      "keywordIds":  [
+                                         "calm"
+                                     ],
+                      "slot":  "close",
+                      "sectionIds":  [
+                                         "works",
+                                         "about"
+                                     ]
+                  },
+                  {
+                      "id":  "salon_mat_0_7",
+                      "text":  "白髪の見え方を見て、トーンを抑えた仕上がりにします。",
+                      "axisIds":  [
+                                      "bright"
+                                  ],
+                      "weight":  1,
+                      "keywordIds":  [
+                                         "bright"
+                                     ],
+                      "slot":  "open",
+                      "sectionIds":  [
+                                         "works",
+                                         "about"
+                                     ]
+                  },
+                  {
+                      "id":  "salon_mat_0_8",
+                      "text":  "ご予約はメールで。希望日時とメニューを書いてください。",
+                      "axisIds":  [
+                                      "craft"
+                                  ],
+                      "weight":  1,
+                      "keywordIds":  [
+                                         "craft"
+                                     ],
+                      "slot":  "mid",
+                      "sectionIds":  [
+                                         "contact"
+                                     ]
+                  },
+                  {
+                      "id":  "salon_mat_0_9",
+                      "text":  "施術中は返信が遅れることがあります。2営業日以内を目安にします。",
+                      "axisIds":  [
+                                      "warm"
+                                  ],
+                      "weight":  1,
+                      "keywordIds":  [
+                                         "warm"
+                                     ],
+                      "slot":  "close",
+                      "sectionIds":  [
+                                         "contact"
+                                     ]
+                  },
+                  {
+                      "id":  "salon_mat_0_10",
+                      "text":  "クセや生えグセ、朝の支度時間を聞いてから切る量を決めます。写真の共有も歓迎です。",
+                      "axisIds":  [
+                                      "clear"
+                                  ],
+                      "weight":  1,
+                      "keywordIds":  [
+                                         "first"
+                                     ],
+                      "slot":  "open",
+                      "sectionIds":  [
+                                         "hero",
+                                         "about"
+                                     ]
+                  },
+                  {
+                      "id":  "salon_mat_0_11",
+                      "text":  "完全個室ではありませんが、パーテーションで視線を遮り、隣の会話が聞こえにくい配置にしています。",
+                      "axisIds":  [
+                                      "invite"
+                                  ],
+                      "weight":  1,
+                      "keywordIds":  [
+                                         "local"
+                                     ],
+                      "slot":  "mid",
+                      "sectionIds":  [
+                                         "hero",
+                                         "about"
+                                     ]
+                  },
+                  {
+                      "id":  "salon_mat_11_1",
+                      "text":  "淡い色の、午後の一口。",
+                      "axisIds":  [
+                                      "bright"
+                                  ],
+                      "weight":  1,
+                      "keywordIds":  [
+                                         "bright"
+                                     ],
+                      "slot":  "open",
+                      "sectionIds":  [
+                                         "hero",
+                                         "about"
+                                     ]
+                  },
+                  {
+                      "id":  "salon_mat_11_2",
+                      "text":  "クリームは甘さ控えめ、生地はしっとり。パステル色のショーケースから、今日の気分で選ぶ小さな菓子屋…",
+                      "axisIds":  [
+                                      "craft"
+                                  ],
+                      "weight":  1,
+                      "keywordIds":  [
+                                         "craft"
+                                     ],
+                      "slot":  "mid",
+                      "sectionIds":  [
+                                         "hero",
+                                         "about"
+                                     ]
+                  },
+                  {
+                      "id":  "salon_mat_11_3",
+                      "text":  "席はありません。持ち帰って、お茶の時間に合わせてください。",
+                      "axisIds":  [
+                                      "warm"
+                                  ],
+                      "weight":  1,
+                      "keywordIds":  [
+                                         "warm"
+                                     ],
+                      "slot":  "close",
+                      "sectionIds":  [
+                                         "hero",
+                                         "about"
+                                     ]
+                  },
+                  {
+                      "id":  "salon_mat_11_4",
+                      "text":  "住宅街の角にある、席なしのテイクアウト専門店です。焼成は午前中にまとめ、午後は仕上げと販売に集中…",
+                      "axisIds":  [
+                                      "clear"
+                                  ],
+                      "weight":  1,
+                      "keywordIds":  [
+                                         "first"
+                                     ],
+                      "slot":  "open",
+                      "sectionIds":  [
+                                         "about"
+                                     ]
+                  },
+                  {
+                      "id":  "salon_mat_11_5",
+                      "text":  "季節で色が変わります。",
+                      "axisIds":  [
+                                      "invite"
+                                  ],
+                      "weight":  1,
+                      "keywordIds":  [
+                                         "local"
+                                     ],
+                      "slot":  "mid",
+                      "sectionIds":  [
+                                         "works",
+                                         "about"
+                                     ]
+                  },
+                  {
+                      "id":  "salon_mat_11_6",
+                      "text":  "スポンジを薄く重ね、クリームは牛乳感を残した甘さ。午後のおやつ向けです。",
+                      "axisIds":  [
+                                      "ease"
+                                  ],
+                      "weight":  1,
+                      "keywordIds":  [
+                                         "calm"
+                                     ],
+                      "slot":  "close",
+                      "sectionIds":  [
+                                         "works",
+                                         "about"
+                                     ]
+                  },
+                  {
+                      "id":  "salon_mat_11_7",
+                      "text":  "その週の焼き菓子を小皿に盛った、お茶請け向けのセットです。",
+                      "axisIds":  [
+                                      "bright"
+                                  ],
+                      "weight":  1,
+                      "keywordIds":  [
+                                         "bright"
+                                     ],
+                      "slot":  "open",
+                      "sectionIds":  [
+                                         "works",
+                                         "about"
+                                     ]
+                  },
+                  {
+                      "id":  "salon_mat_11_8",
+                      "text":  "ホールケーキや文字入れのご予約はメールで。希望日を書いてください。",
+                      "axisIds":  [
+                                      "craft"
+                                  ],
+                      "weight":  1,
+                      "keywordIds":  [
+                                         "craft"
+                                     ],
+                      "slot":  "mid",
+                      "sectionIds":  [
+                                         "contact"
+                                     ]
+                  },
+                  {
+                      "id":  "salon_mat_11_9",
+                      "text":  "営業中は店頭優先のため返信が遅れることがあります。2営業日以内を目安にご連絡します。",
+                      "axisIds":  [
+                                      "warm"
+                                  ],
+                      "weight":  1,
+                      "keywordIds":  [
+                                         "warm"
+                                     ],
+                      "slot":  "close",
+                      "sectionIds":  [
+                                         "contact"
+                                     ]
+                  },
+                  {
+                      "id":  "salon_mat_11_10",
+                      "text":  "砂糖を抑え、果物や茶葉の香りが残る配合にしています。食後にも重くならない甘さです。",
+                      "axisIds":  [
+                                      "clear"
+                                  ],
+                      "weight":  1,
+                      "keywordIds":  [
+                                         "first"
+                                     ],
+                      "slot":  "open",
+                      "sectionIds":  [
+                                         "hero",
+                                         "about"
+                                     ]
+                  },
+                  {
+                      "id":  "salon_mat_11_11",
+                      "text":  "カットケーキは一人用。箱はリボンなしの淡色で、職場や手土産にも渡しやすい形です。",
+                      "axisIds":  [
+                                      "invite"
+                                  ],
+                      "weight":  1,
+                      "keywordIds":  [
+                                         "local"
+                                     ],
+                      "slot":  "mid",
+                      "sectionIds":  [
+                                         "hero",
+                                         "about"
+                                     ]
+                  }
+              ],
+    "scene":  "salon"
+}

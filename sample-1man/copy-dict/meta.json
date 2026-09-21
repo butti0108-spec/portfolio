@@ -1,0 +1,140 @@
+﻿{
+    "sections":  [
+                     {
+                         "id":  "hero",
+                         "role":  "catch"
+                     },
+                     {
+                         "id":  "about",
+                         "role":  "intro"
+                     },
+                     {
+                         "id":  "works",
+                         "role":  "recommend"
+                     },
+                     {
+                         "id":  "contact",
+                         "role":  "contact"
+                     }
+                 ],
+    "keywords":  [
+                     {
+                         "axisHint":  "ease",
+                         "group":  "taste",
+                         "id":  "calm"
+                     },
+                     {
+                         "axisHint":  "bright",
+                         "group":  "taste",
+                         "id":  "bright"
+                     },
+                     {
+                         "axisHint":  "clear",
+                         "group":  "taste",
+                         "id":  "refined"
+                     },
+                     {
+                         "axisHint":  "invite",
+                         "group":  "taste",
+                         "id":  "casual"
+                     },
+                     {
+                         "axisHint":  "craft",
+                         "group":  "taste",
+                         "id":  "craft"
+                     },
+                     {
+                         "axisHint":  "warm",
+                         "group":  "taste",
+                         "id":  "warm"
+                     },
+                     {
+                         "axisHint":  "craft",
+                         "group":  "message",
+                         "id":  "quality"
+                     },
+                     {
+                         "axisHint":  "ease",
+                         "group":  "message",
+                         "id":  "space"
+                     },
+                     {
+                         "axisHint":  "warm",
+                         "group":  "message",
+                         "id":  "care"
+                     },
+                     {
+                         "axisHint":  "clear",
+                         "group":  "message",
+                         "id":  "access"
+                     },
+                     {
+                         "axisHint":  "invite",
+                         "group":  "message",
+                         "id":  "menu"
+                     },
+                     {
+                         "axisHint":  "warm",
+                         "group":  "message",
+                         "id":  "story"
+                     },
+                     {
+                         "axisHint":  "invite",
+                         "group":  "value",
+                         "id":  "local"
+                     },
+                     {
+                         "axisHint":  "clear",
+                         "group":  "value",
+                         "id":  "first"
+                     },
+                     {
+                         "axisHint":  "craft",
+                         "group":  "value",
+                         "id":  "picky"
+                     },
+                     {
+                         "axisHint":  "warm",
+                         "group":  "value",
+                         "id":  "with"
+                     },
+                     {
+                         "axisHint":  "ease",
+                         "group":  "value",
+                         "id":  "solo"
+                     },
+                     {
+                         "axisHint":  "invite",
+                         "group":  "value",
+                         "id":  "repeat"
+                     }
+                 ],
+    "version":  1,
+    "fallbackScene":  "cafe",
+    "axes":  [
+                 {
+                     "id":  "ease",
+                     "label":  "やすらぎ"
+                 },
+                 {
+                     "id":  "bright",
+                     "label":  "明るさ"
+                 },
+                 {
+                     "id":  "craft",
+                     "label":  "こだわり"
+                 },
+                 {
+                     "id":  "warm",
+                     "label":  "あたたかさ"
+                 },
+                 {
+                     "id":  "clear",
+                     "label":  "わかりやすさ"
+                 },
+                 {
+                     "id":  "invite",
+                     "label":  "誘い"
+                 }
+             ]
+}

@@ -817,56 +817,7 @@
       ]
     }
   ];
-  const COPY_STUB_POOL = {
-    hero: [
-      [
-        { label: "静けさ", text: "静かな時間を、ここから。" },
-        { label: "明るさ", text: "明るい空気が、まず迎えます。" },
-        { label: "丁寧さ", text: "ていねいに、あなたのお店を伝えます。" }
-      ],
-      [
-        { label: "日常", text: "いつもの場所が、すこし特別に。" },
-        { label: "発見", text: "はじめてでも、すぐになじめます。" },
-        { label: "余白", text: "余白のある一日をどうぞ。" }
-      ]
-    ],
-    about: [
-      [
-        { label: "安心", text: "落ち着いて過ごせる空間づくりを大切にしています。" },
-        { label: "活気", text: "にぎわいと笑顔が自然と集まる場所を目指しています。" },
-        { label: "専門", text: "こだわりの一点を、わかりやすくお伝えします。" }
-      ],
-      [
-        { label: "人柄", text: "接する一人ひとりとのやりとりを大切にしています。" },
-        { label: "立地", text: "通いやすい場所から、日常に寄り添います。" },
-        { label: "物語", text: "お店の物語を、短い言葉で残せます。" }
-      ]
-    ],
-    works: [
-      [
-        { label: "定番", text: "いちばんのおすすめを、まずご覧ください。" },
-        { label: "季節", text: "季節ごとのおすすめをご用意しています。" },
-        { label: "厳選", text: "厳選したメニュー・サービスをご案内します。" }
-      ],
-      [
-        { label: "体験", text: "体験の入り口として、おすすめをまとめました。" },
-        { label: "人気", text: "多くの方に選ばれている内容です。" },
-        { label: "はじめて", text: "初めての方にも分かりやすいおすすめです。" }
-      ]
-    ],
-    contact: [
-      [
-        { label: "気軽", text: "ご質問やご予約は、お気軽にご連絡ください。" },
-        { label: "丁寧", text: "内容を確認のうえ、丁寧にご案内します。" },
-        { label: "近道", text: "最短の連絡手段から、どうぞ。" }
-      ],
-      [
-        { label: "時間", text: "営業時間内であれば、すぐにお返事しやすいです。" },
-        { label: "場所", text: "アクセスとあわせて、ご連絡ください。" },
-        { label: "安心", text: "小さなことでも相談できます。" }
-      ]
-    ]
-  };
+  /* COPY_STUB_POOL は辞典接続後に撤去。フォールバックは fallbackStubThree */
   const EASY_IMG_FIELD = {
     "easy-img-wire": "hero_image"
   };
@@ -2094,6 +2045,7 @@
     copyPathMode: null,
     copyDirIds: [],
     copyPresetId: null,
+    copyOmakaseAxes: null,
     copyFrameIndex: 0,
     copyFramePoolIndex: {},
     copyFrameCandidates: {},
@@ -6692,7 +6644,7 @@
     }
     if (stepId === "easy-basics") {
       const brand = String((document.getElementById("easy-brand-name") || {}).value || "").trim();
-      if (!brand) return "店名を入れてから、「" + action + "」を押してください。";
+      if (!brand) return "店名を入れてください。";
       return "";
     }
     if (stepId === "easy-copy-frame") {
@@ -6847,6 +6799,29 @@
     hideWizardFootPanel();
     const status = document.getElementById("wizard-status");
     if (status) status.textContent = msg;
+  }
+
+  function flagEasyBrandRequired() {
+    const brand = document.getElementById("easy-brand-name");
+    const wrap = brand && brand.closest(".easy-field");
+    const errEl = document.getElementById("easy-brand-error");
+    if (wrap) wrap.classList.add("is-invalid");
+    if (errEl) errEl.hidden = false;
+    if (brand) {
+      try {
+        brand.focus({ preventScroll: false });
+      } catch (e) {
+        brand.focus();
+      }
+      brand.addEventListener(
+        "input",
+        function clearInvalid() {
+          if (wrap) wrap.classList.remove("is-invalid");
+          if (errEl) errEl.hidden = true;
+        },
+        { once: true }
+      );
+    }
   }
 
   function syncCharCounter(el) {
@@ -7512,11 +7487,13 @@
     const onModePick = !!(step && step.id === "guide");
     const onPurpose = !!(step && step.id === "purpose");
     const onLayout = !!(step && step.id === "layout");
+    const onCopyPath = !!(step && step.id === "easy-copy-path");
     const hideFootNav =
       selfList ||
       isGuidedColorTrialFootHidden() ||
       store.guidedColorPhase === "pick" ||
-      onLayout;
+      onLayout ||
+      onCopyPath;
 
     if (progress) {
       /* 進捗バー廃止に合わせ、件数カウント文言も出さない */
@@ -7568,6 +7545,7 @@
         hubDetailEdit ||
         (isSelf && !hubPlaceEdit) ||
         onPurpose ||
+        onCopyPath ||
         isGuidedColorTrialFootHidden();
       if (hubPlaceEdit) {
         backBtn.hidden = false;
@@ -7583,6 +7561,7 @@
         !!(step && step.id === "finish") ||
         onModePick ||
         onLayout ||
+        onCopyPath ||
         isGuidedColorTrialFootHidden() ||
         store.guidedColorPhase === "pick";
       if (step && EASY_FLOW_STEP_SET.has(step.id)) {
@@ -9331,34 +9310,78 @@
     return COPY_FRAME_ORDER[store.copyFrameIndex || 0] || "hero";
   }
 
-  function stubCandidatesForFrame(secId, forceNext) {
-    const pools = COPY_STUB_POOL[secId] || COPY_STUB_POOL.hero;
-    let idx = Number(store.copyFramePoolIndex[secId] || 0);
-    if (forceNext) idx = (idx + 1) % pools.length;
-    store.copyFramePoolIndex[secId] = idx;
-    const seed = (store.copyDirIds || []).join("-");
-    const list = (pools[idx] || pools[0]).map(function (c, i) {
-      const tip = seed ? "（" + (store.copyDirIds[i % store.copyDirIds.length] || "") + "）" : "";
-      return {
-        label: c.label,
-        text: c.text + (tip && i === 0 && seed ? "" : "")
-      };
-    });
-    /* 方向IDがあるとき先頭案だけ少し差を付ける（見た目差のスタブ） */
-    if (store.copyDirIds && store.copyDirIds.length) {
-      list[0] = {
-        label: list[0].label,
-        text: list[0].text.replace(/。$/, "") + "／" + store.copyDirIds[0] + "寄り。"
-      };
+  function fallbackStubThree(secId) {
+    var lines = {
+      hero: [
+        { label: "やすらぎ", text: "静かな時間を、ここから。" },
+        { label: "明るさ", text: "明るい空気が、まず迎えます。" },
+        { label: "こだわり", text: "丁寧な仕事を、わかりやすく伝えます。" }
+      ],
+      about: [
+        { label: "やすらぎ", text: "落ち着いて過ごせる空間づくりを大切にしています。" },
+        { label: "明るさ", text: "にぎわいと笑顔が自然と集まる場所を目指しています。" },
+        { label: "こだわり", text: "こだわりの一点を、わかりやすくお伝えします。" }
+      ],
+      works: [
+        { label: "誘い", text: "いちばんのおすすめを、まずご覧ください。" },
+        { label: "わかりやすさ", text: "初めての方にも分かりやすいおすすめです。" },
+        { label: "こだわり", text: "店主おすすめの内容をご案内します。" }
+      ],
+      contact: [
+        { label: "わかりやすさ", text: "ご質問は、お気軽にご連絡ください。" },
+        { label: "あたたかさ", text: "内容を確認のうえ、丁寧にご案内します。" },
+        { label: "誘い", text: "小さなことでも相談できます。" }
+      ]
+    };
+    return lines[secId] || lines.hero;
+  }
+
+  function generateFrameCandidates(secId, reroll) {
+    var dict = window.Sample1manCopyDict;
+    if (!dict || typeof dict.generateThree !== "function") {
+      return Promise.resolve(fallbackStubThree(secId));
     }
-    return list;
+    if (reroll) {
+      store.copyFramePoolIndex[secId] = (Number(store.copyFramePoolIndex[secId]) || 0) + 1;
+    }
+    var salt =
+      String(store.copyFramePoolIndex[secId] || 0) +
+      "|" +
+      (store.copyPathMode || "") +
+      "|" +
+      Date.now();
+    return dict
+      .generateThree({
+        sampleKey: store.sushiSampleKey || "",
+        sceneTag: dict.sceneFromSampleKey(store.sushiSampleKey),
+        sectionId: secId,
+        keywordIds: store.copyPathMode === "keyword" ? store.copyDirIds || [] : [],
+        presetAxes: store.copyPathMode === "omakase" ? store.copyOmakaseAxes : null,
+        salt: salt
+      })
+      .then(function (res) {
+        return (res.candidates || []).map(function (c) {
+          return { label: c.label, text: c.text, axisId: c.axisId };
+        });
+      })
+      .catch(function () {
+        return fallbackStubThree(secId);
+      });
   }
 
   function ensureCopyFrameCandidates(secId, reroll) {
-    if (reroll || !store.copyFrameCandidates[secId] || !store.copyFrameCandidates[secId].length) {
-      store.copyFrameCandidates[secId] = stubCandidatesForFrame(secId, !!reroll);
-      store.copyFrameSelected[secId] = null;
+    if (
+      !reroll &&
+      store.copyFrameCandidates[secId] &&
+      store.copyFrameCandidates[secId].length
+    ) {
+      return Promise.resolve(store.copyFrameCandidates[secId]);
     }
+    return generateFrameCandidates(secId, !!reroll).then(function (list) {
+      store.copyFrameCandidates[secId] = list;
+      store.copyFrameSelected[secId] = null;
+      return list;
+    });
   }
 
   function readCurrentSectionText(secId) {
@@ -9372,7 +9395,6 @@
 
   function renderCopyFrameUi() {
     const secId = currentCopyFrameId();
-    ensureCopyFrameCandidates(secId, false);
     const title = document.getElementById("easy-copy-frame-title");
     if (title) title.textContent = COPY_FRAME_LABEL[secId] || secId;
     const nowEl = document.getElementById("easy-copy-frame-now-text");
@@ -9381,41 +9403,50 @@
     if (nowEl) nowEl.textContent = nowText || "（まだありません）";
     const host = document.getElementById("easy-copy-frame-cands");
     if (!host) return;
-    const list = store.copyFrameCandidates[secId] || [];
-    host.innerHTML = list
-      .map(function (c, i) {
-        const on = store.copyFrameSelected[secId] === i ? " is-selected" : "";
-        return (
-          '<button type="button" class="easy-copy-frame-cand' +
-          on +
-          '" role="option" aria-selected="' +
-          (on ? "true" : "false") +
-          '" data-copy-cand="' +
-          i +
-          '"><span class="easy-copy-frame-cand-label">' +
-          escapeHtml(c.label) +
-          '</span><span class="easy-copy-frame-cand-text">' +
-          escapeHtml(c.text) +
-          "</span></button>"
-        );
-      })
-      .join("");
-    host.querySelectorAll("[data-copy-cand]").forEach(function (btn) {
-      btn.addEventListener("click", function () {
-        const i = Number(btn.getAttribute("data-copy-cand"));
-        const cand = list[i];
-        if (!cand) return;
-        store.copyFrameSelected[secId] = i;
-        applyCopyTextToSection(secId, cand.text);
-        renderCopyFrameUi();
-        scrollPreviewTo(COPY_FRAME_PREVIEW[secId] || "#hero");
-        scheduleSave();
+    const paint = function (list) {
+      if (currentCopyFrameId() !== secId) return;
+      host.innerHTML = list
+        .map(function (c, i) {
+          const on = store.copyFrameSelected[secId] === i ? " is-selected" : "";
+          return (
+            '<button type="button" class="easy-copy-frame-cand' +
+            on +
+            '" role="option" aria-selected="' +
+            (on ? "true" : "false") +
+            '" data-copy-cand="' +
+            i +
+            '"><span class="easy-copy-frame-cand-label">' +
+            escapeHtml(c.label) +
+            '</span><span class="easy-copy-frame-cand-text">' +
+            escapeHtml(c.text) +
+            "</span></button>"
+          );
+        })
+        .join("");
+      host.querySelectorAll("[data-copy-cand]").forEach(function (btn) {
+        btn.addEventListener("click", function () {
+          const i = Number(btn.getAttribute("data-copy-cand"));
+          const cand = list[i];
+          if (!cand) return;
+          store.copyFrameSelected[secId] = i;
+          applyCopyTextToSection(secId, cand.text);
+          renderCopyFrameUi();
+          scrollPreviewTo(COPY_FRAME_PREVIEW[secId] || "#hero");
+          scheduleSave();
+        });
       });
-    });
-    const block = form.querySelector('.dash-block[data-step-id="easy-copy-frame"]');
-    if (block) block.setAttribute("data-preview-target", COPY_FRAME_PREVIEW[secId] || "#hero");
-    scrollPreviewTo(COPY_FRAME_PREVIEW[secId] || "#hero");
-    updateWizardUi();
+      const block = form.querySelector('.dash-block[data-step-id="easy-copy-frame"]');
+      if (block) block.setAttribute("data-preview-target", COPY_FRAME_PREVIEW[secId] || "#hero");
+      scrollPreviewTo(COPY_FRAME_PREVIEW[secId] || "#hero");
+      updateWizardUi();
+    };
+    const cached = store.copyFrameCandidates[secId];
+    if (cached && cached.length) {
+      paint(cached);
+      return;
+    }
+    host.innerHTML = '<p class="easy-copy-frame-loading">候補を用意しています…</p>';
+    ensureCopyFrameCandidates(secId, false).then(paint);
   }
 
   function renderCopyDirsUi() {
@@ -9454,20 +9485,45 @@
         if (set.has(id)) set.delete(id);
         else set.add(id);
         store.copyDirIds = Array.from(set);
+        store.copyFrameCandidates = {};
+        store.copyFrameSelected = {};
         renderCopyDirsUi();
         scheduleSave();
       });
     });
   }
 
-  function applyOmakaseStubAllSections() {
-    store.copyPresetId = store.copyPresetId || "omakase-flow-v1";
-    COPY_FRAME_ORDER.forEach(function (secId) {
-      const pools = COPY_STUB_POOL[secId] || COPY_STUB_POOL.hero;
-      const text = (pools[0] && pools[0][0] && pools[0][0].text) || readCurrentSectionText(secId);
-      /* 見本文があればそれを優先（おまかせ＝見本の流れを残す） */
-      const existing = readCurrentSectionText(secId);
-      applyCopyTextToSection(secId, existing || text);
+  function applyOmakaseFromDict() {
+    const dict = window.Sample1manCopyDict;
+    if (!dict || typeof dict.pickOmakasePreset !== "function") {
+      COPY_FRAME_ORDER.forEach(function (secId) {
+        const line = fallbackStubThree(secId)[0];
+        applyCopyTextToSection(secId, line && line.text);
+      });
+      return Promise.resolve();
+    }
+    return dict.pickOmakasePreset(Math.random).then(function (preset) {
+      store.copyPresetId = preset.id || "omakase-flow-v1";
+      store.copyOmakaseAxes = preset.axes || null;
+      var chain = Promise.resolve();
+      COPY_FRAME_ORDER.forEach(function (secId) {
+        chain = chain.then(function () {
+          return dict
+            .generateThree({
+              sampleKey: store.sushiSampleKey || "",
+              sceneTag: dict.sceneFromSampleKey(store.sushiSampleKey),
+              sectionId: secId,
+              keywordIds: [],
+              presetAxes: store.copyOmakaseAxes,
+              salt: "omakase|" + store.copyPresetId + "|" + secId
+            })
+            .then(function (res) {
+              var cand = (res.candidates && res.candidates[0]) || fallbackStubThree(secId)[0];
+              applyCopyTextToSection(secId, cand.text);
+            });
+        });
+      });
+      return chain;
     });
   }
 
@@ -9494,9 +9550,11 @@
       reroll.dataset.bound = "1";
       reroll.addEventListener("click", function () {
         const secId = currentCopyFrameId();
-        ensureCopyFrameCandidates(secId, true);
-        renderCopyFrameUi();
-        scheduleSave();
+        store.copyFrameCandidates[secId] = null;
+        ensureCopyFrameCandidates(secId, true).then(function () {
+          renderCopyFrameUi();
+          scheduleSave();
+        });
       });
     }
     const brand = document.getElementById("easy-brand-name");
@@ -9981,7 +10039,15 @@
     if (step.id === "easy-basics") {
       applyEasyBasicsToForm();
       if (store.copyPathMode === "omakase") {
-        applyOmakaseStubAllSections();
+        return applyOmakaseFromDict().then(function () {
+          store.snapshots[step.id] = captureStepSnapshot(step.id);
+          store.confirmed[step.id] = true;
+          applyAllConfirmed();
+          updateConfirmUi();
+          updateZoneBadgeDoneState();
+          hideWizardFootPanel();
+          return true;
+        });
       }
     }
     if (step.id === "easy-copy-frame") {
@@ -10020,6 +10086,7 @@
     const err = getStepValidationError(step.id);
     if (err) {
       showValidationNotice(err);
+      if (step.id === "easy-basics") flagEasyBrandRequired();
       return;
     }
     const revisingAfterLock =
@@ -10031,8 +10098,21 @@
       step.id !== "finish";
 
     const confirmed = wizardConfirmCurrentStep();
+    if (confirmed && typeof confirmed.then === "function") {
+      confirmed.then(function (ok) {
+        if (ok === "stay" || !ok) return;
+        wizardNextAfterConfirm(step, revisingAfterLock);
+      });
+      return;
+    }
     if (confirmed === "stay") return;
     if (!confirmed) return;
+    wizardNextAfterConfirm(step, revisingAfterLock);
+  }
+
+  function wizardNextAfterConfirm(step, revisingAfterLock) {
+    const flow = getFlowSteps();
+    if (!step) return;
     closeDraftNotice();
     if (store.uiMode === "self") {
       if (step.id === "guide") {

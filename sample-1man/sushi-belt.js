@@ -190,13 +190,13 @@
       (opts.stock
         ? '<button type="button" class="sushi-tile-btn sushi-tile-btn--down" data-sushi-act="unstock" data-slot="' +
           opts.slot +
-          '" title="レーンへ戻す" aria-label="ストック解除">↓</button>'
+          '" title="サンプルを戻す" aria-label="サンプルを枠から外す">↓</button>'
         : '<button type="button" class="sushi-tile-btn sushi-tile-btn--up" data-sushi-act="stock" data-id="' +
           escapeAttr(sample.id) +
-          '" title="ストック" aria-label="ストック">↑</button>') +
+          '" title="サンプルを残す" aria-label="サンプルを1・2・3へ残す">↑</button>') +
       '<button type="button" class="sushi-tile-btn sushi-tile-btn--zoom" data-sushi-act="zoom" data-id="' +
       escapeAttr(sample.id) +
-      '" title="拡大" aria-label="拡大">🔍</button>' +
+      '" title="大きく見る" aria-label="サンプルを大きく見る">🔍</button>' +
       labelHtml +
       '<span class="sushi-tile-meta" hidden data-visible-site-h="' +
       visibleSiteH +
@@ -223,7 +223,7 @@
           '<span class="sushi-stock-num" aria-hidden="true">' +
           n +
           "</span>" +
-          '<div class="sushi-stock-slot is-filled" aria-label="ストック枠' +
+          '<div class="sushi-stock-slot is-filled" aria-label="選んだサンプル' +
           n +
           '">' +
           tileHtml(s, { stock: true, slot: i }) +
@@ -231,9 +231,9 @@
         confirmHtml +=
           '<button type="button" class="sushi-decide-btn is-ready" data-sushi-act="confirm" data-slot="' +
           i +
-          '" aria-label="' +
+          '" aria-label="サンプル' +
           n +
-          '番を最終決定">' +
+          'を選ぶ">' +
           n +
           "</button>";
       } else {
@@ -244,15 +244,15 @@
           '<span class="sushi-stock-num" aria-hidden="true">' +
           n +
           "</span>" +
-          '<div class="sushi-stock-slot is-empty" aria-label="ストック枠' +
+          '<div class="sushi-stock-slot is-empty" aria-label="選んだサンプル' +
           n +
           '（空）"></div></div>';
         confirmHtml +=
           '<button type="button" class="sushi-decide-btn" data-sushi-act="confirm" data-slot="' +
           i +
-          '" disabled aria-disabled="true" aria-label="' +
+          '" disabled aria-disabled="true" aria-label="サンプル' +
           n +
-          '番（空）">' +
+          '（空）">' +
           n +
           "</button>";
       }
@@ -289,7 +289,7 @@
     if (!els.track) return;
     if (!laneSamples.length) {
       els.track.innerHTML =
-        '<p class="sushi-lane-empty">ストック中のため、レーンに見本がありません</p>';
+        '<p class="sushi-lane-empty">選んだサンプルのため、いま流れるサンプルはありません</p>';
       loopWidth = 0;
       offsetX = 0;
       applyTrackTransform();
@@ -445,7 +445,10 @@
       btn.className = "sushi-replace-choice";
       btn.setAttribute("data-replace-slot", String(i));
       btn.textContent =
-        i + 1 + "枠と入れ替え：No." + (s ? s.id + " " + (s.brand || "") : "（空）");
+        "候補" +
+        (i + 1) +
+        "と入れ替え：No." +
+        (s ? s.id + " " + (s.brand || "") : "（空）");
       list.appendChild(btn);
     }
   }
@@ -568,21 +571,18 @@
     var src =
       "index.html?embedPreview=1&sample=" +
       encodeURIComponent(folder) +
-      "&v=sushi-zoom-live-v6";
+      "&brand=" +
+      encodeURIComponent(sample.brand || "") +
+      "&v=sushi-zoom-live-v8";
     els.zoomInner.innerHTML =
       '<div class="sushi-zoom-frame is-pending">' +
-      '<p class="sushi-zoom-pending" aria-live="polite">見本を準備しています…</p>' +
-      '<iframe class="sushi-zoom-iframe" title="見本プレビュー No.' +
+      '<p class="sushi-zoom-pending" aria-live="polite">サンプルを準備しています…</p>' +
+      '<iframe class="sushi-zoom-iframe" title="サンプルプレビュー No.' +
       escapeAttr(sample.id) +
       '" src="' +
       escapeAttr(src) +
       '"></iframe>' +
       "</div>" +
-      '<p class="sushi-zoom-cap">No.' +
-      escapeHtml(sample.id) +
-      " " +
-      escapeHtml(sample.brand || "") +
-      "</p>" +
       '<button type="button" class="gct-btn sushi-zoom-close" data-sushi-act="zoom-close">閉じる</button>';
     var iframe = els.zoomInner.querySelector(".sushi-zoom-iframe");
     var frame = els.zoomInner.querySelector(".sushi-zoom-frame");
@@ -894,7 +894,9 @@
       }
     }
     if (!sample) {
-      window.alert("見本を枠に入れてから、右の番号を押してください。");
+      window.alert(
+        "まだ候補がありません。レーンの「↑」で1・2・3へ残してから、右の番号を押してください。"
+      );
       return;
     }
     if (!onConfirm) return;

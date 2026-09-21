@@ -9,9 +9,11 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@500;700&family=Zen+Kaku+Gothic+New:wght@400;500;700&family=Zen+Maru+Gothic:wght@400;700&family=M+PLUS+Rounded+1c:wght@400;700&family=Noto+Sans+JP:wght@400;700&family=Noto+Serif+JP:wght@500;700&family=Sawarabi+Mincho&family=Sawarabi+Gothic&family=Kosugi+Maru&family=Kiwi+Maru:wght@500&family=Yuji+Syuku&family=Dela+Gothic+One&display=swap" rel="stylesheet">
+  <!-- Live Server を sample-1man 直下で開くと ../style.css が空になるため、同フォルダにも置く -->
   <link rel="stylesheet" href="../style.css">
+  <link rel="stylesheet" href="style.css?v=base-live-1">
   <link rel="icon" href="brand/mark-favicon.png?v=logo-7" type="image/png">
-  <link rel="stylesheet" href="sample-overrides.css?v=sushi-ui-v16">
+  <link rel="stylesheet" href="sample-overrides.css?v=sushi-copy-v5">
   <script>
     (function () {
       var h = location.hostname;
@@ -33,8 +35,8 @@
   <script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js" defer></script>
   <script src="vibe-dict.js" defer></script>
   <script src="easy-copy-dict.js?v=s5-1" defer></script>
-  <script src="sushi-belt.js?v=sushi-boot-v5" defer></script>
-  <script src="script.js?v=embed-ready-v2" defer></script>
+  <script src="sushi-belt.js?v=sushi-copy-v1" defer></script>
+  <script src="script.js?v=embed-zoom-v4" defer></script>
   <script>
     (function () {
       var h = location.hostname;
@@ -209,32 +211,66 @@
             <div class="sushi-guide">
               <p class="sushi-guide-title">使い方</p>
               <div class="sushi-guide-item">
-                <p class="sushi-guide-kicker">止める</p>
-                <p class="sushi-guide-body">PCはレーンにマウス、<br>スマホはタップ（約3秒）</p>
+                <div class="sushi-guide-head">
+                  <p class="sushi-guide-kicker">気になるところで止める</p>
+                  <span class="hub-tip-wrap sushi-guide-tip">
+                    <button type="button" class="hub-tip-btn" data-hub-tip aria-expanded="false" aria-label="気になるところで止めるとは？">?</button>
+                    <span class="hub-tip-pop" hidden role="tooltip">
+                      <strong>気になるところで止めるとは？</strong>
+                      パソコンではサンプルにマウスを合わせると、流れが止まります。スマートフォンでは、サンプルを軽くタップするとしばらく止まります。ゆっくり見たいときに使えます。
+                    </span>
+                  </span>
+                </div>
               </div>
               <div class="sushi-guide-item">
-                <p class="sushi-guide-kicker">見本を見る</p>
-                <p class="sushi-guide-body">虫眼鏡・横ドラッグで確認。<br>レーンへ戻すのは ↓</p>
+                <div class="sushi-guide-head">
+                  <p class="sushi-guide-kicker">サンプルを大きく見る</p>
+                  <span class="hub-tip-wrap sushi-guide-tip">
+                    <button type="button" class="hub-tip-btn" data-hub-tip aria-expanded="false" aria-label="サンプルを大きく見るとは？">?</button>
+                    <span class="hub-tip-pop" hidden role="tooltip">
+                      <strong>サンプルを大きく見るとは？</strong>
+                      各サンプルの虫眼鏡を押すと、大きな画面で全体をゆっくり見られます。雰囲気を確かめたいときに使えます。
+                    </span>
+                  </span>
+                </div>
               </div>
               <div class="sushi-guide-item">
-                <p class="sushi-guide-kicker">進め方を変える</p>
-                <p class="sushi-guide-body">
-                  <button type="button" class="sushi-rechoose-path" data-entry-step-back>進め方を選び直す</button>
-                </p>
+                <div class="sushi-guide-head">
+                  <p class="sushi-guide-kicker">気に入ったサンプルを残す</p>
+                  <span class="hub-tip-wrap sushi-guide-tip">
+                    <button type="button" class="hub-tip-btn" data-hub-tip aria-expanded="false" aria-label="気に入ったサンプルを残すとは？">?</button>
+                    <span class="hub-tip-pop" hidden role="tooltip">
+                      <strong>気に入ったサンプルを残すとは？</strong>
+                      レーン上の「↑」を押すと、中央の1・2・3へ候補として残せます。枠の「↓」で外せます。あとで見比べて、ひとつに決めるときに使えます。
+                    </span>
+                  </span>
+                </div>
               </div>
+              <p class="sushi-guide-foot">
+                <button type="button" class="sushi-rechoose-path" data-entry-step-back>進め方を選び直す</button>
+              </p>
             </div>
           </div>
           <div class="sushi-upper-center">
-            <div class="sushi-stock-bar" id="sushi-stock-bar" aria-label="ストック（最大3）"></div>
+            <div class="sushi-stock-bar" id="sushi-stock-bar" aria-label="候補として残したサンプル（最大3）"></div>
           </div>
           <div class="sushi-upper-right">
-            <p class="sushi-decide-label">最終決定</p>
-            <p class="sushi-decide-hint">3つの中から、<br>使いたい見本を<br>選んでください</p>
-            <div class="sushi-stock-confirm-row" id="sushi-stock-confirm-row" role="group" aria-label="最終決定"></div>
+            <div class="sushi-decide-head">
+              <p class="sushi-decide-label">ひとつに決める</p>
+              <span class="hub-tip-wrap sushi-decide-tip">
+                <button type="button" class="hub-tip-btn" data-hub-tip aria-expanded="false" aria-label="ひとつに決めるとは？">?</button>
+                <span class="hub-tip-pop" hidden role="tooltip">
+                  <strong>ひとつに決めるとは？</strong>
+                  中央に残した候補のうち、これから使うサンプルを右の番号で選びます。決めたあとも、色や文字はあとから整えられます。
+                </span>
+              </span>
+            </div>
+            <p class="sushi-decide-hint">候補の番号から、<br>使うサンプルを選べます。</p>
+            <div class="sushi-stock-confirm-row" id="sushi-stock-confirm-row" role="group" aria-label="ひとつに決める"></div>
           </div>
         </div>
         <div class="sushi-lane-wrap">
-          <div class="sushi-lane" id="sushi-lane" aria-label="見本レーン（横にドラッグできます）">
+          <div class="sushi-lane" id="sushi-lane" aria-label="サンプルの列（横にドラッグできます）">
             <div class="sushi-lane-track" id="sushi-lane-track"></div>
           </div>
         </div>
@@ -242,7 +278,7 @@
         <div id="sushi-replace-modal" class="sushi-modal" hidden>
           <div class="sushi-modal-card" role="dialog" aria-labelledby="sushi-replace-title">
             <h2 id="sushi-replace-title">どれと入れ替えますか？</h2>
-            <p class="sushi-modal-note">ストックは3つまでです。入れ替える枠を選んでください。</p>
+            <p class="sushi-modal-note">候補は3つまでです。入れ替える番号を選ぶと、新しいサンプルに差し替わります。</p>
             <div class="sushi-replace-list"></div>
             <button type="button" class="gct-btn" data-sushi-replace-cancel>やめる</button>
           </div>

@@ -329,7 +329,10 @@
 
   /* 色番号は見本サイトの上→下・左→右（ヘッダー／フッターは背景→文字の2工程）。0は章の注意（注文画面のみ） */
   const STEPS = [
+    { id: "easy-copy-path", label: "文章の決め方", needsConfirm: true, num: 0 },
+    { id: "easy-copy-dirs", label: "方向", needsConfirm: true, num: 0 },
     { id: "easy-basics", label: "基本情報", needsConfirm: true, num: 0 },
+    { id: "easy-copy-frame", label: "枠の文章", needsConfirm: true, num: 0 },
     { id: "easy-sec-hero", label: "キャッチ文", needsConfirm: true, num: 0 },
     { id: "easy-sec-about", label: "紹介文", needsConfirm: true, num: 0 },
     { id: "easy-sec-works", label: "おすすめ文", needsConfirm: true, num: 0 },
@@ -735,7 +738,19 @@
   const GRADIENT_BG_KEYS = new Set(["chromeBg", "pageBg", "accent", "cardBg", "valuesBg", "contactBg"]);
 
   const EASY_FLOW_STEP_IDS = [
+    "easy-copy-path",
+    "easy-copy-dirs",
     "easy-basics",
+    "easy-copy-frame",
+    "easy-img-wire",
+    "easy-loading",
+    "easy-done"
+  ];
+  const EASY_FLOW_STEP_SET = new Set([
+    "easy-copy-path",
+    "easy-copy-dirs",
+    "easy-basics",
+    "easy-copy-frame",
     "easy-sec-hero",
     "easy-sec-about",
     "easy-sec-works",
@@ -743,14 +758,114 @@
     "easy-img-wire",
     "easy-loading",
     "easy-done"
-  ];
-  const EASY_FLOW_STEP_SET = new Set(EASY_FLOW_STEP_IDS);
+  ]);
   const SAMPLE_SEC_STEP_IDS = ["easy-sec-hero", "easy-sec-about", "easy-sec-works", "easy-sec-contact"];
   const SAMPLE_SEC_ID_FROM_STEP = {
     "easy-sec-hero": "hero",
     "easy-sec-about": "about",
     "easy-sec-works": "works",
     "easy-sec-contact": "contact"
+  };
+  const COPY_FRAME_ORDER = ["hero", "about", "works", "contact"];
+  const COPY_FRAME_LABEL = {
+    hero: "キャッチ",
+    about: "紹介",
+    works: "おすすめ",
+    contact: "ご連絡"
+  };
+  const COPY_FRAME_PREVIEW = {
+    hero: "#hero",
+    about: "#about",
+    works: "#works",
+    contact: "#contact"
+  };
+  const COPY_DIR_GROUPS = [
+    {
+      id: "taste",
+      label: "お好み",
+      options: [
+        { id: "calm", label: "落ち着き" },
+        { id: "bright", label: "明るさ" },
+        { id: "refined", label: "きれいめ" },
+        { id: "casual", label: "気軽さ" },
+        { id: "craft", label: "こだわり" },
+        { id: "warm", label: "あたたかさ" }
+      ]
+    },
+    {
+      id: "message",
+      label: "伝えたいこと",
+      options: [
+        { id: "quality", label: "品質" },
+        { id: "space", label: "空間" },
+        { id: "care", label: "接客" },
+        { id: "access", label: "通いやすさ" },
+        { id: "menu", label: "品揃え" },
+        { id: "story", label: "ストーリー" }
+      ]
+    },
+    {
+      id: "value",
+      label: "大事にしたいこと",
+      options: [
+        { id: "local", label: "近所の人" },
+        { id: "first", label: "初めての人" },
+        { id: "picky", label: "こだわる人" },
+        { id: "with", label: "だれかと" },
+        { id: "solo", label: "ひとりで" },
+        { id: "repeat", label: "通い続け" }
+      ]
+    }
+  ];
+  const COPY_STUB_POOL = {
+    hero: [
+      [
+        { label: "静けさ", text: "静かな時間を、ここから。" },
+        { label: "明るさ", text: "明るい空気が、まず迎えます。" },
+        { label: "丁寧さ", text: "ていねいに、あなたのお店を伝えます。" }
+      ],
+      [
+        { label: "日常", text: "いつもの場所が、すこし特別に。" },
+        { label: "発見", text: "はじめてでも、すぐになじめます。" },
+        { label: "余白", text: "余白のある一日をどうぞ。" }
+      ]
+    ],
+    about: [
+      [
+        { label: "安心", text: "落ち着いて過ごせる空間づくりを大切にしています。" },
+        { label: "活気", text: "にぎわいと笑顔が自然と集まる場所を目指しています。" },
+        { label: "専門", text: "こだわりの一点を、わかりやすくお伝えします。" }
+      ],
+      [
+        { label: "人柄", text: "接する一人ひとりとのやりとりを大切にしています。" },
+        { label: "立地", text: "通いやすい場所から、日常に寄り添います。" },
+        { label: "物語", text: "お店の物語を、短い言葉で残せます。" }
+      ]
+    ],
+    works: [
+      [
+        { label: "定番", text: "いちばんのおすすめを、まずご覧ください。" },
+        { label: "季節", text: "季節ごとのおすすめをご用意しています。" },
+        { label: "厳選", text: "厳選したメニュー・サービスをご案内します。" }
+      ],
+      [
+        { label: "体験", text: "体験の入り口として、おすすめをまとめました。" },
+        { label: "人気", text: "多くの方に選ばれている内容です。" },
+        { label: "はじめて", text: "初めての方にも分かりやすいおすすめです。" }
+      ]
+    ],
+    contact: [
+      [
+        { label: "気軽", text: "ご質問やご予約は、お気軽にご連絡ください。" },
+        { label: "丁寧", text: "内容を確認のうえ、丁寧にご案内します。" },
+        { label: "近道", text: "最短の連絡手段から、どうぞ。" }
+      ],
+      [
+        { label: "時間", text: "営業時間内であれば、すぐにお返事しやすいです。" },
+        { label: "場所", text: "アクセスとあわせて、ご連絡ください。" },
+        { label: "安心", text: "小さなことでも相談できます。" }
+      ]
+    ]
   };
   const EASY_IMG_FIELD = {
     "easy-img-wire": "hero_image"
@@ -1972,9 +2087,18 @@
     pendingSushi: null,
     sushiSampleId: null,
     sushiSampleKey: null,
+    sushiSampleBrand: null,
     sampleSectionCandidates: {},
     sampleSectionSelected: {},
     sampleWireSlot: "hero",
+    copyPathMode: null,
+    copyDirIds: [],
+    copyPresetId: null,
+    copyFrameIndex: 0,
+    copyFramePoolIndex: {},
+    copyFrameCandidates: {},
+    copyFrameSelected: {},
+    copyFrameNow: {},
     easyAnswers: { mood: "calm", focus: "quality", guest: "first" },
     easyCopyCandidates: [],
     easyCopySelected: null,
@@ -5135,9 +5259,29 @@
     syncFontPickers();
   }
 
+  function getEasyFlowStepIds() {
+    if (store.copyPathMode === "omakase") {
+      return ["easy-copy-path", "easy-basics", "easy-img-wire", "easy-loading", "easy-done"];
+    }
+    if (store.copyPathMode === "keyword") {
+      return [
+        "easy-copy-path",
+        "easy-copy-dirs",
+        "easy-basics",
+        "easy-copy-frame",
+        "easy-img-wire",
+        "easy-loading",
+        "easy-done"
+      ];
+    }
+    return ["easy-copy-path", "easy-basics", "easy-img-wire", "easy-loading", "easy-done"];
+  }
+
   function getFlowSteps() {
     if (store.uiMode === "guided" && store.easyFlowActive) {
-      return EASY_FLOW_STEP_IDS.map((id) => STEPS.find((s) => s.id === id)).filter(Boolean);
+      return getEasyFlowStepIds()
+        .map((id) => STEPS.find((s) => s.id === id))
+        .filter(Boolean);
     }
     if (store.uiMode === "guided") {
       return filterFlowIds(GUIDED_STEP_IDS)
@@ -5165,6 +5309,11 @@
     const step = getCurrentFlowStep();
     if (step && step.id === "easy-done") return "確認へ";
     if (step && step.id === "easy-loading") return "お待ちください";
+    if (step && step.id === "easy-copy-frame") {
+      const idx = store.copyFrameIndex || 0;
+      if (idx >= COPY_FRAME_ORDER.length - 1) return "これで画像へ";
+      return "これで次の文言へ";
+    }
     if (step && EASY_FLOW_STEP_SET.has(step.id)) return "次へ";
     if (store.uiMode === "self") {
       if (step && (step.id === "guide" || step.id === "purpose")) return "次へ";
@@ -5830,7 +5979,66 @@
     const el = document.getElementById("footer-brand");
     if (!el) return;
     const name = String(fieldValue("brand_name") || "").trim();
-    el.textContent = name || purposeField("brand_name") || "店名";
+    const fromSample = String(store.sushiSampleBrand || "").trim();
+    el.textContent = name || fromSample || purposeField("brand_name") || "店名";
+  }
+
+  /** サンプル屋号をロゴ／フッターへ揃える（draftに brand_name が無い見本対策） */
+  function isPlaceholderBrand(name) {
+    const s = String(name || "").trim();
+    if (!s) return true;
+    if (s === "店名" || s === "サイトタイトル") return true;
+    if (/（仮）$/.test(s)) return true;
+    return false;
+  }
+
+  function applySampleBrandName(name) {
+    const brand = String(name || "").trim();
+    if (!brand) return false;
+    store.sushiSampleBrand = brand;
+    if (isPlaceholderBrand(fieldValue("brand_name"))) {
+      setFieldValue("brand_name", brand);
+    }
+    syncPreviewHeaderChrome();
+    return true;
+  }
+
+  function ensureSampleBrandName(draft) {
+    const current = String(fieldValue("brand_name") || "").trim();
+    if (!isPlaceholderBrand(current)) {
+      store.sushiSampleBrand = current;
+      syncFooterBrand();
+      return Promise.resolve(current);
+    }
+    const fromDraftField =
+      draft && draft.fields && String(draft.fields.brand_name || "").trim();
+    const fromDraftMeta = draft && String(draft.brand || "").trim();
+    const fromQuery = String(
+      new URLSearchParams(location.search).get("brand") || ""
+    ).trim();
+    const immediate = fromDraftField || fromDraftMeta || fromQuery;
+    if (immediate && !isPlaceholderBrand(immediate)) {
+      applySampleBrandName(immediate);
+      return Promise.resolve(immediate);
+    }
+    const sid = draft && String(draft.sushiSampleId || "").trim();
+    if (!sid) return Promise.resolve("");
+    return fetch("sushi-samples/manifest.json?v=" + Date.now())
+      .then(function (r) {
+        return r.json();
+      })
+      .then(function (man) {
+        const list = (man && man.samples) || [];
+        const hit = list.find(function (s) {
+          return String(s.id) === sid || String(s.id) === String(Number(sid));
+        });
+        const brand = hit && String(hit.brand || "").trim();
+        if (brand) applySampleBrandName(brand);
+        return brand || "";
+      })
+      .catch(function () {
+        return "";
+      });
   }
 
   function syncContactPanels() {
@@ -6470,9 +6678,28 @@
 
   function getStepValidationError(stepId) {
     const action = wizardPrimaryLabel();
+    if (stepId === "easy-copy-path") {
+      if (store.copyPathMode !== "keyword" && store.copyPathMode !== "omakase") {
+        return "決め方を選んでください。";
+      }
+      return "";
+    }
+    if (stepId === "easy-copy-dirs") {
+      if (!Array.isArray(store.copyDirIds) || store.copyDirIds.length < 1) {
+        return "方向を1つ以上選んでから、「" + action + "」を押してください。";
+      }
+      return "";
+    }
     if (stepId === "easy-basics") {
       const brand = String((document.getElementById("easy-brand-name") || {}).value || "").trim();
       if (!brand) return "店名を入れてから、「" + action + "」を押してください。";
+      return "";
+    }
+    if (stepId === "easy-copy-frame") {
+      const sec = COPY_FRAME_ORDER[store.copyFrameIndex || 0] || "hero";
+      if (store.copyFrameSelected[sec] == null && !store.copyFrameNow[sec]) {
+        return "候補を選んでから、「" + action + "」を押してください。";
+      }
       return "";
     }
     if (SAMPLE_SEC_STEP_IDS.indexOf(stepId) >= 0) {
@@ -6953,6 +7180,19 @@
       } else {
         renderSampleSectionList(sec);
       }
+    }
+    setupCopyFlowUi();
+    if (step.id === "easy-copy-path") {
+      form.querySelectorAll('input[name="easy_copy_path"]').forEach(function (r) {
+        r.checked = r.value === store.copyPathMode;
+      });
+    }
+    if (step.id === "easy-copy-dirs") {
+      renderCopyDirsUi();
+    }
+    if (step.id === "easy-copy-frame") {
+      if (store.copyFrameIndex == null) store.copyFrameIndex = 0;
+      renderCopyFrameUi();
     }
     if (step.id === "easy-img-wire") {
       prepareEasyFixedImageCounts();
@@ -8872,8 +9112,10 @@
       setSampleFlowPreviewHidden(false);
       return;
     }
-    const reveal = stepId === "easy-loading" || stepId === "easy-done";
-    setSampleFlowPreviewHidden(!reveal);
+    /* 見本決定後（色合い完了後）〜文章・画像工程は左プレビューを出す。作成演出・完成も出す */
+    const hide = false;
+    setSampleFlowPreviewHidden(hide);
+    void stepId;
   }
 
   function revealSamplePreview() {
@@ -9030,6 +9272,7 @@
     applyHeroImageOffState();
     applyHeroFocalToPreview();
     syncPreviewHeaderChrome();
+    return ensureSampleBrandName(draft);
   }
 
   function applyHeroImageOffState() {
@@ -9064,6 +9307,210 @@
       const note = fieldValue("contact_note_1") || "";
       const m = note.match(/0[\d\-]+/);
       if (m) elPhone.value = m[0];
+    }
+  }
+
+  function applyCopyTextToSection(secId, text) {
+    applyEasyBasicsToForm();
+    const brand = readEasyBasicsFromUi().brand || fieldValue("brand_name") || "店名";
+    const dict = window.Sample1manEasyCopy;
+    const section =
+      dict && dict.SECTIONS ? dict.SECTIONS.find(function (s) { return s.id === secId; }) : null;
+    const map = section && typeof section.apply === "function" ? section.apply(String(text || ""), brand) : null;
+    if (map) {
+      Object.keys(map).forEach(function (k) {
+        if (map[k] != null && map[k] !== "") setFieldValue(k, map[k]);
+      });
+    }
+    store.copyFrameNow[secId] = String(text || "");
+    applyAllConfirmed();
+    syncPreviewHeaderChrome();
+  }
+
+  function currentCopyFrameId() {
+    return COPY_FRAME_ORDER[store.copyFrameIndex || 0] || "hero";
+  }
+
+  function stubCandidatesForFrame(secId, forceNext) {
+    const pools = COPY_STUB_POOL[secId] || COPY_STUB_POOL.hero;
+    let idx = Number(store.copyFramePoolIndex[secId] || 0);
+    if (forceNext) idx = (idx + 1) % pools.length;
+    store.copyFramePoolIndex[secId] = idx;
+    const seed = (store.copyDirIds || []).join("-");
+    const list = (pools[idx] || pools[0]).map(function (c, i) {
+      const tip = seed ? "（" + (store.copyDirIds[i % store.copyDirIds.length] || "") + "）" : "";
+      return {
+        label: c.label,
+        text: c.text + (tip && i === 0 && seed ? "" : "")
+      };
+    });
+    /* 方向IDがあるとき先頭案だけ少し差を付ける（見た目差のスタブ） */
+    if (store.copyDirIds && store.copyDirIds.length) {
+      list[0] = {
+        label: list[0].label,
+        text: list[0].text.replace(/。$/, "") + "／" + store.copyDirIds[0] + "寄り。"
+      };
+    }
+    return list;
+  }
+
+  function ensureCopyFrameCandidates(secId, reroll) {
+    if (reroll || !store.copyFrameCandidates[secId] || !store.copyFrameCandidates[secId].length) {
+      store.copyFrameCandidates[secId] = stubCandidatesForFrame(secId, !!reroll);
+      store.copyFrameSelected[secId] = null;
+    }
+  }
+
+  function readCurrentSectionText(secId) {
+    if (store.copyFrameNow[secId]) return store.copyFrameNow[secId];
+    if (secId === "hero") return fieldValue("hero_lead_1") || "";
+    if (secId === "about") return fieldValue("about_lead") || "";
+    if (secId === "works") return fieldValue("works_lead") || fieldValue("work_1_text") || "";
+    if (secId === "contact") return fieldValue("contact_note_1") || "";
+    return "";
+  }
+
+  function renderCopyFrameUi() {
+    const secId = currentCopyFrameId();
+    ensureCopyFrameCandidates(secId, false);
+    const title = document.getElementById("easy-copy-frame-title");
+    if (title) title.textContent = COPY_FRAME_LABEL[secId] || secId;
+    const nowEl = document.getElementById("easy-copy-frame-now-text");
+    const nowText = readCurrentSectionText(secId);
+    store.copyFrameNow[secId] = nowText;
+    if (nowEl) nowEl.textContent = nowText || "（まだありません）";
+    const host = document.getElementById("easy-copy-frame-cands");
+    if (!host) return;
+    const list = store.copyFrameCandidates[secId] || [];
+    host.innerHTML = list
+      .map(function (c, i) {
+        const on = store.copyFrameSelected[secId] === i ? " is-selected" : "";
+        return (
+          '<button type="button" class="easy-copy-frame-cand' +
+          on +
+          '" role="option" aria-selected="' +
+          (on ? "true" : "false") +
+          '" data-copy-cand="' +
+          i +
+          '"><span class="easy-copy-frame-cand-label">' +
+          escapeHtml(c.label) +
+          '</span><span class="easy-copy-frame-cand-text">' +
+          escapeHtml(c.text) +
+          "</span></button>"
+        );
+      })
+      .join("");
+    host.querySelectorAll("[data-copy-cand]").forEach(function (btn) {
+      btn.addEventListener("click", function () {
+        const i = Number(btn.getAttribute("data-copy-cand"));
+        const cand = list[i];
+        if (!cand) return;
+        store.copyFrameSelected[secId] = i;
+        applyCopyTextToSection(secId, cand.text);
+        renderCopyFrameUi();
+        scrollPreviewTo(COPY_FRAME_PREVIEW[secId] || "#hero");
+        scheduleSave();
+      });
+    });
+    const block = form.querySelector('.dash-block[data-step-id="easy-copy-frame"]');
+    if (block) block.setAttribute("data-preview-target", COPY_FRAME_PREVIEW[secId] || "#hero");
+    scrollPreviewTo(COPY_FRAME_PREVIEW[secId] || "#hero");
+    updateWizardUi();
+  }
+
+  function renderCopyDirsUi() {
+    const root = document.getElementById("easy-copy-dirs-root");
+    if (!root) return;
+    const selected = new Set(store.copyDirIds || []);
+    root.innerHTML = COPY_DIR_GROUPS.map(function (g) {
+      const chips = g.options
+        .map(function (o) {
+          const on = selected.has(o.id) ? " is-on" : "";
+          return (
+            '<button type="button" class="easy-copy-dir-chip' +
+            on +
+            '" data-copy-dir="' +
+            o.id +
+            '" aria-pressed="' +
+            (on ? "true" : "false") +
+            '">' +
+            escapeHtml(o.label) +
+            "</button>"
+          );
+        })
+        .join("");
+      return (
+        '<div class="easy-copy-dir-group"><p class="easy-copy-dir-heading">' +
+        escapeHtml(g.label) +
+        '</p><div class="easy-copy-dir-chips">' +
+        chips +
+        "</div></div>"
+      );
+    }).join("");
+    root.querySelectorAll("[data-copy-dir]").forEach(function (btn) {
+      btn.addEventListener("click", function () {
+        const id = btn.getAttribute("data-copy-dir");
+        const set = new Set(store.copyDirIds || []);
+        if (set.has(id)) set.delete(id);
+        else set.add(id);
+        store.copyDirIds = Array.from(set);
+        renderCopyDirsUi();
+        scheduleSave();
+      });
+    });
+  }
+
+  function applyOmakaseStubAllSections() {
+    store.copyPresetId = store.copyPresetId || "omakase-flow-v1";
+    COPY_FRAME_ORDER.forEach(function (secId) {
+      const pools = COPY_STUB_POOL[secId] || COPY_STUB_POOL.hero;
+      const text = (pools[0] && pools[0][0] && pools[0][0].text) || readCurrentSectionText(secId);
+      /* 見本文があればそれを優先（おまかせ＝見本の流れを残す） */
+      const existing = readCurrentSectionText(secId);
+      applyCopyTextToSection(secId, existing || text);
+    });
+  }
+
+  function setupCopyFlowUi() {
+    const pathRoot = document.querySelector('.dash-block[data-step-id="easy-copy-path"]');
+    if (pathRoot && !pathRoot.dataset.copyPathBound) {
+      pathRoot.dataset.copyPathBound = "1";
+      pathRoot.querySelectorAll('input[name="easy_copy_path"]').forEach(function (input) {
+        input.addEventListener("change", function () {
+          if (!input.checked) return;
+          store.copyPathMode = input.value === "omakase" ? "omakase" : "keyword";
+          if (store.copyPathMode === "omakase") store.copyPresetId = "omakase-flow-v1";
+          store.confirmed["easy-copy-path"] = true;
+          scheduleSave();
+          const flow = getFlowSteps();
+          const next = flow.findIndex(function (s) { return s.id === "easy-copy-path"; });
+          if (next >= 0 && next < flow.length - 1) showWizardStep(next + 1);
+          else showWizardStep(0);
+        });
+      });
+    }
+    const reroll = document.getElementById("easy-copy-frame-reroll");
+    if (reroll && !reroll.dataset.bound) {
+      reroll.dataset.bound = "1";
+      reroll.addEventListener("click", function () {
+        const secId = currentCopyFrameId();
+        ensureCopyFrameCandidates(secId, true);
+        renderCopyFrameUi();
+        scheduleSave();
+      });
+    }
+    const brand = document.getElementById("easy-brand-name");
+    if (brand && !brand.dataset.copyLiveBound) {
+      brand.dataset.copyLiveBound = "1";
+      brand.addEventListener("input", function () {
+        const v = String(brand.value || "").trim();
+        if (!v) return;
+        setFieldValue("brand_name", v);
+        setFieldValue("hero_title", v);
+        setFieldValue("about_name", v);
+        applyAllConfirmed();
+        syncPreviewHeaderChrome();
+      });
     }
   }
 
@@ -9172,17 +9619,25 @@
     store.wizardStepIndex = 0;
     store.sampleSectionCandidates = {};
     store.sampleSectionSelected = {};
+    store.copyPathMode = null;
+    store.copyDirIds = [];
+    store.copyPresetId = null;
+    store.copyFrameIndex = 0;
+    store.copyFramePoolIndex = {};
+    store.copyFrameCandidates = {};
+    store.copyFrameSelected = {};
+    store.copyFrameNow = {};
     store.easyAnswers = { mood: "calm", focus: "quality", guest: "first" };
     prepareEasyFixedImageCounts();
     fillEasyBasicsFromFields();
-    setSampleFlowPreviewHidden(true);
+    setSampleFlowPreviewHidden(false);
     hideEntryGate();
     if (typeof window.setPreviewWidthStepById === "function") {
       window.setPreviewWidthStepById("desktop");
     }
     showWizardStep(0);
     const status = document.getElementById("wizard-status");
-    if (status) status.textContent = "基本情報を入力してください。";
+    if (status) status.textContent = "文章の決め方を選んでください。";
     scheduleSave();
   }
 
@@ -9437,7 +9892,7 @@
       hideEntryGate();
       syncSiteColorModeUi();
       if (store.easyFlowActive && store.uiMode === "guided") {
-        if (store.entryBranch === "sample") setSampleFlowPreviewHidden(true);
+        if (store.entryBranch === "sample") setSampleFlowPreviewHidden(false);
         showWizardStep(resolveWizardStepIndex());
       }
     }
@@ -9525,6 +9980,22 @@
 
     if (step.id === "easy-basics") {
       applyEasyBasicsToForm();
+      if (store.copyPathMode === "omakase") {
+        applyOmakaseStubAllSections();
+      }
+    }
+    if (step.id === "easy-copy-frame") {
+      const sec = currentCopyFrameId();
+      const now = store.copyFrameNow[sec] || readCurrentSectionText(sec);
+      applyCopyTextToSection(sec, now);
+      if ((store.copyFrameIndex || 0) < COPY_FRAME_ORDER.length - 1) {
+        store.copyFrameIndex = (store.copyFrameIndex || 0) + 1;
+        store.confirmed["easy-copy-frame"] = false;
+        renderCopyFrameUi();
+        updateWizardUi();
+        scheduleSave();
+        return "stay";
+      }
     }
 
     store.snapshots[step.id] = captureStepSnapshot(step.id);
@@ -9559,7 +10030,9 @@
       step.id !== "layout" &&
       step.id !== "finish";
 
-    if (!wizardConfirmCurrentStep()) return;
+    const confirmed = wizardConfirmCurrentStep();
+    if (confirmed === "stay") return;
+    if (!confirmed) return;
     closeDraftNotice();
     if (store.uiMode === "self") {
       if (step.id === "guide") {
@@ -9641,13 +10114,20 @@
       returnToLayoutHub();
       return;
     }
-    if (step && step.id === "easy-basics") {
+    if (step && step.id === "easy-copy-path") {
       reopenSampleEntryAtColor();
+      return;
+    }
+    if (step && step.id === "easy-copy-frame" && (store.copyFrameIndex || 0) > 0) {
+      store.copyFrameIndex = (store.copyFrameIndex || 0) - 1;
+      store.confirmed["easy-copy-frame"] = false;
+      renderCopyFrameUi();
+      updateWizardUi();
       return;
     }
     if (step && (step.id === "easy-loading" || step.id === "easy-done")) {
       clearEasyLoadingTimers();
-      setSampleFlowPreviewHidden(true);
+      setSampleFlowPreviewHidden(false);
       const flow = getFlowSteps();
       const img = flow.findIndex((s) => s.id === "easy-img-wire");
       if (img >= 0) showWizardStep(img);
@@ -12203,6 +12683,17 @@
         store.previewFrameScale = 1;
         return 1;
       }
+      /* 虫眼鏡embed: 縮小zoomしない（窮屈＋marker幽霊の元）。幅は apply() 側で実寸合わせ */
+      if (document.documentElement.classList.contains("is-embed-preview")) {
+        store.previewFrameScale = 1;
+        viewport.style.removeProperty("zoom");
+        viewport.style.removeProperty("transform");
+        viewport.style.removeProperty("transform-origin");
+        viewport.style.removeProperty("margin-bottom");
+        viewport.style.removeProperty("--hub-place-fit-scale");
+        scrollEl.scrollLeft = 0;
+        return 1;
+      }
       /* 同一文書レビュー: 自動zoomはスクロールバー↔幅の往復でプルプルする。実寸固定（俯瞰zoomは review-mode が一度だけ付ける） */
       if (document.documentElement.classList.contains("is-review-mode")) {
         if (!document.body.classList.contains("review-view-fit")) {
@@ -12253,6 +12744,31 @@
             viewport.classList.remove("is-scroll-x");
           }
         }
+        return;
+      }
+      /* 虫眼鏡: 親フレーム幅に合わせて実寸表示（1280固定＋縮小zoomはしない） */
+      if (document.documentElement.classList.contains("is-embed-preview")) {
+        const scrollEl = document.querySelector(".preview-scroll");
+        const availW = scrollEl ? Math.max(320, scrollEl.clientWidth - 2) : 1280;
+        const requested = Math.min(1280, availW);
+        store.previewDesignWidth = requested;
+        store.previewFrameScale = 1;
+        if (viewport.style.width !== requested + "px") {
+          viewport.style.width = requested + "px";
+        }
+        viewport.style.maxWidth = "none";
+        viewport.classList.toggle("is-phone", requested <= 500);
+        viewport.classList.toggle("is-mobile", requested <= 500);
+        viewport.classList.toggle("is-tablet", requested > 500 && requested <= 900);
+        viewport.classList.toggle("is-desktop", requested > 900);
+        viewport.classList.remove("is-scroll-x");
+        viewport.style.removeProperty("zoom");
+        viewport.style.removeProperty("transform");
+        viewport.style.removeProperty("transform-origin");
+        viewport.style.removeProperty("margin-bottom");
+        if (deviceEl) deviceEl.textContent = requested >= 1200 ? "PC" : requested > 900 ? "ノート" : requested > 500 ? "タブレット" : "スマホ";
+        if (pxEl) pxEl.textContent = requested + "px";
+        if (scrollEl) scrollEl.scrollLeft = 0;
         return;
       }
       const step = WIDTH_STEPS[stepIndex] || WIDTH_STEPS[WIDTH_STEPS.length - 1];
@@ -13206,7 +13722,7 @@
       keepUnselected: true
     });
     if (typeof window.setPreviewWidthStepById === "function") {
-      /* 虫眼鏡は通常プレビューのPC幅。狭い窓では既存の縮小でその横幅に合わせる */
+      /* 虫眼鏡: 親の広い枠に合わせ実寸。狭いときだけ幅を落とし、縮小zoomは使わない */
       window.setPreviewWidthStepById("desktop");
     }
     applyLiveColors(false);
@@ -13215,20 +13731,25 @@
         .then(function (r) { return r.json(); })
         .then(function (draft) {
           suppressSave = true;
-          applySushiSampleDraft(draft);
-          applyLiveColors(true);
-          applyAllConfirmed();
-          if (draft.imagePaths) applyDraftImagePaths(draft.imagePaths);
-          applyHeroImageOffState();
-          syncPreviewHeaderChrome();
-          suppressSave = true;
-          document.documentElement.classList.remove("is-embed-pending");
-          document.body.classList.remove("is-embed-pending");
-          try {
-            if (window.parent && window.parent !== window) {
-              window.parent.postMessage({ type: "sushi-embed-ready" }, "*");
-            }
-          } catch (e) { /* ignore */ }
+          Promise.resolve(applySushiSampleDraft(draft))
+            .then(function () {
+              applyLiveColors(true);
+              applyAllConfirmed();
+              if (draft.imagePaths) applyDraftImagePaths(draft.imagePaths);
+              applyHeroImageOffState();
+              syncPreviewHeaderChrome();
+              suppressSave = true;
+              if (typeof window.applyPreviewWidthFromPane === "function") {
+                window.applyPreviewWidthFromPane();
+              }
+              document.documentElement.classList.remove("is-embed-pending");
+              document.body.classList.remove("is-embed-pending");
+              try {
+                if (window.parent && window.parent !== window) {
+                  window.parent.postMessage({ type: "sushi-embed-ready" }, "*");
+                }
+              } catch (e) { /* ignore */ }
+            });
         })
         .catch(function () {
           document.documentElement.classList.remove("is-embed-pending");

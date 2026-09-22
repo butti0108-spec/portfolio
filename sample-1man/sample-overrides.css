@@ -10281,6 +10281,25 @@ body.wizard-mode .dash-block.is-wizard-active .easy-copy-frame > .easy-copy-late
 .easy-img-omakase-actions {
   margin-top: 0.75rem;
 }
+.hub-img-path {
+  margin: 0.35rem 0 0.75rem;
+}
+.hub-img-self-actions,
+.hub-img-slot-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+  align-items: center;
+  margin: 0.45rem 0;
+}
+.hub-img-slot-row > span {
+  min-width: 4.5rem;
+  font-size: 0.9rem;
+  font-weight: 700;
+}
+.hub-img-omakase {
+  margin: 0.35rem 0 0.5rem;
+}
 
 .easy-copy-dirs {
   display: flex;

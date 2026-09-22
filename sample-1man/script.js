@@ -787,6 +787,7 @@
     { key: "about", input: "about_image_1", label: "写真", prefer: "square" },
     { key: "works", input: "work_1_image", label: "カード", prefer: "square" }
   ];
+  const HUB_IMG_STEP_IDS = ["hero-image", "about-images", "works-images"];
   let photoCatalogCache = null;
   const COPY_FRAME_PREVIEW = {
     hero: "#hero",
@@ -2059,6 +2060,7 @@
     sampleWireSlot: "hero",
     copyPathMode: null,
     imgPathMode: null,
+    hubImgPathMode: {},
     imgOmakaseLocks: {},
     imgOmakasePicks: {},
     imgOmakaseSalt: 0,
@@ -5288,6 +5290,10 @@
     if (step && step.id === "easy-done") return "確認へ";
     if (step && step.id === "easy-loading") return "お待ちください";
     if (step && step.id === "easy-img-omakase") return "これで進む";
+    if (step && HUB_IMG_STEP_IDS.indexOf(step.id) >= 0) {
+      const mode = store.hubImgPathMode && store.hubImgPathMode[step.id];
+      if (mode === "omakase") return "これで進む";
+    }
     if (step && step.id === "easy-copy-omakase") return "これで進む";
     if (step && step.id === "easy-copy-frame") {
       const idx = store.copyFrameIndex || 0;
@@ -6679,6 +6685,22 @@
       }
       return "";
     }
+    if (HUB_IMG_STEP_IDS.indexOf(stepId) >= 0) {
+      const mode = store.hubImgPathMode && store.hubImgPathMode[stepId];
+      if (!mode) {
+        return "写真の決め方を選んでください。";
+      }
+      if (mode === "omakase") {
+        const slots = getImgSlotsForStep(stepId);
+        const miss = slots.filter(function (slot) {
+          return !inputHasFile(slot.input);
+        });
+        if (miss.length) {
+          return "写真の候補がそろってから、「これで進む」を押せます。";
+        }
+      }
+      return "";
+    }
     if (stepId === "easy-copy-dirs") {
       if (!Array.isArray(store.copyDirIds) || store.copyDirIds.length < 1) {
         return "方向を1つ以上選んでから、「" + action + "」を押してください。";
@@ -7116,6 +7138,10 @@
     if (store.siteColorMode === "detail") {
       syncGuidedColorTrial();
     }
+    if (HUB_IMG_STEP_IDS.indexOf(stepId) >= 0) {
+      setupHubImagePathUi();
+      syncHubImagePathPanels(stepId);
+    }
     scheduleSave();
   }
 
@@ -7245,6 +7271,10 @@
       setEasyPreviewFocus("easy-img-wire");
     } else {
       setEasyPreviewFocus(null);
+    }
+    if (HUB_IMG_STEP_IDS.indexOf(step.id) >= 0) {
+      setupHubImagePathUi();
+      syncHubImagePathPanels(step.id);
     }
     if (step.id === "easy-loading") {
       startEasyLoadingSequence();
@@ -8296,6 +8326,8 @@
 
   function setupEasyImagePickers() {
     document.querySelectorAll("[data-easy-pick]").forEach((btn) => {
+      if (btn.dataset.easyPickBound) return;
+      btn.dataset.easyPickBound = "1";
       btn.addEventListener("click", () => {
         const name = btn.getAttribute("data-easy-pick");
         const input = form.elements.namedItem(name);
@@ -8303,11 +8335,14 @@
       });
     });
     document.querySelectorAll("[data-easy-gallery]").forEach((btn) => {
+      if (btn.dataset.easyGalleryBound) return;
+      btn.dataset.easyGalleryBound = "1";
       btn.addEventListener("click", () => {
         const name = btn.getAttribute("data-easy-gallery");
         if (name) openFreePhotoGalleryModal(name);
       });
     });
+    setupHubImagePathUi();
     document.querySelectorAll("[data-easy-done-ok]").forEach((btn) => {
       btn.addEventListener("click", () => leaveEasyFlowToFinish());
     });
@@ -9881,10 +9916,11 @@
       });
   }
 
-  function collectImgOmakaseUsedIds(exceptKey) {
+  function collectImgOmakaseUsedIds(slots, exceptKey) {
     const used = [];
     const picks = store.imgOmakasePicks || {};
-    IMG_OMAKASE_SLOTS.forEach(function (slot) {
+    const list = Array.isArray(slots) ? slots : IMG_OMAKASE_SLOTS;
+    list.forEach(function (slot) {
       if (exceptKey && slot.key === exceptKey) return;
       const pick = picks[slot.key];
       if (pick && pick.id) used.push(pick.id);
@@ -9912,15 +9948,12 @@
     return finalPool[Math.floor(Math.random() * finalPool.length)] || null;
   }
 
-  function applyImgOmakasePickToPreview(slotKey, item) {
-    const slot = IMG_OMAKASE_SLOTS.find(function (s) {
-      return s.key === slotKey;
-    });
+  function applyImgOmakasePickToPreview(slot, item) {
     if (!slot || !item) return;
     if (!store.imgOmakasePicks || typeof store.imgOmakasePicks !== "object") {
       store.imgOmakasePicks = {};
     }
-    store.imgOmakasePicks[slotKey] = {
+    store.imgOmakasePicks[slot.key] = {
       id: item.id,
       path: item.path,
       shape: item.shape || "",
@@ -9930,9 +9963,43 @@
     applyGalleryPickToSlot(slot.input, item);
   }
 
+  function getImgSlotsForStep(stepId) {
+    if (stepId === "hero-image") {
+      return [{ key: "hero_image", input: "hero_image", label: "キャッチ", prefer: "wide" }];
+    }
+    if (stepId === "about-images") {
+      const n = Math.max(1, Number(store.draftCounts["about-photos"] || 1));
+      const out = [];
+      for (let i = 1; i <= n; i += 1) {
+        out.push({
+          key: "about_image_" + i,
+          input: "about_image_" + i,
+          label: "写真" + i,
+          prefer: "square"
+        });
+      }
+      return out;
+    }
+    if (stepId === "works-images") {
+      const n = Math.max(1, Number(store.draftCounts["works-list"] || 1));
+      const out = [];
+      for (let i = 1; i <= n; i += 1) {
+        out.push({
+          key: "work_" + i + "_image",
+          input: "work_" + i + "_image",
+          label: "カード" + i,
+          prefer: "square"
+        });
+      }
+      return out;
+    }
+    return IMG_OMAKASE_SLOTS.slice();
+  }
+
   function applyImgOmakaseFromCatalog(opts) {
     const options = opts || {};
     const onlyUnlocked = !!options.onlyUnlocked;
+    const slots = Array.isArray(options.slots) ? options.slots : IMG_OMAKASE_SLOTS;
     if (!store.imgOmakaseLocks || typeof store.imgOmakaseLocks !== "object") {
       store.imgOmakaseLocks = {};
     }
@@ -9942,31 +10009,37 @@
     store.imgOmakaseSalt = (Number(store.imgOmakaseSalt) || 0) + 1;
     return loadPhotoCatalog().then(function (catalog) {
       const items = (catalog && catalog.items) || [];
-      IMG_OMAKASE_SLOTS.forEach(function (slot) {
+      slots.forEach(function (slot) {
         if (onlyUnlocked && store.imgOmakaseLocks[slot.key]) return;
-        const used = collectImgOmakaseUsedIds(slot.key);
+        const used = collectImgOmakaseUsedIds(slots, slot.key);
         const pick = pickCatalogPhoto(items, slot.prefer, used);
-        if (pick) applyImgOmakasePickToPreview(slot.key, pick);
+        if (pick) applyImgOmakasePickToPreview(slot, pick);
       });
     });
   }
 
-  function ensureImgOmakaseReady() {
-    const hasAll = IMG_OMAKASE_SLOTS.every(function (slot) {
+  function ensureImgOmakaseReady(opts) {
+    const options = opts || {};
+    const slots = Array.isArray(options.slots) ? options.slots : IMG_OMAKASE_SLOTS;
+    const hasAll = slots.every(function (slot) {
       return !!(store.imgOmakasePicks && store.imgOmakasePicks[slot.key] && store.imgOmakasePicks[slot.key].id);
     });
     if (hasAll) {
-      IMG_OMAKASE_SLOTS.forEach(function (slot) {
+      slots.forEach(function (slot) {
         const pick = store.imgOmakasePicks[slot.key];
         if (pick) applyGalleryPickToSlot(slot.input, pick);
       });
       return Promise.resolve();
     }
-    return applyImgOmakaseFromCatalog({ onlyUnlocked: false });
+    return applyImgOmakaseFromCatalog({ onlyUnlocked: false, slots: slots });
   }
 
-  function renderImgOmakaseUi() {
-    const host = document.getElementById("easy-img-omakase-list");
+  function renderImgOmakaseUi(opts) {
+    const options = opts || {};
+    const host =
+      options.host ||
+      document.getElementById("easy-img-omakase-list");
+    const slots = Array.isArray(options.slots) ? options.slots : IMG_OMAKASE_SLOTS;
     if (!host) return;
     if (!store.imgOmakaseLocks || typeof store.imgOmakaseLocks !== "object") {
       store.imgOmakaseLocks = {};
@@ -9974,56 +10047,132 @@
     if (!store.imgOmakasePicks || typeof store.imgOmakasePicks !== "object") {
       store.imgOmakasePicks = {};
     }
-    host.innerHTML = IMG_OMAKASE_SLOTS.map(function (slot) {
-      const locked = !!store.imgOmakaseLocks[slot.key];
-      const pick = store.imgOmakasePicks[slot.key];
-      const thumb = pick && pick.path ? "free-photo-gallery/" + String(pick.path).replace(/^\/+/, "") : "";
-      const meta = pick
-        ? (pick.sceneLabel || pick.scene || "写真") + (pick.shape === "wide" ? "・全幅寄り" : "")
-        : "候補を用意しています";
-      return (
-        '<div class="easy-img-omakase-row' +
-        (locked ? " is-locked" : "") +
-        '" data-img-omakase-slot="' +
-        slot.key +
-        '">' +
-        '<div class="easy-img-omakase-thumb">' +
-        (thumb
-          ? '<img src="' +
-            escapeHtml(thumb) +
-            '" alt="" loading="lazy" decoding="async">'
-          : "") +
-        "</div>" +
-        '<div class="easy-img-omakase-main">' +
-        '<p class="easy-img-omakase-label">' +
-        escapeHtml(slot.label) +
-        "</p>" +
-        '<p class="easy-img-omakase-text">' +
-        escapeHtml(meta) +
-        "</p>" +
-        "</div>" +
-        '<button type="button" class="easy-img-omakase-lock" data-img-omakase-lock="' +
-        slot.key +
-        '" aria-pressed="' +
-        (locked ? "true" : "false") +
-        '" title="' +
-        (locked ? "鍵をはずす" : "この写真を固定する") +
-        '">' +
-        (locked ? "鍵解除" : "鍵") +
-        "</button>" +
-        "</div>"
-      );
-    }).join("");
+    host.innerHTML = slots
+      .map(function (slot) {
+        const locked = !!store.imgOmakaseLocks[slot.key];
+        const pick = store.imgOmakasePicks[slot.key];
+        const thumb = pick && pick.path ? "free-photo-gallery/" + String(pick.path).replace(/^\/+/, "") : "";
+        const meta = pick
+          ? (pick.sceneLabel || pick.scene || "写真") + (pick.shape === "wide" ? "・全幅寄り" : "")
+          : "候補を用意しています";
+        return (
+          '<div class="easy-img-omakase-row' +
+          (locked ? " is-locked" : "") +
+          '" data-img-omakase-slot="' +
+          slot.key +
+          '">' +
+          '<div class="easy-img-omakase-thumb">' +
+          (thumb
+            ? '<img src="' +
+              escapeHtml(thumb) +
+              '" alt="" loading="lazy" decoding="async">'
+            : "") +
+          "</div>" +
+          '<div class="easy-img-omakase-main">' +
+          '<p class="easy-img-omakase-label">' +
+          escapeHtml(slot.label) +
+          "</p>" +
+          '<p class="easy-img-omakase-text">' +
+          escapeHtml(meta) +
+          "</p>" +
+          "</div>" +
+          '<button type="button" class="easy-img-omakase-lock" data-img-omakase-lock="' +
+          slot.key +
+          '" aria-pressed="' +
+          (locked ? "true" : "false") +
+          '" title="' +
+          (locked ? "鍵をはずす" : "この写真を固定する") +
+          '">' +
+          (locked ? "鍵解除" : "鍵") +
+          "</button>" +
+          "</div>"
+        );
+      })
+      .join("");
     host.querySelectorAll("[data-img-omakase-lock]").forEach(function (btn) {
       btn.addEventListener("click", function () {
         const key = btn.getAttribute("data-img-omakase-lock");
         if (!key) return;
         store.imgOmakaseLocks[key] = !store.imgOmakaseLocks[key];
-        renderImgOmakaseUi();
+        renderImgOmakaseUi(options);
         scheduleSave();
       });
     });
     updateWizardUi();
+  }
+
+  function syncHubImagePathPanels(stepId) {
+    if (HUB_IMG_STEP_IDS.indexOf(stepId) < 0) return;
+    if (!store.hubImgPathMode || typeof store.hubImgPathMode !== "object") {
+      store.hubImgPathMode = {};
+    }
+    const mode = store.hubImgPathMode[stepId] || null;
+    const pathRoot = document.querySelector('[data-hub-img-path="' + stepId + '"]');
+    const omaRoot = document.querySelector('[data-hub-img-omakase="' + stepId + '"]');
+    const selfRoot = document.querySelector('[data-hub-img-self="' + stepId + '"]');
+    if (pathRoot) {
+      pathRoot.querySelectorAll('input[type="radio"]').forEach(function (r) {
+        r.checked = !!(mode && r.value === mode);
+      });
+    }
+    if (omaRoot) omaRoot.hidden = mode !== "omakase";
+    if (selfRoot) selfRoot.hidden = mode !== "self";
+    if (mode === "omakase") {
+      const slots = getImgSlotsForStep(stepId);
+      const list = document.querySelector('[data-hub-img-omakase-list="' + stepId + '"]');
+      ensureImgOmakaseReady({ slots: slots }).then(function () {
+        renderImgOmakaseUi({ host: list, slots: slots });
+      });
+    }
+    updateWizardUi();
+  }
+
+  function setupHubImagePathUi() {
+    HUB_IMG_STEP_IDS.forEach(function (stepId) {
+      const pathRoot = document.querySelector('[data-hub-img-path="' + stepId + '"]');
+      if (pathRoot && !pathRoot.dataset.hubImgPathBound) {
+        pathRoot.dataset.hubImgPathBound = "1";
+        pathRoot.querySelectorAll('input[type="radio"]').forEach(function (input) {
+          input.addEventListener("change", function () {
+            if (!input.checked) return;
+            if (!store.hubImgPathMode || typeof store.hubImgPathMode !== "object") {
+              store.hubImgPathMode = {};
+            }
+            store.hubImgPathMode[stepId] = input.value === "omakase" ? "omakase" : "self";
+            if (store.hubImgPathMode[stepId] === "omakase") {
+              getImgSlotsForStep(stepId).forEach(function (slot) {
+                if (store.imgOmakaseLocks) delete store.imgOmakaseLocks[slot.key];
+                if (store.imgOmakasePicks) delete store.imgOmakasePicks[slot.key];
+              });
+            }
+            scheduleSave();
+            syncHubImagePathPanels(stepId);
+          });
+        });
+      }
+      const reroll = document.querySelector('[data-hub-img-omakase-reroll="' + stepId + '"]');
+      if (reroll && !reroll.dataset.bound) {
+        reroll.dataset.bound = "1";
+        reroll.addEventListener("click", function () {
+          const slots = getImgSlotsForStep(stepId);
+          const list = document.querySelector('[data-hub-img-omakase-list="' + stepId + '"]');
+          reroll.disabled = true;
+          applyImgOmakaseFromCatalog({ onlyUnlocked: true, slots: slots })
+            .then(function () {
+              renderImgOmakaseUi({ host: list, slots: slots });
+              scheduleSave();
+            })
+            .then(
+              function () {
+                reroll.disabled = false;
+              },
+              function () {
+                reroll.disabled = false;
+              }
+            );
+        });
+      }
+    });
   }
 
   function setupCopyFlowUi() {
@@ -10241,6 +10390,7 @@
     store.sampleSectionSelected = {};
     store.copyPathMode = null;
     store.imgPathMode = null;
+    store.hubImgPathMode = {};
     store.imgOmakaseLocks = {};
     store.imgOmakasePicks = {};
     store.imgOmakaseSalt = 0;
@@ -11127,6 +11277,15 @@
     });
     applyAllConfirmed();
     updateZipGate();
+    const curStep = getCurrentFlowStep();
+    if (
+      curStep &&
+      HUB_IMG_STEP_IDS.indexOf(curStep.id) >= 0 &&
+      store.hubImgPathMode &&
+      store.hubImgPathMode[curStep.id] === "omakase"
+    ) {
+      syncHubImagePathPanels(curStep.id);
+    }
   }
 
   function setupCounts() {

@@ -5,9 +5,9 @@
 (function (global) {
   "use strict";
 
-  /* レーン／上枠の本番寸法（拡大しない。ちょうどよかった前寸法） */
-  var TILE_W = 170;
-  var TILE_H = 240;
+  /* レーンは画面に約4〜5枚見える大きさ（CSS --sushi-tile-* と揃える） */
+  var TILE_W = 210;
+  var TILE_H = 296;
   var TILE_GAP = 18;
   var SITE_DESIGN_W = 1200;
   var SPEED_PX_S = 36;

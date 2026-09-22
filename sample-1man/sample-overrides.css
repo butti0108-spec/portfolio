@@ -7384,11 +7384,11 @@ body.atelier.color-mode-easy .zone-badge[data-open-step="site-fonts"] {
 }
 
 #entry-sushi-field.sushi-shelf {
-  /* レーンはスクショ基準。上枠はレーンの約3/4（旧1・2・3付き枠感） */
-  --sushi-tile-w: 170px;
-  --sushi-tile-h: 240px;
+  /* レーンは画面に約4〜5枚見える大きさ。上枠は小さくしてレーンを主役に */
+  --sushi-tile-w: 210px;
+  --sushi-tile-h: 296px;
   --sushi-tile-gap: 18px;
-  --sushi-stock-scale: 0.72;
+  --sushi-stock-scale: 0.5;
   --sushi-stock-tile-w: calc(var(--sushi-tile-w) * var(--sushi-stock-scale));
   --sushi-stock-tile-h: calc(var(--sushi-tile-h) * var(--sushi-stock-scale));
   --sushi-zoom-ms: 680ms;
@@ -7431,8 +7431,8 @@ body.atelier.color-mode-easy .zone-badge[data-open-step="site-fonts"] {
   gap: 0.35rem;
   flex: 0 0 auto;
   min-width: 0;
-  /* ↓先端とレーンのあいだ：約1文字分 */
-  margin-bottom: 1em;
+  /* ①②行とレーンのあいだ（矢印がレーンを食わない余白） */
+  margin-bottom: 0.85rem;
 }
 
 /* 旧1・2・3番号の位置：最上段に戻る／操作のヒント */
@@ -7487,8 +7487,8 @@ body.atelier.color-mode-easy .zone-badge[data-open-step="site-fonts"] {
   padding-inline: 0.35rem;
 }
 .sushi-side--add {
-  /* ↓をレーン近くへ：枠列の下端揃え */
-  align-self: end;
+  /* ①は3枠・②と同じ横列（縦中央） */
+  align-self: center;
   justify-content: center;
   padding-bottom: 0;
 }
@@ -7622,22 +7622,21 @@ body.atelier.color-mode-easy .zone-badge[data-open-step="site-fonts"] {
   letter-spacing: 0;
   line-height: 1;
 }
-/* 目立つ指差し矢印（塗りつぶし三角）。先端〜対象は約1文字分 */
+/* 控えめな指差し三角。主役はレーンのサンプル */
 .sushi-flow-arrow {
   flex: 0 0 auto;
   box-sizing: border-box;
-  color: #0d1418;
-  filter: drop-shadow(0 1px 0 rgba(255, 255, 255, 0.85));
+  color: #5a6570;
 }
 .sushi-flow-arrow--down {
   display: block;
   width: 0;
   height: 0;
-  margin: 0.2rem auto 0;
+  margin: 0.15rem auto 0;
   border-style: solid;
-  border-width: 1.25em 0.8em 0;
+  border-width: 0.72em 0.48em 0;
   border-color: currentColor transparent transparent;
-  font-size: 1.55rem;
+  font-size: 0.95rem;
 }
 .sushi-flow-guide--add .sushi-flow-arrow--down {
   width: 0;
@@ -7646,14 +7645,14 @@ body.atelier.color-mode-easy .zone-badge[data-open-step="site-fonts"] {
 }
 .sushi-flow-arrow--left {
   display: inline-block;
-  vertical-align: -0.15em;
+  vertical-align: -0.08em;
   width: 0;
   height: 0;
-  margin: 0 0.4em 0 0;
+  margin: 0 0.35em 0 0;
   border-style: solid;
-  border-width: 0.7em 1.15em 0.7em 0;
+  border-width: 0.42em 0.68em 0.42em 0;
   border-color: transparent currentColor transparent transparent;
-  font-size: 1.55rem;
+  font-size: 0.95rem;
 }
 
 @media (max-width: 720px) {

@@ -957,7 +957,8 @@
   }
 
   function maybeShowFirstGuide() {
-    if (!guideSeen()) openGuideModal();
+    /* 「サンプルから選ぶ」で寿司に入ったら毎回強制表示（閉じたら操作のヒントへ吸い込む） */
+    openGuideModal();
   }
 
   function onRootClick(ev) {

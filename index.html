@@ -8,9 +8,9 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@500;700&family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="style.css?v=hero-rainbow-2">
   <script>document.documentElement.classList.add("js");</script>
-  <script src="script.js" defer></script>
+  <script src="script.js?v=hero-rainbow-2" defer></script>
 </head>
 <body>
   <a class="skip-link" href="#main">本文へスキップ</a>
@@ -76,14 +76,16 @@
 
     <section id="about" class="section about" aria-labelledby="about-title">
       <div class="shell">
-        <p class="section-label">About</p>
-        <h2 id="about-title">Profile</h2>
-        <p class="profile-name">増渕 敦（Atsushi Masubuchi）</p>
-        <p class="section-lead">お客様の立場に立って考える Web Designer です。声になっていない要望にも耳を傾け、「何を作りたいか」だけでなく「なぜそれを作りたいのか」まで整理します。</p>
+        <div class="reveal-group" data-reveal-group>
+          <p class="section-label" data-reveal>About</p>
+          <h2 id="about-title" data-reveal style="--reveal-delay: 0.08s">Profile</h2>
+          <p class="profile-name" data-reveal style="--reveal-delay: 0.16s">増渕 敦（Atsushi Masubuchi）</p>
+          <p class="section-lead" data-reveal style="--reveal-delay: 0.24s">お客様の立場に立って考える Web Designer です。声になっていない要望にも耳を傾け、「何を作りたいか」だけでなく「なぜそれを作りたいのか」まで整理します。</p>
+        </div>
 
         <p class="tap-hint">白い見出しをタップすると、中身が開きます。</p>
-        <div class="accordion-list">
-          <details class="accordion">
+        <div class="accordion-list" data-reveal-group>
+          <details class="accordion" data-reveal="fade">
             <summary>大切にしていること</summary>
             <div class="accordion-body">
               <ul class="value-list">
@@ -95,7 +97,7 @@
             </div>
           </details>
 
-          <details class="accordion">
+          <details class="accordion" data-reveal="fade" style="--reveal-delay: 0.1s">
             <summary>強み</summary>
             <div class="accordion-body">
               <ul class="strength-list">
@@ -116,23 +118,23 @@
           </details>
         </div>
 
-        <ul class="skill-cards">
-          <li class="skill-card">
+        <ul class="skill-cards" data-reveal-group>
+          <li class="skill-card" data-reveal="wave">
             <button type="button" class="skill-card-btn" data-skill-popup="design" aria-haspopup="dialog" aria-controls="skill-dialog" aria-label="Webデザインの説明を開く">
               <img class="skill-card-img" src="assets/images/works/web-design-3000-1.png" alt="" width="3000" height="2250" loading="lazy">
             </button>
           </li>
-          <li class="skill-card">
+          <li class="skill-card" data-reveal="wave" style="--reveal-delay: 0.16s">
             <button type="button" class="skill-card-btn" data-skill-popup="code" aria-haspopup="dialog" aria-controls="skill-dialog" aria-label="コーディングの説明を開く">
               <img class="skill-card-img" src="assets/images/works/web-design-3000-2.png" alt="" width="3000" height="2250" loading="lazy">
             </button>
           </li>
-          <li class="skill-card">
+          <li class="skill-card" data-reveal="wave" style="--reveal-delay: 0.32s">
             <button type="button" class="skill-card-btn" data-skill-popup="ai" aria-haspopup="dialog" aria-controls="skill-dialog" aria-label="AI活用の説明を開く">
               <img class="skill-card-img" src="assets/images/works/web-design-3000-3.png" alt="" width="3000" height="2250" loading="lazy">
             </button>
           </li>
-          <li class="skill-card">
+          <li class="skill-card" data-reveal="wave" style="--reveal-delay: 0.48s">
             <button type="button" class="skill-card-btn" data-skill-popup="wordpress" aria-haspopup="dialog" aria-controls="skill-dialog" aria-label="WordPressの説明を開く">
               <img class="skill-card-img" src="assets/images/works/web-design-3000-4.png" alt="" width="3000" height="2250" loading="lazy">
             </button>
@@ -141,8 +143,8 @@
         <p class="tap-hint tap-hint--skills">画像をタップすると、それぞれの説明が開きます。</p>
 
         <p class="tap-hint">白い見出しをタップすると、中身が開きます。</p>
-        <div class="accordion-list">
-          <details class="accordion" id="offer">
+        <div class="accordion-list" data-reveal-group>
+          <details class="accordion" id="offer" data-reveal="fade">
             <summary>ご依頼できること</summary>
             <div class="accordion-body">
               <p class="offer-lead">こんな制作をお受けできます。</p>
@@ -248,7 +250,7 @@
             </div>
           </details>
 
-          <details class="accordion" id="faq">
+          <details class="accordion" id="faq" data-reveal="fade" style="--reveal-delay: 0.1s">
             <summary>よくある質問</summary>
             <div class="accordion-body">
               <details class="accordion accordion-nested">
@@ -296,62 +298,68 @@
 
     <section id="works" class="section works" aria-labelledby="works-title">
       <div class="shell">
-        <p class="section-label">Works</p>
-        <h2 id="works-title">Selected Works</h2>
-        <p class="section-lead">制作したサイト・<span class="text-keep">Webアプリ</span>の一部です。下の作品を押すと、詳細や実サイトを確認できます。</p>
+        <div class="reveal-group" data-reveal-group>
+          <div data-reveal-trigger>
+            <p class="section-label" data-reveal>Works</p>
+            <h2 id="works-title" data-reveal>Selected Works</h2>
+            <p class="section-lead" data-reveal style="--reveal-delay: 0.12s">制作したサイト・<span class="text-keep">Webアプリ</span>の一部です。下の作品を押すと、詳細や実サイトを確認できます。</p>
+          </div>
 
-        <ul class="work-list">
-          <li class="work-item">
-            <a href="works/vital.html">
-              <img class="work-thumb" src="assets/images/works/vital-thumb.png" alt="バイタル記録ノートの画面キャプチャ" width="1200" height="750" loading="lazy">
-              <div class="work-item-body">
-                <span class="work-tag">Web App</span>
-                <h3>バイタル記録ノート</h3>
-                <div class="work-item-copy">
-                  <p>血圧・脈拍・体重・体温をスマホで記録。</p>
-                  <p>カレンダーとグラフで振り返る軽量<span class="text-keep">Webアプリ</span>。</p>
+          <ul class="work-list">
+            <li class="work-item" data-reveal="work" style="--reveal-delay: 0.00s">
+              <a href="works/vital.html">
+                <img class="work-thumb" src="assets/images/works/vital-thumb.png" alt="バイタル記録ノートの画面キャプチャ" width="1200" height="750" loading="lazy">
+                <div class="work-item-body">
+                  <span class="work-tag">Web App</span>
+                  <h3>バイタル記録ノート</h3>
+                  <div class="work-item-copy">
+                    <p>血圧・脈拍・体重・体温をスマホで記録。</p>
+                    <p>カレンダーとグラフで振り返る軽量<span class="text-keep">Webアプリ</span>。</p>
+                  </div>
+                  <span class="work-link">詳細を見る</span>
                 </div>
-                <span class="work-link">詳細を見る</span>
-              </div>
-            </a>
-          </li>
-          <li class="work-item">
-            <a href="https://butti0108-spec.github.io/taro/" target="_blank" rel="noopener noreferrer">
-              <img class="work-thumb" src="assets/images/works/taro-thumb.png" alt="Taro's Scenery のサイトキャプチャ" width="1200" height="750" loading="lazy">
-              <div class="work-item-body">
-                <span class="work-tag">Website</span>
-                <h3>Taro's Scenery</h3>
-                <div class="work-item-copy">
-                  <p>フォトグラファー紹介の模写コーディング。</p>
-                  <p><span class="text-keep">ABOUT／WORKS</span>構成の静的サイト。</p>
+              </a>
+            </li>
+            <li class="work-item" data-reveal="work" style="--reveal-delay: 0.22s">
+              <a href="https://butti0108-spec.github.io/taro/" target="_blank" rel="noopener noreferrer">
+                <img class="work-thumb" src="assets/images/works/taro-thumb.png" alt="Taro's Scenery のサイトキャプチャ" width="1200" height="750" loading="lazy">
+                <div class="work-item-body">
+                  <span class="work-tag">Website</span>
+                  <h3>Taro's Scenery</h3>
+                  <div class="work-item-copy">
+                    <p>フォトグラファー紹介の模写コーディング。</p>
+                    <p><span class="text-keep">ABOUT／WORKS</span>構成の静的サイト。</p>
+                  </div>
+                  <span class="work-link">サイトを見る</span>
                 </div>
-                <span class="work-link">サイトを見る</span>
-              </div>
-            </a>
-          </li>
-          <li class="work-item">
-            <a href="https://butti0108-spec.github.io/GnamGnam/" target="_blank" rel="noopener noreferrer">
-              <img class="work-thumb" src="assets/images/works/gnamgnam-thumb.png" alt="Gnam gnam のサイトキャプチャ" width="1200" height="750" loading="lazy">
-              <div class="work-item-body">
-                <span class="work-tag">Website</span>
-                <h3>Gnam gnam</h3>
-                <div class="work-item-copy">
-                  <p>イタリアンレストランの模写コーディング。<br>コンセプト・メニュー・店舗情報の構成。</p>
+              </a>
+            </li>
+            <li class="work-item" data-reveal="work" style="--reveal-delay: 0.44s">
+              <a href="https://butti0108-spec.github.io/GnamGnam/" target="_blank" rel="noopener noreferrer">
+                <img class="work-thumb" src="assets/images/works/gnamgnam-thumb.png" alt="Gnam gnam のサイトキャプチャ" width="1200" height="750" loading="lazy">
+                <div class="work-item-body">
+                  <span class="work-tag">Website</span>
+                  <h3>Gnam gnam</h3>
+                  <div class="work-item-copy">
+                    <p>イタリアンレストランの模写コーディング。<br>コンセプト・メニュー・店舗情報の構成。</p>
+                  </div>
+                  <span class="work-link">サイトを見る</span>
                 </div>
-                <span class="work-link">サイトを見る</span>
-              </div>
-            </a>
-          </li>
-        </ul>
+              </a>
+            </li>
+          </ul>
+        </div>
       </div>
     </section>
 
     <section id="contact" class="contact-band" aria-labelledby="contact-title">
       <div class="shell contact-band-inner">
-        <p class="section-label">Contact</p>
-        <h2 id="contact-title">制作のご相談はお気軽に</h2>
-        <p class="contact-band-lead">サイト制作・UI改善・<span class="text-keep">WordPress</span>構築など、ご依頼やご質問はフォームからどうぞ。</p>
-        <p class="contact-band-lead">内容を確認のうえ、折り返しご連絡します。</p>
+        <div class="reveal-group" data-reveal-group>
+          <p class="section-label" data-reveal>Contact</p>
+          <h2 id="contact-title" data-reveal style="--reveal-delay: 0.08s">制作のご相談はお気軽に</h2>
+          <p class="contact-band-lead" data-reveal style="--reveal-delay: 0.16s">サイト制作・UI改善・<span class="text-keep">WordPress</span>構築など、ご依頼やご質問はフォームからどうぞ。</p>
+          <p class="contact-band-lead" data-reveal style="--reveal-delay: 0.24s">内容を確認のうえ、折り返しご連絡します。</p>
+        </div>
 
         <form class="contact-form" id="contact-form" action="#" method="post" novalidate>
           <div class="contact-form-row">

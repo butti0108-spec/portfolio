@@ -256,14 +256,52 @@ a {
   max-width: 100%;
   min-width: 0;
   overflow: hidden;
+  aspect-ratio: 2752 / 1536;
 }
 
+/* グロー層：同じ虹をぼかして光のにじみを演出 */
 .hero-stage::before {
   content: "";
   grid-area: 1 / 1;
-  display: block;
-  padding-top: calc(1536 / 2752 * 100%);
+  z-index: 1;
   pointer-events: none;
+  background: radial-gradient(
+    ellipse 130% 80% at 50% 108%,
+    transparent 36%,
+    oklch(55% 0.28 20)  42%,
+    oklch(72% 0.22 55)  47%,
+    oklch(90% 0.20 100) 52%,
+    oklch(72% 0.22 148) 57%,
+    oklch(55% 0.25 255) 62%,
+    oklch(45% 0.30 300) 67%,
+    transparent 72%
+  );
+  mix-blend-mode: screen;
+  filter: blur(14px);
+  opacity: 0;
+  clip-path: inset(0 100% 0 0);
+}
+
+/* シャープな虹本体 */
+.hero-stage::after {
+  content: "";
+  grid-area: 1 / 1;
+  z-index: 1;
+  pointer-events: none;
+  background: radial-gradient(
+    ellipse 130% 80% at 50% 108%,
+    transparent 36%,
+    oklch(55% 0.28 20)  40%,
+    oklch(72% 0.22 55)  44%,
+    oklch(90% 0.20 100) 48%,
+    oklch(72% 0.22 148) 52%,
+    oklch(55% 0.25 255) 56%,
+    oklch(45% 0.30 300) 60%,
+    transparent 64%
+  );
+  mix-blend-mode: screen;
+  opacity: 0;
+  clip-path: inset(0 100% 0 0);
 }
 
 .hero-photo {
@@ -285,7 +323,7 @@ a {
 
 .hero-copy {
   grid-area: 1 / 1;
-  z-index: 1;
+  z-index: 2;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -957,6 +995,12 @@ a {
 .accordion-body {
   padding: 0 1.35rem 1.35rem;
   border-top: 1px solid rgba(17, 17, 17, 0.08);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .accordion[open] > .accordion-body {
+    animation: accordionIn 0.38s ease both;
+  }
 }
 
 .offer-lead {
@@ -2285,8 +2329,159 @@ body.lightbox-open {
   to   { opacity: 1; }
 }
 
+@keyframes heroRainbow {
+  0% {
+    opacity: 1;
+    clip-path: inset(0 100% 0 0);
+  }
+  44% {
+    opacity: 1;
+    clip-path: inset(0 0 0 0);
+  }
+  55% {
+    opacity: 1;
+    clip-path: inset(0 0 0 0);
+  }
+  100% {
+    opacity: 0;
+    clip-path: inset(0 0 0 100%);
+  }
+}
+
+@keyframes heroValueRise {
+  from {
+    opacity: 0;
+    transform: translateY(22px) scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+@keyframes accordionIn {
+  from {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes revealUp {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 @media (prefers-reduced-motion: no-preference) {
   .js .hero-copy {
     animation: heroFadeUp 0.7s 0.08s ease both;
+  }
+
+  .js .hero-stage::before,
+  .js .hero-stage::after {
+    animation: heroRainbow 3.5s ease-in-out 0.12s forwards;
+  }
+
+  .js .hero-value-list li {
+    opacity: 0;
+    transform-origin: 50% 80%;
+    animation: heroValueRise 1.15s 3.4s cubic-bezier(0.16, 1, 0.3, 1) both;
+  }
+
+  .has-reveal [data-reveal-group] [data-reveal] {
+    opacity: 0;
+    transform: translateY(18px);
+    transition:
+      opacity 1.05s cubic-bezier(0.22, 1, 0.36, 1),
+      transform 1.05s cubic-bezier(0.22, 1, 0.36, 1);
+    transition-delay: var(--reveal-delay, 0s);
+  }
+
+  .has-reveal [data-reveal-group] [data-reveal="wave"] {
+    transform: translateX(-16px) translateY(8px);
+  }
+
+  .has-reveal [data-reveal-group] [data-reveal="fade"] {
+    transform: translateY(10px);
+  }
+
+  .has-reveal [data-reveal-group] [data-reveal="work"] {
+    transform: translateX(-18px) translateY(8px);
+    transition-duration: 1.15s;
+  }
+
+  .has-reveal [data-reveal-group] [data-reveal="work"] .work-thumb,
+  .has-reveal [data-reveal-group] [data-reveal="work"] .work-tag,
+  .has-reveal [data-reveal-group] [data-reveal="work"] h3,
+  .has-reveal [data-reveal-group] [data-reveal="work"] .work-item-copy,
+  .has-reveal [data-reveal-group] [data-reveal="work"] .work-link {
+    opacity: 0;
+    transform: translateY(10px);
+    transition:
+      opacity 0.9s cubic-bezier(0.22, 1, 0.36, 1),
+      transform 0.9s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .has-reveal [data-reveal-group].is-revealed [data-reveal] {
+    opacity: 1;
+    transform: none;
+  }
+
+  .has-reveal [data-reveal-group].is-revealed [data-reveal="work"] .work-thumb {
+    opacity: 1;
+    transform: none;
+    transition-delay: calc(var(--reveal-delay, 0s) + 0.04s);
+  }
+
+  .has-reveal [data-reveal-group].is-revealed [data-reveal="work"] .work-tag {
+    opacity: 1;
+    transform: none;
+    transition-delay: calc(var(--reveal-delay, 0s) + 0.16s);
+  }
+
+  .has-reveal [data-reveal-group].is-revealed [data-reveal="work"] h3 {
+    opacity: 1;
+    transform: none;
+    transition-delay: calc(var(--reveal-delay, 0s) + 0.28s);
+  }
+
+  .has-reveal [data-reveal-group].is-revealed [data-reveal="work"] .work-item-copy {
+    opacity: 1;
+    transform: none;
+    transition-delay: calc(var(--reveal-delay, 0s) + 0.4s);
+  }
+
+  .has-reveal [data-reveal-group].is-revealed [data-reveal="work"] .work-link {
+    opacity: 1;
+    transform: none;
+    transition-delay: calc(var(--reveal-delay, 0s) + 0.52s);
+  }
+
+  .has-reveal [data-reveal-group].is-instant [data-reveal],
+  .has-reveal [data-reveal-group].is-instant [data-reveal="work"] .work-thumb,
+  .has-reveal [data-reveal-group].is-instant [data-reveal="work"] .work-tag,
+  .has-reveal [data-reveal-group].is-instant [data-reveal="work"] h3,
+  .has-reveal [data-reveal-group].is-instant [data-reveal="work"] .work-item-copy,
+  .has-reveal [data-reveal-group].is-instant [data-reveal="work"] .work-link {
+    transition: none;
+  }
+
+  @media (min-width: 60rem) {
+    .has-reveal [data-reveal-group] [data-reveal] {
+      transition-duration: 1.2s;
+    }
+
+    .has-reveal [data-reveal-group] [data-reveal="work"] {
+      transition-duration: 1.3s;
+    }
   }
 }

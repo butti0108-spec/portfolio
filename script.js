@@ -79,6 +79,54 @@
     openHashTarget(location.hash);
   }
 
+  const reduceMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  const groups = Array.from(document.querySelectorAll("[data-reveal-group]"));
+  if (groups.length && !reduceMotion && "IntersectionObserver" in window) {
+    document.documentElement.classList.add("has-reveal");
+
+    const isDesktop = window.matchMedia("(min-width: 60rem)").matches;
+    const triggerToGroup = new Map();
+    const revealGroup = (group, instant) => {
+      if (group.classList.contains("is-revealed")) return;
+      if (instant) group.classList.add("is-instant");
+      group.classList.add("is-revealed");
+    };
+
+    const io = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting) return;
+          const group = triggerToGroup.get(entry.target);
+          if (!group) return;
+          revealGroup(group, false);
+          io.unobserve(entry.target);
+        });
+      },
+      isDesktop
+        ? { threshold: 0.2, rootMargin: "0px 0px -18% 0px" }
+        : { threshold: 0.08, rootMargin: "0px 0px -4% 0px" }
+    );
+
+    groups.forEach((group) => {
+      const trigger = group.querySelector("[data-reveal-trigger]") || group;
+      triggerToGroup.set(trigger, group);
+      io.observe(trigger);
+    });
+
+    const catchPassedGroups = () => {
+      triggerToGroup.forEach((group, trigger) => {
+        if (group.classList.contains("is-revealed")) return;
+        const rect = trigger.getBoundingClientRect();
+        if (rect.bottom < 0) {
+          revealGroup(group, true);
+          io.unobserve(trigger);
+        }
+      });
+    };
+
+    window.addEventListener("scroll", catchPassedGroups, { passive: true });
+  }
+
   const SKILL_POPUPS = {
     design: {
       title: "Webデザイン",

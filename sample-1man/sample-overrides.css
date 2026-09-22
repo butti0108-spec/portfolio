@@ -7685,24 +7685,22 @@ body.atelier.color-mode-easy .zone-badge[data-open-step="site-fonts"] {
   }
 }
 
-/* 上枠ポップ：画面中央（被ってよい） */
+/* 上枠ポップ：3枠の上にかぶせる（視線を画面中央へ飛ばさない） */
 .sushi-slot-pop {
   position: fixed;
   inset: 0;
   z-index: 78;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 1rem;
+  display: block;
+  padding: 0;
   box-sizing: border-box;
-  background: rgba(18, 24, 30, 0.28);
+  background: rgba(18, 24, 30, 0.22);
   pointer-events: auto;
 }
 .sushi-slot-pop[hidden] {
   display: none !important;
 }
 .sushi-slot-pop-card {
-  position: relative;
+  position: fixed;
   width: min(16rem, calc(100vw - 1.5rem));
   pointer-events: auto;
   background: #fff;
@@ -7712,6 +7710,7 @@ body.atelier.color-mode-easy .zone-badge[data-open-step="site-fonts"] {
   border: 1px solid rgba(20, 28, 36, 0.1);
   display: grid;
   gap: 0.45rem;
+  z-index: 1;
 }
 
 .sushi-slot-pop-title {
@@ -7938,6 +7937,14 @@ body.atelier.color-mode-easy .zone-badge[data-open-step="site-fonts"] {
   place-items: center;
   background: rgba(10, 14, 18, 0.45);
   padding: 1rem;
+}
+
+/* 操作のヒントだけ上端へ（レーンより先に案内を置く） */
+#sushi-guide-modal.sushi-modal {
+  place-items: start center;
+  align-content: start;
+  padding-top: 0.55rem;
+  padding-bottom: 1rem;
 }
 
 .sushi-modal[hidden] { display: none !important; }

@@ -820,6 +820,27 @@
     delete els.slotPop.dataset.slot;
   }
 
+  function placeSlotPopOverStock(anchorEl) {
+    var card = els.slotPop && els.slotPop.querySelector(".sushi-slot-pop-card");
+    var bar = els.stockBar;
+    if (!card || !bar) return;
+    var barR = bar.getBoundingClientRect();
+    var cw = card.offsetWidth || 256;
+    var ch = card.offsetHeight || 180;
+    /* 3枠バンドの中央にかぶせる（クリックした枠があればその列を優先） */
+    var focusR = barR;
+    if (anchorEl && anchorEl.getBoundingClientRect) {
+      var aR = anchorEl.getBoundingClientRect();
+      if (aR.width > 0 && aR.height > 0) focusR = aR;
+    }
+    var left = Math.round(focusR.left + (focusR.width - cw) / 2);
+    var top = Math.round(barR.top + (barR.height - ch) / 2);
+    left = Math.max(8, Math.min(left, window.innerWidth - cw - 8));
+    top = Math.max(8, Math.min(top, window.innerHeight - ch - 8));
+    card.style.left = left + "px";
+    card.style.top = top + "px";
+  }
+
   function openSlotPop(slot, anchorEl) {
     if (!els.slotPop || slot < 0 || !stock[slot]) return;
     selectedStockSlot = slot;
@@ -829,12 +850,11 @@
       btn.setAttribute("data-slot", String(slot));
     });
     renderStock();
-    /* 視線を飛ばさない：画面中央固定（枠の左右に寄せない） */
-    var card = els.slotPop.querySelector(".sushi-slot-pop-card");
-    if (card) {
-      card.style.top = "";
-      card.style.left = "";
-    }
+    /* 視線を飛ばさない：上の3枠の上にかぶせる */
+    placeSlotPopOverStock(anchorEl);
+    requestAnimationFrame(function () {
+      placeSlotPopOverStock(anchorEl);
+    });
   }
 
   function guideSeen() {

@@ -7399,7 +7399,7 @@ body.atelier.color-mode-easy .zone-badge[data-open-step="site-fonts"] {
   min-width: 0;
   display: flex;
   flex-direction: column;
-  gap: 0.55rem;
+  gap: 0.35rem;
   flex: 0 1 auto;
   min-height: 0;
   overflow: visible;
@@ -7423,22 +7423,22 @@ body.atelier.color-mode-easy .zone-badge[data-open-step="site-fonts"] {
   min-height: 0;
 }
 
-/* 寿司ヘッダー：戻る＝左上／操作のヒント＝右上 */
+/* 寿司ヘッダー：戻る＝左上／操作のヒント＝右上（本線より一段小さく） */
 .sushi-chrome {
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: 0.75rem;
-  padding: 0.15rem 0.35rem 0.25rem;
+  padding: 0 0.2rem;
   min-width: 0;
 }
 .sushi-chrome-back,
 .sushi-chrome-hint {
   font: inherit;
-  font-size: 0.92rem;
+  font-size: 1rem;
   font-weight: 650;
   line-height: 1.3;
-  padding: 0.4rem 0.7rem;
+  padding: 0.45rem 0.85rem;
   border-radius: 0.45rem;
   border: 1px solid rgba(20, 28, 36, 0.16);
   background: #fff;
@@ -7453,14 +7453,17 @@ body.atelier.color-mode-easy .zone-badge[data-open-step="site-fonts"] {
   background: #f7f8f7;
 }
 
-/* 上段：左＝①追加／中央＝3枠／右＝←②確定（案内帯を縦積みしない） */
+/*
+  上段本線：目立たせる＝字と番号の大きさ／コントラスト。
+  余白を広げて「空で押す」やり方はしない（隙間取りと混同しない）。
+*/
 .sushi-upper {
   display: grid;
-  grid-template-columns: minmax(7.5rem, 11rem) minmax(0, 1fr) minmax(7.5rem, 11rem);
-  align-items: center;
-  gap: 0.55rem 0.85rem;
+  grid-template-columns: minmax(11rem, 15rem) minmax(0, 1fr) minmax(11rem, 15rem);
+  align-items: end;
+  gap: 0.35rem 0.7rem;
   margin: 0;
-  padding: 0.35rem 0.85rem 0.2rem;
+  padding: 0.1rem 0.45rem 0;
   min-width: 0;
   overflow: visible;
 }
@@ -7468,10 +7471,11 @@ body.atelier.color-mode-easy .zone-badge[data-open-step="site-fonts"] {
 .sushi-upper-left,
 .sushi-upper-right {
   min-width: 0;
-  align-self: center;
+  align-self: end;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: flex-end;
+  padding-bottom: 0.35rem;
 }
 .sushi-upper-left {
   align-items: flex-start;
@@ -7482,35 +7486,37 @@ body.atelier.color-mode-easy .zone-badge[data-open-step="site-fonts"] {
 
 .sushi-flow-guide {
   margin: 0;
-  max-width: 11rem;
-  color: #1a242c;
-  font-size: 0.92rem;
-  font-weight: 750;
-  line-height: 1.35;
+  max-width: none;
+  color: #12181e;
+  font-size: clamp(1.15rem, 1.35vw, 1.4rem);
+  font-weight: 800;
+  line-height: 1.4;
   letter-spacing: 0.01em;
 }
 .sushi-flow-line {
   display: inline-flex;
   align-items: center;
   flex-wrap: wrap;
-  gap: 0.12rem 0.2rem;
+  gap: 0.1rem 0.25rem;
 }
 .sushi-flow-num {
-  font-weight: 850;
+  font-size: 1.2em;
+  font-weight: 900;
   letter-spacing: 0;
+  line-height: 1;
 }
 .sushi-flow-arrow {
   display: block;
-  margin-top: 0.2rem;
-  font-size: 1.15rem;
-  font-weight: 800;
+  margin-top: 0.15rem;
+  font-size: 1.35em;
+  font-weight: 900;
   line-height: 1;
-  color: #2a3640;
+  color: #12181e;
 }
 .sushi-flow-arrow--left {
   display: inline;
-  margin: 0 0.12rem 0 0;
-  font-size: 1.05em;
+  margin: 0 0.15rem 0 0;
+  font-size: 1.15em;
 }
 .sushi-flow-guide--confirm {
   text-align: right;
@@ -7611,25 +7617,25 @@ body.atelier.color-mode-easy .zone-badge[data-open-step="site-fonts"] {
   to { transform: none; opacity: 1; }
 }
 
-.sushi-upper-right {
-  /* grid cell alignment handled above */
-}
-
 @media (max-width: 720px) {
   .sushi-upper {
     grid-template-columns: 1fr 1fr;
     grid-template-areas:
       "add confirm"
       "slots slots";
-    gap: 0.45rem 0.5rem;
-    padding: 0.25rem 0.45rem 0.15rem;
+    gap: 0.35rem 0.45rem;
+    padding: 0.15rem 0.35rem 0.1rem;
   }
   .sushi-upper-left { grid-area: add; }
   .sushi-upper-right { grid-area: confirm; }
   .sushi-upper-center { grid-area: slots; }
   .sushi-flow-guide {
-    max-width: none;
-    font-size: 0.82rem;
+    font-size: 1.08rem;
+  }
+  .sushi-chrome-back,
+  .sushi-chrome-hint {
+    font-size: 0.95rem;
+    padding: 0.4rem 0.7rem;
   }
   .sushi-stock-bar {
     gap: 0.4rem;
@@ -7660,8 +7666,8 @@ body.atelier.color-mode-easy .zone-badge[data-open-step="site-fonts"] {
 }
 .sushi-slot-pop-title {
   margin: 0 0 0.15rem;
-  font-size: 0.98rem;
-  font-weight: 750;
+  font-size: 1.08rem;
+  font-weight: 800;
   color: #12181c;
 }
 .sushi-slot-pop-go,
@@ -7672,26 +7678,30 @@ body.atelier.color-mode-easy .zone-badge[data-open-step="site-fonts"] {
 }
 .sushi-slot-pop-close {
   font: inherit;
-  font-size: 0.88rem;
-  padding: 0.4rem 0.5rem;
+  font-size: 0.95rem;
+  padding: 0.45rem 0.5rem;
   border: 0;
   background: transparent;
   color: #445;
   cursor: pointer;
 }
 
+.sushi-guide-card #sushi-guide-title {
+  font-size: 1.25rem;
+  font-weight: 850;
+}
 .sushi-guide-card .sushi-guide-steps {
   margin: 0 0 0.7rem;
   padding-left: 1.25rem;
-  font-size: 0.92rem;
+  font-size: 1.05rem;
   line-height: 1.55;
-  color: #334;
+  color: #223;
 }
 .sushi-guide-card .sushi-guide-note {
   margin: 0 0 0.85rem;
-  font-size: 0.82rem;
+  font-size: 0.95rem;
   line-height: 1.5;
-  color: #556;
+  color: #445;
 }
 .sushi-guide-actions {
   display: flex;

@@ -7384,10 +7384,10 @@ body.atelier.color-mode-easy .zone-badge[data-open-step="site-fonts"] {
 }
 
 #entry-sushi-field.sushi-shelf {
-  --sushi-tile-w: 260px;
-  --sushi-tile-h: 367px;
-  --sushi-tile-gap: 28px;
-  --sushi-stock-scale: 0.46;
+  --sushi-tile-w: 300px;
+  --sushi-tile-h: 424px;
+  --sushi-tile-gap: 24px;
+  --sushi-stock-scale: 0.5;
   --sushi-stock-tile-w: calc(var(--sushi-tile-w) * var(--sushi-stock-scale));
   --sushi-stock-tile-h: calc(var(--sushi-tile-h) * var(--sushi-stock-scale));
   --sushi-zoom-ms: 680ms;
@@ -7399,7 +7399,7 @@ body.atelier.color-mode-easy .zone-badge[data-open-step="site-fonts"] {
   min-width: 0;
   display: flex;
   flex-direction: column;
-  gap: 0.85rem;
+  gap: 0.55rem;
   flex: 0 1 auto;
   min-height: 0;
   overflow: visible;
@@ -7423,198 +7423,144 @@ body.atelier.color-mode-easy .zone-badge[data-open-step="site-fonts"] {
   min-height: 0;
 }
 
-/* 上段：左＝できること／中央＝候補1・2・3／右＝お好み */
+/* 寿司ヘッダー：戻る＝左上／操作のヒント＝右上 */
+.sushi-chrome {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 0.15rem 0.35rem 0.25rem;
+  min-width: 0;
+}
+.sushi-chrome-back,
+.sushi-chrome-hint {
+  font: inherit;
+  font-size: 0.92rem;
+  font-weight: 650;
+  line-height: 1.3;
+  padding: 0.4rem 0.7rem;
+  border-radius: 0.45rem;
+  border: 1px solid rgba(20, 28, 36, 0.16);
+  background: #fff;
+  color: #1a242c;
+  cursor: pointer;
+}
+.sushi-chrome-back:hover,
+.sushi-chrome-hint:hover,
+.sushi-chrome-back:focus-visible,
+.sushi-chrome-hint:focus-visible {
+  border-color: rgba(20, 28, 36, 0.32);
+  background: #f7f8f7;
+}
+
+/* 上段：左＝①追加／中央＝3枠／右＝←②確定（案内帯を縦積みしない） */
 .sushi-upper {
   display: grid;
-  grid-template-columns: minmax(12.5rem, 16.5rem) minmax(0, 1fr) minmax(7.5rem, 9.5rem);
+  grid-template-columns: minmax(7.5rem, 11rem) minmax(0, 1fr) minmax(7.5rem, 11rem);
   align-items: center;
-  gap: 0.9rem 1.15rem;
+  gap: 0.55rem 0.85rem;
   margin: 0;
-  /* 左右端から内側へ。上下は呼吸を取る */
-  padding: 1.05rem 2.6em 0.65rem;
+  padding: 0.35rem 0.85rem 0.2rem;
   min-width: 0;
   overflow: visible;
 }
 
-.sushi-upper-left {
+.sushi-upper-left,
+.sushi-upper-right {
   min-width: 0;
   align-self: center;
   display: flex;
   flex-direction: column;
   justify-content: center;
 }
-
-.sushi-guide {
-  margin: 0;
-  max-width: 16.5rem;
-  color: #3a4650;
-}
-.sushi-guide-title {
-  margin: 0 0 0.45rem;
-  font-size: 1.12rem;
-  font-weight: 800;
-  letter-spacing: 0.02em;
-  line-height: 1.3;
-  color: #12181c;
-  white-space: nowrap;
-}
-.sushi-guide-lead {
-  margin: 0 0 0.95rem;
-  font-size: 0.78rem;
-  font-weight: 400;
-  line-height: 1.45;
-  color: #5a6570;
-}
-.sushi-guide-item {
-  position: relative;
-  display: block;
-  width: 100%;
-  box-sizing: border-box;
-  margin: 0 0 0.9rem;
-  padding-right: 0;
-}
-.sushi-guide-item:last-of-type {
-  margin-bottom: 0;
-}
-.sushi-guide-head {
-  display: inline-flex;
+.sushi-upper-left {
   align-items: flex-start;
-  flex-wrap: wrap;
-  gap: 0;
-  max-width: 100%;
-  min-width: 0;
 }
-.sushi-guide-kicker {
-  position: relative;
+.sushi-upper-right {
+  align-items: flex-end;
+}
+
+.sushi-flow-guide {
   margin: 0;
-  padding-left: 0.95em;
-  font-size: 0.95rem;
-  font-weight: 700;
-  line-height: 1.4;
+  max-width: 11rem;
   color: #1a242c;
+  font-size: 0.92rem;
+  font-weight: 750;
+  line-height: 1.35;
+  letter-spacing: 0.01em;
 }
-.sushi-guide-kicker::before {
-  content: "・";
-  position: absolute;
-  left: 0;
-  top: 0;
-  font-weight: 800;
-  color: #1a242c;
-}
-/* 項目名の文末に半角スペース相当で？をくっつける（列右端に浮かさない） */
-.sushi-guide-item .sushi-guide-tip.hub-tip-wrap {
-  position: relative;
-  top: 0.08em;
-  right: auto;
-  margin-left: 0.25em;
+.sushi-flow-line {
   display: inline-flex;
-  flex: 0 0 auto;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.12rem 0.2rem;
 }
-.sushi-guide-item .sushi-guide-tip .hub-tip-btn {
-  top: 0;
+.sushi-flow-num {
+  font-weight: 850;
+  letter-spacing: 0;
 }
-.sushi-guide .hub-tip-pop {
-  left: 0;
-  right: auto;
-  top: calc(100% + 0.35rem);
-  bottom: auto;
-  z-index: 30;
-  max-width: min(14.5rem, 72vw);
+.sushi-flow-arrow {
+  display: block;
+  margin-top: 0.2rem;
+  font-size: 1.15rem;
+  font-weight: 800;
+  line-height: 1;
+  color: #2a3640;
 }
-.sushi-guide-body {
-  margin: 0;
-  font-size: 0.76rem;
-  font-weight: 400;
-  line-height: 1.45;
-  color: #5a6570;
-}
-.sushi-guide-foot {
-  margin: 0.95rem 0 0;
-  font-size: 0.78rem;
-  line-height: 1.4;
-}
-.sushi-rechoose-path {
+.sushi-flow-arrow--left {
   display: inline;
-  margin: 0;
-  padding: 0;
-  border: 0;
-  background: none;
-  box-shadow: none;
-  color: #1f4f78;
-  font: inherit;
-  font-size: inherit;
-  line-height: inherit;
-  text-decoration: underline;
-  text-underline-offset: 0.15em;
-  cursor: pointer;
+  margin: 0 0.12rem 0 0;
+  font-size: 1.05em;
 }
-.sushi-rechoose-path:hover,
-.sushi-rechoose-path:focus-visible {
-  color: #163a58;
+.sushi-flow-guide--confirm {
+  text-align: right;
+}
+.sushi-flow-guide--confirm .sushi-flow-line {
+  justify-content: flex-end;
 }
 
 .sushi-upper-center {
   min-width: 0;
   display: flex;
   justify-content: center;
-  align-items: center;
 }
 
 .sushi-stock-bar {
   display: flex;
   justify-content: center;
-  align-items: flex-start;
-  flex-wrap: nowrap;
-  gap: 2.6rem;
-  margin: 0;
-  padding: 0;
-  border: 0;
-  background: transparent;
-  max-width: 100%;
+  align-items: stretch;
+  gap: 0.55rem;
   min-width: 0;
-  overflow-x: auto;
+  margin: 0;
 }
 
 .sushi-stock-col {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 0.3rem;
-  flex: 0 0 auto;
+  gap: 0;
+  min-width: 0;
 }
 .sushi-stock-col.is-selected .sushi-stock-slot {
-  outline: 2px solid #3d8a48;
-  outline-offset: 1px;
+  outline: 2px solid #2f7d4a;
+  outline-offset: 2px;
 }
-
-.sushi-stock-num {
-  display: block;
-  margin: 0;
-  padding: 0;
-  border: 0;
-  background: transparent;
-  box-shadow: none;
-  font-size: 1.22rem;
-  font-weight: 700;
-  line-height: 1;
-  letter-spacing: 0.02em;
-  text-align: center;
-  color: #1a242c;
-  pointer-events: none;
+.sushi-stock-num,
+.sushi-stock-confirm-row,
+.sushi-decide-head,
+.sushi-decide-btn,
+.sushi-guide,
+.sushi-rechoose-path {
+  display: none !important;
 }
 
 .sushi-stock-slot {
   position: relative;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  /* 枠＝縮小タイルと同寸。入ったあとはレーン縮小がそのまま収まる */
   width: var(--sushi-stock-tile-w);
   height: var(--sushi-stock-tile-h);
-  min-height: var(--sushi-stock-tile-h);
-  border-radius: 0.45rem;
+  border-radius: 0.55rem;
+  border: 1px dashed rgba(20, 28, 36, 0.22);
   background: rgba(255, 255, 255, 0.72);
-  border: 1px dashed rgba(20, 28, 36, 0.16);
   padding: 0;
   box-sizing: border-box;
   overflow: hidden;
@@ -7622,17 +7568,13 @@ body.atelier.color-mode-easy .zone-badge[data-open-step="site-fonts"] {
   transition: transform var(--sushi-stock-in-ms) ease, opacity var(--sushi-stock-out-ms) ease;
 }
 .sushi-stock-slot.is-empty::after {
-  content: "候補";
-  font-size: 0.72rem;
-  font-weight: 600;
-  letter-spacing: 0.06em;
-  color: #8a939c;
-  pointer-events: none;
+  content: none !important;
+  display: none !important;
 }
 .sushi-stock-slot.is-filled {
-  /* 二重枠・枠線ぶんのすき間を消し、中のタイルだけが見える */
   background: transparent;
   border: none;
+  cursor: pointer;
 }
 .sushi-stock-slot .sushi-tile {
   position: absolute;
@@ -7645,7 +7587,6 @@ body.atelier.color-mode-easy .zone-badge[data-open-step="site-fonts"] {
 .sushi-stock-slot .sushi-tile--stock .sushi-tile-label {
   display: none !important;
 }
-/* ラベルを消した分、写真を枠いっぱいに */
 .sushi-stock-slot .sushi-tile--stock .sushi-tile-clip {
   inset: 0;
 }
@@ -7660,10 +7601,9 @@ body.atelier.color-mode-easy .zone-badge[data-open-step="site-fonts"] {
 .sushi-stock-slot.is-stock-in {
   animation: sushi-stock-in var(--sushi-stock-in-ms) ease;
 }
-
 .sushi-stock-slot.is-stock-out {
-  opacity: 0.35;
-  transform: translateY(8px);
+  opacity: 0;
+  transform: scale(0.92);
 }
 
 @keyframes sushi-stock-in {
@@ -7672,149 +7612,97 @@ body.atelier.color-mode-easy .zone-badge[data-open-step="site-fonts"] {
 }
 
 .sushi-upper-right {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 0.4rem;
-  padding: 0;
-  flex: 0 0 auto;
-  min-width: 0;
-  align-self: center;
-  text-align: center;
-  overflow: visible;
-}
-.sushi-decide-head {
-  position: relative;
-  display: inline-flex;
-  align-items: flex-start;
-  justify-content: center;
-  gap: 0;
-  max-width: 100%;
-  box-sizing: border-box;
-  text-align: center;
-  overflow: visible;
-}
-.sushi-decide-label {
-  margin: 0;
-  font-size: 1.02rem;
-  font-weight: 800;
-  letter-spacing: 0.02em;
-  line-height: 1.3;
-  color: #12181c;
-  white-space: normal;
-  max-width: 8.5rem;
-  text-align: center;
-}
-.sushi-upper-right .sushi-decide-tip.hub-tip-wrap {
-  position: relative;
-  top: 0.08em;
-  right: auto;
-  margin-left: 0.25em;
-  display: inline-flex;
-  flex: 0 0 auto;
-}
-.sushi-upper-right .sushi-decide-tip .hub-tip-btn {
-  top: 0;
-}
-.sushi-upper-right .hub-tip-pop {
-  left: auto;
-  right: 0;
-  top: calc(100% + 0.35rem);
-  bottom: auto;
-  transform: none;
-  z-index: 40;
-  width: max-content;
-  max-width: min(12.5rem, calc(100vw - 2rem));
-  text-align: left;
-}
-.sushi-decide-hint {
-  margin: 0.35rem 0 0;
-  max-width: 11rem;
-  font-size: 0.78rem;
-  font-weight: 500;
-  line-height: 1.45;
-  color: #4a5560;
-  text-align: center;
-}
-.sushi-stock-confirm-row {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-wrap: nowrap;
-  gap: 0.45rem;
-  margin-top: 0.1rem;
-}
-.sushi-decide-btn {
-  width: 2.55rem;
-  height: 2.55rem;
-  min-width: 2.55rem;
-  padding: 0;
-  border-radius: 0.5rem;
-  border: 1px solid rgba(20, 28, 36, 0.22);
-  background: #fff;
-  box-shadow: 0 2px 8px rgba(20, 28, 36, 0.07);
-  font-size: 1.15rem;
-  font-weight: 700;
-  line-height: 1;
-  color: #1a242c;
-  cursor: pointer;
-}
-.sushi-decide-btn.is-ready {
-  border-color: rgba(40, 90, 50, 0.45);
-  background: #fff;
-  box-shadow: 0 3px 12px rgba(40, 90, 50, 0.14);
-  color: #16301c;
-}
-.sushi-decide-btn.is-ready:hover,
-.sushi-decide-btn.is-ready:focus-visible {
-  border-color: rgba(40, 90, 50, 0.65);
-  outline: 2px solid rgba(61, 138, 72, 0.35);
-  outline-offset: 1px;
-}
-.sushi-decide-btn:disabled {
-  opacity: 0.55;
-  cursor: not-allowed;
-  box-shadow: none;
-  color: #6a7680;
-  background: rgba(255, 255, 255, 0.7);
+  /* grid cell alignment handled above */
 }
 
-.sushi-stock-slot .sushi-tile-btn {
-  width: 1.45rem;
-  height: 1.45rem;
-  font-size: 0.7rem;
-}
-
-@media (max-width: 820px) {
+@media (max-width: 720px) {
   .sushi-upper {
-    grid-template-columns: 1fr;
-    gap: 1rem;
-    padding: 1rem 1.2em 0.75rem;
+    grid-template-columns: 1fr 1fr;
+    grid-template-areas:
+      "add confirm"
+      "slots slots";
+    gap: 0.45rem 0.5rem;
+    padding: 0.25rem 0.45rem 0.15rem;
   }
-  .sushi-upper-left,
-  .sushi-upper-center,
-  .sushi-upper-right {
-    width: 100%;
-  }
-  .sushi-guide {
+  .sushi-upper-left { grid-area: add; }
+  .sushi-upper-right { grid-area: confirm; }
+  .sushi-upper-center { grid-area: slots; }
+  .sushi-flow-guide {
     max-width: none;
-  }
-  .sushi-guide-title {
-    white-space: nowrap;
-    font-size: 1.08rem;
-  }
-  .sushi-upper-right {
-    flex-direction: row;
-    flex-wrap: wrap;
-    justify-content: flex-start;
-    gap: 0.55rem 0.85rem;
+    font-size: 0.82rem;
   }
   .sushi-stock-bar {
-    justify-content: flex-start;
-    gap: 0.85rem;
+    gap: 0.4rem;
   }
 }
+
+/* 上枠ポップ（進む／外す／閉じる） */
+.sushi-slot-pop {
+  position: fixed;
+  inset: 0;
+  z-index: 78;
+  pointer-events: none;
+}
+.sushi-slot-pop[hidden] {
+  display: none !important;
+}
+.sushi-slot-pop-card {
+  position: fixed;
+  width: min(15.5rem, calc(100vw - 1.5rem));
+  pointer-events: auto;
+  background: #fff;
+  border-radius: 0.7rem;
+  padding: 0.85rem 0.9rem 0.75rem;
+  box-shadow: 0 14px 36px rgba(20, 28, 36, 0.22);
+  border: 1px solid rgba(20, 28, 36, 0.1);
+  display: grid;
+  gap: 0.45rem;
+}
+.sushi-slot-pop-title {
+  margin: 0 0 0.15rem;
+  font-size: 0.98rem;
+  font-weight: 750;
+  color: #12181c;
+}
+.sushi-slot-pop-go,
+.sushi-slot-pop-remove,
+.sushi-slot-pop-close {
+  width: 100%;
+  justify-self: stretch;
+}
+.sushi-slot-pop-close {
+  font: inherit;
+  font-size: 0.88rem;
+  padding: 0.4rem 0.5rem;
+  border: 0;
+  background: transparent;
+  color: #445;
+  cursor: pointer;
+}
+
+.sushi-guide-card .sushi-guide-steps {
+  margin: 0 0 0.7rem;
+  padding-left: 1.25rem;
+  font-size: 0.92rem;
+  line-height: 1.55;
+  color: #334;
+}
+.sushi-guide-card .sushi-guide-note {
+  margin: 0 0 0.85rem;
+  font-size: 0.82rem;
+  line-height: 1.5;
+  color: #556;
+}
+.sushi-guide-actions {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.sushi-tile-btn--up,
+.sushi-tile-btn--down {
+  display: none !important;
+}
+
 .sushi-lane-wrap {
   position: relative;
   margin: 0;
@@ -8127,7 +8015,7 @@ body.atelier.color-mode-easy .zone-badge[data-open-step="site-fonts"] {
   cursor: pointer;
 }
 
-/* 旧チュートリアル／？は撤去済み（残骸スタイルは非表示） */
+/* 旧チュートリアル残骸：ガイドモーダルは .sushi-modal を使用 */
 .sushi-tutorial {
   display: none !important;
 }

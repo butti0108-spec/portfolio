@@ -5,10 +5,10 @@
 (function (global) {
   "use strict";
 
-  /* 本番タイル寸法（文言短縮後の余白をレーンへ寄せて一段大きく） */
-  var TILE_W = 260;
-  var TILE_H = 367;
-  var TILE_GAP = 28;
+  /* 本番タイル寸法（↑↓・番号行を消しレーンへ寄せて拡大） */
+  var TILE_W = 300;
+  var TILE_H = 424;
+  var TILE_GAP = 24;
   var SITE_DESIGN_W = 1200;
   var SPEED_PX_S = 36;
   var MS_STOCK_IN = 360;
@@ -16,6 +16,8 @@
   var MS_ZOOM = 680;
   var MAX_STOCK = 3;
   var TOUCH_PAUSE_MS = 3000;
+  var CLICK_DEAD_PX = 8;
+  var GUIDE_LS_KEY = "sample1man-sushi-guide-v1";
 
   function isFineHoverPointer() {
     return (
@@ -148,12 +150,14 @@
   function bindEls() {
     els.root = $("entry-sushi-field");
     els.stockBar = $("sushi-stock-bar");
-    els.stockConfirmRow = $("sushi-stock-confirm-row");
     els.lane = $("sushi-lane");
     els.track = $("sushi-lane-track");
     els.replace = $("sushi-replace-modal");
     els.zoomLayer = $("sushi-zoom-layer");
     els.zoomInner = $("sushi-zoom-inner");
+    els.slotPop = $("sushi-slot-pop");
+    els.guideModal = $("sushi-guide-modal");
+    els.hintOpen = $("sushi-hint-open");
   }
 
   function tileHtml(sample, opts) {
@@ -187,13 +191,6 @@
       TILE_W +
       '" decoding="async" loading="eager" fetchpriority="low">' +
       "</div>" +
-      (opts.stock
-        ? '<button type="button" class="sushi-tile-btn sushi-tile-btn--down" data-sushi-act="unstock" data-slot="' +
-          opts.slot +
-          '" title="候補から外す" aria-label="候補から外す">↓</button>'
-        : '<button type="button" class="sushi-tile-btn sushi-tile-btn--up" data-sushi-act="stock" data-id="' +
-          escapeAttr(sample.id) +
-          '" title="候補に残す" aria-label="候補に残す">↑</button>') +
       '<button type="button" class="sushi-tile-btn sushi-tile-btn--zoom" data-sushi-act="zoom" data-id="' +
       escapeAttr(sample.id) +
       '" title="大きく見てみる" aria-label="大きく見てみる">🔍</button>' +
@@ -208,10 +205,8 @@
   function renderStock() {
     if (!els.stockBar) return;
     var html = "";
-    var confirmHtml = "";
     for (var i = 0; i < MAX_STOCK; i++) {
       var s = stock[i];
-      var n = i + 1;
       var sel = selectedStockSlot === i ? " is-selected" : "";
       if (s) {
         html +=
@@ -220,58 +215,20 @@
           '" data-stock-slot="' +
           i +
           '">' +
-          '<span class="sushi-stock-num" aria-hidden="true">' +
-          n +
-          "</span>" +
-          '<div class="sushi-stock-slot is-filled" aria-label="候補' +
-          n +
-          '">' +
+          '<div class="sushi-stock-slot is-filled" aria-label="上の枠の見本">' +
           tileHtml(s, { stock: true, slot: i }) +
           "</div></div>";
-        confirmHtml +=
-          '<button type="button" class="sushi-decide-btn is-ready" data-sushi-act="confirm" data-slot="' +
-          i +
-          '" aria-label="候補' +
-          n +
-          'を選ぶ">' +
-          n +
-          "</button>";
       } else {
         html +=
           '<div class="sushi-stock-col" data-stock-slot="' +
           i +
           '">' +
-          '<span class="sushi-stock-num" aria-hidden="true">' +
-          n +
-          "</span>" +
-          '<div class="sushi-stock-slot is-empty" aria-label="候補' +
-          n +
-          '（まだありません）"></div></div>';
-        confirmHtml +=
-          '<button type="button" class="sushi-decide-btn" data-sushi-act="confirm" data-slot="' +
-          i +
-          '" disabled aria-disabled="true" aria-label="候補' +
-          n +
-          '（まだありません）">' +
-          n +
-          "</button>";
+          '<div class="sushi-stock-slot is-empty" aria-label="空き枠"></div></div>';
       }
     }
     els.stockBar.innerHTML = html;
     els.stockBar.style.setProperty("--sushi-tile-w", TILE_W + "px");
     els.stockBar.style.setProperty("--sushi-tile-h", TILE_H + "px");
-    if (els.stockConfirmRow) els.stockConfirmRow.innerHTML = confirmHtml;
-    var hint = $("sushi-decide-hint");
-    if (hint) {
-      var n = stockCount();
-      if (n < 1) {
-        hint.textContent = "まだ候補がありません。レーンの「↑」で候補に残せます。";
-      } else if (n >= MAX_STOCK) {
-        hint.textContent = "候補は3つまでです。右の番号で進められます。さらに残すときは入れ替え先を選べます。";
-      } else {
-        hint.textContent = "右の番号を押すと、その候補で次へ進めます。";
-      }
-    }
   }
 
   function fallbackLoopWidth() {
@@ -469,7 +426,7 @@
       btn.className = "sushi-replace-choice";
       btn.setAttribute("data-replace-slot", String(i));
       btn.textContent =
-        "候補" +
+        "上の枠" +
         (i + 1) +
         "と入れ替え：No." +
         (s ? s.id + " " + (s.brand || "") : "（空）");
@@ -783,13 +740,21 @@
     var startX = 0;
     var startOffset = 0;
     var lastPointerEv = null;
+    var downOnTile = null;
 
-    function onDown(clientX) {
+    function onDown(clientX, ev) {
       if (isZoomed) return;
       isDragging = true;
       dragMoved = false;
       startX = clientX;
       startOffset = offsetX;
+      downOnTile = null;
+      if (ev && ev.target && ev.target.closest) {
+        var tile = ev.target.closest(".sushi-lane .sushi-tile");
+        if (tile && !ev.target.closest("button")) {
+          downOnTile = tile.getAttribute("data-sample-id");
+        }
+      }
       els.lane.classList.add("is-dragging");
       clearTouchPause();
     }
@@ -797,17 +762,23 @@
     function onMove(clientX) {
       if (!isDragging) return;
       var dx = clientX - startX;
-      if (Math.abs(dx) > 4) dragMoved = true;
+      if (Math.abs(dx) > CLICK_DEAD_PX) dragMoved = true;
       offsetX = startOffset - dx;
       offsetX = normalizeLoopOffset(offsetX);
       applyTrackTransform();
     }
 
-    function onUp() {
+    function onUp(ev) {
       if (!isDragging) return;
       isDragging = false;
       els.lane.classList.remove("is-dragging");
-      if (!dragMoved && shouldArmTouchPause(lastPointerEv)) {
+      if (!dragMoved && downOnTile) {
+        addToStock(findSample(downOnTile));
+        downOnTile = null;
+        return;
+      }
+      downOnTile = null;
+      if (!dragMoved && shouldArmTouchPause(lastPointerEv || ev)) {
         armTouchPause();
       }
     }
@@ -820,7 +791,7 @@
       } catch (err) {
         /* synthetic / unsupported capture */
       }
-      onDown(ev.clientX);
+      onDown(ev.clientX, ev);
     });
     els.lane.addEventListener("pointermove", function (ev) {
       lastPointerEv = ev;
@@ -828,7 +799,7 @@
     });
     els.lane.addEventListener("pointerup", function (ev) {
       lastPointerEv = ev;
-      onUp();
+      onUp(ev);
     });
     els.lane.addEventListener("pointercancel", onUp);
     els.lane.addEventListener(
@@ -843,9 +814,73 @@
     );
   }
 
+  function closeSlotPop() {
+    if (!els.slotPop) return;
+    els.slotPop.hidden = true;
+    delete els.slotPop.dataset.slot;
+  }
+
+  function openSlotPop(slot, anchorEl) {
+    if (!els.slotPop || slot < 0 || !stock[slot]) return;
+    selectedStockSlot = slot;
+    els.slotPop.hidden = false;
+    els.slotPop.dataset.slot = String(slot);
+    els.slotPop.querySelectorAll("[data-slot]").forEach(function (btn) {
+      btn.setAttribute("data-slot", String(slot));
+    });
+    renderStock();
+    if (anchorEl && els.slotPop) {
+      var card = els.slotPop.querySelector(".sushi-slot-pop-card");
+      var rect = anchorEl.getBoundingClientRect();
+      if (card) {
+        var top = Math.min(window.innerHeight - 220, Math.max(12, rect.bottom + 8));
+        var left = Math.min(window.innerWidth - 260, Math.max(12, rect.left + rect.width / 2 - 120));
+        card.style.top = top + "px";
+        card.style.left = left + "px";
+      }
+    }
+  }
+
+  function guideSeen() {
+    try {
+      return localStorage.getItem(GUIDE_LS_KEY) === "1";
+    } catch (e) {
+      return false;
+    }
+  }
+
+  function markGuideSeen() {
+    try {
+      localStorage.setItem(GUIDE_LS_KEY, "1");
+    } catch (e) {
+      /* ignore */
+    }
+  }
+
+  function openGuideModal() {
+    if (!els.guideModal) return;
+    els.guideModal.hidden = false;
+  }
+
+  function closeGuideModal(persist) {
+    if (!els.guideModal) return;
+    els.guideModal.hidden = true;
+    if (persist) markGuideSeen();
+  }
+
+  function maybeShowFirstGuide() {
+    if (!guideSeen()) openGuideModal();
+  }
+
   function onRootClick(ev) {
     var t = ev.target;
     if (!t || !t.closest) return;
+
+    if (t.closest("[data-sushi-guide-close]")) {
+      ev.preventDefault();
+      closeGuideModal(true);
+      return;
+    }
 
     var actBtn = t.closest("[data-sushi-act]");
     if (actBtn) {
@@ -857,20 +892,23 @@
       }
       if (act === "unstock") {
         ev.preventDefault();
-        var slot = Number(actBtn.getAttribute("data-slot"));
-        var slotEl = actBtn.closest(".sushi-stock-slot");
+        var slotU = Number(actBtn.getAttribute("data-slot"));
+        closeSlotPop();
+        var slotEl = actBtn.closest(".sushi-stock-slot") ||
+          (els.stockBar && els.stockBar.querySelector('[data-stock-slot="' + slotU + '"] .sushi-stock-slot'));
         if (slotEl) {
           slotEl.classList.add("is-stock-out");
           window.setTimeout(function () {
-            unstock(slot);
+            unstock(slotU);
           }, MS_STOCK_OUT);
         } else {
-          unstock(slot);
+          unstock(slotU);
         }
         return;
       }
       if (act === "zoom") {
         ev.preventDefault();
+        closeSlotPop();
         openZoom(findSample(actBtn.getAttribute("data-id")));
         return;
       }
@@ -881,7 +919,13 @@
       }
       if (act === "confirm") {
         ev.preventDefault();
+        closeSlotPop();
         confirmPick(Number(actBtn.getAttribute("data-slot")));
+        return;
+      }
+      if (act === "slot-pop-close") {
+        ev.preventDefault();
+        closeSlotPop();
         return;
       }
     }
@@ -911,8 +955,13 @@
       stockCol.querySelector(".sushi-stock-slot.is-filled") &&
       !t.closest("button")
     ) {
-      selectedStockSlot = Number(stockCol.getAttribute("data-stock-slot"));
-      renderStock();
+      ev.preventDefault();
+      openSlotPop(Number(stockCol.getAttribute("data-stock-slot")), stockCol);
+      return;
+    }
+
+    if (els.slotPop && !els.slotPop.hidden && !t.closest(".sushi-slot-pop-card")) {
+      closeSlotPop();
     }
   }
 
@@ -934,13 +983,14 @@
     }
     if (!sample) {
       window.alert(
-        "まだ候補がありません。気になるサンプルで「↑」を押すと、ここに残せます。"
+        "まだ上の枠にサンプルがありません。下のサンプルを短くクリックすると、ここに入れられます。"
       );
       return;
     }
     if (!onConfirm) return;
     stopRaf();
     closeZoom();
+    closeSlotPop();
     var draft = await fetchDraft(sample);
     onConfirm({ sample: sample, draft: draft });
   }
@@ -951,13 +1001,19 @@
       window.__sushiEmbedReadyBound = true;
       window.addEventListener("message", onEmbedReadyMessage);
     }
-    if (!els.root || els.root.dataset.sushiBound === "2") return;
-    els.root.dataset.sushiBound = "2";
+    if (!els.root || els.root.dataset.sushiBound === "3") return;
+    els.root.dataset.sushiBound = "3";
     els.root.addEventListener("click", onRootClick);
 
     if (els.zoomLayer) {
       els.zoomLayer.addEventListener("click", function (ev) {
         if (ev.target === els.zoomLayer) closeZoom();
+      });
+    }
+    if (els.hintOpen && !els.hintOpen.dataset.bound) {
+      els.hintOpen.dataset.bound = "1";
+      els.hintOpen.addEventListener("click", function () {
+        openGuideModal();
       });
     }
     setupDrag();
@@ -1014,6 +1070,7 @@
     }
     hideBootLoading();
     startRaf();
+    maybeShowFirstGuide();
   }
 
   function unmount() {
@@ -1021,6 +1078,8 @@
     stopRaf();
     closeZoom();
     closeReplaceModal();
+    closeSlotPop();
+    closeGuideModal(false);
     isPlaying = false;
     hoverPaused = false;
     clearTouchPause();

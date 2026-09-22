@@ -12,7 +12,7 @@
   <!-- メーカー親CSS（ポートフォリオ根の style.css は読まない） -->
   <link rel="stylesheet" href="maker-base.css?v=cleanup-20260922">
   <link rel="icon" href="brand/mark-favicon.png?v=logo-7" type="image/png">
-  <link rel="stylesheet" href="sample-overrides.css?v=cleanup-20260922">
+  <link rel="stylesheet" href="sample-overrides.css?v=sushi-ui-20260922">
   <link rel="stylesheet" href="free-photo-gallery/gallery.css?v=cleanup-20260922">
   <script>
     (function () {
@@ -36,7 +36,7 @@
   <script src="vibe-dict.js" defer></script>
   <script src="easy-copy-dict.js?v=cleanup-20260922" defer></script>
   <script src="copy-dict-engine.js?v=cleanup-20260922" defer></script>
-  <script src="sushi-belt.js?v=cleanup-20260922" defer></script>
+  <script src="sushi-belt.js?v=sushi-ui-20260922" defer></script>
   <script src="free-photo-gallery/gallery.js?v=cleanup-20260922" defer></script>
   <script src="script.js?v=cleanup-20260922" defer></script>
   <script>
@@ -208,78 +208,61 @@
             <p id="sushi-boot-loading-msg" class="sushi-boot-loading-msg">ただいまサンプルをレーンに流しています…</p>
           </div>
         </div>
+        <div class="sushi-chrome">
+          <button type="button" class="sushi-chrome-back" data-entry-step-back>← ひとつ戻る</button>
+          <button type="button" class="sushi-chrome-hint" id="sushi-hint-open" aria-haspopup="dialog">操作のヒント</button>
+        </div>
         <div class="sushi-upper">
           <div class="sushi-upper-left">
-            <div class="sushi-guide">
-              <p class="sushi-guide-title">こんなことができます</p>
-              <p class="sushi-guide-lead">流れはかんたんです。まず候補に残して、右の番号で進めます。</p>
-              <div class="sushi-guide-item">
-                <div class="sushi-guide-head">
-                  <p class="sushi-guide-kicker">気になるサンプルを見つける</p>
-                  <span class="hub-tip-wrap sushi-guide-tip">
-                    <button type="button" class="hub-tip-btn" data-hub-tip aria-expanded="false" aria-label="気になるサンプルを見つけるの説明">?</button>
-                    <span class="hub-tip-pop" hidden role="tooltip">
-                      パソコンではサンプルにマウスを合わせると、流れが止まります。スマートフォンでは、サンプルを軽くタップするとしばらく止まります。ゆっくり探せます。
-                    </span>
-                  </span>
-                </div>
-              </div>
-              <div class="sushi-guide-item">
-                <div class="sushi-guide-head">
-                  <p class="sushi-guide-kicker">大きく見てみる</p>
-                  <span class="hub-tip-wrap sushi-guide-tip">
-                    <button type="button" class="hub-tip-btn" data-hub-tip aria-expanded="false" aria-label="大きく見てみるの説明">?</button>
-                    <span class="hub-tip-pop" hidden role="tooltip">
-                      各サンプルの虫眼鏡を押すと、大きな画面で全体をゆっくり見られます。雰囲気を確かめたいときに使えます。まだ決定にはなりません。
-                    </span>
-                  </span>
-                </div>
-              </div>
-              <div class="sushi-guide-item">
-                <div class="sushi-guide-head">
-                  <p class="sushi-guide-kicker">候補に残す（↑）</p>
-                  <span class="hub-tip-wrap sushi-guide-tip">
-                    <button type="button" class="hub-tip-btn" data-hub-tip aria-expanded="false" aria-label="候補に残すの説明">?</button>
-                    <span class="hub-tip-pop" hidden role="tooltip">
-                      レーン上の「↑」を押すと、中央の1・2・3へ候補として残せます。枠の「↓」で外せます。サンプルを押しただけでは進みません。
-                    </span>
-                  </span>
-                </div>
-              </div>
-              <p class="sushi-guide-foot">
-                <button type="button" class="sushi-rechoose-path" data-entry-step-back>進め方を選び直す</button>
-              </p>
-            </div>
+            <p class="sushi-flow-guide sushi-flow-guide--add">
+              <span class="sushi-flow-line"><span class="sushi-flow-num" aria-hidden="true">①</span>クリックしてサンプル追加</span>
+              <span class="sushi-flow-arrow sushi-flow-arrow--down" aria-hidden="true">↓</span>
+            </p>
           </div>
           <div class="sushi-upper-center">
-            <div class="sushi-stock-bar" id="sushi-stock-bar" aria-label="候補として残したサンプル（最大3）"></div>
+            <div class="sushi-stock-bar" id="sushi-stock-bar" aria-label="上の枠（最大3）"></div>
           </div>
           <div class="sushi-upper-right">
-            <div class="sushi-decide-head">
-              <p class="sushi-decide-label">候補から進む番号はどれですか</p>
-              <p class="sushi-decide-hint" id="sushi-decide-hint">右の番号を押すと、その候補で次へ進めます。</p>
-              <span class="hub-tip-wrap sushi-decide-tip">
-                <button type="button" class="hub-tip-btn" data-hub-tip aria-expanded="false" aria-label="候補から進む番号の説明">?</button>
-                <span class="hub-tip-pop" hidden role="tooltip">
-                  中央に残した候補のうち、これから使うサンプルを右の番号で選べます。空の番号はまだ押せません。3枠がいっぱいのときは、新しい「↑」で入れ替え先を選べます。
-                </span>
-              </span>
-            </div>
-            <div class="sushi-stock-confirm-row" id="sushi-stock-confirm-row" role="group" aria-label="候補の番号から進む"></div>
+            <p class="sushi-flow-guide sushi-flow-guide--confirm">
+              <span class="sushi-flow-line"><span class="sushi-flow-arrow sushi-flow-arrow--left" aria-hidden="true">←</span><span class="sushi-flow-num" aria-hidden="true">②</span>クリックして確定</span>
+            </p>
           </div>
         </div>
         <div class="sushi-lane-wrap">
-          <div class="sushi-lane" id="sushi-lane" aria-label="サンプルの列（横にドラッグできます）">
+          <div class="sushi-lane" id="sushi-lane" aria-label="サンプルの列（短くクリックで上の枠へ。ドラッグで送れます）">
             <div class="sushi-lane-track" id="sushi-lane-track"></div>
+          </div>
+        </div>
+
+        <div id="sushi-slot-pop" class="sushi-slot-pop" hidden>
+          <div class="sushi-slot-pop-card" role="dialog" aria-labelledby="sushi-slot-pop-title">
+            <p id="sushi-slot-pop-title" class="sushi-slot-pop-title">この見本で進めますか</p>
+            <button type="button" class="btn btn-primary sushi-slot-pop-go" data-sushi-act="confirm" data-slot="">この見本で進む</button>
+            <button type="button" class="gct-btn sushi-slot-pop-remove" data-sushi-act="unstock" data-slot="">候補から外す</button>
+            <button type="button" class="sushi-slot-pop-close" data-sushi-act="slot-pop-close">▼ 閉じる</button>
           </div>
         </div>
 
         <div id="sushi-replace-modal" class="sushi-modal" hidden>
           <div class="sushi-modal-card" role="dialog" aria-labelledby="sushi-replace-title">
             <h2 id="sushi-replace-title">どれと入れ替えますか？</h2>
-            <p class="sushi-modal-note">候補は3つまでです。入れ替える番号を選ぶと、新しいサンプルに差し替わります。</p>
+            <p class="sushi-modal-note">上の枠は3つまでです。入れ替える枠を選ぶと、新しいサンプルに差し替わります。</p>
             <div class="sushi-replace-list"></div>
             <button type="button" class="gct-btn" data-sushi-replace-cancel>やめる</button>
+          </div>
+        </div>
+
+        <div id="sushi-guide-modal" class="sushi-modal" hidden>
+          <div class="sushi-modal-card sushi-guide-card" role="dialog" aria-labelledby="sushi-guide-title">
+            <h2 id="sushi-guide-title">サンプルの選び方</h2>
+            <ol class="sushi-guide-steps">
+              <li>下のサンプルを<strong>短くクリック</strong>すると、上の枠に入ります。</li>
+              <li>上の枠をクリックすると、<strong>その見本で進められます</strong>。</li>
+            </ol>
+            <p class="sushi-guide-note">虫眼鏡で大きく見られます。枠がいっぱいのときは、入れ替え先を選べます。レーンにポインタを乗せると流れが止まります。</p>
+            <div class="sushi-guide-actions">
+              <button type="button" class="btn btn-primary" data-sushi-guide-close>OK</button>
+            </div>
           </div>
         </div>
 

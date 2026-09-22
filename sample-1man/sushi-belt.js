@@ -14,6 +14,7 @@
   var MS_STOCK_IN = 360;
   var MS_STOCK_OUT = 240;
   var MS_ZOOM = 680;
+  var MS_GUIDE_SUCK = 420;
   var MAX_STOCK = 3;
   var TOUCH_PAUSE_MS = 3000;
   var CLICK_DEAD_PX = 8;
@@ -873,15 +874,86 @@
     }
   }
 
+  function resetGuideCardMotion() {
+    if (!els.guideModal) return;
+    var card = els.guideModal.querySelector(".sushi-guide-card");
+    els.guideModal.classList.remove("is-sucking");
+    if (!card) return;
+    card.style.transition = "";
+    card.style.transform = "";
+    card.style.opacity = "";
+  }
+
   function openGuideModal() {
     if (!els.guideModal) return;
+    resetGuideCardMotion();
     els.guideModal.hidden = false;
   }
 
-  function closeGuideModal(persist) {
-    if (!els.guideModal) return;
-    els.guideModal.hidden = true;
+  function finishCloseGuide(persist) {
+    resetGuideCardMotion();
+    if (els.guideModal) els.guideModal.hidden = true;
     if (persist) markGuideSeen();
+    if (persist && els.hintOpen) {
+      els.hintOpen.classList.remove("is-hint-pulse");
+      /* reflow so animation can replay */
+      void els.hintOpen.offsetWidth;
+      els.hintOpen.classList.add("is-hint-pulse");
+      window.setTimeout(function () {
+        if (els.hintOpen) els.hintOpen.classList.remove("is-hint-pulse");
+      }, 700);
+    }
+  }
+
+  function closeGuideModal(persist) {
+    if (!els.guideModal || els.guideModal.hidden) return;
+    if (els.guideModal.classList.contains("is-sucking")) return;
+
+    /* 破棄時はアニメなし。OK閉じは「操作のヒント」へ吸い込む */
+    if (!persist || !els.hintOpen) {
+      finishCloseGuide(!!persist);
+      return;
+    }
+
+    var card = els.guideModal.querySelector(".sushi-guide-card");
+    if (!card) {
+      finishCloseGuide(true);
+      return;
+    }
+
+    var cR = card.getBoundingClientRect();
+    var hR = els.hintOpen.getBoundingClientRect();
+    if (cR.width < 8 || hR.width < 8) {
+      finishCloseGuide(true);
+      return;
+    }
+
+    var dx = hR.left + hR.width / 2 - (cR.left + cR.width / 2);
+    var dy = hR.top + hR.height / 2 - (cR.top + cR.height / 2);
+    var s = Math.min(hR.width / cR.width, hR.height / cR.height, 0.12);
+    s = Math.max(0.06, s);
+
+    els.guideModal.classList.add("is-sucking");
+    card.style.transformOrigin = "center center";
+    card.style.transition = "none";
+    card.style.transform = "translate(0px, 0px) scale(1)";
+    card.style.opacity = "1";
+    /* 二重 rAF：初期状態を確定してから吸い込みを開始 */
+    requestAnimationFrame(function () {
+      requestAnimationFrame(function () {
+        card.style.transition =
+          "transform " +
+          MS_GUIDE_SUCK +
+          "ms cubic-bezier(0.45, 0.05, 0.55, 0.95), opacity " +
+          MS_GUIDE_SUCK +
+          "ms ease";
+        card.style.transform = "translate(" + dx + "px, " + dy + "px) scale(" + s + ")";
+        card.style.opacity = "0";
+      });
+    });
+    window.setTimeout(function () {
+      finishCloseGuide(true);
+    }, MS_GUIDE_SUCK + 40);
   }
 
   function maybeShowFirstGuide() {

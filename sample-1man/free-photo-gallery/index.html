@@ -3,16 +3,29 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>無料写真ギャラリー（準備中）</title>
+  <meta name="robots" content="noindex,nofollow">
+  <title>写真ギャラリー</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="gallery.css?v=fpg-i1-1">
   <style>
-    body { font-family: "Zen Kaku Gothic New", sans-serif; max-width: 40rem; margin: 2rem auto; padding: 0 1rem; line-height: 1.6; color: #222; }
-    .badge { display: inline-block; background: #eee; padding: 0.2rem 0.5rem; border-radius: 0.25rem; font-size: 0.85rem; }
+    html, body {
+      margin: 0;
+      min-height: 100%;
+      background: #fff;
+    }
   </style>
 </head>
 <body>
-  <p class="badge">準備中</p>
-  <h1>無料写真ギャラリー</h1>
-  <p>再配布できると確認した画像だけを、ここに並べます。いまは棚づくり中です。</p>
-  <p>監査メモ: <code>_audit/SUMMARY.md</code></p>
+  <div id="fpg-root"></div>
+  <script src="gallery.js?v=fpg-i1-1"></script>
+  <script>
+    FreePhotoGallery.mount(document.getElementById("fpg-root"), {
+      catalogUrl: "catalog.json",
+      imageBase: "",
+      mode: "standalone"
+    });
+  </script>
 </body>
 </html>

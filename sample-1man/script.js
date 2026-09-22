@@ -2079,6 +2079,7 @@
     hubUiMode: "home",
     studioImagePaths: null,
     zipImageFiles: null,
+    galleryPicks: null,
     folderDirHandle: null,
     folderDisplayName: "",
     pendingResumeFolderFiles: null,
@@ -6761,7 +6762,9 @@
   function inputHasFile(name) {
     const input = form.elements.namedItem(name);
     if (input && input.files && input.files[0]) return true;
-    return !!(store.zipImageFiles && store.zipImageFiles[name]);
+    if (store.zipImageFiles && store.zipImageFiles[name]) return true;
+    if (imageUrls[name]) return true;
+    return false;
   }
 
   function requiredImageInputs() {
@@ -6919,9 +6922,15 @@
         const file = input.files && input.files[0];
         if (!file) {
           setImageUrl(input.name, null);
+          if (store.galleryPicks && store.galleryPicks[input.name]) {
+            delete store.galleryPicks[input.name];
+          }
           applyAllImages();
           scheduleSave();
           return;
+        }
+        if (store.galleryPicks && store.galleryPicks[input.name]) {
+          delete store.galleryPicks[input.name];
         }
         input.disabled = true;
         try {
@@ -8060,9 +8069,206 @@
     Object.keys(map).forEach((slot) => {
       const el = document.getElementById("easy-img-status-" + slot);
       if (!el) return;
-      const ready = inputHasFile(map[slot]);
-      el.textContent = ready ? "選択済み（選び直しもできます）" : "まだ選んでいません";
+      const name = map[slot];
+      const ready = inputHasFile(name);
+      const fromGallery = !!(store.galleryPicks && store.galleryPicks[name]);
+      if (!ready) {
+        el.textContent = "まだ選んでいません";
+      } else if (fromGallery) {
+        el.textContent = "ギャラリーから選びました（選び直しもできます）";
+      } else {
+        el.textContent = "選択済み（選び直しもできます）";
+      }
       el.classList.toggle("is-ready", ready);
+    });
+  }
+
+  function closeFreePhotoGalleryModal() {
+    const modal = document.getElementById("fpg-modal");
+    if (!modal) return;
+    const mount = modal.querySelector("[data-fpg-mount]");
+    if (mount && mount._fpgApi && typeof mount._fpgApi.destroy === "function") {
+      try {
+        mount._fpgApi.destroy();
+      } catch (e) {
+        /* ignore */
+      }
+      mount._fpgApi = null;
+    }
+    modal.hidden = true;
+    modal.removeAttribute("data-fpg-slot");
+    const prev = modal._fpgPrevFocus;
+    modal._fpgPrevFocus = null;
+    if (prev && typeof prev.focus === "function") {
+      try {
+        prev.focus();
+      } catch (e) {
+        /* ignore */
+      }
+    }
+  }
+
+  function ensureFreePhotoGalleryModal() {
+    let modal = document.getElementById("fpg-modal");
+    if (modal) return modal;
+    modal = document.createElement("div");
+    modal.id = "fpg-modal";
+    modal.className = "fpg-modal";
+    modal.hidden = true;
+    modal.setAttribute("role", "dialog");
+    modal.setAttribute("aria-modal", "true");
+    modal.setAttribute("aria-labelledby", "fpg-modal-title");
+    modal.innerHTML =
+      '<div class="fpg-modal-panel">' +
+      '  <div class="fpg-modal-bar">' +
+      '    <strong id="fpg-modal-title">ギャラリーから選ぶ</strong>' +
+      '    <button type="button" class="fpg-modal-close" data-fpg-close>閉じる</button>' +
+      "  </div>" +
+      '  <div class="fpg-modal-body"><div data-fpg-mount></div></div>' +
+      '  <div class="fpg-modal-foot">' +
+      '    <p class="fpg-status" data-fpg-foot-status hidden></p>' +
+      '    <button type="button" class="fpg-apply" data-fpg-apply disabled>この写真を枠に入れる</button>' +
+      "  </div>" +
+      "</div>";
+    document.body.appendChild(modal);
+
+    modal.addEventListener("click", (ev) => {
+      if (ev.target === modal) closeFreePhotoGalleryModal();
+    });
+    modal.querySelector("[data-fpg-close]").addEventListener("click", () => closeFreePhotoGalleryModal());
+    modal.querySelector("[data-fpg-apply]").addEventListener("click", () => {
+      const slot = modal.getAttribute("data-fpg-slot");
+      const mount = modal.querySelector("[data-fpg-mount]");
+      const api = mount && mount._fpgApi;
+      const item = api && api.getSelected ? api.getSelected() : null;
+      if (!slot || !item) return;
+      applyGalleryPickToSlot(slot, item);
+      closeFreePhotoGalleryModal();
+    });
+    document.addEventListener("keydown", (ev) => {
+      if (ev.key === "Escape" && modal && !modal.hidden) {
+        ev.preventDefault();
+        closeFreePhotoGalleryModal();
+      }
+    });
+    return modal;
+  }
+
+  function applyGalleryPickToSlot(inputName, item) {
+    if (!inputName || !item || !item.path) return;
+    const url = "free-photo-gallery/" + String(item.path).replace(/^\/+/, "");
+    const input = form.elements.namedItem(inputName);
+    if (input && input.type === "file") {
+      try {
+        input.value = "";
+      } catch (e) {
+        /* ignore */
+      }
+    }
+    if (store.zipImageFiles && store.zipImageFiles[inputName]) {
+      delete store.zipImageFiles[inputName];
+    }
+    if (!store.galleryPicks) store.galleryPicks = {};
+    store.galleryPicks[inputName] = {
+      id: item.id,
+      path: item.path,
+      shape: item.shape || "",
+      scene: item.scene || ""
+    };
+    setRemoteImageUrl(inputName, url);
+    applyImageSlotByName(inputName, true);
+    syncEasyImageStatuses();
+    const cur = getCurrentFlowStep();
+    if (cur && cur.id === "easy-img-wire") {
+      const order = ["hero_image", "about_image_1", "work_1_image"];
+      const slots = ["hero", "about", "works"];
+      const at = order.indexOf(inputName);
+      if (at >= 0 && at < order.length - 1) {
+        const nextSlot = slots[at + 1];
+        store.sampleWireSlot = nextSlot;
+        document.querySelectorAll("[data-wire-slot]").forEach((b) => {
+          b.classList.toggle("is-active", b.getAttribute("data-wire-slot") === nextSlot);
+        });
+        document.querySelectorAll("[data-easy-slot]").forEach((p) => {
+          p.classList.toggle("is-current", p.getAttribute("data-easy-slot") === nextSlot);
+        });
+      }
+    }
+    scheduleSave();
+  }
+
+  function openFreePhotoGalleryModal(inputName) {
+    if (!window.FreePhotoGallery || typeof window.FreePhotoGallery.mount !== "function") {
+      window.alert("ギャラリーを読み込めませんでした。ページを更新してもう一度開けますか。");
+      return;
+    }
+    const modal = ensureFreePhotoGalleryModal();
+    const mount = modal.querySelector("[data-fpg-mount]");
+    const applyBtn = modal.querySelector("[data-fpg-apply]");
+    const footStatus = modal.querySelector("[data-fpg-foot-status]");
+    modal._fpgPrevFocus = document.activeElement;
+    modal.setAttribute("data-fpg-slot", inputName);
+    modal.hidden = false;
+    applyBtn.disabled = true;
+    footStatus.hidden = true;
+    footStatus.textContent = "";
+    if (mount._fpgApi && typeof mount._fpgApi.destroy === "function") {
+      try {
+        mount._fpgApi.destroy();
+      } catch (e) {
+        /* ignore */
+      }
+    }
+    mount.innerHTML = "";
+    const prevId =
+      store.galleryPicks && store.galleryPicks[inputName] ? store.galleryPicks[inputName].id : null;
+    window.FreePhotoGallery.mount(mount, {
+      catalogUrl: "free-photo-gallery/catalog.json",
+      imageBase: "free-photo-gallery",
+      mode: "picker",
+      selectedId: prevId,
+      onSelect(item) {
+        applyBtn.disabled = !item;
+        if (item) {
+          footStatus.hidden = false;
+          footStatus.classList.add("is-ready");
+          footStatus.textContent = "この写真を枠に入れられます。";
+        } else {
+          footStatus.hidden = true;
+        }
+      }
+    }).then((api) => {
+      mount._fpgApi = api;
+      if (api && api.getSelected && api.getSelected()) {
+        applyBtn.disabled = false;
+        footStatus.hidden = false;
+        footStatus.classList.add("is-ready");
+        footStatus.textContent = "この写真を枠に入れられます。";
+      }
+      const closeBtn = modal.querySelector("[data-fpg-close]");
+      if (closeBtn) closeBtn.focus();
+    });
+  }
+
+  function setupEasyImagePickers() {
+    document.querySelectorAll("[data-easy-pick]").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const name = btn.getAttribute("data-easy-pick");
+        const input = form.elements.namedItem(name);
+        if (input && input.type === "file") input.click();
+      });
+    });
+    document.querySelectorAll("[data-easy-gallery]").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const name = btn.getAttribute("data-easy-gallery");
+        if (name) openFreePhotoGalleryModal(name);
+      });
+    });
+    document.querySelectorAll("[data-easy-done-ok]").forEach((btn) => {
+      btn.addEventListener("click", () => leaveEasyFlowToFinish());
+    });
+    document.querySelectorAll("[data-easy-done-edit]").forEach((btn) => {
+      btn.addEventListener("click", () => leaveEasyFlowToEditHub());
     });
   }
 
@@ -8171,22 +8377,6 @@
     openDetailLayoutHub();
     showDetailNoticeModal();
     scheduleSave();
-  }
-
-  function setupEasyImagePickers() {
-    document.querySelectorAll("[data-easy-pick]").forEach((btn) => {
-      btn.addEventListener("click", () => {
-        const name = btn.getAttribute("data-easy-pick");
-        const input = form.elements.namedItem(name);
-        if (input && input.type === "file") input.click();
-      });
-    });
-    document.querySelectorAll("[data-easy-done-ok]").forEach((btn) => {
-      btn.addEventListener("click", () => leaveEasyFlowToFinish());
-    });
-    document.querySelectorAll("[data-easy-done-edit]").forEach((btn) => {
-      btn.addEventListener("click", () => leaveEasyFlowToEditHub());
-    });
   }
 
   function applyIntakeSelections(purposeKey, modeKey, moodKey, layoutKey) {

@@ -1,0 +1,1742 @@
+{
+  "version": 1,
+  "updated": "2026-09-22",
+  "source": "ai-or-original",
+  "tagLabels": {
+    "person": "人",
+    "hand": "手",
+    "food": "料理",
+    "drink": "飲み物",
+    "indoor": "室内",
+    "scenery": "景色",
+    "nature": "自然",
+    "animal": "動物"
+  },
+  "shapeLabels": {
+    "wide": "全幅寄り",
+    "square": "ふつう"
+  },
+  "note": "粗タグ一次。color-insertは除外。迷いは indoor 等へ寄せた。",
+  "items": [
+    {
+      "id": "01-cafe-warm-a/about-01.jpg",
+      "path": "ai-or-original/01-cafe-warm-a/about-01.jpg",
+      "scene": "cafe",
+      "sceneLabel": "カフェ",
+      "tags": ["food", "drink", "indoor"],
+      "shape": "square"
+    },
+    {
+      "id": "01-cafe-warm-a/about-02.jpg",
+      "path": "ai-or-original/01-cafe-warm-a/about-02.jpg",
+      "scene": "cafe",
+      "sceneLabel": "カフェ",
+      "tags": ["food", "drink", "indoor"],
+      "shape": "square"
+    },
+    {
+      "id": "01-cafe-warm-a/about-03.jpg",
+      "path": "ai-or-original/01-cafe-warm-a/about-03.jpg",
+      "scene": "cafe",
+      "sceneLabel": "カフェ",
+      "tags": ["food", "drink", "indoor"],
+      "shape": "square"
+    },
+    {
+      "id": "01-cafe-warm-a/about-04.jpg",
+      "path": "ai-or-original/01-cafe-warm-a/about-04.jpg",
+      "scene": "cafe",
+      "sceneLabel": "カフェ",
+      "tags": ["food", "drink", "indoor"],
+      "shape": "square"
+    },
+    {
+      "id": "01-cafe-warm-a/hero.jpg",
+      "path": "ai-or-original/01-cafe-warm-a/hero.jpg",
+      "scene": "cafe",
+      "sceneLabel": "カフェ",
+      "tags": ["food", "drink", "indoor"],
+      "shape": "wide"
+    },
+    {
+      "id": "01-cafe-warm-a/work-01.jpg",
+      "path": "ai-or-original/01-cafe-warm-a/work-01.jpg",
+      "scene": "cafe",
+      "sceneLabel": "カフェ",
+      "tags": ["food", "drink", "indoor"],
+      "shape": "square"
+    },
+    {
+      "id": "01-cafe-warm-a/work-02.jpg",
+      "path": "ai-or-original/01-cafe-warm-a/work-02.jpg",
+      "scene": "cafe",
+      "sceneLabel": "カフェ",
+      "tags": ["food", "drink", "indoor"],
+      "shape": "square"
+    },
+    {
+      "id": "01-cafe-warm-a/work-03.jpg",
+      "path": "ai-or-original/01-cafe-warm-a/work-03.jpg",
+      "scene": "cafe",
+      "sceneLabel": "カフェ",
+      "tags": ["food", "drink", "indoor"],
+      "shape": "square"
+    },
+    {
+      "id": "02-cafe-split-b/about-01.jpg",
+      "path": "ai-or-original/02-cafe-split-b/about-01.jpg",
+      "scene": "cafe",
+      "sceneLabel": "カフェ",
+      "tags": ["food", "drink", "indoor"],
+      "shape": "square"
+    },
+    {
+      "id": "02-cafe-split-b/about-02.jpg",
+      "path": "ai-or-original/02-cafe-split-b/about-02.jpg",
+      "scene": "cafe",
+      "sceneLabel": "カフェ",
+      "tags": ["food", "drink", "indoor"],
+      "shape": "square"
+    },
+    {
+      "id": "02-cafe-split-b/about-03.jpg",
+      "path": "ai-or-original/02-cafe-split-b/about-03.jpg",
+      "scene": "cafe",
+      "sceneLabel": "カフェ",
+      "tags": ["food", "drink", "indoor"],
+      "shape": "square"
+    },
+    {
+      "id": "02-cafe-split-b/about-04.jpg",
+      "path": "ai-or-original/02-cafe-split-b/about-04.jpg",
+      "scene": "cafe",
+      "sceneLabel": "カフェ",
+      "tags": ["food", "drink", "indoor"],
+      "shape": "square"
+    },
+    {
+      "id": "02-cafe-split-b/hero.jpg",
+      "path": "ai-or-original/02-cafe-split-b/hero.jpg",
+      "scene": "cafe",
+      "sceneLabel": "カフェ",
+      "tags": ["food", "drink", "indoor"],
+      "shape": "wide"
+    },
+    {
+      "id": "02-cafe-split-b/work-01.jpg",
+      "path": "ai-or-original/02-cafe-split-b/work-01.jpg",
+      "scene": "cafe",
+      "sceneLabel": "カフェ",
+      "tags": ["food", "drink", "indoor"],
+      "shape": "square"
+    },
+    {
+      "id": "02-cafe-split-b/work-02.jpg",
+      "path": "ai-or-original/02-cafe-split-b/work-02.jpg",
+      "scene": "cafe",
+      "sceneLabel": "カフェ",
+      "tags": ["food", "drink", "indoor"],
+      "shape": "square"
+    },
+    {
+      "id": "02-cafe-split-b/work-03.jpg",
+      "path": "ai-or-original/02-cafe-split-b/work-03.jpg",
+      "scene": "cafe",
+      "sceneLabel": "カフェ",
+      "tags": ["food", "drink", "indoor"],
+      "shape": "square"
+    },
+    {
+      "id": "03-cafe-mix-ink-c/about-01.jpg",
+      "path": "ai-or-original/03-cafe-mix-ink-c/about-01.jpg",
+      "scene": "cafe",
+      "sceneLabel": "カフェ",
+      "tags": ["food", "drink", "indoor"],
+      "shape": "square"
+    },
+    {
+      "id": "03-cafe-mix-ink-c/about-02.jpg",
+      "path": "ai-or-original/03-cafe-mix-ink-c/about-02.jpg",
+      "scene": "cafe",
+      "sceneLabel": "カフェ",
+      "tags": ["food", "drink", "indoor"],
+      "shape": "square"
+    },
+    {
+      "id": "03-cafe-mix-ink-c/about-03.jpg",
+      "path": "ai-or-original/03-cafe-mix-ink-c/about-03.jpg",
+      "scene": "cafe",
+      "sceneLabel": "カフェ",
+      "tags": ["food", "drink", "indoor"],
+      "shape": "square"
+    },
+    {
+      "id": "03-cafe-mix-ink-c/hero.jpg",
+      "path": "ai-or-original/03-cafe-mix-ink-c/hero.jpg",
+      "scene": "cafe",
+      "sceneLabel": "カフェ",
+      "tags": ["food", "drink", "indoor"],
+      "shape": "wide"
+    },
+    {
+      "id": "03-cafe-mix-ink-c/work-01.jpg",
+      "path": "ai-or-original/03-cafe-mix-ink-c/work-01.jpg",
+      "scene": "cafe",
+      "sceneLabel": "カフェ",
+      "tags": ["food", "drink", "indoor"],
+      "shape": "square"
+    },
+    {
+      "id": "03-cafe-mix-ink-c/work-02.jpg",
+      "path": "ai-or-original/03-cafe-mix-ink-c/work-02.jpg",
+      "scene": "cafe",
+      "sceneLabel": "カフェ",
+      "tags": ["food", "drink", "indoor"],
+      "shape": "square"
+    },
+    {
+      "id": "03-cafe-mix-ink-c/work-03.jpg",
+      "path": "ai-or-original/03-cafe-mix-ink-c/work-03.jpg",
+      "scene": "cafe",
+      "sceneLabel": "カフェ",
+      "tags": ["food", "drink", "indoor"],
+      "shape": "square"
+    },
+    {
+      "id": "04-salon-clinic-a/about-01.jpg",
+      "path": "ai-or-original/04-salon-clinic-a/about-01.jpg",
+      "scene": "salon",
+      "sceneLabel": "サロン",
+      "tags": ["person", "indoor"],
+      "shape": "square"
+    },
+    {
+      "id": "04-salon-clinic-a/about-02.jpg",
+      "path": "ai-or-original/04-salon-clinic-a/about-02.jpg",
+      "scene": "salon",
+      "sceneLabel": "サロン",
+      "tags": ["person", "indoor"],
+      "shape": "square"
+    },
+    {
+      "id": "04-salon-clinic-a/about-03.jpg",
+      "path": "ai-or-original/04-salon-clinic-a/about-03.jpg",
+      "scene": "salon",
+      "sceneLabel": "サロン",
+      "tags": ["person", "indoor"],
+      "shape": "square"
+    },
+    {
+      "id": "04-salon-clinic-a/hero.jpg",
+      "path": "ai-or-original/04-salon-clinic-a/hero.jpg",
+      "scene": "salon",
+      "sceneLabel": "サロン",
+      "tags": ["person", "indoor"],
+      "shape": "wide"
+    },
+    {
+      "id": "04-salon-clinic-a/work-01.jpg",
+      "path": "ai-or-original/04-salon-clinic-a/work-01.jpg",
+      "scene": "salon",
+      "sceneLabel": "サロン",
+      "tags": ["person", "indoor"],
+      "shape": "square"
+    },
+    {
+      "id": "04-salon-clinic-a/work-02.jpg",
+      "path": "ai-or-original/04-salon-clinic-a/work-02.jpg",
+      "scene": "salon",
+      "sceneLabel": "サロン",
+      "tags": ["person", "indoor"],
+      "shape": "square"
+    },
+    {
+      "id": "04-salon-clinic-a/work-03.jpg",
+      "path": "ai-or-original/04-salon-clinic-a/work-03.jpg",
+      "scene": "salon",
+      "sceneLabel": "サロン",
+      "tags": ["person", "indoor"],
+      "shape": "square"
+    },
+    {
+      "id": "05-salon-sakura-b/about-01.jpg",
+      "path": "ai-or-original/05-salon-sakura-b/about-01.jpg",
+      "scene": "salon",
+      "sceneLabel": "サロン",
+      "tags": ["person", "indoor"],
+      "shape": "square"
+    },
+    {
+      "id": "05-salon-sakura-b/about-02.jpg",
+      "path": "ai-or-original/05-salon-sakura-b/about-02.jpg",
+      "scene": "salon",
+      "sceneLabel": "サロン",
+      "tags": ["person", "indoor"],
+      "shape": "square"
+    },
+    {
+      "id": "05-salon-sakura-b/about-03.jpg",
+      "path": "ai-or-original/05-salon-sakura-b/about-03.jpg",
+      "scene": "salon",
+      "sceneLabel": "サロン",
+      "tags": ["person", "indoor"],
+      "shape": "square"
+    },
+    {
+      "id": "05-salon-sakura-b/hero.jpg",
+      "path": "ai-or-original/05-salon-sakura-b/hero.jpg",
+      "scene": "salon",
+      "sceneLabel": "サロン",
+      "tags": ["person", "indoor"],
+      "shape": "wide"
+    },
+    {
+      "id": "05-salon-sakura-b/work-01.jpg",
+      "path": "ai-or-original/05-salon-sakura-b/work-01.jpg",
+      "scene": "salon",
+      "sceneLabel": "サロン",
+      "tags": ["person", "indoor"],
+      "shape": "square"
+    },
+    {
+      "id": "05-salon-sakura-b/work-02.jpg",
+      "path": "ai-or-original/05-salon-sakura-b/work-02.jpg",
+      "scene": "salon",
+      "sceneLabel": "サロン",
+      "tags": ["person", "indoor"],
+      "shape": "square"
+    },
+    {
+      "id": "05-salon-sakura-b/work-03.jpg",
+      "path": "ai-or-original/05-salon-sakura-b/work-03.jpg",
+      "scene": "salon",
+      "sceneLabel": "サロン",
+      "tags": ["person", "indoor"],
+      "shape": "square"
+    },
+    {
+      "id": "06-bakery-brick-a/about-01.jpg",
+      "path": "ai-or-original/06-bakery-brick-a/about-01.jpg",
+      "scene": "bakery",
+      "sceneLabel": "ベーカリー",
+      "tags": ["food", "indoor"],
+      "shape": "square"
+    },
+    {
+      "id": "06-bakery-brick-a/about-02.jpg",
+      "path": "ai-or-original/06-bakery-brick-a/about-02.jpg",
+      "scene": "bakery",
+      "sceneLabel": "ベーカリー",
+      "tags": ["food", "indoor"],
+      "shape": "square"
+    },
+    {
+      "id": "06-bakery-brick-a/about-03.jpg",
+      "path": "ai-or-original/06-bakery-brick-a/about-03.jpg",
+      "scene": "bakery",
+      "sceneLabel": "ベーカリー",
+      "tags": ["food", "indoor"],
+      "shape": "square"
+    },
+    {
+      "id": "06-bakery-brick-a/hero.jpg",
+      "path": "ai-or-original/06-bakery-brick-a/hero.jpg",
+      "scene": "bakery",
+      "sceneLabel": "ベーカリー",
+      "tags": ["food", "indoor"],
+      "shape": "wide"
+    },
+    {
+      "id": "06-bakery-brick-a/work-01.jpg",
+      "path": "ai-or-original/06-bakery-brick-a/work-01.jpg",
+      "scene": "bakery",
+      "sceneLabel": "ベーカリー",
+      "tags": ["food", "indoor"],
+      "shape": "square"
+    },
+    {
+      "id": "06-bakery-brick-a/work-02.jpg",
+      "path": "ai-or-original/06-bakery-brick-a/work-02.jpg",
+      "scene": "bakery",
+      "sceneLabel": "ベーカリー",
+      "tags": ["food", "indoor"],
+      "shape": "square"
+    },
+    {
+      "id": "06-bakery-brick-a/work-03.jpg",
+      "path": "ai-or-original/06-bakery-brick-a/work-03.jpg",
+      "scene": "bakery",
+      "sceneLabel": "ベーカリー",
+      "tags": ["food", "indoor"],
+      "shape": "square"
+    },
+    {
+      "id": "07-bakery-cafe-c/about-01.jpg",
+      "path": "ai-or-original/07-bakery-cafe-c/about-01.jpg",
+      "scene": "bakery",
+      "sceneLabel": "ベーカリー",
+      "tags": ["food", "indoor"],
+      "shape": "square"
+    },
+    {
+      "id": "07-bakery-cafe-c/about-02.jpg",
+      "path": "ai-or-original/07-bakery-cafe-c/about-02.jpg",
+      "scene": "bakery",
+      "sceneLabel": "ベーカリー",
+      "tags": ["food", "indoor"],
+      "shape": "square"
+    },
+    {
+      "id": "07-bakery-cafe-c/about-03.jpg",
+      "path": "ai-or-original/07-bakery-cafe-c/about-03.jpg",
+      "scene": "bakery",
+      "sceneLabel": "ベーカリー",
+      "tags": ["food", "indoor"],
+      "shape": "square"
+    },
+    {
+      "id": "07-bakery-cafe-c/hero.jpg",
+      "path": "ai-or-original/07-bakery-cafe-c/hero.jpg",
+      "scene": "bakery",
+      "sceneLabel": "ベーカリー",
+      "tags": ["food", "indoor"],
+      "shape": "wide"
+    },
+    {
+      "id": "07-bakery-cafe-c/work-01.jpg",
+      "path": "ai-or-original/07-bakery-cafe-c/work-01.jpg",
+      "scene": "bakery",
+      "sceneLabel": "ベーカリー",
+      "tags": ["food", "indoor"],
+      "shape": "square"
+    },
+    {
+      "id": "07-bakery-cafe-c/work-02.jpg",
+      "path": "ai-or-original/07-bakery-cafe-c/work-02.jpg",
+      "scene": "bakery",
+      "sceneLabel": "ベーカリー",
+      "tags": ["food", "indoor"],
+      "shape": "square"
+    },
+    {
+      "id": "07-bakery-cafe-c/work-03.jpg",
+      "path": "ai-or-original/07-bakery-cafe-c/work-03.jpg",
+      "scene": "bakery",
+      "sceneLabel": "ベーカリー",
+      "tags": ["food", "indoor"],
+      "shape": "square"
+    },
+    {
+      "id": "08-bar-ink-b/about-01.jpg",
+      "path": "ai-or-original/08-bar-ink-b/about-01.jpg",
+      "scene": "bar",
+      "sceneLabel": "バー",
+      "tags": ["drink", "indoor"],
+      "shape": "square"
+    },
+    {
+      "id": "08-bar-ink-b/about-02.jpg",
+      "path": "ai-or-original/08-bar-ink-b/about-02.jpg",
+      "scene": "bar",
+      "sceneLabel": "バー",
+      "tags": ["drink", "indoor"],
+      "shape": "square"
+    },
+    {
+      "id": "08-bar-ink-b/about-03.jpg",
+      "path": "ai-or-original/08-bar-ink-b/about-03.jpg",
+      "scene": "bar",
+      "sceneLabel": "バー",
+      "tags": ["drink", "indoor"],
+      "shape": "square"
+    },
+    {
+      "id": "08-bar-ink-b/hero.jpg",
+      "path": "ai-or-original/08-bar-ink-b/hero.jpg",
+      "scene": "bar",
+      "sceneLabel": "バー",
+      "tags": ["drink", "indoor"],
+      "shape": "wide"
+    },
+    {
+      "id": "08-bar-ink-b/work-01.jpg",
+      "path": "ai-or-original/08-bar-ink-b/work-01.jpg",
+      "scene": "bar",
+      "sceneLabel": "バー",
+      "tags": ["drink", "indoor"],
+      "shape": "square"
+    },
+    {
+      "id": "08-bar-ink-b/work-02.jpg",
+      "path": "ai-or-original/08-bar-ink-b/work-02.jpg",
+      "scene": "bar",
+      "sceneLabel": "バー",
+      "tags": ["drink", "indoor"],
+      "shape": "square"
+    },
+    {
+      "id": "08-bar-ink-b/work-03.jpg",
+      "path": "ai-or-original/08-bar-ink-b/work-03.jpg",
+      "scene": "bar",
+      "sceneLabel": "バー",
+      "tags": ["drink", "indoor"],
+      "shape": "square"
+    },
+    {
+      "id": "09-bar-brick-a/about-01.jpg",
+      "path": "ai-or-original/09-bar-brick-a/about-01.jpg",
+      "scene": "bar",
+      "sceneLabel": "バー",
+      "tags": ["drink", "indoor"],
+      "shape": "square"
+    },
+    {
+      "id": "09-bar-brick-a/about-02.jpg",
+      "path": "ai-or-original/09-bar-brick-a/about-02.jpg",
+      "scene": "bar",
+      "sceneLabel": "バー",
+      "tags": ["drink", "indoor"],
+      "shape": "square"
+    },
+    {
+      "id": "09-bar-brick-a/about-03.jpg",
+      "path": "ai-or-original/09-bar-brick-a/about-03.jpg",
+      "scene": "bar",
+      "sceneLabel": "バー",
+      "tags": ["drink", "indoor"],
+      "shape": "square"
+    },
+    {
+      "id": "09-bar-brick-a/hero.jpg",
+      "path": "ai-or-original/09-bar-brick-a/hero.jpg",
+      "scene": "bar",
+      "sceneLabel": "バー",
+      "tags": ["drink", "indoor"],
+      "shape": "wide"
+    },
+    {
+      "id": "09-bar-brick-a/work-01.jpg",
+      "path": "ai-or-original/09-bar-brick-a/work-01.jpg",
+      "scene": "bar",
+      "sceneLabel": "バー",
+      "tags": ["drink", "indoor"],
+      "shape": "square"
+    },
+    {
+      "id": "09-bar-brick-a/work-02.jpg",
+      "path": "ai-or-original/09-bar-brick-a/work-02.jpg",
+      "scene": "bar",
+      "sceneLabel": "バー",
+      "tags": ["drink", "indoor"],
+      "shape": "square"
+    },
+    {
+      "id": "09-bar-brick-a/work-03.jpg",
+      "path": "ai-or-original/09-bar-brick-a/work-03.jpg",
+      "scene": "bar",
+      "sceneLabel": "バー",
+      "tags": ["drink", "indoor"],
+      "shape": "square"
+    },
+    {
+      "id": "10-clinic-green-a/about-01.jpg",
+      "path": "ai-or-original/10-clinic-green-a/about-01.jpg",
+      "scene": "clinic",
+      "sceneLabel": "クリニック",
+      "tags": ["person", "indoor"],
+      "shape": "square"
+    },
+    {
+      "id": "10-clinic-green-a/about-02.jpg",
+      "path": "ai-or-original/10-clinic-green-a/about-02.jpg",
+      "scene": "clinic",
+      "sceneLabel": "クリニック",
+      "tags": ["person", "indoor"],
+      "shape": "square"
+    },
+    {
+      "id": "10-clinic-green-a/about-03.jpg",
+      "path": "ai-or-original/10-clinic-green-a/about-03.jpg",
+      "scene": "clinic",
+      "sceneLabel": "クリニック",
+      "tags": ["person", "indoor"],
+      "shape": "square"
+    },
+    {
+      "id": "10-clinic-green-a/hero.jpg",
+      "path": "ai-or-original/10-clinic-green-a/hero.jpg",
+      "scene": "clinic",
+      "sceneLabel": "クリニック",
+      "tags": ["person", "indoor"],
+      "shape": "wide"
+    },
+    {
+      "id": "10-clinic-green-a/work-01.jpg",
+      "path": "ai-or-original/10-clinic-green-a/work-01.jpg",
+      "scene": "clinic",
+      "sceneLabel": "クリニック",
+      "tags": ["person", "indoor"],
+      "shape": "square"
+    },
+    {
+      "id": "10-clinic-green-a/work-02.jpg",
+      "path": "ai-or-original/10-clinic-green-a/work-02.jpg",
+      "scene": "clinic",
+      "sceneLabel": "クリニック",
+      "tags": ["person", "indoor"],
+      "shape": "square"
+    },
+    {
+      "id": "10-clinic-green-a/work-03.jpg",
+      "path": "ai-or-original/10-clinic-green-a/work-03.jpg",
+      "scene": "clinic",
+      "sceneLabel": "クリニック",
+      "tags": ["person", "indoor"],
+      "shape": "square"
+    },
+    {
+      "id": "11-clinic-clinic-b/about-01.jpg",
+      "path": "ai-or-original/11-clinic-clinic-b/about-01.jpg",
+      "scene": "clinic",
+      "sceneLabel": "クリニック",
+      "tags": ["person", "indoor"],
+      "shape": "square"
+    },
+    {
+      "id": "11-clinic-clinic-b/about-02.jpg",
+      "path": "ai-or-original/11-clinic-clinic-b/about-02.jpg",
+      "scene": "clinic",
+      "sceneLabel": "クリニック",
+      "tags": ["person", "indoor"],
+      "shape": "square"
+    },
+    {
+      "id": "11-clinic-clinic-b/about-03.jpg",
+      "path": "ai-or-original/11-clinic-clinic-b/about-03.jpg",
+      "scene": "clinic",
+      "sceneLabel": "クリニック",
+      "tags": ["person", "indoor"],
+      "shape": "square"
+    },
+    {
+      "id": "11-clinic-clinic-b/hero.jpg",
+      "path": "ai-or-original/11-clinic-clinic-b/hero.jpg",
+      "scene": "clinic",
+      "sceneLabel": "クリニック",
+      "tags": ["person", "indoor"],
+      "shape": "wide"
+    },
+    {
+      "id": "11-clinic-clinic-b/work-01.jpg",
+      "path": "ai-or-original/11-clinic-clinic-b/work-01.jpg",
+      "scene": "clinic",
+      "sceneLabel": "クリニック",
+      "tags": ["person", "indoor"],
+      "shape": "square"
+    },
+    {
+      "id": "11-clinic-clinic-b/work-02.jpg",
+      "path": "ai-or-original/11-clinic-clinic-b/work-02.jpg",
+      "scene": "clinic",
+      "sceneLabel": "クリニック",
+      "tags": ["person", "indoor"],
+      "shape": "square"
+    },
+    {
+      "id": "11-clinic-clinic-b/work-03.jpg",
+      "path": "ai-or-original/11-clinic-clinic-b/work-03.jpg",
+      "scene": "clinic",
+      "sceneLabel": "クリニック",
+      "tags": ["person", "indoor"],
+      "shape": "square"
+    },
+    {
+      "id": "12-florist-sakura-a/about-01.jpg",
+      "path": "ai-or-original/12-florist-sakura-a/about-01.jpg",
+      "scene": "florist",
+      "sceneLabel": "花屋",
+      "tags": ["nature", "indoor"],
+      "shape": "square"
+    },
+    {
+      "id": "12-florist-sakura-a/about-02.jpg",
+      "path": "ai-or-original/12-florist-sakura-a/about-02.jpg",
+      "scene": "florist",
+      "sceneLabel": "花屋",
+      "tags": ["nature", "indoor"],
+      "shape": "square"
+    },
+    {
+      "id": "12-florist-sakura-a/about-03.jpg",
+      "path": "ai-or-original/12-florist-sakura-a/about-03.jpg",
+      "scene": "florist",
+      "sceneLabel": "花屋",
+      "tags": ["nature", "indoor"],
+      "shape": "square"
+    },
+    {
+      "id": "12-florist-sakura-a/hero.jpg",
+      "path": "ai-or-original/12-florist-sakura-a/hero.jpg",
+      "scene": "florist",
+      "sceneLabel": "花屋",
+      "tags": ["nature", "indoor"],
+      "shape": "wide"
+    },
+    {
+      "id": "12-florist-sakura-a/work-01.jpg",
+      "path": "ai-or-original/12-florist-sakura-a/work-01.jpg",
+      "scene": "florist",
+      "sceneLabel": "花屋",
+      "tags": ["nature", "indoor"],
+      "shape": "square"
+    },
+    {
+      "id": "12-florist-sakura-a/work-02.jpg",
+      "path": "ai-or-original/12-florist-sakura-a/work-02.jpg",
+      "scene": "florist",
+      "sceneLabel": "花屋",
+      "tags": ["nature", "indoor"],
+      "shape": "square"
+    },
+    {
+      "id": "12-florist-sakura-a/work-03.jpg",
+      "path": "ai-or-original/12-florist-sakura-a/work-03.jpg",
+      "scene": "florist",
+      "sceneLabel": "花屋",
+      "tags": ["nature", "indoor"],
+      "shape": "square"
+    },
+    {
+      "id": "13-florist-green-c/about-01.jpg",
+      "path": "ai-or-original/13-florist-green-c/about-01.jpg",
+      "scene": "florist",
+      "sceneLabel": "花屋",
+      "tags": ["nature", "indoor"],
+      "shape": "square"
+    },
+    {
+      "id": "13-florist-green-c/about-02.jpg",
+      "path": "ai-or-original/13-florist-green-c/about-02.jpg",
+      "scene": "florist",
+      "sceneLabel": "花屋",
+      "tags": ["nature", "indoor"],
+      "shape": "square"
+    },
+    {
+      "id": "13-florist-green-c/about-03.jpg",
+      "path": "ai-or-original/13-florist-green-c/about-03.jpg",
+      "scene": "florist",
+      "sceneLabel": "花屋",
+      "tags": ["nature", "indoor"],
+      "shape": "square"
+    },
+    {
+      "id": "13-florist-green-c/about-04.jpg",
+      "path": "ai-or-original/13-florist-green-c/about-04.jpg",
+      "scene": "florist",
+      "sceneLabel": "花屋",
+      "tags": ["nature", "indoor"],
+      "shape": "square"
+    },
+    {
+      "id": "13-florist-green-c/hero.jpg",
+      "path": "ai-or-original/13-florist-green-c/hero.jpg",
+      "scene": "florist",
+      "sceneLabel": "花屋",
+      "tags": ["nature", "indoor"],
+      "shape": "wide"
+    },
+    {
+      "id": "13-florist-green-c/work-01.jpg",
+      "path": "ai-or-original/13-florist-green-c/work-01.jpg",
+      "scene": "florist",
+      "sceneLabel": "花屋",
+      "tags": ["nature", "indoor"],
+      "shape": "square"
+    },
+    {
+      "id": "13-florist-green-c/work-02.jpg",
+      "path": "ai-or-original/13-florist-green-c/work-02.jpg",
+      "scene": "florist",
+      "sceneLabel": "花屋",
+      "tags": ["nature", "indoor"],
+      "shape": "square"
+    },
+    {
+      "id": "13-florist-green-c/work-03.jpg",
+      "path": "ai-or-original/13-florist-green-c/work-03.jpg",
+      "scene": "florist",
+      "sceneLabel": "花屋",
+      "tags": ["nature", "indoor"],
+      "shape": "square"
+    },
+    {
+      "id": "14-ramen-brick-b/about-01.jpg",
+      "path": "ai-or-original/14-ramen-brick-b/about-01.jpg",
+      "scene": "ramen",
+      "sceneLabel": "ラーメン",
+      "tags": ["food", "indoor"],
+      "shape": "square"
+    },
+    {
+      "id": "14-ramen-brick-b/about-02.jpg",
+      "path": "ai-or-original/14-ramen-brick-b/about-02.jpg",
+      "scene": "ramen",
+      "sceneLabel": "ラーメン",
+      "tags": ["food", "indoor"],
+      "shape": "square"
+    },
+    {
+      "id": "14-ramen-brick-b/about-03.jpg",
+      "path": "ai-or-original/14-ramen-brick-b/about-03.jpg",
+      "scene": "ramen",
+      "sceneLabel": "ラーメン",
+      "tags": ["food", "indoor"],
+      "shape": "square"
+    },
+    {
+      "id": "14-ramen-brick-b/hero.jpg",
+      "path": "ai-or-original/14-ramen-brick-b/hero.jpg",
+      "scene": "ramen",
+      "sceneLabel": "ラーメン",
+      "tags": ["food", "indoor"],
+      "shape": "wide"
+    },
+    {
+      "id": "14-ramen-brick-b/work-01.jpg",
+      "path": "ai-or-original/14-ramen-brick-b/work-01.jpg",
+      "scene": "ramen",
+      "sceneLabel": "ラーメン",
+      "tags": ["food", "indoor"],
+      "shape": "square"
+    },
+    {
+      "id": "14-ramen-brick-b/work-02.jpg",
+      "path": "ai-or-original/14-ramen-brick-b/work-02.jpg",
+      "scene": "ramen",
+      "sceneLabel": "ラーメン",
+      "tags": ["food", "indoor"],
+      "shape": "square"
+    },
+    {
+      "id": "14-ramen-brick-b/work-03.jpg",
+      "path": "ai-or-original/14-ramen-brick-b/work-03.jpg",
+      "scene": "ramen",
+      "sceneLabel": "ラーメン",
+      "tags": ["food", "indoor"],
+      "shape": "square"
+    },
+    {
+      "id": "15-ramen-ink-a/about-01.jpg",
+      "path": "ai-or-original/15-ramen-ink-a/about-01.jpg",
+      "scene": "ramen",
+      "sceneLabel": "ラーメン",
+      "tags": ["food", "indoor"],
+      "shape": "square"
+    },
+    {
+      "id": "15-ramen-ink-a/about-02.jpg",
+      "path": "ai-or-original/15-ramen-ink-a/about-02.jpg",
+      "scene": "ramen",
+      "sceneLabel": "ラーメン",
+      "tags": ["food", "indoor"],
+      "shape": "square"
+    },
+    {
+      "id": "15-ramen-ink-a/about-03.jpg",
+      "path": "ai-or-original/15-ramen-ink-a/about-03.jpg",
+      "scene": "ramen",
+      "sceneLabel": "ラーメン",
+      "tags": ["food", "indoor"],
+      "shape": "square"
+    },
+    {
+      "id": "15-ramen-ink-a/hero.jpg",
+      "path": "ai-or-original/15-ramen-ink-a/hero.jpg",
+      "scene": "ramen",
+      "sceneLabel": "ラーメン",
+      "tags": ["food", "indoor"],
+      "shape": "wide"
+    },
+    {
+      "id": "15-ramen-ink-a/work-01.jpg",
+      "path": "ai-or-original/15-ramen-ink-a/work-01.jpg",
+      "scene": "ramen",
+      "sceneLabel": "ラーメン",
+      "tags": ["food", "indoor"],
+      "shape": "square"
+    },
+    {
+      "id": "15-ramen-ink-a/work-02.jpg",
+      "path": "ai-or-original/15-ramen-ink-a/work-02.jpg",
+      "scene": "ramen",
+      "sceneLabel": "ラーメン",
+      "tags": ["food", "indoor"],
+      "shape": "square"
+    },
+    {
+      "id": "15-ramen-ink-a/work-03.jpg",
+      "path": "ai-or-original/15-ramen-ink-a/work-03.jpg",
+      "scene": "ramen",
+      "sceneLabel": "ラーメン",
+      "tags": ["food", "indoor"],
+      "shape": "square"
+    },
+    {
+      "id": "16-yoga-green-a/about-01.jpg",
+      "path": "ai-or-original/16-yoga-green-a/about-01.jpg",
+      "scene": "yoga",
+      "sceneLabel": "ヨガ",
+      "tags": ["person", "indoor"],
+      "shape": "square"
+    },
+    {
+      "id": "16-yoga-green-a/about-02.jpg",
+      "path": "ai-or-original/16-yoga-green-a/about-02.jpg",
+      "scene": "yoga",
+      "sceneLabel": "ヨガ",
+      "tags": ["person", "indoor"],
+      "shape": "square"
+    },
+    {
+      "id": "16-yoga-green-a/hero.jpg",
+      "path": "ai-or-original/16-yoga-green-a/hero.jpg",
+      "scene": "yoga",
+      "sceneLabel": "ヨガ",
+      "tags": ["person", "indoor"],
+      "shape": "wide"
+    },
+    {
+      "id": "16-yoga-green-a/work-01.jpg",
+      "path": "ai-or-original/16-yoga-green-a/work-01.jpg",
+      "scene": "yoga",
+      "sceneLabel": "ヨガ",
+      "tags": ["person", "indoor"],
+      "shape": "square"
+    },
+    {
+      "id": "16-yoga-green-a/work-02.jpg",
+      "path": "ai-or-original/16-yoga-green-a/work-02.jpg",
+      "scene": "yoga",
+      "sceneLabel": "ヨガ",
+      "tags": ["person", "indoor"],
+      "shape": "square"
+    },
+    {
+      "id": "16-yoga-green-a/work-03.jpg",
+      "path": "ai-or-original/16-yoga-green-a/work-03.jpg",
+      "scene": "yoga",
+      "sceneLabel": "ヨガ",
+      "tags": ["person", "indoor"],
+      "shape": "square"
+    },
+    {
+      "id": "17-yoga-sakura-b/about-01.jpg",
+      "path": "ai-or-original/17-yoga-sakura-b/about-01.jpg",
+      "scene": "yoga",
+      "sceneLabel": "ヨガ",
+      "tags": ["person", "indoor"],
+      "shape": "square"
+    },
+    {
+      "id": "17-yoga-sakura-b/about-02.jpg",
+      "path": "ai-or-original/17-yoga-sakura-b/about-02.jpg",
+      "scene": "yoga",
+      "sceneLabel": "ヨガ",
+      "tags": ["person", "indoor"],
+      "shape": "square"
+    },
+    {
+      "id": "17-yoga-sakura-b/about-03.jpg",
+      "path": "ai-or-original/17-yoga-sakura-b/about-03.jpg",
+      "scene": "yoga",
+      "sceneLabel": "ヨガ",
+      "tags": ["person", "indoor"],
+      "shape": "square"
+    },
+    {
+      "id": "17-yoga-sakura-b/hero.jpg",
+      "path": "ai-or-original/17-yoga-sakura-b/hero.jpg",
+      "scene": "yoga",
+      "sceneLabel": "ヨガ",
+      "tags": ["person", "indoor"],
+      "shape": "wide"
+    },
+    {
+      "id": "17-yoga-sakura-b/work-01.jpg",
+      "path": "ai-or-original/17-yoga-sakura-b/work-01.jpg",
+      "scene": "yoga",
+      "sceneLabel": "ヨガ",
+      "tags": ["person", "indoor"],
+      "shape": "square"
+    },
+    {
+      "id": "17-yoga-sakura-b/work-02.jpg",
+      "path": "ai-or-original/17-yoga-sakura-b/work-02.jpg",
+      "scene": "yoga",
+      "sceneLabel": "ヨガ",
+      "tags": ["person", "indoor"],
+      "shape": "square"
+    },
+    {
+      "id": "17-yoga-sakura-b/work-03.jpg",
+      "path": "ai-or-original/17-yoga-sakura-b/work-03.jpg",
+      "scene": "yoga",
+      "sceneLabel": "ヨガ",
+      "tags": ["person", "indoor"],
+      "shape": "square"
+    },
+    {
+      "id": "18-studio-clinic-c/about-01.jpg",
+      "path": "ai-or-original/18-studio-clinic-c/about-01.jpg",
+      "scene": "studio",
+      "sceneLabel": "スタジオ",
+      "tags": ["indoor", "person"],
+      "shape": "square"
+    },
+    {
+      "id": "18-studio-clinic-c/about-02.jpg",
+      "path": "ai-or-original/18-studio-clinic-c/about-02.jpg",
+      "scene": "studio",
+      "sceneLabel": "スタジオ",
+      "tags": ["indoor", "person"],
+      "shape": "square"
+    },
+    {
+      "id": "18-studio-clinic-c/about-03.jpg",
+      "path": "ai-or-original/18-studio-clinic-c/about-03.jpg",
+      "scene": "studio",
+      "sceneLabel": "スタジオ",
+      "tags": ["indoor", "person"],
+      "shape": "square"
+    },
+    {
+      "id": "18-studio-clinic-c/hero.jpg",
+      "path": "ai-or-original/18-studio-clinic-c/hero.jpg",
+      "scene": "studio",
+      "sceneLabel": "スタジオ",
+      "tags": ["indoor", "person"],
+      "shape": "wide"
+    },
+    {
+      "id": "18-studio-clinic-c/work-01.jpg",
+      "path": "ai-or-original/18-studio-clinic-c/work-01.jpg",
+      "scene": "studio",
+      "sceneLabel": "スタジオ",
+      "tags": ["indoor", "person"],
+      "shape": "square"
+    },
+    {
+      "id": "18-studio-clinic-c/work-02.jpg",
+      "path": "ai-or-original/18-studio-clinic-c/work-02.jpg",
+      "scene": "studio",
+      "sceneLabel": "スタジオ",
+      "tags": ["indoor", "person"],
+      "shape": "square"
+    },
+    {
+      "id": "18-studio-clinic-c/work-03.jpg",
+      "path": "ai-or-original/18-studio-clinic-c/work-03.jpg",
+      "scene": "studio",
+      "sceneLabel": "スタジオ",
+      "tags": ["indoor", "person"],
+      "shape": "square"
+    },
+    {
+      "id": "19-studio-ink-a/about-01.jpg",
+      "path": "ai-or-original/19-studio-ink-a/about-01.jpg",
+      "scene": "studio",
+      "sceneLabel": "スタジオ",
+      "tags": ["indoor", "person"],
+      "shape": "square"
+    },
+    {
+      "id": "19-studio-ink-a/about-02.jpg",
+      "path": "ai-or-original/19-studio-ink-a/about-02.jpg",
+      "scene": "studio",
+      "sceneLabel": "スタジオ",
+      "tags": ["indoor", "person"],
+      "shape": "square"
+    },
+    {
+      "id": "19-studio-ink-a/about-03.jpg",
+      "path": "ai-or-original/19-studio-ink-a/about-03.jpg",
+      "scene": "studio",
+      "sceneLabel": "スタジオ",
+      "tags": ["indoor", "person"],
+      "shape": "square"
+    },
+    {
+      "id": "19-studio-ink-a/hero.jpg",
+      "path": "ai-or-original/19-studio-ink-a/hero.jpg",
+      "scene": "studio",
+      "sceneLabel": "スタジオ",
+      "tags": ["indoor", "person"],
+      "shape": "wide"
+    },
+    {
+      "id": "19-studio-ink-a/work-01.jpg",
+      "path": "ai-or-original/19-studio-ink-a/work-01.jpg",
+      "scene": "studio",
+      "sceneLabel": "スタジオ",
+      "tags": ["indoor", "person"],
+      "shape": "square"
+    },
+    {
+      "id": "19-studio-ink-a/work-02.jpg",
+      "path": "ai-or-original/19-studio-ink-a/work-02.jpg",
+      "scene": "studio",
+      "sceneLabel": "スタジオ",
+      "tags": ["indoor", "person"],
+      "shape": "square"
+    },
+    {
+      "id": "19-studio-ink-a/work-03.jpg",
+      "path": "ai-or-original/19-studio-ink-a/work-03.jpg",
+      "scene": "studio",
+      "sceneLabel": "スタジオ",
+      "tags": ["indoor", "person"],
+      "shape": "square"
+    },
+    {
+      "id": "20-pet-cafe-b/about-01.jpg",
+      "path": "ai-or-original/20-pet-cafe-b/about-01.jpg",
+      "scene": "pet",
+      "sceneLabel": "ペット",
+      "tags": ["animal", "indoor"],
+      "shape": "square"
+    },
+    {
+      "id": "20-pet-cafe-b/about-02.jpg",
+      "path": "ai-or-original/20-pet-cafe-b/about-02.jpg",
+      "scene": "pet",
+      "sceneLabel": "ペット",
+      "tags": ["animal", "indoor"],
+      "shape": "square"
+    },
+    {
+      "id": "20-pet-cafe-b/about-03.jpg",
+      "path": "ai-or-original/20-pet-cafe-b/about-03.jpg",
+      "scene": "pet",
+      "sceneLabel": "ペット",
+      "tags": ["animal", "indoor"],
+      "shape": "square"
+    },
+    {
+      "id": "20-pet-cafe-b/about-04.jpg",
+      "path": "ai-or-original/20-pet-cafe-b/about-04.jpg",
+      "scene": "pet",
+      "sceneLabel": "ペット",
+      "tags": ["animal", "indoor"],
+      "shape": "square"
+    },
+    {
+      "id": "20-pet-cafe-b/hero.jpg",
+      "path": "ai-or-original/20-pet-cafe-b/hero.jpg",
+      "scene": "pet",
+      "sceneLabel": "ペット",
+      "tags": ["animal", "indoor"],
+      "shape": "wide"
+    },
+    {
+      "id": "20-pet-cafe-b/work-01.jpg",
+      "path": "ai-or-original/20-pet-cafe-b/work-01.jpg",
+      "scene": "pet",
+      "sceneLabel": "ペット",
+      "tags": ["animal", "indoor"],
+      "shape": "square"
+    },
+    {
+      "id": "20-pet-cafe-b/work-02.jpg",
+      "path": "ai-or-original/20-pet-cafe-b/work-02.jpg",
+      "scene": "pet",
+      "sceneLabel": "ペット",
+      "tags": ["animal", "indoor"],
+      "shape": "square"
+    },
+    {
+      "id": "20-pet-cafe-b/work-03.jpg",
+      "path": "ai-or-original/20-pet-cafe-b/work-03.jpg",
+      "scene": "pet",
+      "sceneLabel": "ペット",
+      "tags": ["animal", "indoor"],
+      "shape": "square"
+    },
+    {
+      "id": "21-pet-sakura-a/about-01.jpg",
+      "path": "ai-or-original/21-pet-sakura-a/about-01.jpg",
+      "scene": "pet",
+      "sceneLabel": "ペット",
+      "tags": ["animal", "indoor"],
+      "shape": "square"
+    },
+    {
+      "id": "21-pet-sakura-a/about-02.jpg",
+      "path": "ai-or-original/21-pet-sakura-a/about-02.jpg",
+      "scene": "pet",
+      "sceneLabel": "ペット",
+      "tags": ["animal", "indoor"],
+      "shape": "square"
+    },
+    {
+      "id": "21-pet-sakura-a/about-03.jpg",
+      "path": "ai-or-original/21-pet-sakura-a/about-03.jpg",
+      "scene": "pet",
+      "sceneLabel": "ペット",
+      "tags": ["animal", "indoor"],
+      "shape": "square"
+    },
+    {
+      "id": "21-pet-sakura-a/hero.jpg",
+      "path": "ai-or-original/21-pet-sakura-a/hero.jpg",
+      "scene": "pet",
+      "sceneLabel": "ペット",
+      "tags": ["animal", "indoor"],
+      "shape": "wide"
+    },
+    {
+      "id": "21-pet-sakura-a/work-01.jpg",
+      "path": "ai-or-original/21-pet-sakura-a/work-01.jpg",
+      "scene": "pet",
+      "sceneLabel": "ペット",
+      "tags": ["animal", "indoor"],
+      "shape": "square"
+    },
+    {
+      "id": "21-pet-sakura-a/work-02.jpg",
+      "path": "ai-or-original/21-pet-sakura-a/work-02.jpg",
+      "scene": "pet",
+      "sceneLabel": "ペット",
+      "tags": ["animal", "indoor"],
+      "shape": "square"
+    },
+    {
+      "id": "21-pet-sakura-a/work-03.jpg",
+      "path": "ai-or-original/21-pet-sakura-a/work-03.jpg",
+      "scene": "pet",
+      "sceneLabel": "ペット",
+      "tags": ["animal", "indoor"],
+      "shape": "square"
+    },
+    {
+      "id": "22-cowork-clinic-b/about-01.jpg",
+      "path": "ai-or-original/22-cowork-clinic-b/about-01.jpg",
+      "scene": "cowork",
+      "sceneLabel": "コワーキング",
+      "tags": ["indoor"],
+      "shape": "square"
+    },
+    {
+      "id": "22-cowork-clinic-b/about-02.jpg",
+      "path": "ai-or-original/22-cowork-clinic-b/about-02.jpg",
+      "scene": "cowork",
+      "sceneLabel": "コワーキング",
+      "tags": ["indoor"],
+      "shape": "square"
+    },
+    {
+      "id": "22-cowork-clinic-b/about-03.jpg",
+      "path": "ai-or-original/22-cowork-clinic-b/about-03.jpg",
+      "scene": "cowork",
+      "sceneLabel": "コワーキング",
+      "tags": ["indoor"],
+      "shape": "square"
+    },
+    {
+      "id": "22-cowork-clinic-b/about-04.jpg",
+      "path": "ai-or-original/22-cowork-clinic-b/about-04.jpg",
+      "scene": "cowork",
+      "sceneLabel": "コワーキング",
+      "tags": ["indoor"],
+      "shape": "square"
+    },
+    {
+      "id": "22-cowork-clinic-b/hero.jpg",
+      "path": "ai-or-original/22-cowork-clinic-b/hero.jpg",
+      "scene": "cowork",
+      "sceneLabel": "コワーキング",
+      "tags": ["indoor"],
+      "shape": "wide"
+    },
+    {
+      "id": "22-cowork-clinic-b/work-01.jpg",
+      "path": "ai-or-original/22-cowork-clinic-b/work-01.jpg",
+      "scene": "cowork",
+      "sceneLabel": "コワーキング",
+      "tags": ["indoor"],
+      "shape": "square"
+    },
+    {
+      "id": "22-cowork-clinic-b/work-02.jpg",
+      "path": "ai-or-original/22-cowork-clinic-b/work-02.jpg",
+      "scene": "cowork",
+      "sceneLabel": "コワーキング",
+      "tags": ["indoor"],
+      "shape": "square"
+    },
+    {
+      "id": "22-cowork-clinic-b/work-03.jpg",
+      "path": "ai-or-original/22-cowork-clinic-b/work-03.jpg",
+      "scene": "cowork",
+      "sceneLabel": "コワーキング",
+      "tags": ["indoor"],
+      "shape": "square"
+    },
+    {
+      "id": "23-cowork-green-a/about-01.jpg",
+      "path": "ai-or-original/23-cowork-green-a/about-01.jpg",
+      "scene": "cowork",
+      "sceneLabel": "コワーキング",
+      "tags": ["indoor"],
+      "shape": "square"
+    },
+    {
+      "id": "23-cowork-green-a/about-02.jpg",
+      "path": "ai-or-original/23-cowork-green-a/about-02.jpg",
+      "scene": "cowork",
+      "sceneLabel": "コワーキング",
+      "tags": ["indoor"],
+      "shape": "square"
+    },
+    {
+      "id": "23-cowork-green-a/about-03.jpg",
+      "path": "ai-or-original/23-cowork-green-a/about-03.jpg",
+      "scene": "cowork",
+      "sceneLabel": "コワーキング",
+      "tags": ["indoor"],
+      "shape": "square"
+    },
+    {
+      "id": "23-cowork-green-a/hero.jpg",
+      "path": "ai-or-original/23-cowork-green-a/hero.jpg",
+      "scene": "cowork",
+      "sceneLabel": "コワーキング",
+      "tags": ["indoor"],
+      "shape": "wide"
+    },
+    {
+      "id": "23-cowork-green-a/work-01.jpg",
+      "path": "ai-or-original/23-cowork-green-a/work-01.jpg",
+      "scene": "cowork",
+      "sceneLabel": "コワーキング",
+      "tags": ["indoor"],
+      "shape": "square"
+    },
+    {
+      "id": "23-cowork-green-a/work-02.jpg",
+      "path": "ai-or-original/23-cowork-green-a/work-02.jpg",
+      "scene": "cowork",
+      "sceneLabel": "コワーキング",
+      "tags": ["indoor"],
+      "shape": "square"
+    },
+    {
+      "id": "23-cowork-green-a/work-03.jpg",
+      "path": "ai-or-original/23-cowork-green-a/work-03.jpg",
+      "scene": "cowork",
+      "sceneLabel": "コワーキング",
+      "tags": ["indoor"],
+      "shape": "square"
+    },
+    {
+      "id": "24-sweets-sakura-c/about-01.jpg",
+      "path": "ai-or-original/24-sweets-sakura-c/about-01.jpg",
+      "scene": "sweets",
+      "sceneLabel": "スイーツ",
+      "tags": ["food", "drink", "indoor"],
+      "shape": "square"
+    },
+    {
+      "id": "24-sweets-sakura-c/about-02.jpg",
+      "path": "ai-or-original/24-sweets-sakura-c/about-02.jpg",
+      "scene": "sweets",
+      "sceneLabel": "スイーツ",
+      "tags": ["food", "drink", "indoor"],
+      "shape": "square"
+    },
+    {
+      "id": "24-sweets-sakura-c/about-03.jpg",
+      "path": "ai-or-original/24-sweets-sakura-c/about-03.jpg",
+      "scene": "sweets",
+      "sceneLabel": "スイーツ",
+      "tags": ["food", "drink", "indoor"],
+      "shape": "square"
+    },
+    {
+      "id": "24-sweets-sakura-c/hero.jpg",
+      "path": "ai-or-original/24-sweets-sakura-c/hero.jpg",
+      "scene": "sweets",
+      "sceneLabel": "スイーツ",
+      "tags": ["food", "drink", "indoor"],
+      "shape": "wide"
+    },
+    {
+      "id": "24-sweets-sakura-c/work-01.jpg",
+      "path": "ai-or-original/24-sweets-sakura-c/work-01.jpg",
+      "scene": "sweets",
+      "sceneLabel": "スイーツ",
+      "tags": ["food", "drink", "indoor"],
+      "shape": "square"
+    },
+    {
+      "id": "24-sweets-sakura-c/work-02.jpg",
+      "path": "ai-or-original/24-sweets-sakura-c/work-02.jpg",
+      "scene": "sweets",
+      "sceneLabel": "スイーツ",
+      "tags": ["food", "drink", "indoor"],
+      "shape": "square"
+    },
+    {
+      "id": "24-sweets-sakura-c/work-03.jpg",
+      "path": "ai-or-original/24-sweets-sakura-c/work-03.jpg",
+      "scene": "sweets",
+      "sceneLabel": "スイーツ",
+      "tags": ["food", "drink", "indoor"],
+      "shape": "square"
+    },
+    {
+      "id": "25-sweets-cafe-a/about-01.jpg",
+      "path": "ai-or-original/25-sweets-cafe-a/about-01.jpg",
+      "scene": "sweets",
+      "sceneLabel": "スイーツ",
+      "tags": ["food", "drink", "indoor"],
+      "shape": "square"
+    },
+    {
+      "id": "25-sweets-cafe-a/about-02.jpg",
+      "path": "ai-or-original/25-sweets-cafe-a/about-02.jpg",
+      "scene": "sweets",
+      "sceneLabel": "スイーツ",
+      "tags": ["food", "drink", "indoor"],
+      "shape": "square"
+    },
+    {
+      "id": "25-sweets-cafe-a/about-03.jpg",
+      "path": "ai-or-original/25-sweets-cafe-a/about-03.jpg",
+      "scene": "sweets",
+      "sceneLabel": "スイーツ",
+      "tags": ["food", "drink", "indoor"],
+      "shape": "square"
+    },
+    {
+      "id": "25-sweets-cafe-a/hero.jpg",
+      "path": "ai-or-original/25-sweets-cafe-a/hero.jpg",
+      "scene": "sweets",
+      "sceneLabel": "スイーツ",
+      "tags": ["food", "drink", "indoor"],
+      "shape": "wide"
+    },
+    {
+      "id": "25-sweets-cafe-a/work-01.jpg",
+      "path": "ai-or-original/25-sweets-cafe-a/work-01.jpg",
+      "scene": "sweets",
+      "sceneLabel": "スイーツ",
+      "tags": ["food", "drink", "indoor"],
+      "shape": "square"
+    },
+    {
+      "id": "25-sweets-cafe-a/work-02.jpg",
+      "path": "ai-or-original/25-sweets-cafe-a/work-02.jpg",
+      "scene": "sweets",
+      "sceneLabel": "スイーツ",
+      "tags": ["food", "drink", "indoor"],
+      "shape": "square"
+    },
+    {
+      "id": "25-sweets-cafe-a/work-03.jpg",
+      "path": "ai-or-original/25-sweets-cafe-a/work-03.jpg",
+      "scene": "sweets",
+      "sceneLabel": "スイーツ",
+      "tags": ["food", "drink", "indoor"],
+      "shape": "square"
+    },
+    {
+      "id": "26-izakaya-brick-c/about-01.jpg",
+      "path": "ai-or-original/26-izakaya-brick-c/about-01.jpg",
+      "scene": "izakaya",
+      "sceneLabel": "居酒屋",
+      "tags": ["food", "drink", "indoor"],
+      "shape": "square"
+    },
+    {
+      "id": "26-izakaya-brick-c/about-02.jpg",
+      "path": "ai-or-original/26-izakaya-brick-c/about-02.jpg",
+      "scene": "izakaya",
+      "sceneLabel": "居酒屋",
+      "tags": ["food", "drink", "indoor"],
+      "shape": "square"
+    },
+    {
+      "id": "26-izakaya-brick-c/about-03.jpg",
+      "path": "ai-or-original/26-izakaya-brick-c/about-03.jpg",
+      "scene": "izakaya",
+      "sceneLabel": "居酒屋",
+      "tags": ["food", "drink", "indoor"],
+      "shape": "square"
+    },
+    {
+      "id": "26-izakaya-brick-c/hero.jpg",
+      "path": "ai-or-original/26-izakaya-brick-c/hero.jpg",
+      "scene": "izakaya",
+      "sceneLabel": "居酒屋",
+      "tags": ["food", "drink", "indoor"],
+      "shape": "wide"
+    },
+    {
+      "id": "26-izakaya-brick-c/work-01.jpg",
+      "path": "ai-or-original/26-izakaya-brick-c/work-01.jpg",
+      "scene": "izakaya",
+      "sceneLabel": "居酒屋",
+      "tags": ["food", "drink", "indoor"],
+      "shape": "square"
+    },
+    {
+      "id": "26-izakaya-brick-c/work-02.jpg",
+      "path": "ai-or-original/26-izakaya-brick-c/work-02.jpg",
+      "scene": "izakaya",
+      "sceneLabel": "居酒屋",
+      "tags": ["food", "drink", "indoor"],
+      "shape": "square"
+    },
+    {
+      "id": "26-izakaya-brick-c/work-03.jpg",
+      "path": "ai-or-original/26-izakaya-brick-c/work-03.jpg",
+      "scene": "izakaya",
+      "sceneLabel": "居酒屋",
+      "tags": ["food", "drink", "indoor"],
+      "shape": "square"
+    },
+    {
+      "id": "27-izakaya-ink-b/about-01.jpg",
+      "path": "ai-or-original/27-izakaya-ink-b/about-01.jpg",
+      "scene": "izakaya",
+      "sceneLabel": "居酒屋",
+      "tags": ["food", "drink", "indoor"],
+      "shape": "square"
+    },
+    {
+      "id": "27-izakaya-ink-b/about-02.jpg",
+      "path": "ai-or-original/27-izakaya-ink-b/about-02.jpg",
+      "scene": "izakaya",
+      "sceneLabel": "居酒屋",
+      "tags": ["food", "drink", "indoor"],
+      "shape": "square"
+    },
+    {
+      "id": "27-izakaya-ink-b/about-03.jpg",
+      "path": "ai-or-original/27-izakaya-ink-b/about-03.jpg",
+      "scene": "izakaya",
+      "sceneLabel": "居酒屋",
+      "tags": ["food", "drink", "indoor"],
+      "shape": "square"
+    },
+    {
+      "id": "27-izakaya-ink-b/about-04.jpg",
+      "path": "ai-or-original/27-izakaya-ink-b/about-04.jpg",
+      "scene": "izakaya",
+      "sceneLabel": "居酒屋",
+      "tags": ["food", "drink", "indoor"],
+      "shape": "square"
+    },
+    {
+      "id": "27-izakaya-ink-b/hero.jpg",
+      "path": "ai-or-original/27-izakaya-ink-b/hero.jpg",
+      "scene": "izakaya",
+      "sceneLabel": "居酒屋",
+      "tags": ["food", "drink", "indoor"],
+      "shape": "wide"
+    },
+    {
+      "id": "27-izakaya-ink-b/work-01.jpg",
+      "path": "ai-or-original/27-izakaya-ink-b/work-01.jpg",
+      "scene": "izakaya",
+      "sceneLabel": "居酒屋",
+      "tags": ["food", "drink", "indoor"],
+      "shape": "square"
+    },
+    {
+      "id": "27-izakaya-ink-b/work-02.jpg",
+      "path": "ai-or-original/27-izakaya-ink-b/work-02.jpg",
+      "scene": "izakaya",
+      "sceneLabel": "居酒屋",
+      "tags": ["food", "drink", "indoor"],
+      "shape": "square"
+    },
+    {
+      "id": "27-izakaya-ink-b/work-03.jpg",
+      "path": "ai-or-original/27-izakaya-ink-b/work-03.jpg",
+      "scene": "izakaya",
+      "sceneLabel": "居酒屋",
+      "tags": ["food", "drink", "indoor"],
+      "shape": "square"
+    },
+    {
+      "id": "28-gallery-ink-a/about-01.jpg",
+      "path": "ai-or-original/28-gallery-ink-a/about-01.jpg",
+      "scene": "gallery",
+      "sceneLabel": "ギャラリー",
+      "tags": ["indoor", "scenery"],
+      "shape": "square"
+    },
+    {
+      "id": "28-gallery-ink-a/about-02.jpg",
+      "path": "ai-or-original/28-gallery-ink-a/about-02.jpg",
+      "scene": "gallery",
+      "sceneLabel": "ギャラリー",
+      "tags": ["indoor", "scenery"],
+      "shape": "square"
+    },
+    {
+      "id": "28-gallery-ink-a/about-03.jpg",
+      "path": "ai-or-original/28-gallery-ink-a/about-03.jpg",
+      "scene": "gallery",
+      "sceneLabel": "ギャラリー",
+      "tags": ["indoor", "scenery"],
+      "shape": "square"
+    },
+    {
+      "id": "28-gallery-ink-a/hero.jpg",
+      "path": "ai-or-original/28-gallery-ink-a/hero.jpg",
+      "scene": "gallery",
+      "sceneLabel": "ギャラリー",
+      "tags": ["indoor", "scenery"],
+      "shape": "wide"
+    },
+    {
+      "id": "28-gallery-ink-a/work-01.jpg",
+      "path": "ai-or-original/28-gallery-ink-a/work-01.jpg",
+      "scene": "gallery",
+      "sceneLabel": "ギャラリー",
+      "tags": ["indoor", "scenery"],
+      "shape": "square"
+    },
+    {
+      "id": "28-gallery-ink-a/work-02.jpg",
+      "path": "ai-or-original/28-gallery-ink-a/work-02.jpg",
+      "scene": "gallery",
+      "sceneLabel": "ギャラリー",
+      "tags": ["indoor", "scenery"],
+      "shape": "square"
+    },
+    {
+      "id": "28-gallery-ink-a/work-03.jpg",
+      "path": "ai-or-original/28-gallery-ink-a/work-03.jpg",
+      "scene": "gallery",
+      "sceneLabel": "ギャラリー",
+      "tags": ["indoor", "scenery"],
+      "shape": "square"
+    },
+    {
+      "id": "29-gallery-clinic-c/about-01.jpg",
+      "path": "ai-or-original/29-gallery-clinic-c/about-01.jpg",
+      "scene": "gallery",
+      "sceneLabel": "ギャラリー",
+      "tags": ["indoor", "scenery"],
+      "shape": "square"
+    },
+    {
+      "id": "29-gallery-clinic-c/about-02.jpg",
+      "path": "ai-or-original/29-gallery-clinic-c/about-02.jpg",
+      "scene": "gallery",
+      "sceneLabel": "ギャラリー",
+      "tags": ["indoor", "scenery"],
+      "shape": "square"
+    },
+    {
+      "id": "29-gallery-clinic-c/about-03.jpg",
+      "path": "ai-or-original/29-gallery-clinic-c/about-03.jpg",
+      "scene": "gallery",
+      "sceneLabel": "ギャラリー",
+      "tags": ["indoor", "scenery"],
+      "shape": "square"
+    },
+    {
+      "id": "29-gallery-clinic-c/hero.jpg",
+      "path": "ai-or-original/29-gallery-clinic-c/hero.jpg",
+      "scene": "gallery",
+      "sceneLabel": "ギャラリー",
+      "tags": ["indoor", "scenery"],
+      "shape": "wide"
+    },
+    {
+      "id": "29-gallery-clinic-c/work-01.jpg",
+      "path": "ai-or-original/29-gallery-clinic-c/work-01.jpg",
+      "scene": "gallery",
+      "sceneLabel": "ギャラリー",
+      "tags": ["indoor", "scenery"],
+      "shape": "square"
+    },
+    {
+      "id": "29-gallery-clinic-c/work-02.jpg",
+      "path": "ai-or-original/29-gallery-clinic-c/work-02.jpg",
+      "scene": "gallery",
+      "sceneLabel": "ギャラリー",
+      "tags": ["indoor", "scenery"],
+      "shape": "square"
+    },
+    {
+      "id": "29-gallery-clinic-c/work-03.jpg",
+      "path": "ai-or-original/29-gallery-clinic-c/work-03.jpg",
+      "scene": "gallery",
+      "sceneLabel": "ギャラリー",
+      "tags": ["indoor", "scenery"],
+      "shape": "square"
+    },
+    {
+      "id": "30-hotel-cafe-b/about-01.jpg",
+      "path": "ai-or-original/30-hotel-cafe-b/about-01.jpg",
+      "scene": "hotel",
+      "sceneLabel": "宿",
+      "tags": ["indoor", "scenery"],
+      "shape": "square"
+    },
+    {
+      "id": "30-hotel-cafe-b/about-02.jpg",
+      "path": "ai-or-original/30-hotel-cafe-b/about-02.jpg",
+      "scene": "hotel",
+      "sceneLabel": "宿",
+      "tags": ["indoor", "scenery"],
+      "shape": "square"
+    },
+    {
+      "id": "30-hotel-cafe-b/about-03.jpg",
+      "path": "ai-or-original/30-hotel-cafe-b/about-03.jpg",
+      "scene": "hotel",
+      "sceneLabel": "宿",
+      "tags": ["indoor", "scenery"],
+      "shape": "square"
+    },
+    {
+      "id": "30-hotel-cafe-b/hero.jpg",
+      "path": "ai-or-original/30-hotel-cafe-b/hero.jpg",
+      "scene": "hotel",
+      "sceneLabel": "宿",
+      "tags": ["indoor", "scenery"],
+      "shape": "wide"
+    },
+    {
+      "id": "30-hotel-cafe-b/work-01.jpg",
+      "path": "ai-or-original/30-hotel-cafe-b/work-01.jpg",
+      "scene": "hotel",
+      "sceneLabel": "宿",
+      "tags": ["indoor", "scenery"],
+      "shape": "square"
+    },
+    {
+      "id": "30-hotel-cafe-b/work-02.jpg",
+      "path": "ai-or-original/30-hotel-cafe-b/work-02.jpg",
+      "scene": "hotel",
+      "sceneLabel": "宿",
+      "tags": ["indoor", "scenery"],
+      "shape": "square"
+    },
+    {
+      "id": "30-hotel-cafe-b/work-03.jpg",
+      "path": "ai-or-original/30-hotel-cafe-b/work-03.jpg",
+      "scene": "hotel",
+      "sceneLabel": "宿",
+      "tags": ["indoor", "scenery"],
+      "shape": "square"
+    }
+  ]
+}

@@ -8233,6 +8233,14 @@ body.atelier.sample-flow-hide-preview .atelier-dash {
   border: 1px solid rgba(20, 28, 36, 0.12);
   border-radius: 0.55rem;
   background: #fff;
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+  align-items: flex-start;
+}
+
+.sample-img-wire-list .easy-img-panel .gct-btn + .gct-btn {
+  margin-top: 0;
 }
 
 .sample-img-wire-list .easy-img-panel.is-current {

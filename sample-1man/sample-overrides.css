@@ -7384,9 +7384,9 @@ body.atelier.color-mode-easy .zone-badge[data-open-step="site-fonts"] {
 }
 
 #entry-sushi-field.sushi-shelf {
-  --sushi-tile-w: 300px;
-  --sushi-tile-h: 424px;
-  --sushi-tile-gap: 24px;
+  --sushi-tile-w: 170px;
+  --sushi-tile-h: 240px;
+  --sushi-tile-gap: 18px;
   --sushi-stock-scale: 0.5;
   --sushi-stock-tile-w: calc(var(--sushi-tile-w) * var(--sushi-stock-scale));
   --sushi-stock-tile-h: calc(var(--sushi-tile-h) * var(--sushi-stock-scale));
@@ -7400,9 +7400,9 @@ body.atelier.color-mode-easy .zone-badge[data-open-step="site-fonts"] {
   display: flex;
   flex-direction: column;
   gap: 0.35rem;
-  flex: 0 1 auto;
+  flex: 1 1 auto;
   min-height: 0;
-  overflow: visible;
+  overflow: hidden;
 }
 #entry-sushi-field.sushi-shelf[hidden] {
   display: none !important;
@@ -7415,22 +7415,27 @@ body.atelier.color-mode-easy .zone-badge[data-open-step="site-fonts"] {
   display: none !important;
 }
 #entry-gate[data-entry-step="sushi"] .entry-gate-panel--full {
-  padding-top: 1rem;
+  padding-top: 0.65rem;
   padding-bottom: 0.55rem;
+  overflow: hidden;
 }
 #entry-gate[data-entry-step="sushi"] #entry-sushi-field {
-  flex: 0 1 auto;
+  flex: 1 1 auto;
   min-height: 0;
 }
 
-/* 寿司ヘッダー：戻る＝左上／操作のヒント＝右上（本線より一段小さく） */
+/*
+  最上段：戻る ＝ 3枠 ＝ 操作のヒント（同じ高さ）
+  枠・レーン寸法は拡大しない（前の 170×240 系）。
+*/
 .sushi-chrome {
-  display: flex;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
   align-items: center;
-  justify-content: space-between;
-  gap: 0.75rem;
-  padding: 0 0.2rem;
+  gap: 0.55rem 0.75rem;
+  padding: 0 0.15rem;
   min-width: 0;
+  flex: 0 0 auto;
 }
 .sushi-chrome-back,
 .sushi-chrome-hint {
@@ -7444,6 +7449,7 @@ body.atelier.color-mode-easy .zone-badge[data-open-step="site-fonts"] {
   background: #fff;
   color: #1a242c;
   cursor: pointer;
+  white-space: nowrap;
 }
 .sushi-chrome-back:hover,
 .sushi-chrome-hint:hover,
@@ -7453,91 +7459,15 @@ body.atelier.color-mode-easy .zone-badge[data-open-step="site-fonts"] {
   background: #f7f8f7;
 }
 
-/*
-  上段本線：目立たせる＝字と番号の大きさ／コントラスト。
-  余白を広げて「空で押す」やり方はしない（隙間取りと混同しない）。
-*/
-.sushi-upper {
-  display: grid;
-  grid-template-columns: minmax(11rem, 15rem) minmax(0, 1fr) minmax(11rem, 15rem);
-  align-items: end;
-  gap: 0.35rem 0.7rem;
-  margin: 0;
-  padding: 0.1rem 0.45rem 0;
-  min-width: 0;
-  overflow: visible;
-}
-
-.sushi-upper-left,
-.sushi-upper-right {
-  min-width: 0;
-  align-self: end;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-end;
-  padding-bottom: 0.35rem;
-}
-.sushi-upper-left {
-  align-items: flex-start;
-}
-.sushi-upper-right {
-  align-items: flex-end;
-}
-
-.sushi-flow-guide {
-  margin: 0;
-  max-width: none;
-  color: #12181e;
-  font-size: clamp(1.15rem, 1.35vw, 1.4rem);
-  font-weight: 800;
-  line-height: 1.4;
-  letter-spacing: 0.01em;
-}
-.sushi-flow-line {
-  display: inline-flex;
-  align-items: center;
-  flex-wrap: wrap;
-  gap: 0.1rem 0.25rem;
-}
-.sushi-flow-num {
-  font-size: 1.2em;
-  font-weight: 900;
-  letter-spacing: 0;
-  line-height: 1;
-}
-.sushi-flow-arrow {
-  display: block;
-  margin-top: 0.15rem;
-  font-size: 1.35em;
-  font-weight: 900;
-  line-height: 1;
-  color: #12181e;
-}
-.sushi-flow-arrow--left {
-  display: inline;
-  margin: 0 0.15rem 0 0;
-  font-size: 1.15em;
-}
-.sushi-flow-guide--confirm {
-  text-align: right;
-}
-.sushi-flow-guide--confirm .sushi-flow-line {
-  justify-content: flex-end;
-}
-
-.sushi-upper-center {
-  min-width: 0;
-  display: flex;
-  justify-content: center;
-}
-
 .sushi-stock-bar {
   display: flex;
   justify-content: center;
-  align-items: stretch;
-  gap: 0.55rem;
+  align-items: center;
+  /* 枠幅の約1/3を隙間に */
+  gap: calc(var(--sushi-stock-tile-w) / 3);
   min-width: 0;
   margin: 0;
+  justify-self: center;
 }
 
 .sushi-stock-col {
@@ -7564,7 +7494,7 @@ body.atelier.color-mode-easy .zone-badge[data-open-step="site-fonts"] {
   position: relative;
   width: var(--sushi-stock-tile-w);
   height: var(--sushi-stock-tile-h);
-  border-radius: 0.55rem;
+  border-radius: 0.45rem;
   border: 1px dashed rgba(20, 28, 36, 0.22);
   background: rgba(255, 255, 255, 0.72);
   padding: 0;
@@ -7596,14 +7526,12 @@ body.atelier.color-mode-easy .zone-badge[data-open-step="site-fonts"] {
 .sushi-stock-slot .sushi-tile--stock .sushi-tile-clip {
   inset: 0;
 }
-
 .sushi-stock-slot.is-empty {
   align-items: center;
   justify-content: center;
   border-style: dashed;
   color: #556;
 }
-
 .sushi-stock-slot.is-stock-in {
   animation: sushi-stock-in var(--sushi-stock-in-ms) ease;
 }
@@ -7617,49 +7545,121 @@ body.atelier.color-mode-easy .zone-badge[data-open-step="site-fonts"] {
   to { transform: none; opacity: 1; }
 }
 
+/*
+  本線案内：①は左（↓は文言の中央下）／②は3枠の中央下
+  目立たせる＝字。空きで押さない。
+*/
+.sushi-flow-row {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: start;
+  gap: 0.25rem 0.75rem;
+  padding: 0 0.15rem;
+  min-width: 0;
+  flex: 0 0 auto;
+}
+.sushi-flow-guide {
+  margin: 0;
+  color: #12181e;
+  font-size: clamp(1.1rem, 1.3vw, 1.35rem);
+  font-weight: 800;
+  line-height: 1.35;
+  letter-spacing: 0.01em;
+}
+.sushi-flow-guide--add {
+  grid-column: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  max-width: 12.5rem;
+}
+.sushi-flow-guide--confirm {
+  grid-column: 2;
+  justify-self: center;
+  text-align: center;
+}
+.sushi-flow-line {
+  display: inline-flex;
+  align-items: center;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 0.1rem 0.25rem;
+}
+.sushi-flow-num {
+  font-size: 1.2em;
+  font-weight: 900;
+  letter-spacing: 0;
+  line-height: 1;
+}
+.sushi-flow-arrow {
+  display: block;
+  margin-top: 0.1rem;
+  font-size: 1.3em;
+  font-weight: 900;
+  line-height: 1;
+  color: #12181e;
+  text-align: center;
+}
+.sushi-flow-arrow--left {
+  display: inline;
+  margin: 0 0.15rem 0 0;
+  font-size: 1.15em;
+}
+
 @media (max-width: 720px) {
-  .sushi-upper {
-    grid-template-columns: 1fr 1fr;
-    grid-template-areas:
-      "add confirm"
-      "slots slots";
-    gap: 0.35rem 0.45rem;
-    padding: 0.15rem 0.35rem 0.1rem;
+  .sushi-chrome {
+    grid-template-columns: auto 1fr auto;
+    gap: 0.35rem 0.4rem;
   }
-  .sushi-upper-left { grid-area: add; }
-  .sushi-upper-right { grid-area: confirm; }
-  .sushi-upper-center { grid-area: slots; }
+  .sushi-flow-row {
+    grid-template-columns: 1fr 1fr;
+  }
+  .sushi-flow-guide--add {
+    grid-column: 1;
+    max-width: none;
+  }
+  .sushi-flow-guide--confirm {
+    grid-column: 2;
+    justify-self: center;
+  }
   .sushi-flow-guide {
-    font-size: 1.08rem;
+    font-size: 1.05rem;
   }
   .sushi-chrome-back,
   .sushi-chrome-hint {
-    font-size: 0.95rem;
-    padding: 0.4rem 0.7rem;
+    font-size: 0.92rem;
+    padding: 0.35rem 0.55rem;
   }
   .sushi-stock-bar {
-    gap: 0.4rem;
+    gap: calc(var(--sushi-stock-tile-w) / 3);
   }
 }
 
-/* 上枠ポップ（進む／外す／閉じる） */
+/* 上枠ポップ：画面中央（被ってよい） */
 .sushi-slot-pop {
   position: fixed;
   inset: 0;
   z-index: 78;
-  pointer-events: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  box-sizing: border-box;
+  background: rgba(18, 24, 30, 0.28);
+  pointer-events: auto;
 }
 .sushi-slot-pop[hidden] {
   display: none !important;
 }
 .sushi-slot-pop-card {
-  position: fixed;
-  width: min(15.5rem, calc(100vw - 1.5rem));
+  position: relative;
+  width: min(16rem, calc(100vw - 1.5rem));
   pointer-events: auto;
   background: #fff;
   border-radius: 0.7rem;
-  padding: 0.85rem 0.9rem 0.75rem;
-  box-shadow: 0 14px 36px rgba(20, 28, 36, 0.22);
+  padding: 0.95rem 1rem 0.8rem;
+  box-shadow: 0 16px 40px rgba(20, 28, 36, 0.28);
   border: 1px solid rgba(20, 28, 36, 0.1);
   display: grid;
   gap: 0.45rem;
@@ -7723,11 +7723,11 @@ body.atelier.color-mode-easy .zone-badge[data-open-step="site-fonts"] {
     #f3f1ec;
   border: 1px solid rgba(20, 28, 36, 0.07);
   overflow: hidden;
-  /* 余った縦を吸わず、タイル直下で床を切る */
-  flex: 0 0 auto;
+  /* 上段を上げた分、レーン帯が残りの縦を使う（タイル寸法は拡大しない） */
+  flex: 1 1 auto;
   align-self: stretch;
   width: 100%;
-  min-height: 0;
+  min-height: calc(var(--sushi-tile-h) + 2.4rem);
   height: auto;
   display: flex;
   flex-direction: column;
@@ -7738,13 +7738,12 @@ body.atelier.color-mode-easy .zone-badge[data-open-step="site-fonts"] {
   overflow: hidden;
   touch-action: pan-y;
   cursor: grab;
-  padding: 1.35rem calc(var(--sushi-tile-w) * 0.28) 1.5rem;
+  padding: 1rem calc(var(--sushi-tile-w) * 0.28) 1.15rem;
   user-select: none;
-  /* 床の高さ＝タイル＋上下パディングだけ */
-  flex: 0 0 auto;
-  min-height: calc(var(--sushi-tile-h) + 2.85rem);
-  height: calc(var(--sushi-tile-h) + 2.85rem);
-  max-height: calc(var(--sushi-tile-h) + 2.85rem);
+  flex: 1 1 auto;
+  min-height: calc(var(--sushi-tile-h) + 2.15rem);
+  height: auto;
+  max-height: none;
   display: flex;
   align-items: center;
 }

@@ -12,7 +12,7 @@
   <!-- メーカー親CSS（ポートフォリオ根の style.css は読まない） -->
   <link rel="stylesheet" href="maker-base.css?v=cleanup-20260922">
   <link rel="icon" href="brand/mark-favicon.png?v=logo-7" type="image/png">
-  <link rel="stylesheet" href="sample-overrides.css?v=sushi-type-20260922b">
+  <link rel="stylesheet" href="sample-overrides.css?v=sushi-layout-20260922c">
   <link rel="stylesheet" href="free-photo-gallery/gallery.css?v=cleanup-20260922">
   <script>
     (function () {
@@ -36,7 +36,7 @@
   <script src="vibe-dict.js" defer></script>
   <script src="easy-copy-dict.js?v=cleanup-20260922" defer></script>
   <script src="copy-dict-engine.js?v=cleanup-20260922" defer></script>
-  <script src="sushi-belt.js?v=sushi-ui-20260922" defer></script>
+  <script src="sushi-belt.js?v=sushi-layout-20260922c" defer></script>
   <script src="free-photo-gallery/gallery.js?v=cleanup-20260922" defer></script>
   <script src="script.js?v=cleanup-20260922" defer></script>
   <script>
@@ -210,23 +210,17 @@
         </div>
         <div class="sushi-chrome">
           <button type="button" class="sushi-chrome-back" data-entry-step-back>← ひとつ戻る</button>
+          <div class="sushi-stock-bar" id="sushi-stock-bar" aria-label="上の枠（最大3）"></div>
           <button type="button" class="sushi-chrome-hint" id="sushi-hint-open" aria-haspopup="dialog">操作のヒント</button>
         </div>
-        <div class="sushi-upper">
-          <div class="sushi-upper-left">
-            <p class="sushi-flow-guide sushi-flow-guide--add">
-              <span class="sushi-flow-line"><span class="sushi-flow-num" aria-hidden="true">①</span>クリックしてサンプル追加</span>
-              <span class="sushi-flow-arrow sushi-flow-arrow--down" aria-hidden="true">↓</span>
-            </p>
-          </div>
-          <div class="sushi-upper-center">
-            <div class="sushi-stock-bar" id="sushi-stock-bar" aria-label="上の枠（最大3）"></div>
-          </div>
-          <div class="sushi-upper-right">
-            <p class="sushi-flow-guide sushi-flow-guide--confirm">
-              <span class="sushi-flow-line"><span class="sushi-flow-arrow sushi-flow-arrow--left" aria-hidden="true">←</span><span class="sushi-flow-num" aria-hidden="true">②</span>クリックして確定</span>
-            </p>
-          </div>
+        <div class="sushi-flow-row">
+          <p class="sushi-flow-guide sushi-flow-guide--add">
+            <span class="sushi-flow-line"><span class="sushi-flow-num" aria-hidden="true">①</span>クリックしてサンプル追加</span>
+            <span class="sushi-flow-arrow sushi-flow-arrow--down" aria-hidden="true">↓</span>
+          </p>
+          <p class="sushi-flow-guide sushi-flow-guide--confirm">
+            <span class="sushi-flow-line"><span class="sushi-flow-arrow sushi-flow-arrow--left" aria-hidden="true">←</span><span class="sushi-flow-num" aria-hidden="true">②</span>クリックして確定</span>
+          </p>
         </div>
         <div class="sushi-lane-wrap">
           <div class="sushi-lane" id="sushi-lane" aria-label="サンプルの列（短くクリックで上の枠へ。ドラッグで送れます）">

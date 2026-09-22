@@ -5,10 +5,10 @@
 (function (global) {
   "use strict";
 
-  /* 本番タイル寸法（↑↓・番号行を消しレーンへ寄せて拡大） */
-  var TILE_W = 300;
-  var TILE_H = 424;
-  var TILE_GAP = 24;
+  /* レーン／上枠の本番寸法（拡大しない。ちょうどよかった前寸法） */
+  var TILE_W = 170;
+  var TILE_H = 240;
+  var TILE_GAP = 18;
   var SITE_DESIGN_W = 1200;
   var SPEED_PX_S = 36;
   var MS_STOCK_IN = 360;
@@ -829,15 +829,11 @@
       btn.setAttribute("data-slot", String(slot));
     });
     renderStock();
-    if (anchorEl && els.slotPop) {
-      var card = els.slotPop.querySelector(".sushi-slot-pop-card");
-      var rect = anchorEl.getBoundingClientRect();
-      if (card) {
-        var top = Math.min(window.innerHeight - 220, Math.max(12, rect.bottom + 8));
-        var left = Math.min(window.innerWidth - 260, Math.max(12, rect.left + rect.width / 2 - 120));
-        card.style.top = top + "px";
-        card.style.left = left + "px";
-      }
+    /* 視線を飛ばさない：画面中央固定（枠の左右に寄せない） */
+    var card = els.slotPop.querySelector(".sushi-slot-pop-card");
+    if (card) {
+      card.style.top = "";
+      card.style.left = "";
     }
   }
 

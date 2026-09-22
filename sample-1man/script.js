@@ -9816,6 +9816,9 @@
     store.copyFrameSelected = {};
     store.copyFrameNow = {};
     store.easyAnswers = { mood: "calm", focus: "quality", guest: "first" };
+    if (window.Sample1manCopyDict && typeof window.Sample1manCopyDict.resetSessionUsedParts === "function") {
+      window.Sample1manCopyDict.resetSessionUsedParts();
+    }
     prepareEasyFixedImageCounts();
     fillEasyBasicsFromFields();
     setSampleFlowPreviewHidden(false);

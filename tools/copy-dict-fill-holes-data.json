@@ -1,0 +1,136 @@
+{
+  "sharedBrightMid": [
+    { "id": "gen_mid_bright_1", "text": "明るい時間を大切にしています", "kw": "bright" },
+    { "id": "gen_mid_bright_2", "text": "にぎわいと笑顔が自然と集まります", "kw": "bright" },
+    { "id": "gen_mid_bright_3", "text": "開放感のある空気を心がけています", "kw": "bright" },
+    { "id": "gen_mid_bright_4", "text": "活気のある店づくりを続けています", "kw": "bright" }
+  ],
+  "sharedBrightClose": [
+    { "id": "gen_close_bright_1", "text": "明るい気分でお立ち寄りください。", "kw": "bright" },
+    { "id": "gen_close_bright_2", "text": "にぎやかなひとときを楽しめます。", "kw": "bright" },
+    { "id": "gen_close_bright_3", "text": "元気が出る場所でありたいです。", "kw": "bright" }
+  ],
+  "worksFill": [
+    { "id": "gen_works_open_ease_1", "slot": "open", "axis": "ease", "text": "ゆったり味わう一品" },
+    { "id": "gen_works_open_ease_2", "slot": "open", "axis": "ease", "text": "落ち着いて選べる定番" },
+    { "id": "gen_works_open_clear_1", "slot": "open", "axis": "clear", "text": "迷わず選べる組み合わせ" },
+    { "id": "gen_works_open_invite_1", "slot": "open", "axis": "invite", "text": "まずはこちらから" },
+    { "id": "gen_works_open_craft_1", "slot": "open", "axis": "craft", "text": "店主おすすめの一点" },
+    { "id": "gen_works_open_warm_1", "slot": "open", "axis": "warm", "text": "あたたかい定番メニュー" },
+    { "id": "gen_works_mid_bright_1", "slot": "mid", "axis": "bright", "text": "明るい時間帯に人気です" },
+    { "id": "gen_works_mid_bright_2", "slot": "mid", "axis": "bright", "text": "活気のあるおすすめです" },
+    { "id": "gen_works_mid_bright_3", "slot": "mid", "axis": "bright", "text": "にぎわいの中で選ばれています" },
+    { "id": "gen_works_close_bright_1", "slot": "close", "axis": "bright", "text": "明るい気分でお試しください。" },
+    { "id": "gen_works_close_bright_2", "slot": "close", "axis": "bright", "text": "元気が出る一品です。" },
+    { "id": "gen_works_close_bright_3", "slot": "close", "axis": "bright", "text": "気軽にどうぞ。" }
+  ],
+  "contactFill": [
+    { "id": "gen_contact_open_ease_1", "slot": "open", "axis": "ease", "text": "ゆっくりご相談を" },
+    { "id": "gen_contact_open_ease_2", "slot": "open", "axis": "ease", "text": "落ち着いてお問い合わせを" },
+    { "id": "gen_contact_mid_ease_1", "slot": "mid", "axis": "ease", "text": "無理のないペースでご案内します" },
+    { "id": "gen_contact_open_bright_1", "slot": "open", "axis": "bright", "text": "気軽にお声がけを" },
+    { "id": "gen_contact_mid_bright_1", "slot": "mid", "axis": "bright", "text": "明るい時間帯のご連絡も受け付けます" },
+    { "id": "gen_contact_mid_bright_2", "slot": "mid", "axis": "bright", "text": "にぎやかな時間でも対応します" },
+    { "id": "gen_contact_close_bright_1", "slot": "close", "axis": "bright", "text": "お気軽にご連絡ください。" },
+    { "id": "gen_contact_close_bright_2", "slot": "close", "axis": "bright", "text": "短い一言でも大丈夫です。" },
+    { "id": "gen_contact_close_bright_3", "slot": "close", "axis": "bright", "text": "ご質問を歓迎しています。" },
+    { "id": "gen_contact_open_invite_1", "slot": "open", "axis": "invite", "text": "気になることがあれば" },
+    { "id": "gen_contact_mid_invite_1", "slot": "mid", "axis": "invite", "text": "小さなことでも受け付けています" },
+    { "id": "gen_contact_open_craft_1", "slot": "open", "axis": "craft", "text": "内容のご相談は" },
+    { "id": "gen_contact_open_warm_1", "slot": "open", "axis": "warm", "text": "あたたかくお返事します" },
+    { "id": "gen_contact_mid_warm_1", "slot": "mid", "axis": "warm", "text": "丁寧に内容を確認します" },
+    { "id": "gen_contact_mid_craft_1", "slot": "mid", "axis": "craft", "text": "ご希望を整理してお伝えします" }
+  ],
+  "sceneFlavor": {
+    "cafe": {
+      "mid": ["挽きたての香りが店内に広がります", "窓辺の光とコーヒーの時間を大切にしています", "朝から昼まで、明るい席をご用意しています"],
+      "close": ["一杯で、朝の調子が整います。", "明るいカフェタイムをどうぞ。", "気軽な立ち寄りを歓迎しています。"],
+      "worksOpen": ["今朝の定番ブレンド", "焼きたて焼き菓子セット"],
+      "contactMid": ["営業時間内のメールが確実です"]
+    },
+    "salon": {
+      "mid": ["白磁のような静けさのなかで整えます", "カットとカラーの提案を丁寧に進めます", "明るい鏡まわりで仕上がりを確認できます"],
+      "close": ["すっきりした気分でお帰りください。", "次の予約も気軽にご相談ください。", "はじめてでも安心してお任せください。"],
+      "worksOpen": ["今季のおすすめスタイル", "ケア重視のメニュー"],
+      "contactMid": ["ご予約の変更もメールで受けます"]
+    },
+    "bakery": {
+      "mid": ["焼き立てのパンがケースに並びます", "小麦の香りが店先まで届きます", "朝の早い時間がいちばん活気があります"],
+      "close": ["焼きたてを手にとってください。", "今日の一斤を楽しみにどうぞ。", "お持ち帰りの袋もご用意しています。"],
+      "worksOpen": ["看板の食パン", "本日の焼き菓子"],
+      "contactMid": ["予約パンは前日までのご連絡が安心です"]
+    },
+    "bar": {
+      "mid": ["カウンターの会話が自然と弾みます", "グラスの音が明るい夜の合図です", "灯りを落としすぎず、顔が見える席です"],
+      "close": ["今夜の一杯をどうぞ。", "気軽な立ち寄りを歓迎します。", "次の一杯もゆっくり選べます。"],
+      "worksOpen": ["看板カクテル", "今夜のつまみ"],
+      "contactMid": ["貸切のご相談は早めにご連絡ください"]
+    },
+    "clinic": {
+      "mid": ["説明は短く、わかりやすく進めます", "待ち時間にも配慮した案内です", "明るい受付で次の流れをお伝えします"],
+      "close": ["ご不明点はお気軽にどうぞ。", "次回のご案内もわかりやすくします。", "はじめてでも迷わない導線です。"],
+      "worksOpen": ["よく選ばれる検査", "はじめての方の流れ"],
+      "contactMid": ["予約変更はお電話かメールで"]
+    },
+    "florist": {
+      "mid": ["色合わせはご希望を伺ってから整えます", "持ち帰りやすい束に仕上げます", "季節の花を明るく店頭に並べます"],
+      "close": ["今日の花を手にとってください。", "贈り物にも気軽にご相談ください。", "短い一言でもアレンジできます。"],
+      "worksOpen": ["今週のブーケ", "ギフト用アレンジ"],
+      "contactMid": ["配達希望日は早めにお知らせください"]
+    },
+    "ramen": {
+      "mid": ["湯気の立つ一杯をカウンターで待ちます", "麺の硬さは注文時に選べます", "ランチ時は明るい行列が続きます"],
+      "close": ["熱いうちにどうぞ。", "替え玉のご案内もしています。", "気軽なリピートを歓迎します。"],
+      "worksOpen": ["看板ラーメン", "今日のトッピング"],
+      "contactMid": ["貸切は事前のご相談をお願いします"]
+    },
+    "yoga": {
+      "mid": ["呼吸に合わせた動きを大切にしています", "明るいスタジオで姿勢を確認できます", "はじめての方向けの説明から入ります"],
+      "close": ["自分のペースで続けられます。", "体験のご予約も受け付けます。", "次のクラスも見やすい表でご案内します。"],
+      "worksOpen": ["朝のベーシッククラス", "はじめて向け体験"],
+      "contactMid": ["振替の相談はメッセージでどうぞ"]
+    },
+    "studio": {
+      "mid": ["光の向きを見て撮影位置を決めます", "短い打ち合わせから本番へ進めます", "成果物の用途を先に確認します"],
+      "close": ["用途に合わせた一枚を残せます。", "修正のご相談も短くまとめます。", "次の撮影も気軽にご連絡ください。"],
+      "worksOpen": ["ポートレート枠", "商品撮影セット"],
+      "contactMid": ["日程調整はメールが確実です"]
+    },
+    "pet": {
+      "mid": ["ペットのペースに合わせた案内です", "明るく清潔なスペースを保っています", "飼い主さんとの会話を大切にします"],
+      "close": ["はじめてでも落ち着いて過ごせます。", "次回のご予約も気軽にどうぞ。", "小さなことでもご相談ください。"],
+      "worksOpen": ["はじめての爪切り", "シャンプーコース"],
+      "contactMid": ["体調の変化は事前にお知らせください"]
+    },
+    "cowork": {
+      "mid": ["集中と会話のバランスを取った席です", "明るい共用部で打ち合わせできます", "電源とWi-Fiをわかりやすく案内します"],
+      "close": ["短時間の利用も歓迎します。", "見学は事前予約がスムーズです。", "次の予約もアプリかメールで。"],
+      "worksOpen": ["半日ドロップイン", "会議室パック"],
+      "contactMid": ["法人契約は担当までご連絡ください"]
+    },
+    "sweets": {
+      "mid": ["ショーケースの色が店内を明るくします", "季節のケーキを毎日入れ替えています", "テイクアウト袋もご用意しています"],
+      "close": ["今日の一皿を選んでください。", "贈り物の箱も選べます。", "甘い休憩にどうぞ。"],
+      "worksOpen": ["看板ショートケーキ", "本日の焼き菓子"],
+      "contactMid": ["ホールケーキは前日予約が安心です"]
+    },
+    "izakaya": {
+      "mid": ["揚げ物の音が明るい夜の合図です", "串とお酒の組み合わせをご提案します", "グループでも会話が弾む席割りです"],
+      "close": ["今夜の一献をどうぞ。", "二次会にも使いやすい距離感です。", "気軽な宴会相談を受けます。"],
+      "worksOpen": ["看板の串盛り", "今日の日替わり"],
+      "contactMid": ["宴会予約は人数と日時を添えて"]
+    },
+    "gallery": {
+      "mid": ["作品の前で立ち止まれる余白を残します", "明るい壁面で色がはっきり見えます", "解説は短く、見やすさを優先します"],
+      "close": ["静かにご覧いただけます。", "次回展の案内もお渡しします。", "購入のご相談も短くまとめます。"],
+      "worksOpen": ["今期の展示から", "小作品コーナー"],
+      "contactMid": ["貸出・取材はメールでご連絡ください"]
+    },
+    "hotel": {
+      "mid": ["チェックイン後の流れを短く案内します", "共用部は明るく保っています", "周辺の立ち寄り先もわかりやすく伝えます"],
+      "close": ["滞在の目的に合わせてご案内します。", "延長のご相談も受け付けます。", "次回のご予約も気軽にどうぞ。"],
+      "worksOpen": ["スタンダード滞在", "朝食付きプラン"],
+      "contactMid": ["到着が遅れる場合は事前にご連絡を"]
+    }
+  }
+}

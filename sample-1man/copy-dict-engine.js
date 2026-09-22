@@ -13,6 +13,34 @@
     scenes: {}
   };
 
+  /* 制作フロー内の使用済み部品（ローカルのみ。クラウド同期なし） */
+  var sessionUsedPartIds = {};
+  var saltTick = 0;
+
+  function resetSessionUsedParts() {
+    sessionUsedPartIds = {};
+    saltTick = 0;
+  }
+
+  function noteUsedPartIds(ids) {
+    (ids || []).forEach(function (id) {
+      if (id) sessionUsedPartIds[id] = true;
+    });
+  }
+
+  function freshSalt(extra) {
+    saltTick += 1;
+    return (
+      "s" +
+      saltTick +
+      "|" +
+      Date.now() +
+      "|" +
+      Math.random().toString(36).slice(2, 10) +
+      (extra ? "|" + extra : "")
+    );
+  }
+
   function fetchJson(path) {
     return fetch(path, { cache: "no-cache" }).then(function (r) {
       if (!r.ok) throw new Error("copy-dict fetch " + path + " " + r.status);
@@ -211,33 +239,40 @@
   function assembleSentence(parts, sectionId, axisId, keywordIds, rng, usedIds) {
     usedIds = usedIds || {};
     function pickSlot(slot) {
-      var pool = filterParts(parts, {
-        sectionId: sectionId,
-        axisId: axisId,
-        keywordIds: keywordIds,
-        slot: slot
-      }).filter(function (p) {
-        return !usedIds[p.id];
-      });
-      if (!pool.length) {
-        pool = filterParts(parts, {
+      function poolFor(strictAvoidSession) {
+        var base = filterParts(parts, {
           sectionId: sectionId,
           axisId: axisId,
+          keywordIds: keywordIds,
           slot: slot
-        }).filter(function (p) {
-          return !usedIds[p.id];
+        });
+        if (!base.length) {
+          base = filterParts(parts, {
+            sectionId: sectionId,
+            axisId: axisId,
+            slot: slot
+          });
+        }
+        if (!base.length) {
+          base = filterParts(parts, { sectionId: sectionId, slot: slot });
+        }
+        if (!base.length) {
+          base = filterParts(parts, { slot: slot });
+        }
+        return base.filter(function (p) {
+          if (usedIds[p.id]) return false;
+          if (strictAvoidSession && sessionUsedPartIds[p.id]) return false;
+          return true;
         });
       }
-      if (!pool.length) {
-        pool = filterParts(parts, { sectionId: sectionId, slot: slot }).filter(function (p) {
-          return !usedIds[p.id];
-        });
-      }
-      if (!pool.length) {
-        pool = filterParts(parts, { slot: slot });
-      }
+      /* まず制作中の使用済みを避け、枯れたら緩和 */
+      var pool = poolFor(true);
+      if (!pool.length) pool = poolFor(false);
       var pick = weightedPick(pool, rng);
-      if (pick) usedIds[pick.id] = true;
+      if (pick) {
+        usedIds[pick.id] = true;
+        sessionUsedPartIds[pick.id] = true;
+      }
       return pick;
     }
     var open = pickSlot("open");
@@ -289,7 +324,8 @@
     var sectionId = opts.sectionId || "hero";
     var keywordIds = Array.isArray(opts.keywordIds) ? opts.keywordIds.slice() : [];
     var presetAxes = opts.presetAxes || null; /* { hero: axisId, ... } for omakase */
-    var salt = opts.salt || String(Date.now());
+    /* 生成のたびに salt を必ず更新（呼び出し側 salt があっても時刻・tick を混ぜる） */
+    var salt = freshSalt(opts.salt || "");
 
     return ensureMeta()
       .then(function () {
@@ -339,7 +375,7 @@
               sectionId,
               c.axisId,
               keywordIds,
-              mulberry32(hashSeed(salt + "|retry|" + i)),
+              mulberry32(hashSeed(salt + "|retry|" + i + "|" + freshSalt("retry"))),
               usedIds
             );
             c.text = rebuilt.text;
@@ -350,7 +386,8 @@
         return {
           sceneId: scene.scene || sceneHint,
           axes: axes,
-          candidates: candidates
+          candidates: candidates,
+          salt: salt
         };
       })
       .catch(function () {
@@ -370,7 +407,8 @@
               axisId: a,
               partIds: []
             };
-          })
+          }),
+          salt: salt
         };
       });
   }
@@ -394,6 +432,9 @@
     loadScene: loadScene,
     generateThree: generateThree,
     pickOmakasePreset: pickOmakasePreset,
-    ensureMeta: ensureMeta
+    ensureMeta: ensureMeta,
+    resetSessionUsedParts: resetSessionUsedParts,
+    noteUsedPartIds: noteUsedPartIds,
+    freshSalt: freshSalt
   };
 })(typeof window !== "undefined" ? window : globalThis);

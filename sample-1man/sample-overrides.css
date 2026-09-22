@@ -1,4 +1,4 @@
-﻿/**
+/**
  * sample-1man atelier overrides
  * Shell: chrome (top) + split (preview | handle | dash)
  */
@@ -7384,10 +7384,11 @@ body.atelier.color-mode-easy .zone-badge[data-open-step="site-fonts"] {
 }
 
 #entry-sushi-field.sushi-shelf {
+  /* レーンはスクショ基準。上枠はレーンの約3/4（旧1・2・3付き枠感） */
   --sushi-tile-w: 170px;
   --sushi-tile-h: 240px;
   --sushi-tile-gap: 18px;
-  --sushi-stock-scale: 0.5;
+  --sushi-stock-scale: 0.72;
   --sushi-stock-tile-w: calc(var(--sushi-tile-w) * var(--sushi-stock-scale));
   --sushi-stock-tile-h: calc(var(--sushi-tile-h) * var(--sushi-stock-scale));
   --sushi-zoom-ms: 680ms;
@@ -7399,7 +7400,7 @@ body.atelier.color-mode-easy .zone-badge[data-open-step="site-fonts"] {
   min-width: 0;
   display: flex;
   flex-direction: column;
-  gap: 0.35rem;
+  gap: 0.4rem;
   flex: 1 1 auto;
   min-height: 0;
   overflow: hidden;
@@ -7415,7 +7416,7 @@ body.atelier.color-mode-easy .zone-badge[data-open-step="site-fonts"] {
   display: none !important;
 }
 #entry-gate[data-entry-step="sushi"] .entry-gate-panel--full {
-  padding-top: 0.65rem;
+  padding-top: 0.55rem;
   padding-bottom: 0.55rem;
   overflow: hidden;
 }
@@ -7424,26 +7425,30 @@ body.atelier.color-mode-easy .zone-badge[data-open-step="site-fonts"] {
   min-height: 0;
 }
 
-/*
-  最上段：戻る ＝ 3枠 ＝ 操作のヒント（同じ高さ）
-  枠・レーン寸法は拡大しない（前の 170×240 系）。
-*/
-.sushi-chrome {
-  display: grid;
-  grid-template-columns: auto minmax(0, 1fr) auto;
-  align-items: center;
-  gap: 0.55rem 0.75rem;
-  padding: 0 0.15rem;
-  min-width: 0;
+.sushi-stage-top {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
   flex: 0 0 auto;
+  min-width: 0;
+}
+
+/* 旧1・2・3番号の位置：最上段に戻る／操作のヒント */
+.sushi-chrome {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  padding: 0 0.2rem;
+  min-width: 0;
 }
 .sushi-chrome-back,
 .sushi-chrome-hint {
   font: inherit;
-  font-size: 1rem;
+  font-size: 0.98rem;
   font-weight: 650;
   line-height: 1.3;
-  padding: 0.45rem 0.85rem;
+  padding: 0.4rem 0.8rem;
   border-radius: 0.45rem;
   border: 1px solid rgba(20, 28, 36, 0.16);
   background: #fff;
@@ -7459,15 +7464,39 @@ body.atelier.color-mode-easy .zone-badge[data-open-step="site-fonts"] {
   background: #f7f8f7;
 }
 
+/*
+  旧左右テキスト枠の空きに①②。枠の両脇に余白を残し、その中央に置く。
+  ②は右端枠の右側から、その枠の高さ中央を指す。
+*/
+.sushi-upper-band {
+  display: grid;
+  grid-template-columns: minmax(11.5rem, 1.1fr) auto minmax(11.5rem, 1.1fr);
+  align-items: center;
+  column-gap: 0.75rem;
+  row-gap: 0;
+  padding: 0.45rem 0.35rem;
+  min-width: 0;
+}
+.sushi-side {
+  display: flex;
+  align-items: center;
+  min-width: 0;
+  padding-inline: 0.55rem;
+}
+.sushi-side--add {
+  justify-content: center;
+}
+.sushi-side--confirm {
+  justify-content: center;
+}
+
 .sushi-stock-bar {
   display: flex;
   justify-content: center;
   align-items: center;
-  /* 枠幅の約1/3を隙間に */
   gap: calc(var(--sushi-stock-tile-w) / 3);
   min-width: 0;
   margin: 0;
-  justify-self: center;
 }
 
 .sushi-stock-col {
@@ -7545,94 +7574,91 @@ body.atelier.color-mode-easy .zone-badge[data-open-step="site-fonts"] {
   to { transform: none; opacity: 1; }
 }
 
-/*
-  本線案内：①は左（↓は文言の中央下）／②は3枠の中央下
-  目立たせる＝字。空きで押さない。
-*/
-.sushi-flow-row {
-  display: grid;
-  grid-template-columns: auto minmax(0, 1fr) auto;
-  align-items: start;
-  gap: 0.25rem 0.75rem;
-  padding: 0 0.15rem;
-  min-width: 0;
-  flex: 0 0 auto;
-}
 .sushi-flow-guide {
   margin: 0;
   color: #12181e;
-  font-size: clamp(1.1rem, 1.3vw, 1.35rem);
+  font-size: clamp(1.2rem, 1.45vw, 1.45rem);
   font-weight: 800;
   line-height: 1.35;
   letter-spacing: 0.01em;
 }
 .sushi-flow-guide--add {
-  grid-column: 1;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  text-align: center;
-  max-width: 12.5rem;
+  align-items: stretch;
+  text-align: left;
+  width: max-content;
+  max-width: 100%;
 }
 .sushi-flow-guide--confirm {
-  grid-column: 2;
-  justify-self: center;
-  text-align: center;
+  text-align: left;
+  width: max-content;
+  max-width: 100%;
 }
 .sushi-flow-line {
   display: inline-flex;
   align-items: center;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 0.1rem 0.25rem;
+  flex-wrap: nowrap;
+  gap: 0.2rem 0.28rem;
+  white-space: nowrap;
+  max-width: 100%;
+}
+.sushi-flow-words {
+  white-space: nowrap;
 }
 .sushi-flow-num {
-  font-size: 1.2em;
+  flex: 0 0 auto;
+  font-size: 1.15em;
   font-weight: 900;
   letter-spacing: 0;
   line-height: 1;
 }
 .sushi-flow-arrow {
   display: block;
-  margin-top: 0.1rem;
-  font-size: 1.3em;
+  margin-top: 0.15rem;
+  font-size: 1.25em;
   font-weight: 900;
   line-height: 1;
   color: #12181e;
   text-align: center;
 }
+.sushi-flow-guide--add .sushi-flow-arrow--down {
+  width: 100%;
+  margin-left: 0;
+}
 .sushi-flow-arrow--left {
   display: inline;
-  margin: 0 0.15rem 0 0;
-  font-size: 1.15em;
+  margin: 0;
+  font-size: 1.1em;
 }
 
 @media (max-width: 720px) {
-  .sushi-chrome {
-    grid-template-columns: auto 1fr auto;
-    gap: 0.35rem 0.4rem;
-  }
-  .sushi-flow-row {
+  .sushi-upper-band {
     grid-template-columns: 1fr 1fr;
+    grid-template-areas:
+      "stock stock"
+      "add confirm";
+    row-gap: 0.45rem;
+    column-gap: 0.4rem;
+    padding: 0.3rem 0.2rem;
   }
-  .sushi-flow-guide--add {
-    grid-column: 1;
-    max-width: none;
-  }
-  .sushi-flow-guide--confirm {
-    grid-column: 2;
-    justify-self: center;
-  }
+  .sushi-stock-bar { grid-area: stock; }
+  .sushi-side--add { grid-area: add; padding-inline: 0.2rem; }
+  .sushi-side--confirm { grid-area: confirm; padding-inline: 0.2rem; }
   .sushi-flow-guide {
-    font-size: 1.05rem;
+    font-size: 1.15rem;
+  }
+  .sushi-flow-line {
+    white-space: normal;
+    flex-wrap: wrap;
+  }
+  .sushi-flow-words {
+    white-space: normal;
   }
   .sushi-chrome-back,
   .sushi-chrome-hint {
-    font-size: 0.92rem;
+    font-size: 0.9rem;
     padding: 0.35rem 0.55rem;
-  }
-  .sushi-stock-bar {
-    gap: calc(var(--sushi-stock-tile-w) / 3);
   }
 }
 
@@ -7664,6 +7690,7 @@ body.atelier.color-mode-easy .zone-badge[data-open-step="site-fonts"] {
   display: grid;
   gap: 0.45rem;
 }
+
 .sushi-slot-pop-title {
   margin: 0 0 0.15rem;
   font-size: 1.08rem;

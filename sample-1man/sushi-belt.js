@@ -18,7 +18,7 @@
   var MAX_STOCK = 3;
   var TOUCH_PAUSE_MS = 3000;
   var CLICK_DEAD_PX = 8;
-  var GUIDE_LS_KEY = "sample1man-sushi-guide-v1";
+  var GUIDE_SS_KEY = "sample1man-sushi-guide-session-v1";
 
   function isFineHoverPointer() {
     return (
@@ -860,7 +860,7 @@
 
   function guideSeen() {
     try {
-      return localStorage.getItem(GUIDE_LS_KEY) === "1";
+      return sessionStorage.getItem(GUIDE_SS_KEY) === "1";
     } catch (e) {
       return false;
     }
@@ -868,7 +868,7 @@
 
   function markGuideSeen() {
     try {
-      localStorage.setItem(GUIDE_LS_KEY, "1");
+      sessionStorage.setItem(GUIDE_SS_KEY, "1");
     } catch (e) {
       /* ignore */
     }
@@ -957,8 +957,8 @@
   }
 
   function maybeShowFirstGuide() {
-    /* 「サンプルから選ぶ」で寿司に入ったら毎回強制表示（閉じたら操作のヒントへ吸い込む） */
-    openGuideModal();
+    /* このタブで未表示なら強制。閉じたあと戻って再入場しても出さない */
+    if (!guideSeen()) openGuideModal();
   }
 
   function onRootClick(ev) {

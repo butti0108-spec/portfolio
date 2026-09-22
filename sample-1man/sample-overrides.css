@@ -7207,10 +7207,16 @@ body.mode-detail .dash-block--layout-hub {
   overflow: hidden;
   aspect-ratio: 2752 / 1536;
 }
-.preview-site .hero-stage::before {
-  /* aspect-ratio に任せる。縦長固有サイズの干渉を切る */
-  padding-top: 0 !important;
+/* 保険: 親／コピー style の虹が漏れても見本キャッチには出さない（フェーズ3） */
+.preview-site .hero-stage::before,
+.preview-site .hero-stage::after {
+  content: none !important;
   display: none !important;
+  animation: none !important;
+  background: none !important;
+  opacity: 0 !important;
+  filter: none !important;
+  padding-top: 0 !important;
 }
 .preview-site .hero-photo {
   min-width: 0;

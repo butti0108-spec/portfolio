@@ -259,7 +259,7 @@ a {
   aspect-ratio: 2752 / 1536;
 }
 
-/* 虹レイヤ：ポートフォリオ正面キャッチ専用（.hero-stage--rainbow のみ） */
+/* 虹レイヤ：ポートフォリオ正面専用クラスのみ（メーカー見本には付けない） */
 .hero-stage--rainbow::before {
   content: "";
   grid-area: 1 / 1;
@@ -994,12 +994,6 @@ a {
 .accordion-body {
   padding: 0 1.35rem 1.35rem;
   border-top: 1px solid rgba(17, 17, 17, 0.08);
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .accordion[open] > .accordion-body {
-    animation: accordionIn 0.38s ease both;
-  }
 }
 
 .offer-lead {

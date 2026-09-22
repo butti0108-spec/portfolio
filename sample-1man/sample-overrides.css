@@ -7432,7 +7432,7 @@ body.atelier.color-mode-easy .zone-badge[data-open-step="site-fonts"] {
   flex: 0 0 auto;
   min-width: 0;
   /* ↓先端とレーンのあいだ：約1文字分 */
-  margin-bottom: 0.65rem;
+  margin-bottom: 1em;
 }
 
 /* 旧1・2・3番号の位置：最上段に戻る／操作のヒント */
@@ -7474,26 +7474,29 @@ body.atelier.color-mode-easy .zone-badge[data-open-step="site-fonts"] {
   display: grid;
   grid-template-columns: minmax(11.5rem, 1.1fr) auto minmax(11.5rem, 1.1fr);
   align-items: center;
-  /* 矢印先端と対象のあいだ：およそ1文字分見える空間 */
-  column-gap: 1.15rem;
+  /* ←先端と右端枠のあいだは側の padding で約1文字分 */
+  column-gap: 0.25rem;
   row-gap: 0;
-  padding: 0.45rem 0.35rem 0.85rem;
+  padding: 0.45rem 0.35rem 0;
   min-width: 0;
 }
 .sushi-side {
   display: flex;
   align-items: center;
   min-width: 0;
-  padding-inline: 0.55rem;
+  padding-inline: 0.35rem;
 }
 .sushi-side--add {
+  /* ↓をレーン近くへ：枠列の下端揃え */
+  align-self: end;
   justify-content: center;
-  padding-bottom: 0.55rem;
+  padding-bottom: 0;
 }
 .sushi-side--confirm {
-  justify-content: center;
-  /* ← と右端枠のあいだ：約1文字分 */
-  padding-left: 1em;
+  /* 先端を枠寄りに置き、padding で1文字分あける */
+  justify-content: flex-start;
+  padding-left: 1.45rem;
+  padding-right: 0.35rem;
 }
 
 .sushi-stock-bar {
@@ -7619,24 +7622,38 @@ body.atelier.color-mode-easy .zone-badge[data-open-step="site-fonts"] {
   letter-spacing: 0;
   line-height: 1;
 }
+/* 目立つ指差し矢印（塗りつぶし三角）。先端〜対象は約1文字分 */
 .sushi-flow-arrow {
+  flex: 0 0 auto;
+  box-sizing: border-box;
+  color: #0d1418;
+  filter: drop-shadow(0 1px 0 rgba(255, 255, 255, 0.85));
+}
+.sushi-flow-arrow--down {
   display: block;
-  margin-top: 0.15rem;
-  margin-bottom: 0.55rem;
-  font-size: 1.25em;
-  font-weight: 900;
-  line-height: 1;
-  color: #12181e;
-  text-align: center;
+  width: 0;
+  height: 0;
+  margin: 0.2rem auto 0;
+  border-style: solid;
+  border-width: 1.25em 0.8em 0;
+  border-color: currentColor transparent transparent;
+  font-size: 1.55rem;
 }
 .sushi-flow-guide--add .sushi-flow-arrow--down {
-  width: 100%;
-  margin-left: 0;
+  width: 0;
+  margin-left: auto;
+  margin-right: auto;
 }
 .sushi-flow-arrow--left {
-  display: inline;
-  margin: 0 0.55em 0 0;
-  font-size: 1.1em;
+  display: inline-block;
+  vertical-align: -0.15em;
+  width: 0;
+  height: 0;
+  margin: 0 0.4em 0 0;
+  border-style: solid;
+  border-width: 0.7em 1.15em 0.7em 0;
+  border-color: transparent currentColor transparent transparent;
+  font-size: 1.55rem;
 }
 
 @media (max-width: 720px) {

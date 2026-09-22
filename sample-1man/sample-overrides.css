@@ -10167,9 +10167,22 @@ body.atelier.entry-gate-open,
   background: #fff;
 }
 /* —— 文章決め方・方向・枠UI（スタブ骨格 2026-09-22） —— */
+/* 文章工程共通：あとから直せる案内（画像工程には出さない） */
+.easy-copy-later-hint {
+  margin: 0 0 0.65rem;
+  padding: 0.45rem 0.6rem;
+  border-left: 3px solid #9aa6b2;
+  background: #f3f5f7;
+  color: #2a3238;
+  font-size: 0.88rem;
+  line-height: 1.45;
+}
+
 /* 見出しを線の直下へ（summary隠れ後も :first-child にならないため明示） */
 body.wizard-mode .dash-block.is-wizard-active > summary + .dash-subhead,
-body.wizard-mode .dash-block.is-wizard-active > summary + .easy-copy-frame > .dash-subhead {
+body.wizard-mode .dash-block.is-wizard-active > summary + .easy-copy-later-hint + .dash-subhead,
+body.wizard-mode .dash-block.is-wizard-active > summary + .easy-copy-frame > .dash-subhead,
+body.wizard-mode .dash-block.is-wizard-active > summary + .easy-copy-frame > .easy-copy-later-hint + .dash-subhead {
   margin-top: 0;
   margin-bottom: 0.4rem;
 }
@@ -10177,7 +10190,9 @@ body.wizard-mode.mode-guided .dash-pane > .dash-body {
   padding-top: 0.35rem;
 }
 body.wizard-mode .dash-block.is-wizard-active > summary + .dash-subhead + .step-help,
-body.wizard-mode .dash-block.is-wizard-active .easy-copy-frame > .dash-subhead + .step-help {
+body.wizard-mode .dash-block.is-wizard-active > summary + .easy-copy-later-hint + .dash-subhead + .step-help,
+body.wizard-mode .dash-block.is-wizard-active .easy-copy-frame > .dash-subhead + .step-help,
+body.wizard-mode .dash-block.is-wizard-active .easy-copy-frame > .easy-copy-later-hint + .dash-subhead + .step-help {
   margin-top: 0;
   margin-bottom: 0.75rem;
 }
@@ -10217,6 +10232,68 @@ body.wizard-mode .dash-block.is-wizard-active .easy-copy-frame > .dash-subhead +
   box-shadow: 0 0 0 2px #3d8a48;
   background: #fff;
 }
+
+/* おまかせ Coolors型：右パネルの枠一覧＋鍵 */
+.easy-copy-omakase {
+  margin: 0.35rem 0 0.5rem;
+}
+.easy-copy-omakase-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+}
+.easy-copy-omakase-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.55rem;
+  padding: 0.55rem 0.65rem;
+  border: 1px solid #d5dde5;
+  background: #fff;
+}
+.easy-copy-omakase-row.is-locked {
+  border-color: #3d8a48;
+  box-shadow: 0 0 0 1px #3d8a48;
+  background: #f7fbf8;
+}
+.easy-copy-omakase-main {
+  flex: 1;
+  min-width: 0;
+}
+.easy-copy-omakase-label {
+  margin: 0 0 0.25rem;
+  font-size: 0.78rem;
+  font-weight: 800;
+  color: #4a5560;
+}
+.easy-copy-omakase-text {
+  margin: 0;
+  font-size: 0.92rem;
+  line-height: 1.45;
+  color: #12181c;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+.easy-copy-omakase-lock {
+  flex: 0 0 auto;
+  appearance: none;
+  border: 1px solid #c5ced6;
+  border-radius: 0;
+  background: #fff;
+  color: #1a1f1c;
+  font-size: 0.78rem;
+  font-weight: 700;
+  padding: 0.35rem 0.55rem;
+  cursor: pointer;
+  white-space: nowrap;
+}
+.easy-copy-omakase-row.is-locked .easy-copy-omakase-lock {
+  border-color: #3d8a48;
+  color: #2d6b36;
+}
+.easy-copy-omakase-actions {
+  margin-top: 0.75rem;
+}
+
 /* いまの文言＝表示のみ／候補＝選べる、を見た目で分ける */
 .easy-copy-frame-now {
   margin: 0 0 0.55rem;

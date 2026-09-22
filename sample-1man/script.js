@@ -332,6 +332,7 @@
     { id: "easy-copy-path", label: "文章の決め方", needsConfirm: true, num: 0 },
     { id: "easy-copy-dirs", label: "方向", needsConfirm: true, num: 0 },
     { id: "easy-basics", label: "基本情報", needsConfirm: true, num: 0 },
+    { id: "easy-copy-omakase", label: "おまかせ文章", needsConfirm: true, num: 0 },
     { id: "easy-copy-frame", label: "枠の文章", needsConfirm: true, num: 0 },
     { id: "easy-sec-hero", label: "キャッチ文", needsConfirm: true, num: 0 },
     { id: "easy-sec-about", label: "紹介文", needsConfirm: true, num: 0 },
@@ -741,6 +742,7 @@
     "easy-copy-path",
     "easy-copy-dirs",
     "easy-basics",
+    "easy-copy-omakase",
     "easy-copy-frame",
     "easy-img-wire",
     "easy-loading",
@@ -750,6 +752,7 @@
     "easy-copy-path",
     "easy-copy-dirs",
     "easy-basics",
+    "easy-copy-omakase",
     "easy-copy-frame",
     "easy-sec-hero",
     "easy-sec-about",
@@ -2046,6 +2049,8 @@
     copyDirIds: [],
     copyPresetId: null,
     copyOmakaseAxes: null,
+    copyOmakaseLocks: {},
+    copyOmakaseSalt: 0,
     copyFrameIndex: 0,
     copyFramePoolIndex: {},
     copyFrameCandidates: {},
@@ -5213,7 +5218,14 @@
 
   function getEasyFlowStepIds() {
     if (store.copyPathMode === "omakase") {
-      return ["easy-copy-path", "easy-basics", "easy-img-wire", "easy-loading", "easy-done"];
+      return [
+        "easy-copy-path",
+        "easy-basics",
+        "easy-copy-omakase",
+        "easy-img-wire",
+        "easy-loading",
+        "easy-done"
+      ];
     }
     if (store.copyPathMode === "keyword") {
       return [
@@ -5261,6 +5273,7 @@
     const step = getCurrentFlowStep();
     if (step && step.id === "easy-done") return "確認へ";
     if (step && step.id === "easy-loading") return "お待ちください";
+    if (step && step.id === "easy-copy-omakase") return "これで進む";
     if (step && step.id === "easy-copy-frame") {
       const idx = store.copyFrameIndex || 0;
       if (idx >= COPY_FRAME_ORDER.length - 1) return "これで画像へ";
@@ -7165,6 +7178,11 @@
     if (step.id === "easy-copy-dirs") {
       renderCopyDirsUi();
     }
+    if (step.id === "easy-copy-omakase") {
+      ensureOmakaseCopyReady().then(function () {
+        renderCopyOmakaseUi();
+      });
+    }
     if (step.id === "easy-copy-frame") {
       if (store.copyFrameIndex == null) store.copyFrameIndex = 0;
       renderCopyFrameUi();
@@ -7405,6 +7423,8 @@
     store.copyFrameSelected = {};
     store.copyFrameNow = {};
     store.copyOmakaseAxes = null;
+    store.copyOmakaseLocks = {};
+    store.copyOmakaseSalt = 0;
     Object.keys(pack.fields).forEach((name) => {
       const el = form.elements.namedItem(name);
       if (!el || el.type === "file" || el.type === "checkbox" || el.type === "radio") return;
@@ -9499,20 +9519,43 @@
     });
   }
 
-  function applyOmakaseFromDict() {
+  function applyOmakaseFromDict(opts) {
+    const options = opts || {};
+    const onlyUnlocked = !!options.onlyUnlocked;
     const dict = window.Sample1manCopyDict;
+    if (!store.copyOmakaseLocks || typeof store.copyOmakaseLocks !== "object") {
+      store.copyOmakaseLocks = {};
+    }
+    store.copyOmakaseSalt = (Number(store.copyOmakaseSalt) || 0) + 1;
+    const saltBase =
+      "omakase|" +
+      (store.copyPresetId || "omakase-flow-v1") +
+      "|" +
+      store.copyOmakaseSalt +
+      "|" +
+      Date.now() +
+      "|" +
+      Math.random().toString(36).slice(2, 10);
+
     if (!dict || typeof dict.pickOmakasePreset !== "function") {
       COPY_FRAME_ORDER.forEach(function (secId) {
+        if (onlyUnlocked && store.copyOmakaseLocks[secId]) return;
         const line = fallbackStubThree(secId)[0];
         applyCopyTextToSection(secId, line && line.text);
       });
       return Promise.resolve();
     }
-    return dict.pickOmakasePreset(Math.random).then(function (preset) {
-      store.copyPresetId = preset.id || "omakase-flow-v1";
-      store.copyOmakaseAxes = preset.axes || null;
+
+    const pickPreset = onlyUnlocked && store.copyOmakaseAxes
+      ? Promise.resolve({ id: store.copyPresetId || "omakase-flow-v1", axes: store.copyOmakaseAxes })
+      : dict.pickOmakasePreset(Math.random);
+
+    return pickPreset.then(function (preset) {
+      store.copyPresetId = preset.id || store.copyPresetId || "omakase-flow-v1";
+      store.copyOmakaseAxes = preset.axes || store.copyOmakaseAxes || null;
       var chain = Promise.resolve();
       COPY_FRAME_ORDER.forEach(function (secId) {
+        if (onlyUnlocked && store.copyOmakaseLocks[secId]) return;
         chain = chain.then(function () {
           return dict
             .generateThree({
@@ -9522,7 +9565,7 @@
               sectionId: secId,
               keywordIds: [],
               presetAxes: store.copyOmakaseAxes,
-              salt: "omakase|" + store.copyPresetId + "|" + secId
+              salt: saltBase + "|" + secId
             })
             .then(function (res) {
               var cand = (res.candidates && res.candidates[0]) || fallbackStubThree(secId)[0];
@@ -9534,6 +9577,61 @@
     });
   }
 
+  function ensureOmakaseCopyReady() {
+    const hasAny = COPY_FRAME_ORDER.some(function (secId) {
+      return !!(store.copyFrameNow[secId] || readCurrentSectionText(secId));
+    });
+    if (hasAny && store.copyOmakaseAxes) return Promise.resolve();
+    return applyOmakaseFromDict({ onlyUnlocked: false });
+  }
+
+  function renderCopyOmakaseUi() {
+    const host = document.getElementById("easy-copy-omakase-list");
+    if (!host) return;
+    if (!store.copyOmakaseLocks || typeof store.copyOmakaseLocks !== "object") {
+      store.copyOmakaseLocks = {};
+    }
+    host.innerHTML = COPY_FRAME_ORDER.map(function (secId) {
+      const locked = !!store.copyOmakaseLocks[secId];
+      const text = store.copyFrameNow[secId] || readCurrentSectionText(secId) || "（準備中）";
+      return (
+        '<div class="easy-copy-omakase-row' +
+        (locked ? " is-locked" : "") +
+        '" data-omakase-sec="' +
+        secId +
+        '">' +
+        '<div class="easy-copy-omakase-main">' +
+        '<p class="easy-copy-omakase-label">' +
+        escapeHtml(COPY_FRAME_LABEL[secId] || secId) +
+        "</p>" +
+        '<p class="easy-copy-omakase-text">' +
+        escapeHtml(text) +
+        "</p>" +
+        "</div>" +
+        '<button type="button" class="easy-copy-omakase-lock" data-omakase-lock="' +
+        secId +
+        '" aria-pressed="' +
+        (locked ? "true" : "false") +
+        '" title="' +
+        (locked ? "鍵をはずす" : "この文言を固定する") +
+        '">' +
+        (locked ? "鍵解除" : "鍵") +
+        "</button>" +
+        "</div>"
+      );
+    }).join("");
+    host.querySelectorAll("[data-omakase-lock]").forEach(function (btn) {
+      btn.addEventListener("click", function () {
+        const secId = btn.getAttribute("data-omakase-lock");
+        if (!secId) return;
+        store.copyOmakaseLocks[secId] = !store.copyOmakaseLocks[secId];
+        renderCopyOmakaseUi();
+        scheduleSave();
+      });
+    });
+    updateWizardUi();
+  }
+
   function setupCopyFlowUi() {
     const pathRoot = document.querySelector('.dash-block[data-step-id="easy-copy-path"]');
     if (pathRoot && !pathRoot.dataset.copyPathBound) {
@@ -9543,6 +9641,8 @@
           if (!input.checked) return;
           store.copyPathMode = input.value === "omakase" ? "omakase" : "keyword";
           if (store.copyPathMode === "omakase") store.copyPresetId = "omakase-flow-v1";
+          store.copyOmakaseLocks = {};
+          store.copyOmakaseSalt = 0;
           store.confirmed["easy-copy-path"] = true;
           scheduleSave();
           const flow = getFlowSteps();
@@ -9562,6 +9662,26 @@
           renderCopyFrameUi();
           scheduleSave();
         });
+      });
+    }
+    const omakaseReroll = document.getElementById("easy-copy-omakase-reroll");
+    if (omakaseReroll && !omakaseReroll.dataset.bound) {
+      omakaseReroll.dataset.bound = "1";
+      omakaseReroll.addEventListener("click", function () {
+        omakaseReroll.disabled = true;
+        applyOmakaseFromDict({ onlyUnlocked: true })
+          .then(function () {
+            renderCopyOmakaseUi();
+            scheduleSave();
+          })
+          .then(
+            function () {
+              omakaseReroll.disabled = false;
+            },
+            function () {
+              omakaseReroll.disabled = false;
+            }
+          );
       });
     }
     const brand = document.getElementById("easy-brand-name");
@@ -9687,6 +9807,9 @@
     store.copyPathMode = null;
     store.copyDirIds = [];
     store.copyPresetId = null;
+    store.copyOmakaseAxes = null;
+    store.copyOmakaseLocks = {};
+    store.copyOmakaseSalt = 0;
     store.copyFrameIndex = 0;
     store.copyFramePoolIndex = {};
     store.copyFrameCandidates = {};

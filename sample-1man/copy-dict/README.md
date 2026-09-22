@@ -29,10 +29,17 @@
 - 生成は **axis を先に3つ選ぶ** → 各1文（open+mid+close）
 - キーワードはプール絞りに使う。おまかせは preset の axis 並び
 
-## 見本接続
+## 見本・用途の寄せ先
 
-`sushiSampleKey`（例 `cafe-warm-a`）の先頭トークン → `scenes/cafe.json`
+優先: **人の選択・入力 ＞ 用途 ＞ 見本の初期ヒント**
+
+1. `sitePurpose` → `meta.purposeScenes`（例: service→salon。`shop` は null＝見本ヒントを使う）
+2. 無い／薄いとき `sushiSampleKey` 先頭トークン（例 `cafe-warm-a` → cafe）
+3. さらに無ければ `fallbackScene`（cafe）
+
+キーワードは scene 固定ではなく axis 絞り。店名は差し込み材料のみ。
 
 ## エンジン
 
-`copy-dict-engine.js` → `window.Sample1manCopyDict`
+`copy-dict-engine.js` → `window.Sample1manCopyDict`（`resolveScene` / `generateThree`）
+

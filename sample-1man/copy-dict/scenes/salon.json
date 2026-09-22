@@ -1,4 +1,4 @@
-﻿{
+{
     "parts":  [
                   {
                       "id":  "gen_open_craft_1",
@@ -1636,21 +1636,6 @@
                                      ]
                   },
                   {
-                      "id":  "salon_mat_11_4",
-                      "text":  "住宅街の角にある、席なしのテイクアウト専門店です。焼成は午前中にまとめ、午後は仕上げと販売に集中…",
-                      "axisIds":  [
-                                      "clear"
-                                  ],
-                      "weight":  1,
-                      "keywordIds":  [
-                                         "first"
-                                     ],
-                      "slot":  "open",
-                      "sectionIds":  [
-                                         "about"
-                                     ]
-                  },
-                  {
                       "id":  "salon_mat_11_5",
                       "text":  "季節で色が変わります。",
                       "axisIds":  [
@@ -1680,37 +1665,6 @@
                       "sectionIds":  [
                                          "works",
                                          "about"
-                                     ]
-                  },
-                  {
-                      "id":  "salon_mat_11_7",
-                      "text":  "その週の焼き菓子を小皿に盛った、お茶請け向けのセットです。",
-                      "axisIds":  [
-                                      "bright"
-                                  ],
-                      "weight":  1,
-                      "keywordIds":  [
-                                         "bright"
-                                     ],
-                      "slot":  "open",
-                      "sectionIds":  [
-                                         "works",
-                                         "about"
-                                     ]
-                  },
-                  {
-                      "id":  "salon_mat_11_8",
-                      "text":  "ホールケーキや文字入れのご予約はメールで。希望日を書いてください。",
-                      "axisIds":  [
-                                      "craft"
-                                  ],
-                      "weight":  1,
-                      "keywordIds":  [
-                                         "craft"
-                                     ],
-                      "slot":  "mid",
-                      "sectionIds":  [
-                                         "contact"
                                      ]
                   },
                   {
@@ -1745,14 +1699,30 @@
                                      ]
                   },
                   {
-                      "id":  "salon_mat_11_11",
-                      "text":  "カットケーキは一人用。箱はリボンなしの淡色で、職場や手土産にも渡しやすい形です。",
+                      "id":  "salon_from_yoga_yoga_mat_0_10",
+                      "text":  "鏡の横に小さな花。髪の悩みを短く聞いてから、カットの方針を決めます。",
                       "axisIds":  [
-                                      "invite"
+                                      "clear"
                                   ],
                       "weight":  1,
                       "keywordIds":  [
-                                         "local"
+                                         "first"
+                                     ],
+                      "slot":  "open",
+                      "sectionIds":  [
+                                         "hero",
+                                         "about"
+                                     ]
+                  },
+                  {
+                      "id":  "salon_from_florist_florist_from_yoga_yoga_mat_0_2",
+                      "text":  "切り花が迎える個室寄りのヘアサロン。カットもカラーも、話す速さはお客様のペースに合わせます。",
+                      "axisIds":  [
+                                      "craft"
+                                  ],
+                      "weight":  1,
+                      "keywordIds":  [
+                                         "craft"
                                      ],
                       "slot":  "mid",
                       "sectionIds":  [

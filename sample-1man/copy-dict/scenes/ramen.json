@@ -1,4 +1,4 @@
-﻿{
+{
     "parts":  [
                   {
                       "id":  "gen_open_craft_1",
@@ -1431,22 +1431,6 @@
                                      ]
                   },
                   {
-                      "id":  "ramen_mat_0_2",
-                      "text":  "余計な装飾を置かない、小さなギャラリー。作品と壁のあいだの余白を、いちばん大切にしています。",
-                      "axisIds":  [
-                                      "craft"
-                                  ],
-                      "weight":  1,
-                      "keywordIds":  [
-                                         "craft"
-                                     ],
-                      "slot":  "mid",
-                      "sectionIds":  [
-                                         "hero",
-                                         "about"
-                                     ]
-                  },
-                  {
                       "id":  "ramen_mat_0_3",
                       "text":  "企画展は月替わり。オープニングの時間だけ短くご案内します。静かに見て、静かに帰れる場所です。",
                       "axisIds":  [
@@ -1459,21 +1443,6 @@
                       "slot":  "close",
                       "sectionIds":  [
                                          "hero",
-                                         "about"
-                                     ]
-                  },
-                  {
-                      "id":  "ramen_mat_0_4",
-                      "text":  "架空市しろかべ区の路面にあるワンルームのギャラリーです。販売は展による有無があります。在廊作家へ…",
-                      "axisIds":  [
-                                      "clear"
-                                  ],
-                      "weight":  1,
-                      "keywordIds":  [
-                                         "first"
-                                     ],
-                      "slot":  "open",
-                      "sectionIds":  [
                                          "about"
                                      ]
                   },
@@ -1604,53 +1573,6 @@
                                      ]
                   },
                   {
-                      "id":  "ramen_mat_11_2",
-                      "text":  "通勤の手前で立ち寄れる、朝だけのパン屋。紙袋に入れた焼きたてが、改札までの短い道のりに合います。",
-                      "axisIds":  [
-                                      "craft"
-                                  ],
-                      "weight":  1,
-                      "keywordIds":  [
-                                         "craft"
-                                     ],
-                      "slot":  "mid",
-                      "sectionIds":  [
-                                         "hero",
-                                         "about"
-                                     ]
-                  },
-                  {
-                      "id":  "ramen_mat_11_3",
-                      "text":  "食パンと塩パンを中心に、その日の焼き上がりを黒板に書いています。売り切れ次第終了です。",
-                      "axisIds":  [
-                                      "warm"
-                                  ],
-                      "weight":  1,
-                      "keywordIds":  [
-                                         "warm"
-                                     ],
-                      "slot":  "close",
-                      "sectionIds":  [
-                                         "hero",
-                                         "about"
-                                     ]
-                  },
-                  {
-                      "id":  "ramen_mat_11_4",
-                      "text":  "架空市あさやけ区の駅前通りにある朝営業のパン屋です。午後は仕込みのため閉店。予約パンは前日15時…",
-                      "axisIds":  [
-                                      "clear"
-                                  ],
-                      "weight":  1,
-                      "keywordIds":  [
-                                         "first"
-                                     ],
-                      "slot":  "open",
-                      "sectionIds":  [
-                                         "about"
-                                     ]
-                  },
-                  {
                       "id":  "ramen_mat_11_5",
                       "text":  "売り切れは空の棚のままにします。",
                       "axisIds":  [
@@ -1745,18 +1667,49 @@
                                      ]
                   },
                   {
-                      "id":  "ramen_mat_11_11",
-                      "text":  "改札向きの小さめ袋。コーヒーとの同時持ちも想定した形です。",
+                      "id":  "ramen_from_bakery_bakery_mat_11_2",
+                      "text":  "カウンター越しに見える寸胴と、熱い丼。醤油と鶏ガラを軸に、その日の味を整える近所のラーメン店です…",
                       "axisIds":  [
-                                      "invite"
+                                      "craft"
                                   ],
                       "weight":  1,
                       "keywordIds":  [
-                                         "local"
+                                         "craft"
                                      ],
                       "slot":  "mid",
                       "sectionIds":  [
                                          "hero",
+                                         "about"
+                                     ]
+                  },
+                  {
+                      "id":  "ramen_from_bakery_bakery_mat_11_6",
+                      "text":  "鶏ガラ醤油。澄んだスープに、チャーシューは薄切り二枚。",
+                      "axisIds":  [
+                                      "ease"
+                                  ],
+                      "weight":  1,
+                      "keywordIds":  [
+                                         "calm"
+                                     ],
+                      "slot":  "close",
+                      "sectionIds":  [
+                                         "works",
+                                         "about"
+                                     ]
+                  },
+                  {
+                      "id":  "ramen_from_studio_studio_mat_11_4",
+                      "text":  "架空市むぎび区の路地にあるラーメン屋です。昼と夜でスープの火入れを分けています。テイクアウトはス…",
+                      "axisIds":  [
+                                      "clear"
+                                  ],
+                      "weight":  1,
+                      "keywordIds":  [
+                                         "first"
+                                     ],
+                      "slot":  "open",
+                      "sectionIds":  [
                                          "about"
                                      ]
                   }

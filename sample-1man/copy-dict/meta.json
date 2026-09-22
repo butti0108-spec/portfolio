@@ -111,6 +111,13 @@
                  ],
     "version":  1,
     "fallbackScene":  "cafe",
+    "purposeScenes": {
+      "personal": "studio",
+      "company": "cowork",
+      "shop": null,
+      "works": "gallery",
+      "service": "salon"
+    },
     "axes":  [
                  {
                      "id":  "ease",

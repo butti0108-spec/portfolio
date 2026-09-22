@@ -7400,6 +7400,11 @@
     const pack = PURPOSE_PACKS[purposeKey];
     if (!pack) return;
     store.sitePurpose = purposeKey;
+    /* 用途が変わったら辞典の寄せ先も変わるので候補を作り直す */
+    store.copyFrameCandidates = {};
+    store.copyFrameSelected = {};
+    store.copyFrameNow = {};
+    store.copyOmakaseAxes = null;
     Object.keys(pack.fields).forEach((name) => {
       const el = form.elements.namedItem(name);
       if (!el || el.type === "file" || el.type === "checkbox" || el.type === "radio") return;
@@ -9353,7 +9358,8 @@
     return dict
       .generateThree({
         sampleKey: store.sushiSampleKey || "",
-        sceneTag: dict.sceneFromSampleKey(store.sushiSampleKey),
+        sitePurpose: store.sitePurpose || null,
+        sceneTag: null,
         sectionId: secId,
         keywordIds: store.copyPathMode === "keyword" ? store.copyDirIds || [] : [],
         presetAxes: store.copyPathMode === "omakase" ? store.copyOmakaseAxes : null,
@@ -9511,7 +9517,8 @@
           return dict
             .generateThree({
               sampleKey: store.sushiSampleKey || "",
-              sceneTag: dict.sceneFromSampleKey(store.sushiSampleKey),
+              sitePurpose: store.sitePurpose || null,
+              sceneTag: null,
               sectionId: secId,
               keywordIds: [],
               presetAxes: store.copyOmakaseAxes,

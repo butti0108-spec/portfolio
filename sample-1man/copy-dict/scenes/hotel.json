@@ -1,4 +1,4 @@
-﻿{
+{
     "parts":  [
                   {
                       "id":  "gen_open_craft_1",
@@ -1425,6 +1425,85 @@
                                          "bright"
                                      ],
                       "slot":  "open",
+                      "sectionIds":  [
+                                         "hero",
+                                         "about"
+                                     ]
+                  },
+                  {
+                      "id":  "hotel_from_bar_bar_mat_0_1",
+                      "text":  "窓辺の光が、客室の主役。",
+                      "axisIds":  [
+                                      "bright"
+                                  ],
+                      "weight":  1,
+                      "keywordIds":  [
+                                         "bright"
+                                     ],
+                      "slot":  "open",
+                      "sectionIds":  [
+                                         "hero",
+                                         "about"
+                                     ]
+                  },
+                  {
+                      "id":  "hotel_from_bar_bar_mat_0_2",
+                      "text":  "布団の白と木の床だけを残した、小さな宿。チェックイン後は廊下の足音も少なく、部屋でゆっくり休める…",
+                      "axisIds":  [
+                                      "craft"
+                                  ],
+                      "weight":  1,
+                      "keywordIds":  [
+                                         "craft"
+                                     ],
+                      "slot":  "mid",
+                      "sectionIds":  [
+                                         "hero",
+                                         "about"
+                                     ]
+                  },
+                  {
+                      "id":  "hotel_from_bar_bar_mat_0_4",
+                      "text":  "全四室の小さな宿です。チェックインは15時以降、フロントは夕方まで。鍵はスマートロックで、遅い到…",
+                      "axisIds":  [
+                                      "clear"
+                                  ],
+                      "weight":  1,
+                      "keywordIds":  [
+                                         "first"
+                                     ],
+                      "slot":  "open",
+                      "sectionIds":  [
+                                         "about"
+                                     ]
+                  },
+                  {
+                      "id":  "hotel_from_bar_bar_mat_0_7",
+                      "text":  "朝の光が長く入る客室。読書と仮眠向けの静かな配置です。",
+                      "axisIds":  [
+                                      "bright"
+                                  ],
+                      "weight":  1,
+                      "keywordIds":  [
+                                         "bright"
+                                     ],
+                      "slot":  "open",
+                      "sectionIds":  [
+                                         "works",
+                                         "about"
+                                     ]
+                  },
+                  {
+                      "id":  "hotel_from_izakaya_izakaya_mat_11_2",
+                      "text":  "客室のひなた畳とは違い、主役は朝露と夜明けの光。小さな旅宿で、静かな一晩をどうぞ。",
+                      "axisIds":  [
+                                      "craft"
+                                  ],
+                      "weight":  1,
+                      "keywordIds":  [
+                                         "craft"
+                                     ],
+                      "slot":  "mid",
                       "sectionIds":  [
                                          "hero",
                                          "about"

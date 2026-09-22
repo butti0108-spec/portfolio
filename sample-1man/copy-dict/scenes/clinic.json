@@ -1,4 +1,4 @@
-﻿{
+{
     "parts":  [
                   {
                       "id":  "gen_open_craft_1",
@@ -1431,22 +1431,6 @@
                                      ]
                   },
                   {
-                      "id":  "clinic_mat_0_2",
-                      "text":  "赤い提灯の下で、串とお酒が並ぶ小さな居酒屋。隣の席と杯をぶつけない距離感を大切にしています。",
-                      "axisIds":  [
-                                      "craft"
-                                  ],
-                      "weight":  1,
-                      "keywordIds":  [
-                                         "craft"
-                                     ],
-                      "slot":  "mid",
-                      "sectionIds":  [
-                                         "hero",
-                                         "about"
-                                     ]
-                  },
-                  {
                       "id":  "clinic_mat_0_3",
                       "text":  "一人飲み歓迎。大きな宴会向きではありませんが、四名までの予約は受け付けています。",
                       "axisIds":  [
@@ -1755,6 +1739,84 @@
                                          "local"
                                      ],
                       "slot":  "mid",
+                      "sectionIds":  [
+                                         "hero",
+                                         "about"
+                                     ]
+                  },
+                  {
+                      "id":  "clinic_from_sweets_sweets_mat_0_2",
+                      "text":  "近所の通いやすさを大切にした小さな診療所。待ち時間の目安と、やさしい案内で、来院の不安を短くしま…",
+                      "axisIds":  [
+                                      "craft"
+                                  ],
+                      "weight":  1,
+                      "keywordIds":  [
+                                         "craft"
+                                     ],
+                      "slot":  "mid",
+                      "sectionIds":  [
+                                         "hero",
+                                         "about"
+                                     ]
+                  },
+                  {
+                      "id":  "clinic_from_sweets_sweets_mat_0_3",
+                      "text":  "初診の方も、事前メールで気になる点のメモを送っていただければ、当日の説明がスムーズです。",
+                      "axisIds":  [
+                                      "warm"
+                                  ],
+                      "weight":  1,
+                      "keywordIds":  [
+                                         "warm"
+                                     ],
+                      "slot":  "close",
+                      "sectionIds":  [
+                                         "hero",
+                                         "about"
+                                     ]
+                  },
+                  {
+                      "id":  "clinic_from_sweets_sweets_mat_0_4",
+                      "text":  "内科を中心とした地域のクリニックです。かぜや生活習慣の相談、健診の再検査まで幅広く対応します。清…",
+                      "axisIds":  [
+                                      "clear"
+                                  ],
+                      "weight":  1,
+                      "keywordIds":  [
+                                         "first"
+                                     ],
+                      "slot":  "open",
+                      "sectionIds":  [
+                                         "about"
+                                     ]
+                  },
+                  {
+                      "id":  "clinic_from_sweets_sweets_mat_0_9",
+                      "text":  "診療中は返信が遅れることがあります。2営業日以内を目安にご連絡します。",
+                      "axisIds":  [
+                                      "warm"
+                                  ],
+                      "weight":  1,
+                      "keywordIds":  [
+                                         "warm"
+                                     ],
+                      "slot":  "close",
+                      "sectionIds":  [
+                                         "contact"
+                                     ]
+                  },
+                  {
+                      "id":  "clinic_from_sweets_sweets_mat_0_10",
+                      "text":  "初診・再診の流れを掲示し、問診票は大きな活字にしています。待ち時間の目安も受付でお伝えします。",
+                      "axisIds":  [
+                                      "clear"
+                                  ],
+                      "weight":  1,
+                      "keywordIds":  [
+                                         "first"
+                                     ],
+                      "slot":  "open",
                       "sectionIds":  [
                                          "hero",
                                          "about"

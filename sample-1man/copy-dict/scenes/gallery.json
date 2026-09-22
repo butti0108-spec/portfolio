@@ -1,4 +1,4 @@
-﻿{
+{
     "parts":  [
                   {
                       "id":  "gen_open_craft_1",
@@ -1443,6 +1443,37 @@
                       "slot":  "open",
                       "sectionIds":  [
                                          "hero",
+                                         "about"
+                                     ]
+                  },
+                  {
+                      "id":  "gallery_from_ramen_ramen_mat_0_2",
+                      "text":  "余計な装飾を置かない、小さなギャラリー。作品と壁のあいだの余白を、いちばん大切にしています。",
+                      "axisIds":  [
+                                      "craft"
+                                  ],
+                      "weight":  1,
+                      "keywordIds":  [
+                                         "craft"
+                                     ],
+                      "slot":  "mid",
+                      "sectionIds":  [
+                                         "hero",
+                                         "about"
+                                     ]
+                  },
+                  {
+                      "id":  "gallery_from_ramen_ramen_mat_0_4",
+                      "text":  "架空市しろかべ区の路面にあるワンルームのギャラリーです。販売は展による有無があります。在廊作家へ…",
+                      "axisIds":  [
+                                      "clear"
+                                  ],
+                      "weight":  1,
+                      "keywordIds":  [
+                                         "first"
+                                     ],
+                      "slot":  "open",
+                      "sectionIds":  [
                                          "about"
                                      ]
                   }

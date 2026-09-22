@@ -1,4 +1,4 @@
-﻿{
+{
     "parts":  [
                   {
                       "id":  "gen_open_craft_1",
@@ -1431,22 +1431,6 @@
                                      ]
                   },
                   {
-                      "id":  "florist_mat_0_2",
-                      "text":  "犬の散歩代行と、短時間のおあずかりを組み合わせた小さなペットケア。飼い主さんの生活リズムに合わせ…",
-                      "axisIds":  [
-                                      "craft"
-                                  ],
-                      "weight":  1,
-                      "keywordIds":  [
-                                         "craft"
-                                     ],
-                      "slot":  "mid",
-                      "sectionIds":  [
-                                         "hero",
-                                         "about"
-                                     ]
-                  },
-                  {
                       "id":  "florist_mat_0_3",
                       "text":  "初めての子は、相性とクセを見るための短いトライアルから。無理な引っ張りはせず、安全な距離で進めま…",
                       "axisIds":  [
@@ -1459,21 +1443,6 @@
                       "slot":  "close",
                       "sectionIds":  [
                                          "hero",
-                                         "about"
-                                     ]
-                  },
-                  {
-                      "id":  "florist_mat_0_4",
-                      "text":  "個人運営の訪問型ペットケアです。店舗型のトリミング室はありません。ワクチン証明書の確認後にご契約…",
-                      "axisIds":  [
-                                      "clear"
-                                  ],
-                      "weight":  1,
-                      "keywordIds":  [
-                                         "first"
-                                     ],
-                      "slot":  "open",
-                      "sectionIds":  [
                                          "about"
                                      ]
                   },
@@ -1541,21 +1510,6 @@
                                      ]
                   },
                   {
-                      "id":  "florist_mat_0_9",
-                      "text":  "緊急時の連絡先は契約時に共有します。診療行為は行いません。",
-                      "axisIds":  [
-                                      "warm"
-                                  ],
-                      "weight":  1,
-                      "keywordIds":  [
-                                         "warm"
-                                     ],
-                      "slot":  "close",
-                      "sectionIds":  [
-                                         "contact"
-                                     ]
-                  },
-                  {
                       "id":  "florist_mat_0_10",
                       "text":  "公園まわりと住宅街の静かな道を組み合わせ。歩きの様子は写真つきのメモで共有します。",
                       "axisIds":  [
@@ -1600,53 +1554,6 @@
                       "slot":  "open",
                       "sectionIds":  [
                                          "hero",
-                                         "about"
-                                     ]
-                  },
-                  {
-                      "id":  "florist_mat_11_2",
-                      "text":  "観葉植物に囲まれた共有のデスク。電源と静かなWi-Fiだけを整えた、小さなコワーキングです。",
-                      "axisIds":  [
-                                      "craft"
-                                  ],
-                      "weight":  1,
-                      "keywordIds":  [
-                                         "craft"
-                                     ],
-                      "slot":  "mid",
-                      "sectionIds":  [
-                                         "hero",
-                                         "about"
-                                     ]
-                  },
-                  {
-                      "id":  "florist_mat_11_3",
-                      "text":  "通話ブースは別室。長机と個席を選べます。初めての方も、予約不要のドロップインからどうぞ。",
-                      "axisIds":  [
-                                      "warm"
-                                  ],
-                      "weight":  1,
-                      "keywordIds":  [
-                                         "warm"
-                                     ],
-                      "slot":  "close",
-                      "sectionIds":  [
-                                         "hero",
-                                         "about"
-                                     ]
-                  },
-                  {
-                      "id":  "florist_mat_11_4",
-                      "text":  "架空市みどり区の2階にあるドロップイン中心のコワーキングです。会員プランもありますが、まずは半日…",
-                      "axisIds":  [
-                                      "clear"
-                                  ],
-                      "weight":  1,
-                      "keywordIds":  [
-                                         "first"
-                                     ],
-                      "slot":  "open",
-                      "sectionIds":  [
                                          "about"
                                      ]
                   },
@@ -1757,6 +1664,54 @@
                       "slot":  "mid",
                       "sectionIds":  [
                                          "hero",
+                                         "about"
+                                     ]
+                  },
+                  {
+                      "id":  "florist_from_cafe_cafe_mat_11_2",
+                      "text":  "朝のうちに水を替えた切り花と、小さな鉢ものが並ぶ路面店。通りがかりの「これ一輪」も、玄関用のまと…",
+                      "axisIds":  [
+                                      "craft"
+                                  ],
+                      "weight":  1,
+                      "keywordIds":  [
+                                         "craft"
+                                     ],
+                      "slot":  "mid",
+                      "sectionIds":  [
+                                         "hero",
+                                         "about"
+                                     ]
+                  },
+                  {
+                      "id":  "florist_from_cafe_cafe_mat_11_11",
+                      "text":  "玄関・デスク・ギフト用で長さと葉の量を変えます。花瓶がない方には簡易の水袋もお付けします。",
+                      "axisIds":  [
+                                      "invite"
+                                  ],
+                      "weight":  1,
+                      "keywordIds":  [
+                                         "local"
+                                     ],
+                      "slot":  "mid",
+                      "sectionIds":  [
+                                         "hero",
+                                         "about"
+                                     ]
+                  },
+                  {
+                      "id":  "florist_from_cafe_cafe_mat_11_7",
+                      "text":  "高さのある花を中心に、左右のバランスを整えたスタンダードサイズ。",
+                      "axisIds":  [
+                                      "bright"
+                                  ],
+                      "weight":  1,
+                      "keywordIds":  [
+                                         "bright"
+                                     ],
+                      "slot":  "open",
+                      "sectionIds":  [
+                                         "works",
                                          "about"
                                      ]
                   }

@@ -1,4 +1,4 @@
-﻿{
+{
     "parts":  [
                   {
                       "id":  "gen_open_craft_1",
@@ -1431,53 +1431,6 @@
                                      ]
                   },
                   {
-                      "id":  "cowork_mat_0_2",
-                      "text":  "古い木の暖簾が目印の居酒屋。カウンターで、串と杯をゆっくりどうぞ。赤提灯の賑わいとは違う、木目の…",
-                      "axisIds":  [
-                                      "craft"
-                                  ],
-                      "weight":  1,
-                      "keywordIds":  [
-                                         "craft"
-                                     ],
-                      "slot":  "mid",
-                      "sectionIds":  [
-                                         "hero",
-                                         "about"
-                                     ]
-                  },
-                  {
-                      "id":  "cowork_mat_0_3",
-                      "text":  "日本酒と焼酎を中心に、季節の一品を黒板に書いています。予約なしでも入りやすい席割りです。",
-                      "axisIds":  [
-                                      "warm"
-                                  ],
-                      "weight":  1,
-                      "keywordIds":  [
-                                         "warm"
-                                     ],
-                      "slot":  "close",
-                      "sectionIds":  [
-                                         "hero",
-                                         "about"
-                                     ]
-                  },
-                  {
-                      "id":  "cowork_mat_0_4",
-                      "text":  "駅裏側の細い通りにある居酒屋です。串焼きとお通し、地酒とハイボールが中心。座敷は小上がり一組のみ…",
-                      "axisIds":  [
-                                      "clear"
-                                  ],
-                      "weight":  1,
-                      "keywordIds":  [
-                                         "first"
-                                     ],
-                      "slot":  "open",
-                      "sectionIds":  [
-                                         "about"
-                                     ]
-                  },
-                  {
                       "id":  "cowork_mat_0_6",
                       "text":  "炭火で表面を香ばしく。酒の最初の一本に。",
                       "axisIds":  [
@@ -1651,22 +1604,6 @@
                                      ]
                   },
                   {
-                      "id":  "cowork_mat_10_6",
-                      "text":  "四時間まで。フリー席・珈琲込み。延長は時間課金。",
-                      "axisIds":  [
-                                      "ease"
-                                  ],
-                      "weight":  1,
-                      "keywordIds":  [
-                                         "calm"
-                                     ],
-                      "slot":  "close",
-                      "sectionIds":  [
-                                         "works",
-                                         "about"
-                                     ]
-                  },
-                  {
                       "id":  "cowork_mat_10_7",
                       "text":  "開館中いつでもフリー席。ロッカー小が一つ付き。",
                       "axisIds":  [
@@ -1741,6 +1678,53 @@
                       "slot":  "mid",
                       "sectionIds":  [
                                          "hero",
+                                         "about"
+                                     ]
+                  },
+                  {
+                      "id":  "cowork_from_florist_florist_mat_11_2",
+                      "text":  "観葉植物に囲まれた共有のデスク。電源と静かなWi-Fiだけを整えた、小さなコワーキングです。",
+                      "axisIds":  [
+                                      "craft"
+                                  ],
+                      "weight":  1,
+                      "keywordIds":  [
+                                         "craft"
+                                     ],
+                      "slot":  "mid",
+                      "sectionIds":  [
+                                         "hero",
+                                         "about"
+                                     ]
+                  },
+                  {
+                      "id":  "cowork_from_florist_florist_mat_11_3",
+                      "text":  "通話ブースは別室。長机と個席を選べます。初めての方も、予約不要のドロップインからどうぞ。",
+                      "axisIds":  [
+                                      "warm"
+                                  ],
+                      "weight":  1,
+                      "keywordIds":  [
+                                         "warm"
+                                     ],
+                      "slot":  "close",
+                      "sectionIds":  [
+                                         "hero",
+                                         "about"
+                                     ]
+                  },
+                  {
+                      "id":  "cowork_from_florist_florist_mat_11_4",
+                      "text":  "架空市みどり区の2階にあるドロップイン中心のコワーキングです。会員プランもありますが、まずは半日…",
+                      "axisIds":  [
+                                      "clear"
+                                  ],
+                      "weight":  1,
+                      "keywordIds":  [
+                                         "first"
+                                     ],
+                      "slot":  "open",
+                      "sectionIds":  [
                                          "about"
                                      ]
                   }

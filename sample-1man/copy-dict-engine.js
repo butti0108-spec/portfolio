@@ -53,6 +53,29 @@
     return token || null;
   }
 
+  /**
+   * 寄せ先: 人の選択・入力 ＞ 用途 ＞ 見本の初期ヒント
+   * shop など用途が scene を持たないときは sampleKey を足場にする
+   */
+  function resolveScene(opts) {
+    opts = opts || {};
+    var purpose = opts.sitePurpose || opts.purpose || null;
+    var map = (cache.meta && cache.meta.purposeScenes) || {
+      personal: "studio",
+      company: "cowork",
+      shop: null,
+      works: "gallery",
+      service: "salon"
+    };
+    if (purpose && Object.prototype.hasOwnProperty.call(map, purpose) && map[purpose]) {
+      return map[purpose];
+    }
+    if (opts.sceneTag) return opts.sceneTag;
+    var fromSample = sceneFromSampleKey(opts.sampleKey);
+    if (fromSample) return fromSample;
+    return (cache.meta && cache.meta.fallbackScene) || "cafe";
+  }
+
   function loadScene(sceneId) {
     var id = sceneId || "cafe";
     if (cache.scenes[id]) return Promise.resolve(cache.scenes[id]);
@@ -267,14 +290,32 @@
     var keywordIds = Array.isArray(opts.keywordIds) ? opts.keywordIds.slice() : [];
     var presetAxes = opts.presetAxes || null; /* { hero: axisId, ... } for omakase */
     var salt = opts.salt || String(Date.now());
-    var sceneHint = opts.sceneTag || sceneFromSampleKey(sampleKey) || "cafe";
 
-    return Promise.all([ensureMeta(), loadScene(sceneHint)])
-      .then(function (pair) {
-        var meta = pair[0];
-        var scene = pair[1] || { parts: [] };
+    return ensureMeta()
+      .then(function () {
+        var sceneHint = resolveScene(opts);
+        return loadScene(sceneHint).then(function (sceneDoc) {
+          return { sceneHint: sceneHint, sceneDoc: sceneDoc };
+        });
+      })
+      .then(function (pack) {
+        var sceneHint = pack.sceneHint;
+        var scene = pack.sceneDoc || { parts: [] };
         var parts = scene.parts || [];
-        var rng = mulberry32(hashSeed(sampleKey + "|" + sectionId + "|" + keywordIds.join(",") + "|" + salt));
+        var meta = cache.meta;
+        var rng = mulberry32(
+          hashSeed(
+            sampleKey +
+              "|" +
+              (opts.sitePurpose || "") +
+              "|" +
+              sectionId +
+              "|" +
+              keywordIds.join(",") +
+              "|" +
+              salt
+          )
+        );
         var preferred = [];
         if (presetAxes && presetAxes[sectionId]) preferred.push(presetAxes[sectionId]);
         preferred = preferred.concat(keywordToAxisHints(meta, keywordIds));
@@ -315,10 +356,14 @@
       .catch(function () {
         /* absolute fallback — never blank */
         var axes = ["ease", "bright", "craft"];
+        var sceneHint = "cafe";
+        try {
+          sceneHint = resolveScene(opts);
+        } catch (e) {}
         return {
           sceneId: sceneHint,
           axes: axes,
-          candidates: axes.map(function (a, i) {
+          candidates: axes.map(function (a) {
             return {
               label: a,
               text: fallbackLine(sectionId, a),
@@ -345,6 +390,7 @@
 
   global.Sample1manCopyDict = {
     sceneFromSampleKey: sceneFromSampleKey,
+    resolveScene: resolveScene,
     loadScene: loadScene,
     generateThree: generateThree,
     pickOmakasePreset: pickOmakasePreset,

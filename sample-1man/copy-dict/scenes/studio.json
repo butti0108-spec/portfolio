@@ -1,4 +1,4 @@
-﻿{
+{
     "parts":  [
                   {
                       "id":  "gen_open_craft_1",
@@ -1463,21 +1463,6 @@
                                      ]
                   },
                   {
-                      "id":  "studio_mat_0_4",
-                      "text":  "架空市しろい区の貸切スタジオです。自然光は午前優先。機材レンタルは別メニュー。ペット撮影は要相談…",
-                      "axisIds":  [
-                                      "clear"
-                                  ],
-                      "weight":  1,
-                      "keywordIds":  [
-                                         "first"
-                                     ],
-                      "slot":  "open",
-                      "sectionIds":  [
-                                         "about"
-                                     ]
-                  },
-                  {
                       "id":  "studio_mat_0_5",
                       "text":  "実際の納品データに近いトーンです。",
                       "axisIds":  [
@@ -1636,21 +1621,6 @@
                                      ]
                   },
                   {
-                      "id":  "studio_mat_11_4",
-                      "text":  "架空市むぎび区の路地にあるラーメン屋です。昼と夜でスープの火入れを分けています。テイクアウトはス…",
-                      "axisIds":  [
-                                      "clear"
-                                  ],
-                      "weight":  1,
-                      "keywordIds":  [
-                                         "first"
-                                     ],
-                      "slot":  "open",
-                      "sectionIds":  [
-                                         "about"
-                                     ]
-                  },
-                  {
                       "id":  "studio_mat_11_5",
                       "text":  "売り切れは暖簾横の黒板へ。",
                       "axisIds":  [
@@ -1757,6 +1727,37 @@
                       "slot":  "mid",
                       "sectionIds":  [
                                          "hero",
+                                         "about"
+                                     ]
+                  },
+                  {
+                      "id":  "studio_from_izakaya_izakaya_mat_0_3",
+                      "text":  "宣材・ポートレート・作品撮りに対応。撮影後の簡単なレタッチまで含めたコースがあります。",
+                      "axisIds":  [
+                                      "warm"
+                                  ],
+                      "weight":  1,
+                      "keywordIds":  [
+                                         "warm"
+                                     ],
+                      "slot":  "close",
+                      "sectionIds":  [
+                                         "hero",
+                                         "about"
+                                     ]
+                  },
+                  {
+                      "id":  "studio_from_izakaya_izakaya_mat_0_4",
+                      "text":  "モノクロームのポートレートを得意とする写真スタジオです。アーティスト宣材、作家プロフィール、静か…",
+                      "axisIds":  [
+                                      "clear"
+                                  ],
+                      "weight":  1,
+                      "keywordIds":  [
+                                         "first"
+                                     ],
+                      "slot":  "open",
+                      "sectionIds":  [
                                          "about"
                                      ]
                   }

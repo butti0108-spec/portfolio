@@ -1,4 +1,4 @@
-﻿{
+{
     "parts":  [
                   {
                       "id":  "gen_open_craft_1",
@@ -1463,21 +1463,6 @@
                                      ]
                   },
                   {
-                      "id":  "bakery_mat_0_4",
-                      "text":  "駅から一本入った通りの、レンガ調の小さな店です。イートインは窓際の立ち飲みスペースのみ。コーヒー…",
-                      "axisIds":  [
-                                      "clear"
-                                  ],
-                      "weight":  1,
-                      "keywordIds":  [
-                                         "first"
-                                     ],
-                      "slot":  "open",
-                      "sectionIds":  [
-                                         "about"
-                                     ]
-                  },
-                  {
                       "id":  "bakery_mat_0_5",
                       "text":  "売り切れ次第終了です。",
                       "axisIds":  [
@@ -1604,22 +1589,6 @@
                                      ]
                   },
                   {
-                      "id":  "bakery_mat_11_2",
-                      "text":  "カウンター越しに見える寸胴と、熱い丼。醤油と鶏ガラを軸に、その日の味を整える近所のラーメン店です…",
-                      "axisIds":  [
-                                      "craft"
-                                  ],
-                      "weight":  1,
-                      "keywordIds":  [
-                                         "craft"
-                                     ],
-                      "slot":  "mid",
-                      "sectionIds":  [
-                                         "hero",
-                                         "about"
-                                     ]
-                  },
-                  {
                       "id":  "bakery_mat_11_3",
                       "text":  "席は回転を意識しつつ、丼が冷める前に食べ切れるペースを大切にしています。",
                       "axisIds":  [
@@ -1661,22 +1630,6 @@
                                          "local"
                                      ],
                       "slot":  "mid",
-                      "sectionIds":  [
-                                         "works",
-                                         "about"
-                                     ]
-                  },
-                  {
-                      "id":  "bakery_mat_11_6",
-                      "text":  "鶏ガラ醤油。澄んだスープに、チャーシューは薄切り二枚。",
-                      "axisIds":  [
-                                      "ease"
-                                  ],
-                      "weight":  1,
-                      "keywordIds":  [
-                                         "calm"
-                                     ],
-                      "slot":  "close",
                       "sectionIds":  [
                                          "works",
                                          "about"
@@ -1742,6 +1695,162 @@
                       "slot":  "mid",
                       "sectionIds":  [
                                          "hero",
+                                         "about"
+                                     ]
+                  },
+                  {
+                      "id":  "bakery_from_cafe_cafe_mat_0_11",
+                      "text":  "スコーンとパウンドケーキは毎朝店内で仕上げ。売り切れ次第終了なので、早い時間の来店がいちばんの近…",
+                      "axisIds":  [
+                                      "invite"
+                                  ],
+                      "weight":  1,
+                      "keywordIds":  [
+                                         "local"
+                                     ],
+                      "slot":  "mid",
+                      "sectionIds":  [
+                                         "hero",
+                                         "about"
+                                     ]
+                  },
+                  {
+                      "id":  "bakery_from_ramen_ramen_mat_11_2",
+                      "text":  "通勤の手前で立ち寄れる、朝だけのパン屋。紙袋に入れた焼きたてが、改札までの短い道のりに合います。",
+                      "axisIds":  [
+                                      "craft"
+                                  ],
+                      "weight":  1,
+                      "keywordIds":  [
+                                         "craft"
+                                     ],
+                      "slot":  "mid",
+                      "sectionIds":  [
+                                         "hero",
+                                         "about"
+                                     ]
+                  },
+                  {
+                      "id":  "bakery_from_ramen_ramen_mat_11_3",
+                      "text":  "食パンと塩パンを中心に、その日の焼き上がりを黒板に書いています。売り切れ次第終了です。",
+                      "axisIds":  [
+                                      "warm"
+                                  ],
+                      "weight":  1,
+                      "keywordIds":  [
+                                         "warm"
+                                     ],
+                      "slot":  "close",
+                      "sectionIds":  [
+                                         "hero",
+                                         "about"
+                                     ]
+                  },
+                  {
+                      "id":  "bakery_from_ramen_ramen_mat_11_4",
+                      "text":  "架空市あさやけ区の駅前通りにある朝営業のパン屋です。午後は仕込みのため閉店。予約パンは前日15時…",
+                      "axisIds":  [
+                                      "clear"
+                                  ],
+                      "weight":  1,
+                      "keywordIds":  [
+                                         "first"
+                                     ],
+                      "slot":  "open",
+                      "sectionIds":  [
+                                         "about"
+                                     ]
+                  },
+                  {
+                      "id":  "bakery_from_sweets_sweets_mat_11_2",
+                      "text":  "窯ケースのパン屋とも、通勤の朝パンとも違い、主役は小麦のローフ。粉の匂いが残る店で、焼き立てを持…",
+                      "axisIds":  [
+                                      "craft"
+                                  ],
+                      "weight":  1,
+                      "keywordIds":  [
+                                         "craft"
+                                     ],
+                      "slot":  "mid",
+                      "sectionIds":  [
+                                         "hero",
+                                         "about"
+                                     ]
+                  },
+                  {
+                      "id":  "bakery_from_sweets_sweets_mat_11_3",
+                      "text":  "食パンとカンパーニュが中心。売り切れ次第終了なので、早い時間の来店がいちばん確実です。",
+                      "axisIds":  [
+                                      "warm"
+                                  ],
+                      "weight":  1,
+                      "keywordIds":  [
+                                         "warm"
+                                     ],
+                      "slot":  "close",
+                      "sectionIds":  [
+                                         "hero",
+                                         "about"
+                                     ]
+                  },
+                  {
+                      "id":  "bakery_from_sweets_sweets_mat_11_4",
+                      "text":  "住宅地の一角にある小さなパン屋です。看板は食パンとカンパーニュ。クロワッサンや惣菜パンも並びます…",
+                      "axisIds":  [
+                                      "clear"
+                                  ],
+                      "weight":  1,
+                      "keywordIds":  [
+                                         "first"
+                                     ],
+                      "slot":  "open",
+                      "sectionIds":  [
+                                         "about"
+                                     ]
+                  },
+                  {
+                      "id":  "bakery_from_sweets_sweets_mat_11_8",
+                      "text":  "食パン・カンパーニュの予約はメールで。希望日と個数を。",
+                      "axisIds":  [
+                                      "craft"
+                                  ],
+                      "weight":  1,
+                      "keywordIds":  [
+                                         "craft"
+                                     ],
+                      "slot":  "mid",
+                      "sectionIds":  [
+                                         "contact"
+                                     ]
+                  },
+                  {
+                      "id":  "bakery_from_sweets_sweets_mat_11_10",
+                      "text":  "食パンとカンパーニュは店内で成形。小麦の風味が残るよう、砂糖と油脂は控えめにしています。",
+                      "axisIds":  [
+                                      "clear"
+                                  ],
+                      "weight":  1,
+                      "keywordIds":  [
+                                         "first"
+                                     ],
+                      "slot":  "open",
+                      "sectionIds":  [
+                                         "hero",
+                                         "about"
+                                     ]
+                  },
+                  {
+                      "id":  "bakery_from_salon_salon_mat_11_4",
+                      "text":  "住宅街の角にある、席なしのテイクアウト専門店です。焼成は午前中にまとめ、午後は仕上げと販売に集中…",
+                      "axisIds":  [
+                                      "clear"
+                                  ],
+                      "weight":  1,
+                      "keywordIds":  [
+                                         "first"
+                                     ],
+                      "slot":  "open",
+                      "sectionIds":  [
                                          "about"
                                      ]
                   }

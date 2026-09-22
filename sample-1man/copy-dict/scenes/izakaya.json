@@ -1,4 +1,4 @@
-﻿{
+{
     "parts":  [
                   {
                       "id":  "gen_open_craft_1",
@@ -1447,37 +1447,6 @@
                                      ]
                   },
                   {
-                      "id":  "izakaya_mat_0_3",
-                      "text":  "宣材・ポートレート・作品撮りに対応。撮影後の簡単なレタッチまで含めたコースがあります。",
-                      "axisIds":  [
-                                      "warm"
-                                  ],
-                      "weight":  1,
-                      "keywordIds":  [
-                                         "warm"
-                                     ],
-                      "slot":  "close",
-                      "sectionIds":  [
-                                         "hero",
-                                         "about"
-                                     ]
-                  },
-                  {
-                      "id":  "izakaya_mat_0_4",
-                      "text":  "モノクロームのポートレートを得意とする写真スタジオです。アーティスト宣材、作家プロフィール、静か…",
-                      "axisIds":  [
-                                      "clear"
-                                  ],
-                      "weight":  1,
-                      "keywordIds":  [
-                                         "first"
-                                     ],
-                      "slot":  "open",
-                      "sectionIds":  [
-                                         "about"
-                                     ]
-                  },
-                  {
                       "id":  "izakaya_mat_0_5",
                       "text":  "影と輪郭のための枠",
                       "axisIds":  [
@@ -1604,8 +1573,24 @@
                                      ]
                   },
                   {
-                      "id":  "izakaya_mat_11_2",
-                      "text":  "客室のひなた畳とは違い、主役は朝露と夜明けの光。小さな旅宿で、静かな一晩をどうぞ。",
+                      "id":  "izakaya_mat_11_3",
+                      "text":  "食事は簡易の朝食のみ。近くの食堂マップをお渡しするので、夕食は街歩きと合わせてどうぞ。",
+                      "axisIds":  [
+                                      "warm"
+                                  ],
+                      "weight":  1,
+                      "keywordIds":  [
+                                         "warm"
+                                     ],
+                      "slot":  "close",
+                      "sectionIds":  [
+                                         "hero",
+                                         "about"
+                                     ]
+                  },
+                  {
+                      "id":  "izakaya_from_clinic_clinic_mat_0_2",
+                      "text":  "赤い提灯の下で、串とお酒が並ぶ小さな居酒屋。隣の席と杯をぶつけない距離感を大切にしています。",
                       "axisIds":  [
                                       "craft"
                                   ],
@@ -1620,8 +1605,24 @@
                                      ]
                   },
                   {
-                      "id":  "izakaya_mat_11_3",
-                      "text":  "食事は簡易の朝食のみ。近くの食堂マップをお渡しするので、夕食は街歩きと合わせてどうぞ。",
+                      "id":  "izakaya_from_cowork_cowork_mat_0_2",
+                      "text":  "古い木の暖簾が目印の居酒屋。カウンターで、串と杯をゆっくりどうぞ。赤提灯の賑わいとは違う、木目の…",
+                      "axisIds":  [
+                                      "craft"
+                                  ],
+                      "weight":  1,
+                      "keywordIds":  [
+                                         "craft"
+                                     ],
+                      "slot":  "mid",
+                      "sectionIds":  [
+                                         "hero",
+                                         "about"
+                                     ]
+                  },
+                  {
+                      "id":  "izakaya_from_cowork_cowork_mat_0_3",
+                      "text":  "日本酒と焼酎を中心に、季節の一品を黒板に書いています。予約なしでも入りやすい席割りです。",
                       "axisIds":  [
                                       "warm"
                                   ],
@@ -1632,6 +1633,21 @@
                       "slot":  "close",
                       "sectionIds":  [
                                          "hero",
+                                         "about"
+                                     ]
+                  },
+                  {
+                      "id":  "izakaya_from_cowork_cowork_mat_0_4",
+                      "text":  "駅裏側の細い通りにある居酒屋です。串焼きとお通し、地酒とハイボールが中心。座敷は小上がり一組のみ…",
+                      "axisIds":  [
+                                      "clear"
+                                  ],
+                      "weight":  1,
+                      "keywordIds":  [
+                                         "first"
+                                     ],
+                      "slot":  "open",
+                      "sectionIds":  [
                                          "about"
                                      ]
                   }

@@ -1878,6 +1878,9 @@ body.atelier.mode-detail #preview-root [data-open-step] {
   object-fit: cover;
   box-sizing: border-box;
 }
+.preview-site .work-thumb {
+  object-position: center top;
+}
 
 .preview-site .contact-band h2::after {
   background: var(--contact-ink) !important;
@@ -4141,6 +4144,7 @@ body.atelier:not(.mode-detail) .item-focal-nudge {
   aspect-ratio: 4 / 3;
   max-height: 180px;
   object-fit: cover;
+  object-position: center top;
 }
 #preview-root[data-layout="b"] #hero .hero-stage {
   aspect-ratio: 4 / 3;

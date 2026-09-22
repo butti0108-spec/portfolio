@@ -30,6 +30,7 @@
     let selectedItem = null;
     const tagSet = new Set();
     const shapeSet = new Set();
+    let trimOnly = false;
 
     root.classList.add("fpg");
     root.innerHTML = [
@@ -38,11 +39,12 @@
       mode === "standalone"
         ? '    <h1 class="fpg-title">写真ギャラリー</h1>'
         : '    <p class="fpg-title" role="heading" aria-level="2">写真ギャラリー</p>',
-      '    <p class="fpg-lead">お好みの写真はありますか。題材や形で絞り込めます。</p>',
+      '    <p class="fpg-lead">お好みの写真はありますか。題材や形で絞り込めます。カード向けの上寄せ種もあります。</p>',
       "  </header>",
       '  <div class="fpg-filters" hidden>',
       '    <div class="fpg-filter-row" data-fpg-tags></div>',
       '    <div class="fpg-filter-row" data-fpg-shapes></div>',
+      '    <div class="fpg-filter-row" data-fpg-trim></div>',
       "  </div>",
       '  <div class="fpg-toolbar">',
       '    <p class="fpg-count" data-fpg-count></p>',
@@ -58,6 +60,7 @@
     const elFilters = root.querySelector(".fpg-filters");
     const elTags = root.querySelector("[data-fpg-tags]");
     const elShapes = root.querySelector("[data-fpg-shapes]");
+    const elTrim = root.querySelector("[data-fpg-trim]");
     const elCount = root.querySelector("[data-fpg-count]");
     const elClear = root.querySelector("[data-fpg-clear]");
     const elError = root.querySelector("[data-fpg-error]");
@@ -72,12 +75,20 @@
 
     function shapeLabel(key) {
       const map = (catalog && catalog.shapeLabels) || {};
-      return map[key] || key;
+      if (map[key]) return map[key];
+      if (key === "wide") return "全幅寄り";
+      if (key === "square") return "ふつう・半幅向け";
+      return key;
+    }
+
+    function itemHasTrim(item) {
+      return !!(item && item.trimCardPath);
     }
 
     function filteredItems() {
       const items = (catalog && catalog.items) || [];
       return items.filter((item) => {
+        if (trimOnly && !itemHasTrim(item)) return false;
         if (tagSet.size) {
           const tags = Array.isArray(item.tags) ? item.tags : [];
           let hit = false;
@@ -141,6 +152,21 @@
           );
         }).join("");
 
+      const hasAnyTrim = ((catalog && catalog.items) || []).some(itemHasTrim);
+      if (elTrim) {
+        if (hasAnyTrim) {
+          elTrim.innerHTML =
+            '<span class="fpg-filter-label">カード</span>' +
+            '<label class="fpg-chip"><input type="checkbox" data-fpg-trim-only' +
+            (trimOnly ? " checked" : "") +
+            "> 上寄せ種だけ</label>";
+          elTrim.hidden = false;
+        } else {
+          elTrim.innerHTML = "";
+          elTrim.hidden = true;
+        }
+      }
+
       elFilters.hidden = false;
     }
 
@@ -151,7 +177,7 @@
         items.length === total
           ? total + "枚あります"
           : items.length + " / " + total + "枚（絞り込み中）";
-      elClear.hidden = !(tagSet.size || shapeSet.size);
+      elClear.hidden = !(tagSet.size || shapeSet.size || trimOnly);
       elEmpty.hidden = items.length > 0;
       elGrid.hidden = items.length === 0;
 
@@ -163,9 +189,10 @@
           const pills = []
             .concat(item.sceneLabel ? [item.sceneLabel] : [])
             .concat(item.shape === "wide" ? [shapeLabel("wide")] : [])
+            .concat(itemHasTrim(item) ? ["上寄せ種"] : [])
             .concat(
               (item.tags || [])
-                .filter((t) => t !== "indoor")
+                .filter((t) => t !== "indoor" && t !== "card-upper")
                 .slice(0, 2)
                 .map(tagLabel)
             );
@@ -232,9 +259,19 @@
       renderGrid();
     });
 
+    if (elTrim) {
+      elTrim.addEventListener("change", (ev) => {
+        const input = ev.target.closest("input[data-fpg-trim-only]");
+        if (!input) return;
+        trimOnly = !!input.checked;
+        renderGrid();
+      });
+    }
+
     elClear.addEventListener("click", () => {
       tagSet.clear();
       shapeSet.clear();
+      trimOnly = false;
       renderFilters();
       renderGrid();
     });
@@ -253,6 +290,7 @@
       clearFilters() {
         tagSet.clear();
         shapeSet.clear();
+        trimOnly = false;
         renderFilters();
         renderGrid();
       },

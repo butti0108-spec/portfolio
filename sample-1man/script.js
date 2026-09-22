@@ -8230,7 +8230,12 @@
 
   function applyGalleryPickToSlot(inputName, item) {
     if (!inputName || !item || !item.path) return;
-    const url = "free-photo-gallery/" + String(item.path).replace(/^\/+/, "");
+    const isWorkSlot = /^work_\d+_image$/.test(inputName);
+    const relPath =
+      isWorkSlot && item.trimCardPath
+        ? String(item.trimCardPath).replace(/^\/+/, "")
+        : String(item.path).replace(/^\/+/, "");
+    const url = "free-photo-gallery/" + relPath;
     const input = form.elements.namedItem(inputName);
     if (input && input.type === "file") {
       try {
@@ -8246,11 +8251,16 @@
     store.galleryPicks[inputName] = {
       id: item.id,
       path: item.path,
+      trimCardPath: item.trimCardPath || null,
+      usedPath: relPath,
       shape: item.shape || "",
       scene: item.scene || ""
     };
     setRemoteImageUrl(inputName, url);
     applyImageSlotByName(inputName, true);
+    if (isWorkSlot) {
+      applyWorkThumbFit(inputName);
+    }
     syncEasyImageStatuses();
     const cur = getCurrentFlowStep();
     if (cur && cur.id === "easy-img-wire") {
@@ -8269,6 +8279,16 @@
       }
     }
     scheduleSave();
+  }
+
+  function applyWorkThumbFit(inputName) {
+    const m = String(inputName || "").match(/^work_(\d+)_image$/);
+    if (!m) return;
+    const n = Number(m[1]);
+    const el = root.querySelectorAll("#works-list .work-thumb")[n - 1];
+    if (!el) return;
+    el.style.objectFit = "cover";
+    el.style.objectPosition = "center top";
   }
 
   function openFreePhotoGalleryModal(inputName) {
@@ -9928,7 +9948,9 @@
     return used;
   }
 
-  function pickCatalogPhoto(items, preferShape, usedIds) {
+  function pickCatalogPhoto(items, preferShape, usedIds, opts) {
+    const options = opts || {};
+    const preferTrim = !!options.preferTrim;
     const list = Array.isArray(items) ? items.slice() : [];
     if (!list.length) return null;
     const unusedPrefer = list.filter(function (it) {
@@ -9937,13 +9959,20 @@
     const unusedAny = list.filter(function (it) {
       return it && usedIds.indexOf(it.id) < 0;
     });
-    const pool = unusedPrefer.length
+    let pool = unusedPrefer.length
       ? unusedPrefer
       : unusedAny.length
         ? unusedAny
         : list.filter(function (it) {
             return it && it.shape === preferShape;
           });
+    if (!pool.length) pool = list;
+    if (preferTrim) {
+      const withTrim = pool.filter(function (it) {
+        return it && it.trimCardPath;
+      });
+      if (withTrim.length) pool = withTrim;
+    }
     const finalPool = pool.length ? pool : list;
     return finalPool[Math.floor(Math.random() * finalPool.length)] || null;
   }
@@ -9956,6 +9985,7 @@
     store.imgOmakasePicks[slot.key] = {
       id: item.id,
       path: item.path,
+      trimCardPath: item.trimCardPath || null,
       shape: item.shape || "",
       scene: item.scene || "",
       sceneLabel: item.sceneLabel || ""
@@ -10012,7 +10042,8 @@
       slots.forEach(function (slot) {
         if (onlyUnlocked && store.imgOmakaseLocks[slot.key]) return;
         const used = collectImgOmakaseUsedIds(slots, slot.key);
-        const pick = pickCatalogPhoto(items, slot.prefer, used);
+        const preferTrim = /^work_\d+_image$/.test(slot.input) || slot.key === "works";
+        const pick = pickCatalogPhoto(items, slot.prefer, used, { preferTrim: preferTrim });
         if (pick) applyImgOmakasePickToPreview(slot, pick);
       });
     });

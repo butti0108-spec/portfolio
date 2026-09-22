@@ -13,7 +13,7 @@
   <link rel="stylesheet" href="../style.css">
   <link rel="stylesheet" href="style.css?v=base-live-1">
   <link rel="icon" href="brand/mark-favicon.png?v=logo-7" type="image/png">
-  <link rel="stylesheet" href="sample-overrides.css?v=fpg-i2-1">
+  <link rel="stylesheet" href="sample-overrides.css?v=fpg-i3-1">
   <link rel="stylesheet" href="free-photo-gallery/gallery.css?v=fpg-i1-1">
   <script>
     (function () {
@@ -39,7 +39,7 @@
   <script src="copy-dict-engine.js?v=copy-dict-thick-v1" defer></script>
   <script src="sushi-belt.js?v=sushi-choice-v1" defer></script>
   <script src="free-photo-gallery/gallery.js?v=fpg-i1-1" defer></script>
-  <script src="script.js?v=fpg-i2-1" defer></script>
+  <script src="script.js?v=fpg-i3-1" defer></script>
   <script>
     (function () {
       var h = location.hostname;
@@ -837,7 +837,7 @@
               <input type="radio" name="easy_img_path" value="omakase">
               <span class="entry-branch-card-inner">
                 <strong role="heading" aria-level="3">おまかせ</strong>
-                <span>こちらで写真の候補を整えます（いまは案内のみ。次の画面から進められます）</span>
+                <span>こちらで写真の候補を整えます。気に入った枠には鍵をかけられます</span>
               </span>
             </label>
             <label class="entry-branch-card">
@@ -850,12 +850,15 @@
           </div>
         </details>
 
-        <details class="dash-block dash-block--easy" data-step-id="easy-img-omakase" hidden>
+        <details class="dash-block dash-block--easy" data-step-id="easy-img-omakase" data-preview-target="#hero" hidden>
           <summary>おまかせ画像</summary>
-          <p class="dash-subhead" role="heading" aria-level="3">おまかせの写真（準備中）</p>
-          <p class="step-help">自動で候補を出す画面は、もう少しあとでつながります。いまは次の画像工程へ進めます。ギャラリーや端末から選ぶこともできますよ。</p>
-          <div class="easy-img-omakase-stub">
-            <button type="button" class="gct-btn gct-btn-primary" id="easy-img-omakase-continue">画像工程へ進む</button>
+          <p class="dash-subhead" role="heading" aria-level="3">おまかせの写真</p>
+          <p class="step-help">左の見本に載っています。気に入った枠には鍵をかけられます。鍵のない枠だけ、もう一度やり直せます。</p>
+          <div class="easy-img-omakase" id="easy-img-omakase-root">
+            <div class="easy-img-omakase-list" id="easy-img-omakase-list" aria-live="polite"></div>
+            <div class="easy-img-omakase-actions">
+              <button type="button" class="gct-btn" id="easy-img-omakase-reroll">もう一度選ぶ</button>
+            </div>
           </div>
         </details>
 

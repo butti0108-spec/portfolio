@@ -7152,7 +7152,35 @@
 
   function restoreViewAfterMode() {
     if (store.easyFlowActive && store.uiMode === "guided") {
+      store.siteColorMode = "easy";
+      store.heroTextOnPhoto = false;
       showWizardStep(resolveWizardStepIndex());
+      return;
+    }
+    /* サンプル入口途中（色など）へ戻っていた／リロードした */
+    if (
+      store.entryBranch === "sample" &&
+      !store.easyFlowActive &&
+      store.hubEntrySource !== "sample-done" &&
+      store.siteColorMode !== "detail" &&
+      !store.intakeDone
+    ) {
+      store.siteColorMode = "easy";
+      store.uiMode = "guided";
+      store.heroTextOnPhoto = false;
+      const gate = document.getElementById("entry-gate");
+      if (gate) {
+        const purposeRadio = gate.querySelector(
+          'input[name="entry_purpose"][value="' + (store.sitePurpose || "shop") + '"]'
+        );
+        if (purposeRadio) purposeRadio.checked = true;
+        const branchRadio = gate.querySelector('input[name="entry_branch"][value="sample"]');
+        if (branchRadio) branchRadio.checked = true;
+        gate.querySelectorAll('input[name="entry_sample_color"]').forEach(function (r) {
+          r.checked = false;
+        });
+      }
+      showEntryGate(store.sushiSampleId ? "color" : "sushi");
       return;
     }
     if (store.siteColorMode === "detail") {
@@ -7786,6 +7814,16 @@
   function openDraftNotice() {}
 
   function shouldShowEntryGate() {
+    if (store.easyFlowActive) return false;
+    /* サンプル入口へ戻った／途中リロード：確定フラグが残っていてもゲートを出す */
+    if (
+      store.entryBranch === "sample" &&
+      !store.intakeDone &&
+      store.hubEntrySource !== "sample-done" &&
+      store.siteColorMode !== "detail"
+    ) {
+      return true;
+    }
     if (store.intakeDone) return false;
     if (store.confirmed.purpose || store.confirmed.layout || store.confirmed.guide) return false;
     if (store.sitePurpose) return false;
@@ -7929,6 +7967,13 @@
     store.easyFlowActive = false;
     store.intakeDone = false;
     store.guidedImageUnlocked = false;
+    store.siteColorMode = "easy";
+    store.uiMode = "guided";
+    store.heroTextOnPhoto = false;
+    /* ゲート再表示のため、intake 確定フラグをいったん外す（中身のプレビューは残す） */
+    store.confirmed.purpose = false;
+    store.confirmed.layout = false;
+    store.confirmed.guide = false;
     setSampleFlowPreviewHidden(false);
     const gate = document.getElementById("entry-gate");
     if (gate) {
@@ -7938,14 +7983,17 @@
       if (purposeRadio) purposeRadio.checked = true;
       const branchRadio = gate.querySelector('input[name="entry_branch"][value="sample"]');
       if (branchRadio) branchRadio.checked = true;
+      /* 同じ「このままでよい」を押し直せるよう、色ラジオをいったん外す */
+      gate.querySelectorAll('input[name="entry_sample_color"]').forEach(function (r) {
+        r.checked = false;
+      });
     }
     store.entryBranch = "sample";
-    if (!store.pendingSushi && store.sushiSampleId && window.SushiBelt) {
-      /* 下書き復元後の戻る用：色画面へ。寿司確定データが無い場合は寿司へ */
-      showEntryGate("color");
-    } else {
-      showEntryGate("color");
+    if (store.hubEntrySource !== "sample-done") {
+      store.hubEntrySource = "sample";
     }
+    applyUiMode();
+    showEntryGate("color");
     scheduleSave();
   }
 
@@ -9487,8 +9535,13 @@
     } else {
       setFieldValue("accentBar", normalizeAccentBar(draft.fields.accentBar));
     }
-    /* 見本draftのキャッチ文字オンをそのまま適用（本線でも表示。操作はハブのみ） */
-    store.heroTextOnPhoto = draft.heroTextOnPhoto === true;
+    /* 見本draftのキャッチ文字オンは、展示／レビュー／ハブ用。
+       サンプル easy 本線ではゲート方針どおり載せない（操作もさせない） */
+    if (sampleMainline) {
+      store.heroTextOnPhoto = false;
+    } else {
+      store.heroTextOnPhoto = draft.heroTextOnPhoto === true;
+    }
     store.heroFocalX = normalizeFocalPercent(
       draft.heroFocalX != null ? draft.heroFocalX : HERO_FOCAL_X_DEFAULT,
       HERO_FOCAL_X_DEFAULT
@@ -9548,9 +9601,9 @@
     } else {
       store.layoutBlockOff = {};
     }
-    /* キャッチ枠あり・画像なし（色＋文字） */
+    /* キャッチ枠あり・画像なし（色＋文字）— 本線でも文字オンが必要な例外 */
     store.heroImageOff = draft.heroImageOff === true;
-    if (store.heroImageOff) {
+    if (store.heroImageOff && !sampleMainline) {
       store.heroTextOnPhoto = true;
     }
     /* 見本JSONは draftCounts。旧キー counts も受け付ける */
@@ -9927,9 +9980,9 @@
         '" aria-pressed="' +
         (locked ? "true" : "false") +
         '" title="' +
-        (locked ? "鍵をはずす" : "この文言を固定する") +
+        (locked ? "固定をはずす" : "この文言を残す（もう一度では変わらない）") +
         '">' +
-        (locked ? "鍵解除" : "鍵") +
+        (locked ? "はずす" : "残す") +
         "</button>" +
         "</div>"
       );
@@ -10137,9 +10190,9 @@
           '" aria-pressed="' +
           (locked ? "true" : "false") +
           '" title="' +
-          (locked ? "鍵をはずす" : "この写真を固定する") +
+          (locked ? "固定をはずす" : "この写真を残す（もう一度では変わらない）") +
           '">' +
-          (locked ? "鍵解除" : "鍵") +
+          (locked ? "はずす" : "残す") +
           "</button>" +
           "</div>"
         );
@@ -10480,7 +10533,11 @@
   async function finishSampleEntryFromGate() {
     const gate = document.getElementById("entry-gate");
     if (!gate) return;
-    const purposeEl = gate.querySelector('input[name="entry_purpose"]:checked');
+    let purposeEl = gate.querySelector('input[name="entry_purpose"]:checked');
+    if (!purposeEl && store.entryBranch === "sample") {
+      purposeEl = gate.querySelector('input[name="entry_purpose"][value="shop"]');
+      if (purposeEl) purposeEl.checked = true;
+    }
     if (!purposeEl || purposeEl.value !== "shop") return;
     if (!store.pendingSushi || !store.pendingSushi.draft) {
       if (store.sushiSampleId && window.SushiBelt && window.SushiBelt.loadManifest) {
@@ -10726,8 +10783,30 @@
     });
     setupEasyImagePickers();
     syncDashResumeNotice();
-    if (shouldShowEntryGate()) showEntryGate();
-    else {
+    if (shouldShowEntryGate()) {
+      const gateOpen =
+        gate && !gate.hidden && document.body.classList.contains("entry-gate-open");
+      const curStep = gate && gate.dataset.entryStep;
+      /* restoreViewAfterMode が既に色／寿司へ戻しているときは上書きしない */
+      if (gateOpen && curStep && curStep !== "save" && curStep !== "branch") {
+        /* keep */
+      } else if (
+        store.entryBranch === "sample" &&
+        !store.easyFlowActive &&
+        store.hubEntrySource !== "sample-done" &&
+        store.hubEntrySource !== "detail-entry"
+      ) {
+        const purposeRadio = gate.querySelector(
+          'input[name="entry_purpose"][value="' + (store.sitePurpose || "shop") + '"]'
+        );
+        if (purposeRadio) purposeRadio.checked = true;
+        const branchRadio = gate.querySelector('input[name="entry_branch"][value="sample"]');
+        if (branchRadio) branchRadio.checked = true;
+        showEntryGate(store.sushiSampleId ? "color" : "sushi");
+      } else {
+        showEntryGate();
+      }
+    } else {
       hideEntryGate();
       syncSiteColorModeUi();
       if (store.easyFlowActive && store.uiMode === "guided") {
@@ -10980,6 +11059,17 @@
       return;
     }
     if (step && step.id === "easy-copy-path") {
+      reopenSampleEntryAtColor();
+      return;
+    }
+    /* サンプル本線の先頭付近：文章決め方より前は色ゲートへ */
+    if (
+      store.easyFlowActive &&
+      store.entryBranch === "sample" &&
+      step &&
+      EASY_FLOW_STEP_SET.has(step.id) &&
+      store.wizardStepIndex <= 0
+    ) {
       reopenSampleEntryAtColor();
       return;
     }
@@ -14252,6 +14342,24 @@
         if (!store.confirmed.layout && (store.confirmed.guide || store.layoutSelected)) {
           store.confirmed.layout = true;
           store.layoutSelected = true;
+        }
+      }
+      /* サンプル本線の途中保存：detail／文字オンを持ち込まない（リロードでハブ飛ばし防止） */
+      if (store.easyFlowActive && store.entryBranch === "sample") {
+        store.siteColorMode = "easy";
+        store.uiMode = "guided";
+        store.heroTextOnPhoto = false;
+      } else if (
+        store.entryBranch === "sample" &&
+        !store.easyFlowActive &&
+        store.hubEntrySource !== "sample-done" &&
+        store.hubEntrySource !== "detail-entry"
+      ) {
+        store.siteColorMode = "easy";
+        store.uiMode = "guided";
+        store.heroTextOnPhoto = false;
+        if (store.intakeDone && !store.confirmed.finish) {
+          store.intakeDone = false;
         }
       }
       if (data.selfEditingStepId != null) {

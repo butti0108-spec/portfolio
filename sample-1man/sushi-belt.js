@@ -261,6 +261,17 @@
     els.stockBar.style.setProperty("--sushi-tile-w", TILE_W + "px");
     els.stockBar.style.setProperty("--sushi-tile-h", TILE_H + "px");
     if (els.stockConfirmRow) els.stockConfirmRow.innerHTML = confirmHtml;
+    var hint = $("sushi-decide-hint");
+    if (hint) {
+      var n = stockCount();
+      if (n < 1) {
+        hint.textContent = "まだ候補がありません。レーンの「↑」で候補に残せます。";
+      } else if (n >= MAX_STOCK) {
+        hint.textContent = "候補は3つまでです。右の番号で進められます。さらに残すときは入れ替え先を選べます。";
+      } else {
+        hint.textContent = "右の番号を押すと、その候補で次へ進めます。";
+      }
+    }
   }
 
   function fallbackLoopWidth() {

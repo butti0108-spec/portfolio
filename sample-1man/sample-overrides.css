@@ -7723,12 +7723,13 @@ body.atelier.color-mode-easy .zone-badge[data-open-step="site-fonts"] {
   text-align: left;
 }
 .sushi-decide-hint {
-  margin: 0;
-  max-width: 9.5rem;
+  margin: 0.35rem 0 0;
+  max-width: 11rem;
   font-size: 0.78rem;
-  font-weight: 400;
+  font-weight: 500;
   line-height: 1.45;
-  color: #5a6570;
+  color: #4a5560;
+  text-align: center;
 }
 .sushi-stock-confirm-row {
   display: flex;

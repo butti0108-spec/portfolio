@@ -13,7 +13,7 @@
   <link rel="stylesheet" href="../style.css">
   <link rel="stylesheet" href="style.css?v=base-live-1">
   <link rel="icon" href="brand/mark-favicon.png?v=logo-7" type="image/png">
-  <link rel="stylesheet" href="sample-overrides.css?v=fpg-i5-1">
+  <link rel="stylesheet" href="sample-overrides.css?v=phase2-mentor-1">
   <link rel="stylesheet" href="free-photo-gallery/gallery.css?v=fpg-i5-1">
   <script>
     (function () {
@@ -37,9 +37,9 @@
   <script src="vibe-dict.js" defer></script>
   <script src="easy-copy-dict.js?v=s5-1" defer></script>
   <script src="copy-dict-engine.js?v=copy-dict-thick-v1" defer></script>
-  <script src="sushi-belt.js?v=sushi-choice-v1" defer></script>
+  <script src="sushi-belt.js?v=phase2-sushi-1" defer></script>
   <script src="free-photo-gallery/gallery.js?v=fpg-i5-1" defer></script>
-  <script src="script.js?v=phase1-finish-1" defer></script>
+  <script src="script.js?v=phase2-mentor-3" defer></script>
   <script>
     (function () {
       var h = location.hostname;
@@ -176,7 +176,7 @@
             </span>
           </label>
         </div>
-        <p class="entry-intake-note entry-hero-text-note">サンプルではキャッチ写真に文字を載せません。写真の上に文字を載せたい人は、「自分で作る」か完成後の「編集する」でできます。</p>
+        <p class="entry-intake-note entry-hero-text-note">サンプル本線では、キャッチ写真の上に文字を載せません（見本データのオン設定も本線ではオフにします）。載せたいときは、「自分で作る」か完成後の「編集する」でできます。</p>
         <button type="button" class="entry-step-back" data-entry-step-back>← ひとつ戻る</button>
       </fieldset>
 
@@ -213,7 +213,7 @@
           <div class="sushi-upper-left">
             <div class="sushi-guide">
               <p class="sushi-guide-title">こんなことができます</p>
-              <p class="sushi-guide-lead">お好きな順番で大丈夫です</p>
+              <p class="sushi-guide-lead">流れはかんたんです。まず候補に残して、右の番号で進めます。</p>
               <div class="sushi-guide-item">
                 <div class="sushi-guide-head">
                   <p class="sushi-guide-kicker">気になるサンプルを見つける</p>
@@ -231,18 +231,18 @@
                   <span class="hub-tip-wrap sushi-guide-tip">
                     <button type="button" class="hub-tip-btn" data-hub-tip aria-expanded="false" aria-label="大きく見てみるの説明">?</button>
                     <span class="hub-tip-pop" hidden role="tooltip">
-                      各サンプルの虫眼鏡を押すと、大きな画面で全体をゆっくり見られます。雰囲気を確かめたいときに使えます。
+                      各サンプルの虫眼鏡を押すと、大きな画面で全体をゆっくり見られます。雰囲気を確かめたいときに使えます。まだ決定にはなりません。
                     </span>
                   </span>
                 </div>
               </div>
               <div class="sushi-guide-item">
                 <div class="sushi-guide-head">
-                  <p class="sushi-guide-kicker">候補に残す</p>
+                  <p class="sushi-guide-kicker">候補に残す（↑）</p>
                   <span class="hub-tip-wrap sushi-guide-tip">
                     <button type="button" class="hub-tip-btn" data-hub-tip aria-expanded="false" aria-label="候補に残すの説明">?</button>
                     <span class="hub-tip-pop" hidden role="tooltip">
-                      レーン上の「↑」を押すと、中央の1・2・3へ候補として残せます。枠の「↓」で外せます。あとで見比べたいときに使えます。
+                      レーン上の「↑」を押すと、中央の1・2・3へ候補として残せます。枠の「↓」で外せます。サンプルを押しただけでは進みません。
                     </span>
                   </span>
                 </div>
@@ -257,15 +257,16 @@
           </div>
           <div class="sushi-upper-right">
             <div class="sushi-decide-head">
-              <p class="sushi-decide-label">お好みのものはどれですか</p>
+              <p class="sushi-decide-label">候補から進む番号はどれですか</p>
+              <p class="sushi-decide-hint" id="sushi-decide-hint">右の番号を押すと、その候補で次へ進めます。</p>
               <span class="hub-tip-wrap sushi-decide-tip">
-                <button type="button" class="hub-tip-btn" data-hub-tip aria-expanded="false" aria-label="お好みのものはどれですかの説明">?</button>
+                <button type="button" class="hub-tip-btn" data-hub-tip aria-expanded="false" aria-label="候補から進む番号の説明">?</button>
                 <span class="hub-tip-pop" hidden role="tooltip">
-                  中央に残した候補のうち、これから使うサンプルを右の番号で選べます。決めたあとも、色や文字はあとから整えられます。
+                  中央に残した候補のうち、これから使うサンプルを右の番号で選べます。空の番号はまだ押せません。3枠がいっぱいのときは、新しい「↑」で入れ替え先を選べます。
                 </span>
               </span>
             </div>
-            <div class="sushi-stock-confirm-row" id="sushi-stock-confirm-row" role="group" aria-label="お好みのサンプルを選ぶ"></div>
+            <div class="sushi-stock-confirm-row" id="sushi-stock-confirm-row" role="group" aria-label="候補の番号から進む"></div>
           </div>
         </div>
         <div class="sushi-lane-wrap">
@@ -768,11 +769,11 @@
           <summary>おまかせ文章</summary>
           <p class="easy-copy-later-hint">あとから、サイト内の文章は修正できます。まずは完成まで進みましょう。</p>
           <p class="dash-subhead" role="heading" aria-level="3">おまかせの文章</p>
-          <p class="step-help">左の見本に載っています。気に入った枠には鍵をかけられます。鍵のない枠だけ、もう一度やり直せます。</p>
+          <p class="step-help">左の見本に載っています。「残す」を押した枠は、もう一度選んでも変わりません。残していない枠だけやり直せます。</p>
           <div class="easy-copy-omakase" id="easy-copy-omakase-root">
             <div class="easy-copy-omakase-list" id="easy-copy-omakase-list" aria-live="polite"></div>
             <div class="easy-copy-omakase-actions">
-              <button type="button" class="gct-btn" id="easy-copy-omakase-reroll">もう一度選ぶ</button>
+              <button type="button" class="gct-btn" id="easy-copy-omakase-reroll">残していない枠をもう一度</button>
             </div>
           </div>
         </details>
@@ -837,7 +838,7 @@
               <input type="radio" name="easy_img_path" value="omakase">
               <span class="entry-branch-card-inner">
                 <strong role="heading" aria-level="3">おまかせ</strong>
-                <span>こちらで写真の候補を整えます。気に入った枠には鍵をかけられます</span>
+                <span>こちらで写真の候補を整えます。気に入った枠は「残す」で固定できます</span>
               </span>
             </label>
             <label class="entry-branch-card">
@@ -853,11 +854,11 @@
         <details class="dash-block dash-block--easy" data-step-id="easy-img-omakase" data-preview-target="#hero" hidden>
           <summary>おまかせ画像</summary>
           <p class="dash-subhead" role="heading" aria-level="3">おまかせの写真</p>
-          <p class="step-help">左の見本に載っています。気に入った枠には鍵をかけられます。鍵のない枠だけ、もう一度やり直せます。</p>
+          <p class="step-help">左の見本に載っています。「残す」を押した枠は、もう一度選んでも変わりません。残していない枠だけやり直せます。</p>
           <div class="easy-img-omakase" id="easy-img-omakase-root">
             <div class="easy-img-omakase-list" id="easy-img-omakase-list" aria-live="polite"></div>
             <div class="easy-img-omakase-actions">
-              <button type="button" class="gct-btn" id="easy-img-omakase-reroll">もう一度選ぶ</button>
+              <button type="button" class="gct-btn" id="easy-img-omakase-reroll">残していない枠をもう一度</button>
             </div>
           </div>
         </details>
@@ -1147,7 +1148,7 @@
                 <input type="radio" name="hub_img_path_hero-image" value="omakase">
                 <span class="entry-branch-card-inner">
                   <strong role="heading" aria-level="4">おまかせ</strong>
-                  <span>こちらで写真の候補を整えます。気に入った枠には鍵をかけられます</span>
+                  <span>こちらで写真の候補を整えます。気に入った枠は「残す」で固定できます</span>
                 </span>
               </label>
               <label class="entry-branch-card">
@@ -1160,10 +1161,10 @@
             </div>
           </div>
           <div class="hub-img-omakase" data-hub-img-omakase="hero-image" hidden>
-            <p class="step-help">左の見本に載っています。気に入った枠には鍵をかけられます。鍵のない枠だけ、もう一度やり直せます。</p>
+            <p class="step-help">左の見本に載っています。「残す」を押した枠は、もう一度選んでも変わりません。残していない枠だけやり直せます。</p>
             <div class="easy-img-omakase-list" data-hub-img-omakase-list="hero-image" aria-live="polite"></div>
             <div class="easy-img-omakase-actions">
-              <button type="button" class="gct-btn" data-hub-img-omakase-reroll="hero-image">もう一度選ぶ</button>
+              <button type="button" class="gct-btn" data-hub-img-omakase-reroll="hero-image">残していない枠をもう一度</button>
             </div>
           </div>
           <div class="hub-img-self" data-hub-img-self="hero-image" hidden>
@@ -1213,10 +1214,10 @@
             </div>
           </div>
           <div class="hub-img-omakase" data-hub-img-omakase="about-images" hidden>
-            <p class="step-help">左の見本に載っています。気に入った枠には鍵をかけられます。鍵のない枠だけ、もう一度やり直せます。</p>
+            <p class="step-help">左の見本に載っています。「残す」を押した枠は、もう一度選んでも変わりません。残していない枠だけやり直せます。</p>
             <div class="easy-img-omakase-list" data-hub-img-omakase-list="about-images" aria-live="polite"></div>
             <div class="easy-img-omakase-actions">
-              <button type="button" class="gct-btn" data-hub-img-omakase-reroll="about-images">もう一度選ぶ</button>
+              <button type="button" class="gct-btn" data-hub-img-omakase-reroll="about-images">残していない枠をもう一度</button>
             </div>
           </div>
           <div class="hub-img-self" data-hub-img-self="about-images" hidden>
@@ -1286,10 +1287,10 @@
             </div>
           </div>
           <div class="hub-img-omakase" data-hub-img-omakase="works-images" hidden>
-            <p class="step-help">左の見本に載っています。気に入った枠には鍵をかけられます。鍵のない枠だけ、もう一度やり直せます。</p>
+            <p class="step-help">左の見本に載っています。「残す」を押した枠は、もう一度選んでも変わりません。残していない枠だけやり直せます。</p>
             <div class="easy-img-omakase-list" data-hub-img-omakase-list="works-images" aria-live="polite"></div>
             <div class="easy-img-omakase-actions">
-              <button type="button" class="gct-btn" data-hub-img-omakase-reroll="works-images">もう一度選ぶ</button>
+              <button type="button" class="gct-btn" data-hub-img-omakase-reroll="works-images">残していない枠をもう一度</button>
             </div>
           </div>
           <div class="hub-img-self" data-hub-img-self="works-images" hidden>
@@ -1447,7 +1448,7 @@
             <div class="step-font-embed">
               <div data-font-host="catch"></div>
             </div>
-            <p class="dash-note easy-only-note" id="hero-text-easy-note">見本表示中は「これは見本です」だけ出ます。サンプル本線では写真の上に文字を載せません。編集ハブでは「載せる」にできます。</p>
+            <p class="dash-note easy-only-note" id="hero-text-easy-note">サンプル本線では写真の上に文字を載せません（見本draftのオンも本線ではオフ）。編集ハブでは「載せる」にできます。</p>
           </div>
         </details>
 

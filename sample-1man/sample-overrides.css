@@ -7431,6 +7431,8 @@ body.atelier.color-mode-easy .zone-badge[data-open-step="site-fonts"] {
   gap: 0.35rem;
   flex: 0 0 auto;
   min-width: 0;
+  /* ↓先端とレーンのあいだ */
+  margin-bottom: 0.35rem;
 }
 
 /* 旧1・2・3番号の位置：最上段に戻る／操作のヒント */
@@ -7472,9 +7474,10 @@ body.atelier.color-mode-easy .zone-badge[data-open-step="site-fonts"] {
   display: grid;
   grid-template-columns: minmax(11.5rem, 1.1fr) auto minmax(11.5rem, 1.1fr);
   align-items: center;
-  column-gap: 0.75rem;
+  /* 矢印先端と3枠／レーンが別要素として読める余白 */
+  column-gap: 0.85rem;
   row-gap: 0;
-  padding: 0.45rem 0.35rem;
+  padding: 0.45rem 0.35rem 0.65rem;
   min-width: 0;
 }
 .sushi-side {
@@ -7485,9 +7488,12 @@ body.atelier.color-mode-easy .zone-badge[data-open-step="site-fonts"] {
 }
 .sushi-side--add {
   justify-content: center;
+  padding-bottom: 0.35rem;
 }
 .sushi-side--confirm {
   justify-content: center;
+  /* ← と右端枠のあいだ */
+  padding-left: 0.65rem;
 }
 
 .sushi-stock-bar {
@@ -7616,6 +7622,7 @@ body.atelier.color-mode-easy .zone-badge[data-open-step="site-fonts"] {
 .sushi-flow-arrow {
   display: block;
   margin-top: 0.15rem;
+  margin-bottom: 0.35rem;
   font-size: 1.25em;
   font-weight: 900;
   line-height: 1;
@@ -7628,7 +7635,7 @@ body.atelier.color-mode-easy .zone-badge[data-open-step="site-fonts"] {
 }
 .sushi-flow-arrow--left {
   display: inline;
-  margin: 0;
+  margin: 0 0.35rem 0 0;
   font-size: 1.1em;
 }
 
@@ -7713,23 +7720,6 @@ body.atelier.color-mode-easy .zone-badge[data-open-step="site-fonts"] {
   cursor: pointer;
 }
 
-.sushi-guide-card #sushi-guide-title {
-  font-size: 1.25rem;
-  font-weight: 850;
-}
-.sushi-guide-card .sushi-guide-steps {
-  margin: 0 0 0.7rem;
-  padding-left: 1.25rem;
-  font-size: 1.05rem;
-  line-height: 1.55;
-  color: #223;
-}
-.sushi-guide-card .sushi-guide-note {
-  margin: 0 0 0.85rem;
-  font-size: 0.95rem;
-  line-height: 1.5;
-  color: #445;
-}
 .sushi-guide-actions {
   display: flex;
   justify-content: flex-end;
@@ -7944,9 +7934,68 @@ body.atelier.color-mode-easy .zone-badge[data-open-step="site-fonts"] {
   box-shadow: 0 18px 40px rgba(0, 0, 0, 0.22);
 }
 
+.sushi-modal-card.sushi-guide-card {
+  /* 上端〜タイトルの無駄な空白を減らす */
+  padding: 0.85rem 1.15rem 0.95rem;
+  width: min(24rem, 100%);
+}
+
+.sushi-modal-card h2,
 .sushi-modal-card h3 {
   margin: 0 0 0.35rem;
-  font-size: 1.05rem;
+}
+
+.sushi-guide-card #sushi-guide-title {
+  margin: 0 0 0.85rem;
+  font-size: 1.22rem;
+  font-weight: 850;
+  line-height: 1.3;
+  color: #12181c;
+}
+
+.sushi-guide-body {
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+  margin: 0 0 1rem;
+}
+
+.sushi-guide-block {
+  margin: 0;
+  padding: 0;
+}
+
+.sushi-guide-heading {
+  margin: 0 0 0.3rem;
+  font-size: 1.02rem;
+  font-weight: 800;
+  line-height: 1.35;
+  color: #1a242c;
+}
+
+.sushi-guide-text {
+  margin: 0;
+  font-size: 0.98rem;
+  font-weight: 500;
+  line-height: 1.55;
+  color: #334;
+}
+
+.sushi-guide-block--note .sushi-guide-text {
+  font-size: 0.92rem;
+  color: #556;
+}
+
+.sushi-guide-card .sushi-guide-steps,
+.sushi-guide-card .sushi-guide-note {
+  /* 旧一塊レイアウトは使わない */
+  display: none !important;
+}
+
+.sushi-guide-actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 0.15rem;
 }
 
 .sushi-modal-note {

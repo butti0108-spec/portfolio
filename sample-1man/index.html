@@ -12,7 +12,7 @@
   <!-- メーカー親CSS（ポートフォリオ根の style.css は読まない） -->
   <link rel="stylesheet" href="maker-base.css?v=cleanup-20260922">
   <link rel="icon" href="brand/mark-favicon.png?v=logo-7" type="image/png">
-  <link rel="stylesheet" href="sample-overrides.css?v=sushi-layout-20260922e">
+  <link rel="stylesheet" href="sample-overrides.css?v=sushi-hint-20260922f">
   <link rel="stylesheet" href="free-photo-gallery/gallery.css?v=cleanup-20260922">
   <script>
     (function () {
@@ -255,11 +255,23 @@
         <div id="sushi-guide-modal" class="sushi-modal" hidden>
           <div class="sushi-modal-card sushi-guide-card" role="dialog" aria-labelledby="sushi-guide-title">
             <h2 id="sushi-guide-title">サンプルの選び方</h2>
-            <ol class="sushi-guide-steps">
-              <li>下のサンプルを<strong>短くクリック</strong>すると、上の枠に入ります。</li>
-              <li>上の枠をクリックすると、<strong>その見本で進められます</strong>。</li>
-            </ol>
-            <p class="sushi-guide-note">虫眼鏡で大きく見られます。枠がいっぱいのときは、入れ替え先を選べます。レーンにポインタを乗せると流れが止まります。</p>
+            <div class="sushi-guide-body">
+              <section class="sushi-guide-block">
+                <h3 class="sushi-guide-heading">① サンプルを追加する</h3>
+                <p class="sushi-guide-text">下のサンプルをクリックすると、上の枠に入ります。</p>
+              </section>
+              <section class="sushi-guide-block">
+                <h3 class="sushi-guide-heading">② サンプルを確定する</h3>
+                <p class="sushi-guide-text">上の枠をクリックすると、そのサンプルで進められます。</p>
+              </section>
+              <section class="sushi-guide-block">
+                <h3 class="sushi-guide-heading">大きく見たいとき</h3>
+                <p class="sushi-guide-text">虫眼鏡をクリックすると、サンプルを大きく見られます。</p>
+              </section>
+              <section class="sushi-guide-block sushi-guide-block--note">
+                <p class="sushi-guide-text">上の枠がいっぱいのときは、入れ替える枠を選べます。</p>
+              </section>
+            </div>
             <div class="sushi-guide-actions">
               <button type="button" class="btn btn-primary" data-sushi-guide-close>OK</button>
             </div>

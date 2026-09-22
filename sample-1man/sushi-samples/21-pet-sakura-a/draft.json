@@ -1,1 +1,183 @@
-{"version":17,"savedAt":"2026-09-19T12:25:13.470Z","uiMode":"self","sitePurpose":"shop","layoutPattern":"a","layoutOrder":["hero","accordions","values","works","photos","hours","access","address","contact"],"layoutSelected":true,"layoutSchema":2,"itemLayouts":{"about-photos":{"sizes":["L","L","L"],"gap":"loose","growDirs":[],"focalYs":[60,45,40],"focalXs":[50,50,50]},"works-list":{"sizes":["H","H","L"],"gap":"loose","growDirs":[],"focalYs":[15,30,25],"focalXs":[50,50,50]}},"heroTextOnPhoto":true,"heroFocalX":50,"heroFocalY":55,"aboutItemsDisplay":"accordion","heroTextPlate":"round","heroTextPlateTone":"white","guidedImageUnlocked":true,"guidedTextUnlocked":false,"presetChosen":true,"chosenPresetKey":"green","intakeDone":true,"entryBranch":"detail","hubEntrySource":"detail-entry","easyFlowActive":false,"sushiSampleId":"21","sushiSampleKey":"pet-sakura-a","siteColorMode":"detail","slotGradients":{},"slotGradientPartners":{},"draftColors":{"pageBg":"#e8f2e6","pageBgSoft":"#d2e6ce","heroInk":"#111111","bodyInk":"#212121","bodyMuted":"#555555","chromeBg":"#1f3d18","chromeInk":"#f4fff6","accent":"#3d8a48","cardBg":"#ffffff","valuesBg":"#ffffff","contactBg":"#2d6a36","contactInk":"#f4fff6","radius":"0.6rem","headingScale":"1","accentBar":"mid"},"draftCounts":{"hero-leads":2,"hero-values":3,"about-accordions":1,"about-photos":3,"works-list":3},"draftExtras":{"hours":true,"access":true,"address":true},"layoutBlockOff":{},"confirmed":{"easy-basics":false,"easy-sec-hero":false,"easy-sec-about":false,"easy-sec-works":false,"easy-sec-contact":false,"easy-img-wire":false,"easy-loading":false,"easy-done":false,"purpose":true,"layout":true,"guide":true,"global-preset":true,"global-chrome-bg":true,"global-chrome-ink":true,"global-bg":true,"hero-color":true,"values-color":true,"global-body":true,"global-accent":true,"global-card":true,"contact-color":true,"hero-image":false,"about-images":false,"works-images":false,"logo-text":false,"site-fonts":true,"hero-text":false,"values-text":false,"about-text":false,"works-text":false,"hours-text":false,"access-text":false,"address-text":false,"contact-text":false,"finish":false},"fields":{"hero_title":"窓辺の緑と、\n静かな一杯。","headingScale":"1","hero_lead_1":"観葉植物の並ぶ窓際で、浅煎りの珈琲をゆっくり。仕事の前にも、休日の読書にも使える小さなカフェです。","hero_lead_2":"甘さを足しすぎない焼き菓子と、ハーブティーもご用意。長居しても肩が凝らない静けさを大切にしています。"},"fonts":{"display":"Sawarabi Gothic","catch":"Sawarabi Gothic","body":"Zen Kaku Gothic New"},"imagePaths":{"about_image_1":"sushi-samples/21-pet-sakura-a/images/about-01.jpg?v=1789820675981","about_image_2":"sushi-samples/21-pet-sakura-a/images/about-02.jpg?v=1789820675981","about_image_3":"sushi-samples/21-pet-sakura-a/images/about-03.jpg?v=1789820675981","hero_image":"sushi-samples/21-pet-sakura-a/images/hero.jpg?v=1789820675981","work_1_image":"sushi-samples/21-pet-sakura-a/images/work-01.jpg?v=1789820675981","work_2_image":"sushi-samples/21-pet-sakura-a/images/work-02.jpg?v=1789820675981","work_3_image":"sushi-samples/21-pet-sakura-a/images/work-03.jpg?v=1789820675981"},"blurb":"窓辺の緑カフェ。静かに座る。窓・葉・カップ","scene":"カフェ・窓辺","layoutRecipeNote":"rebuild-21 window-green cafe vs 01 wood morning","brushUpStructure":"2026-09-14-v01","brushUpMeaning":"2026-09-19-rebuild","brushUpPhoto":"2026-09-19-ai-gen"}
+{
+    "version":  17,
+    "savedAt":  "2026-09-19T12:25:13.470Z",
+    "uiMode":  "self",
+    "sitePurpose":  "shop",
+    "layoutPattern":  "a",
+    "layoutOrder":  [
+                        "hero",
+                        "accordions",
+                        "values",
+                        "works",
+                        "photos",
+                        "hours",
+                        "access",
+                        "address",
+                        "contact"
+                    ],
+    "layoutSelected":  true,
+    "layoutSchema":  2,
+    "itemLayouts":  {
+                        "about-photos":  {
+                                             "sizes":  [
+                                                           "L",
+                                                           "L",
+                                                           "L"
+                                                       ],
+                                             "gap":  "loose",
+                                             "growDirs":  [
+
+                                                          ],
+                                             "focalYs":  [
+                                                             60,
+                                                             45,
+                                                             40
+                                                         ],
+                                             "focalXs":  [
+                                                             50,
+                                                             50,
+                                                             50
+                                                         ]
+                                         },
+                        "works-list":  {
+                                           "sizes":  [
+                                                         "H",
+                                                         "H",
+                                                         "L"
+                                                     ],
+                                           "gap":  "loose",
+                                           "growDirs":  [
+
+                                                        ],
+                                           "focalYs":  [
+                                                           15,
+                                                           30,
+                                                           25
+                                                       ],
+                                           "focalXs":  [
+                                                           50,
+                                                           50,
+                                                           50
+                                                       ]
+                                       }
+                    },
+    "heroTextOnPhoto":  true,
+    "heroFocalX":  50,
+    "heroFocalY":  55,
+    "aboutItemsDisplay":  "accordion",
+    "heroTextPlate":  "round",
+    "heroTextPlateTone":  "white",
+    "guidedImageUnlocked":  true,
+    "guidedTextUnlocked":  false,
+    "presetChosen":  true,
+    "chosenPresetKey":  "green",
+    "intakeDone":  true,
+    "entryBranch":  "detail",
+    "hubEntrySource":  "detail-entry",
+    "easyFlowActive":  false,
+    "sushiSampleId":  "21",
+    "sushiSampleKey":  "pet-sakura-a",
+    "siteColorMode":  "detail",
+    "slotGradients":  {
+
+                      },
+    "slotGradientPartners":  {
+
+                             },
+    "draftColors":  {
+                        "pageBg":  "#e8f2e6",
+                        "pageBgSoft":  "#d2e6ce",
+                        "heroInk":  "#111111",
+                        "bodyInk":  "#212121",
+                        "bodyMuted":  "#555555",
+                        "chromeBg":  "#1f3d18",
+                        "chromeInk":  "#f4fff6",
+                        "accent":  "#3d8a48",
+                        "cardBg":  "#ffffff",
+                        "valuesBg":  "#ffffff",
+                        "contactBg":  "#2d6a36",
+                        "contactInk":  "#f4fff6",
+                        "radius":  "0.6rem",
+                        "headingScale":  "1",
+                        "accentBar":  "mid"
+                    },
+    "draftCounts":  {
+                        "hero-leads":  2,
+                        "hero-values":  3,
+                        "about-accordions":  1,
+                        "about-photos":  3,
+                        "works-list":  3
+                    },
+    "draftExtras":  {
+                        "hours":  true,
+                        "access":  true,
+                        "address":  true
+                    },
+    "layoutBlockOff":  {
+
+                       },
+    "confirmed":  {
+                      "easy-basics":  false,
+                      "easy-sec-hero":  false,
+                      "easy-sec-about":  false,
+                      "easy-sec-works":  false,
+                      "easy-sec-contact":  false,
+                      "easy-img-wire":  false,
+                      "easy-loading":  false,
+                      "easy-done":  false,
+                      "purpose":  true,
+                      "layout":  true,
+                      "guide":  true,
+                      "global-preset":  true,
+                      "global-chrome-bg":  true,
+                      "global-chrome-ink":  true,
+                      "global-bg":  true,
+                      "hero-color":  true,
+                      "values-color":  true,
+                      "global-body":  true,
+                      "global-accent":  true,
+                      "global-card":  true,
+                      "contact-color":  true,
+                      "hero-image":  false,
+                      "about-images":  false,
+                      "works-images":  false,
+                      "logo-text":  false,
+                      "site-fonts":  true,
+                      "hero-text":  false,
+                      "values-text":  false,
+                      "about-text":  false,
+                      "works-text":  false,
+                      "hours-text":  false,
+                      "access-text":  false,
+                      "address-text":  false,
+                      "contact-text":  false,
+                      "finish":  false
+                  },
+    "fields":  {
+                   "hero_title":  "窓辺の緑と、\n静かな一杯。",
+                   "headingScale":  "1",
+                   "hero_lead_1":  "観葉植物の並ぶ窓際で、浅煎りの珈琲をゆっくり。仕事の前にも、休日の読書にも使える小さなカフェです。",
+                   "hero_lead_2":  "甘さを足しすぎない焼き菓子と、ハーブティーもご用意。長居しても肩が凝らない静けさを大切にしています。",
+                   "brand_name":  "窓辺の緑カフェ"
+               },
+    "fonts":  {
+                  "display":  "Sawarabi Gothic",
+                  "catch":  "Sawarabi Gothic",
+                  "body":  "Zen Kaku Gothic New"
+              },
+    "imagePaths":  {
+                       "about_image_1":  "sushi-samples/21-pet-sakura-a/images/about-01.jpg?v=1789820675981",
+                       "about_image_2":  "sushi-samples/21-pet-sakura-a/images/about-02.jpg?v=1789820675981",
+                       "about_image_3":  "sushi-samples/21-pet-sakura-a/images/about-03.jpg?v=1789820675981",
+                       "hero_image":  "sushi-samples/21-pet-sakura-a/images/hero.jpg?v=1789820675981",
+                       "work_1_image":  "sushi-samples/21-pet-sakura-a/images/work-01.jpg?v=1789820675981",
+                       "work_2_image":  "sushi-samples/21-pet-sakura-a/images/work-02.jpg?v=1789820675981",
+                       "work_3_image":  "sushi-samples/21-pet-sakura-a/images/work-03.jpg?v=1789820675981"
+                   },
+    "blurb":  "窓辺の緑カフェ。静かに座る。窓・葉・カップ",
+    "scene":  "カフェ・窓辺",
+    "layoutRecipeNote":  "rebuild-21 window-green cafe vs 01 wood morning",
+    "brushUpStructure":  "2026-09-14-v01",
+    "brushUpMeaning":  "2026-09-19-rebuild",
+    "brushUpPhoto":  "2026-09-19-ai-gen"
+}

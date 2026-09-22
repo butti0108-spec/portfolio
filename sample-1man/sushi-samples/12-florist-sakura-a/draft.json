@@ -1,1 +1,179 @@
-{"version":17,"savedAt":"2026-09-19T11:52:40.451Z","uiMode":"self","sitePurpose":"shop","layoutPattern":"a","layoutOrder":["hero","works","photos","values","accordions","hours","access","address","contact"],"layoutSelected":true,"layoutSchema":2,"itemLayouts":{"about-photos":{"sizes":["L","L","L"],"gap":"loose","growDirs":[],"focalYs":[65,60,45],"focalXs":[65,50,50]},"works-list":{"sizes":["H","H","L"],"gap":"tight","growDirs":[],"focalYs":[20,45,15],"focalXs":[50,50,50]}},"heroTextOnPhoto":false,"heroFocalX":50,"heroFocalY":55,"aboutItemsDisplay":"flat","heroTextPlate":"round","heroTextPlateTone":"white","guidedImageUnlocked":true,"guidedTextUnlocked":false,"presetChosen":true,"chosenPresetKey":"sakura","intakeDone":true,"entryBranch":"detail","hubEntrySource":"detail-entry","easyFlowActive":false,"sushiSampleId":"12","sushiSampleKey":"florist-sakura-a","siteColorMode":"detail","slotGradients":{},"slotGradientPartners":{},"draftColors":{"pageBg":"#fdf5f6","pageBgSoft":"#f5e4e8","heroInk":"#ffffff","bodyInk":"#3d2228","bodyMuted":"#6a454d","chromeBg":"#8f4a5a","chromeInk":"#fff8fa","accent":"#c95d7a","cardBg":"#ffffff","valuesBg":"#ffffff","contactBg":"#8f4a5a","contactInk":"#fff8fa","radius":"0.6rem","headingScale":"1","accentBar":"mid"},"draftCounts":{"hero-leads":2,"hero-values":3,"about-accordions":1,"about-photos":3,"works-list":3},"draftExtras":{"hours":true,"access":true,"address":true},"layoutBlockOff":{},"confirmed":{"easy-basics":false,"easy-sec-hero":false,"easy-sec-about":false,"easy-sec-works":false,"easy-sec-contact":false,"easy-img-wire":false,"easy-loading":false,"easy-done":false,"purpose":true,"layout":true,"guide":true,"global-preset":true,"global-chrome-bg":true,"global-chrome-ink":true,"global-bg":true,"hero-color":true,"values-color":true,"global-body":true,"global-accent":true,"global-card":true,"contact-color":true,"hero-image":false,"about-images":false,"works-images":false,"logo-text":false,"site-fonts":true,"hero-text":false,"values-text":false,"about-text":false,"works-text":false,"hours-text":false,"access-text":false,"address-text":false,"contact-text":false,"finish":false},"fields":{},"fonts":{"display":"Zen Maru Gothic","catch":"Kiwi Maru","body":"M PLUS Rounded 1c"},"imagePaths":{"about_image_1":"sushi-samples/12-florist-sakura-a/images/about-01.jpg?v=1789818670418","about_image_2":"sushi-samples/12-florist-sakura-a/images/about-02.jpg?v=1789818670418","about_image_3":"sushi-samples/12-florist-sakura-a/images/about-03.jpg?v=1789818670418","hero_image":"sushi-samples/12-florist-sakura-a/images/hero.jpg?v=1789818670418","work_1_image":"sushi-samples/12-florist-sakura-a/images/work-01.jpg?v=1789818670418","work_2_image":"sushi-samples/12-florist-sakura-a/images/work-02.jpg?v=1789818670418","work_3_image":"sushi-samples/12-florist-sakura-a/images/work-03.jpg?v=1789818670418"},"blurb":"ペット・散歩","scene":"ペット・散歩","layoutRecipeNote":"rebuild-2026-09-19 リードの先の散歩を任せられる","brushUpStructure":"2026-09-14-v01","brushUpMeaning":"2026-09-19-rebuild","brushUpPhoto":"2026-09-19-title-match-fix"}
+{
+    "version":  17,
+    "savedAt":  "2026-09-19T11:52:40.451Z",
+    "uiMode":  "self",
+    "sitePurpose":  "shop",
+    "layoutPattern":  "a",
+    "layoutOrder":  [
+                        "hero",
+                        "works",
+                        "photos",
+                        "values",
+                        "accordions",
+                        "hours",
+                        "access",
+                        "address",
+                        "contact"
+                    ],
+    "layoutSelected":  true,
+    "layoutSchema":  2,
+    "itemLayouts":  {
+                        "about-photos":  {
+                                             "sizes":  [
+                                                           "L",
+                                                           "L",
+                                                           "L"
+                                                       ],
+                                             "gap":  "loose",
+                                             "growDirs":  [
+
+                                                          ],
+                                             "focalYs":  [
+                                                             65,
+                                                             60,
+                                                             45
+                                                         ],
+                                             "focalXs":  [
+                                                             65,
+                                                             50,
+                                                             50
+                                                         ]
+                                         },
+                        "works-list":  {
+                                           "sizes":  [
+                                                         "H",
+                                                         "H",
+                                                         "L"
+                                                     ],
+                                           "gap":  "tight",
+                                           "growDirs":  [
+
+                                                        ],
+                                           "focalYs":  [
+                                                           20,
+                                                           45,
+                                                           15
+                                                       ],
+                                           "focalXs":  [
+                                                           50,
+                                                           50,
+                                                           50
+                                                       ]
+                                       }
+                    },
+    "heroTextOnPhoto":  false,
+    "heroFocalX":  50,
+    "heroFocalY":  55,
+    "aboutItemsDisplay":  "flat",
+    "heroTextPlate":  "round",
+    "heroTextPlateTone":  "white",
+    "guidedImageUnlocked":  true,
+    "guidedTextUnlocked":  false,
+    "presetChosen":  true,
+    "chosenPresetKey":  "sakura",
+    "intakeDone":  true,
+    "entryBranch":  "detail",
+    "hubEntrySource":  "detail-entry",
+    "easyFlowActive":  false,
+    "sushiSampleId":  "12",
+    "sushiSampleKey":  "florist-sakura-a",
+    "siteColorMode":  "detail",
+    "slotGradients":  {
+
+                      },
+    "slotGradientPartners":  {
+
+                             },
+    "draftColors":  {
+                        "pageBg":  "#fdf5f6",
+                        "pageBgSoft":  "#f5e4e8",
+                        "heroInk":  "#ffffff",
+                        "bodyInk":  "#3d2228",
+                        "bodyMuted":  "#6a454d",
+                        "chromeBg":  "#8f4a5a",
+                        "chromeInk":  "#fff8fa",
+                        "accent":  "#c95d7a",
+                        "cardBg":  "#ffffff",
+                        "valuesBg":  "#ffffff",
+                        "contactBg":  "#8f4a5a",
+                        "contactInk":  "#fff8fa",
+                        "radius":  "0.6rem",
+                        "headingScale":  "1",
+                        "accentBar":  "mid"
+                    },
+    "draftCounts":  {
+                        "hero-leads":  2,
+                        "hero-values":  3,
+                        "about-accordions":  1,
+                        "about-photos":  3,
+                        "works-list":  3
+                    },
+    "draftExtras":  {
+                        "hours":  true,
+                        "access":  true,
+                        "address":  true
+                    },
+    "layoutBlockOff":  {
+
+                       },
+    "confirmed":  {
+                      "easy-basics":  false,
+                      "easy-sec-hero":  false,
+                      "easy-sec-about":  false,
+                      "easy-sec-works":  false,
+                      "easy-sec-contact":  false,
+                      "easy-img-wire":  false,
+                      "easy-loading":  false,
+                      "easy-done":  false,
+                      "purpose":  true,
+                      "layout":  true,
+                      "guide":  true,
+                      "global-preset":  true,
+                      "global-chrome-bg":  true,
+                      "global-chrome-ink":  true,
+                      "global-bg":  true,
+                      "hero-color":  true,
+                      "values-color":  true,
+                      "global-body":  true,
+                      "global-accent":  true,
+                      "global-card":  true,
+                      "contact-color":  true,
+                      "hero-image":  false,
+                      "about-images":  false,
+                      "works-images":  false,
+                      "logo-text":  false,
+                      "site-fonts":  true,
+                      "hero-text":  false,
+                      "values-text":  false,
+                      "about-text":  false,
+                      "works-text":  false,
+                      "hours-text":  false,
+                      "access-text":  false,
+                      "address-text":  false,
+                      "contact-text":  false,
+                      "finish":  false
+                  },
+    "fields":  {
+                   "brand_name":  "おさんぽペットケア みずき"
+               },
+    "fonts":  {
+                  "display":  "Zen Maru Gothic",
+                  "catch":  "Kiwi Maru",
+                  "body":  "M PLUS Rounded 1c"
+              },
+    "imagePaths":  {
+                       "about_image_1":  "sushi-samples/12-florist-sakura-a/images/about-01.jpg?v=1789818670418",
+                       "about_image_2":  "sushi-samples/12-florist-sakura-a/images/about-02.jpg?v=1789818670418",
+                       "about_image_3":  "sushi-samples/12-florist-sakura-a/images/about-03.jpg?v=1789818670418",
+                       "hero_image":  "sushi-samples/12-florist-sakura-a/images/hero.jpg?v=1789818670418",
+                       "work_1_image":  "sushi-samples/12-florist-sakura-a/images/work-01.jpg?v=1789818670418",
+                       "work_2_image":  "sushi-samples/12-florist-sakura-a/images/work-02.jpg?v=1789818670418",
+                       "work_3_image":  "sushi-samples/12-florist-sakura-a/images/work-03.jpg?v=1789818670418"
+                   },
+    "blurb":  "ペット・散歩",
+    "scene":  "ペット・散歩",
+    "layoutRecipeNote":  "rebuild-2026-09-19 リードの先の散歩を任せられる",
+    "brushUpStructure":  "2026-09-14-v01",
+    "brushUpMeaning":  "2026-09-19-rebuild",
+    "brushUpPhoto":  "2026-09-19-title-match-fix"
+}

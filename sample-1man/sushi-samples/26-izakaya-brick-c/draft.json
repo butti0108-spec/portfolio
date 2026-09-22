@@ -1,1 +1,183 @@
-{"version":17,"savedAt":"2026-09-19T12:27:04.920Z","uiMode":"self","sitePurpose":"shop","layoutPattern":"a","layoutOrder":["hero","works","photos","values","access","address","hours","accordions","contact"],"layoutSelected":true,"layoutSchema":2,"itemLayouts":{"about-photos":{"sizes":["L","L","L"],"gap":"normal","growDirs":[],"focalYs":[30,50,35],"focalXs":[50,50,50]},"works-list":{"sizes":["H","H","L"],"gap":"tight","growDirs":[],"focalYs":[25,15,45],"focalXs":[50,50,50]}},"heroTextOnPhoto":true,"heroFocalX":50,"heroFocalY":0,"aboutItemsDisplay":"accordion","heroTextPlate":"round","heroTextPlateTone":"dark","guidedImageUnlocked":true,"guidedTextUnlocked":false,"presetChosen":true,"chosenPresetKey":"ink","intakeDone":true,"entryBranch":"detail","hubEntrySource":"detail-entry","easyFlowActive":false,"sushiSampleId":"26","sushiSampleKey":"izakaya-brick-c","siteColorMode":"detail","slotGradients":{},"slotGradientPartners":{},"draftColors":{"pageBg":"#2e3333","pageBgSoft":"#3a4040","heroInk":"#ffffff","bodyInk":"#f5f5f5","bodyMuted":"#c8c8c8","chromeBg":"#111111","chromeInk":"#f5f5f5","accent":"#c9a227","cardBg":"#1f2424","valuesBg":"#1f2424","contactBg":"#111111","contactInk":"#f5f5f5","radius":"0.6rem","headingScale":"1","accentBar":"mid"},"draftCounts":{"hero-leads":2,"hero-values":3,"about-accordions":1,"about-photos":3,"works-list":3},"draftExtras":{"hours":true,"access":true,"address":true},"layoutBlockOff":{},"confirmed":{"easy-basics":false,"easy-sec-hero":false,"easy-sec-about":false,"easy-sec-works":false,"easy-sec-contact":false,"easy-img-wire":false,"easy-loading":false,"easy-done":false,"purpose":true,"layout":true,"guide":true,"global-preset":true,"global-chrome-bg":true,"global-chrome-ink":true,"global-bg":true,"hero-color":true,"values-color":true,"global-body":true,"global-accent":true,"global-card":true,"contact-color":true,"hero-image":false,"about-images":false,"works-images":false,"logo-text":false,"site-fonts":true,"hero-text":false,"values-text":false,"about-text":false,"works-text":false,"hours-text":false,"access-text":false,"address-text":false,"contact-text":false,"finish":false},"fields":{"hero_title":"墨と白だけで、\n静かに切り取る。","headingScale":"1","hero_lead_1":"余白の多いカラー写真館とは違い、提案の中心はモノクロ。光と影だけで表情を組み立てます。","hero_lead_2":"宣材・ポートレート・作品撮りに対応。撮影後の簡単なレタッチまで含めたコースがあります。"},"fonts":{"display":"Dela Gothic One","catch":"Zen Kaku Gothic New","body":"Zen Kaku Gothic New"},"imagePaths":{"about_image_1":"sushi-samples/26-izakaya-brick-c/images/about-01.jpg?v=1789820808932","about_image_2":"sushi-samples/26-izakaya-brick-c/images/about-02.jpg?v=1789820808932","about_image_3":"sushi-samples/26-izakaya-brick-c/images/about-03.jpg?v=1789820808932","hero_image":"sushi-samples/26-izakaya-brick-c/images/hero.jpg?v=1789820808932","work_1_image":"sushi-samples/26-izakaya-brick-c/images/work-01.jpg?v=1789820808932","work_2_image":"sushi-samples/26-izakaya-brick-c/images/work-02.jpg?v=1789820808932","work_3_image":"sushi-samples/26-izakaya-brick-c/images/work-03.jpg?v=1789820808932"},"blurb":"写真館。モノクロ","scene":"写真館・モノクロ","layoutRecipeNote":"rebuild-26 mono vs 18 color yohaku","brushUpStructure":"2026-09-14-v01","brushUpMeaning":"2026-09-19-rebuild","brushUpPhoto":"2026-09-19-title-match-fix"}
+{
+    "version":  17,
+    "savedAt":  "2026-09-19T12:27:04.920Z",
+    "uiMode":  "self",
+    "sitePurpose":  "shop",
+    "layoutPattern":  "a",
+    "layoutOrder":  [
+                        "hero",
+                        "works",
+                        "photos",
+                        "values",
+                        "access",
+                        "address",
+                        "hours",
+                        "accordions",
+                        "contact"
+                    ],
+    "layoutSelected":  true,
+    "layoutSchema":  2,
+    "itemLayouts":  {
+                        "about-photos":  {
+                                             "sizes":  [
+                                                           "L",
+                                                           "L",
+                                                           "L"
+                                                       ],
+                                             "gap":  "normal",
+                                             "growDirs":  [
+
+                                                          ],
+                                             "focalYs":  [
+                                                             30,
+                                                             50,
+                                                             35
+                                                         ],
+                                             "focalXs":  [
+                                                             50,
+                                                             50,
+                                                             50
+                                                         ]
+                                         },
+                        "works-list":  {
+                                           "sizes":  [
+                                                         "H",
+                                                         "H",
+                                                         "L"
+                                                     ],
+                                           "gap":  "tight",
+                                           "growDirs":  [
+
+                                                        ],
+                                           "focalYs":  [
+                                                           25,
+                                                           15,
+                                                           45
+                                                       ],
+                                           "focalXs":  [
+                                                           50,
+                                                           50,
+                                                           50
+                                                       ]
+                                       }
+                    },
+    "heroTextOnPhoto":  true,
+    "heroFocalX":  50,
+    "heroFocalY":  0,
+    "aboutItemsDisplay":  "accordion",
+    "heroTextPlate":  "round",
+    "heroTextPlateTone":  "dark",
+    "guidedImageUnlocked":  true,
+    "guidedTextUnlocked":  false,
+    "presetChosen":  true,
+    "chosenPresetKey":  "ink",
+    "intakeDone":  true,
+    "entryBranch":  "detail",
+    "hubEntrySource":  "detail-entry",
+    "easyFlowActive":  false,
+    "sushiSampleId":  "26",
+    "sushiSampleKey":  "izakaya-brick-c",
+    "siteColorMode":  "detail",
+    "slotGradients":  {
+
+                      },
+    "slotGradientPartners":  {
+
+                             },
+    "draftColors":  {
+                        "pageBg":  "#2e3333",
+                        "pageBgSoft":  "#3a4040",
+                        "heroInk":  "#ffffff",
+                        "bodyInk":  "#f5f5f5",
+                        "bodyMuted":  "#c8c8c8",
+                        "chromeBg":  "#111111",
+                        "chromeInk":  "#f5f5f5",
+                        "accent":  "#c9a227",
+                        "cardBg":  "#1f2424",
+                        "valuesBg":  "#1f2424",
+                        "contactBg":  "#111111",
+                        "contactInk":  "#f5f5f5",
+                        "radius":  "0.6rem",
+                        "headingScale":  "1",
+                        "accentBar":  "mid"
+                    },
+    "draftCounts":  {
+                        "hero-leads":  2,
+                        "hero-values":  3,
+                        "about-accordions":  1,
+                        "about-photos":  3,
+                        "works-list":  3
+                    },
+    "draftExtras":  {
+                        "hours":  true,
+                        "access":  true,
+                        "address":  true
+                    },
+    "layoutBlockOff":  {
+
+                       },
+    "confirmed":  {
+                      "easy-basics":  false,
+                      "easy-sec-hero":  false,
+                      "easy-sec-about":  false,
+                      "easy-sec-works":  false,
+                      "easy-sec-contact":  false,
+                      "easy-img-wire":  false,
+                      "easy-loading":  false,
+                      "easy-done":  false,
+                      "purpose":  true,
+                      "layout":  true,
+                      "guide":  true,
+                      "global-preset":  true,
+                      "global-chrome-bg":  true,
+                      "global-chrome-ink":  true,
+                      "global-bg":  true,
+                      "hero-color":  true,
+                      "values-color":  true,
+                      "global-body":  true,
+                      "global-accent":  true,
+                      "global-card":  true,
+                      "contact-color":  true,
+                      "hero-image":  false,
+                      "about-images":  false,
+                      "works-images":  false,
+                      "logo-text":  false,
+                      "site-fonts":  true,
+                      "hero-text":  false,
+                      "values-text":  false,
+                      "about-text":  false,
+                      "works-text":  false,
+                      "hours-text":  false,
+                      "access-text":  false,
+                      "address-text":  false,
+                      "contact-text":  false,
+                      "finish":  false
+                  },
+    "fields":  {
+                   "hero_title":  "墨と白だけで、\n静かに切り取る。",
+                   "headingScale":  "1",
+                   "hero_lead_1":  "余白の多いカラー写真館とは違い、提案の中心はモノクロ。光と影だけで表情を組み立てます。",
+                   "hero_lead_2":  "宣材・ポートレート・作品撮りに対応。撮影後の簡単なレタッチまで含めたコースがあります。",
+                   "brand_name":  "墨白フォト"
+               },
+    "fonts":  {
+                  "display":  "Dela Gothic One",
+                  "catch":  "Zen Kaku Gothic New",
+                  "body":  "Zen Kaku Gothic New"
+              },
+    "imagePaths":  {
+                       "about_image_1":  "sushi-samples/26-izakaya-brick-c/images/about-01.jpg?v=1789820808932",
+                       "about_image_2":  "sushi-samples/26-izakaya-brick-c/images/about-02.jpg?v=1789820808932",
+                       "about_image_3":  "sushi-samples/26-izakaya-brick-c/images/about-03.jpg?v=1789820808932",
+                       "hero_image":  "sushi-samples/26-izakaya-brick-c/images/hero.jpg?v=1789820808932",
+                       "work_1_image":  "sushi-samples/26-izakaya-brick-c/images/work-01.jpg?v=1789820808932",
+                       "work_2_image":  "sushi-samples/26-izakaya-brick-c/images/work-02.jpg?v=1789820808932",
+                       "work_3_image":  "sushi-samples/26-izakaya-brick-c/images/work-03.jpg?v=1789820808932"
+                   },
+    "blurb":  "写真館。モノクロ",
+    "scene":  "写真館・モノクロ",
+    "layoutRecipeNote":  "rebuild-26 mono vs 18 color yohaku",
+    "brushUpStructure":  "2026-09-14-v01",
+    "brushUpMeaning":  "2026-09-19-rebuild",
+    "brushUpPhoto":  "2026-09-19-title-match-fix"
+}

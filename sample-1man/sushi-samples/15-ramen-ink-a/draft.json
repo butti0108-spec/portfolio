@@ -1,1 +1,179 @@
-{"version":17,"savedAt":"2026-09-19T11:57:36.379Z","uiMode":"self","sitePurpose":"shop","layoutPattern":"a","layoutOrder":["hero","values","works","photos","accordions","hours","access","address","contact"],"layoutSelected":true,"layoutSchema":2,"itemLayouts":{"about-photos":{"sizes":["L","H","H"],"gap":"normal","growDirs":[],"focalYs":[60,60,60],"focalXs":[50,50,50]},"works-list":{"sizes":["L","L","L"],"gap":"loose","growDirs":[],"focalYs":[20,25,60],"focalXs":[50,50,50]}},"heroTextOnPhoto":false,"heroFocalX":50,"heroFocalY":70,"aboutItemsDisplay":"accordion","heroTextPlate":"round","heroTextPlateTone":"white","guidedImageUnlocked":true,"guidedTextUnlocked":false,"presetChosen":true,"chosenPresetKey":"cafe","intakeDone":true,"entryBranch":"detail","hubEntrySource":"detail-entry","easyFlowActive":false,"sushiSampleId":"15","sushiSampleKey":"ramen-ink-a","siteColorMode":"detail","slotGradients":{},"slotGradientPartners":{},"draftColors":{"pageBg":"#f5efe4","pageBgSoft":"#ebe1d0","heroInk":"#fff6e8","bodyInk":"#3e2723","bodyMuted":"#6a5340","chromeBg":"#5c4033","chromeInk":"#fff6e8","accent":"#c45c26","cardBg":"#fff8ee","valuesBg":"#fff8ee","contactBg":"#5c4033","contactInk":"#fff6e8","radius":"0.6rem","headingScale":"1","accentBar":"mid"},"draftCounts":{"hero-leads":2,"hero-values":3,"about-accordions":1,"about-photos":3,"works-list":3},"draftExtras":{"hours":true,"access":true,"address":true},"layoutBlockOff":{},"confirmed":{"easy-basics":false,"easy-sec-hero":false,"easy-sec-about":false,"easy-sec-works":false,"easy-sec-contact":false,"easy-img-wire":false,"easy-loading":false,"easy-done":false,"purpose":true,"layout":true,"guide":true,"global-preset":true,"global-chrome-bg":true,"global-chrome-ink":true,"global-bg":true,"hero-color":true,"values-color":true,"global-body":true,"global-accent":true,"global-card":true,"contact-color":true,"hero-image":false,"about-images":false,"works-images":false,"logo-text":false,"site-fonts":true,"hero-text":false,"values-text":false,"about-text":false,"works-text":false,"hours-text":false,"access-text":false,"address-text":false,"contact-text":false,"finish":false},"fields":{},"fonts":{"display":"Zen Maru Gothic","catch":"Kiwi Maru","body":"M PLUS Rounded 1c"},"imagePaths":{"about_image_1":"sushi-samples/15-ramen-ink-a/images/about-01.jpg?v=1789818944124","about_image_2":"sushi-samples/15-ramen-ink-a/images/about-02.jpg?v=1789818944124","about_image_3":"sushi-samples/15-ramen-ink-a/images/about-03.jpg?v=1789818944124","hero_image":"sushi-samples/15-ramen-ink-a/images/hero.jpg?v=1789818944124","work_1_image":"sushi-samples/15-ramen-ink-a/images/work-01.jpg?v=1789818944124","work_2_image":"sushi-samples/15-ramen-ink-a/images/work-02.jpg?v=1789818944124","work_3_image":"sushi-samples/15-ramen-ink-a/images/work-03.jpg?v=1789818944124"},"blurb":"パン屋・朝","scene":"パン屋・朝","layoutRecipeNote":"rebuild-2026-09-19 開店ベルと焼きたてが揃う","brushUpStructure":"2026-09-14-v01","brushUpMeaning":"2026-09-19-rebuild","brushUpPhoto":"2026-09-19-title-match-fix"}
+{
+    "version":  17,
+    "savedAt":  "2026-09-19T11:57:36.379Z",
+    "uiMode":  "self",
+    "sitePurpose":  "shop",
+    "layoutPattern":  "a",
+    "layoutOrder":  [
+                        "hero",
+                        "values",
+                        "works",
+                        "photos",
+                        "accordions",
+                        "hours",
+                        "access",
+                        "address",
+                        "contact"
+                    ],
+    "layoutSelected":  true,
+    "layoutSchema":  2,
+    "itemLayouts":  {
+                        "about-photos":  {
+                                             "sizes":  [
+                                                           "L",
+                                                           "H",
+                                                           "H"
+                                                       ],
+                                             "gap":  "normal",
+                                             "growDirs":  [
+
+                                                          ],
+                                             "focalYs":  [
+                                                             60,
+                                                             60,
+                                                             60
+                                                         ],
+                                             "focalXs":  [
+                                                             50,
+                                                             50,
+                                                             50
+                                                         ]
+                                         },
+                        "works-list":  {
+                                           "sizes":  [
+                                                         "L",
+                                                         "L",
+                                                         "L"
+                                                     ],
+                                           "gap":  "loose",
+                                           "growDirs":  [
+
+                                                        ],
+                                           "focalYs":  [
+                                                           20,
+                                                           25,
+                                                           60
+                                                       ],
+                                           "focalXs":  [
+                                                           50,
+                                                           50,
+                                                           50
+                                                       ]
+                                       }
+                    },
+    "heroTextOnPhoto":  false,
+    "heroFocalX":  50,
+    "heroFocalY":  70,
+    "aboutItemsDisplay":  "accordion",
+    "heroTextPlate":  "round",
+    "heroTextPlateTone":  "white",
+    "guidedImageUnlocked":  true,
+    "guidedTextUnlocked":  false,
+    "presetChosen":  true,
+    "chosenPresetKey":  "cafe",
+    "intakeDone":  true,
+    "entryBranch":  "detail",
+    "hubEntrySource":  "detail-entry",
+    "easyFlowActive":  false,
+    "sushiSampleId":  "15",
+    "sushiSampleKey":  "ramen-ink-a",
+    "siteColorMode":  "detail",
+    "slotGradients":  {
+
+                      },
+    "slotGradientPartners":  {
+
+                             },
+    "draftColors":  {
+                        "pageBg":  "#f5efe4",
+                        "pageBgSoft":  "#ebe1d0",
+                        "heroInk":  "#fff6e8",
+                        "bodyInk":  "#3e2723",
+                        "bodyMuted":  "#6a5340",
+                        "chromeBg":  "#5c4033",
+                        "chromeInk":  "#fff6e8",
+                        "accent":  "#c45c26",
+                        "cardBg":  "#fff8ee",
+                        "valuesBg":  "#fff8ee",
+                        "contactBg":  "#5c4033",
+                        "contactInk":  "#fff6e8",
+                        "radius":  "0.6rem",
+                        "headingScale":  "1",
+                        "accentBar":  "mid"
+                    },
+    "draftCounts":  {
+                        "hero-leads":  2,
+                        "hero-values":  3,
+                        "about-accordions":  1,
+                        "about-photos":  3,
+                        "works-list":  3
+                    },
+    "draftExtras":  {
+                        "hours":  true,
+                        "access":  true,
+                        "address":  true
+                    },
+    "layoutBlockOff":  {
+
+                       },
+    "confirmed":  {
+                      "easy-basics":  false,
+                      "easy-sec-hero":  false,
+                      "easy-sec-about":  false,
+                      "easy-sec-works":  false,
+                      "easy-sec-contact":  false,
+                      "easy-img-wire":  false,
+                      "easy-loading":  false,
+                      "easy-done":  false,
+                      "purpose":  true,
+                      "layout":  true,
+                      "guide":  true,
+                      "global-preset":  true,
+                      "global-chrome-bg":  true,
+                      "global-chrome-ink":  true,
+                      "global-bg":  true,
+                      "hero-color":  true,
+                      "values-color":  true,
+                      "global-body":  true,
+                      "global-accent":  true,
+                      "global-card":  true,
+                      "contact-color":  true,
+                      "hero-image":  false,
+                      "about-images":  false,
+                      "works-images":  false,
+                      "logo-text":  false,
+                      "site-fonts":  true,
+                      "hero-text":  false,
+                      "values-text":  false,
+                      "about-text":  false,
+                      "works-text":  false,
+                      "hours-text":  false,
+                      "access-text":  false,
+                      "address-text":  false,
+                      "contact-text":  false,
+                      "finish":  false
+                  },
+    "fields":  {
+                   "brand_name":  "朝焼パン ひかり屋"
+               },
+    "fonts":  {
+                  "display":  "Zen Maru Gothic",
+                  "catch":  "Kiwi Maru",
+                  "body":  "M PLUS Rounded 1c"
+              },
+    "imagePaths":  {
+                       "about_image_1":  "sushi-samples/15-ramen-ink-a/images/about-01.jpg?v=1789818944124",
+                       "about_image_2":  "sushi-samples/15-ramen-ink-a/images/about-02.jpg?v=1789818944124",
+                       "about_image_3":  "sushi-samples/15-ramen-ink-a/images/about-03.jpg?v=1789818944124",
+                       "hero_image":  "sushi-samples/15-ramen-ink-a/images/hero.jpg?v=1789818944124",
+                       "work_1_image":  "sushi-samples/15-ramen-ink-a/images/work-01.jpg?v=1789818944124",
+                       "work_2_image":  "sushi-samples/15-ramen-ink-a/images/work-02.jpg?v=1789818944124",
+                       "work_3_image":  "sushi-samples/15-ramen-ink-a/images/work-03.jpg?v=1789818944124"
+                   },
+    "blurb":  "パン屋・朝",
+    "scene":  "パン屋・朝",
+    "layoutRecipeNote":  "rebuild-2026-09-19 開店ベルと焼きたてが揃う",
+    "brushUpStructure":  "2026-09-14-v01",
+    "brushUpMeaning":  "2026-09-19-rebuild",
+    "brushUpPhoto":  "2026-09-19-title-match-fix"
+}

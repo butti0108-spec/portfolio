@@ -1,1 +1,182 @@
-{"version":17,"savedAt":"2026-09-19T12:23:07.635Z","uiMode":"self","sitePurpose":"shop","layoutPattern":"a","layoutOrder":["hero","values","works","accordions","photos","hours","access","address","contact"],"layoutSelected":true,"layoutSchema":2,"itemLayouts":{"about-photos":{"sizes":["H","H","H","H"],"gap":"tight","growDirs":[],"focalYs":[70,60,65,70],"focalXs":[50,50,50,50]},"works-list":{"sizes":["H","H","L"],"gap":"normal","growDirs":[],"focalYs":[10,10,35],"focalXs":[50,50,50]}},"heroTextOnPhoto":false,"heroFocalX":50,"heroFocalY":25,"aboutItemsDisplay":"accordion","heroTextPlate":"round","heroTextPlateTone":"white","guidedImageUnlocked":true,"guidedTextUnlocked":false,"presetChosen":true,"chosenPresetKey":"sakura","intakeDone":true,"entryBranch":"detail","hubEntrySource":"detail-entry","easyFlowActive":false,"sushiSampleId":"20","sushiSampleKey":"pet-cafe-b","siteColorMode":"detail","slotGradients":{},"slotGradientPartners":{},"draftColors":{"pageBg":"#fdf5f6","pageBgSoft":"#f5e4e8","heroInk":"#ffffff","bodyInk":"#3d2228","bodyMuted":"#6a454d","chromeBg":"#8f4a5a","chromeInk":"#fff8fa","accent":"#c95d7a","cardBg":"#ffffff","valuesBg":"#ffffff","contactBg":"#8f4a5a","contactInk":"#fff8fa","radius":"0.6rem","headingScale":"1","accentBar":"mid"},"draftCounts":{"hero-leads":2,"hero-values":3,"about-accordions":1,"about-photos":4,"works-list":3},"draftExtras":{"hours":true,"access":true,"address":true},"layoutBlockOff":{},"confirmed":{"easy-basics":false,"easy-sec-hero":false,"easy-sec-about":false,"easy-sec-works":false,"easy-sec-contact":false,"easy-img-wire":false,"easy-loading":false,"easy-done":false,"purpose":true,"layout":true,"guide":true,"global-preset":true,"global-chrome-bg":true,"global-chrome-ink":true,"global-bg":true,"hero-color":true,"values-color":true,"global-body":true,"global-accent":true,"global-card":true,"contact-color":true,"hero-image":false,"about-images":false,"works-images":false,"logo-text":false,"site-fonts":true,"hero-text":false,"values-text":false,"about-text":false,"works-text":false,"hours-text":false,"access-text":false,"address-text":false,"contact-text":false,"finish":false},"fields":{},"fonts":{"display":"Zen Maru Gothic","catch":"Kiwi Maru","body":"M PLUS Rounded 1c"},"imagePaths":{"about_image_2":"sushi-samples/20-pet-cafe-b/images/about-02.jpg?v=1789820525455","about_image_4":"sushi-samples/20-pet-cafe-b/images/about-04.jpg?v=1789820525455","hero_image":"sushi-samples/20-pet-cafe-b/images/hero.jpg?v=1789820525455","work_1_image":"sushi-samples/20-pet-cafe-b/images/work-01.jpg?v=1789820525455","about_image_1":"sushi-samples/20-pet-cafe-b/images/about-01.jpg?v=1789820525455","about_image_3":"sushi-samples/20-pet-cafe-b/images/about-03.jpg?v=1789820525455","work_2_image":"sushi-samples/20-pet-cafe-b/images/work-02.jpg?v=1789820525455","work_3_image":"sushi-samples/20-pet-cafe-b/images/work-03.jpg?v=1789820525455"},"blurb":"スイーツ","scene":"スイーツ","layoutRecipeNote":"rebuild-2026-09-19 午後のご褒美としての層のある甘いもの","brushUpMeaning":"2026-09-19-rebuild","brushUpPhoto":"2026-09-19-title-match-fix2"}
+{
+    "version":  17,
+    "savedAt":  "2026-09-19T12:23:07.635Z",
+    "uiMode":  "self",
+    "sitePurpose":  "shop",
+    "layoutPattern":  "a",
+    "layoutOrder":  [
+                        "hero",
+                        "values",
+                        "works",
+                        "accordions",
+                        "photos",
+                        "hours",
+                        "access",
+                        "address",
+                        "contact"
+                    ],
+    "layoutSelected":  true,
+    "layoutSchema":  2,
+    "itemLayouts":  {
+                        "about-photos":  {
+                                             "sizes":  [
+                                                           "H",
+                                                           "H",
+                                                           "H",
+                                                           "H"
+                                                       ],
+                                             "gap":  "tight",
+                                             "growDirs":  [
+
+                                                          ],
+                                             "focalYs":  [
+                                                             70,
+                                                             60,
+                                                             65,
+                                                             70
+                                                         ],
+                                             "focalXs":  [
+                                                             50,
+                                                             50,
+                                                             50,
+                                                             50
+                                                         ]
+                                         },
+                        "works-list":  {
+                                           "sizes":  [
+                                                         "H",
+                                                         "H",
+                                                         "L"
+                                                     ],
+                                           "gap":  "normal",
+                                           "growDirs":  [
+
+                                                        ],
+                                           "focalYs":  [
+                                                           10,
+                                                           10,
+                                                           35
+                                                       ],
+                                           "focalXs":  [
+                                                           50,
+                                                           50,
+                                                           50
+                                                       ]
+                                       }
+                    },
+    "heroTextOnPhoto":  false,
+    "heroFocalX":  50,
+    "heroFocalY":  25,
+    "aboutItemsDisplay":  "accordion",
+    "heroTextPlate":  "round",
+    "heroTextPlateTone":  "white",
+    "guidedImageUnlocked":  true,
+    "guidedTextUnlocked":  false,
+    "presetChosen":  true,
+    "chosenPresetKey":  "sakura",
+    "intakeDone":  true,
+    "entryBranch":  "detail",
+    "hubEntrySource":  "detail-entry",
+    "easyFlowActive":  false,
+    "sushiSampleId":  "20",
+    "sushiSampleKey":  "pet-cafe-b",
+    "siteColorMode":  "detail",
+    "slotGradients":  {
+
+                      },
+    "slotGradientPartners":  {
+
+                             },
+    "draftColors":  {
+                        "pageBg":  "#fdf5f6",
+                        "pageBgSoft":  "#f5e4e8",
+                        "heroInk":  "#ffffff",
+                        "bodyInk":  "#3d2228",
+                        "bodyMuted":  "#6a454d",
+                        "chromeBg":  "#8f4a5a",
+                        "chromeInk":  "#fff8fa",
+                        "accent":  "#c95d7a",
+                        "cardBg":  "#ffffff",
+                        "valuesBg":  "#ffffff",
+                        "contactBg":  "#8f4a5a",
+                        "contactInk":  "#fff8fa",
+                        "radius":  "0.6rem",
+                        "headingScale":  "1",
+                        "accentBar":  "mid"
+                    },
+    "draftCounts":  {
+                        "hero-leads":  2,
+                        "hero-values":  3,
+                        "about-accordions":  1,
+                        "about-photos":  4,
+                        "works-list":  3
+                    },
+    "draftExtras":  {
+                        "hours":  true,
+                        "access":  true,
+                        "address":  true
+                    },
+    "layoutBlockOff":  {
+
+                       },
+    "confirmed":  {
+                      "easy-basics":  false,
+                      "easy-sec-hero":  false,
+                      "easy-sec-about":  false,
+                      "easy-sec-works":  false,
+                      "easy-sec-contact":  false,
+                      "easy-img-wire":  false,
+                      "easy-loading":  false,
+                      "easy-done":  false,
+                      "purpose":  true,
+                      "layout":  true,
+                      "guide":  true,
+                      "global-preset":  true,
+                      "global-chrome-bg":  true,
+                      "global-chrome-ink":  true,
+                      "global-bg":  true,
+                      "hero-color":  true,
+                      "values-color":  true,
+                      "global-body":  true,
+                      "global-accent":  true,
+                      "global-card":  true,
+                      "contact-color":  true,
+                      "hero-image":  false,
+                      "about-images":  false,
+                      "works-images":  false,
+                      "logo-text":  false,
+                      "site-fonts":  true,
+                      "hero-text":  false,
+                      "values-text":  false,
+                      "about-text":  false,
+                      "works-text":  false,
+                      "hours-text":  false,
+                      "access-text":  false,
+                      "address-text":  false,
+                      "contact-text":  false,
+                      "finish":  false
+                  },
+    "fields":  {
+                   "brand_name":  "砂糖屋パルフェ"
+               },
+    "fonts":  {
+                  "display":  "Zen Maru Gothic",
+                  "catch":  "Kiwi Maru",
+                  "body":  "M PLUS Rounded 1c"
+              },
+    "imagePaths":  {
+                       "about_image_2":  "sushi-samples/20-pet-cafe-b/images/about-02.jpg?v=1789820525455",
+                       "about_image_4":  "sushi-samples/20-pet-cafe-b/images/about-04.jpg?v=1789820525455",
+                       "hero_image":  "sushi-samples/20-pet-cafe-b/images/hero.jpg?v=1789820525455",
+                       "work_1_image":  "sushi-samples/20-pet-cafe-b/images/work-01.jpg?v=1789820525455",
+                       "about_image_1":  "sushi-samples/20-pet-cafe-b/images/about-01.jpg?v=1789820525455",
+                       "about_image_3":  "sushi-samples/20-pet-cafe-b/images/about-03.jpg?v=1789820525455",
+                       "work_2_image":  "sushi-samples/20-pet-cafe-b/images/work-02.jpg?v=1789820525455",
+                       "work_3_image":  "sushi-samples/20-pet-cafe-b/images/work-03.jpg?v=1789820525455"
+                   },
+    "blurb":  "スイーツ",
+    "scene":  "スイーツ",
+    "layoutRecipeNote":  "rebuild-2026-09-19 午後のご褒美としての層のある甘いもの",
+    "brushUpMeaning":  "2026-09-19-rebuild",
+    "brushUpPhoto":  "2026-09-19-title-match-fix2"
+}

@@ -1,1 +1,183 @@
-{"version":17,"savedAt":"2026-09-19T12:29:07.657Z","uiMode":"self","sitePurpose":"shop","layoutPattern":"a","layoutOrder":["contact","hero","works","values","photos","hours","access","address","accordions"],"layoutSelected":true,"layoutSchema":2,"itemLayouts":{"about-photos":{"sizes":["L","L","L"],"gap":"normal","growDirs":[],"focalYs":[35,60,40],"focalXs":[50,50,50]},"works-list":{"sizes":["H","H","L"],"gap":"loose","growDirs":[],"focalYs":[30,5,35],"focalXs":[50,50,50]}},"heroTextOnPhoto":true,"heroFocalX":50,"heroFocalY":0,"aboutItemsDisplay":"accordion","heroTextPlate":"round","heroTextPlateTone":"white","guidedImageUnlocked":true,"guidedTextUnlocked":false,"presetChosen":true,"chosenPresetKey":"brick","intakeDone":true,"entryBranch":"detail","hubEntrySource":"detail-entry","easyFlowActive":false,"sushiSampleId":"30","sushiSampleKey":"hotel-cafe-b","siteColorMode":"detail","slotGradients":{},"slotGradientPartners":{},"draftColors":{"pageBg":"#fff6ee","pageBgSoft":"#ffe4cc","heroInk":"#8a3a10","bodyInk":"#3a2418","bodyMuted":"#6a4a38","chromeBg":"#e07020","chromeInk":"#fff8f0","accent":"#f08a28","cardBg":"#ffffff","valuesBg":"#fffaf5","contactBg":"#d46818","contactInk":"#fff8f0","radius":"0.6rem","headingScale":"1","accentBar":"mid"},"draftCounts":{"hero-leads":2,"hero-values":3,"about-accordions":1,"about-photos":3,"works-list":3},"draftExtras":{"hours":true,"access":true,"address":true},"layoutBlockOff":{},"confirmed":{"easy-basics":false,"easy-sec-hero":false,"easy-sec-about":false,"easy-sec-works":false,"easy-sec-contact":false,"easy-img-wire":false,"easy-loading":false,"easy-done":false,"purpose":true,"layout":true,"guide":true,"global-preset":true,"global-chrome-bg":true,"global-chrome-ink":true,"global-bg":true,"hero-color":true,"values-color":true,"global-body":true,"global-accent":true,"global-card":true,"contact-color":true,"hero-image":false,"about-images":false,"works-images":false,"logo-text":false,"site-fonts":true,"hero-text":false,"values-text":false,"about-text":false,"works-text":false,"hours-text":false,"access-text":false,"address-text":false,"contact-text":false,"finish":false},"fields":{"hero_title":"額の灯りが、\n作品を残す。","headingScale":"1","hero_lead_1":"白い壁の余白ギャラリーとは違い、主役は額と灯り。一点ずつ、余白と光で見せます。","hero_lead_2":"企画展は月替わり。購入・貸し出しの相談はメールで。静かに見る時間を大切にしています。"},"fonts":{"display":"Shippori Mincho","catch":"Shippori Mincho","body":"Zen Kaku Gothic New"},"imagePaths":{"about_image_1":"sushi-samples/30-hotel-cafe-b/images/about-01.jpg?v=1789820927701","about_image_2":"sushi-samples/30-hotel-cafe-b/images/about-02.jpg?v=1789820927701","about_image_3":"sushi-samples/30-hotel-cafe-b/images/about-03.jpg?v=1789820927701","hero_image":"sushi-samples/30-hotel-cafe-b/images/hero.jpg?v=1789820927701","work_1_image":"sushi-samples/30-hotel-cafe-b/images/work-01.jpg?v=1789820927701","work_2_image":"sushi-samples/30-hotel-cafe-b/images/work-02.jpg?v=1789820927701","work_3_image":"sushi-samples/30-hotel-cafe-b/images/work-03.jpg?v=1789820927701"},"blurb":"額縁ギャラリー灯。額の灯りと作品が残る小さなギャラリー","scene":"ギャラリー・額","layoutRecipeNote":"rebuild-30 framed lit vs 14 white wall","brushUpStructure":"2026-09-14-v01","brushUpMeaning":"2026-09-19-rebuild","brushUpPhoto":"2026-09-19-title-match-fix"}
+{
+    "version":  17,
+    "savedAt":  "2026-09-19T12:29:07.657Z",
+    "uiMode":  "self",
+    "sitePurpose":  "shop",
+    "layoutPattern":  "a",
+    "layoutOrder":  [
+                        "contact",
+                        "hero",
+                        "works",
+                        "values",
+                        "photos",
+                        "hours",
+                        "access",
+                        "address",
+                        "accordions"
+                    ],
+    "layoutSelected":  true,
+    "layoutSchema":  2,
+    "itemLayouts":  {
+                        "about-photos":  {
+                                             "sizes":  [
+                                                           "L",
+                                                           "L",
+                                                           "L"
+                                                       ],
+                                             "gap":  "normal",
+                                             "growDirs":  [
+
+                                                          ],
+                                             "focalYs":  [
+                                                             35,
+                                                             60,
+                                                             40
+                                                         ],
+                                             "focalXs":  [
+                                                             50,
+                                                             50,
+                                                             50
+                                                         ]
+                                         },
+                        "works-list":  {
+                                           "sizes":  [
+                                                         "H",
+                                                         "H",
+                                                         "L"
+                                                     ],
+                                           "gap":  "loose",
+                                           "growDirs":  [
+
+                                                        ],
+                                           "focalYs":  [
+                                                           30,
+                                                           5,
+                                                           35
+                                                       ],
+                                           "focalXs":  [
+                                                           50,
+                                                           50,
+                                                           50
+                                                       ]
+                                       }
+                    },
+    "heroTextOnPhoto":  true,
+    "heroFocalX":  50,
+    "heroFocalY":  0,
+    "aboutItemsDisplay":  "accordion",
+    "heroTextPlate":  "round",
+    "heroTextPlateTone":  "white",
+    "guidedImageUnlocked":  true,
+    "guidedTextUnlocked":  false,
+    "presetChosen":  true,
+    "chosenPresetKey":  "brick",
+    "intakeDone":  true,
+    "entryBranch":  "detail",
+    "hubEntrySource":  "detail-entry",
+    "easyFlowActive":  false,
+    "sushiSampleId":  "30",
+    "sushiSampleKey":  "hotel-cafe-b",
+    "siteColorMode":  "detail",
+    "slotGradients":  {
+
+                      },
+    "slotGradientPartners":  {
+
+                             },
+    "draftColors":  {
+                        "pageBg":  "#fff6ee",
+                        "pageBgSoft":  "#ffe4cc",
+                        "heroInk":  "#8a3a10",
+                        "bodyInk":  "#3a2418",
+                        "bodyMuted":  "#6a4a38",
+                        "chromeBg":  "#e07020",
+                        "chromeInk":  "#fff8f0",
+                        "accent":  "#f08a28",
+                        "cardBg":  "#ffffff",
+                        "valuesBg":  "#fffaf5",
+                        "contactBg":  "#d46818",
+                        "contactInk":  "#fff8f0",
+                        "radius":  "0.6rem",
+                        "headingScale":  "1",
+                        "accentBar":  "mid"
+                    },
+    "draftCounts":  {
+                        "hero-leads":  2,
+                        "hero-values":  3,
+                        "about-accordions":  1,
+                        "about-photos":  3,
+                        "works-list":  3
+                    },
+    "draftExtras":  {
+                        "hours":  true,
+                        "access":  true,
+                        "address":  true
+                    },
+    "layoutBlockOff":  {
+
+                       },
+    "confirmed":  {
+                      "easy-basics":  false,
+                      "easy-sec-hero":  false,
+                      "easy-sec-about":  false,
+                      "easy-sec-works":  false,
+                      "easy-sec-contact":  false,
+                      "easy-img-wire":  false,
+                      "easy-loading":  false,
+                      "easy-done":  false,
+                      "purpose":  true,
+                      "layout":  true,
+                      "guide":  true,
+                      "global-preset":  true,
+                      "global-chrome-bg":  true,
+                      "global-chrome-ink":  true,
+                      "global-bg":  true,
+                      "hero-color":  true,
+                      "values-color":  true,
+                      "global-body":  true,
+                      "global-accent":  true,
+                      "global-card":  true,
+                      "contact-color":  true,
+                      "hero-image":  false,
+                      "about-images":  false,
+                      "works-images":  false,
+                      "logo-text":  false,
+                      "site-fonts":  true,
+                      "hero-text":  false,
+                      "values-text":  false,
+                      "about-text":  false,
+                      "works-text":  false,
+                      "hours-text":  false,
+                      "access-text":  false,
+                      "address-text":  false,
+                      "contact-text":  false,
+                      "finish":  false
+                  },
+    "fields":  {
+                   "hero_title":  "額の灯りが、\n作品を残す。",
+                   "headingScale":  "1",
+                   "hero_lead_1":  "白い壁の余白ギャラリーとは違い、主役は額と灯り。一点ずつ、余白と光で見せます。",
+                   "hero_lead_2":  "企画展は月替わり。購入・貸し出しの相談はメールで。静かに見る時間を大切にしています。",
+                   "brand_name":  "額縁ギャラリー灯"
+               },
+    "fonts":  {
+                  "display":  "Shippori Mincho",
+                  "catch":  "Shippori Mincho",
+                  "body":  "Zen Kaku Gothic New"
+              },
+    "imagePaths":  {
+                       "about_image_1":  "sushi-samples/30-hotel-cafe-b/images/about-01.jpg?v=1789820927701",
+                       "about_image_2":  "sushi-samples/30-hotel-cafe-b/images/about-02.jpg?v=1789820927701",
+                       "about_image_3":  "sushi-samples/30-hotel-cafe-b/images/about-03.jpg?v=1789820927701",
+                       "hero_image":  "sushi-samples/30-hotel-cafe-b/images/hero.jpg?v=1789820927701",
+                       "work_1_image":  "sushi-samples/30-hotel-cafe-b/images/work-01.jpg?v=1789820927701",
+                       "work_2_image":  "sushi-samples/30-hotel-cafe-b/images/work-02.jpg?v=1789820927701",
+                       "work_3_image":  "sushi-samples/30-hotel-cafe-b/images/work-03.jpg?v=1789820927701"
+                   },
+    "blurb":  "額縁ギャラリー灯。額の灯りと作品が残る小さなギャラリー",
+    "scene":  "ギャラリー・額",
+    "layoutRecipeNote":  "rebuild-30 framed lit vs 14 white wall",
+    "brushUpStructure":  "2026-09-14-v01",
+    "brushUpMeaning":  "2026-09-19-rebuild",
+    "brushUpPhoto":  "2026-09-19-title-match-fix"
+}

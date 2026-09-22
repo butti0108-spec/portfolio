@@ -5731,13 +5731,18 @@
       if (file) {
         setImageUrl(name, file);
         out[name] = true;
-      } else {
-        if (imageUrls[name]) {
-          URL.revokeObjectURL(imageUrls[name]);
-          delete imageUrls[name];
-        }
-        out[name] = false;
+        return;
       }
+      /* ギャラリー／見本の remote URL は消さない（旧実装はここで revoke→削除してプレビューが戻っていた） */
+      if (imageUrls[name] || (store.galleryPicks && store.galleryPicks[name])) {
+        out[name] = true;
+        return;
+      }
+      if (store.zipImageFiles && store.zipImageFiles[name]) {
+        out[name] = true;
+        return;
+      }
+      out[name] = false;
     });
     return out;
   }
@@ -7979,8 +7984,12 @@
     const b = basics || readEasyBasicsFromUi();
     if (b.brand) {
       setFieldValue("brand_name", b.brand);
-      setFieldValue("hero_title", b.brand);
       setFieldValue("about_name", b.brand);
+      /* キャッチ全文を屋号で上書きしない（見本の hero_title を守る） */
+      const hero = String(fieldValue("hero_title") || "").trim();
+      if (!hero || isPlaceholderBrand(hero)) {
+        setFieldValue("hero_title", b.brand);
+      }
     }
     if (b.intro) {
       setFieldValue("about_lead", b.intro);
@@ -8120,7 +8129,10 @@
     const basics = readEasyBasicsFromUi();
     const brand = basics.brand || "店名";
     setFieldValue("brand_name", brand);
-    setFieldValue("hero_title", brand);
+    const hero = String(fieldValue("hero_title") || "").trim();
+    if (!hero || isPlaceholderBrand(hero)) {
+      setFieldValue("hero_title", brand);
+    }
     setFieldValue("hero_lead_1", cand.text.slice(0, 40));
     if (cand.text.length > 40) {
       setFieldValue("hero_lead_2", cand.text.slice(40, 80));
@@ -8444,6 +8456,9 @@
     confirmEasyImagesForFinish();
     store.easyFlowActive = false;
     setSampleFlowPreviewHidden(false);
+    /* 提出面を出す。detail のままだと syncDetailDashVisibility が finish を隠す */
+    store.siteColorMode = "easy";
+    syncSiteColorModeUi();
     store.uiMode = "guided";
     applyUiMode();
     const flow = getFlowSteps();
@@ -9428,8 +9443,15 @@
       store.layoutSelected = true;
       store.confirmed.layout = true;
     }
-    /* 見本の色をプレビューへ必ず載せる（easy のままだと DEFAULTS＝clinic 青が残る） */
-    if (draft.siteColorMode === "detail" || draft.siteColorMode === "easy") {
+    /* 見本の色は draftColors／confirmed で載せる。
+       サンプル本線では draft の detail を持ち込まない（finish が 1ブロック隠しで消えるため） */
+    const sampleMainline =
+      store.entryBranch === "sample" ||
+      store.easyFlowActive ||
+      store.hubEntrySource === "sample";
+    if (sampleMainline) {
+      store.siteColorMode = "easy";
+    } else if (draft.siteColorMode === "detail" || draft.siteColorMode === "easy") {
       store.siteColorMode = draft.siteColorMode;
     } else {
       store.siteColorMode = "detail";
@@ -9584,7 +9606,10 @@
   }
 
   function fillEasyBasicsFromFields() {
-    const brand = fieldValue("brand_name") || fieldValue("hero_title") || "";
+    const brand =
+      fieldValue("brand_name") ||
+      String(store.sushiSampleBrand || "").trim() ||
+      "";
     const elBrand = document.getElementById("easy-brand-name");
     const elIntro = document.getElementById("easy-intro");
     const elEmail = document.getElementById("easy-email");
@@ -10483,12 +10508,15 @@
     const mood = colorVal === "keep" ? moodFromDraft : colorVal;
 
     applyIntakeSelections("shop", "sample", mood, layout);
+    /* draft 適用前に本線フラグを立て、siteColorMode:detail の持ち越しを防ぐ */
+    store.entryBranch = "sample";
+    store.easyFlowActive = true;
+    store.hubEntrySource = "sample";
     applySushiSampleDraft(draft);
     if (colorVal !== "keep" && PRESETS[colorVal]) {
       applyPresetByKey(colorVal);
       confirmAllColorStepsFromPreset();
     }
-    store.hubEntrySource = "sample";
     store.pendingSushi = null;
     if (window.SushiBelt) window.SushiBelt.unmount();
     startSampleFlowAfterEntry();

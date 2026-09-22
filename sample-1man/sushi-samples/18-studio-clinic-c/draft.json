@@ -1,1 +1,179 @@
-{"version":17,"savedAt":"2026-09-19T12:00:30.409Z","uiMode":"self","sitePurpose":"shop","layoutPattern":"a","layoutOrder":["hero","works","values","accordions","photos","hours","access","address","contact"],"layoutSelected":true,"layoutSchema":2,"itemLayouts":{"about-photos":{"sizes":["L","L","L"],"gap":"normal","growDirs":[],"focalYs":[75,65,55],"focalXs":[50,50,50]},"works-list":{"sizes":["L","H","H"],"gap":"loose","growDirs":[],"focalYs":[35,25,25],"focalXs":[50,50,50]}},"heroTextOnPhoto":false,"heroFocalX":50,"heroFocalY":45,"aboutItemsDisplay":"flat","heroTextPlate":"round","heroTextPlateTone":"white","guidedImageUnlocked":true,"guidedTextUnlocked":false,"presetChosen":true,"chosenPresetKey":"clinic","intakeDone":true,"entryBranch":"detail","hubEntrySource":"detail-entry","easyFlowActive":false,"sushiSampleId":"18","sushiSampleKey":"studio-clinic-c","siteColorMode":"detail","slotGradients":{},"slotGradientPartners":{},"draftColors":{"pageBg":"#ffffff","pageBgSoft":"#f3f6f8","heroInk":"#ffffff","bodyInk":"#212121","bodyMuted":"#555555","chromeBg":"#1a4d8c","chromeInk":"#ffffff","accent":"#1a4d8c","cardBg":"#ffffff","valuesBg":"#ffffff","contactBg":"#1a4d8c","contactInk":"#ffffff","radius":"0.6rem","headingScale":"1","accentBar":"mid"},"draftCounts":{"hero-leads":2,"hero-values":3,"about-accordions":1,"about-photos":3,"works-list":3},"draftExtras":{"hours":true,"access":true,"address":true},"layoutBlockOff":{},"confirmed":{"easy-basics":false,"easy-sec-hero":false,"easy-sec-about":false,"easy-sec-works":false,"easy-sec-contact":false,"easy-img-wire":false,"easy-loading":false,"easy-done":false,"purpose":true,"layout":true,"guide":true,"global-preset":true,"global-chrome-bg":true,"global-chrome-ink":true,"global-bg":true,"hero-color":true,"values-color":true,"global-body":true,"global-accent":true,"global-card":true,"contact-color":true,"hero-image":false,"about-images":false,"works-images":false,"logo-text":false,"site-fonts":true,"hero-text":false,"values-text":false,"about-text":false,"works-text":false,"hours-text":false,"access-text":false,"address-text":false,"contact-text":false,"finish":false},"fields":{},"fonts":{"display":"Zen Kaku Gothic New","catch":"Zen Kaku Gothic New","body":"Noto Sans JP"},"imagePaths":{"about_image_1":"sushi-samples/18-studio-clinic-c/images/about-01.jpg?v=1789819170899","about_image_2":"sushi-samples/18-studio-clinic-c/images/about-02.jpg?v=1789819170899","about_image_3":"sushi-samples/18-studio-clinic-c/images/about-03.jpg?v=1789819170899","hero_image":"sushi-samples/18-studio-clinic-c/images/hero.jpg?v=1789819170899","work_1_image":"sushi-samples/18-studio-clinic-c/images/work-01.jpg?v=1789819170899","work_2_image":"sushi-samples/18-studio-clinic-c/images/work-02.jpg?v=1789819170899","work_3_image":"sushi-samples/18-studio-clinic-c/images/work-03.jpg?v=1789819170899"},"blurb":"写真館・余白","scene":"写真館・余白","layoutRecipeNote":"rebuild-2026-09-19 余白の多い写真で人を撮る","brushUpStructure":"2026-09-14-v01","brushUpMeaning":"2026-09-19-rebuild","brushUpPhoto":"2026-09-19-title-match-fix"}
+{
+    "version":  17,
+    "savedAt":  "2026-09-19T12:00:30.409Z",
+    "uiMode":  "self",
+    "sitePurpose":  "shop",
+    "layoutPattern":  "a",
+    "layoutOrder":  [
+                        "hero",
+                        "works",
+                        "values",
+                        "accordions",
+                        "photos",
+                        "hours",
+                        "access",
+                        "address",
+                        "contact"
+                    ],
+    "layoutSelected":  true,
+    "layoutSchema":  2,
+    "itemLayouts":  {
+                        "about-photos":  {
+                                             "sizes":  [
+                                                           "L",
+                                                           "L",
+                                                           "L"
+                                                       ],
+                                             "gap":  "normal",
+                                             "growDirs":  [
+
+                                                          ],
+                                             "focalYs":  [
+                                                             75,
+                                                             65,
+                                                             55
+                                                         ],
+                                             "focalXs":  [
+                                                             50,
+                                                             50,
+                                                             50
+                                                         ]
+                                         },
+                        "works-list":  {
+                                           "sizes":  [
+                                                         "L",
+                                                         "H",
+                                                         "H"
+                                                     ],
+                                           "gap":  "loose",
+                                           "growDirs":  [
+
+                                                        ],
+                                           "focalYs":  [
+                                                           35,
+                                                           25,
+                                                           25
+                                                       ],
+                                           "focalXs":  [
+                                                           50,
+                                                           50,
+                                                           50
+                                                       ]
+                                       }
+                    },
+    "heroTextOnPhoto":  false,
+    "heroFocalX":  50,
+    "heroFocalY":  45,
+    "aboutItemsDisplay":  "flat",
+    "heroTextPlate":  "round",
+    "heroTextPlateTone":  "white",
+    "guidedImageUnlocked":  true,
+    "guidedTextUnlocked":  false,
+    "presetChosen":  true,
+    "chosenPresetKey":  "clinic",
+    "intakeDone":  true,
+    "entryBranch":  "detail",
+    "hubEntrySource":  "detail-entry",
+    "easyFlowActive":  false,
+    "sushiSampleId":  "18",
+    "sushiSampleKey":  "studio-clinic-c",
+    "siteColorMode":  "detail",
+    "slotGradients":  {
+
+                      },
+    "slotGradientPartners":  {
+
+                             },
+    "draftColors":  {
+                        "pageBg":  "#ffffff",
+                        "pageBgSoft":  "#f3f6f8",
+                        "heroInk":  "#ffffff",
+                        "bodyInk":  "#212121",
+                        "bodyMuted":  "#555555",
+                        "chromeBg":  "#1a4d8c",
+                        "chromeInk":  "#ffffff",
+                        "accent":  "#1a4d8c",
+                        "cardBg":  "#ffffff",
+                        "valuesBg":  "#ffffff",
+                        "contactBg":  "#1a4d8c",
+                        "contactInk":  "#ffffff",
+                        "radius":  "0.6rem",
+                        "headingScale":  "1",
+                        "accentBar":  "mid"
+                    },
+    "draftCounts":  {
+                        "hero-leads":  2,
+                        "hero-values":  3,
+                        "about-accordions":  1,
+                        "about-photos":  3,
+                        "works-list":  3
+                    },
+    "draftExtras":  {
+                        "hours":  true,
+                        "access":  true,
+                        "address":  true
+                    },
+    "layoutBlockOff":  {
+
+                       },
+    "confirmed":  {
+                      "easy-basics":  false,
+                      "easy-sec-hero":  false,
+                      "easy-sec-about":  false,
+                      "easy-sec-works":  false,
+                      "easy-sec-contact":  false,
+                      "easy-img-wire":  false,
+                      "easy-loading":  false,
+                      "easy-done":  false,
+                      "purpose":  true,
+                      "layout":  true,
+                      "guide":  true,
+                      "global-preset":  true,
+                      "global-chrome-bg":  true,
+                      "global-chrome-ink":  true,
+                      "global-bg":  true,
+                      "hero-color":  true,
+                      "values-color":  true,
+                      "global-body":  true,
+                      "global-accent":  true,
+                      "global-card":  true,
+                      "contact-color":  true,
+                      "hero-image":  false,
+                      "about-images":  false,
+                      "works-images":  false,
+                      "logo-text":  false,
+                      "site-fonts":  true,
+                      "hero-text":  false,
+                      "values-text":  false,
+                      "about-text":  false,
+                      "works-text":  false,
+                      "hours-text":  false,
+                      "access-text":  false,
+                      "address-text":  false,
+                      "contact-text":  false,
+                      "finish":  false
+                  },
+    "fields":  {
+                   "brand_name":  "余白フォトスタジオ"
+               },
+    "fonts":  {
+                  "display":  "Zen Kaku Gothic New",
+                  "catch":  "Zen Kaku Gothic New",
+                  "body":  "Noto Sans JP"
+              },
+    "imagePaths":  {
+                       "about_image_1":  "sushi-samples/18-studio-clinic-c/images/about-01.jpg?v=1789819170899",
+                       "about_image_2":  "sushi-samples/18-studio-clinic-c/images/about-02.jpg?v=1789819170899",
+                       "about_image_3":  "sushi-samples/18-studio-clinic-c/images/about-03.jpg?v=1789819170899",
+                       "hero_image":  "sushi-samples/18-studio-clinic-c/images/hero.jpg?v=1789819170899",
+                       "work_1_image":  "sushi-samples/18-studio-clinic-c/images/work-01.jpg?v=1789819170899",
+                       "work_2_image":  "sushi-samples/18-studio-clinic-c/images/work-02.jpg?v=1789819170899",
+                       "work_3_image":  "sushi-samples/18-studio-clinic-c/images/work-03.jpg?v=1789819170899"
+                   },
+    "blurb":  "写真館・余白",
+    "scene":  "写真館・余白",
+    "layoutRecipeNote":  "rebuild-2026-09-19 余白の多い写真で人を撮る",
+    "brushUpStructure":  "2026-09-14-v01",
+    "brushUpMeaning":  "2026-09-19-rebuild",
+    "brushUpPhoto":  "2026-09-19-title-match-fix"
+}

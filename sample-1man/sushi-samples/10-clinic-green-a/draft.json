@@ -1,1 +1,180 @@
-{"version":17,"savedAt":"2026-09-19T11:49:56.644Z","uiMode":"self","sitePurpose":"shop","layoutPattern":"a","layoutOrder":["works","photos","hero","hours","access","contact","address","values","accordions"],"layoutSelected":true,"layoutSchema":2,"itemLayouts":{"about-photos":{"sizes":["H","H","L"],"gap":"normal","growDirs":[],"focalYs":[45,5,70],"focalXs":[50,50,50]},"works-list":{"sizes":["L","H","H"],"gap":"normal","growDirs":[],"focalYs":[20,10,10],"focalXs":[50,50,50]}},"heroTextOnPhoto":false,"heroFocalX":50,"heroFocalY":15,"aboutItemsDisplay":"accordion","heroTextPlate":"round","heroTextPlateTone":"white","guidedImageUnlocked":true,"guidedTextUnlocked":false,"presetChosen":true,"chosenPresetKey":"brick","intakeDone":true,"entryBranch":"detail","hubEntrySource":"detail-entry","easyFlowActive":false,"sushiSampleId":"10","sushiSampleKey":"clinic-green-a","siteColorMode":"detail","slotGradients":{},"slotGradientPartners":{},"draftColors":{"pageBg":"#fff6ee","pageBgSoft":"#ffe4cc","heroInk":"#ffffff","bodyInk":"#3a2418","bodyMuted":"#6a4a38","chromeBg":"#e07020","chromeInk":"#fff8f0","accent":"#f08a28","cardBg":"#ffffff","valuesBg":"#fffaf5","contactBg":"#d46818","contactInk":"#fff8f0","radius":"0.6rem","headingScale":"1","accentBar":"mid"},"draftCounts":{"hero-leads":2,"hero-values":3,"about-accordions":1,"about-photos":3,"works-list":3},"draftExtras":{"hours":true,"access":true,"address":true},"layoutBlockOff":{"values":true,"accordions":true},"confirmed":{"easy-basics":false,"easy-sec-hero":false,"easy-sec-about":false,"easy-sec-works":false,"easy-sec-contact":false,"easy-img-wire":false,"easy-loading":false,"easy-done":false,"purpose":true,"layout":true,"guide":true,"global-preset":true,"global-chrome-bg":true,"global-chrome-ink":true,"global-bg":true,"hero-color":true,"values-color":true,"global-body":true,"global-accent":true,"global-card":true,"contact-color":true,"hero-image":false,"about-images":false,"works-images":false,"logo-text":false,"site-fonts":true,"hero-text":false,"values-text":false,"about-text":false,"works-text":false,"hours-text":false,"access-text":false,"address-text":false,"contact-text":false,"finish":false},"fields":{},"fonts":{"display":"Dela Gothic One","catch":"Zen Kaku Gothic New","body":"Zen Kaku Gothic New"},"imagePaths":{"about_image_3":"sushi-samples/10-clinic-green-a/images/about-03.jpg?v=1789818449719","about_image_2":"sushi-samples/10-clinic-green-a/images/about-02.jpg?v=1789818449719","about_image_1":"sushi-samples/10-clinic-green-a/images/about-01.jpg?v=1789818449719","hero_image":"sushi-samples/10-clinic-green-a/images/hero.jpg?v=1789818449719","work_1_image":"sushi-samples/10-clinic-green-a/images/work-01.jpg?v=1789818449719","work_2_image":"sushi-samples/10-clinic-green-a/images/work-02.jpg?v=1789818449719","work_3_image":"sushi-samples/10-clinic-green-a/images/work-03.jpg?v=1789818449719"},"blurb":"提灯居酒屋。今夜寄る。提灯・赤のれん","scene":"居酒屋・提灯","layoutRecipeNote":"rebuild lantern izakaya brick-bold","brushUpStructure":"2026-09-14-v01","brushUpMeaning":"2026-09-15-v01","brushUpPhoto":"2026-09-19-title-match-fix"}
+{
+    "version":  17,
+    "savedAt":  "2026-09-19T11:49:56.644Z",
+    "uiMode":  "self",
+    "sitePurpose":  "shop",
+    "layoutPattern":  "a",
+    "layoutOrder":  [
+                        "works",
+                        "photos",
+                        "hero",
+                        "hours",
+                        "access",
+                        "contact",
+                        "address",
+                        "values",
+                        "accordions"
+                    ],
+    "layoutSelected":  true,
+    "layoutSchema":  2,
+    "itemLayouts":  {
+                        "about-photos":  {
+                                             "sizes":  [
+                                                           "H",
+                                                           "H",
+                                                           "L"
+                                                       ],
+                                             "gap":  "normal",
+                                             "growDirs":  [
+
+                                                          ],
+                                             "focalYs":  [
+                                                             45,
+                                                             5,
+                                                             70
+                                                         ],
+                                             "focalXs":  [
+                                                             50,
+                                                             50,
+                                                             50
+                                                         ]
+                                         },
+                        "works-list":  {
+                                           "sizes":  [
+                                                         "L",
+                                                         "H",
+                                                         "H"
+                                                     ],
+                                           "gap":  "normal",
+                                           "growDirs":  [
+
+                                                        ],
+                                           "focalYs":  [
+                                                           20,
+                                                           10,
+                                                           10
+                                                       ],
+                                           "focalXs":  [
+                                                           50,
+                                                           50,
+                                                           50
+                                                       ]
+                                       }
+                    },
+    "heroTextOnPhoto":  false,
+    "heroFocalX":  50,
+    "heroFocalY":  15,
+    "aboutItemsDisplay":  "accordion",
+    "heroTextPlate":  "round",
+    "heroTextPlateTone":  "white",
+    "guidedImageUnlocked":  true,
+    "guidedTextUnlocked":  false,
+    "presetChosen":  true,
+    "chosenPresetKey":  "brick",
+    "intakeDone":  true,
+    "entryBranch":  "detail",
+    "hubEntrySource":  "detail-entry",
+    "easyFlowActive":  false,
+    "sushiSampleId":  "10",
+    "sushiSampleKey":  "clinic-green-a",
+    "siteColorMode":  "detail",
+    "slotGradients":  {
+
+                      },
+    "slotGradientPartners":  {
+
+                             },
+    "draftColors":  {
+                        "pageBg":  "#fff6ee",
+                        "pageBgSoft":  "#ffe4cc",
+                        "heroInk":  "#ffffff",
+                        "bodyInk":  "#3a2418",
+                        "bodyMuted":  "#6a4a38",
+                        "chromeBg":  "#e07020",
+                        "chromeInk":  "#fff8f0",
+                        "accent":  "#f08a28",
+                        "cardBg":  "#ffffff",
+                        "valuesBg":  "#fffaf5",
+                        "contactBg":  "#d46818",
+                        "contactInk":  "#fff8f0",
+                        "radius":  "0.6rem",
+                        "headingScale":  "1",
+                        "accentBar":  "mid"
+                    },
+    "draftCounts":  {
+                        "hero-leads":  2,
+                        "hero-values":  3,
+                        "about-accordions":  1,
+                        "about-photos":  3,
+                        "works-list":  3
+                    },
+    "draftExtras":  {
+                        "hours":  true,
+                        "access":  true,
+                        "address":  true
+                    },
+    "layoutBlockOff":  {
+                           "values":  true,
+                           "accordions":  true
+                       },
+    "confirmed":  {
+                      "easy-basics":  false,
+                      "easy-sec-hero":  false,
+                      "easy-sec-about":  false,
+                      "easy-sec-works":  false,
+                      "easy-sec-contact":  false,
+                      "easy-img-wire":  false,
+                      "easy-loading":  false,
+                      "easy-done":  false,
+                      "purpose":  true,
+                      "layout":  true,
+                      "guide":  true,
+                      "global-preset":  true,
+                      "global-chrome-bg":  true,
+                      "global-chrome-ink":  true,
+                      "global-bg":  true,
+                      "hero-color":  true,
+                      "values-color":  true,
+                      "global-body":  true,
+                      "global-accent":  true,
+                      "global-card":  true,
+                      "contact-color":  true,
+                      "hero-image":  false,
+                      "about-images":  false,
+                      "works-images":  false,
+                      "logo-text":  false,
+                      "site-fonts":  true,
+                      "hero-text":  false,
+                      "values-text":  false,
+                      "about-text":  false,
+                      "works-text":  false,
+                      "hours-text":  false,
+                      "access-text":  false,
+                      "address-text":  false,
+                      "contact-text":  false,
+                      "finish":  false
+                  },
+    "fields":  {
+                   "brand_name":  "提灯の居酒屋 赤のれん"
+               },
+    "fonts":  {
+                  "display":  "Dela Gothic One",
+                  "catch":  "Zen Kaku Gothic New",
+                  "body":  "Zen Kaku Gothic New"
+              },
+    "imagePaths":  {
+                       "about_image_3":  "sushi-samples/10-clinic-green-a/images/about-03.jpg?v=1789818449719",
+                       "about_image_2":  "sushi-samples/10-clinic-green-a/images/about-02.jpg?v=1789818449719",
+                       "about_image_1":  "sushi-samples/10-clinic-green-a/images/about-01.jpg?v=1789818449719",
+                       "hero_image":  "sushi-samples/10-clinic-green-a/images/hero.jpg?v=1789818449719",
+                       "work_1_image":  "sushi-samples/10-clinic-green-a/images/work-01.jpg?v=1789818449719",
+                       "work_2_image":  "sushi-samples/10-clinic-green-a/images/work-02.jpg?v=1789818449719",
+                       "work_3_image":  "sushi-samples/10-clinic-green-a/images/work-03.jpg?v=1789818449719"
+                   },
+    "blurb":  "提灯居酒屋。今夜寄る。提灯・赤のれん",
+    "scene":  "居酒屋・提灯",
+    "layoutRecipeNote":  "rebuild lantern izakaya brick-bold",
+    "brushUpStructure":  "2026-09-14-v01",
+    "brushUpMeaning":  "2026-09-15-v01",
+    "brushUpPhoto":  "2026-09-19-title-match-fix"
+}

@@ -338,6 +338,8 @@
     { id: "easy-sec-about", label: "紹介文", needsConfirm: true, num: 0 },
     { id: "easy-sec-works", label: "おすすめ文", needsConfirm: true, num: 0 },
     { id: "easy-sec-contact", label: "連絡文", needsConfirm: true, num: 0 },
+    { id: "easy-img-path", label: "画像の決め方", needsConfirm: true, num: 0 },
+    { id: "easy-img-omakase", label: "おまかせ画像", needsConfirm: true, num: 0 },
     { id: "easy-img-wire", label: "画像", needsConfirm: true, num: 0 },
     { id: "easy-loading", label: "作成中", needsConfirm: false, num: 0 },
     { id: "easy-done", label: "完成", needsConfirm: false, num: 0 },
@@ -744,6 +746,8 @@
     "easy-basics",
     "easy-copy-omakase",
     "easy-copy-frame",
+    "easy-img-path",
+    "easy-img-omakase",
     "easy-img-wire",
     "easy-loading",
     "easy-done"
@@ -758,6 +762,8 @@
     "easy-sec-about",
     "easy-sec-works",
     "easy-sec-contact",
+    "easy-img-path",
+    "easy-img-omakase",
     "easy-img-wire",
     "easy-loading",
     "easy-done"
@@ -2046,6 +2052,7 @@
     sampleSectionSelected: {},
     sampleWireSlot: "hero",
     copyPathMode: null,
+    imgPathMode: null,
     copyDirIds: [],
     copyPresetId: null,
     copyOmakaseAxes: null,
@@ -5217,29 +5224,26 @@
     syncFontPickers();
   }
 
+  function getEasyImageFlowTail() {
+    if (store.imgPathMode === "omakase") {
+      return ["easy-img-path", "easy-img-omakase", "easy-img-wire", "easy-loading", "easy-done"];
+    }
+    if (store.imgPathMode === "self") {
+      return ["easy-img-path", "easy-img-wire", "easy-loading", "easy-done"];
+    }
+    return ["easy-img-path"];
+  }
+
   function getEasyFlowStepIds() {
+    let head;
     if (store.copyPathMode === "omakase") {
-      return [
-        "easy-copy-path",
-        "easy-basics",
-        "easy-copy-omakase",
-        "easy-img-wire",
-        "easy-loading",
-        "easy-done"
-      ];
+      head = ["easy-copy-path", "easy-basics", "easy-copy-omakase"];
+    } else if (store.copyPathMode === "keyword") {
+      head = ["easy-copy-path", "easy-copy-dirs", "easy-basics", "easy-copy-frame"];
+    } else {
+      head = ["easy-copy-path"];
     }
-    if (store.copyPathMode === "keyword") {
-      return [
-        "easy-copy-path",
-        "easy-copy-dirs",
-        "easy-basics",
-        "easy-copy-frame",
-        "easy-img-wire",
-        "easy-loading",
-        "easy-done"
-      ];
-    }
-    return ["easy-copy-path", "easy-basics", "easy-img-wire", "easy-loading", "easy-done"];
+    return head.concat(getEasyImageFlowTail());
   }
 
   function getFlowSteps() {
@@ -5274,6 +5278,7 @@
     const step = getCurrentFlowStep();
     if (step && step.id === "easy-done") return "確認へ";
     if (step && step.id === "easy-loading") return "お待ちください";
+    if (step && step.id === "easy-img-omakase") return "画像工程へ進む";
     if (step && step.id === "easy-copy-omakase") return "これで進む";
     if (step && step.id === "easy-copy-frame") {
       const idx = store.copyFrameIndex || 0;
@@ -6650,6 +6655,15 @@
       }
       return "";
     }
+    if (stepId === "easy-img-path") {
+      if (store.imgPathMode !== "self" && store.imgPathMode !== "omakase") {
+        return "写真の決め方を選んでください。";
+      }
+      return "";
+    }
+    if (stepId === "easy-img-omakase") {
+      return "";
+    }
     if (stepId === "easy-copy-dirs") {
       if (!Array.isArray(store.copyDirIds) || store.copyDirIds.length < 1) {
         return "方向を1つ以上選んでから、「" + action + "」を押してください。";
@@ -7184,6 +7198,14 @@
         r.checked = r.value === store.copyPathMode;
       });
     }
+    if (step.id === "easy-img-path") {
+      form.querySelectorAll('input[name="easy_img_path"]').forEach(function (r) {
+        r.checked = r.value === store.imgPathMode;
+      });
+    }
+    if (step.id === "easy-img-omakase") {
+      /* stub only — I-3 で Coolors 接続 */
+    }
     if (step.id === "easy-copy-dirs") {
       renderCopyDirsUi();
     }
@@ -7522,12 +7544,14 @@
     const onPurpose = !!(step && step.id === "purpose");
     const onLayout = !!(step && step.id === "layout");
     const onCopyPath = !!(step && step.id === "easy-copy-path");
+    const onImgPath = !!(step && step.id === "easy-img-path");
     const hideFootNav =
       selfList ||
       isGuidedColorTrialFootHidden() ||
       store.guidedColorPhase === "pick" ||
       onLayout ||
-      onCopyPath;
+      onCopyPath ||
+      onImgPath;
 
     if (progress) {
       /* 進捗バー廃止に合わせ、件数カウント文言も出さない */
@@ -9842,6 +9866,37 @@
         });
       });
     }
+    const imgPathRoot = document.querySelector('.dash-block[data-step-id="easy-img-path"]');
+    if (imgPathRoot && !imgPathRoot.dataset.imgPathBound) {
+      imgPathRoot.dataset.imgPathBound = "1";
+      imgPathRoot.querySelectorAll('input[name="easy_img_path"]').forEach(function (input) {
+        input.addEventListener("change", function () {
+          if (!input.checked) return;
+          store.imgPathMode = input.value === "omakase" ? "omakase" : "self";
+          store.confirmed["easy-img-path"] = true;
+          scheduleSave();
+          const flow = getFlowSteps();
+          const at = flow.findIndex(function (s) { return s.id === "easy-img-path"; });
+          if (at >= 0 && at < flow.length - 1) showWizardStep(at + 1);
+          else showWizardStep(Math.max(0, at));
+        });
+      });
+    }
+    const imgOmakaseGo = document.getElementById("easy-img-omakase-continue");
+    if (imgOmakaseGo && !imgOmakaseGo.dataset.bound) {
+      imgOmakaseGo.dataset.bound = "1";
+      imgOmakaseGo.addEventListener("click", function () {
+        store.confirmed["easy-img-omakase"] = true;
+        scheduleSave();
+        const flow = getFlowSteps();
+        const wire = flow.findIndex(function (s) { return s.id === "easy-img-wire"; });
+        if (wire >= 0) showWizardStep(wire);
+        else {
+          const at = flow.findIndex(function (s) { return s.id === "easy-img-omakase"; });
+          if (at >= 0 && at < flow.length - 1) showWizardStep(at + 1);
+        }
+      });
+    }
     const reroll = document.getElementById("easy-copy-frame-reroll");
     if (reroll && !reroll.dataset.bound) {
       reroll.dataset.bound = "1";
@@ -9995,6 +10050,7 @@
     store.sampleSectionCandidates = {};
     store.sampleSectionSelected = {};
     store.copyPathMode = null;
+    store.imgPathMode = null;
     store.copyDirIds = [];
     store.copyPresetId = null;
     store.copyOmakaseAxes = null;
@@ -10532,8 +10588,16 @@
       clearEasyLoadingTimers();
       setSampleFlowPreviewHidden(false);
       const flow = getFlowSteps();
-      const img = flow.findIndex((s) => s.id === "easy-img-wire");
+      let backId = "easy-img-wire";
+      if (store.imgPathMode === "omakase") backId = "easy-img-omakase";
+      else if (store.imgPathMode === "self") backId = "easy-img-wire";
+      else backId = "easy-img-path";
+      const img = flow.findIndex((s) => s.id === backId);
       if (img >= 0) showWizardStep(img);
+      else {
+        const wire = flow.findIndex((s) => s.id === "easy-img-wire");
+        if (wire >= 0) showWizardStep(wire);
+      }
       return;
     }
     if (step && EASY_FLOW_STEP_SET.has(step.id)) {

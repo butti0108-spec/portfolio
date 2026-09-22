@@ -13,7 +13,7 @@
   <link rel="stylesheet" href="../style.css">
   <link rel="stylesheet" href="style.css?v=base-live-1">
   <link rel="icon" href="brand/mark-favicon.png?v=logo-7" type="image/png">
-  <link rel="stylesheet" href="sample-overrides.css?v=fpg-i1-1">
+  <link rel="stylesheet" href="sample-overrides.css?v=fpg-i2-1">
   <link rel="stylesheet" href="free-photo-gallery/gallery.css?v=fpg-i1-1">
   <script>
     (function () {
@@ -39,7 +39,7 @@
   <script src="copy-dict-engine.js?v=copy-dict-thick-v1" defer></script>
   <script src="sushi-belt.js?v=sushi-choice-v1" defer></script>
   <script src="free-photo-gallery/gallery.js?v=fpg-i1-1" defer></script>
-  <script src="script.js?v=fpg-i1-1" defer></script>
+  <script src="script.js?v=fpg-i2-1" defer></script>
   <script>
     (function () {
       var h = location.hostname;
@@ -826,6 +826,37 @@
           <p class="step-help">選んだ内容に合わせて候補を作りました。1〜5からひとつ選んでください。</p>
           <div class="easy-copy-list" id="easy-sec-contact-list" role="radiogroup" aria-labelledby="easy-sec-contact-title"></div>
           <button type="button" class="gct-btn" data-sec-regen="contact">別の5案を作り直す</button>
+        </details>
+
+        <details class="dash-block dash-block--easy" data-step-id="easy-img-path" hidden>
+          <summary>画像の決め方</summary>
+          <p class="dash-subhead" role="heading" aria-level="3">写真はどう決めますか</p>
+          <p class="step-help">進め方をひとつ選んでみられます。あとから選び直すこともできます。</p>
+          <div class="entry-branch-grid easy-img-path-grid" role="radiogroup" aria-label="画像の決め方">
+            <label class="entry-branch-card">
+              <input type="radio" name="easy_img_path" value="omakase">
+              <span class="entry-branch-card-inner">
+                <strong role="heading" aria-level="3">おまかせ</strong>
+                <span>こちらで写真の候補を整えます（いまは案内のみ。次の画面から進められます）</span>
+              </span>
+            </label>
+            <label class="entry-branch-card">
+              <input type="radio" name="easy_img_path" value="self">
+              <span class="entry-branch-card-inner">
+                <strong role="heading" aria-level="3">自分で選ぶ</strong>
+                <span>ギャラリーや端末から、お好みの写真を選べます</span>
+              </span>
+            </label>
+          </div>
+        </details>
+
+        <details class="dash-block dash-block--easy" data-step-id="easy-img-omakase" hidden>
+          <summary>おまかせ画像</summary>
+          <p class="dash-subhead" role="heading" aria-level="3">おまかせの写真（準備中）</p>
+          <p class="step-help">自動で候補を出す画面は、もう少しあとでつながります。いまは次の画像工程へ進めます。ギャラリーや端末から選ぶこともできますよ。</p>
+          <div class="easy-img-omakase-stub">
+            <button type="button" class="gct-btn gct-btn-primary" id="easy-img-omakase-continue">画像工程へ進む</button>
+          </div>
         </details>
 
         <details class="dash-block dash-block--easy" data-step-id="easy-img-wire" hidden>

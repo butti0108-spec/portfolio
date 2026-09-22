@@ -10205,9 +10205,15 @@ body.wizard-mode .dash-block.is-wizard-active .easy-copy-frame > .easy-copy-late
   margin-bottom: 0.75rem;
 }
 
-.dash-block--easy .easy-copy-path-grid {
+.dash-block--easy .easy-copy-path-grid,
+.dash-block--easy .easy-img-path-grid {
   margin: 0.15rem 0 0.5rem;
 }
+
+.easy-img-omakase-stub {
+  margin: 0.75rem 0 0.25rem;
+}
+
 .easy-copy-dirs {
   display: flex;
   flex-direction: column;

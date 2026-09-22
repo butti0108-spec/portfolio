@@ -1,6 +1,7 @@
 /**
  * Static + review API for sample-1man.
- * Serves the portfolio root (parent of this folder) so ../style.css resolves.
+ * Serves the portfolio root (parent of this folder) for shared assets / review APIs.
+ * Maker CSS is local: sample-1man/maker-base.css（../style.css は使わない）.
  *
  *   node sample-1man/_static-server.js [port]
  *

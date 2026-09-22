@@ -259,50 +259,6 @@ a {
   aspect-ratio: 2752 / 1536;
 }
 
-/* 虹レイヤ：ポートフォリオ正面専用クラスのみ（メーカー見本には付けない） */
-.hero-stage--rainbow::before {
-  content: "";
-  grid-area: 1 / 1;
-  z-index: 1;
-  pointer-events: none;
-  background: radial-gradient(
-    ellipse 130% 80% at 50% 108%,
-    transparent 36%,
-    oklch(55% 0.28 20)  42%,
-    oklch(72% 0.22 55)  47%,
-    oklch(90% 0.20 100) 52%,
-    oklch(72% 0.22 148) 57%,
-    oklch(55% 0.25 255) 62%,
-    oklch(45% 0.30 300) 67%,
-    transparent 72%
-  );
-  mix-blend-mode: screen;
-  filter: blur(14px);
-  opacity: 0;
-  clip-path: inset(0 100% 0 0);
-}
-
-.hero-stage--rainbow::after {
-  content: "";
-  grid-area: 1 / 1;
-  z-index: 1;
-  pointer-events: none;
-  background: radial-gradient(
-    ellipse 130% 80% at 50% 108%,
-    transparent 36%,
-    oklch(55% 0.28 20)  40%,
-    oklch(72% 0.22 55)  44%,
-    oklch(90% 0.20 100) 48%,
-    oklch(72% 0.22 148) 52%,
-    oklch(55% 0.25 255) 56%,
-    oklch(45% 0.30 300) 60%,
-    transparent 64%
-  );
-  mix-blend-mode: screen;
-  opacity: 0;
-  clip-path: inset(0 100% 0 0);
-}
-
 .hero-photo {
   grid-area: 1 / 1;
   display: block;
@@ -994,6 +950,12 @@ a {
 .accordion-body {
   padding: 0 1.35rem 1.35rem;
   border-top: 1px solid rgba(17, 17, 17, 0.08);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .accordion[open] > .accordion-body {
+    animation: accordionIn 0.38s ease both;
+  }
 }
 
 .offer-lead {
@@ -2322,25 +2284,6 @@ body.lightbox-open {
   to   { opacity: 1; }
 }
 
-@keyframes heroRainbow {
-  0% {
-    opacity: 1;
-    clip-path: inset(0 100% 0 0);
-  }
-  44% {
-    opacity: 1;
-    clip-path: inset(0 0 0 0);
-  }
-  55% {
-    opacity: 1;
-    clip-path: inset(0 0 0 0);
-  }
-  100% {
-    opacity: 0;
-    clip-path: inset(0 0 0 100%);
-  }
-}
-
 @keyframes heroValueRise {
   from {
     opacity: 0;
@@ -2377,11 +2320,6 @@ body.lightbox-open {
 @media (prefers-reduced-motion: no-preference) {
   .js .hero-copy {
     animation: heroFadeUp 0.7s 0.08s ease both;
-  }
-
-  .js .hero-stage--rainbow::before,
-  .js .hero-stage--rainbow::after {
-    animation: heroRainbow 3.5s ease-in-out 0.12s forwards;
   }
 
   .js .hero-value-list li {

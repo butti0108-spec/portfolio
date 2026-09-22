@@ -3,7 +3,7 @@
 ローカルではポートフォリオ＋メーカー＋開発レビューを一体管理する。  
 **WordPress 本番へ載せるのは顧客向け一式だけ。** 開発・レビュー専用は載せない。
 
-更新: 2026-09-16（レビュー統合）
+更新: 2026-09-22（親CSSバリケード：maker-base.css）
 
 ---
 
@@ -14,13 +14,16 @@
 | `sample-1man/index.html` | メーカー本体 |
 | `sample-1man/help.html` / `help.js` / `help.css`（あれば） | 操作ヘルプ |
 | `sample-1man/script.js` | 本体ロジック |
+| `sample-1man/maker-base.css` | メーカー親スタイル（プレビュー必須セット。ポートフォリオ根の `style.css` とは別本） |
 | `sample-1man/sample-overrides.css` | メーカー専用スタイル |
 | `sample-1man/sushi-belt.js` / `vibe-dict.js` / `easy-copy-dict.js` | 寿司・辞書 |
 | `sample-1man/brand/` | 屋号ロゴ等 |
 | `sample-1man/images/` | メーカー用画像（顧客向け） |
 | `sample-1man/sushi-samples/manifest.json` | 見本一覧 |
 | `sample-1man/sushi-samples/NN-*/` | 各見本の `draft.json` / `images/` / `preview.png`（公開に使うもの） |
-| リポジトリ根の `style.css` | メーカーが `../style.css` で参照。サイト根に配置すること |
+
+メーカーは **ポートフォリオ根の `style.css` を読まない**（親CSSバリケード）。見た目の親は `maker-base.css`。  
+入口リンク（ポートフォリオ ↔ メーカー）は残してよいが、CSS の読み込みは分けたまま。
 
 あわせて本番テーマ ZIP（`wp-theme/masubuchi-portfolio/`）を反映する。  
 テーマは `/sample-1man/` へリンクする前提。
@@ -63,6 +66,7 @@
 ## 確認チェック（アップロード前）
 
 - [ ] 上記「含めない」パスが ZIP／FTP 対象に入っていない
-- [ ] `/sample-1man/` でメーカーが開き、ポートフォリオからリンクできる
+- [ ] `/sample-1man/` でメーカーが開き、ポートフォリオからリンクできる（CSSは `maker-base.css`。根 `style.css` 非依存）
+- [ ] ポートフォリオ正面の虹演出を変えてもメーカー見本キャッチに漏れない
 - [ ] 本番ホストでは「レビュー」カードが出ない
 - [ ] `?review=1` を本番 URL で開いても API が無い（保存・STATUS 更新は失敗してよい。載せないのが正）

@@ -12,8 +12,8 @@
   <!-- メーカー親CSS（ポートフォリオ根の style.css は読まない） -->
   <link rel="stylesheet" href="maker-base.css?v=cleanup-20260922">
   <link rel="icon" href="brand/mark-favicon.png?v=logo-7" type="image/png">
-  <link rel="stylesheet" href="sample-overrides.css?v=sushi-guide-zoom-20260922b">
-  <link rel="stylesheet" href="free-photo-gallery/gallery.css?v=cleanup-20260922">
+  <link rel="stylesheet" href="sample-overrides.css?v=path-back-20260923">
+  <link rel="stylesheet" href="free-photo-gallery/gallery.css?v=gallery-check-20260923">
   <script>
     (function () {
       var h = location.hostname;
@@ -37,8 +37,8 @@
   <script src="easy-copy-dict.js?v=cleanup-20260922" defer></script>
   <script src="copy-dict-engine.js?v=cleanup-20260922" defer></script>
   <script src="sushi-belt.js?v=sushi-guide-session-20260922a" defer></script>
-  <script src="free-photo-gallery/gallery.js?v=cleanup-20260922" defer></script>
-  <script src="script.js?v=cleanup-20260922" defer></script>
+  <script src="free-photo-gallery/gallery.js?v=gallery-check-20260923" defer></script>
+  <script src="script.js?v=item-order-20260923b" defer></script>
   <script>
     (function () {
       var h = location.hostname;
@@ -348,9 +348,16 @@
         <div class="chrome-control chrome-control--width" role="group" aria-label="見本の幅" id="chrome-preview-width">
           <p class="preview-width-hint">スマホ ← タップで切替 → PC</p>
           <div class="preview-width-ruler" id="preview-width-ruler" role="radiogroup" aria-label="見本の表示幅"></div>
-          <span class="preview-width-meta" aria-live="polite">
-            <span id="preview-width-device" class="preview-width-device">タブレット</span>
-            <span id="preview-width-px" class="preview-width-px">768px</span>
+          <span class="preview-width-line">
+            <span class="preview-width-meta" aria-live="polite">
+              <span id="preview-width-device" class="preview-width-device">タブレット</span>
+              <span id="preview-width-px" class="preview-width-px">768px</span>
+            </span>
+            <span class="preview-look" id="preview-look" role="group" aria-label="見本の大きさ">
+              <span class="preview-look-sep" aria-hidden="true">|</span>
+              <button type="button" class="preview-look-btn" id="preview-scale-minus" aria-label="見本を小さく">−</button>
+              <button type="button" class="preview-look-btn" id="preview-scale-plus" aria-label="見本を大きく">＋</button>
+            </span>
           </span>
         </div>
       </div>
@@ -553,10 +560,10 @@
                 <div class="shell">
                   <p class="section-label" id="about-photos-label">写真</p>
                   <ul id="about-photos" class="skill-cards" data-sample-repeat data-min="1" data-max="4" data-count="1">
-                    <li class="skill-card" data-sample-item><img class="skill-card-img" src="images/offer-1.png" data-default-src="images/offer-1.png" alt="" width="1200" height="750" loading="lazy"></li>
-                    <li class="skill-card" data-sample-item><img class="skill-card-img" src="images/offer-2.png" data-default-src="images/offer-2.png" alt="" width="1200" height="750" loading="lazy"></li>
-                    <li class="skill-card" data-sample-item><img class="skill-card-img" src="images/offer-3.png" data-default-src="images/offer-3.png" alt="" width="1200" height="750" loading="lazy"></li>
-                    <li class="skill-card" data-sample-item><img class="skill-card-img" src="images/hero.png" data-default-src="images/hero.png" alt="" width="1200" height="750" loading="lazy"></li>
+                    <li class="skill-card" data-sample-item data-item-id="about_image_1"><img class="skill-card-img" src="images/offer-1.png" data-default-src="images/offer-1.png" alt="" width="1200" height="750" loading="lazy"></li>
+                    <li class="skill-card" data-sample-item data-item-id="about_image_2"><img class="skill-card-img" src="images/offer-2.png" data-default-src="images/offer-2.png" alt="" width="1200" height="750" loading="lazy"></li>
+                    <li class="skill-card" data-sample-item data-item-id="about_image_3"><img class="skill-card-img" src="images/offer-3.png" data-default-src="images/offer-3.png" alt="" width="1200" height="750" loading="lazy"></li>
+                    <li class="skill-card" data-sample-item data-item-id="about_image_4"><img class="skill-card-img" src="images/hero.png" data-default-src="images/hero.png" alt="" width="1200" height="750" loading="lazy"></li>
                   </ul>
                 </div>
               </section>
@@ -569,7 +576,7 @@
                   <h2 id="works-heading">ここに大見出し</h2>
                   <p class="section-lead" id="works-lead">カードの並びは、この見本と同じ枠です。</p>
                   <ul id="works-list" class="work-list" data-sample-repeat data-min="1" data-max="3" data-count="1">
-                    <li class="work-item" data-sample-item>
+                    <li class="work-item" data-sample-item data-item-id="work_1">
                       <a class="work-item-link" href="#" tabindex="-1" data-work-link>
                         <img class="work-thumb" src="images/offer-1.png" data-default-src="images/offer-1.png" alt="" width="1200" height="750" loading="lazy">
                         <div class="work-item-body">
@@ -579,7 +586,7 @@
                         </div>
                       </a>
                     </li>
-                    <li class="work-item" data-sample-item>
+                    <li class="work-item" data-sample-item data-item-id="work_2">
                       <a class="work-item-link" href="#" tabindex="-1" data-work-link>
                         <img class="work-thumb" src="images/offer-2.png" data-default-src="images/offer-2.png" alt="" width="1200" height="750" loading="lazy">
                         <div class="work-item-body">
@@ -589,7 +596,7 @@
                         </div>
                       </a>
                     </li>
-                    <li class="work-item" data-sample-item>
+                    <li class="work-item" data-sample-item data-item-id="work_3">
                       <a class="work-item-link" href="#" tabindex="-1" data-work-link>
                         <img class="work-thumb" src="images/offer-3.png" data-default-src="images/offer-3.png" alt="" width="1200" height="750" loading="lazy">
                         <div class="work-item-body">

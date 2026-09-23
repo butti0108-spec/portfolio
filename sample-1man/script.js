@@ -892,6 +892,10 @@
   });
 
   const ITEM_LAYOUT_IDS = ["about-photos", "works-list"];
+  const ITEM_SLOT_IDS = {
+    "about-photos": ["about_image_1", "about_image_2", "about_image_3", "about_image_4"],
+    "works-list": ["work_1", "work_2", "work_3"]
+  };
   const ITEM_GAP_STEPS = ["tight", "normal", "loose"];
   const ITEM_GAP_LABELS = { tight: "狭い", normal: "ふつう", loose: "広い" };
   const ITEM_FOCAL_STEP = 5;
@@ -980,28 +984,65 @@
     return fixOrphanTrailingH(out);
   }
 
-  function parseItemLayoutSource(src, count) {
-    const gap =
-      src && ITEM_GAP_STEPS.indexOf(src.gap) >= 0 ? src.gap : "normal";
-    const growDirs = normalizeGrowDirsArray(src && src.growDirs);
-    const sizes = normalizeSizesArray(src && src.sizes, count, growDirs);
-    const focalYs = normalizeFocalYsArray(src && src.focalYs, count);
-    const focalXs = normalizeFocalXsArray(src && src.focalXs, count);
-    return { sizes: sizes, gap: gap, growDirs: [], focalYs: focalYs, focalXs: focalXs };
+  function itemSlotImageName(slotId) {
+    const work = /^work_(\d+)$/.exec(String(slotId || ""));
+    if (work) return "work_" + work[1] + "_image";
+    return String(slotId || "");
+  }
+
+  function layoutByIdFromSource(countId, src) {
+    const slots = ITEM_SLOT_IDS[countId] || [];
+    const sizeById = {};
+    const focalXById = {};
+    const focalYById = {};
+    slots.forEach((slot) => {
+      sizeById[slot] = "L";
+      focalXById[slot] = ITEM_FOCAL_DEFAULT;
+      focalYById[slot] = ITEM_FOCAL_DEFAULT;
+    });
+    const gap = src && ITEM_GAP_STEPS.indexOf(src.gap) >= 0 ? src.gap : "normal";
+    const hasIdMap = src && src.sizeById && typeof src.sizeById === "object" && !Array.isArray(src.sizeById);
+    if (hasIdMap) {
+      slots.forEach((slot) => {
+        if (src.sizeById[slot] != null) sizeById[slot] = normalizeItemSizeToken(src.sizeById[slot]);
+        if (src.focalXById && src.focalXById[slot] != null) {
+          focalXById[slot] = normalizeFocalX(src.focalXById[slot]);
+        }
+        if (src.focalYById && src.focalYById[slot] != null) {
+          focalYById[slot] = normalizeFocalY(src.focalYById[slot]);
+        }
+      });
+    } else if (src) {
+      const rawSizes = Array.isArray(src.sizes) ? src.sizes : [];
+      const rawX = Array.isArray(src.focalXs) ? src.focalXs : [];
+      const rawY = Array.isArray(src.focalYs) ? src.focalYs : [];
+      const growDirs = normalizeGrowDirsArray(src.growDirs);
+      let legacySizes = rawSizes.map(normalizeItemSizeToken);
+      if ((!legacySizes.length || legacySizes.every((s) => s == null)) && growDirs.length) {
+        legacySizes = sizesFromLegacyGrowDirs(growDirs, Math.max(legacySizes.length, Number(store.draftCounts[countId] || 1)));
+      }
+      slots.forEach((slot, i) => {
+        if (legacySizes[i] != null) sizeById[slot] = normalizeItemSizeToken(legacySizes[i]);
+        if (rawX[i] != null) focalXById[slot] = normalizeFocalX(rawX[i]);
+        if (rawY[i] != null) focalYById[slot] = normalizeFocalY(rawY[i]);
+      });
+    }
+    return {
+      gap: gap,
+      growDirs: [],
+      sizeById: sizeById,
+      focalXById: focalXById,
+      focalYById: focalYById
+    };
+  }
+
+  function parseItemLayoutSource(countId, src) {
+    return layoutByIdFromSource(countId, src);
   }
 
   function defaultItemLayouts() {
     return Object.fromEntries(
-      ITEM_LAYOUT_IDS.map((id) => [
-        id,
-        {
-          sizes: ["L"],
-          gap: "normal",
-          growDirs: [],
-          focalYs: [ITEM_FOCAL_DEFAULT],
-          focalXs: [ITEM_FOCAL_DEFAULT]
-        }
-      ])
+      ITEM_LAYOUT_IDS.map((id) => [id, layoutByIdFromSource(id, null)])
     );
   }
 
@@ -1010,24 +1051,159 @@
     if (!store.itemLayouts || typeof store.itemLayouts !== "object") {
       store.itemLayouts = defaultItemLayouts();
     }
-    if (!store.itemLayouts[id] || typeof store.itemLayouts[id] !== "object") {
-      store.itemLayouts[id] = {
-        sizes: ["L"],
-        gap: "normal",
-        growDirs: [],
-        focalYs: [ITEM_FOCAL_DEFAULT],
-        focalXs: [ITEM_FOCAL_DEFAULT]
-      };
+    const current = store.itemLayouts[id];
+    const already =
+      current && current.sizeById && typeof current.sizeById === "object" && !Array.isArray(current.sizeById);
+    store.itemLayouts[id] = layoutByIdFromSource(id, already ? current : current || null);
+    return store.itemLayouts[id];
+  }
+
+  function smallestUnusedSlot(countId) {
+    const slots = ITEM_SLOT_IDS[countId] || [];
+    const used = {};
+    const order = (store.itemOrders && store.itemOrders[countId]) || [];
+    const parked = (store.itemOrderParked && store.itemOrderParked[countId]) || [];
+    order.forEach((slot) => {
+      used[slot] = 1;
+    });
+    parked.forEach((slot) => {
+      used[slot] = 1;
+    });
+    for (let i = 0; i < slots.length; i += 1) {
+      if (!used[slots[i]]) return slots[i];
     }
-    const layout = store.itemLayouts[id];
-    const count = Number(store.draftCounts[id] || 1);
-    const parsed = parseItemLayoutSource(layout, count);
-    layout.sizes = parsed.sizes;
-    layout.gap = parsed.gap;
-    layout.growDirs = [];
-    layout.focalYs = parsed.focalYs;
-    layout.focalXs = parsed.focalXs;
-    return layout;
+    return null;
+  }
+
+  function seedItemOrder(countId) {
+    if (!ITEM_SLOT_IDS[countId]) return;
+    if (!store.itemOrders || typeof store.itemOrders !== "object") store.itemOrders = {};
+    if (!store.itemOrderParked || typeof store.itemOrderParked !== "object") store.itemOrderParked = {};
+    const slots = ITEM_SLOT_IDS[countId];
+    const meta = COUNT_META[countId] || { min: 1, max: slots.length, defaultCount: 1 };
+    const known = {};
+    slots.forEach((slot) => {
+      known[slot] = 1;
+    });
+    if (!Array.isArray(store.itemOrders[countId])) {
+      const n = Math.max(
+        meta.min,
+        Math.min(meta.max, Number(store.draftCounts[countId] || meta.defaultCount || 1))
+      );
+      store.itemOrders[countId] = slots.slice(0, n);
+      store.itemOrderParked[countId] = [];
+      store.draftCounts[countId] = store.itemOrders[countId].length;
+      return;
+    }
+    const seen = {};
+    store.itemOrders[countId] = store.itemOrders[countId].filter((slot) => {
+      if (!known[slot] || seen[slot]) return false;
+      seen[slot] = 1;
+      return true;
+    });
+    const parkedSrc = Array.isArray(store.itemOrderParked[countId]) ? store.itemOrderParked[countId] : [];
+    store.itemOrderParked[countId] = parkedSrc.filter((slot) => {
+      if (!known[slot] || seen[slot]) return false;
+      seen[slot] = 1;
+      return true;
+    });
+    while (store.itemOrders[countId].length < meta.min) {
+      const slot = smallestUnusedSlot(countId);
+      if (!slot) break;
+      store.itemOrders[countId].push(slot);
+    }
+    while (store.itemOrders[countId].length > meta.max) {
+      store.itemOrderParked[countId].push(store.itemOrders[countId].pop());
+    }
+  }
+
+  function seedAllItemOrders() {
+    ITEM_LAYOUT_IDS.forEach((id) => seedItemOrder(id));
+  }
+
+  function adoptItemOrders(srcOrders, srcParked) {
+    store.itemOrders = {};
+    store.itemOrderParked = {};
+    if (srcOrders && typeof srcOrders === "object") {
+      ITEM_LAYOUT_IDS.forEach((id) => {
+        if (Array.isArray(srcOrders[id])) store.itemOrders[id] = srcOrders[id].slice();
+      });
+    }
+    if (srcParked && typeof srcParked === "object") {
+      ITEM_LAYOUT_IDS.forEach((id) => {
+        if (Array.isArray(srcParked[id])) store.itemOrderParked[id] = srcParked[id].slice();
+      });
+    }
+    seedAllItemOrders();
+    if (srcOrders && typeof srcOrders === "object") {
+      ITEM_LAYOUT_IDS.forEach((id) => {
+        if (Array.isArray(srcOrders[id]) && store.itemOrders[id]) {
+          store.draftCounts[id] = store.itemOrders[id].length;
+        }
+      });
+    }
+  }
+
+  function previewItemEl(countId, slotId) {
+    const block = document.getElementById(countId);
+    if (!block || !slotId) return null;
+    return block.querySelector(':scope > [data-item-id="' + slotId + '"]');
+  }
+
+  function applyItemOrderToPreview(countId) {
+    const block = document.getElementById(countId);
+    if (!block || !ITEM_SLOT_IDS[countId]) return;
+    seedItemOrder(countId);
+    const order = store.itemOrders[countId];
+    const parked = store.itemOrderParked[countId];
+    order.forEach((slot) => {
+      const el = previewItemEl(countId, slot);
+      if (!el) return;
+      el.hidden = false;
+      block.appendChild(el);
+    });
+    parked.forEach((slot) => {
+      const el = previewItemEl(countId, slot);
+      if (!el) return;
+      el.hidden = true;
+      block.appendChild(el);
+    });
+    ITEM_SLOT_IDS[countId].forEach((slot) => {
+      if (order.indexOf(slot) >= 0 || parked.indexOf(slot) >= 0) return;
+      const el = previewItemEl(countId, slot);
+      if (!el) return;
+      el.hidden = true;
+      block.appendChild(el);
+    });
+  }
+
+  function alignItemOrderToCount(countId) {
+    if (!ITEM_SLOT_IDS[countId]) return;
+    seedItemOrder(countId);
+    const meta = COUNT_META[countId];
+    if (!meta) return;
+    let target = Number(store.draftCounts[countId]);
+    if (!Number.isFinite(target)) target = meta.defaultCount || 1;
+    target = Math.max(meta.min, Math.min(meta.max, target));
+    const order = store.itemOrders[countId];
+    const parked = store.itemOrderParked[countId];
+    const layout = normalizeItemLayout(countId);
+    while (order.length > target) parked.push(order.pop());
+    while (order.length < target) {
+      if (parked.length) {
+        order.push(parked.pop());
+      } else {
+        const slot = smallestUnusedSlot(countId);
+        if (!slot) break;
+        if (layout) {
+          if (!layout.sizeById[slot]) layout.sizeById[slot] = "L";
+          if (layout.focalXById[slot] == null) layout.focalXById[slot] = ITEM_FOCAL_DEFAULT;
+          if (layout.focalYById[slot] == null) layout.focalYById[slot] = ITEM_FOCAL_DEFAULT;
+        }
+        order.push(slot);
+      }
+    }
+    store.draftCounts[countId] = order.length;
   }
 
   function syncItemGapButtons() {
@@ -1062,33 +1238,38 @@
     if (!block) return;
     const layout = normalizeItemLayout(id);
     if (!layout) return;
-    const count = Number(store.draftCounts[id] || 1);
+    seedItemOrder(id);
+    applyItemOrderToPreview(id);
+    const order = store.itemOrders[id] || [];
     block.setAttribute("data-item-gap", layout.gap);
-    const items = Array.from(block.querySelectorAll(":scope > [data-sample-item]"));
-    const sizes = normalizeSizesArray(layout.sizes, count, []);
-    layout.sizes = sizes;
-    layout.focalYs = normalizeFocalYsArray(layout.focalYs, count);
-    layout.focalXs = normalizeFocalXsArray(layout.focalXs, count);
-    const useManual = count >= 1;
+    const visibleSizes = order.map((slot) => layout.sizeById[slot] || "L");
+    let fixed = visibleSizes.slice();
+    if (fixed.length === 1) fixed[0] = "L";
+    else fixed = fixOrphanTrailingH(fixed);
+    fixed.forEach((sz, i) => {
+      layout.sizeById[order[i]] = sz;
+    });
+    const useManual = order.length >= 1;
     block.classList.toggle("is-item-layout-manual", useManual);
     if (!useManual) {
       block.style.removeProperty("--item-layout-cols");
-      items.forEach((item) => {
-        item.removeAttribute("data-item-size");
-        clearItemFocalOnItem(item);
-      });
       return;
     }
     block.style.setProperty("--item-layout-cols", "2");
-    items.forEach((item, i) => {
-      if (i >= count) {
-        item.removeAttribute("data-item-size");
-        clearItemFocalOnItem(item);
-        return;
-      }
-      const size = sizes[i] || "L";
+    order.forEach((slot, i) => {
+      const item = previewItemEl(id, slot);
+      if (!item) return;
+      const size = fixed[i] || "L";
+      item.hidden = false;
       item.setAttribute("data-item-size", size);
-      applyItemFocalToItem(id, item, i, size, layout.focalXs[i], layout.focalYs[i]);
+      applyItemFocalToItem(id, item, slot, size, layout.focalXById[slot], layout.focalYById[slot]);
+    });
+    (store.itemOrderParked[id] || []).forEach((slot) => {
+      const item = previewItemEl(id, slot);
+      if (!item) return;
+      item.hidden = true;
+      item.removeAttribute("data-item-size");
+      clearItemFocalOnItem(item);
     });
   }
 
@@ -1151,7 +1332,7 @@
     syncItemFocalNudge(countId, item, index, true, x, y);
   }
 
-  function syncItemFocalNudge(countId, item, index, show, focalX, focalY) {
+  function syncItemFocalNudge(countId, item, slotId, show, focalX, focalY) {
     if (!item) return;
     let nudge = item.querySelector(":scope > .item-focal-nudge");
     if (!show) {
@@ -1167,10 +1348,12 @@
       item.appendChild(nudge);
     }
     nudge.setAttribute("data-focal-for", countId);
-    nudge.setAttribute("data-focal-index", String(index));
+    nudge.setAttribute("data-item-id", String(slotId || ""));
+    nudge.setAttribute("data-focal-index", String(slotId || ""));
     nudge.querySelectorAll("[data-focal-nudge]").forEach(function (btn) {
       btn.setAttribute("data-focal-for", countId);
-      btn.setAttribute("data-focal-index", String(index));
+      btn.setAttribute("data-item-id", String(slotId || ""));
+      btn.setAttribute("data-focal-index", String(slotId || ""));
     });
     syncFocalNudgeButtons(nudge, focalX, focalY);
   }
@@ -1179,22 +1362,24 @@
     if (ITEM_LAYOUT_IDS.indexOf(countId) < 0) return;
     const layout = normalizeItemLayout(countId);
     if (!layout) return;
-    const i = Number(index);
-    if (!Number.isFinite(i) || i < 0 || i >= layout.focalYs.length) return;
-    layout.focalXs = normalizeFocalXsArray(layout.focalXs, layout.focalYs.length);
+    seedItemOrder(countId);
+    const order = store.itemOrders[countId] || [];
+    let slot = String(index == null ? "" : index);
+    if (/^\d+$/.test(slot)) slot = order[Number(slot)] || "";
+    if (!slot || order.indexOf(slot) < 0) return;
     let changed = false;
     if (dir === "up" || dir === "down") {
       const delta = dir === "up" ? -ITEM_FOCAL_STEP : ITEM_FOCAL_STEP;
-      const next = normalizeFocalY(layout.focalYs[i] + delta);
-      if (next !== layout.focalYs[i]) {
-        layout.focalYs[i] = next;
+      const next = normalizeFocalY(Number(layout.focalYById[slot]) + delta);
+      if (next !== layout.focalYById[slot]) {
+        layout.focalYById[slot] = next;
         changed = true;
       }
     } else if (dir === "left" || dir === "right") {
       const delta = dir === "left" ? -ITEM_FOCAL_STEP : ITEM_FOCAL_STEP;
-      const next = normalizeFocalX(layout.focalXs[i] + delta);
-      if (next !== layout.focalXs[i]) {
-        layout.focalXs[i] = next;
+      const next = normalizeFocalX(Number(layout.focalXById[slot]) + delta);
+      if (next !== layout.focalXById[slot]) {
+        layout.focalXById[slot] = next;
         changed = true;
       }
     }
@@ -1305,24 +1490,9 @@
     applyHeroFocalToPreview();
   }
 
-  function trimItemLayoutForCount(id, nextCount) {
-    const layout = normalizeItemLayout(id);
-    if (!layout) return;
-    const n = Math.max(0, Number(nextCount) || 0);
-    layout.sizes = normalizeSizesArray(layout.sizes, n, []);
-    layout.focalYs = normalizeFocalYsArray(layout.focalYs, n);
-    layout.focalXs = normalizeFocalXsArray(layout.focalXs, n);
-    layout.growDirs = [];
-  }
+  function trimItemLayoutForCount() {}
 
-  function padItemLayoutBeforeAdd(id) {
-    const layout = normalizeItemLayout(id);
-    if (!layout) return;
-    const cur = Number(store.draftCounts[id] || 1);
-    layout.sizes = normalizeSizesArray(layout.sizes, cur, []);
-    layout.focalYs = normalizeFocalYsArray(layout.focalYs, cur);
-    layout.focalXs = normalizeFocalXsArray(layout.focalXs, cur);
-  }
+  function padItemLayoutBeforeAdd() {}
 
   let pendingItemGrow = null;
 
@@ -1386,56 +1556,54 @@
     const countId = pendingItemGrow.countId;
     const scrollSel = pendingItemGrow.scrollSel;
     const meta = COUNT_META[countId];
-    const cur = Number(store.draftCounts[countId] || (meta && meta.defaultCount) || 1);
+    seedItemOrder(countId);
+    const order = store.itemOrders[countId];
+    const cur = order.length;
     if (meta && cur >= meta.max) {
       closeItemGrowModal();
       return;
     }
     const size = normalizeItemSizeToken(sizeRaw);
-    pushLayoutUndo();
-    padItemLayoutBeforeAdd(countId);
     const layout = normalizeItemLayout(countId);
-    let addDelta = 1;
-    if (layout) {
-      const next = layout.sizes.slice();
-      while (next.length < cur) next.push("L");
-      next.length = cur;
-      if (size === "H") {
-        if (cur === 1) {
-          /* 1枚目から半分 → 横並び H|H */
-          next[0] = "H";
-          next.push("H");
-          addDelta = 1;
-        } else if (next.length && next.every((s) => s === "L") && meta && cur + 2 <= meta.max) {
-          /* 全幅のあとに半分 → 前の L は残し、新しい行として H|H を足す（例: L L → L L H H） */
-          next.push("H");
-          next.push("H");
-          addDelta = 2;
-        } else {
-          next.push("H");
-          addDelta = 1;
-        }
+    const plan = [];
+    if (layout && size === "H") {
+      if (cur === 1) {
+        layout.sizeById[order[0]] = "H";
+        plan.push("H");
+      } else if (
+        order.every((slot) => (layout.sizeById[slot] || "L") === "L") &&
+        meta &&
+        cur + 2 <= meta.max
+      ) {
+        plan.push("H");
+        plan.push("H");
       } else {
-        next.push("L");
-        addDelta = 1;
+        plan.push("H");
       }
-      const nextCount = Math.min(meta ? meta.max : cur + addDelta, cur + addDelta);
-      layout.sizes = normalizeSizesArray(next, nextCount, []);
-      layout.focalYs = normalizeFocalYsArray(layout.focalYs, nextCount);
-      layout.focalXs = normalizeFocalXsArray(layout.focalXs, nextCount);
-      layout.growDirs = [];
-      addDelta = nextCount - cur;
+    } else {
+      plan.push("L");
     }
-    pendingItemGrow = null;
-    const modal = document.getElementById("item-grow-modal");
-    if (modal) {
-      modal.hidden = true;
-      modal.setAttribute("hidden", "");
-    }
-    document.body.classList.remove("is-item-grow-open");
-    if (addDelta > 0) {
-      adjustDraftCount(countId, addDelta, scrollSel, { skipGrowPrompt: true, skipUndo: true });
-    }
+    const room = meta ? meta.max - cur : plan.length;
+    if (plan.length > room) plan.length = Math.max(0, room);
+    closeItemGrowModal();
+    if (!plan.length || !layout) return;
+    pushLayoutUndo();
+    plan.forEach((sz) => {
+      const slot = smallestUnusedSlot(countId);
+      if (!slot) return;
+      layout.sizeById[slot] = sz;
+      layout.focalXById[slot] = ITEM_FOCAL_DEFAULT;
+      layout.focalYById[slot] = ITEM_FOCAL_DEFAULT;
+      order.push(slot);
+    });
+    store.draftCounts[countId] = order.length;
+    patchOwnerSnapshotCount(countId);
+    syncCountLabels();
+    applyAllItemLayoutsToPreview();
+    renderLayoutArrangeWire();
+    if (scrollSel) scrollPreviewTo(scrollSel);
+    if (store.confirmed.finish) unconfirmFinishSoft();
+    scheduleSave();
     showLayoutArrangeHint(
       "追加しました。写真やカードは、あとからワイヤーで場所を変えられます。"
     );
@@ -1448,8 +1616,15 @@
   function requestAddDraftCount(countId, scrollSel, anchorEl) {
     const meta = COUNT_META[countId];
     if (!meta) return;
-    const cur = Number(store.draftCounts[countId] || meta.defaultCount || 1);
+    seedItemOrder(countId);
+    const cur = ITEM_SLOT_IDS[countId]
+      ? store.itemOrders[countId].length
+      : Number(store.draftCounts[countId] || meta.defaultCount || 1);
     if (cur >= meta.max) return;
+    if (ITEM_LAYOUT_IDS.indexOf(countId) >= 0 && (store.itemOrderParked[countId] || []).length) {
+      adjustDraftCount(countId, 1, scrollSel, { skipGrowPrompt: true });
+      return;
+    }
     if (ITEM_LAYOUT_IDS.indexOf(countId) >= 0) {
       /* 最終枠は余りH→Lになるため、ポップなしで横幅いっぱい固定 */
       if (cur + 1 >= meta.max) {
@@ -1529,7 +1704,9 @@
       ),
       itemLayouts: store.itemLayouts
         ? JSON.parse(JSON.stringify(store.itemLayouts))
-        : defaultItemLayouts()
+        : defaultItemLayouts(),
+      itemOrders: JSON.parse(JSON.stringify(store.itemOrders || {})),
+      itemOrderParked: JSON.parse(JSON.stringify(store.itemOrderParked || {}))
     };
   }
 
@@ -1581,12 +1758,10 @@
         ITEM_LAYOUT_IDS.forEach((id) => {
           const src = snap.itemLayouts[id];
           if (!src || typeof src !== "object") return;
-          store.itemLayouts[id] = parseItemLayoutSource(
-            src,
-            Number(store.draftCounts[id] || 1)
-          );
+          store.itemLayouts[id] = parseItemLayoutSource(id, src);
         });
       }
+      adoptItemOrders(snap.itemOrders, snap.itemOrderParked);
       root.setAttribute("data-layout", store.layoutPattern);
       document.querySelectorAll(".layout-card[data-layout]").forEach((btn) => {
         const on = btn.getAttribute("data-layout") === store.layoutPattern;
@@ -2060,6 +2235,8 @@
     sampleWireSlot: "hero",
     copyPathMode: null,
     imgPathMode: null,
+    /* 完成から戻った作成中は、自動で先へ進まない */
+    easyLoadingPaused: false,
     hubImgPathMode: {},
     imgOmakaseLocks: {},
     imgOmakasePicks: {},
@@ -2087,6 +2264,8 @@
     slotGradientPartners: {},
     partnerPickMode: false,
     itemLayouts: null,
+    itemOrders: null,
+    itemOrderParked: null,
     layoutUndoStack: [],
     layoutUndoRestoring: false,
     layoutDragOverKey: null,
@@ -2110,6 +2289,7 @@
     previewFrameScale: 1
   };
   store.itemLayouts = defaultItemLayouts();
+  seedAllItemOrders();
 
   function isLayoutBlockActive(meta) {
     if (!meta) return false;
@@ -3508,6 +3688,8 @@
       itemLayouts: store.itemLayouts
         ? JSON.parse(JSON.stringify(store.itemLayouts))
         : defaultItemLayouts(),
+      itemOrders: JSON.parse(JSON.stringify(store.itemOrders || {})),
+      itemOrderParked: JSON.parse(JSON.stringify(store.itemOrderParked || {})),
       heroTextOnPhoto: !!store.heroTextOnPhoto,
       heroFocalX: normalizeFocalPercent(store.heroFocalX, HERO_FOCAL_X_DEFAULT),
       heroFocalY: normalizeFocalPercent(store.heroFocalY, HERO_FOCAL_Y_DEFAULT),
@@ -5664,11 +5846,18 @@
   function rememberImageDefaults() {
     const hero = root.querySelector(".hero-photo");
     if (hero) IMAGE_DEFAULTS.hero_image = hero.getAttribute("data-default-src") || hero.getAttribute("src");
-    root.querySelectorAll("#about-photos .skill-card-img").forEach((img, i) => {
-      IMAGE_DEFAULTS["about_image_" + (i + 1)] = img.getAttribute("data-default-src") || img.getAttribute("src");
+    root.querySelectorAll("#about-photos > [data-item-id]").forEach((li) => {
+      const slot = li.getAttribute("data-item-id");
+      const img = li.querySelector(".skill-card-img");
+      if (!slot || !img) return;
+      IMAGE_DEFAULTS[slot] = img.getAttribute("data-default-src") || img.getAttribute("src");
     });
-    root.querySelectorAll("#works-list .work-thumb").forEach((img, i) => {
-      IMAGE_DEFAULTS["work_" + (i + 1) + "_image"] = img.getAttribute("data-default-src") || img.getAttribute("src");
+    root.querySelectorAll("#works-list > [data-item-id]").forEach((li) => {
+      const slot = li.getAttribute("data-item-id") || "";
+      const img = li.querySelector(".work-thumb");
+      const m = /^work_(\d+)$/.exec(slot);
+      if (!m || !img) return;
+      IMAGE_DEFAULTS["work_" + m[1] + "_image"] = img.getAttribute("data-default-src") || img.getAttribute("src");
     });
   }
 
@@ -6141,13 +6330,18 @@
       return;
     }
     if (name.startsWith("about_image_")) {
-      const n = Number(name.replace("about_image_", ""));
-      applyImageSlot(name, () => root.querySelectorAll("#about-photos .skill-card-img")[n - 1], active);
+      applyImageSlot(name, () => {
+        const li = root.querySelector('#about-photos > [data-item-id="' + name + '"]');
+        return li ? li.querySelector(".skill-card-img") : null;
+      }, active);
       return;
     }
     if (/^work_\d+_image$/.test(name)) {
       const n = Number(name.match(/^work_(\d+)_image$/)[1]);
-      applyImageSlot(name, () => root.querySelectorAll("#works-list .work-thumb")[n - 1], active);
+      applyImageSlot(name, () => {
+        const li = root.querySelector('#works-list > [data-item-id="work_' + n + '"]');
+        return li ? li.querySelector(".work-thumb") : null;
+      }, active);
     }
   }
 
@@ -6196,12 +6390,18 @@
     applyImageSlot("logo_image", "#preview-logo-img", false);
     applyImageSlot("hero_image", ".hero-photo", false);
     for (let i = 1; i <= 4; i += 1) {
-      const idx = i;
-      applyImageSlot("about_image_" + i, () => root.querySelectorAll("#about-photos .skill-card-img")[idx - 1], false);
+      const name = "about_image_" + i;
+      applyImageSlot(name, () => {
+        const li = root.querySelector('#about-photos > [data-item-id="' + name + '"]');
+        return li ? li.querySelector(".skill-card-img") : null;
+      }, false);
     }
     for (let i = 1; i <= 3; i += 1) {
-      const idx = i;
-      applyImageSlot("work_" + i + "_image", () => root.querySelectorAll("#works-list .work-thumb")[idx - 1], false);
+      const slot = "work_" + i;
+      applyImageSlot("work_" + i + "_image", () => {
+        const li = root.querySelector('#works-list > [data-item-id="' + slot + '"]');
+        return li ? li.querySelector(".work-thumb") : null;
+      }, false);
     }
 
     Object.keys(STEP_IMAGE_KEYS).forEach((stepId) => {
@@ -6458,6 +6658,17 @@
         return;
       }
       data[el.name] = el.value;
+    });
+    const parked = (store.itemOrderParked && store.itemOrderParked["works-list"]) || [];
+    parked.forEach((slot) => {
+      const m = /^work_(\d+)$/.exec(String(slot || ""));
+      if (!m) return;
+      ["title", "text", "url", "link_label"].forEach((suffix) => {
+        const name = "work_" + m[1] + "_" + suffix;
+        const el = form.elements.namedItem(name);
+        if (!el || el.type === "file") return;
+        data[name] = el.value;
+      });
     });
     return data;
   }
@@ -6825,14 +7036,16 @@
 
   function requiredImageInputs() {
     const list = [{ name: "hero_image", label: "キャッチ画像" }];
-    const aboutN = Number(store.draftCounts["about-photos"] || 1);
-    for (let i = 1; i <= aboutN; i += 1) {
-      list.push({ name: "about_image_" + i, label: "写真" + i });
-    }
-    const worksN = Number(store.draftCounts["works-list"] || 1);
-    for (let i = 1; i <= worksN; i += 1) {
-      list.push({ name: "work_" + i + "_image", label: "カード画像" + i });
-    }
+    seedItemOrder("about-photos");
+    (store.itemOrders["about-photos"] || []).forEach((slot) => {
+      const n = String(slot).replace("about_image_", "");
+      list.push({ name: slot, label: "写真" + n });
+    });
+    seedItemOrder("works-list");
+    (store.itemOrders["works-list"] || []).forEach((slot) => {
+      const n = String(slot).replace("work_", "");
+      list.push({ name: "work_" + n + "_image", label: "カード画像" + n });
+    });
     const mode = getLogoMode();
     if (mode === "image" || mode === "both") {
       list.push({ name: "logo_image", label: "ロゴ画像" });
@@ -6849,19 +7062,20 @@
       return inputHasFile("hero_image") ? [] : ["hero_image"];
     }
     if (stepId === "about-images") {
-      const n = Number(store.draftCounts["about-photos"] || 1);
+      seedItemOrder("about-photos");
       const miss = [];
-      for (let i = 1; i <= n; i += 1) {
-        if (!inputHasFile("about_image_" + i)) miss.push("about_image_" + i);
-      }
+      (store.itemOrders["about-photos"] || []).forEach((slot) => {
+        if (!inputHasFile(slot)) miss.push(slot);
+      });
       return miss;
     }
     if (stepId === "works-images") {
-      const n = Number(store.draftCounts["works-list"] || 1);
+      seedItemOrder("works-list");
       const miss = [];
-      for (let i = 1; i <= n; i += 1) {
-        if (!inputHasFile("work_" + i + "_image")) miss.push("work_" + i + "_image");
-      }
+      (store.itemOrders["works-list"] || []).forEach((slot) => {
+        const name = itemSlotImageName(slot);
+        if (!inputHasFile(name)) miss.push(name);
+      });
       return miss;
     }
     return [];
@@ -7310,7 +7524,8 @@
       syncHubImagePathPanels(step.id);
     }
     if (step.id === "easy-loading") {
-      startEasyLoadingSequence();
+      if (store.easyLoadingPaused) clearEasyLoadingTimers();
+      else startEasyLoadingSequence();
     } else {
       clearEasyLoadingTimers();
     }
@@ -7423,6 +7638,16 @@
     buildProgressBar();
   }
 
+  function previewPaneOnScreen(previewPane) {
+    if (document.body.classList.contains("entry-gate-open")) return false;
+    if (document.body.classList.contains("sample-flow-hide-preview")) return false;
+    if (document.documentElement.classList.contains("is-capture-mode")) return false;
+    if (document.documentElement.classList.contains("is-embed-preview")) return false;
+    if (!previewPane) return false;
+    const cs = window.getComputedStyle(previewPane);
+    return cs.display !== "none" && cs.visibility !== "hidden";
+  }
+
   function placePreviewWidthControl() {
     const control = document.getElementById("chrome-preview-width");
     const chromeLeft = document.querySelector(".atelier-chrome-left");
@@ -7434,10 +7659,13 @@
     if (!control || !chromeLeft) return;
 
     const mode = store.hubUiMode || "home";
-    const showWidth =
-      mode === "layout" ||
-      mode === "studio-review" ||
+    const previewOn = previewPaneOnScreen(previewPane);
+    const reviewChrome =
       document.documentElement.classList.contains("is-review-mode") ||
+      mode === "studio-review";
+    const showWidth =
+      previewOn ||
+      reviewChrome ||
       document.body.classList.contains("is-review-editing");
     if (!showWidth) {
       control.hidden = true;
@@ -7445,16 +7673,16 @@
       if (previewRail) previewRail.hidden = true;
       if (dashRail) dashRail.hidden = true;
       if (dashSlot) dashSlot.hidden = true;
+      if (typeof window.syncPreviewLookControl === "function") {
+        window.syncPreviewLookControl();
+      }
       return;
     }
     control.hidden = false;
     control.removeAttribute("hidden");
 
     /* 同一文書レビュー／制作・レビュー: ロゴ横に固定 */
-    if (
-      document.documentElement.classList.contains("is-review-mode") ||
-      mode === "studio-review"
-    ) {
+    if (reviewChrome) {
       const brand = chromeLeft.querySelector(".chrome-brand");
       if (brand) {
         if (brand.nextElementSibling !== control) {
@@ -7467,39 +7695,22 @@
       if (previewRail) previewRail.hidden = true;
       if (dashRail) dashRail.hidden = true;
       if (dashSlot) dashSlot.hidden = true;
+      if (typeof window.syncPreviewLookControl === "function") {
+        window.syncPreviewLookControl();
+      }
       return;
     }
 
-    const layoutBlock = form.querySelector('.dash-block[data-step-id="layout"]');
-    const inHub = !!(layoutBlock && !layoutBlock.hidden && layoutBlock.open);
-    const hubFocus = document.body.classList.contains("hub-shell-focus");
-    const previewShown =
-      !!(previewPane && window.getComputedStyle(previewPane).display !== "none");
-    if ((inHub || hubFocus) && previewSlot && previewShown) {
+    /* 左の見本が出ている画面は、見本の上に共通で出す */
+    if (previewOn && previewSlot) {
       if (control.parentElement !== previewSlot) previewSlot.appendChild(control);
       control.classList.add("chrome-control--in-hub");
-      if (previewRail) previewRail.hidden = false;
-      if (dashRail) dashRail.hidden = true;
-      if (dashSlot) dashSlot.hidden = true;
-    } else if ((inHub || hubFocus) && !previewShown) {
-      const brand = chromeLeft.querySelector(".chrome-brand");
-      if (brand) {
-        if (brand.nextElementSibling !== control) {
-          chromeLeft.insertBefore(control, brand.nextSibling);
-        }
-      } else if (control.parentElement !== chromeLeft) {
-        chromeLeft.appendChild(control);
+      if (previewRail) {
+        previewRail.hidden = false;
+        previewRail.removeAttribute("hidden");
       }
-      control.classList.remove("chrome-control--in-hub");
-      if (previewRail) previewRail.hidden = true;
       if (dashRail) dashRail.hidden = true;
       if (dashSlot) dashSlot.hidden = true;
-    } else if (inHub && dashSlot && dashRail) {
-      dashSlot.hidden = false;
-      if (control.parentElement !== dashSlot) dashSlot.appendChild(control);
-      control.classList.add("chrome-control--in-hub");
-      dashRail.hidden = false;
-      if (previewRail) previewRail.hidden = true;
     } else {
       const brand = chromeLeft.querySelector(".chrome-brand");
       if (brand) {
@@ -7512,6 +7723,10 @@
       control.classList.remove("chrome-control--in-hub");
       if (previewRail) previewRail.hidden = true;
       if (dashRail) dashRail.hidden = true;
+      if (dashSlot) dashSlot.hidden = true;
+    }
+    if (typeof window.syncPreviewLookControl === "function") {
+      window.syncPreviewLookControl();
     }
     if (typeof window.applyPreviewWidthFromPane === "function") {
       window.applyPreviewWidthFromPane();
@@ -7628,13 +7843,16 @@
     const onLayout = !!(step && step.id === "layout");
     const onCopyPath = !!(step && step.id === "easy-copy-path");
     const onImgPath = !!(step && step.id === "easy-img-path");
+    const hubShellBack =
+      onLayout &&
+      (store.hubUiMode === "home" || !store.hubUiMode) &&
+      (store.hubEntrySource === "sample-done" || store.hubEntrySource === "detail-entry");
+    document.body.classList.toggle("hub-shell-back", !!hubShellBack);
     const hideFootNav =
       selfList ||
       isGuidedColorTrialFootHidden() ||
       store.guidedColorPhase === "pick" ||
-      onLayout ||
-      onCopyPath ||
-      onImgPath;
+      (onLayout && !hubShellBack);
 
     if (progress) {
       /* 進捗バー廃止に合わせ、件数カウント文言も出さない */
@@ -7681,12 +7899,11 @@
         store.siteColorMode === "detail" && isSelf && !hubPlaceEdit;
       backBtn.disabled =
         onPurpose ||
-        (!onEasyFlow && !hubPlaceEdit && store.wizardStepIndex <= 0 && !onModePick);
+        (!onEasyFlow && !hubPlaceEdit && !hubShellBack && store.wizardStepIndex <= 0 && !onModePick);
       backBtn.hidden =
-        hubDetailEdit ||
-        (isSelf && !hubPlaceEdit) ||
+        (hubDetailEdit && !hubShellBack) ||
+        (isSelf && !hubPlaceEdit && !hubShellBack) ||
         onPurpose ||
-        onCopyPath ||
         isGuidedColorTrialFootHidden();
       if (hubPlaceEdit) {
         backBtn.hidden = false;
@@ -7703,13 +7920,18 @@
         onModePick ||
         onLayout ||
         onCopyPath ||
+        onImgPath ||
         isGuidedColorTrialFootHidden() ||
         store.guidedColorPhase === "pick";
       if (step && EASY_FLOW_STEP_SET.has(step.id)) {
         nextBtn.textContent = wizardPrimaryLabel();
-        if (step.id === "easy-loading" || step.id === "easy-done") {
+        if (step.id === "easy-loading" && store.easyLoadingPaused) {
+          nextBtn.hidden = false;
+          nextBtn.textContent = "次へ";
+          if (backBtn) backBtn.hidden = false;
+        } else if (step.id === "easy-loading" || step.id === "easy-done") {
           nextBtn.hidden = true;
-          backBtn.hidden = step.id === "easy-loading";
+          if (backBtn) backBtn.hidden = step.id === "easy-loading";
         }
       } else if (selfGuide || onPurpose || onLayout || !isSelf) {
         nextBtn.textContent = "次へ";
@@ -8260,7 +8482,6 @@
       "  </div>" +
       '  <div class="fpg-modal-body"><div data-fpg-mount></div></div>' +
       '  <div class="fpg-modal-foot">' +
-      '    <p class="fpg-status" data-fpg-foot-status hidden></p>' +
       '    <button type="button" class="fpg-apply" data-fpg-apply disabled>この写真を枠に入れる</button>' +
       "  </div>" +
       "</div>";
@@ -8345,7 +8566,7 @@
     const m = String(inputName || "").match(/^work_(\d+)_image$/);
     if (!m) return;
     const n = Number(m[1]);
-    const el = root.querySelectorAll("#works-list .work-thumb")[n - 1];
+    const el = root.querySelector('#works-list > [data-item-id="work_' + n + '"] .work-thumb');
     if (!el) return;
     el.style.objectFit = "cover";
     el.style.objectPosition = "center top";
@@ -8359,13 +8580,10 @@
     const modal = ensureFreePhotoGalleryModal();
     const mount = modal.querySelector("[data-fpg-mount]");
     const applyBtn = modal.querySelector("[data-fpg-apply]");
-    const footStatus = modal.querySelector("[data-fpg-foot-status]");
     modal._fpgPrevFocus = document.activeElement;
     modal.setAttribute("data-fpg-slot", inputName);
     modal.hidden = false;
     applyBtn.disabled = true;
-    footStatus.hidden = true;
-    footStatus.textContent = "";
     if (mount._fpgApi && typeof mount._fpgApi.destroy === "function") {
       try {
         mount._fpgApi.destroy();
@@ -8383,21 +8601,11 @@
       selectedId: prevId,
       onSelect(item) {
         applyBtn.disabled = !item;
-        if (item) {
-          footStatus.hidden = false;
-          footStatus.classList.add("is-ready");
-          footStatus.textContent = "この写真を枠に入れられます。";
-        } else {
-          footStatus.hidden = true;
-        }
       }
     }).then((api) => {
       mount._fpgApi = api;
       if (api && api.getSelected && api.getSelected()) {
         applyBtn.disabled = false;
-        footStatus.hidden = false;
-        footStatus.classList.add("is-ready");
-        footStatus.textContent = "この写真を枠に入れられます。";
       }
       const closeBtn = modal.querySelector("[data-fpg-close]");
       if (closeBtn) closeBtn.focus();
@@ -9461,6 +9669,7 @@
 
   function setSampleFlowPreviewHidden(on) {
     document.body.classList.toggle("sample-flow-hide-preview", !!on);
+    placePreviewWidthControl();
   }
 
   function syncSampleFlowPreviewVisibility(stepId) {
@@ -9621,14 +9830,12 @@
       ITEM_LAYOUT_IDS.forEach(function (id) {
         const src = draft.itemLayouts[id];
         if (!src) return;
-        store.itemLayouts[id] = parseItemLayoutSource(
-          src,
-          Number(store.draftCounts[id] || 1)
-        );
+        store.itemLayouts[id] = parseItemLayoutSource(id, src);
       });
     } else if (!store.itemLayouts) {
       store.itemLayouts = defaultItemLayouts();
     }
+    adoptItemOrders(draft.itemOrders, draft.itemOrderParked);
     syncCountLabels();
     applyAllItemLayoutsToPreview();
     applyLayoutOrderToPreview();
@@ -10076,30 +10283,25 @@
       return [{ key: "hero_image", input: "hero_image", label: "キャッチ", prefer: "wide" }];
     }
     if (stepId === "about-images") {
-      const n = Math.max(1, Number(store.draftCounts["about-photos"] || 1));
-      const out = [];
-      for (let i = 1; i <= n; i += 1) {
-        out.push({
-          key: "about_image_" + i,
-          input: "about_image_" + i,
-          label: "写真" + i,
-          prefer: "square"
-        });
-      }
-      return out;
+      seedItemOrder("about-photos");
+      return (store.itemOrders["about-photos"] || []).map((slot) => ({
+        key: slot,
+        input: slot,
+        label: "写真" + String(slot).replace("about_image_", ""),
+        prefer: "square"
+      }));
     }
     if (stepId === "works-images") {
-      const n = Math.max(1, Number(store.draftCounts["works-list"] || 1));
-      const out = [];
-      for (let i = 1; i <= n; i += 1) {
-        out.push({
-          key: "work_" + i + "_image",
-          input: "work_" + i + "_image",
-          label: "カード" + i,
+      seedItemOrder("works-list");
+      return (store.itemOrders["works-list"] || []).map((slot) => {
+        const name = itemSlotImageName(slot);
+        return {
+          key: name,
+          input: name,
+          label: "カード" + String(slot).replace("work_", ""),
           prefer: "square"
-        });
-      }
-      return out;
+        };
+      });
     }
     return IMG_OMAKASE_SLOTS.slice();
   }
@@ -10284,13 +10486,33 @@
     });
   }
 
+  /** 同じ側をもう一度押しても進む。change だけだと印が残っていると無視される */
+  function bindChoiceReselect(input, apply) {
+    let busy = false;
+    function go() {
+      if (busy || !input.checked) return;
+      busy = true;
+      apply();
+      window.setTimeout(function () {
+        busy = false;
+      }, 0);
+    }
+    input.addEventListener("click", go);
+    input.addEventListener("change", go);
+    const label = input.closest("label");
+    if (label) {
+      label.addEventListener("click", function () {
+        if (input.checked) go();
+      });
+    }
+  }
+
   function setupCopyFlowUi() {
     const pathRoot = document.querySelector('.dash-block[data-step-id="easy-copy-path"]');
     if (pathRoot && !pathRoot.dataset.copyPathBound) {
       pathRoot.dataset.copyPathBound = "1";
       pathRoot.querySelectorAll('input[name="easy_copy_path"]').forEach(function (input) {
-        input.addEventListener("change", function () {
-          if (!input.checked) return;
+        bindChoiceReselect(input, function () {
           store.copyPathMode = input.value === "omakase" ? "omakase" : "keyword";
           if (store.copyPathMode === "omakase") store.copyPresetId = "omakase-flow-v1";
           store.copyOmakaseLocks = {};
@@ -10308,8 +10530,7 @@
     if (imgPathRoot && !imgPathRoot.dataset.imgPathBound) {
       imgPathRoot.dataset.imgPathBound = "1";
       imgPathRoot.querySelectorAll('input[name="easy_img_path"]').forEach(function (input) {
-        input.addEventListener("change", function () {
-          if (!input.checked) return;
+        bindChoiceReselect(input, function () {
           store.imgPathMode = input.value === "omakase" ? "omakase" : "self";
           if (store.imgPathMode === "omakase") {
             store.imgOmakaseLocks = {};
@@ -10942,6 +11163,11 @@
     const step = getCurrentFlowStep();
     if (!step) return;
     if (step.id === "easy-loading") {
+      if (!store.easyLoadingPaused) return;
+      store.easyLoadingPaused = false;
+      store.confirmed["easy-loading"] = true;
+      showWizardStep(Math.min(flow.length - 1, store.wizardStepIndex + 1));
+      scheduleSave();
       return;
     }
     if (step.id === "easy-done") {
@@ -11044,8 +11270,60 @@
     showWizardStep(nextIndex);
   }
 
+  function returnFromHubToEasyDone() {
+    hideDetailNoticeModal();
+    store.easyFlowActive = true;
+    store.siteColorMode = "easy";
+    store.uiMode = "guided";
+    store.entryBranch = "sample";
+    store.hubEntrySource = "sample";
+    store.easyLoadingPaused = false;
+    hideEntryGate();
+    setSampleFlowPreviewHidden(false);
+    syncSiteColorModeUi();
+    applyUiMode();
+    const flow = getFlowSteps();
+    let doneIdx = flow.findIndex((s) => s.id === "easy-done");
+    if (doneIdx < 0) doneIdx = Math.max(0, flow.length - 1);
+    if (flow.length) showWizardStep(doneIdx);
+    const status = document.getElementById("wizard-status");
+    if (status) status.textContent = "";
+    scheduleSave();
+  }
+
+  function returnFromHubToPurpose() {
+    hideDetailNoticeModal();
+    const gate = document.getElementById("entry-gate");
+    if (gate) {
+      const branchRadio = gate.querySelector('input[name="entry_branch"][value="detail"]');
+      if (branchRadio) branchRadio.checked = true;
+      gate.querySelectorAll('input[name="entry_purpose"]').forEach(function (r) {
+        r.checked = false;
+      });
+    }
+    store.entryBranch = "detail";
+    showEntryGate("purpose");
+    scheduleSave();
+  }
+
   function wizardBack() {
     const step = getCurrentFlowStep();
+    if (
+      step &&
+      step.id === "layout" &&
+      store.siteColorMode === "detail" &&
+      store.uiMode === "self" &&
+      (store.hubUiMode === "home" || !store.hubUiMode)
+    ) {
+      if (store.hubEntrySource === "sample-done") {
+        returnFromHubToEasyDone();
+        return;
+      }
+      if (store.hubEntrySource === "detail-entry") {
+        returnFromHubToPurpose();
+        return;
+      }
+    }
     if (
       store.siteColorMode === "detail" &&
       store.uiMode === "self" &&
@@ -11080,20 +11358,18 @@
       updateWizardUi();
       return;
     }
-    if (step && (step.id === "easy-loading" || step.id === "easy-done")) {
+    if (step && step.id === "easy-done") {
       clearEasyLoadingTimers();
+      store.easyLoadingPaused = true;
       setSampleFlowPreviewHidden(false);
-      const flow = getFlowSteps();
-      let backId = "easy-img-wire";
-      if (store.imgPathMode === "omakase") backId = "easy-img-omakase";
-      else if (store.imgPathMode === "self") backId = "easy-img-wire";
-      else backId = "easy-img-path";
-      const img = flow.findIndex((s) => s.id === backId);
-      if (img >= 0) showWizardStep(img);
-      else {
-        const wire = flow.findIndex((s) => s.id === "easy-img-wire");
-        if (wire >= 0) showWizardStep(wire);
-      }
+      showWizardStep(Math.max(0, store.wizardStepIndex - 1));
+      return;
+    }
+    if (step && step.id === "easy-loading") {
+      clearEasyLoadingTimers();
+      store.easyLoadingPaused = false;
+      setSampleFlowPreviewHidden(false);
+      showWizardStep(Math.max(0, store.wizardStepIndex - 1));
       return;
     }
     if (step && EASY_FLOW_STEP_SET.has(step.id)) {
@@ -11399,14 +11675,54 @@
     document.querySelectorAll("[data-fill-for]").forEach((el) => {
       const id = el.getAttribute("data-fill-for");
       const at = Number(el.getAttribute("data-fill-at") || "1");
-      const count = Number(store.draftCounts[id] || 0);
-      const show = count >= at;
+      let show = false;
+      if (ITEM_SLOT_IDS[id]) {
+        seedItemOrder(id);
+        const slot = ITEM_SLOT_IDS[id][at - 1];
+        show = !!slot && (store.itemOrders[id] || []).indexOf(slot) >= 0;
+      } else {
+        const count = Number(store.draftCounts[id] || 0);
+        show = count >= at;
+      }
       el.hidden = !show;
       syncPanelFieldLock(el, !show);
     });
+    document.querySelectorAll(".hub-img-slot-row").forEach((row) => {
+      const input = row.querySelector('input[type="file"][name]');
+      if (!input) return;
+      const name = input.getAttribute("name") || "";
+      let countId = "";
+      let slot = "";
+      if (name.indexOf("about_image_") === 0) {
+        countId = "about-photos";
+        slot = name;
+      } else if (/^work_\d+_image$/.test(name)) {
+        countId = "works-list";
+        slot = name.replace(/_image$/, "");
+      } else return;
+      seedItemOrder(countId);
+      const show = (store.itemOrders[countId] || []).indexOf(slot) >= 0;
+      row.hidden = !show;
+      syncPanelFieldLock(row, !show);
+    });
+    if (form) {
+      seedItemOrder("works-list");
+      const visibleWorks = store.itemOrders["works-list"] || [];
+      ["title", "text", "url", "link_label"].forEach((suffix) => {
+        for (let n = 1; n <= 3; n += 1) {
+          const input = form.elements.namedItem("work_" + n + "_" + suffix);
+          const label = input && input.closest ? input.closest("label") : null;
+          if (!label) continue;
+          const show = visibleWorks.indexOf("work_" + n) >= 0;
+          label.hidden = !show;
+          syncPanelFieldLock(label, !show);
+        }
+      });
+    }
   }
 
   function syncCountLabels() {
+    ITEM_LAYOUT_IDS.forEach((id) => alignItemOrderToCount(id));
     COUNT_IDS.forEach((id) => {
       const meta = COUNT_META[id];
       if (!meta) return;
@@ -11446,17 +11762,7 @@
       const plus = panel.querySelector('[data-step="1"]');
       if (minus) {
         minus.addEventListener("click", () => {
-          const cur = Number(store.draftCounts[id]);
-          const next = Math.max(meta.min, cur - 1);
-          if (next === cur) return;
-          pushLayoutUndo();
-          trimItemLayoutForCount(id, next);
-          store.draftCounts[id] = next;
-          patchOwnerSnapshotCount(id);
-          syncCountLabels();
-          applyAllItemLayoutsToPreview();
-          renderLayoutArrangeWire();
-          scheduleSave();
+          adjustDraftCount(id, -1, null);
         });
       }
       if (plus) {
@@ -11633,6 +11939,12 @@
   function applyCountToPreview(id, count) {
     const block = document.getElementById(id);
     if (!block) return;
+    if (ITEM_SLOT_IDS[id]) {
+      seedItemOrder(id);
+      block.setAttribute("data-count", String((store.itemOrders[id] || []).length));
+      applyItemLayoutToPreview(id);
+      return;
+    }
     const meta = COUNT_META[id];
     const items = Array.from(block.querySelectorAll(":scope > [data-sample-item]"));
     let n = Number(count);
@@ -11720,7 +12032,10 @@
     applyFilledText(document.getElementById("works-label"), "", t.worksLabel);
     applyFilledText(document.getElementById("works-heading"), "", t.worksHeading);
     applyFilledText(document.getElementById("works-lead"), "", t.worksLead);
-    document.querySelectorAll("#works-list [data-sample-item]").forEach((li, i) => {
+    document.querySelectorAll("#works-list > [data-item-id]").forEach((li) => {
+      const m = /^work_(\d+)$/.exec(li.getAttribute("data-item-id") || "");
+      if (!m) return;
+      const i = Number(m[1]) - 1;
       const title = li.querySelector("h3");
       const text = li.querySelector(".work-item-copy p");
       if (title) title.textContent = (t.works[i] || {}).title || "";
@@ -11751,8 +12066,10 @@
 
   function applyWorkCardLinks(fields) {
     const source = fields || formToObject();
-    document.querySelectorAll("#works-list [data-sample-item]").forEach((li, i) => {
-      const n = i + 1;
+    document.querySelectorAll("#works-list > [data-item-id]").forEach((li) => {
+      const m = /^work_(\d+)$/.exec(li.getAttribute("data-item-id") || "");
+      if (!m) return;
+      const n = Number(m[1]);
       const url = String(source["work_" + n + "_url"] || "").trim();
       const label = String(source["work_" + n + "_link_label"] || "").trim() || "リンク先を見る";
       const link = li.querySelector("[data-work-link]");
@@ -11859,8 +12176,11 @@
         snap.fields.works_lead,
         purposeField("works_lead") || t.worksLead
       );
-      document.querySelectorAll("#works-list [data-sample-item]").forEach((li, i) => {
-        const n = i + 1;
+      document.querySelectorAll("#works-list > [data-item-id]").forEach((li) => {
+        const m = /^work_(\d+)$/.exec(li.getAttribute("data-item-id") || "");
+        if (!m) return;
+        const n = Number(m[1]);
+        const i = n - 1;
         const title = li.querySelector("h3");
         const text = li.querySelector(".work-item-copy p");
         const titleKey = "work_" + n + "_title";
@@ -11980,6 +12300,7 @@
     /* 表紙±など: draftCounts を正とする（確定スナップより後で上書き） */
     COUNT_IDS.forEach((id) => {
       if (store.draftCounts[id] != null) {
+        if (ITEM_SLOT_IDS[id]) alignItemOrderToCount(id);
         applyCountToPreview(id, store.draftCounts[id]);
       }
     });
@@ -12267,7 +12588,10 @@
     opts = opts || {};
     const meta = COUNT_META[countId];
     if (!meta) return;
-    const cur = Number(store.draftCounts[countId] || meta.defaultCount || 1);
+    if (ITEM_SLOT_IDS[countId]) seedItemOrder(countId);
+    const cur = ITEM_SLOT_IDS[countId]
+      ? store.itemOrders[countId].length
+      : Number(store.draftCounts[countId] || meta.defaultCount || 1);
     if (delta > 0 && !opts.skipGrowPrompt && ITEM_LAYOUT_IDS.indexOf(countId) >= 0) {
       requestAddDraftCount(countId, scrollSel);
       return;
@@ -12275,8 +12599,29 @@
     const next = Math.max(meta.min, Math.min(meta.max, cur + delta));
     if (next === cur) return;
     if (!opts.skipUndo) pushLayoutUndo();
-    if (next < cur) trimItemLayoutForCount(countId, next);
-    store.draftCounts[countId] = next;
+    if (ITEM_SLOT_IDS[countId]) {
+      const order = store.itemOrders[countId];
+      const parked = store.itemOrderParked[countId];
+      const layout = normalizeItemLayout(countId);
+      while (order.length > next) parked.push(order.pop());
+      while (order.length < next) {
+        if (parked.length) {
+          order.push(parked.pop());
+        } else {
+          const slot = smallestUnusedSlot(countId);
+          if (!slot) break;
+          if (layout) {
+            layout.sizeById[slot] = "L";
+            layout.focalXById[slot] = ITEM_FOCAL_DEFAULT;
+            layout.focalYById[slot] = ITEM_FOCAL_DEFAULT;
+          }
+          order.push(slot);
+        }
+      }
+      store.draftCounts[countId] = order.length;
+    } else {
+      store.draftCounts[countId] = next;
+    }
     patchOwnerSnapshotCount(countId);
     syncCountLabels();
     applyAllItemLayoutsToPreview();
@@ -13646,6 +13991,64 @@
       { id: "desktop", label: "PC", width: 1280 }
     ];
     let stepIndex = 4;
+    /* 見るだけ。下書き・ZIPには入れない。幅の並びとは別 */
+    const LOOK_MIN = 0.25;
+    const LOOK_MAX = 2;
+    let lookScale = 1;
+
+    function clampLook(n) {
+      const stepped = Math.round(n * 10) / 10;
+      return Math.min(LOOK_MAX, Math.max(LOOK_MIN, stepped));
+    }
+
+    function previewPaneVisible() {
+      if (document.body.classList.contains("entry-gate-open")) return false;
+      if (document.body.classList.contains("sample-flow-hide-preview")) return false;
+      if (document.documentElement.classList.contains("is-capture-mode")) return false;
+      if (document.documentElement.classList.contains("is-embed-preview")) return false;
+      const previewPane = document.querySelector(".preview-pane");
+      if (!previewPane) return false;
+      const cs = window.getComputedStyle(previewPane);
+      return cs.display !== "none" && cs.visibility !== "hidden";
+    }
+
+    function currentLook() {
+      if (!previewPaneVisible()) return 1;
+      return lookScale;
+    }
+
+    function syncPreviewLookControl() {
+      const box = document.getElementById("preview-look");
+      const widthControl = document.getElementById("chrome-preview-width");
+      const minus = document.getElementById("preview-scale-minus");
+      const plus = document.getElementById("preview-scale-plus");
+      if (!box) return;
+      const widthShown = !!(widthControl && !widthControl.hidden);
+      const show = widthShown && previewPaneVisible();
+      box.hidden = !show;
+      if (show) box.removeAttribute("hidden");
+      else box.setAttribute("hidden", "");
+      if (minus) minus.disabled = lookScale <= LOOK_MIN + 0.001;
+      if (plus) plus.disabled = lookScale >= LOOK_MAX - 0.001;
+    }
+
+    function applyLookZoom(viewportEl, fitScale) {
+      if (!viewportEl) return;
+      const scrollEl = document.querySelector(".preview-scroll");
+      const look = currentLook();
+      const combined = (Number(fitScale) || 1) * look;
+      if (combined < 0.999 || combined > 1.001) {
+        viewportEl.style.zoom = String(combined);
+      } else {
+        viewportEl.style.removeProperty("zoom");
+      }
+      viewportEl.style.removeProperty("transform");
+      viewportEl.style.removeProperty("transform-origin");
+      viewportEl.style.removeProperty("margin-bottom");
+      viewportEl.style.removeProperty("margin-left");
+      viewportEl.style.removeProperty("margin-right");
+      if (scrollEl) scrollEl.classList.toggle("is-look-enlarged", look > 1.001);
+    }
 
     function applyPreviewFrameScale(opts) {
       const scrollEl = document.querySelector(".preview-scroll");
@@ -13670,11 +14073,8 @@
       if (document.documentElement.classList.contains("is-review-mode")) {
         if (!document.body.classList.contains("review-view-fit")) {
           store.previewFrameScale = 1;
-          viewport.style.removeProperty("zoom");
-          viewport.style.removeProperty("transform");
-          viewport.style.removeProperty("transform-origin");
-          viewport.style.removeProperty("margin-bottom");
           viewport.style.removeProperty("--hub-place-fit-scale");
+          applyLookZoom(viewport, 1);
         }
         return store.previewFrameScale || 1;
       }
@@ -13689,16 +14089,9 @@
         scale = Math.min(scale, availH / fullH, 1);
       }
       store.previewFrameScale = scale;
-      /* zoom はレイアウト箱も縮む（Chrome）。transform だと横スクロールが残る */
-      if (scale < 0.999) {
-        viewport.style.zoom = String(scale);
-      } else {
-        viewport.style.removeProperty("zoom");
-      }
-      viewport.style.removeProperty("transform");
-      viewport.style.removeProperty("transform-origin");
-      viewport.style.removeProperty("margin-bottom");
+      /* zoom はレイアウト箱も縮む（Chrome）。見た目の倍率は枠合わせに掛ける */
       viewport.style.removeProperty("--hub-place-fit-scale");
+      applyLookZoom(viewport, scale);
       scrollEl.scrollLeft = 0;
       if (placeFit) scrollEl.scrollTop = 0;
       return scale;
@@ -13743,6 +14136,7 @@
         if (scrollEl) scrollEl.scrollLeft = 0;
         return;
       }
+      syncPreviewLookControl();
       const step = WIDTH_STEPS[stepIndex] || WIDTH_STEPS[WIDTH_STEPS.length - 1];
       const scrollEl = document.querySelector(".preview-scroll");
       const requested = step.width;
@@ -13769,7 +14163,7 @@
       if (document.documentElement.classList.contains("is-review-mode") &&
           !document.body.classList.contains("review-view-fit")) {
         store.previewFrameScale = 1;
-        viewport.style.removeProperty("zoom");
+        applyLookZoom(viewport, 1);
         if (scrollEl) scrollEl.scrollLeft = 0;
         return;
       }
@@ -13800,6 +14194,22 @@
         apply();
       });
     });
+
+    const scaleMinus = document.getElementById("preview-scale-minus");
+    const scalePlus = document.getElementById("preview-scale-plus");
+    if (scaleMinus) {
+      scaleMinus.addEventListener("click", () => {
+        lookScale = clampLook(lookScale - 0.1);
+        apply();
+      });
+    }
+    if (scalePlus) {
+      scalePlus.addEventListener("click", () => {
+        lookScale = clampLook(lookScale + 0.1);
+        apply();
+      });
+    }
+    window.syncPreviewLookControl = syncPreviewLookControl;
 
     window.addEventListener("resize", function () {
       /* capture中は親のiframe高さ変更でresizeが連打される。完全無視 */
@@ -14021,6 +14431,7 @@
         document.querySelectorAll(".atelier-tab").forEach((t) => t.classList.remove("is-active"));
         tab.classList.add("is-active");
         if (name === "preview") applyPendingPreviewScroll();
+        placePreviewWidthControl();
       });
     });
     document.body.classList.add("show-preview");
@@ -14052,6 +14463,8 @@
       itemLayouts: store.itemLayouts
         ? JSON.parse(JSON.stringify(store.itemLayouts))
         : defaultItemLayouts(),
+      itemOrders: JSON.parse(JSON.stringify(store.itemOrders || {})),
+      itemOrderParked: JSON.parse(JSON.stringify(store.itemOrderParked || {})),
       confirmed: { ...store.confirmed },
       snapshots: store.snapshots,
       fonts: {
@@ -14104,6 +14517,8 @@
         itemLayouts: store.itemLayouts
           ? JSON.parse(JSON.stringify(store.itemLayouts))
           : defaultItemLayouts(),
+        itemOrders: JSON.parse(JSON.stringify(store.itemOrders || {})),
+        itemOrderParked: JSON.parse(JSON.stringify(store.itemOrderParked || {})),
         heroTextOnPhoto: !!store.heroTextOnPhoto,
         heroFocalX: normalizeFocalPercent(store.heroFocalX, HERO_FOCAL_X_DEFAULT),
         heroFocalY: normalizeFocalPercent(store.heroFocalY, HERO_FOCAL_Y_DEFAULT),
@@ -14123,6 +14538,11 @@
         entryBranch: store.entryBranch,
         hubEntrySource: store.hubEntrySource,
         easyFlowActive: !!store.easyFlowActive,
+        copyPathMode: store.copyPathMode === "keyword" || store.copyPathMode === "omakase" ? store.copyPathMode : null,
+        imgPathMode: store.imgPathMode === "self" || store.imgPathMode === "omakase" ? store.imgPathMode : null,
+        copyFrameIndex: Number(store.copyFrameIndex) || 0,
+        copyDirIds: Array.isArray(store.copyDirIds) ? store.copyDirIds.slice() : [],
+        hubImgPathMode: store.hubImgPathMode && typeof store.hubImgPathMode === "object" ? store.hubImgPathMode : {},
         sushiSampleId: store.sushiSampleId,
         sushiSampleKey: store.sushiSampleKey,
         sampleSectionCandidates: store.sampleSectionCandidates || {},
@@ -14229,6 +14649,19 @@
       }
       if (data.easyFlowActive != null) store.easyFlowActive = !!data.easyFlowActive;
       else if (data.easyP1Hold) store.easyFlowActive = !!data.easyP1Hold;
+      if (data.copyPathMode === "keyword" || data.copyPathMode === "omakase") {
+        store.copyPathMode = data.copyPathMode;
+      }
+      if (data.imgPathMode === "self" || data.imgPathMode === "omakase") {
+        store.imgPathMode = data.imgPathMode;
+      }
+      if (data.copyFrameIndex != null) {
+        store.copyFrameIndex = Math.max(0, Number(data.copyFrameIndex) || 0);
+      }
+      if (Array.isArray(data.copyDirIds)) store.copyDirIds = data.copyDirIds.slice();
+      if (data.hubImgPathMode && typeof data.hubImgPathMode === "object") {
+        store.hubImgPathMode = data.hubImgPathMode;
+      }
       if (data.sushiSampleId != null) store.sushiSampleId = data.sushiSampleId;
       if (data.sushiSampleKey != null) store.sushiSampleKey = data.sushiSampleKey;
       if (data.sampleSectionCandidates && typeof data.sampleSectionCandidates === "object") {
@@ -14310,12 +14743,10 @@
         ITEM_LAYOUT_IDS.forEach((id) => {
           const src = data.itemLayouts[id];
           if (!src) return;
-          store.itemLayouts[id] = parseItemLayoutSource(
-            src,
-            Number(store.draftCounts[id] || 1)
-          );
+          store.itemLayouts[id] = parseItemLayoutSource(id, src);
         });
       }
+      adoptItemOrders(data.itemOrders, data.itemOrderParked);
       if (data.heroTextOnPhoto != null) store.heroTextOnPhoto = !!data.heroTextOnPhoto;
       if (data.heroFocalX != null) {
         store.heroFocalX = normalizeFocalPercent(data.heroFocalX, HERO_FOCAL_X_DEFAULT);
@@ -14761,6 +15192,12 @@
     }
     return;
   }
+
+  document.querySelectorAll('a[href*="help.html"]').forEach(function (link) {
+    link.addEventListener("click", function () {
+      saveDraft();
+    });
+  });
 
   loadDraft();
   ensureFontsConfirmedForMode();

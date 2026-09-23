@@ -1527,9 +1527,9 @@ body.reset-draft-open {
   margin: 0;
   padding: 0;
   border: 0;
-  border-left: 1px solid rgba(255, 255, 255, 0.14);
-  border-right: 1px solid rgba(0, 0, 0, 0.12);
-  background: linear-gradient(90deg, #2a2e2c 0 40%, #efeae3 60% 100%);
+  border-left: 1px solid rgba(0, 0, 0, 0.12);
+  border-right: 1px solid rgba(255, 255, 255, 0.14);
+  background: linear-gradient(90deg, #efeae3 0 40%, #2a2e2c 60% 100%);
   cursor: col-resize;
   touch-action: none;
   position: relative;

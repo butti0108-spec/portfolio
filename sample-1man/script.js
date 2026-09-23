@@ -5154,8 +5154,8 @@
     }
     if (text) {
       text.textContent = fromEasy
-        ? "このあとは並び替えから、色・文字・画像の枚数・増減などを直せます。左の見本で確認しながら進めてください。"
-        : "このあとは並び替えから、色・文字・画像・枚数の増減を触れます。左の見本で確認しながら進めてください。";
+        ? "このあとは並び替えから、色・文字・画像の枚数・増減などを直せます。右の見本で確認しながら進めてください。"
+        : "このあとは並び替えから、色・文字・画像・枚数の増減を触れます。右の見本で確認しながら進めてください。";
     }
   }
 
@@ -14275,7 +14275,7 @@
     function clientToPct(clientX) {
       const rect = split.getBoundingClientRect();
       if (!rect.width) return pct;
-      return ((clientX - rect.left) / rect.width) * 100;
+      return ((rect.right - clientX) / rect.width) * 100;
     }
 
     function onMove(ev) {
@@ -14311,11 +14311,11 @@
     handle.addEventListener("keydown", (ev) => {
       if (ev.key === "ArrowLeft") {
         ev.preventDefault();
-        setPct(pct - 2);
+        setPct(pct + 2);
         persist();
       } else if (ev.key === "ArrowRight") {
         ev.preventDefault();
-        setPct(pct + 2);
+        setPct(pct - 2);
         persist();
       }
     });

@@ -12,7 +12,7 @@
   <!-- メーカー親CSS（ポートフォリオ根の style.css は読まない） -->
   <link rel="stylesheet" href="maker-base.css?v=cleanup-20260922">
   <link rel="icon" href="brand/mark-favicon.png?v=logo-7" type="image/png">
-  <link rel="stylesheet" href="sample-overrides.css?v=path-back-20260923">
+  <link rel="stylesheet" href="sample-overrides.css?v=split-swap-20260923">
   <link rel="stylesheet" href="free-photo-gallery/gallery.css?v=gallery-check-20260923">
   <script>
     (function () {
@@ -38,7 +38,7 @@
   <script src="copy-dict-engine.js?v=cleanup-20260922" defer></script>
   <script src="sushi-belt.js?v=sushi-guide-session-20260922a" defer></script>
   <script src="free-photo-gallery/gallery.js?v=gallery-check-20260923" defer></script>
-  <script src="script.js?v=item-order-20260923b" defer></script>
+  <script src="script.js?v=split-swap-20260923" defer></script>
   <script>
     (function () {
       var h = location.hostname;
@@ -318,7 +318,7 @@
     <div class="detail-notice-card" role="alertdialog" aria-modal="true" aria-labelledby="detail-notice-title">
       <div class="detail-notice-copy">
         <p class="detail-notice-title" id="detail-notice-title">自分で作る</p>
-        <p class="detail-notice-text" id="detail-notice-text">このあとは並び替えから、色・文字・画像・枚数の増減を触れます。左の見本で確認しながら進めてください。</p>
+        <p class="detail-notice-text" id="detail-notice-text">このあとは並び替えから、色・文字・画像・枚数の増減を触れます。右の見本で確認しながら進めてください。</p>
       </div>
       <button type="button" class="entry-gate-apply" data-detail-notice-ok>OK・並び替えへ</button>
     </div>
@@ -404,272 +404,6 @@
     </div>
 
     <div class="atelier-split" id="atelier-split">
-      <section class="preview-pane" aria-label="サンプル画面">
-        <div class="preview-width-rail" id="preview-width-rail" hidden>
-          <div id="preview-width-slot" class="preview-width-slot"></div>
-        </div>
-        <div class="preview-scroll">
-          <div class="preview-viewport is-desktop" id="preview-viewport" style="max-width: 100%">
-          <div
-            class="preview-site sample-1man"
-            id="preview-root"
-            data-layout="a"
-            data-accent-bar="mid"
-            aria-hidden="false"
-            style="
-              --page-bg:#ffffff;
-              --page-bg-soft:#f3f6f8;
-              --hero-ink:#1a4d8c;
-              --body-ink:#212121;
-              --body-muted:#555555;
-              --chrome-bg:#1a4d8c;
-              --chrome-ink:#ffffff;
-              --accent:#1a4d8c;
-              --card-bg:#ffffff;
-              --values-bg:#ffffff;
-              --contact-bg:#1a4d8c;
-              --contact-ink:#ffffff;
-              --radius:0.6rem;
-              --font-display:'Shippori Mincho',serif;
-              --font-body:'Zen Kaku Gothic New',sans-serif;
-              --heading-scale:1;
-            "
-          >
-            <div class="zone-badge-rail" aria-label="プリセット">
-              <button type="button" class="zone-badge" data-open-step="global-preset" aria-label="プリセット">1</button>
-            </div>
-            <header class="site-header preview-hit" id="preview-header" data-open-step="logo-text" aria-label="ヘッダー。タップで注文画面のロゴを開く">
-              <button type="button" class="zone-badge zone-badge--text" data-open-step="logo-text" aria-label="ロゴを開く">1</button>
-              <button type="button" class="zone-badge" data-open-step="global-chrome-bg" aria-label="ヘッダー・フッターの背景">2</button>
-              <button type="button" class="zone-badge zone-badge--chrome-ink" data-open-step="global-chrome-ink" aria-label="ヘッダー・フッターの文字">3</button>
-              <div class="shell header-inner">
-                <span class="logo-wrap">
-                  <img id="preview-logo-img" class="preview-logo-img" alt="" hidden width="120" height="40">
-                  <span class="logo is-hint" id="preview-logo-text">
-                    <span class="logo-hint-main">サイトタイトル</span>
-                    <span class="logo-hint-sub">納品後は押すと一番上へ</span>
-                  </span>
-                </span>
-                <p class="preview-nav-hint" id="preview-nav-hint">
-                  <span class="nav-hint-main">各セクション名</span>
-                  <span class="nav-hint-sub">納品後は押すとその場所へ</span>
-                </p>
-                <nav class="site-nav preview-nav-static" id="preview-nav-live" hidden aria-label="入力後のメニュー名">
-                  <span id="nav-about"></span>
-                  <span id="nav-works"></span>
-                  <span id="nav-contact"></span>
-                </nav>
-              </div>
-            </header>
-
-            <main>
-              <section class="hero preview-hit" id="hero" data-layout-block="hero" data-open-step="global-bg" aria-label="背景。タップで背景色を開く">
-                <button type="button" class="zone-badge zone-badge--bg" data-open-step="global-bg" aria-label="背景を開く">4</button>
-                <button type="button" class="zone-badge zone-badge--text zone-badge--heading-font" data-open-step="logo-text" aria-label="見出し書体（ロゴ）">2</button>
-                <div class="shell hero-box">
-                  <div class="hero-stage preview-hit" data-open-step="hero-text" aria-label="キャッチ。タップでキャッチ文を開く">
-                    <button type="button" class="zone-badge" data-open-step="hero-color" aria-label="キャッチ色を開く">5</button>
-                    <button type="button" class="zone-badge zone-badge--image" data-open-step="hero-image" aria-label="キャッチ画像を開く">1</button>
-                    <button type="button" class="zone-badge zone-badge--text zone-badge--catch-font" data-open-step="hero-text" aria-label="キャッチ書体">3</button>
-                    <button type="button" class="zone-badge zone-badge--text" data-open-step="hero-text" aria-label="キャッチ文を開く">4</button>
-                    <img class="hero-photo" src="images/hero.png" data-default-src="images/hero.png" alt="" width="2752" height="1536">
-                    <div class="hero-mock-notice" aria-hidden="true">
-                      <p class="hero-mock-notice-title">これは見本です</p>
-                    </div>
-                    <div class="hero-copy">
-                      <div class="hero-copy-plate">
-                        <h1 id="hero-title">店名</h1>
-                        <div id="hero-leads" data-sample-repeat data-min="1" data-max="3" data-count="1">
-                          <p class="hero-lead" data-sample-item>短い紹介文が入ります。</p>
-                          <p class="hero-lead" data-sample-item>もう一文ある場合はここに入ります。</p>
-                          <p class="hero-lead" data-sample-item>（3行目）</p>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </section>
-
-              <section id="hero-values-block" class="section hero-values-block preview-hit" data-layout-block="values" data-open-step="values-text" aria-label="下の枠。タップで下の枠文を開く">
-                <div class="shell">
-                  <div class="hero-values-wrap">
-                    <button type="button" class="zone-badge" data-open-step="values-color" aria-label="下の枠色を開く">6</button>
-                    <button type="button" class="zone-badge zone-badge--text" data-open-step="values-text" aria-label="下の枠文を開く">5</button>
-                    <ul id="hero-values" class="hero-value-list" data-sample-repeat data-min="1" data-max="3" data-count="1">
-                      <li data-sample-item>
-                        <p class="hero-value-title">見出し</p>
-                        <p>短い説明が入ります。</p>
-                      </li>
-                      <li data-sample-item>
-                        <p class="hero-value-title">見出し</p>
-                        <p>短い説明が入ります。</p>
-                      </li>
-                      <li data-sample-item>
-                        <p class="hero-value-title">見出し</p>
-                        <p>短い説明が入ります。</p>
-                      </li>
-                    </ul>
-                  </div>
-                </div>
-              </section>
-
-              <section id="about" class="section about preview-hit" data-layout-block="accordions" data-open-step="about-text" aria-label="開く項目。タップで入力を開く">
-                <button type="button" class="zone-badge zone-badge--body" data-open-step="global-body" aria-label="本文色">7</button>
-                <button type="button" class="zone-badge" data-open-step="global-accent" aria-label="アクセント（見出し下線）">8</button>
-                <button type="button" class="zone-badge zone-badge--card" data-open-step="global-card" aria-label="カード">9</button>
-                <button type="button" class="zone-badge zone-badge--text zone-badge--body-font" data-open-step="about-text" aria-label="本文書体">6</button>
-                <button type="button" class="zone-badge zone-badge--text" data-open-step="about-text" aria-label="開く項目を開く">7</button>
-                <div class="shell">
-                  <p class="section-label" id="about-label">開く項目</p>
-                  <h2 id="about-heading">ここに大見出し</h2>
-                  <p class="profile-name">お名前や屋号</p>
-                  <p class="section-lead">ここに紹介文が入ります。</p>
-
-                  <div id="about-accordions" class="accordion-list is-accordion-items" data-sample-repeat data-min="1" data-max="3" data-count="1">
-                    <details class="accordion" data-sample-item>
-                      <summary>見本の見出し1（納品後は押すと開閉します）</summary>
-                      <div class="accordion-body">
-                        <ul class="value-list">
-                          <li><span class="value-mark">【見本】</span>短い項目が入ります。</li>
-                          <li><span class="value-mark">【見本】</span>レイアウト確認用です。</li>
-                        </ul>
-                      </div>
-                    </details>
-                    <details class="accordion" data-sample-item>
-                      <summary>見本の見出し2</summary>
-                      <div class="accordion-body">
-                        <ul class="value-list">
-                          <li><span class="value-mark">【見本】</span>2つ目の枠です。</li>
-                        </ul>
-                      </div>
-                    </details>
-                    <details class="accordion" data-sample-item>
-                      <summary>見本の見出し3</summary>
-                      <div class="accordion-body">
-                        <ul class="value-list">
-                          <li><span class="value-mark">【見本】</span>3つ目の枠です。</li>
-                        </ul>
-                      </div>
-                    </details>
-                  </div>
-                </div>
-              </section>
-
-              <section id="about-photos-block" class="section about-photos-block preview-hit" data-layout-block="photos" data-open-step="about-images" aria-label="写真。タップで写真入力を開く">
-                <button type="button" class="zone-badge zone-badge--image" data-open-step="about-images" aria-label="写真を開く">2</button>
-                <div class="shell">
-                  <p class="section-label" id="about-photos-label">写真</p>
-                  <ul id="about-photos" class="skill-cards" data-sample-repeat data-min="1" data-max="4" data-count="1">
-                    <li class="skill-card" data-sample-item data-item-id="about_image_1"><img class="skill-card-img" src="images/offer-1.png" data-default-src="images/offer-1.png" alt="" width="1200" height="750" loading="lazy"></li>
-                    <li class="skill-card" data-sample-item data-item-id="about_image_2"><img class="skill-card-img" src="images/offer-2.png" data-default-src="images/offer-2.png" alt="" width="1200" height="750" loading="lazy"></li>
-                    <li class="skill-card" data-sample-item data-item-id="about_image_3"><img class="skill-card-img" src="images/offer-3.png" data-default-src="images/offer-3.png" alt="" width="1200" height="750" loading="lazy"></li>
-                    <li class="skill-card" data-sample-item data-item-id="about_image_4"><img class="skill-card-img" src="images/hero.png" data-default-src="images/hero.png" alt="" width="1200" height="750" loading="lazy"></li>
-                  </ul>
-                </div>
-              </section>
-
-              <section id="works" class="section works preview-hit" data-layout-block="works" data-open-step="works-text" aria-label="カード。タップでカード入力を開く">
-                <button type="button" class="zone-badge zone-badge--image zone-badge--works-img" data-open-step="works-images" aria-label="カードの画像を開く">3</button>
-                <button type="button" class="zone-badge zone-badge--text" data-open-step="works-text" aria-label="カードを開く">8</button>
-                <div class="shell">
-                  <p class="section-label" id="works-label">カード</p>
-                  <h2 id="works-heading">ここに大見出し</h2>
-                  <p class="section-lead" id="works-lead">カードの並びは、この見本と同じ枠です。</p>
-                  <ul id="works-list" class="work-list" data-sample-repeat data-min="1" data-max="3" data-count="1">
-                    <li class="work-item" data-sample-item data-item-id="work_1">
-                      <a class="work-item-link" href="#" tabindex="-1" data-work-link>
-                        <img class="work-thumb" src="images/offer-1.png" data-default-src="images/offer-1.png" alt="" width="1200" height="750" loading="lazy">
-                        <div class="work-item-body">
-                          <h3>カード見出し1</h3>
-                          <div class="work-item-copy"><p>短い説明文が入ります。</p></div>
-                          <span class="work-link" data-work-link-label hidden>リンク先を見る</span>
-                        </div>
-                      </a>
-                    </li>
-                    <li class="work-item" data-sample-item data-item-id="work_2">
-                      <a class="work-item-link" href="#" tabindex="-1" data-work-link>
-                        <img class="work-thumb" src="images/offer-2.png" data-default-src="images/offer-2.png" alt="" width="1200" height="750" loading="lazy">
-                        <div class="work-item-body">
-                          <h3>カード見出し2</h3>
-                          <div class="work-item-copy"><p>件数を変えて確認できます。</p></div>
-                          <span class="work-link" data-work-link-label hidden>リンク先を見る</span>
-                        </div>
-                      </a>
-                    </li>
-                    <li class="work-item" data-sample-item data-item-id="work_3">
-                      <a class="work-item-link" href="#" tabindex="-1" data-work-link>
-                        <img class="work-thumb" src="images/offer-3.png" data-default-src="images/offer-3.png" alt="" width="1200" height="750" loading="lazy">
-                        <div class="work-item-body">
-                          <h3>カード見出し3</h3>
-                          <div class="work-item-copy"><p>3件目の見本です。</p></div>
-                          <span class="work-link" data-work-link-label hidden>リンク先を見る</span>
-                        </div>
-                      </a>
-                    </li>
-                  </ul>
-                </div>
-              </section>
-
-              <section id="hours" class="section sample-extra preview-hit" data-layout-block="hours" data-open-step="hours-text" aria-label="営業時間。タップで営業時間の入力を開く" hidden data-extra="hours">
-                <button type="button" class="zone-badge zone-badge--text" data-open-step="hours-text" aria-label="営業時間を開く">営</button>
-                <div class="shell">
-                  <p class="section-label">Hours</p>
-                  <h2>営業時間</h2>
-                  <p class="section-lead" id="hours-lead">平日 10:00–18:00／土日祝 休み（見本）</p>
-                </div>
-              </section>
-
-              <section id="access" class="section sample-extra preview-hit" data-layout-block="access" data-open-step="access-text" aria-label="アクセス。タップでアクセスの入力を開く" hidden data-extra="access">
-                <button type="button" class="zone-badge zone-badge--text" data-open-step="access-text" aria-label="アクセスを開く">ア</button>
-                <div class="shell">
-                  <p class="section-label">Access</p>
-                  <h2>アクセス</h2>
-                  <p class="section-lead" id="access-lead">〇〇駅から徒歩5分（見本）</p>
-                </div>
-              </section>
-
-              <section id="address" class="section sample-extra preview-hit" data-layout-block="address" data-open-step="address-text" aria-label="住所。タップで住所の入力を開く" hidden data-extra="address">
-                <button type="button" class="zone-badge zone-badge--text" data-open-step="address-text" aria-label="住所を開く">住</button>
-                <div class="shell">
-                  <p class="section-label">Address</p>
-                  <h2>住所</h2>
-                  <a class="section-lead address-map-link" id="address-lead" href="https://www.google.com/maps/search/?api=1&amp;query=%E3%80%92000-0000%20%E6%9D%B1%E4%BA%AC%E9%83%BD%E3%80%87%E3%80%87%E5%8C%BA%E8%A6%8B%E6%9C%AC%E7%94%BA1-2-3%EF%BC%88%E8%A6%8B%E6%9C%AC%EF%BC%89" target="_blank" rel="noopener noreferrer">〒000-0000 東京都〇〇区見本町1-2-3（見本）</a>
-                </div>
-              </section>
-
-              <section id="contact" class="contact-band preview-hit" data-layout-block="contact" data-open-step="contact-text" aria-label="ご連絡。タップでご連絡の入力を開く">
-                <button type="button" class="zone-badge" data-open-step="contact-color" aria-label="ご連絡色を開く">色</button>
-                <button type="button" class="zone-badge zone-badge--text" data-open-step="contact-text" aria-label="ご連絡文を開く">文</button>
-                <div class="shell contact-band-inner">
-                  <p class="section-label" id="contact-label">ご連絡</p>
-                  <h2 id="contact-heading">ご連絡</h2>
-                  <p class="contact-band-lead" data-contact-note="1">1万円プランに送信フォームは含まれません。</p>
-                  <p class="contact-band-lead" data-contact-note="2">メール掲載と、コピーできるところまでです。</p>
-                  <p class="sample-mail">sample@example.com</p>
-                </div>
-              </section>
-            </main>
-
-            <footer class="site-footer preview-hit" id="preview-footer" data-open-step="finish" aria-label="フッター。タップで提出を開く">
-              <button type="button" class="zone-badge zone-badge--text zone-badge--finish" data-open-step="finish" aria-label="提出を開く">提</button>
-              <div class="shell footer-inner">
-                <p id="footer-copy">© <span id="footer-brand">店名</span></p>
-              </div>
-            </footer>
-          </div>
-        </div>
-      </div>
-      </section>
-
-      <div
-        class="split-handle"
-        id="split-handle"
-        role="separator"
-        aria-orientation="vertical"
-        aria-label="見本と注文の幅を調整"
-        tabindex="0"
-      ></div>
-
       <section class="dash-pane" id="dash-pane" aria-label="注文画面">
       <header class="dash-header">
         <div class="dash-header-row dash-header-row--top">
@@ -907,7 +641,7 @@
         <details class="dash-block dash-block--easy" data-step-id="easy-done" hidden>
           <summary>完成</summary>
           <p class="dash-subhead" role="heading" aria-level="3">できあがりを確認</p>
-          <p class="step-help">左の見本がいまの内容です。このまま進むか、編集するかを選んでください。</p>
+          <p class="step-help">右の見本がいまの内容です。このまま進むか、編集するかを選んでください。</p>
           <div class="easy-done-actions">
             <button type="button" class="gct-btn gct-btn-primary" id="easy-done-ok" data-easy-done-ok>これでいい</button>
             <button type="button" class="gct-btn" id="easy-done-edit" data-easy-done-edit>編集する</button>
@@ -921,7 +655,7 @@
           <p class="step-help"><a href="help.html?return=order#start">ヘルプはこちら</a></p>
           <fieldset class="mode-picker" id="purpose-picker">
             <legend>どんな用途で使いますか？</legend>
-            <p class="mode-picker-lead">選ぶと左の見本に仮の文が入ります。</p>
+            <p class="mode-picker-lead">選ぶと右の見本に仮の文が入ります。</p>
             <label class="mode-option"><input type="radio" name="site_purpose" value="personal"><span class="mode-option-body"><strong>個人紹介</strong><span class="mode-option-note">講師・士業・フリーランスなど</span></span></label>
             <label class="mode-option"><input type="radio" name="site_purpose" value="company"><span class="mode-option-body"><strong>会社・教室案内</strong><span class="mode-option-note">法人・教室・事務所など</span></span></label>
             <label class="mode-option"><input type="radio" name="site_purpose" value="shop"><span class="mode-option-body"><strong>お店案内</strong><span class="mode-option-note">店舗・サロン・カフェなど</span></span></label>
@@ -1616,7 +1350,7 @@
             <label class="check"><input type="checkbox" name="scope_revision_once" value="1"> 納品後の<strong>無料修正は1回まで</strong>です（次回以降は別料金。<a href="help.html?return=order#faq">ヘルプはこちら</a>）</label>
           </fieldset>
           <div class="finish-summary" id="finish-summary" aria-live="polite">
-            <p class="finish-summary-lead">左の見本を見てください。直したいところや足りないところがあれば、下の項目をタップして<strong>修正・追加</strong>してください。足りない項目は赤い文字です。直し終わると、またこの画面に戻ります。</p>
+            <p class="finish-summary-lead">右の見本を見てください。直したいところや足りないところがあれば、下の項目をタップして<strong>修正・追加</strong>してください。足りない項目は赤い文字です。直し終わると、またこの画面に戻ります。</p>
             <div id="look-controls-host-finish" class="look-controls-host"></div>
             <p class="finish-summary-title" role="heading" aria-level="3">いまの内容（左側の見本と同じ）</p>
             <ul class="finish-summary-list" id="finish-summary-list"></ul>
@@ -1683,6 +1417,273 @@
       </div>
 
     </section>
+
+      <div
+        class="split-handle"
+        id="split-handle"
+        role="separator"
+        aria-orientation="vertical"
+        aria-label="見本と注文の幅を調整"
+        tabindex="0"
+      ></div>
+
+      <section class="preview-pane" aria-label="サンプル画面">
+        <div class="preview-width-rail" id="preview-width-rail" hidden>
+          <div id="preview-width-slot" class="preview-width-slot"></div>
+        </div>
+        <div class="preview-scroll">
+          <div class="preview-viewport is-desktop" id="preview-viewport" style="max-width: 100%">
+          <div
+            class="preview-site sample-1man"
+            id="preview-root"
+            data-layout="a"
+            data-accent-bar="mid"
+            aria-hidden="false"
+            style="
+              --page-bg:#ffffff;
+              --page-bg-soft:#f3f6f8;
+              --hero-ink:#1a4d8c;
+              --body-ink:#212121;
+              --body-muted:#555555;
+              --chrome-bg:#1a4d8c;
+              --chrome-ink:#ffffff;
+              --accent:#1a4d8c;
+              --card-bg:#ffffff;
+              --values-bg:#ffffff;
+              --contact-bg:#1a4d8c;
+              --contact-ink:#ffffff;
+              --radius:0.6rem;
+              --font-display:'Shippori Mincho',serif;
+              --font-body:'Zen Kaku Gothic New',sans-serif;
+              --heading-scale:1;
+            "
+          >
+            <div class="zone-badge-rail" aria-label="プリセット">
+              <button type="button" class="zone-badge" data-open-step="global-preset" aria-label="プリセット">1</button>
+            </div>
+            <header class="site-header preview-hit" id="preview-header" data-open-step="logo-text" aria-label="ヘッダー。タップで注文画面のロゴを開く">
+              <button type="button" class="zone-badge zone-badge--text" data-open-step="logo-text" aria-label="ロゴを開く">1</button>
+              <button type="button" class="zone-badge" data-open-step="global-chrome-bg" aria-label="ヘッダー・フッターの背景">2</button>
+              <button type="button" class="zone-badge zone-badge--chrome-ink" data-open-step="global-chrome-ink" aria-label="ヘッダー・フッターの文字">3</button>
+              <div class="shell header-inner">
+                <span class="logo-wrap">
+                  <img id="preview-logo-img" class="preview-logo-img" alt="" hidden width="120" height="40">
+                  <span class="logo is-hint" id="preview-logo-text">
+                    <span class="logo-hint-main">サイトタイトル</span>
+                    <span class="logo-hint-sub">納品後は押すと一番上へ</span>
+                  </span>
+                </span>
+                <p class="preview-nav-hint" id="preview-nav-hint">
+                  <span class="nav-hint-main">各セクション名</span>
+                  <span class="nav-hint-sub">納品後は押すとその場所へ</span>
+                </p>
+                <nav class="site-nav preview-nav-static" id="preview-nav-live" hidden aria-label="入力後のメニュー名">
+                  <span id="nav-about"></span>
+                  <span id="nav-works"></span>
+                  <span id="nav-contact"></span>
+                </nav>
+              </div>
+            </header>
+
+            <main>
+              <section class="hero preview-hit" id="hero" data-layout-block="hero" data-open-step="global-bg" aria-label="背景。タップで背景色を開く">
+                <button type="button" class="zone-badge zone-badge--bg" data-open-step="global-bg" aria-label="背景を開く">4</button>
+                <button type="button" class="zone-badge zone-badge--text zone-badge--heading-font" data-open-step="logo-text" aria-label="見出し書体（ロゴ）">2</button>
+                <div class="shell hero-box">
+                  <div class="hero-stage preview-hit" data-open-step="hero-text" aria-label="キャッチ。タップでキャッチ文を開く">
+                    <button type="button" class="zone-badge" data-open-step="hero-color" aria-label="キャッチ色を開く">5</button>
+                    <button type="button" class="zone-badge zone-badge--image" data-open-step="hero-image" aria-label="キャッチ画像を開く">1</button>
+                    <button type="button" class="zone-badge zone-badge--text zone-badge--catch-font" data-open-step="hero-text" aria-label="キャッチ書体">3</button>
+                    <button type="button" class="zone-badge zone-badge--text" data-open-step="hero-text" aria-label="キャッチ文を開く">4</button>
+                    <img class="hero-photo" src="images/hero.png" data-default-src="images/hero.png" alt="" width="2752" height="1536">
+                    <div class="hero-mock-notice" aria-hidden="true">
+                      <p class="hero-mock-notice-title">これは見本です</p>
+                    </div>
+                    <div class="hero-copy">
+                      <div class="hero-copy-plate">
+                        <h1 id="hero-title">店名</h1>
+                        <div id="hero-leads" data-sample-repeat data-min="1" data-max="3" data-count="1">
+                          <p class="hero-lead" data-sample-item>短い紹介文が入ります。</p>
+                          <p class="hero-lead" data-sample-item>もう一文ある場合はここに入ります。</p>
+                          <p class="hero-lead" data-sample-item>（3行目）</p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </section>
+
+              <section id="hero-values-block" class="section hero-values-block preview-hit" data-layout-block="values" data-open-step="values-text" aria-label="下の枠。タップで下の枠文を開く">
+                <div class="shell">
+                  <div class="hero-values-wrap">
+                    <button type="button" class="zone-badge" data-open-step="values-color" aria-label="下の枠色を開く">6</button>
+                    <button type="button" class="zone-badge zone-badge--text" data-open-step="values-text" aria-label="下の枠文を開く">5</button>
+                    <ul id="hero-values" class="hero-value-list" data-sample-repeat data-min="1" data-max="3" data-count="1">
+                      <li data-sample-item>
+                        <p class="hero-value-title">見出し</p>
+                        <p>短い説明が入ります。</p>
+                      </li>
+                      <li data-sample-item>
+                        <p class="hero-value-title">見出し</p>
+                        <p>短い説明が入ります。</p>
+                      </li>
+                      <li data-sample-item>
+                        <p class="hero-value-title">見出し</p>
+                        <p>短い説明が入ります。</p>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+              </section>
+
+              <section id="about" class="section about preview-hit" data-layout-block="accordions" data-open-step="about-text" aria-label="開く項目。タップで入力を開く">
+                <button type="button" class="zone-badge zone-badge--body" data-open-step="global-body" aria-label="本文色">7</button>
+                <button type="button" class="zone-badge" data-open-step="global-accent" aria-label="アクセント（見出し下線）">8</button>
+                <button type="button" class="zone-badge zone-badge--card" data-open-step="global-card" aria-label="カード">9</button>
+                <button type="button" class="zone-badge zone-badge--text zone-badge--body-font" data-open-step="about-text" aria-label="本文書体">6</button>
+                <button type="button" class="zone-badge zone-badge--text" data-open-step="about-text" aria-label="開く項目を開く">7</button>
+                <div class="shell">
+                  <p class="section-label" id="about-label">開く項目</p>
+                  <h2 id="about-heading">ここに大見出し</h2>
+                  <p class="profile-name">お名前や屋号</p>
+                  <p class="section-lead">ここに紹介文が入ります。</p>
+
+                  <div id="about-accordions" class="accordion-list is-accordion-items" data-sample-repeat data-min="1" data-max="3" data-count="1">
+                    <details class="accordion" data-sample-item>
+                      <summary>見本の見出し1（納品後は押すと開閉します）</summary>
+                      <div class="accordion-body">
+                        <ul class="value-list">
+                          <li><span class="value-mark">【見本】</span>短い項目が入ります。</li>
+                          <li><span class="value-mark">【見本】</span>レイアウト確認用です。</li>
+                        </ul>
+                      </div>
+                    </details>
+                    <details class="accordion" data-sample-item>
+                      <summary>見本の見出し2</summary>
+                      <div class="accordion-body">
+                        <ul class="value-list">
+                          <li><span class="value-mark">【見本】</span>2つ目の枠です。</li>
+                        </ul>
+                      </div>
+                    </details>
+                    <details class="accordion" data-sample-item>
+                      <summary>見本の見出し3</summary>
+                      <div class="accordion-body">
+                        <ul class="value-list">
+                          <li><span class="value-mark">【見本】</span>3つ目の枠です。</li>
+                        </ul>
+                      </div>
+                    </details>
+                  </div>
+                </div>
+              </section>
+
+              <section id="about-photos-block" class="section about-photos-block preview-hit" data-layout-block="photos" data-open-step="about-images" aria-label="写真。タップで写真入力を開く">
+                <button type="button" class="zone-badge zone-badge--image" data-open-step="about-images" aria-label="写真を開く">2</button>
+                <div class="shell">
+                  <p class="section-label" id="about-photos-label">写真</p>
+                  <ul id="about-photos" class="skill-cards" data-sample-repeat data-min="1" data-max="4" data-count="1">
+                    <li class="skill-card" data-sample-item data-item-id="about_image_1"><img class="skill-card-img" src="images/offer-1.png" data-default-src="images/offer-1.png" alt="" width="1200" height="750" loading="lazy"></li>
+                    <li class="skill-card" data-sample-item data-item-id="about_image_2"><img class="skill-card-img" src="images/offer-2.png" data-default-src="images/offer-2.png" alt="" width="1200" height="750" loading="lazy"></li>
+                    <li class="skill-card" data-sample-item data-item-id="about_image_3"><img class="skill-card-img" src="images/offer-3.png" data-default-src="images/offer-3.png" alt="" width="1200" height="750" loading="lazy"></li>
+                    <li class="skill-card" data-sample-item data-item-id="about_image_4"><img class="skill-card-img" src="images/hero.png" data-default-src="images/hero.png" alt="" width="1200" height="750" loading="lazy"></li>
+                  </ul>
+                </div>
+              </section>
+
+              <section id="works" class="section works preview-hit" data-layout-block="works" data-open-step="works-text" aria-label="カード。タップでカード入力を開く">
+                <button type="button" class="zone-badge zone-badge--image zone-badge--works-img" data-open-step="works-images" aria-label="カードの画像を開く">3</button>
+                <button type="button" class="zone-badge zone-badge--text" data-open-step="works-text" aria-label="カードを開く">8</button>
+                <div class="shell">
+                  <p class="section-label" id="works-label">カード</p>
+                  <h2 id="works-heading">ここに大見出し</h2>
+                  <p class="section-lead" id="works-lead">カードの並びは、この見本と同じ枠です。</p>
+                  <ul id="works-list" class="work-list" data-sample-repeat data-min="1" data-max="3" data-count="1">
+                    <li class="work-item" data-sample-item data-item-id="work_1">
+                      <a class="work-item-link" href="#" tabindex="-1" data-work-link>
+                        <img class="work-thumb" src="images/offer-1.png" data-default-src="images/offer-1.png" alt="" width="1200" height="750" loading="lazy">
+                        <div class="work-item-body">
+                          <h3>カード見出し1</h3>
+                          <div class="work-item-copy"><p>短い説明文が入ります。</p></div>
+                          <span class="work-link" data-work-link-label hidden>リンク先を見る</span>
+                        </div>
+                      </a>
+                    </li>
+                    <li class="work-item" data-sample-item data-item-id="work_2">
+                      <a class="work-item-link" href="#" tabindex="-1" data-work-link>
+                        <img class="work-thumb" src="images/offer-2.png" data-default-src="images/offer-2.png" alt="" width="1200" height="750" loading="lazy">
+                        <div class="work-item-body">
+                          <h3>カード見出し2</h3>
+                          <div class="work-item-copy"><p>件数を変えて確認できます。</p></div>
+                          <span class="work-link" data-work-link-label hidden>リンク先を見る</span>
+                        </div>
+                      </a>
+                    </li>
+                    <li class="work-item" data-sample-item data-item-id="work_3">
+                      <a class="work-item-link" href="#" tabindex="-1" data-work-link>
+                        <img class="work-thumb" src="images/offer-3.png" data-default-src="images/offer-3.png" alt="" width="1200" height="750" loading="lazy">
+                        <div class="work-item-body">
+                          <h3>カード見出し3</h3>
+                          <div class="work-item-copy"><p>3件目の見本です。</p></div>
+                          <span class="work-link" data-work-link-label hidden>リンク先を見る</span>
+                        </div>
+                      </a>
+                    </li>
+                  </ul>
+                </div>
+              </section>
+
+              <section id="hours" class="section sample-extra preview-hit" data-layout-block="hours" data-open-step="hours-text" aria-label="営業時間。タップで営業時間の入力を開く" hidden data-extra="hours">
+                <button type="button" class="zone-badge zone-badge--text" data-open-step="hours-text" aria-label="営業時間を開く">営</button>
+                <div class="shell">
+                  <p class="section-label">Hours</p>
+                  <h2>営業時間</h2>
+                  <p class="section-lead" id="hours-lead">平日 10:00–18:00／土日祝 休み（見本）</p>
+                </div>
+              </section>
+
+              <section id="access" class="section sample-extra preview-hit" data-layout-block="access" data-open-step="access-text" aria-label="アクセス。タップでアクセスの入力を開く" hidden data-extra="access">
+                <button type="button" class="zone-badge zone-badge--text" data-open-step="access-text" aria-label="アクセスを開く">ア</button>
+                <div class="shell">
+                  <p class="section-label">Access</p>
+                  <h2>アクセス</h2>
+                  <p class="section-lead" id="access-lead">〇〇駅から徒歩5分（見本）</p>
+                </div>
+              </section>
+
+              <section id="address" class="section sample-extra preview-hit" data-layout-block="address" data-open-step="address-text" aria-label="住所。タップで住所の入力を開く" hidden data-extra="address">
+                <button type="button" class="zone-badge zone-badge--text" data-open-step="address-text" aria-label="住所を開く">住</button>
+                <div class="shell">
+                  <p class="section-label">Address</p>
+                  <h2>住所</h2>
+                  <a class="section-lead address-map-link" id="address-lead" href="https://www.google.com/maps/search/?api=1&amp;query=%E3%80%92000-0000%20%E6%9D%B1%E4%BA%AC%E9%83%BD%E3%80%87%E3%80%87%E5%8C%BA%E8%A6%8B%E6%9C%AC%E7%94%BA1-2-3%EF%BC%88%E8%A6%8B%E6%9C%AC%EF%BC%89" target="_blank" rel="noopener noreferrer">〒000-0000 東京都〇〇区見本町1-2-3（見本）</a>
+                </div>
+              </section>
+
+              <section id="contact" class="contact-band preview-hit" data-layout-block="contact" data-open-step="contact-text" aria-label="ご連絡。タップでご連絡の入力を開く">
+                <button type="button" class="zone-badge" data-open-step="contact-color" aria-label="ご連絡色を開く">色</button>
+                <button type="button" class="zone-badge zone-badge--text" data-open-step="contact-text" aria-label="ご連絡文を開く">文</button>
+                <div class="shell contact-band-inner">
+                  <p class="section-label" id="contact-label">ご連絡</p>
+                  <h2 id="contact-heading">ご連絡</h2>
+                  <p class="contact-band-lead" data-contact-note="1">1万円プランに送信フォームは含まれません。</p>
+                  <p class="contact-band-lead" data-contact-note="2">メール掲載と、コピーできるところまでです。</p>
+                  <p class="sample-mail">sample@example.com</p>
+                </div>
+              </section>
+            </main>
+
+            <footer class="site-footer preview-hit" id="preview-footer" data-open-step="finish" aria-label="フッター。タップで提出を開く">
+              <button type="button" class="zone-badge zone-badge--text zone-badge--finish" data-open-step="finish" aria-label="提出を開く">提</button>
+              <div class="shell footer-inner">
+                <p id="footer-copy">© <span id="footer-brand">店名</span></p>
+              </div>
+            </footer>
+          </div>
+        </div>
+      </div>
+      </section>
+
     </div>
   </div>
 </body>

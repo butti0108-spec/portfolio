@@ -5459,7 +5459,7 @@
     if (store.copyPathMode === "omakase") {
       tail = ["easy-copy-path", "easy-copy-omakase"];
     } else if (store.copyPathMode === "keyword") {
-      tail = ["easy-copy-path", "easy-copy-dirs"];
+      tail = ["easy-copy-path"];
       if (activeCopyFrameOrder().length) tail.push("easy-copy-frame");
     } else {
       tail = ["easy-copy-path"];
@@ -5468,7 +5468,7 @@
   }
 
   function getEasyFlowStepIds() {
-    const ids = ["easy-basics", "easy-color"]
+    const ids = ["easy-basics", "easy-color", "easy-copy-dirs"]
       .concat(getEasyImageFlowMid())
       .concat(getEasyCopyFlowTail())
       .concat(["easy-loading", "easy-done"]);
@@ -5640,7 +5640,7 @@
     bar.hidden = true;
   }
 
-  const EASY_FLOW_STAGE_LABELS = ["サンプル", "用途", "基本情報", "色合い", "画像", "文章", "確定"];
+  const EASY_FLOW_STAGE_LABELS = ["サンプル", "用途", "基本情報", "色合い", "雰囲気", "画像", "文章", "確定"];
 
   function easyFlowStageIndex() {
     const gate = document.getElementById("entry-gate");
@@ -5658,17 +5658,17 @@
     if (!id) return 0;
     if (id === "easy-basics") return 3;
     if (id === "easy-color") return 4;
-    if (id === "easy-img-path" || id === "easy-img-wire" || id === "easy-img-omakase") return 5;
+    if (id === "easy-copy-dirs") return 5;
+    if (id === "easy-img-path" || id === "easy-img-wire" || id === "easy-img-omakase") return 6;
     if (
       id === "easy-copy-path" ||
-      id === "easy-copy-dirs" ||
       id === "easy-copy-omakase" ||
       id === "easy-copy-frame" ||
       id.indexOf("easy-sec-") === 0
     ) {
-      return 6;
+      return 7;
     }
-    if (id === "easy-loading" || id === "easy-done") return 7;
+    if (id === "easy-loading" || id === "easy-done") return 8;
     return 0;
   }
 
@@ -5682,8 +5682,8 @@
         return;
       }
       meter.hidden = false;
-      if (label) label.textContent = EASY_FLOW_STAGE_LABELS[n - 1] + "\u3000" + n + " / 7";
-      if (fill) fill.style.width = (n / 7) * 100 + "%";
+      if (label) label.textContent = EASY_FLOW_STAGE_LABELS[n - 1] + "\u3000" + n + " / 8";
+      if (fill) fill.style.width = (n / 8) * 100 + "%";
     });
   }
 
@@ -10246,7 +10246,7 @@
         sitePurpose: store.sitePurpose || null,
         sceneTag: null,
         sectionId: secId,
-        keywordIds: store.copyPathMode === "keyword" ? store.copyDirIds || [] : [],
+        keywordIds: store.copyDirIds || [],
         forbidKeywordIds: store.copyDirForbid || [],
         presetAxes: store.copyPathMode === "omakase" ? store.copyOmakaseAxes : null,
         salt: salt
@@ -10471,6 +10471,7 @@
         }
         store.copyDirIds = Array.from(want);
         store.copyDirForbid = Array.from(ban);
+        store.copyOmakaseAxes = null;
         store.copyFrameCandidates = {};
         store.copyFrameSelected = {};
         renderCopyDirsUi();
@@ -10536,7 +10537,7 @@
                 sitePurpose: store.sitePurpose || null,
                 sceneTag: null,
                 sectionId: secId,
-                keywordIds: [],
+                keywordIds: store.copyDirIds || [],
                 forbidKeywordIds: store.copyDirForbid || [],
                 presetAxes: store.copyOmakaseAxes,
                 salt: saltBase + "|" + secId + "|" + round
@@ -10570,7 +10571,10 @@
       return !!(store.copyFrameNow[secId] || readCurrentSectionText(secId));
     });
     if (hasAny && store.copyOmakaseAxes) return Promise.resolve();
-    return applyOmakaseFromDict({ onlyUnlocked: false });
+    const anyLock = COPY_FRAME_ORDER.some(function (secId) {
+      return !!(store.copyOmakaseLocks && store.copyOmakaseLocks[secId]);
+    });
+    return applyOmakaseFromDict({ onlyUnlocked: anyLock });
   }
 
   function renderCopyOmakaseUi() {

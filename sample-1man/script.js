@@ -10456,6 +10456,8 @@
         chain = chain.then(function () {
           if (!store.copyFieldSource || typeof store.copyFieldSource !== "object") store.copyFieldSource = {};
           const fields = visibleCopyFields(secId).filter(function (field) {
+            /* 基本情報で決めた紹介は、おまかせが生成も上書きもしない */
+            if (field.key === "about_lead" && store.easyBasicsApplied) return false;
             return store.copyFieldSource[field.key] !== "custom";
           });
           if (!fields.length) return;

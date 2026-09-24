@@ -12,7 +12,7 @@
   <!-- メーカー親CSS（ポートフォリオ根の style.css は読まない） -->
   <link rel="stylesheet" href="maker-base.css?v=cleanup-20260922">
   <link rel="icon" href="brand/mark-favicon.png?v=logo-7" type="image/png">
-  <link rel="stylesheet" href="sample-overrides.css?v=easy-flow-meter-20260924">
+  <link rel="stylesheet" href="sample-overrides.css?v=easy-look-pct-20260924">
   <link rel="stylesheet" href="free-photo-gallery/gallery.css?v=gallery-check-20260923">
   <script>
     (function () {
@@ -61,7 +61,7 @@
   <script src="sushi-belt.js?v=sushi-guide-session-20260922a" defer></script>
   <script src="free-photo-gallery/gallery.js?v=gallery-check-20260923" defer></script>
   <script src="page-shutter.js?v=shutter-all-20260924" defer></script>
-  <script src="script.js?v=easy-flow-meter-20260924" defer></script>
+  <script src="script.js?v=easy-look-pct-20260924" defer></script>
   <script>
     (function () {
       var h = location.hostname;
@@ -368,6 +368,7 @@
             <span class="preview-look" id="preview-look" role="group" aria-label="見本の大きさ">
               <span class="preview-look-sep" aria-hidden="true">|</span>
               <button type="button" class="preview-look-btn" id="preview-scale-minus" aria-label="見本を小さく">−</button>
+              <span class="preview-scale-pct" id="preview-scale-pct" aria-live="polite"></span>
               <button type="button" class="preview-look-btn" id="preview-scale-plus" aria-label="見本を大きく">＋</button>
             </span>
           </span>

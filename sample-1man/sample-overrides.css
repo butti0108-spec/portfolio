@@ -7324,8 +7324,19 @@ body.atelier.color-mode-easy .preset-row--mood6 [data-easy-preset] {
   line-height: 1;
   cursor: pointer;
 }
-.preview-look-btn + .preview-look-btn {
+.preview-look-btn + .preview-look-btn,
+.preview-scale-pct + .preview-look-btn {
   margin-left: 0.35rem;
+}
+.preview-scale-pct {
+  min-width: 3.2rem;
+  margin-left: 0.35rem;
+  text-align: center;
+  font-variant-numeric: tabular-nums;
+  font-weight: 700;
+  font-size: 0.85rem;
+  line-height: 1;
+  pointer-events: none;
 }
 .preview-look-btn:hover {
   background: rgba(21, 32, 40, 0.06);

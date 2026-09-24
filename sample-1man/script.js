@@ -15421,14 +15421,18 @@
       { id: "desktop", label: "PC", width: 1280 }
     ];
     let stepIndex = 4;
-    /* 見るだけ。下書き・ZIPには入れない。幅の並びとは別 */
+    /* 100%は選んだ幅の実寸。開いた直後だけ枠に収め、その倍率を％で出す */
     const LOOK_MIN = 0.25;
     const LOOK_MAX = 2;
     let lookScale = 1;
+    let lookTouched = false;
 
     function clampLook(n) {
-      const stepped = Math.round(n * 10) / 10;
-      return Math.min(LOOK_MAX, Math.max(LOOK_MIN, stepped));
+      return Math.min(LOOK_MAX, Math.max(LOOK_MIN, n));
+    }
+
+    function shownLookPercent() {
+      return Math.round(lookScale * 100);
     }
 
     function previewPaneVisible() {
@@ -15452,23 +15456,25 @@
       const widthControl = document.getElementById("chrome-preview-width");
       const minus = document.getElementById("preview-scale-minus");
       const plus = document.getElementById("preview-scale-plus");
+      const pctEl = document.getElementById("preview-scale-pct");
       if (!box) return;
       const widthShown = !!(widthControl && !widthControl.hidden);
       const show = widthShown && previewPaneVisible();
       box.hidden = !show;
       if (show) box.removeAttribute("hidden");
       else box.setAttribute("hidden", "");
-      if (minus) minus.disabled = lookScale <= LOOK_MIN + 0.001;
-      if (plus) plus.disabled = lookScale >= LOOK_MAX - 0.001;
+      const pct = shownLookPercent();
+      if (pctEl) pctEl.textContent = pct + "%";
+      if (minus) minus.disabled = pct <= 25;
+      if (plus) plus.disabled = pct >= 200;
     }
 
-    function applyLookZoom(viewportEl, fitScale) {
+    function applyLookZoom(viewportEl, forcedZoom) {
       if (!viewportEl) return;
       const scrollEl = document.querySelector(".preview-scroll");
-      const look = currentLook();
-      const combined = (Number(fitScale) || 1) * look;
-      if (combined < 0.999 || combined > 1.001) {
-        viewportEl.style.zoom = String(combined);
+      const look = forcedZoom != null ? Number(forcedZoom) : currentLook();
+      if (look < 0.999 || look > 1.001) {
+        viewportEl.style.zoom = String(look);
       } else {
         viewportEl.style.removeProperty("zoom");
       }
@@ -15477,7 +15483,20 @@
       viewportEl.style.removeProperty("margin-bottom");
       viewportEl.style.removeProperty("margin-left");
       viewportEl.style.removeProperty("margin-right");
-      if (scrollEl) scrollEl.classList.toggle("is-look-enlarged", look > 1.001);
+      if (scrollEl) {
+        const fit = store.previewFrameScale || 1;
+        scrollEl.classList.toggle("is-look-enlarged", look > fit + 0.001);
+      }
+    }
+
+    function bumpLook(dir) {
+      lookTouched = true;
+      const cur = shownLookPercent();
+      let next = cur + dir * 10;
+      if (dir > 0 && cur < 100 && next > 100) next = 100;
+      if (dir < 0 && cur > 100 && next < 100) next = 100;
+      lookScale = clampLook(next / 100);
+      apply();
     }
 
     function applyPreviewFrameScale(opts) {
@@ -15519,9 +15538,11 @@
         scale = Math.min(scale, availH / fullH, 1);
       }
       store.previewFrameScale = scale;
-      /* zoom はレイアウト箱も縮む（Chrome）。見た目の倍率は枠合わせに掛ける */
+      /* 100%は幅の実寸。開いた直後だけ、枠に収まる倍率を％にする */
+      if (!lookTouched) lookScale = clampLook(scale);
       viewport.style.removeProperty("--hub-place-fit-scale");
-      applyLookZoom(viewport, scale);
+      applyLookZoom(viewport);
+      syncPreviewLookControl();
       scrollEl.scrollLeft = 0;
       if (placeFit) scrollEl.scrollTop = 0;
       return scale;
@@ -15629,14 +15650,12 @@
     const scalePlus = document.getElementById("preview-scale-plus");
     if (scaleMinus) {
       scaleMinus.addEventListener("click", () => {
-        lookScale = clampLook(lookScale - 0.1);
-        apply();
+        bumpLook(-1);
       });
     }
     if (scalePlus) {
       scalePlus.addEventListener("click", () => {
-        lookScale = clampLook(lookScale + 0.1);
-        apply();
+        bumpLook(1);
       });
     }
     window.syncPreviewLookControl = syncPreviewLookControl;

@@ -7524,6 +7524,14 @@
     if (step.id === "easy-copy-dirs") {
       renderCopyDirsUi();
     }
+    if (step.id === "easy-basics") {
+      const brandEl = document.getElementById("easy-brand-name");
+      const introEl = document.getElementById("easy-intro");
+      const empty =
+        (!brandEl || !String(brandEl.value || "").trim()) &&
+        (!introEl || !String(introEl.value || "").trim());
+      if (empty || !store.easyBasicsSeed) fillEasyBasicsFromFields();
+    }
     if (step.id === "easy-copy-omakase") {
       ensureOmakaseCopyReady().then(function () {
         renderCopyOmakaseUi();
@@ -8295,17 +8303,20 @@
 
   function applyEasyBasicsToForm(basics) {
     const b = basics || readEasyBasicsFromUi();
+    const seed = store.easyBasicsSeed || {};
     if (b.brand) {
-      setFieldValue("brand_name", b.brand);
-      const seedBrand = store.easyBasicsSeed && store.easyBasicsSeed.brand;
-      if (b.brand !== seedBrand) {
+      if (b.brand !== seed.brand) setFieldValue("brand_name", b.brand);
+      if (b.brand !== seed.brand) {
         const hero = String(fieldValue("hero_title") || "").trim();
-        if (!hero || isPlaceholderBrand(hero)) setFieldValue("hero_title", b.brand);
+        if (!hero || isPlaceholderBrand(hero) || hero === seed.brand) setFieldValue("hero_title", b.brand);
       }
     }
-    const seed = store.easyBasicsSeed || {};
     if (b.intro && b.intro !== seed.intro) setFieldValue("about_lead", b.intro);
     if (b.email && b.email !== seed.email) setFieldValue("contact_email", b.email);
+    if (b.phone && b.phone !== seed.phone && seed.phone) {
+      const note = fieldValue("contact_note_1") || "";
+      if (note.indexOf(seed.phone) >= 0) setFieldValue("contact_note_1", note.replace(seed.phone, b.phone));
+    }
     if (b.hours && b.hours !== seed.hours) {
       const hoursToggle = document.querySelector('[data-extra-toggle="hours"]');
       if (hoursToggle && !hoursToggle.checked) {
@@ -9920,30 +9931,42 @@
   function fillEasyBasicsFromFields() {
     const note = fieldValue("contact_note_1") || "";
     const phoneMatch = note.match(/0[\d\-]+/);
-    const samples = {
-      "easy-brand-name": fieldValue("brand_name") || String(store.sushiSampleBrand || "").trim() || "",
-      "easy-intro": fieldValue("about_lead") || "",
-      "easy-email": fieldValue("contact_email") || "",
-      "easy-phone": phoneMatch ? phoneMatch[0] : "",
-      "easy-hours": fieldValue("hours_text") || "",
-      "easy-address": fieldValue("address_text") || ""
+    const mock = {
+      brand: fieldValue("brand_name") || String(store.sushiSampleBrand || "").trim() || "",
+      intro: fieldValue("about_lead") || "",
+      email: fieldValue("contact_email") || "",
+      phone: phoneMatch ? phoneMatch[0] : "",
+      hours: fieldValue("hours_text") || "",
+      address: fieldValue("address_text") || ""
     };
-    Object.keys(samples).forEach(function (id) {
-      const el = document.getElementById(id);
-      if (!el) return;
-      const sample = String(samples[id] || "").trim();
-      const current = String(el.value || "").trim();
-      if (sample) el.setAttribute("placeholder", sample);
-      if (!current || current === sample) el.value = "";
+    const map = {
+      brand: "easy-brand-name",
+      intro: "easy-intro",
+      email: "easy-email",
+      phone: "easy-phone",
+      hours: "easy-hours",
+      address: "easy-address"
+    };
+    const hints = {
+      brand: "例：〇〇カフェ",
+      intro: "どんなお店か、短く",
+      email: "info@example.com",
+      phone: "000-0000-0000",
+      hours: "例：平日 10:00–18:00／定休 水曜",
+      address: "例：東京都〇〇区…"
+    };
+    const seed = {};
+    Object.keys(map).forEach(function (key) {
+      const el = document.getElementById(map[key]);
+      if (!el) {
+        seed[key] = String(mock[key] || "").trim();
+        return;
+      }
+      el.setAttribute("placeholder", hints[key]);
+      el.value = String(mock[key] || "").trim();
+      seed[key] = String(el.value || "").trim();
     });
-    store.easyBasicsSeed = {
-      brand: "",
-      intro: "",
-      email: "",
-      phone: "",
-      hours: "",
-      address: ""
-    };
+    store.easyBasicsSeed = seed;
   }
 
   function applyCopyTextToField(key, text) {

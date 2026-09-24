@@ -1630,11 +1630,16 @@ html {
 html.dash-collapse-closing .dash-collapse-shut,
 html.dash-collapse-full .dash-collapse-shut {
   background: #efeae3;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 0 0.55rem 0.55rem 0;
 }
 
 html.dash-collapse-closing .dash-collapse-shut .dash-chevron--one,
 html.dash-collapse-full .dash-collapse-shut .dash-chevron--one {
   transform: rotate(180deg);
+  width: 1.25rem;
+  height: 1.25rem;
 }
 
 .dash-collapse-shut[hidden],
@@ -1748,6 +1753,7 @@ html.dash-wave-squeeze .dash-collapse-shut .dash-chevron--one {
 html.dash-collapse-full .dash-pane {
   width: 1.35rem;
   background: transparent;
+  overflow: visible;
   z-index: 2;
 }
 

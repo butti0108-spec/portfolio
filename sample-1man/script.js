@@ -7566,6 +7566,7 @@
         r.checked = r.value === val;
       });
       setSampleFlowPreviewHidden(false);
+      paintEasyColorBars();
     }
     if (step.id === "easy-copy-omakase") {
       ensureOmakaseCopyReady().then(function () {
@@ -11252,6 +11253,22 @@
       return false;
     }
     return !!(store.pendingSushi && store.pendingSushi.draft);
+  }
+
+  function paintEasyColorBars() {
+    const row = document.getElementById("entry-sample-color-row");
+    if (!row) return;
+    row.querySelectorAll(".entry-color-bars").forEach(function (bars) {
+      const label = bars.closest("label");
+      const input = label && label.querySelector('input[name="entry_sample_color"]');
+      const preset = input && PRESETS[input.value];
+      if (!preset) return;
+      const keys = ["pageBg", "chromeBg", "accent"];
+      const marks = bars.querySelectorAll("i");
+      keys.forEach(function (key, i) {
+        if (marks[i] && preset[key]) marks[i].style.background = preset[key];
+      });
+    });
   }
 
   function applyEasyColorChoice() {
@@ -17803,6 +17820,7 @@
   restoreViewAfterMode();
   setupColorModeControls();
   setupEntryGate();
+  paintEasyColorBars();
   openDraftNotice();
 
   if (bootReview) {

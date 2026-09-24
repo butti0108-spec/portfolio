@@ -5684,6 +5684,16 @@
       meter.hidden = false;
       if (label) label.textContent = EASY_FLOW_STAGE_LABELS[n - 1] + "\u3000" + n + " / 8";
       if (fill) fill.style.width = (n / 8) * 100 + "%";
+      const names = meter.querySelector("[data-easy-flow-meter-names]");
+      if (names) {
+        names.textContent = "";
+        EASY_FLOW_STAGE_LABELS.forEach(function (name, i) {
+          const span = document.createElement("span");
+          span.className = "easy-flow-meter-name" + (i + 1 === n ? " is-now" : "");
+          span.textContent = name;
+          names.appendChild(span);
+        });
+      }
     });
   }
 

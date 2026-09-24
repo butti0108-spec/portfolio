@@ -644,6 +644,37 @@ body.atelier.entry-gate-open .atelier-shell {
   border-radius: 999px;
 }
 
+.easy-flow-meter-names {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.12rem 0.7rem;
+  margin: 0.38rem 0 0;
+  pointer-events: none;
+}
+
+.easy-flow-meter-name {
+  font-size: 0.78rem;
+  font-weight: 400;
+  line-height: 1.35;
+  color: #6b736e;
+}
+
+.easy-flow-meter-name.is-now {
+  font-weight: 700;
+  color: #2d6a36;
+}
+
+.easy-flow-meter-name.is-now::before {
+  content: "";
+  display: inline-block;
+  width: 0.42rem;
+  height: 0.42rem;
+  margin-right: 0.22rem;
+  border-radius: 999px;
+  background: #2d6a36;
+  vertical-align: 0.05em;
+}
+
 .entry-mood-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;

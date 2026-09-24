@@ -33,7 +33,7 @@
     })();
   </script>
   <script>
-    /* 文章の入力3画面は、描画前から見本と幅切り替えを出さない（更新時の点滅を止める） */
+    /* サンプル本線の復元順。文章・色・基本情報でも見本は隠さない */
     (function () {
       try {
         if (/[?&](?:embedPreview|capture)=1(?:&|$)/.test(location.search)) return;
@@ -42,17 +42,15 @@
         var data = JSON.parse(raw);
         if (!data || !data.easyFlowActive || data.entryBranch !== "sample") return;
         if (data.uiMode && data.uiMode !== "guided") return;
-        var head;
-        if (data.copyPathMode === "omakase") head = ["easy-copy-path", "easy-basics", "easy-copy-omakase"];
-        else if (data.copyPathMode === "keyword") head = ["easy-copy-path", "easy-copy-dirs", "easy-basics", "easy-copy-frame"];
-        else head = ["easy-copy-path"];
-        var tail;
-        if (data.imgPathMode === "omakase" || data.imgPathMode === "self") tail = ["easy-img-path", "easy-img-wire", "easy-loading", "easy-done"];
-        else tail = ["easy-img-path"];
-        var id = head.concat(tail)[Number(data.wizardStepIndex) || 0];
-        if (id === "easy-copy-path" || id === "easy-copy-dirs" || id === "easy-basics") {
-          document.documentElement.classList.add("sample-flow-hide-preview");
-        }
+        var ids = ["easy-basics", "easy-color"];
+        if (data.imgPathMode === "omakase" || data.imgPathMode === "self") ids.push("easy-img-path", "easy-img-wire");
+        else ids.push("easy-img-path");
+        if (data.copyPathMode === "omakase") ids.push("easy-copy-path", "easy-copy-omakase");
+        else if (data.copyPathMode === "keyword") ids.push("easy-copy-path", "easy-copy-dirs", "easy-copy-frame");
+        else ids.push("easy-copy-path");
+        ids.push("easy-loading", "easy-done");
+        /* この順のどの画面でも、見本は隠さない */
+        void ids;
       } catch (e) { /* ignore */ }
     })();
   </script>
@@ -63,7 +61,7 @@
   <script src="sushi-belt.js?v=sushi-guide-session-20260922a" defer></script>
   <script src="free-photo-gallery/gallery.js?v=gallery-check-20260923" defer></script>
   <script src="page-shutter.js?v=shutter-all-20260924" defer></script>
-  <script src="script.js?v=dash-sheet-edge-20260924" defer></script>
+  <script src="script.js?v=easy-flow-order-20260924" defer></script>
   <script>
     (function () {
       var h = location.hostname;
@@ -320,21 +318,6 @@
         </div>
         <button type="button" class="entry-step-back" data-entry-step-back>← ひとつ戻る</button>
       </fieldset>
-
-      <fieldset class="entry-intake-block" id="entry-color-field" data-entry-step="color" hidden>
-        <legend>色合いは？</legend>
-        <p class="entry-intake-note">選んだサンプルのまま、色合いだけ変えられます。</p>
-        <div class="entry-mood-row" id="entry-sample-color-row" role="radiogroup" aria-label="色合い">
-          <label class="entry-choice"><input type="radio" name="entry_sample_color" value="keep"><span>このままでよい</span></label>
-          <label class="entry-choice"><input type="radio" name="entry_sample_color" value="clinic"><span>紺・きれいめ</span></label>
-          <label class="entry-choice"><input type="radio" name="entry_sample_color" value="green"><span>緑</span></label>
-          <label class="entry-choice"><input type="radio" name="entry_sample_color" value="cafe"><span>ベージュ</span></label>
-          <label class="entry-choice"><input type="radio" name="entry_sample_color" value="ink"><span>墨</span></label>
-          <label class="entry-choice"><input type="radio" name="entry_sample_color" value="brick"><span>オレンジ</span></label>
-          <label class="entry-choice"><input type="radio" name="entry_sample_color" value="sakura"><span>ピンク</span></label>
-        </div>
-        <button type="button" class="entry-step-back" data-entry-step-back>← ひとつ戻る</button>
-      </fieldset>
     </div>
   </div>
 
@@ -530,6 +513,21 @@
               <span class="easy-field-label">住所 <span class="easy-field-opt">任意</span></span>
               <input type="text" id="easy-address" name="easy_address" maxlength="80" placeholder="">
             </label>
+          </div>
+        </details>
+
+        <details class="dash-block dash-block--easy" data-step-id="easy-color" data-preview-target="#preview-root" hidden>
+          <summary>色合い</summary>
+          <p class="dash-subhead" role="heading" aria-level="3">色合いは？</p>
+          <p class="step-help">選んだサンプルのまま、色合いだけ変えられます。</p>
+          <div class="entry-mood-row" id="entry-sample-color-row" role="radiogroup" aria-label="色合い">
+            <label class="entry-choice"><input type="radio" name="entry_sample_color" value="keep"><span>このままでよい</span></label>
+            <label class="entry-choice"><input type="radio" name="entry_sample_color" value="clinic"><span>紺・きれいめ</span></label>
+            <label class="entry-choice"><input type="radio" name="entry_sample_color" value="green"><span>緑</span></label>
+            <label class="entry-choice"><input type="radio" name="entry_sample_color" value="cafe"><span>ベージュ</span></label>
+            <label class="entry-choice"><input type="radio" name="entry_sample_color" value="ink"><span>墨</span></label>
+            <label class="entry-choice"><input type="radio" name="entry_sample_color" value="brick"><span>オレンジ</span></label>
+            <label class="entry-choice"><input type="radio" name="entry_sample_color" value="sakura"><span>ピンク</span></label>
           </div>
         </details>
 

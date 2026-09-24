@@ -329,9 +329,10 @@
 
   /* 色番号は見本サイトの上→下・左→右（ヘッダー／フッターは背景→文字の2工程）。0は章の注意（注文画面のみ） */
   const STEPS = [
+    { id: "easy-basics", label: "基本情報", needsConfirm: true, num: 0 },
+    { id: "easy-color", label: "色合い", needsConfirm: true, num: 0 },
     { id: "easy-copy-path", label: "文章の決め方", needsConfirm: true, num: 0 },
     { id: "easy-copy-dirs", label: "方向", needsConfirm: true, num: 0 },
-    { id: "easy-basics", label: "基本情報", needsConfirm: true, num: 0 },
     { id: "easy-copy-omakase", label: "おまかせ文章", needsConfirm: true, num: 0 },
     { id: "easy-copy-frame", label: "枠の文章", needsConfirm: true, num: 0 },
     { id: "easy-sec-hero", label: "キャッチ文", needsConfirm: true, num: 0 },
@@ -741,21 +742,23 @@
   const GRADIENT_BG_KEYS = new Set(["chromeBg", "pageBg", "accent", "cardBg", "valuesBg", "contactBg"]);
 
   const EASY_FLOW_STEP_IDS = [
-    "easy-copy-path",
-    "easy-copy-dirs",
     "easy-basics",
-    "easy-copy-omakase",
-    "easy-copy-frame",
+    "easy-color",
     "easy-img-path",
     "easy-img-omakase",
     "easy-img-wire",
+    "easy-copy-path",
+    "easy-copy-dirs",
+    "easy-copy-omakase",
+    "easy-copy-frame",
     "easy-loading",
     "easy-done"
   ];
   const EASY_FLOW_STEP_SET = new Set([
+    "easy-basics",
+    "easy-color",
     "easy-copy-path",
     "easy-copy-dirs",
-    "easy-basics",
     "easy-copy-omakase",
     "easy-copy-frame",
     "easy-sec-hero",
@@ -5444,26 +5447,35 @@
     syncFontPickers();
   }
 
-  function getEasyImageFlowTail() {
+  function getEasyImageFlowMid() {
     if (store.imgPathMode === "omakase" || store.imgPathMode === "self") {
-      return ["easy-img-path", "easy-img-wire", "easy-loading", "easy-done"];
+      return ["easy-img-path", "easy-img-wire"];
     }
     return ["easy-img-path"];
   }
 
-  function getEasyFlowStepIds() {
-    let head;
+  function getEasyCopyFlowTail() {
+    let tail;
     if (store.copyPathMode === "omakase") {
-      head = ["easy-copy-path", "easy-basics", "easy-copy-omakase"];
+      tail = ["easy-copy-path", "easy-copy-omakase"];
     } else if (store.copyPathMode === "keyword") {
-      head = ["easy-copy-path", "easy-copy-dirs", "easy-basics"];
-      if (activeCopyFrameOrder().length) head.push("easy-copy-frame");
+      tail = ["easy-copy-path", "easy-copy-dirs"];
+      if (activeCopyFrameOrder().length) tail.push("easy-copy-frame");
     } else {
-      head = ["easy-copy-path"];
+      tail = ["easy-copy-path"];
     }
-    const ids = head.concat(getEasyImageFlowTail());
+    return tail;
+  }
+
+  function getEasyFlowStepIds() {
+    const ids = ["easy-basics", "easy-color"]
+      .concat(getEasyImageFlowMid())
+      .concat(getEasyCopyFlowTail())
+      .concat(["easy-loading", "easy-done"]);
     if (store.copyScreenReturn === "hub" && ids.indexOf("easy-copy-frame") < 0) {
-      ids.unshift("easy-copy-frame");
+      const at = ids.indexOf("easy-copy-path");
+      if (at >= 0) ids.splice(at + 1, 0, "easy-copy-frame");
+      else ids.push("easy-copy-frame");
     }
     return ids;
   }
@@ -5510,7 +5522,7 @@
       const order = activeCopyFrameOrder();
       const idx = store.copyFrameIndex || 0;
       if (store.copyScreenReturn === "hub" && (!order.length || idx >= order.length - 1)) return "編集へ戻る";
-      if (!order.length || idx >= order.length - 1) return "これで画像へ";
+      if (!order.length || idx >= order.length - 1) return "これで進む";
       return "これで次の文言へ";
     }
     if (step && EASY_FLOW_STEP_SET.has(step.id)) return "次へ";
@@ -6959,6 +6971,11 @@
       if (!brand) return "店名を入れてください。";
       return "";
     }
+    if (stepId === "easy-color") {
+      const colorEl = document.querySelector('input[name="entry_sample_color"]:checked');
+      if (!colorEl) return "色合いを選んでください。";
+      return "";
+    }
     if (stepId === "easy-copy-omakase") {
       if (store.copyHeroOnPhoto == null) {
         return "写真の上に言葉を出すか、出さないか、選んでから進んでください。";
@@ -7540,6 +7557,15 @@
     if (step.id === "easy-basics") {
       if (!store.easyBasicsHints && !store.easyBasicsApplied) captureEasyBasicsHintsFromSample();
       paintEasyBasicsPlaceholders();
+    }
+    if (step.id === "easy-color") {
+      const chosen = store.chosenPresetKey;
+      const keep = !chosen || chosen === store.sampleOriginalPreset;
+      const val = keep ? "keep" : chosen;
+      document.querySelectorAll('input[name="entry_sample_color"]').forEach(function (r) {
+        r.checked = r.value === val;
+      });
+      setSampleFlowPreviewHidden(false);
     }
     if (step.id === "easy-copy-omakase") {
       ensureOmakaseCopyReady().then(function () {
@@ -8146,7 +8172,7 @@
         title: "用途を選ぶ",
         lead: store.entryBranch === "detail"
           ? "用途のあと、編集ハブ（並び替え）へ進みます。"
-          : "用途を選ぶと、次に色合いへ進みます。"
+          : "用途を選ぶと、次に基本情報へ進みます。"
       };
     }
     return {
@@ -8158,7 +8184,7 @@
   function entryGateAllowedSteps() {
     if (!store.saveMode) return ["save"];
     if (store.entryBranch === "detail") return ["save", "branch", "purpose"];
-    if (store.entryBranch === "sample") return ["save", "branch", "sushi", "purpose", "color"];
+    if (store.entryBranch === "sample") return ["save", "branch", "sushi", "purpose"];
     if (store.entryBranch === "resume") return ["save", "branch", "resume"];
     return ["save", "branch"];
   }
@@ -8261,7 +8287,7 @@
       store.hubEntrySource = "sample";
     }
     applyUiMode();
-    showEntryGate("color");
+    showEntryGate("purpose");
     scheduleSave();
   }
 
@@ -9718,19 +9744,8 @@
     if (typeof window.applyDashCollapse === "function") window.applyDashCollapse();
   }
 
-  /* 文章工程：入力・条件指定は1画面。候補を見比べる段階から左＝操作／右＝プレビュー */
-  const COPY_INPUT_STEP_IDS = {
-    "easy-copy-path": true,
-    "easy-copy-dirs": true,
-    "easy-basics": true
-  };
-
-  function syncSampleFlowPreviewVisibility(stepId) {
-    if (!store.easyFlowActive || store.entryBranch !== "sample") {
-      setSampleFlowPreviewHidden(false);
-      return;
-    }
-    setSampleFlowPreviewHidden(!!COPY_INPUT_STEP_IDS[stepId]);
+  function syncSampleFlowPreviewVisibility() {
+    setSampleFlowPreviewHidden(false);
   }
 
   let samplePreviewPopReady = false;
@@ -11236,6 +11251,51 @@
     return !!(store.pendingSushi && store.pendingSushi.draft);
   }
 
+  function applyEasyColorChoice() {
+    const colorEl = document.querySelector('input[name="entry_sample_color"]:checked');
+    const colorVal = colorEl ? colorEl.value : "keep";
+    let mood = store.sampleOriginalPreset || store.chosenPresetKey || "clinic";
+    if (colorVal !== "keep" && PRESETS[colorVal]) mood = colorVal;
+    if (mood && PRESETS[mood]) {
+      applyPresetByKey(mood);
+      confirmAllColorStepsFromPreset();
+      store.chosenPresetKey = mood;
+    }
+  }
+
+  async function enterSampleAfterPurpose() {
+    const gate = document.getElementById("entry-gate");
+    if (!gate) return;
+    let purposeEl = gate.querySelector('input[name="entry_purpose"]:checked');
+    if (!purposeEl && store.entryBranch === "sample") {
+      purposeEl = gate.querySelector('input[name="entry_purpose"][value="shop"]');
+      if (purposeEl) purposeEl.checked = true;
+    }
+    if (!purposeEl || purposeEl.value !== "shop") return;
+    if (shouldResumeSampleFlow()) {
+      if (window.SushiBelt) window.SushiBelt.unmount();
+      resumeSampleFlowAfterColor("keep");
+      return;
+    }
+    if (!(await warmSampleEntryDraft())) return;
+    const draft = store.pendingSushi.draft;
+    const layout = draft.layoutPattern === "b" || draft.layoutPattern === "c" ? draft.layoutPattern : "a";
+    const moodFromDraft = draft.chosenPresetKey && PRESETS[draft.chosenPresetKey] ? draft.chosenPresetKey : "clinic";
+    applyIntakeSelections("shop", "sample", moodFromDraft, layout);
+    store.entryBranch = "sample";
+    store.easyFlowActive = true;
+    store.hubEntrySource = "sample";
+    applySushiSampleDraft(draft);
+    store.pendingSushi = null;
+    if (window.SushiBelt) window.SushiBelt.unmount();
+    store.sampleOriginalPreset = moodFromDraft;
+    store.sampleFlowAppliedId = String(store.sushiSampleId || "");
+    store.sampleFlowEntered = true;
+    const keep = document.querySelector('input[name="entry_sample_color"][value="keep"]');
+    if (keep) keep.checked = true;
+    startSampleFlowAfterEntry();
+  }
+
   async function finishSampleEntryFromGate() {
     const gate = document.getElementById("entry-gate");
     if (!gate) return;
@@ -11457,12 +11517,7 @@
           runWithCrossShutter(function () { finishDetailEntryFromGate(); });
           return;
         }
-        runWithCrossShutter(function () { setEntryGateStep("color"); });
-      });
-    });
-    gate.querySelectorAll('input[name="entry_sample_color"]').forEach((input) => {
-      bindChoiceReselect(input, () => {
-        runWithCrossShutter(function () { return finishSampleEntryFromGate(); }, warmSampleEntryDraft);
+        runWithCrossShutter(function () { return enterSampleAfterPurpose(); }, warmSampleEntryDraft);
       });
     });
     gate.querySelectorAll("[data-entry-step-back]").forEach((btn) => {
@@ -11601,6 +11656,10 @@
     }
 
     if (step.id === "finish" && !validateFinish()) return false;
+
+    if (step.id === "easy-color") {
+      applyEasyColorChoice();
+    }
 
     if (step.id === "easy-basics") {
       applyEasyBasicsToForm();
@@ -12110,11 +12169,6 @@
       returnToLayoutHub();
       return;
     }
-    if (step && step.id === "easy-copy-path") {
-      reopenSampleEntryAtColor();
-      return;
-    }
-    /* サンプル本線の先頭付近：文章決め方より前は色ゲートへ */
     if (
       store.easyFlowActive &&
       store.entryBranch === "sample" &&

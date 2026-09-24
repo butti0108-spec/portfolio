@@ -9918,33 +9918,31 @@
   }
 
   function fillEasyBasicsFromFields() {
-    const brand =
-      fieldValue("brand_name") ||
-      String(store.sushiSampleBrand || "").trim() ||
-      "";
-    const elBrand = document.getElementById("easy-brand-name");
-    const elIntro = document.getElementById("easy-intro");
-    const elEmail = document.getElementById("easy-email");
-    const elPhone = document.getElementById("easy-phone");
-    const elHours = document.getElementById("easy-hours");
-    const elAddress = document.getElementById("easy-address");
-    if (elBrand && !elBrand.value) elBrand.value = brand;
-    if (elIntro && !elIntro.value) elIntro.value = fieldValue("about_lead") || "";
-    if (elEmail && !elEmail.value) elEmail.value = fieldValue("contact_email") || "";
-    if (elHours && !elHours.value) elHours.value = fieldValue("hours_text") || "";
-    if (elAddress && !elAddress.value) elAddress.value = fieldValue("address_text") || "";
-    if (elPhone && !elPhone.value) {
-      const note = fieldValue("contact_note_1") || "";
-      const m = note.match(/0[\d\-]+/);
-      if (m) elPhone.value = m[0];
-    }
+    const note = fieldValue("contact_note_1") || "";
+    const phoneMatch = note.match(/0[\d\-]+/);
+    const samples = {
+      "easy-brand-name": fieldValue("brand_name") || String(store.sushiSampleBrand || "").trim() || "",
+      "easy-intro": fieldValue("about_lead") || "",
+      "easy-email": fieldValue("contact_email") || "",
+      "easy-phone": phoneMatch ? phoneMatch[0] : "",
+      "easy-hours": fieldValue("hours_text") || "",
+      "easy-address": fieldValue("address_text") || ""
+    };
+    Object.keys(samples).forEach(function (id) {
+      const el = document.getElementById(id);
+      if (!el) return;
+      const sample = String(samples[id] || "").trim();
+      const current = String(el.value || "").trim();
+      if (sample) el.setAttribute("placeholder", sample);
+      if (!current || current === sample) el.value = "";
+    });
     store.easyBasicsSeed = {
-      brand: elBrand ? elBrand.value : "",
-      intro: elIntro ? elIntro.value : "",
-      email: elEmail ? elEmail.value : "",
-      phone: elPhone ? elPhone.value : "",
-      hours: elHours ? elHours.value : "",
-      address: elAddress ? elAddress.value : ""
+      brand: "",
+      intro: "",
+      email: "",
+      phone: "",
+      hours: "",
+      address: ""
     };
   }
 

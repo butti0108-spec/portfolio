@@ -15614,6 +15614,9 @@
     let dashCollapseLevel = 0;
     let dashCollapseGen = 0;
     let dashWaveTimer = 0;
+    let dashOpenWidthPx = 0;
+    let dashSheetAnims = [];
+    let dashSheetScaleToken = 0;
 
     function dashWaveMs(name, fallback) {
       const raw = getComputedStyle(document.documentElement).getPropertyValue(name);
@@ -16525,19 +16528,180 @@
       }
     }
 
+    function cancelDashSheetAnims() {
+      dashSheetScaleToken += 1;
+      dashSheetAnims.forEach(function (anim) {
+        try { anim.cancel(); } catch (err) { /* ignore */ }
+      });
+      dashSheetAnims = [];
+    }
+
+    function commitDashSheetFrame() {
+      const pane = document.getElementById("dash-pane");
+      const preview = document.querySelector(".preview-pane");
+      const splitEl = document.getElementById("atelier-split");
+      const root = document.documentElement;
+      if (!dashSheetAnims.length) return;
+      if (pane) pane.style.width = pane.getBoundingClientRect().width + "px";
+      if (preview && splitEl && root.classList.contains("dash-preview-locked")) {
+        const sr = splitEl.getBoundingClientRect();
+        const pr = preview.getBoundingClientRect();
+        preview.style.left = (pr.left - sr.left) + "px";
+        preview.style.width = pr.width + "px";
+      }
+      cancelDashSheetAnims();
+    }
+
+    function finishDashSheet(gen, opening) {
+      if (gen !== dashCollapseGen) return;
+      const root = document.documentElement;
+      const preview = document.querySelector(".preview-pane");
+      if (opening) {
+        root.classList.remove(
+          "dash-collapse-full",
+          "dash-collapse-half",
+          "dash-collapse-settled",
+          "dash-collapse-closing",
+          "dash-sheet-move"
+        );
+      } else {
+        root.classList.add("dash-collapse-full");
+        root.classList.remove("dash-collapse-closing", "dash-sheet-move");
+      }
+      cancelDashSheetAnims();
+      root.style.removeProperty("--dash-sheet-w");
+      if (preview) {
+        preview.style.maxWidth = "";
+        preview.style.minWidth = "";
+      }
+      unlockPreviewBox();
+      releaseDashPaneWidth();
+      syncDashCollapseChrome(opening ? 0 : 2);
+      if (typeof window.applyPreviewWidthFromPane === "function") {
+        window.applyPreviewWidthFromPane();
+      }
+    }
+
+    function followPreviewScale(token) {
+      function step() {
+        if (token !== dashSheetScaleToken) return;
+        if (typeof window.applyPreviewFrameScale === "function") window.applyPreviewFrameScale();
+        if (dashSheetAnims.some(function (anim) { return anim.playState === "running"; })) {
+          window.requestAnimationFrame(step);
+        }
+      }
+      window.requestAnimationFrame(step);
+    }
+
+    function playDashSheet(opening) {
+      const pane = document.getElementById("dash-pane");
+      const preview = document.querySelector(".preview-pane");
+      const splitEl = document.getElementById("atelier-split");
+      const root = document.documentElement;
+      const dur = dashWaveMs(opening ? "--dash-open-ms" : "--dash-shut-ms", opening ? 360 : 220);
+      if (!pane || !preview || !splitEl || dur <= 0) {
+        cancelDashSheetAnims();
+        dashCollapseLevel = opening ? 0 : 2;
+        paintDashCollapseInstant(opening ? 0 : 2);
+        return;
+      }
+      const gen = ++dashCollapseGen;
+      dashCollapseLevel = opening ? 0 : 2;
+      clearDashWaveTimer();
+      clearDashWaveMarks();
+      commitDashSheetFrame();
+
+      const splitRect = splitEl.getBoundingClientRect();
+      const handleW = handle.getBoundingClientRect().width || 10;
+      const face = 2.5 * (parseFloat(getComputedStyle(document.documentElement).fontSize) || 16);
+      const liveW = pane.getBoundingClientRect().width;
+      if (!opening && liveW > face + 8) dashOpenWidthPx = liveW;
+      let openW = dashOpenWidthPx || rememberedDashWidth();
+      const maxPane = Math.max(280, splitRect.width - handleW - 280);
+      openW = Math.max(280, Math.min(openW, maxPane));
+
+      const easeClose = "cubic-bezier(0.16, 0.84, 0.3, 1)";
+      const easeOpen = "cubic-bezier(0.45, 0.02, 0.18, 1)";
+      root.style.setProperty("--dash-width-dur", dur + "ms");
+      root.style.setProperty("--dash-shut-ease", opening ? "cubic-bezier(0.34, 0.06, 0.18, 1)" : easeClose);
+
+      pane.style.transition = "none";
+      pane.style.flex = "0 0 auto";
+      pane.style.minWidth = "0";
+      const fromW = opening ? (liveW > face + 4 ? liveW : face) : liveW;
+      pane.style.width = fromW + "px";
+      lockPreviewBox();
+      preview.style.maxWidth = "none";
+      preview.style.minWidth = "0";
+      preview.style.transition = "none";
+      root.style.setProperty("--dash-sheet-w", (opening ? openW : Math.max(fromW, openW)) + "px");
+      root.classList.add("dash-sheet-move");
+      if (opening) {
+        root.classList.remove(
+          "dash-collapse-full",
+          "dash-collapse-half",
+          "dash-collapse-settled",
+          "dash-collapse-closing"
+        );
+      } else {
+        root.classList.add("dash-collapse-closing");
+      }
+      syncDashCollapseChrome(opening ? 0 : 2);
+
+      const toW = opening ? openW : face;
+      const previewFromLeft = preview.getBoundingClientRect().left - splitRect.left;
+      const previewFromW = preview.getBoundingClientRect().width;
+      const previewToLeft = opening ? toW + handleW : 0;
+      const previewToW = opening ? Math.max(0, splitRect.width - previewToLeft) : splitRect.width;
+      const travel = toW - fromW;
+      const nudge = 14;
+      const useNudge = opening && travel > nudge * 3;
+      const nudgeAt = Math.min(0.14, 48 / dur);
+      const nudgeFrac = useNudge ? nudge / travel : 0;
+      void pane.offsetWidth;
+
+      const paneFrames = useNudge
+        ? [
+            { width: fromW + "px", easing: "linear" },
+            { width: (fromW + nudge) + "px", offset: nudgeAt, easing: easeOpen },
+            { width: toW + "px", offset: 1 }
+          ]
+        : [
+            { width: fromW + "px", easing: easeClose },
+            { width: toW + "px", offset: 1 }
+          ];
+      const previewFrames = useNudge
+        ? [
+            { left: previewFromLeft + "px", width: previewFromW + "px", easing: "linear" },
+            {
+              left: (previewFromLeft + (previewToLeft - previewFromLeft) * nudgeFrac) + "px",
+              width: (previewFromW + (previewToW - previewFromW) * nudgeFrac) + "px",
+              offset: nudgeAt,
+              easing: easeOpen
+            },
+            { left: previewToLeft + "px", width: previewToW + "px", offset: 1 }
+          ]
+        : [
+            { left: previewFromLeft + "px", width: previewFromW + "px", easing: easeClose },
+            { left: previewToLeft + "px", width: previewToW + "px", offset: 1 }
+          ];
+
+      const paneAnim = pane.animate(paneFrames, { duration: dur, fill: "forwards" });
+      const previewAnim = preview.animate(previewFrames, { duration: dur, fill: "forwards" });
+      dashSheetAnims = [paneAnim, previewAnim];
+      followPreviewScale(++dashSheetScaleToken);
+      paneAnim.onfinish = function () {
+        finishDashSheet(gen, opening);
+      };
+    }
+
     const shutBtn = document.getElementById("dash-collapse-shut");
     if (shutBtn) {
       shutBtn.addEventListener("click", function () {
         if (dashCollapseBlocked()) return;
         clearDashWaveTimer();
         clearDashWaveMarks();
-        if (dashCollapseLevel === 0) {
-          dashCollapseLevel = 2;
-          paintDashCollapseInstant(2);
-        } else {
-          dashCollapseLevel = 0;
-          paintDashCollapseInstant(0);
-        }
+        playDashSheet(dashCollapseLevel !== 0);
       });
     }
     window.addEventListener("resize", function () {

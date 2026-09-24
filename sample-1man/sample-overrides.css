@@ -1578,6 +1578,10 @@ html {
   --dash-width-dur: 220ms;
   --dash-title-tuck: 140ms;
   --dash-squeeze-dur: 80ms;
+  /* 試しの時間。閉じは短く、開きは少し長く。実機で変えてよい */
+  --dash-shut-ms: 220ms;
+  --dash-open-ms: 360ms;
+  --dash-shut-ease: cubic-bezier(0.16, 0.84, 0.3, 1);
 }
 
 .dash-collapse-shut,
@@ -1630,7 +1634,7 @@ html:not(.dash-collapse-full):not(.dash-collapse-closing) .dash-pane > .dash-hea
   width: 1.25rem;
   height: 1.25rem;
   transform-origin: center;
-  transition: transform var(--dash-width-dur, 220ms) ease;
+  transition: transform var(--dash-width-dur, 220ms) var(--dash-shut-ease, cubic-bezier(0.16, 0.84, 0.3, 1));
 }
 
 html.dash-collapse-closing .dash-collapse-shut,
@@ -1641,6 +1645,18 @@ html.dash-collapse-full .dash-collapse-shut {
 html.dash-collapse-closing .dash-collapse-shut .dash-chevron--one,
 html.dash-collapse-full .dash-collapse-shut .dash-chevron--one {
   transform: rotate(180deg);
+}
+
+html.dash-sheet-move .dash-pane {
+  overflow: hidden;
+}
+
+html.dash-sheet-move .dash-pane > .dash-header,
+html.dash-sheet-move .dash-pane > .dash-body {
+  width: var(--dash-sheet-w);
+  min-width: var(--dash-sheet-w);
+  max-width: var(--dash-sheet-w);
+  box-sizing: border-box;
 }
 
 .dash-collapse-shut[hidden],
@@ -2011,6 +2027,8 @@ html.dash-wave-out.dash-wave-squeeze .dash-shutter-band {
     --dash-width-dur: 0ms;
     --dash-title-tuck: 0ms;
     --dash-squeeze-dur: 0ms;
+    --dash-shut-ms: 0ms;
+    --dash-open-ms: 0ms;
   }
 }
 

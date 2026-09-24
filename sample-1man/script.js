@@ -7384,6 +7384,7 @@
       setupHubImagePathUi();
       syncHubImagePathPanels(stepId);
     }
+    syncDashResumeNotice();
     scheduleSave();
   }
 
@@ -7562,6 +7563,7 @@
     }
     syncSampleFlowPreviewVisibility(step.id);
     syncEasyCopyLaterHint(step.id);
+    syncDashResumeNotice();
 
     switchToDashTab();
     form.querySelectorAll(":scope > details.dash-block").forEach((d) => {
@@ -7668,6 +7670,7 @@
     const laterFlow = getFlowSteps();
     const laterStep = laterFlow[store.wizardStepIndex];
     syncEasyCopyLaterHint(laterStep && laterStep.id);
+    syncDashResumeNotice();
   }
 
   function previewPaneOnScreen(previewPane) {
@@ -8066,10 +8069,42 @@
     document.body.classList.toggle("copy-later-fixed", on);
   }
 
+  function photoResumeNoticeStep(stepId) {
+    if (!stepId) return false;
+    if (
+      stepId === "easy-img-wire" ||
+      stepId === "easy-img-omakase" ||
+      stepId === "easy-loading" ||
+      stepId === "easy-done"
+    ) {
+      return true;
+    }
+    return HUB_IMG_STEP_IDS.indexOf(stepId) >= 0;
+  }
+
+  function sessionHasUserPhoto() {
+    if (store.galleryPicks && Object.keys(store.galleryPicks).length) return true;
+    if (store.zipImageFiles && Object.keys(store.zipImageFiles).length) return true;
+    if (typeof form === "undefined" || !form) return false;
+    const inputs = form.querySelectorAll('input[type="file"]');
+    for (let i = 0; i < inputs.length; i++) {
+      const input = inputs[i];
+      if (input.files && input.files[0]) return true;
+      if (input.name && imageUrls[input.name]) return true;
+    }
+    return false;
+  }
+
   function syncDashResumeNotice() {
     const notice = document.querySelector(".dash-resume-notice");
     if (!notice) return;
-    notice.hidden = store.saveMode === "folder";
+    if (store.saveMode === "folder") {
+      notice.hidden = true;
+      return;
+    }
+    const step = getCurrentFlowStep();
+    const onPhotoStep = photoResumeNoticeStep(step && step.id);
+    notice.hidden = !(onPhotoStep || sessionHasUserPhoto());
   }
 
   function hideEntryGate() {

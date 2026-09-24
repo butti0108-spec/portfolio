@@ -1332,30 +1332,10 @@
     syncItemFocalNudge(countId, item, index, true, x, y);
   }
 
-  function syncItemFocalNudge(countId, item, slotId, show, focalX, focalY) {
+  function syncItemFocalNudge(countId, item) {
     if (!item) return;
-    let nudge = item.querySelector(":scope > .item-focal-nudge");
-    if (!show) {
-      if (nudge) nudge.remove();
-      return;
-    }
-    if (!nudge) {
-      nudge = document.createElement("div");
-      nudge.className = "item-focal-nudge";
-      nudge.setAttribute("role", "group");
-      nudge.setAttribute("aria-label", "画像位置調整");
-      nudge.innerHTML = focalNudgeMarkup();
-      item.appendChild(nudge);
-    }
-    nudge.setAttribute("data-focal-for", countId);
-    nudge.setAttribute("data-item-id", String(slotId || ""));
-    nudge.setAttribute("data-focal-index", String(slotId || ""));
-    nudge.querySelectorAll("[data-focal-nudge]").forEach(function (btn) {
-      btn.setAttribute("data-focal-for", countId);
-      btn.setAttribute("data-item-id", String(slotId || ""));
-      btn.setAttribute("data-focal-index", String(slotId || ""));
-    });
-    syncFocalNudgeButtons(nudge, focalX, focalY);
+    const nudge = item.querySelector(":scope > .item-focal-nudge");
+    if (nudge) nudge.remove();
   }
 
   function nudgeItemFocal(countId, index, dir) {
@@ -1388,6 +1368,7 @@
     applyItemLayoutToPreview(countId);
     if (store.confirmed.finish) unconfirmFinishSoft();
     scheduleSave();
+    syncOpenLayoutFocalButtons();
   }
 
   function ensureHeroFocalDefaults() {
@@ -1408,29 +1389,10 @@
     syncHeroFocalNudge(stage, x, y);
   }
 
-  function syncHeroFocalNudge(stage, focalX, focalY) {
+  function syncHeroFocalNudge(stage) {
     if (!stage) return;
-    const show = bodyIsDetailEditMode() && !store.heroImageOff;
-    let nudge = stage.querySelector(":scope > .item-focal-nudge");
-    if (!show) {
-      if (nudge) nudge.remove();
-      return;
-    }
-    if (!nudge) {
-      nudge = document.createElement("div");
-      nudge.className = "item-focal-nudge item-focal-nudge--hero";
-      nudge.setAttribute("role", "group");
-      nudge.setAttribute("aria-label", "キャッチ画像の位置調整");
-      nudge.innerHTML = focalNudgeMarkup();
-      stage.appendChild(nudge);
-    }
-    nudge.setAttribute("data-focal-for", "hero");
-    nudge.setAttribute("data-focal-index", "0");
-    nudge.querySelectorAll("[data-focal-nudge]").forEach(function (btn) {
-      btn.setAttribute("data-focal-for", "hero");
-      btn.setAttribute("data-focal-index", "0");
-    });
-    syncFocalNudgeButtons(nudge, focalX, focalY);
+    const nudge = stage.querySelector(":scope > .item-focal-nudge");
+    if (nudge) nudge.remove();
   }
 
   function bodyIsDetailEditMode() {
@@ -1459,6 +1421,7 @@
     applyHeroFocalToPreview();
     if (store.confirmed.finish) unconfirmFinishSoft();
     scheduleSave();
+    syncOpenLayoutFocalButtons();
   }
 
   function setupItemFocalNudgeClicks() {
@@ -2227,6 +2190,9 @@
     hubEntrySource: null,
     easyFlowActive: false,
     pendingSushi: null,
+    sampleFlowEntered: false,
+    sampleFlowAppliedId: null,
+    sampleOriginalPreset: null,
     sushiSampleId: null,
     sushiSampleKey: null,
     sushiSampleBrand: null,
@@ -2242,6 +2208,10 @@
     imgOmakasePicks: {},
     imgOmakaseSalt: 0,
     copyDirIds: [],
+    copyDirForbid: [],
+    copyFieldSource: {},
+    copyHeroOnPhoto: null,
+    copyScreenReturn: null,
     copyPresetId: null,
     copyOmakaseAxes: null,
     copyOmakaseLocks: {},
@@ -2251,6 +2221,7 @@
     copyFrameCandidates: {},
     copyFrameSelected: {},
     copyFrameNow: {},
+    sampleCopySlots: null,
     easyAnswers: { mood: "calm", focus: "quality", guest: "first" },
     easyCopyCandidates: [],
     easyCopySelected: null,
@@ -3387,6 +3358,7 @@
     }
     resetHubPlaceUi({ keepHub: true, mode: "home" });
     parkFontPickersInReservoir();
+    mountSharedImageUi(false);
     placeLookControls();
     syncDetailDashVisibility("layout");
     syncGuidedColorTrial();
@@ -3575,6 +3547,9 @@
     syncHubShellFocus();
     placeLookControls();
     placePreviewWidthControl();
+    if (!atLayout && typeof restoreLayoutSectionInputs === "function") {
+      restoreLayoutSectionInputs();
+    }
     if (atLayout || atPlaceList || atTaskList) {
       applyHubPlaceFit();
     } else if (!atPlaceActions && !atStudio) {
@@ -3709,6 +3684,9 @@
       entryBranch: store.entryBranch,
       hubEntrySource: store.hubEntrySource,
       easyFlowActive: !!store.easyFlowActive,
+      sampleFlowEntered: !!store.sampleFlowEntered,
+      sampleFlowAppliedId: store.sampleFlowAppliedId || null,
+      sampleOriginalPreset: store.sampleOriginalPreset || null,
       sushiSampleId: store.sushiSampleId,
       sushiSampleKey: store.sushiSampleKey,
       sampleSectionCandidates: store.sampleSectionCandidates || {},
@@ -4806,8 +4784,44 @@
     syncHubColorOkLabel();
   }
 
+  function openCopyFrameFromHub(secId) {
+    store.copyScreenReturn = "hub";
+    store.uiMode = "guided";
+    store.easyFlowActive = true;
+    store.siteColorMode = "easy";
+    const order = activeCopyFrameOrder();
+    const at = order.indexOf(secId);
+    store.copyFrameIndex = at >= 0 ? at : 0;
+    applyUiMode();
+    const flow = getFlowSteps();
+    const idx = flow.findIndex(function (s) { return s.id === "easy-copy-frame"; });
+    if (idx >= 0) showWizardStep(idx);
+    scheduleSave();
+  }
+
+  function closeCopyFrameToHub() {
+    store.copyScreenReturn = null;
+    store.easyFlowActive = false;
+    store.uiMode = "self";
+    store.siteColorMode = "detail";
+    store.hubEntrySource = "sample-done";
+    applyUiMode();
+    returnToLayoutHub();
+    scheduleSave();
+  }
+
   function openHubPlaceStep(stepId) {
     if (!stepId) return;
+    const hubTextFrame = {
+      "hero-text": "hero",
+      "about-text": "about",
+      "works-text": "works",
+      "contact-text": "contact"
+    };
+    if (hubTextFrame[stepId] && store.sampleFlowEntered) {
+      openCopyFrameFromHub(hubTextFrame[stepId]);
+      return;
+    }
     const blockId = store.hubPlaceSelectedBlockId || store.hubReturnBlockId;
     const meta = LAYOUT_BLOCKS.find((b) => b.id === blockId);
     if (blockId) {
@@ -5418,10 +5432,7 @@
   }
 
   function getEasyImageFlowTail() {
-    if (store.imgPathMode === "omakase") {
-      return ["easy-img-path", "easy-img-omakase", "easy-loading", "easy-done"];
-    }
-    if (store.imgPathMode === "self") {
+    if (store.imgPathMode === "omakase" || store.imgPathMode === "self") {
       return ["easy-img-path", "easy-img-wire", "easy-loading", "easy-done"];
     }
     return ["easy-img-path"];
@@ -5432,11 +5443,16 @@
     if (store.copyPathMode === "omakase") {
       head = ["easy-copy-path", "easy-basics", "easy-copy-omakase"];
     } else if (store.copyPathMode === "keyword") {
-      head = ["easy-copy-path", "easy-copy-dirs", "easy-basics", "easy-copy-frame"];
+      head = ["easy-copy-path", "easy-copy-dirs", "easy-basics"];
+      if (activeCopyFrameOrder().length) head.push("easy-copy-frame");
     } else {
       head = ["easy-copy-path"];
     }
-    return head.concat(getEasyImageFlowTail());
+    const ids = head.concat(getEasyImageFlowTail());
+    if (store.copyScreenReturn === "hub" && ids.indexOf("easy-copy-frame") < 0) {
+      ids.unshift("easy-copy-frame");
+    }
+    return ids;
   }
 
   function getFlowSteps() {
@@ -5478,8 +5494,10 @@
     }
     if (step && step.id === "easy-copy-omakase") return "これで進む";
     if (step && step.id === "easy-copy-frame") {
+      const order = activeCopyFrameOrder();
       const idx = store.copyFrameIndex || 0;
-      if (idx >= COPY_FRAME_ORDER.length - 1) return "これで画像へ";
+      if (store.copyScreenReturn === "hub" && (!order.length || idx >= order.length - 1)) return "編集へ戻る";
+      if (!order.length || idx >= order.length - 1) return "これで画像へ";
       return "これで次の文言へ";
     }
     if (step && EASY_FLOW_STEP_SET.has(step.id)) return "次へ";
@@ -6928,10 +6946,15 @@
       if (!brand) return "店名を入れてください。";
       return "";
     }
+    if (stepId === "easy-copy-omakase") {
+      if (store.copyHeroOnPhoto == null) {
+        return "写真の上に言葉を出すか、出さないか、選んでから進んでください。";
+      }
+      return "";
+    }
     if (stepId === "easy-copy-frame") {
-      const sec = COPY_FRAME_ORDER[store.copyFrameIndex || 0] || "hero";
-      if (store.copyFrameSelected[sec] == null && !store.copyFrameNow[sec]) {
-        return "候補を選んでから、「" + action + "」を押してください。";
+      if (currentCopyFrameId() === "hero" && store.copyHeroOnPhoto == null) {
+        return "写真の上に言葉を出すか、出さないか、選んでから進んでください。";
       }
       return "";
     }
@@ -6943,9 +6966,10 @@
       return "";
     }
     if (stepId === "easy-img-wire") {
-      if (!inputHasFile("hero_image") || !inputHasFile("about_image_1") || !inputHasFile("work_1_image")) {
-        return "キャッチ・写真・カードの3枠すべてに写真を選んでください。";
-      }
+      const miss = collectVisibleImageSlots().filter(function (slot) {
+        return !inputHasFile(slot.input);
+      });
+      if (miss.length) return "見えている枠に写真があると、次へ進めます。";
       return "";
     }
     if (stepId === "easy-loading" || stepId === "easy-done") return "";
@@ -7215,11 +7239,10 @@
         syncEasyImageStatuses();
         const cur = getCurrentFlowStep();
         if (cur && cur.id === "easy-img-wire" && inputHasFile(input.name)) {
-          const order = ["hero_image", "about_image_1", "work_1_image"];
-          const slots = ["hero", "about", "works"];
-          const at = order.indexOf(input.name);
-          if (at >= 0 && at < order.length - 1) {
-            const nextSlot = slots[at + 1];
+          const slots = collectVisibleImageSlots();
+          const at = slots.findIndex(function (slot) { return slot.input === input.name; });
+          if (at >= 0 && at < slots.length - 1) {
+            const nextSlot = slots[at + 1].key;
             store.sampleWireSlot = nextSlot;
             document.querySelectorAll("[data-wire-slot]").forEach((b) => {
               b.classList.toggle("is-active", b.getAttribute("data-wire-slot") === nextSlot);
@@ -7367,7 +7390,7 @@
   function restoreViewAfterMode() {
     if (store.easyFlowActive && store.uiMode === "guided") {
       store.siteColorMode = "easy";
-      store.heroTextOnPhoto = false;
+      store.heroTextOnPhoto = store.copyHeroOnPhoto === true;
       showWizardStep(resolveWizardStepIndex());
       return;
     }
@@ -7507,13 +7530,18 @@
     }
     if (step.id === "easy-copy-frame") {
       if (store.copyFrameIndex == null) store.copyFrameIndex = 0;
+      clampCopyFrameIndex();
       renderCopyFrameUi();
     }
     if (step.id === "easy-img-wire") {
-      prepareEasyFixedImageCounts();
+      setSampleFlowPreviewHidden(false);
+      renderEasyImageWireList();
+      mountSharedImageUi(true);
+    } else {
+      mountSharedImageUi(false);
+    }
+    if (step.id === "easy-img-wire") {
       syncEasyImageStatuses();
-      setupSampleWireSlots();
-      setEasyPreviewFocus("easy-img-wire");
     } else if (step.id === "easy-img-omakase") {
       setEasyPreviewFocus("easy-img-wire");
     } else {
@@ -7651,7 +7679,6 @@
   function placePreviewWidthControl() {
     const control = document.getElementById("chrome-preview-width");
     const chromeLeft = document.querySelector(".atelier-chrome-left");
-    const previewSlot = document.getElementById("preview-width-slot");
     const previewRail = document.getElementById("preview-width-rail");
     const dashSlot = document.getElementById("dash-preview-width-slot");
     const dashRail = document.getElementById("dash-width-rail");
@@ -7681,50 +7708,19 @@
     control.hidden = false;
     control.removeAttribute("hidden");
 
-    /* 同一文書レビュー／制作・レビュー: ロゴ横に固定 */
-    if (reviewChrome) {
-      const brand = chromeLeft.querySelector(".chrome-brand");
-      if (brand) {
-        if (brand.nextElementSibling !== control) {
-          chromeLeft.insertBefore(control, brand.nextSibling);
-        }
-      } else if (control.parentElement !== chromeLeft) {
-        chromeLeft.appendChild(control);
+    /* 見本の幅はロゴの横に固定する（見本の上へ移すと、更新のたびにロゴ横が空く） */
+    const brand = chromeLeft.querySelector(".chrome-brand");
+    if (brand) {
+      if (brand.nextElementSibling !== control) {
+        chromeLeft.insertBefore(control, brand.nextSibling);
       }
-      control.classList.remove("chrome-control--in-hub");
-      if (previewRail) previewRail.hidden = true;
-      if (dashRail) dashRail.hidden = true;
-      if (dashSlot) dashSlot.hidden = true;
-      if (typeof window.syncPreviewLookControl === "function") {
-        window.syncPreviewLookControl();
-      }
-      return;
+    } else if (control.parentElement !== chromeLeft) {
+      chromeLeft.appendChild(control);
     }
-
-    /* 左の見本が出ている画面は、見本の上に共通で出す */
-    if (previewOn && previewSlot) {
-      if (control.parentElement !== previewSlot) previewSlot.appendChild(control);
-      control.classList.add("chrome-control--in-hub");
-      if (previewRail) {
-        previewRail.hidden = false;
-        previewRail.removeAttribute("hidden");
-      }
-      if (dashRail) dashRail.hidden = true;
-      if (dashSlot) dashSlot.hidden = true;
-    } else {
-      const brand = chromeLeft.querySelector(".chrome-brand");
-      if (brand) {
-        if (brand.nextElementSibling !== control) {
-          chromeLeft.insertBefore(control, brand.nextSibling);
-        }
-      } else if (control.parentElement !== chromeLeft) {
-        chromeLeft.appendChild(control);
-      }
-      control.classList.remove("chrome-control--in-hub");
-      if (previewRail) previewRail.hidden = true;
-      if (dashRail) dashRail.hidden = true;
-      if (dashSlot) dashSlot.hidden = true;
-    }
+    control.classList.remove("chrome-control--in-hub");
+    if (previewRail) previewRail.hidden = true;
+    if (dashRail) dashRail.hidden = true;
+    if (dashSlot) dashSlot.hidden = true;
     if (typeof window.syncPreviewLookControl === "function") {
       window.syncPreviewLookControl();
     }
@@ -8147,7 +8143,7 @@
             store.pendingSushi = payload;
             store.sushiSampleId = payload.sample && payload.sample.id;
             store.sushiSampleKey = payload.sample && payload.sample.key;
-            setEntryGateStep("purpose");
+            runWithCrossShutter(function () { setEntryGateStep("purpose"); });
           }
         });
       }
@@ -8205,10 +8201,6 @@
       if (purposeRadio) purposeRadio.checked = true;
       const branchRadio = gate.querySelector('input[name="entry_branch"][value="sample"]');
       if (branchRadio) branchRadio.checked = true;
-      /* 同じ「このままでよい」を押し直せるよう、色ラジオをいったん外す */
-      gate.querySelectorAll('input[name="entry_sample_color"]').forEach(function (r) {
-        r.checked = false;
-      });
     }
     store.entryBranch = "sample";
     if (store.hubEntrySource !== "sample-done") {
@@ -8254,27 +8246,18 @@
     const b = basics || readEasyBasicsFromUi();
     if (b.brand) {
       setFieldValue("brand_name", b.brand);
-      setFieldValue("about_name", b.brand);
-      /* キャッチ全文を屋号で上書きしない（見本の hero_title を守る） */
-      const hero = String(fieldValue("hero_title") || "").trim();
-      if (!hero || isPlaceholderBrand(hero)) {
-        setFieldValue("hero_title", b.brand);
+      const seedBrand = store.easyBasicsSeed && store.easyBasicsSeed.brand;
+      if (b.brand !== seedBrand) {
+        const hero = String(fieldValue("hero_title") || "").trim();
+        if (!hero || isPlaceholderBrand(hero)) setFieldValue("hero_title", b.brand);
       }
     }
-    if (b.intro) {
-      setFieldValue("about_lead", b.intro);
-      setFieldValue("hero_lead_1", b.intro.slice(0, 40));
-    }
-    if (b.email) setFieldValue("contact_email", b.email);
-    if (b.phone) {
-      const note = b.phone + (b.hours ? "／" + b.hours : "");
-      setFieldValue("contact_note_1", note.slice(0, 40));
-    } else if (b.hours) {
-      setFieldValue("contact_note_1", b.hours.slice(0, 40));
-    }
-    if (b.hours) {
+    const seed = store.easyBasicsSeed || {};
+    if (b.intro && b.intro !== seed.intro) setFieldValue("about_lead", b.intro);
+    if (b.email && b.email !== seed.email) setFieldValue("contact_email", b.email);
+    if (b.hours && b.hours !== seed.hours) {
       const hoursToggle = document.querySelector('[data-extra-toggle="hours"]');
-      if (hoursToggle) {
+      if (hoursToggle && !hoursToggle.checked) {
         hoursToggle.checked = true;
         hoursToggle.dispatchEvent(new Event("change", { bubbles: true }));
       }
@@ -8282,9 +8265,9 @@
       store.draftExtras = store.draftExtras || {};
       store.draftExtras.hours = true;
     }
-    if (b.address) {
+    if (b.address && b.address !== seed.address) {
       const addressToggle = document.querySelector('[data-extra-toggle="address"]');
-      if (addressToggle) {
+      if (addressToggle && !addressToggle.checked) {
         addressToggle.checked = true;
         addressToggle.dispatchEvent(new Event("change", { bubbles: true }));
       }
@@ -8318,15 +8301,14 @@
         )
         .join("");
       list.querySelectorAll("input").forEach((input) => {
-        input.addEventListener("change", () => {
-          if (!input.checked) return;
+        bindChoiceReselect(input, function () {
           store.easyAnswers[q.id] = input.value;
           store.confirmed["easy-q" + n] = true;
           scheduleSave();
           const flow = getFlowSteps();
           const cur = flow.findIndex((s) => s.id === "easy-q" + n);
           if (cur >= 0 && cur < flow.length - 1) {
-            showWizardStep(cur + 1);
+            runWithCrossShutter(function () { showWizardStep(cur + 1); });
           }
         });
       });
@@ -8373,8 +8355,7 @@
       )
       .join("");
     host.querySelectorAll('input[name="easy_copy"]').forEach((input) => {
-      input.addEventListener("change", () => {
-        if (!input.checked) return;
+      bindChoiceReselect(input, function () {
         const idx = Number(input.value);
         const cand = store.easyCopyCandidates[idx];
         if (!cand) return;
@@ -8417,17 +8398,11 @@
   }
 
   function syncEasyImageStatuses() {
-    const map = {
-      hero: "hero_image",
-      about: "about_image_1",
-      works: "work_1_image"
-    };
-    Object.keys(map).forEach((slot) => {
-      const el = document.getElementById("easy-img-status-" + slot);
+    collectVisibleImageSlots().forEach(function (slot) {
+      const el = document.getElementById("easy-img-status-" + slot.key);
       if (!el) return;
-      const name = map[slot];
-      const ready = inputHasFile(name);
-      const fromGallery = !!(store.galleryPicks && store.galleryPicks[name]);
+      const ready = inputHasFile(slot.input);
+      const fromGallery = !!(store.galleryPicks && store.galleryPicks[slot.input]);
       if (!ready) {
         el.textContent = "まだ選んでいません";
       } else if (fromGallery) {
@@ -8545,11 +8520,10 @@
     syncEasyImageStatuses();
     const cur = getCurrentFlowStep();
     if (cur && cur.id === "easy-img-wire") {
-      const order = ["hero_image", "about_image_1", "work_1_image"];
-      const slots = ["hero", "about", "works"];
-      const at = order.indexOf(inputName);
-      if (at >= 0 && at < order.length - 1) {
-        const nextSlot = slots[at + 1];
+      const slots = collectVisibleImageSlots();
+      const at = slots.findIndex(function (slot) { return slot.input === inputName; });
+      if (at >= 0 && at < slots.length - 1) {
+        const nextSlot = slots[at + 1].key;
         store.sampleWireSlot = nextSlot;
         document.querySelectorAll("[data-wire-slot]").forEach((b) => {
           b.classList.toggle("is-active", b.getAttribute("data-wire-slot") === nextSlot);
@@ -8692,10 +8666,27 @@
   }
 
   function prepareEasyFixedImageCounts() {
-    store.draftCounts["about-photos"] = 1;
-    store.draftCounts["works-list"] = 1;
-    store.draftCounts["hero-leads"] = Math.max(1, Number(store.draftCounts["hero-leads"] || 1));
-    syncCountLabels();
+    /* 見本の枚数と itemOrders は維持する */
+  }
+
+  function mountSharedImageUi(intoSampleStep) {
+    const panel = document.getElementById("layout-arrange");
+    const wire = form.querySelector('.dash-block[data-step-id="easy-img-wire"]');
+    const stack = document.getElementById("hub-layout-stack");
+    if (!panel) return;
+    if (intoSampleStep) {
+      const host = document.getElementById("easy-img-layout-host");
+      if (host && panel.parentElement !== host) host.appendChild(panel);
+      if (wire) wire.classList.add("is-shared-image-ui");
+    } else if (stack && panel.parentElement !== stack) {
+      const nav = stack.querySelector(".hub-nav-row--layout");
+      if (nav) stack.insertBefore(panel, nav);
+      else stack.appendChild(panel);
+      if (wire) wire.classList.remove("is-shared-image-ui");
+    } else if (wire) {
+      wire.classList.remove("is-shared-image-ui");
+    }
+    if (intoSampleStep || (stack && !stack.hidden)) renderLayoutArrangeWire();
   }
 
   function confirmEasyImagesForFinish() {
@@ -9667,24 +9658,33 @@
     }
   });
 
-  function setSampleFlowPreviewHidden(on) {
+    function setSampleFlowPreviewHidden(on) {
+    document.documentElement.classList.toggle("sample-flow-hide-preview", !!on);
     document.body.classList.toggle("sample-flow-hide-preview", !!on);
     placePreviewWidthControl();
+    if (typeof window.applyDashCollapse === "function") window.applyDashCollapse();
   }
+
+  /* 文章工程：入力・条件指定は1画面。候補を見比べる段階から左＝操作／右＝プレビュー */
+  const COPY_INPUT_STEP_IDS = {
+    "easy-copy-path": true,
+    "easy-copy-dirs": true,
+    "easy-basics": true
+  };
 
   function syncSampleFlowPreviewVisibility(stepId) {
     if (!store.easyFlowActive || store.entryBranch !== "sample") {
       setSampleFlowPreviewHidden(false);
       return;
     }
-    /* 見本決定後（色合い完了後）〜文章・画像工程は左プレビューを出す。作成演出・完成も出す */
-    const hide = false;
-    setSampleFlowPreviewHidden(hide);
-    void stepId;
+    setSampleFlowPreviewHidden(!!COPY_INPUT_STEP_IDS[stepId]);
   }
+
+  let samplePreviewPopReady = false;
 
   function revealSamplePreview() {
     setSampleFlowPreviewHidden(false);
+    if (!samplePreviewPopReady) return;
     document.body.classList.add("sample-preview-pop");
     window.setTimeout(function () {
       document.body.classList.remove("sample-preview-pop");
@@ -9810,6 +9810,7 @@
     } else {
       store.layoutBlockOff = {};
     }
+    captureSampleCopySlots(draft);
     /* キャッチ枠あり・画像なし（色＋文字）— 本線でも文字オンが必要な例外 */
     store.heroImageOff = draft.heroImageOff === true;
     if (store.heroImageOff && !sampleMainline) {
@@ -9886,27 +9887,119 @@
       const m = note.match(/0[\d\-]+/);
       if (m) elPhone.value = m[0];
     }
+    store.easyBasicsSeed = {
+      brand: elBrand ? elBrand.value : "",
+      intro: elIntro ? elIntro.value : "",
+      email: elEmail ? elEmail.value : "",
+      phone: elPhone ? elPhone.value : "",
+      hours: elHours ? elHours.value : "",
+      address: elAddress ? elAddress.value : ""
+    };
   }
 
-  function applyCopyTextToSection(secId, text) {
-    applyEasyBasicsToForm();
-    const brand = readEasyBasicsFromUi().brand || fieldValue("brand_name") || "店名";
-    const dict = window.Sample1manEasyCopy;
-    const section =
-      dict && dict.SECTIONS ? dict.SECTIONS.find(function (s) { return s.id === secId; }) : null;
-    const map = section && typeof section.apply === "function" ? section.apply(String(text || ""), brand) : null;
-    if (map) {
-      Object.keys(map).forEach(function (k) {
-        if (map[k] != null && map[k] !== "") setFieldValue(k, map[k]);
-      });
-    }
-    store.copyFrameNow[secId] = String(text || "");
+  function applyCopyTextToField(key, text) {
+    if (!key) return;
+    setFieldValue(key, text);
+    if (!store.copyFieldNow || typeof store.copyFieldNow !== "object") store.copyFieldNow = {};
+    store.copyFieldNow[key] = String(text || "");
     applyAllConfirmed();
     syncPreviewHeaderChrome();
   }
 
+  function applyCopyTextToSection(secId, text) {
+    const fields = visibleCopyFields(secId);
+    if (!fields.length) return;
+    applyCopyTextToField(fields[0].key, text);
+    store.copyFrameNow[secId] = String(text || "");
+  }
+
+  const COPY_FRAME_BLOCK = {
+    hero: "hero",
+    about: "accordions",
+    works: "works",
+    contact: "contact"
+  };
+  const COPY_FRAME_TEXT_KEYS = {
+    hero: ["hero_title", "hero_lead_1", "hero_lead_2", "hero_lead_3"],
+    about: ["about_section_name", "about_heading", "about_name", "about_lead"],
+    works: ["works_heading", "works_lead", "work_1_title", "work_1_text"],
+    contact: ["contact_note_1"]
+  };
+
+  function captureSampleCopySlots(draft) {
+    const fields = (draft && draft.fields) || {};
+    const off = (draft && draft.layoutBlockOff) || {};
+    const order = Array.isArray(draft && draft.layoutOrder) ? draft.layoutOrder.map(String) : null;
+    function blockListed(id) {
+      if (off[id]) return false;
+      if (!order || !order.length) return true;
+      if (id === "accordions") {
+        return order.indexOf("accordions") >= 0 || order.indexOf("about") >= 0;
+      }
+      return order.indexOf(id) >= 0;
+    }
+    function hasText(keys) {
+      return keys.some(function (k) {
+        return String(fields[k] == null ? "" : fields[k]).trim().length > 0;
+      });
+    }
+    const slots = {};
+    COPY_FRAME_ORDER.forEach(function (secId) {
+      let on = blockListed(COPY_FRAME_BLOCK[secId]);
+      if (secId === "contact" && draft && draft.draftContact && draft.draftContact.note1 === false) {
+        on = false;
+      }
+      slots[secId] = !!(on && hasText(COPY_FRAME_TEXT_KEYS[secId]));
+    });
+    store.sampleCopySlots = slots;
+  }
+
+  function copyFrameIsPresent(secId) {
+    if (store.sampleCopySlots && typeof store.sampleCopySlots === "object") {
+      return !!store.sampleCopySlots[secId];
+    }
+    const blockId = COPY_FRAME_BLOCK[secId];
+    const meta = LAYOUT_BLOCKS.find(function (b) { return b.id === blockId; });
+    if (!isLayoutBlockActive(meta)) return false;
+    if (secId === "contact" && store.draftContact && store.draftContact.note1 === false) {
+      return false;
+    }
+    const keys = COPY_FRAME_TEXT_KEYS[secId] || [];
+    return keys.some(function (k) {
+      return String(fieldValue(k) || "").trim().length > 0;
+    });
+  }
+
+  function activeCopyFrameOrder() {
+    return COPY_FRAME_ORDER.filter(copyFrameIsPresent);
+  }
+
+  function clampCopyFrameIndex() {
+    const order = activeCopyFrameOrder();
+    if (!order.length) {
+      store.copyFrameIndex = 0;
+      return order;
+    }
+    let idx = Number(store.copyFrameIndex) || 0;
+    if (idx < 0) idx = 0;
+    if (idx > order.length - 1) idx = order.length - 1;
+    store.copyFrameIndex = idx;
+    return order;
+  }
+
   function currentCopyFrameId() {
-    return COPY_FRAME_ORDER[store.copyFrameIndex || 0] || "hero";
+    const order = clampCopyFrameIndex();
+    return order[store.copyFrameIndex || 0] || "";
+  }
+
+  function scrollCopyFramePreview(secId) {
+    const sel = COPY_FRAME_PREVIEW[secId];
+    if (!sel) return;
+    const scope = document.getElementById("preview-root");
+    if (!scope) return;
+    const target = scope.querySelector(sel);
+    if (!target || target.hidden) return;
+    scrollPreviewTo(sel);
   }
 
   function fallbackStubThree(secId) {
@@ -9935,16 +10028,77 @@
     return lines[secId] || lines.hero;
   }
 
-  function generateFrameCandidates(secId, reroll) {
+  function countForCopy(id, fallback) {
+    const n = Number(store.draftCounts[id]);
+    if (!Number.isFinite(n) || n < 1) return fallback;
+    return n;
+  }
+
+  function visibleCopyFields(secId) {
+    if (secId === "hero") {
+      const fields = [];
+      if (store.copyHeroOnPhoto !== false) {
+        fields.push({ key: "hero_title", label: "見出し" });
+        const leads = countForCopy("hero-leads", 1);
+        for (let i = 1; i <= leads; i += 1) {
+          fields.push({ key: "hero_lead_" + i, label: i + "行目" });
+        }
+      }
+      const values = countForCopy("hero-values", 1);
+      for (let i = 1; i <= values; i += 1) {
+        fields.push({ key: "value_" + i + "_title", label: "枠" + i + "の見出し" });
+        fields.push({ key: "value_" + i + "_text", label: "枠" + i + "の文" });
+      }
+      return fields;
+    }
+    if (secId === "about") {
+      const n = countForCopy("about-accordions", 1);
+      const fields = [
+        { key: "about_heading", label: "見出し" },
+        { key: "about_lead", label: "紹介" }
+      ];
+      for (let i = 1; i <= n; i += 1) {
+        fields.push({ key: "acc_" + i + "_title", label: "項目" + i + "の見出し" });
+        fields.push({ key: "acc_" + i + "_body", label: "項目" + i + "の文" });
+      }
+      return fields;
+    }
+    if (secId === "works") {
+      seedItemOrder("works-list");
+      const order = (store.itemOrders && store.itemOrders["works-list"]) || [];
+      const n = order.length || countForCopy("works-list", 1);
+      const fields = [
+        { key: "works_heading", label: "見出し" },
+        { key: "works_lead", label: "リード" }
+      ];
+      for (let i = 1; i <= n; i += 1) {
+        fields.push({ key: "work_" + i + "_title", label: "カード" + i + "の見出し" });
+        fields.push({ key: "work_" + i + "_text", label: "カード" + i + "の文" });
+      }
+      return fields;
+    }
+    if (secId === "contact") {
+      return [
+        { key: "contact_label", label: "見出し" },
+        { key: "contact_note_1", label: "補足1" },
+        { key: "contact_note_2", label: "補足2" }
+      ];
+    }
+    return [];
+  }
+
+  function generateFrameCandidates(secId, reroll, fieldKey) {
     var dict = window.Sample1manCopyDict;
     if (!dict || typeof dict.generateThree !== "function") {
       return Promise.resolve(fallbackStubThree(secId));
     }
     if (reroll) {
-      store.copyFramePoolIndex[secId] = (Number(store.copyFramePoolIndex[secId]) || 0) + 1;
+      store.copyFramePoolIndex[fieldKey || secId] = (Number(store.copyFramePoolIndex[fieldKey || secId]) || 0) + 1;
     }
     var salt =
-      String(store.copyFramePoolIndex[secId] || 0) +
+      String(store.copyFramePoolIndex[fieldKey || secId] || 0) +
+      "|" +
+      (fieldKey || secId) +
       "|" +
       (store.copyPathMode || "") +
       "|" +
@@ -9956,6 +10110,7 @@
         sceneTag: null,
         sectionId: secId,
         keywordIds: store.copyPathMode === "keyword" ? store.copyDirIds || [] : [],
+        forbidKeywordIds: store.copyDirForbid || [],
         presetAxes: store.copyPathMode === "omakase" ? store.copyOmakaseAxes : null,
         salt: salt
       })
@@ -9965,23 +10120,159 @@
         });
       })
       .catch(function () {
-        return fallbackStubThree(secId);
+        return (store.copyDirForbid || []).length ? [] : fallbackStubThree(secId);
       });
   }
 
-  function ensureCopyFrameCandidates(secId, reroll) {
-    if (
-      !reroll &&
-      store.copyFrameCandidates[secId] &&
-      store.copyFrameCandidates[secId].length
-    ) {
-      return Promise.resolve(store.copyFrameCandidates[secId]);
+  function ensureCopyFieldCandidates(secId, fieldKey, reroll) {
+    if (!store.copyFrameCandidates || typeof store.copyFrameCandidates !== "object") {
+      store.copyFrameCandidates = {};
     }
-    return generateFrameCandidates(secId, !!reroll).then(function (list) {
-      store.copyFrameCandidates[secId] = list;
-      store.copyFrameSelected[secId] = null;
-      return list;
+    if (!reroll && store.copyFrameCandidates[fieldKey] && store.copyFrameCandidates[fieldKey].length) {
+      return Promise.resolve(store.copyFrameCandidates[fieldKey]);
+    }
+    return generateFrameCandidates(secId, !!reroll, fieldKey).then(function (list) {
+      store.copyFrameCandidates[fieldKey] = list || [];
+      return store.copyFrameCandidates[fieldKey];
     });
+  }
+
+  function renderCopyFrameUi() {
+    const secId = currentCopyFrameId();
+    const title = document.getElementById("easy-copy-frame-title");
+    const host = document.getElementById("easy-copy-frame-fields");
+    const ask = document.getElementById("easy-copy-hero-ask");
+    const rerollWrap = document.getElementById("easy-copy-frame-reroll-wrap");
+    if (!secId) {
+      if (title) title.textContent = "";
+      if (host) host.innerHTML = "";
+      return;
+    }
+    if (title) title.textContent = COPY_FRAME_LABEL[secId] || secId;
+    const showAsk = secId === "hero" && store.copyHeroOnPhoto == null;
+    if (ask) ask.hidden = !showAsk;
+    if (rerollWrap) rerollWrap.hidden = showAsk;
+    if (showAsk) {
+      if (host) host.innerHTML = "";
+      if (ask) {
+        ask.hidden = false;
+        ask.innerHTML =
+          '<p class="step-help">写真の上に言葉を出しますか</p>' +
+          '<div class="easy-copy-hero-ask">' +
+          '<button type="button" class="gct-btn" data-hero-copy="1">出す</button>' +
+          '<button type="button" class="gct-btn" data-hero-copy="0">出さない</button>' +
+          "</div>";
+        ask.querySelectorAll("[data-hero-copy]").forEach(function (btn) {
+          btn.addEventListener("click", function () {
+            const on = btn.getAttribute("data-hero-copy") === "1";
+            store.copyHeroOnPhoto = on;
+            store.heroTextOnPhoto = on;
+            applyHeroTextOverlay();
+            if (!on && !visibleCopyFields("hero").length) {
+              const order = activeCopyFrameOrder();
+              if ((store.copyFrameIndex || 0) < order.length - 1) {
+                store.copyFrameIndex = (store.copyFrameIndex || 0) + 1;
+              }
+            }
+            renderCopyFrameUi();
+            scheduleSave();
+            updateWizardUi();
+          });
+        });
+      }
+      scrollCopyFramePreview(secId);
+      updateWizardUi();
+      return;
+    }
+    if (!host) return;
+    const fields = visibleCopyFields(secId);
+    host.innerHTML = fields
+      .map(function (field) {
+        return (
+          '<section class="easy-copy-field" data-copy-field="' +
+          field.key +
+          '"><p class="easy-copy-field-label">' +
+          escapeHtml(field.label) +
+          '</p><div class="easy-copy-field-cands" data-copy-cands="' +
+          field.key +
+          '"></div><div class="easy-copy-field-own"><button type="button" class="gct-btn" data-copy-own="' +
+          field.key +
+          '">自分で入力する</button><textarea class="easy-copy-field-input" data-copy-input="' +
+          field.key +
+          '" rows="2" hidden></textarea></div></section>'
+        );
+      })
+      .join("");
+    fields.forEach(function (field) {
+      const box = host.querySelector('[data-copy-cands="' + field.key + '"]');
+      const ownBtn = host.querySelector('[data-copy-own="' + field.key + '"]');
+      const input = host.querySelector('[data-copy-input="' + field.key + '"]');
+      const paint = function (list) {
+        if (!box || currentCopyFrameId() !== secId) return;
+        const three = (list || []).slice(0, 3);
+        const forbidNote =
+          (store.copyDirForbid || []).length && !three.length
+            ? "入れないにした言葉が多いので、候補を出せませんでした。赤枠をもう一度押すと、白に戻ります。"
+            : (store.copyDirForbid || []).length && three.length < 3
+              ? "入れないにした言葉があるので、候補は出せた分だけです。"
+              : !three.length
+                ? "この条件では、候補を出せませんでした。"
+                : "";
+        if (!three.length) {
+          box.innerHTML = '<p class="easy-copy-frame-hint">' + escapeHtml(forbidNote) + "</p>";
+          return;
+        }
+        box.innerHTML = three
+          .map(function (c, i) {
+            return (
+              '<button type="button" class="easy-copy-frame-cand" data-copy-pick="' +
+              i +
+              '"><span class="easy-copy-frame-cand-label">' +
+              escapeHtml(c.label) +
+              '</span><span class="easy-copy-frame-cand-text">' +
+              escapeHtml(c.text) +
+              "</span></button>"
+            );
+          })
+          .join("");
+        if (forbidNote) {
+          box.insertAdjacentHTML(
+            "beforeend",
+            '<p class="easy-copy-frame-hint">' + escapeHtml(forbidNote) + "</p>"
+          );
+        }
+        box.querySelectorAll("[data-copy-pick]").forEach(function (btn) {
+          btn.addEventListener("click", function () {
+            const cand = three[Number(btn.getAttribute("data-copy-pick"))];
+            if (!cand) return;
+            if (!store.copyFieldSource || typeof store.copyFieldSource !== "object") store.copyFieldSource = {};
+            store.copyFieldSource[field.key] = "cand";
+            applyCopyTextToField(field.key, cand.text);
+            if (input) input.hidden = true;
+            scheduleSave();
+          });
+        });
+      };
+      ensureCopyFieldCandidates(secId, field.key, false).then(paint);
+      if (ownBtn && input) {
+        ownBtn.addEventListener("click", function () {
+          input.hidden = false;
+          input.value = fieldValue(field.key) || "";
+          input.focus();
+        });
+        input.addEventListener("input", function () {
+          if (!store.copyFieldSource || typeof store.copyFieldSource !== "object") store.copyFieldSource = {};
+          store.copyFieldSource[field.key] = "custom";
+          applyCopyTextToField(field.key, input.value);
+          scheduleSave();
+        });
+      }
+    });
+    const block = form.querySelector('.dash-block[data-step-id="easy-copy-frame"]');
+    const sel = COPY_FRAME_PREVIEW[secId];
+    if (block && sel) block.setAttribute("data-preview-target", sel);
+    scrollCopyFramePreview(secId);
+    updateWizardUi();
   }
 
   function readCurrentSectionText(secId) {
@@ -9993,79 +10284,30 @@
     return "";
   }
 
-  function renderCopyFrameUi() {
-    const secId = currentCopyFrameId();
-    const title = document.getElementById("easy-copy-frame-title");
-    if (title) title.textContent = COPY_FRAME_LABEL[secId] || secId;
-    const nowEl = document.getElementById("easy-copy-frame-now-text");
-    const nowText = readCurrentSectionText(secId);
-    store.copyFrameNow[secId] = nowText;
-    if (nowEl) nowEl.textContent = nowText || "（まだありません）";
-    const host = document.getElementById("easy-copy-frame-cands");
-    if (!host) return;
-    const paint = function (list) {
-      if (currentCopyFrameId() !== secId) return;
-      host.innerHTML = list
-        .map(function (c, i) {
-          const on = store.copyFrameSelected[secId] === i ? " is-selected" : "";
-          return (
-            '<button type="button" class="easy-copy-frame-cand' +
-            on +
-            '" role="option" aria-selected="' +
-            (on ? "true" : "false") +
-            '" data-copy-cand="' +
-            i +
-            '"><span class="easy-copy-frame-cand-label">' +
-            escapeHtml(c.label) +
-            '</span><span class="easy-copy-frame-cand-text">' +
-            escapeHtml(c.text) +
-            "</span></button>"
-          );
-        })
-        .join("");
-      host.querySelectorAll("[data-copy-cand]").forEach(function (btn) {
-        btn.addEventListener("click", function () {
-          const i = Number(btn.getAttribute("data-copy-cand"));
-          const cand = list[i];
-          if (!cand) return;
-          store.copyFrameSelected[secId] = i;
-          applyCopyTextToSection(secId, cand.text);
-          renderCopyFrameUi();
-          scrollPreviewTo(COPY_FRAME_PREVIEW[secId] || "#hero");
-          scheduleSave();
-        });
-      });
-      const block = form.querySelector('.dash-block[data-step-id="easy-copy-frame"]');
-      if (block) block.setAttribute("data-preview-target", COPY_FRAME_PREVIEW[secId] || "#hero");
-      scrollPreviewTo(COPY_FRAME_PREVIEW[secId] || "#hero");
-      updateWizardUi();
-    };
-    const cached = store.copyFrameCandidates[secId];
-    if (cached && cached.length) {
-      paint(cached);
-      return;
-    }
-    host.innerHTML = '<p class="easy-copy-frame-loading">候補を用意しています…</p>';
-    ensureCopyFrameCandidates(secId, false).then(paint);
-  }
-
   function renderCopyDirsUi() {
     const root = document.getElementById("easy-copy-dirs-root");
     if (!root) return;
     const selected = new Set(store.copyDirIds || []);
+    const forbidden = new Set(store.copyDirForbid || []);
     root.innerHTML = COPY_DIR_GROUPS.map(function (g) {
       const chips = g.options
         .map(function (o) {
-          const on = selected.has(o.id) ? " is-on" : "";
+          const want = selected.has(o.id);
+          const ban = forbidden.has(o.id);
+          const cls = want ? " is-on" : ban ? " is-forbid" : "";
+          const mark = ban ? '<span class="easy-copy-dir-x" aria-hidden="true">×</span>' : "";
           return (
             '<button type="button" class="easy-copy-dir-chip' +
-            on +
+            cls +
             '" data-copy-dir="' +
             o.id +
             '" aria-pressed="' +
-            (on ? "true" : "false") +
-            '">' +
+            (want ? "true" : "false") +
+            (ban ? ' aria-label="' + escapeHtml(o.label) + '、入れない"' : "") +
+            '"><span class="easy-copy-dir-chip-label">' +
             escapeHtml(o.label) +
+            "</span>" +
+            mark +
             "</button>"
           );
         })
@@ -10081,10 +10323,19 @@
     root.querySelectorAll("[data-copy-dir]").forEach(function (btn) {
       btn.addEventListener("click", function () {
         const id = btn.getAttribute("data-copy-dir");
-        const set = new Set(store.copyDirIds || []);
-        if (set.has(id)) set.delete(id);
-        else set.add(id);
-        store.copyDirIds = Array.from(set);
+        const want = new Set(store.copyDirIds || []);
+        const ban = new Set(store.copyDirForbid || []);
+        if (ban.has(id)) {
+          ban.delete(id);
+        } else if (want.has(id)) {
+          want.delete(id);
+          ban.add(id);
+        } else {
+          want.add(id);
+          ban.delete(id);
+        }
+        store.copyDirIds = Array.from(want);
+        store.copyDirForbid = Array.from(ban);
         store.copyFrameCandidates = {};
         store.copyFrameSelected = {};
         renderCopyDirsUi();
@@ -10130,21 +10381,47 @@
       var chain = Promise.resolve();
       COPY_FRAME_ORDER.forEach(function (secId) {
         if (onlyUnlocked && store.copyOmakaseLocks[secId]) return;
+        if (secId === "hero" && store.copyHeroOnPhoto !== true) return;
         chain = chain.then(function () {
-          return dict
-            .generateThree({
-              sampleKey: store.sushiSampleKey || "",
-              sitePurpose: store.sitePurpose || null,
-              sceneTag: null,
-              sectionId: secId,
-              keywordIds: [],
-              presetAxes: store.copyOmakaseAxes,
-              salt: saltBase + "|" + secId
-            })
-            .then(function (res) {
-              var cand = (res.candidates && res.candidates[0]) || fallbackStubThree(secId)[0];
-              applyCopyTextToSection(secId, cand.text);
+          if (!store.copyFieldSource || typeof store.copyFieldSource !== "object") store.copyFieldSource = {};
+          const fields = visibleCopyFields(secId).filter(function (field) {
+            return store.copyFieldSource[field.key] !== "custom";
+          });
+          if (!fields.length) return;
+          const pool = [];
+          let round = 0;
+          function pull() {
+            if (pool.length >= fields.length || round >= 4) return Promise.resolve();
+            round += 1;
+            return dict
+              .generateThree({
+                sampleKey: store.sushiSampleKey || "",
+                sitePurpose: store.sitePurpose || null,
+                sceneTag: null,
+                sectionId: secId,
+                keywordIds: [],
+                forbidKeywordIds: store.copyDirForbid || [],
+                presetAxes: store.copyOmakaseAxes,
+                salt: saltBase + "|" + secId + "|" + round
+              })
+              .then(function (res) {
+                (res.candidates || []).forEach(function (c) {
+                  if (!c || !c.text) return;
+                  if (pool.some(function (p) { return p.text === c.text; })) return;
+                  pool.push(c);
+                });
+                if (!(res.candidates || []).length) return;
+                return pull();
+              });
+          }
+          return pull().then(function () {
+            fields.forEach(function (field, i) {
+              if (!pool[i]) return;
+              applyCopyTextToField(field.key, pool[i].text);
+              store.copyFieldSource[field.key] = "cand";
             });
+            if (pool[0]) store.copyFrameNow[secId] = pool[0].text;
+          });
         });
       });
       return chain;
@@ -10165,7 +10442,15 @@
     if (!store.copyOmakaseLocks || typeof store.copyOmakaseLocks !== "object") {
       store.copyOmakaseLocks = {};
     }
-    host.innerHTML = COPY_FRAME_ORDER.map(function (secId) {
+    const ask =
+      store.copyHeroOnPhoto == null
+        ? '<div class="easy-copy-hero-ask" id="easy-copy-omakase-hero-ask">' +
+          '<p class="step-help">写真の上に言葉を出しますか</p>' +
+          '<button type="button" class="gct-btn" data-hero-copy="1">出す</button>' +
+          '<button type="button" class="gct-btn" data-hero-copy="0">出さない</button>' +
+          "</div>"
+        : "";
+    host.innerHTML = ask + COPY_FRAME_ORDER.map(function (secId) {
       const locked = !!store.copyOmakaseLocks[secId];
       const text = store.copyFrameNow[secId] || readCurrentSectionText(secId) || "（準備中）";
       return (
@@ -10194,6 +10479,20 @@
         "</div>"
       );
     }).join("");
+    host.querySelectorAll("[data-hero-copy]").forEach(function (btn) {
+      btn.addEventListener("click", function () {
+        const on = btn.getAttribute("data-hero-copy") === "1";
+        store.copyHeroOnPhoto = on;
+        store.heroTextOnPhoto = on;
+        applyHeroTextOverlay();
+        const done = function () {
+          renderCopyOmakaseUi();
+          scheduleSave();
+        };
+        if (on) applyOmakaseFromDict({ onlyUnlocked: true }).then(done);
+        else done();
+      });
+    });
     host.querySelectorAll("[data-omakase-lock]").forEach(function (btn) {
       btn.addEventListener("click", function () {
         const secId = btn.getAttribute("data-omakase-lock");
@@ -10444,18 +10743,11 @@
       if (pathRoot && !pathRoot.dataset.hubImgPathBound) {
         pathRoot.dataset.hubImgPathBound = "1";
         pathRoot.querySelectorAll('input[type="radio"]').forEach(function (input) {
-          input.addEventListener("change", function () {
-            if (!input.checked) return;
+          bindChoiceReselect(input, function () {
             if (!store.hubImgPathMode || typeof store.hubImgPathMode !== "object") {
               store.hubImgPathMode = {};
             }
             store.hubImgPathMode[stepId] = input.value === "omakase" ? "omakase" : "self";
-            if (store.hubImgPathMode[stepId] === "omakase") {
-              getImgSlotsForStep(stepId).forEach(function (slot) {
-                if (store.imgOmakaseLocks) delete store.imgOmakaseLocks[slot.key];
-                if (store.imgOmakasePicks) delete store.imgOmakasePicks[slot.key];
-              });
-            }
             scheduleSave();
             syncHubImagePathPanels(stepId);
           });
@@ -10514,14 +10806,12 @@
       pathRoot.querySelectorAll('input[name="easy_copy_path"]').forEach(function (input) {
         bindChoiceReselect(input, function () {
           store.copyPathMode = input.value === "omakase" ? "omakase" : "keyword";
-          if (store.copyPathMode === "omakase") store.copyPresetId = "omakase-flow-v1";
-          store.copyOmakaseLocks = {};
-          store.copyOmakaseSalt = 0;
+          if (store.copyPathMode === "omakase" && !store.copyPresetId) store.copyPresetId = "omakase-flow-v1";
           store.confirmed["easy-copy-path"] = true;
           scheduleSave();
           const flow = getFlowSteps();
           const next = flow.findIndex(function (s) { return s.id === "easy-copy-path"; });
-          if (next >= 0 && next < flow.length - 1) showWizardStep(next + 1);
+          if (next >= 0 && next < flow.length - 1) runWithCrossShutter(function () { showWizardStep(next + 1); });
           else showWizardStep(0);
         });
       });
@@ -10532,16 +10822,11 @@
       imgPathRoot.querySelectorAll('input[name="easy_img_path"]').forEach(function (input) {
         bindChoiceReselect(input, function () {
           store.imgPathMode = input.value === "omakase" ? "omakase" : "self";
-          if (store.imgPathMode === "omakase") {
-            store.imgOmakaseLocks = {};
-            store.imgOmakasePicks = {};
-            store.imgOmakaseSalt = 0;
-          }
           store.confirmed["easy-img-path"] = true;
           scheduleSave();
           const flow = getFlowSteps();
           const at = flow.findIndex(function (s) { return s.id === "easy-img-path"; });
-          if (at >= 0 && at < flow.length - 1) showWizardStep(at + 1);
+          if (at >= 0 && at < flow.length - 1) runWithCrossShutter(function () { showWizardStep(at + 1); });
           else showWizardStep(Math.max(0, at));
         });
       });
@@ -10571,8 +10856,23 @@
       reroll.dataset.bound = "1";
       reroll.addEventListener("click", function () {
         const secId = currentCopyFrameId();
-        store.copyFrameCandidates[secId] = null;
-        ensureCopyFrameCandidates(secId, true).then(function () {
+        const fields = visibleCopyFields(secId);
+        if (!store.copyFieldSource || typeof store.copyFieldSource !== "object") store.copyFieldSource = {};
+        const jobs = fields.filter(function (field) {
+          return store.copyFieldSource[field.key] !== "custom";
+        });
+        jobs.forEach(function (field) {
+          store.copyFrameCandidates[field.key] = null;
+        });
+        Promise.all(
+          jobs.map(function (field) {
+            return ensureCopyFieldCandidates(secId, field.key, true).then(function (list) {
+              if (store.copyFieldSource[field.key] === "cand" && list && list[0]) {
+                applyCopyTextToField(field.key, list[0].text);
+              }
+            });
+          })
+        ).then(function () {
           renderCopyFrameUi();
           scheduleSave();
         });
@@ -10671,8 +10971,7 @@
       })
       .join("");
     host.querySelectorAll('input[name="easy_sec_' + secId + '"]').forEach(function (input) {
-      input.addEventListener("change", function () {
-        if (!input.checked) return;
+      bindChoiceReselect(input, function () {
         const idx = Number(input.value);
         const cand = store.sampleSectionCandidates[secId][idx];
         if (!cand) return;
@@ -10685,7 +10984,7 @@
         scheduleSave();
         const flow = getFlowSteps();
         const cur = flow.findIndex(function (s) { return s.id === stepId; });
-        if (cur >= 0 && cur < flow.length - 1) showWizardStep(cur + 1);
+        if (cur >= 0 && cur < flow.length - 1) runWithCrossShutter(function () { showWizardStep(cur + 1); });
       });
     });
     if (store.sampleSectionSelected[secId] != null) {
@@ -10694,20 +10993,63 @@
     }
   }
 
+  function renderEasyImageWireList() {
+    const stage = document.querySelector(".sample-img-wire-stage");
+    const list = document.querySelector(".sample-img-wire-list");
+    if (!stage || !list) return;
+    const slots = collectVisibleImageSlots();
+    stage.innerHTML = slots
+      .map(function (slot, i) {
+        return (
+          '<button type="button" class="sample-wire-slot' +
+          (i === 0 ? " is-active" : "") +
+          '" data-wire-slot="' +
+          slot.key +
+          '">' +
+          escapeHtml(slot.label) +
+          "</button>"
+        );
+      })
+      .join("");
+    list.innerHTML = slots
+      .map(function (slot, i) {
+        return (
+          '<div class="easy-img-panel' +
+          (i === 0 ? " is-current" : "") +
+          '" data-easy-slot="' +
+          slot.key +
+          '"><p class="easy-img-status" id="easy-img-status-' +
+          slot.key +
+          '">まだ選んでいません</p><button type="button" class="gct-btn gct-btn-primary" data-easy-pick="' +
+          slot.input +
+          '">' +
+          escapeHtml(slot.label) +
+          'を選ぶ</button><button type="button" class="gct-btn" data-easy-gallery="' +
+          slot.input +
+          '">ギャラリーから選ぶ</button></div>'
+        );
+      })
+      .join("");
+    if (slots[0]) store.sampleWireSlot = slots[0].key;
+    setupEasyImagePickers();
+    setupSampleWireSlots();
+    syncEasyImageStatuses();
+  }
+
   function setupSampleWireSlots() {
     const rootWire = document.querySelector(".sample-img-wire-layout");
     if (!rootWire || rootWire.dataset.bound) return;
     rootWire.dataset.bound = "1";
-    rootWire.querySelectorAll("[data-wire-slot]").forEach(function (btn) {
-      btn.addEventListener("click", function () {
-        const slot = btn.getAttribute("data-wire-slot");
-        store.sampleWireSlot = slot;
-        rootWire.querySelectorAll("[data-wire-slot]").forEach(function (b) {
-          b.classList.toggle("is-active", b === btn);
-        });
-        rootWire.querySelectorAll("[data-easy-slot]").forEach(function (p) {
-          p.classList.toggle("is-current", p.getAttribute("data-easy-slot") === slot);
-        });
+    rootWire.addEventListener("click", function (ev) {
+      const btn = ev.target.closest("[data-wire-slot]");
+      if (!btn || !rootWire.contains(btn)) return;
+      const slot = btn.getAttribute("data-wire-slot");
+      store.sampleWireSlot = slot;
+      rootWire.querySelectorAll("[data-wire-slot]").forEach(function (b) {
+        b.classList.toggle("is-active", b === btn);
+      });
+      rootWire.querySelectorAll("[data-easy-slot]").forEach(function (p) {
+        p.classList.toggle("is-current", p.getAttribute("data-easy-slot") === slot);
       });
     });
   }
@@ -10725,6 +11067,13 @@
     store.imgOmakasePicks = {};
     store.imgOmakaseSalt = 0;
     store.copyDirIds = [];
+    store.copyDirForbid = [];
+    store.copyFieldSource = {};
+    store.copyFieldNow = {};
+    store.copyHeroOnPhoto = null;
+    store.copyScreenReturn = null;
+    store.heroTextOnPhoto = false;
+    store.easyBasicsSeed = null;
     store.copyPresetId = null;
     store.copyOmakaseAxes = null;
     store.copyOmakaseLocks = {};
@@ -10751,6 +11100,79 @@
     scheduleSave();
   }
 
+  function incomingSushiId() {
+    if (store.pendingSushi && store.pendingSushi.sample && store.pendingSushi.sample.id) {
+      return String(store.pendingSushi.sample.id);
+    }
+    return String(store.sushiSampleId || "");
+  }
+
+  function shouldResumeSampleFlow() {
+    return !!(
+      store.sampleFlowEntered &&
+      store.sampleFlowAppliedId &&
+      incomingSushiId() &&
+      incomingSushiId() === String(store.sampleFlowAppliedId)
+    );
+  }
+
+  function resumeSampleFlowAfterColor(colorVal) {
+    let mood = store.chosenPresetKey;
+    if (colorVal === "keep") mood = store.sampleOriginalPreset || store.chosenPresetKey;
+    else if (colorVal && PRESETS[colorVal]) mood = colorVal;
+    if (mood && PRESETS[mood]) {
+      applyPresetByKey(mood);
+      confirmAllColorStepsFromPreset();
+      store.chosenPresetKey = mood;
+    }
+    store.pendingSushi = null;
+    store.entryBranch = "sample";
+    store.easyFlowActive = true;
+    store.intakeDone = true;
+    store.confirmed.purpose = true;
+    store.confirmed.layout = true;
+    store.confirmed.guide = true;
+    store.siteColorMode = "easy";
+    store.uiMode = "guided";
+    if (store.hubEntrySource !== "sample-done") store.hubEntrySource = "sample";
+    applyUiMode();
+    syncSiteColorModeUi();
+    hideEntryGate();
+    const flow = getFlowSteps();
+    let idx = store.wizardStepIndex || 0;
+    if (idx < 0) idx = 0;
+    if (flow.length && idx > flow.length - 1) idx = flow.length - 1;
+    showWizardStep(flow.length ? idx : 0);
+    scheduleSave();
+  }
+
+  async function warmSampleEntryDraft() {
+    const gate = document.getElementById("entry-gate");
+    if (!gate) return false;
+    let purposeEl = gate.querySelector('input[name="entry_purpose"]:checked');
+    if (!purposeEl && store.entryBranch === "sample") {
+      purposeEl = gate.querySelector('input[name="entry_purpose"][value="shop"]');
+    }
+    if (!purposeEl || purposeEl.value !== "shop") return false;
+    if (shouldResumeSampleFlow()) return true;
+    if (store.pendingSushi && store.pendingSushi.draft) return true;
+    if (!(store.sushiSampleId && window.SushiBelt && window.SushiBelt.loadManifest)) return false;
+    try {
+      const man = await window.SushiBelt.loadManifest();
+      const sample = (man.samples || []).find(function (s) {
+        return String(s.id) === String(store.sushiSampleId);
+      });
+      if (sample) {
+        const res = await fetch("sushi-samples/" + sample.draftPath + "?v=color-apply-v3");
+        const draft = await res.json();
+        store.pendingSushi = { sample: sample, draft: draft };
+      }
+    } catch (e) {
+      return false;
+    }
+    return !!(store.pendingSushi && store.pendingSushi.draft);
+  }
+
   async function finishSampleEntryFromGate() {
     const gate = document.getElementById("entry-gate");
     if (!gate) return;
@@ -10760,24 +11182,14 @@
       if (purposeEl) purposeEl.checked = true;
     }
     if (!purposeEl || purposeEl.value !== "shop") return;
-    if (!store.pendingSushi || !store.pendingSushi.draft) {
-      if (store.sushiSampleId && window.SushiBelt && window.SushiBelt.loadManifest) {
-        try {
-          const man = await window.SushiBelt.loadManifest();
-          const sample = (man.samples || []).find(function (s) {
-            return String(s.id) === String(store.sushiSampleId);
-          });
-          if (sample) {
-            const res = await fetch("sushi-samples/" + sample.draftPath + "?v=color-apply-v3");
-            const draft = await res.json();
-            store.pendingSushi = { sample: sample, draft: draft };
-          }
-        } catch (e) {
-          return;
-        }
-      }
+    const colorElEarly = gate.querySelector('input[name="entry_sample_color"]:checked');
+    const colorValEarly = colorElEarly ? colorElEarly.value : "keep";
+    if (shouldResumeSampleFlow()) {
+      if (window.SushiBelt) window.SushiBelt.unmount();
+      resumeSampleFlowAfterColor(colorValEarly);
+      return;
     }
-    if (!store.pendingSushi || !store.pendingSushi.draft) return;
+    if (!(await warmSampleEntryDraft())) return;
     const colorEl = gate.querySelector('input[name="entry_sample_color"]:checked');
     const colorVal = colorEl ? colorEl.value : "keep";
     const draft = store.pendingSushi.draft;
@@ -10797,6 +11209,9 @@
     }
     store.pendingSushi = null;
     if (window.SushiBelt) window.SushiBelt.unmount();
+    store.sampleOriginalPreset = moodFromDraft;
+    store.sampleFlowAppliedId = String(store.sushiSampleId || "");
+    store.sampleFlowEntered = true;
     startSampleFlowAfterEntry();
   }
 
@@ -10806,6 +11221,20 @@
     if (!gate) return;
     const purposeEl = gate.querySelector('input[name="entry_purpose"]:checked');
     if (!purposeEl || purposeEl.value !== "shop") return;
+    const returning = store.hubEntrySource === "detail-entry";
+    if (returning || store.sampleFlowEntered) {
+      hideEntryGate();
+      store.entryBranch = "detail";
+      store.hubEntrySource = "detail-entry";
+      store.uiMode = "self";
+      store.siteColorMode = "detail";
+      applyUiMode();
+      syncSiteColorModeUi();
+      openDetailLayoutHub();
+      if (!returning) showDetailNoticeModal();
+      scheduleSave();
+      return;
+    }
     hideEntryGate();
     store.hubEntrySource = "detail-entry";
     applyIntakeSelections("shop", "detail", "clinic", "a");
@@ -10827,24 +11256,43 @@
     applyIntakeSelections("shop", "easy", colorEl.value, layoutEl.value);
   }
 
+  function restoreSaveChoiceAfterFolderCancel(gate, prevMode) {
+    if (!gate) return;
+    if (prevMode === "folder" && store.folderDirHandle) {
+      store.saveMode = "folder";
+      const folder = gate.querySelector('input[name="entry_save_mode"][value="folder"]');
+      if (folder) folder.checked = true;
+      return;
+    }
+    if (prevMode === "browser") {
+      store.saveMode = "browser";
+      const browser = gate.querySelector('input[name="entry_save_mode"][value="browser"]');
+      if (browser) browser.checked = true;
+      return;
+    }
+    store.saveMode = null;
+    gate.querySelectorAll('input[name="entry_save_mode"]').forEach(function (r) {
+      r.checked = false;
+    });
+  }
+
   function setupEntryGate() {
     const gate = document.getElementById("entry-gate");
     if (!gate) return;
     gate.querySelectorAll('input[name="entry_save_mode"]').forEach((input) => {
-      input.addEventListener("change", () => {
-        if (!input.checked) return;
+      bindChoiceReselect(input, () => {
         if (input.value === "folder") {
+          const prevMode = store.saveMode;
           pickProjectFolderForSave()
             .then(function () {
               store.saveMode = "folder";
               syncDashResumeNotice();
               scheduleSave();
               scheduleFolderWrite();
-              setEntryGateStep("branch");
+              enterBranchAfterSaveChoice();
             })
             .catch(function (err) {
-              input.checked = false;
-              store.saveMode = null;
+              restoreSaveChoiceAfterFolderCancel(gate, prevMode);
               const msg =
                 err && err.name === "AbortError"
                   ? "フォルダ選択をキャンセルしました。もう一度選ぶか、「残さず」を選んでください。"
@@ -10861,7 +11309,7 @@
         idbClearFolderHandle();
         syncDashResumeNotice();
         scheduleSave();
-        setEntryGateStep("branch");
+        enterBranchAfterSaveChoice();
       });
     });
     const resumeZipInput = document.getElementById("entry-resume-zip");
@@ -10926,33 +11374,32 @@
       if (store.saveMode === "folder" && store.folderDirHandle) scheduleFolderWrite();
     });
     gate.querySelectorAll('input[name="entry_branch"]').forEach((input) => {
-      input.addEventListener("change", () => {
-        if (!input.checked) return;
+      bindChoiceReselect(input, () => {
         if (input.value === "resume") {
           store.entryBranch = "resume";
           setEntryResumeStatus("");
           syncEntryResumeLoadButton();
-          setEntryGateStep("resume");
+          runWithCrossShutter(function () { setEntryGateStep("resume"); });
           return;
         }
         store.entryBranch = input.value === "detail" ? "detail" : "sample";
-        if (store.entryBranch === "sample") setEntryGateStep("sushi");
-        else setEntryGateStep("purpose");
+        if (store.entryBranch === "sample") runWithCrossShutter(function () { setEntryGateStep("sushi"); });
+        else runWithCrossShutter(function () { setEntryGateStep("purpose"); });
       });
     });
     gate.querySelectorAll('input[name="entry_purpose"]').forEach((input) => {
-      input.addEventListener("change", () => {
-        if (!input.checked || input.disabled) return;
+      bindChoiceReselect(input, () => {
+        if (input.disabled) return;
         if (store.entryBranch === "detail") {
-          finishDetailEntryFromGate();
+          runWithCrossShutter(function () { finishDetailEntryFromGate(); });
           return;
         }
-        setEntryGateStep("color");
+        runWithCrossShutter(function () { setEntryGateStep("color"); });
       });
     });
     gate.querySelectorAll('input[name="entry_sample_color"]').forEach((input) => {
-      input.addEventListener("change", () => {
-        if (input.checked) finishSampleEntryFromGate();
+      bindChoiceReselect(input, () => {
+        runWithCrossShutter(function () { return finishSampleEntryFromGate(); }, warmSampleEntryDraft);
       });
     });
     gate.querySelectorAll("[data-entry-step-back]").forEach((btn) => {
@@ -10964,34 +11411,9 @@
             setEntryGateStep("sushi");
             return;
           }
-          store.entryBranch = null;
-          gate.querySelectorAll('input[name="entry_branch"]').forEach((r) => {
-            r.checked = false;
-          });
           setEntryGateStep("branch");
-        } else if (cur === "sushi") {
-          store.entryBranch = null;
-          store.pendingSushi = null;
-          gate.querySelectorAll('input[name="entry_branch"]').forEach((r) => {
-            r.checked = false;
-          });
-          setEntryGateStep("branch");
-        } else if (cur === "resume") {
-          store.entryBranch = null;
-          gate.querySelectorAll('input[name="entry_branch"]').forEach((r) => {
-            r.checked = false;
-          });
-          const zipInput = document.getElementById("entry-resume-zip");
-          if (zipInput) zipInput.value = "";
-          setEntryResumeStatus("");
-          syncEntryResumeLoadButton();
-          setEntryGateStep("branch");
-        } else if (cur === "branch") {
-          store.entryBranch = null;
-          gate.querySelectorAll('input[name="entry_branch"]').forEach((r) => {
-            r.checked = false;
-          });
-          setEntryGateStep("save");
+        } else if (cur === "sushi" || cur === "resume" || cur === "branch") {
+          setEntryGateStep(cur === "branch" ? "save" : "branch");
         }
       });
     });
@@ -11031,10 +11453,10 @@
       hideEntryGate();
       syncSiteColorModeUi();
       if (store.easyFlowActive && store.uiMode === "guided") {
-        if (store.entryBranch === "sample") setSampleFlowPreviewHidden(false);
         showWizardStep(resolveWizardStepIndex());
       }
     }
+    samplePreviewPopReady = true;
   }
 
   function resetColorsForEasyMode() {
@@ -11132,15 +11554,17 @@
       }
     }
     if (step.id === "easy-copy-frame") {
-      const sec = currentCopyFrameId();
-      const now = store.copyFrameNow[sec] || readCurrentSectionText(sec);
-      applyCopyTextToSection(sec, now);
-      if ((store.copyFrameIndex || 0) < COPY_FRAME_ORDER.length - 1) {
+      const order = activeCopyFrameOrder();
+      if ((store.copyFrameIndex || 0) < order.length - 1) {
         store.copyFrameIndex = (store.copyFrameIndex || 0) + 1;
         store.confirmed["easy-copy-frame"] = false;
         renderCopyFrameUi();
         updateWizardUi();
         scheduleSave();
+        return "stay";
+      }
+      if (store.copyScreenReturn === "hub") {
+        closeCopyFrameToHub();
         return "stay";
       }
     }
@@ -11158,7 +11582,292 @@
     return true;
   }
 
+  const COLOR_WAVE_ROWS = 4;
+  const COLOR_WAVE_COLS = 8;
+  const COLOR_WAVE_DUR = 340;
+  const COLOR_WAVE_GAP = 32;
+  const COLOR_WAVE_ROW_GAP = 18;
+  const COLOR_WAVE_FIELD = {
+    clinic: "chromeBg",
+    green: "accent",
+    cafe: "chromeBg",
+    ink: "pageBg",
+    brick: "chromeBg",
+    sakura: "accent"
+  };
+  const COLOR_WAVE_PATTERNS = [
+    [["clinic", "green"], ["sakura", "brick"], ["green", "clinic"], ["brick", "sakura"]],
+    [["green", "sakura"], ["brick", "clinic"], ["cafe", "green"], ["sakura", "brick"]],
+    [["clinic", "sakura"], ["green", "brick"], ["ink", "clinic"], ["sakura", "green"]],
+    [["brick", "green"], ["clinic", "cafe"], ["sakura", "clinic"], ["green", "brick"]]
+  ];
+  let colorWaveBusy = false;
+  let colorWavePattern = -1;
+
+  function colorWaveHex(key) {
+    const preset = PRESETS[key] || PRESETS.clinic;
+    const field = COLOR_WAVE_FIELD[key] || "chromeBg";
+    return preset[field] || preset.chromeBg;
+  }
+
+  function ensureColorWave() {
+    let layer = document.getElementById("color-wave");
+    if (layer) return layer;
+    layer = document.createElement("div");
+    layer.id = "color-wave";
+    layer.hidden = true;
+    layer.setAttribute("aria-hidden", "true");
+    for (let r = 0; r < COLOR_WAVE_ROWS; r++) {
+      const row = document.createElement("div");
+      row.className = "color-wave-row";
+      for (let c = 0; c < COLOR_WAVE_COLS; c++) {
+        const cell = document.createElement("div");
+        cell.className = "color-wave-cell";
+        cell.dataset.row = String(r);
+        cell.dataset.col = String(c);
+        row.appendChild(cell);
+      }
+      layer.appendChild(row);
+    }
+    document.body.appendChild(layer);
+    return layer;
+  }
+
+  function paintColorWave(layer) {
+    let pick = Math.floor(Math.random() * COLOR_WAVE_PATTERNS.length);
+    if (pick === colorWavePattern) pick = (pick + 1) % COLOR_WAVE_PATTERNS.length;
+    colorWavePattern = pick;
+    const pattern = COLOR_WAVE_PATTERNS[pick];
+    const half = COLOR_WAVE_COLS / 2;
+    layer.querySelectorAll(".color-wave-cell").forEach(function (cell) {
+      const row = Number(cell.dataset.row) || 0;
+      const col = Number(cell.dataset.col) || 0;
+      const pair = pattern[row] || pattern[0];
+      const key = col < half ? pair[0] : pair[1];
+      cell.style.background = colorWaveHex(key);
+      cell.style.transform = "scaleX(0)";
+    });
+  }
+
+  function colorWaveDelay(row, col, opening) {
+    const reverseCol = row % 2 === 0 ? col : COLOR_WAVE_COLS - 1 - col;
+    const along = opening ? COLOR_WAVE_COLS - 1 - reverseCol : reverseCol;
+    return along * COLOR_WAVE_GAP + row * COLOR_WAVE_ROW_GAP;
+  }
+
+  function colorWaveSpan() {
+    return (COLOR_WAVE_COLS - 1) * COLOR_WAVE_GAP + (COLOR_WAVE_ROWS - 1) * COLOR_WAVE_ROW_GAP + COLOR_WAVE_DUR;
+  }
+
+  function playColorWave(onCovered) {
+    if (colorWaveBusy) return false;
+    const layer = ensureColorWave();
+    paintColorWave(layer);
+    const cells = layer.querySelectorAll(".color-wave-cell");
+    colorWaveBusy = true;
+    layer.hidden = false;
+    const span = colorWaveSpan();
+    cells.forEach(function (cell) {
+      const row = Number(cell.dataset.row) || 0;
+      const col = Number(cell.dataset.col) || 0;
+      cell.style.transformOrigin = row % 2 === 0 ? "left center" : "right center";
+      cell.animate(
+        [{ transform: "scaleX(0)" }, { transform: "scaleX(1)" }],
+        {
+          duration: COLOR_WAVE_DUR,
+          delay: colorWaveDelay(row, col, false),
+          easing: "cubic-bezier(0.45, 0, 0.2, 1)",
+          fill: "both"
+        }
+      );
+    });
+    window.setTimeout(function () {
+      try {
+        onCovered();
+      } finally {
+        cells.forEach(function (cell) {
+          const row = Number(cell.dataset.row) || 0;
+          const col = Number(cell.dataset.col) || 0;
+          cell.getAnimations().forEach(function (anim) { anim.cancel(); });
+          cell.style.transform = "scaleX(1)";
+          cell.style.transformOrigin = row % 2 === 0 ? "right center" : "left center";
+          cell.animate(
+            [{ transform: "scaleX(1)" }, { transform: "scaleX(0)" }],
+            {
+              duration: COLOR_WAVE_DUR,
+              delay: colorWaveDelay(row, col, true),
+              easing: "cubic-bezier(0.45, 0, 0.2, 1)",
+              fill: "both"
+            }
+          );
+        });
+        window.setTimeout(function () {
+          cells.forEach(function (cell) {
+            cell.getAnimations().forEach(function (anim) { anim.cancel(); });
+            cell.style.transform = "scaleX(0)";
+          });
+          layer.hidden = true;
+          colorWaveBusy = false;
+        }, span + 40);
+      }
+    }, span + 30);
+    return true;
+  }
+
+  const GRID_SHUTTER_ROWS = 4;
+  const GRID_SHUTTER_COLS = 16;
+  const GRID_SHUTTER_DUR = 900;
+  const GRID_SHUTTER_STAGGER = 48;
+  let gridShutterBusy = false;
+
+  function gridShutterSpan() {
+    return (GRID_SHUTTER_COLS - 1) * GRID_SHUTTER_STAGGER + GRID_SHUTTER_DUR;
+  }
+
+  function ensureGridShutter() {
+    let layer = document.getElementById("grid-shutter");
+    if (layer) return layer;
+    layer = document.createElement("div");
+    layer.id = "grid-shutter";
+    layer.hidden = true;
+    layer.setAttribute("aria-hidden", "true");
+    const keys = Object.keys(COLOR_WAVE_FIELD);
+    for (let r = 0; r < GRID_SHUTTER_ROWS; r++) {
+      for (let c = 0; c < GRID_SHUTTER_COLS; c++) {
+        const cell = document.createElement("div");
+        cell.className = "grid-shutter-cell";
+        cell.dataset.row = String(r);
+        cell.dataset.col = String(c);
+        const along = r % 2 === 0 ? c : GRID_SHUTTER_COLS - 1 - c;
+        const key = keys[(along + r * 2) % keys.length];
+        cell.style.background = colorWaveHex(key);
+        cell.style.left = (c * 100) / GRID_SHUTTER_COLS + "%";
+        cell.style.top = (r * 100) / GRID_SHUTTER_ROWS + "%";
+        cell.style.width = "calc(100% / " + GRID_SHUTTER_COLS + " + 1px)";
+        cell.style.height = "calc(100% / " + GRID_SHUTTER_ROWS + " + 1px)";
+        layer.appendChild(cell);
+      }
+    }
+    document.body.appendChild(layer);
+    return layer;
+  }
+
+  function playGridShutter(onCovered) {
+    if (gridShutterBusy) return false;
+    const layer = ensureGridShutter();
+    const cells = layer.querySelectorAll(".grid-shutter-cell");
+    gridShutterBusy = true;
+    layer.hidden = false;
+    const span = gridShutterSpan();
+    const ease = "cubic-bezier(0.77, 0, 0.175, 1)";
+    cells.forEach(function (cell) {
+      const row = Number(cell.dataset.row) || 0;
+      const col = Number(cell.dataset.col) || 0;
+      const order = row % 2 === 0 ? col : GRID_SHUTTER_COLS - 1 - col;
+      cell.style.transformOrigin = row % 2 === 0 ? "left center" : "right center";
+      cell.style.transform = "scaleX(0)";
+      cell.animate(
+        [{ transform: "scaleX(0)" }, { transform: "scaleX(1)" }],
+        {
+          duration: GRID_SHUTTER_DUR,
+          delay: order * GRID_SHUTTER_STAGGER,
+          easing: ease,
+          fill: "both"
+        }
+      );
+    });
+    window.setTimeout(function () {
+      try {
+        onCovered();
+      } finally {
+        cells.forEach(function (cell) {
+          const row = Number(cell.dataset.row) || 0;
+          const col = Number(cell.dataset.col) || 0;
+          const order = row % 2 === 0 ? col : GRID_SHUTTER_COLS - 1 - col;
+          cell.getAnimations().forEach(function (anim) { anim.cancel(); });
+          cell.style.transform = "scaleX(1)";
+          cell.animate(
+            [{ transform: "scaleX(1)" }, { transform: "scaleX(0)" }],
+            {
+              duration: GRID_SHUTTER_DUR,
+              delay: order * GRID_SHUTTER_STAGGER,
+              easing: ease,
+              fill: "both"
+            }
+          );
+        });
+        window.setTimeout(function () {
+          cells.forEach(function (cell) {
+            cell.getAnimations().forEach(function (anim) { anim.cancel(); });
+            cell.style.transform = "scaleX(0)";
+          });
+          layer.hidden = true;
+          gridShutterBusy = false;
+        }, span + 40);
+      }
+    }, span + 20);
+    return true;
+  }
+
+  let crossShutterBusy = false;
+
+  function playCrossShutter(onCross, alreadyBusy) {
+    if (!window.PageShutter) {
+      if (onCross) onCross();
+      return true;
+    }
+    if (!alreadyBusy && (crossShutterBusy || gridShutterBusy || window.PageShutter.isBusy())) return false;
+    crossShutterBusy = true;
+    var started = window.PageShutter.play(function () {
+      try { if (onCross) onCross(); } catch (err) { /* 切替に失敗しても帯は抜ける */ }
+    }, function () {
+      crossShutterBusy = false;
+    });
+    if (!started) {
+      crossShutterBusy = false;
+      return false;
+    }
+    return true;
+  }
+
+  function runWithCrossShutter(next, prepare) {
+    if (crossShutterBusy || gridShutterBusy || (window.PageShutter && window.PageShutter.isBusy())) return;
+    crossShutterBusy = true;
+    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    Promise.resolve(prepare && prepare()).then(function (ready) {
+      if (ready === false) {
+        crossShutterBusy = false;
+        return;
+      }
+      if (reduced) {
+        crossShutterBusy = false;
+        next();
+        return;
+      }
+      if (!playCrossShutter(next, true)) {
+        crossShutterBusy = false;
+        next();
+      }
+    }, function () {
+      crossShutterBusy = false;
+    });
+  }
+
+  function enterBranchAfterSaveChoice() {
+    if (gridShutterBusy || crossShutterBusy) return;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      setEntryGateStep("branch");
+      return;
+    }
+    if (!playGridShutter(function () {
+      setEntryGateStep("branch");
+    })) {
+      setEntryGateStep("branch");
+    }
+  }
+
   function wizardNext() {
+    if (colorWaveBusy) return;
     const flow = getFlowSteps();
     const step = getCurrentFlowStep();
     if (!step) return;
@@ -11248,26 +11957,28 @@
       return;
     }
     const nextIndex = store.wizardStepIndex + 1;
-    if (store.uiMode === "guided") {
-      if (step.id === LAST_COLOR_STEP_ID && !store.guidedImageUnlocked) {
-        store.guidedImageUnlocked = true;
-        store.chapterCoachMsg = "色の選択が完了しました。画像の選択ができます。";
-        scheduleSave();
-        window.setTimeout(() => {
-          store.chapterCoachMsg = "";
-          updateWizardUi();
-        }, 6000);
-      } else if (step.id === LAST_IMAGE_STEP_ID && !store.guidedTextUnlocked) {
-        store.guidedTextUnlocked = true;
-        store.chapterCoachMsg = "画像の選択が完了しました。文字の入力ができます。";
-        scheduleSave();
-        window.setTimeout(() => {
-          store.chapterCoachMsg = "";
-          updateWizardUi();
-        }, 6000);
+    runWithCrossShutter(function () {
+      if (store.uiMode === "guided") {
+        if (step.id === LAST_COLOR_STEP_ID && !store.guidedImageUnlocked) {
+          store.guidedImageUnlocked = true;
+          store.chapterCoachMsg = "色の選択が完了しました。画像の選択ができます。";
+          scheduleSave();
+          window.setTimeout(() => {
+            store.chapterCoachMsg = "";
+            updateWizardUi();
+          }, 6000);
+        } else if (step.id === LAST_IMAGE_STEP_ID && !store.guidedTextUnlocked) {
+          store.guidedTextUnlocked = true;
+          store.chapterCoachMsg = "画像の選択が完了しました。文字の入力ができます。";
+          scheduleSave();
+          window.setTimeout(() => {
+            store.chapterCoachMsg = "";
+            updateWizardUi();
+          }, 6000);
+        }
       }
-    }
-    showWizardStep(nextIndex);
+      showWizardStep(nextIndex);
+    });
   }
 
   function returnFromHubToEasyDone() {
@@ -11298,7 +12009,7 @@
       const branchRadio = gate.querySelector('input[name="entry_branch"][value="detail"]');
       if (branchRadio) branchRadio.checked = true;
       gate.querySelectorAll('input[name="entry_purpose"]').forEach(function (r) {
-        r.checked = false;
+        if (r.value === (store.sitePurpose || "shop")) r.checked = true;
       });
     }
     store.entryBranch = "detail";
@@ -11351,12 +12062,21 @@
       reopenSampleEntryAtColor();
       return;
     }
-    if (step && step.id === "easy-copy-frame" && (store.copyFrameIndex || 0) > 0) {
-      store.copyFrameIndex = (store.copyFrameIndex || 0) - 1;
-      store.confirmed["easy-copy-frame"] = false;
-      renderCopyFrameUi();
-      updateWizardUi();
-      return;
+    if (step && step.id === "easy-copy-frame") {
+      if ((store.copyFrameIndex || 0) > 0) {
+        const order = activeCopyFrameOrder();
+        if (order.length) {
+          store.copyFrameIndex = Math.min((store.copyFrameIndex || 0) - 1, order.length - 1);
+          store.confirmed["easy-copy-frame"] = false;
+          renderCopyFrameUi();
+          updateWizardUi();
+          return;
+        }
+      }
+      if (store.copyScreenReturn === "hub") {
+        closeCopyFrameToHub();
+        return;
+      }
     }
     if (step && step.id === "easy-done") {
       clearEasyLoadingTimers();
@@ -13003,9 +13723,452 @@
     );
   }
 
+  function restoreLayoutSectionInputs() {
+    document.querySelectorAll("[data-layout-input-home]").forEach((node) => {
+      const stepId = node.getAttribute("data-layout-input-home");
+      const home = stepId
+        ? form.querySelector('.dash-block[data-step-id="' + stepId + '"]')
+        : null;
+      if (home) home.appendChild(node);
+      node.removeAttribute("data-layout-input-home");
+    });
+  }
+
+  const LAYOUT_SECTION_INPUTS = {
+    values: ["values-text"],
+    accordions: ["about-text"],
+    hours: ["hours-text"],
+    access: ["access-text"],
+    address: ["address-text"],
+    contact: ["contact-text"]
+  };
+
+  function mountLayoutSectionInputs(body, blockId) {
+    const steps = LAYOUT_SECTION_INPUTS[blockId] || [];
+    steps.forEach((stepId) => {
+      const block = form.querySelector('.dash-block[data-step-id="' + stepId + '"]');
+      if (!block) return;
+      Array.from(block.children).forEach((child) => {
+        if (!child || child.tagName === "SUMMARY") return;
+        child.setAttribute("data-layout-input-home", stepId);
+        body.appendChild(child);
+      });
+    });
+  }
+
+  function buildLayoutMiniDiagram(meta) {
+    if (!meta) return null;
+    if (meta.id === "hero") {
+      const wrap = document.createElement("span");
+      wrap.className = "layout-mini";
+      wrap.setAttribute("aria-hidden", "true");
+      const bar = document.createElement("span");
+      bar.className = "layout-mini-bar layout-mini-bar--wide";
+      wrap.appendChild(bar);
+      return wrap;
+    }
+    if (meta.id !== "photos" && meta.id !== "works") return null;
+    const countId = meta.id === "photos" ? "about-photos" : "works-list";
+    seedItemOrder(countId);
+    const order = (store.itemOrders && store.itemOrders[countId]) || [];
+    const layout = normalizeItemLayout(countId);
+    const wrap = document.createElement("span");
+    wrap.className = "layout-mini";
+    wrap.setAttribute("aria-hidden", "true");
+    wrap.setAttribute("data-gap", (layout && layout.gap) || "normal");
+    order.forEach((slot) => {
+      const sz = layout && layout.sizeById ? layout.sizeById[slot] : "L";
+      const bar = document.createElement("span");
+      bar.className = "layout-mini-bar " + (sz === "H" ? "is-half" : "is-full");
+      wrap.appendChild(bar);
+    });
+    return wrap;
+  }
+
+  function isLayoutImageBlock(blockId) {
+    return blockId === "hero" || blockId === "photos" || blockId === "works";
+  }
+
+  function layoutImageCountId(blockId) {
+    if (blockId === "photos") return "about-photos";
+    if (blockId === "works") return "works-list";
+    return "";
+  }
+
+  function layoutFrameLabel(blockId, slot) {
+    if (blockId === "photos") return "写真" + String(slot).replace("about_image_", "");
+    if (blockId === "works") return "カード" + String(slot).replace("work_", "");
+    return "キャッチ";
+  }
+
+  function layoutFrameImageName(blockId, slot) {
+    if (blockId === "hero") return "hero_image";
+    return itemSlotImageName(slot);
+  }
+
+  function layoutFrameLockKey(blockId, slot) {
+    return layoutFrameImageName(blockId, slot);
+  }
+
+  function collectVisibleImageSlots() {
+    const slots = [];
+    activeLayoutOrder(store.layoutOrder).forEach((blockId) => {
+      const meta = LAYOUT_BLOCKS.find((b) => b.id === blockId);
+      if (!isLayoutBlockActive(meta) || !isLayoutImageBlock(blockId)) return;
+      if (blockId === "hero") {
+        slots.push({ key: "hero_image", input: "hero_image", prefer: "wide", label: "キャッチ" });
+        return;
+      }
+      const countId = layoutImageCountId(blockId);
+      seedItemOrder(countId);
+      (store.itemOrders[countId] || []).forEach((slot) => {
+        const name = layoutFrameImageName(blockId, slot);
+        slots.push({
+          key: name,
+          input: name,
+          prefer: "square",
+          label: layoutFrameLabel(blockId, slot)
+        });
+      });
+    });
+    return slots;
+  }
+
+  function syncOpenLayoutFocalButtons() {
+    document.querySelectorAll(".layout-focal-pad").forEach((pad) => {
+      const kind = pad.getAttribute("data-focal-kind");
+      if (kind === "hero") {
+        ensureHeroFocalDefaults();
+        syncFocalNudgeButtons(pad, store.heroFocalX, store.heroFocalY);
+        return;
+      }
+      const countId = pad.getAttribute("data-focal-for");
+      const slot = pad.getAttribute("data-item-id");
+      const layout = normalizeItemLayout(countId);
+      if (!layout || !slot) return;
+      syncFocalNudgeButtons(pad, layout.focalXById[slot], layout.focalYById[slot]);
+    });
+  }
+
+  function resetLayoutFrameFocal(blockId, slot) {
+    if (blockId === "hero") {
+      store.heroFocalX = HERO_FOCAL_X_DEFAULT;
+      store.heroFocalY = HERO_FOCAL_Y_DEFAULT;
+      applyHeroFocalToPreview();
+    } else {
+      const countId = layoutImageCountId(blockId);
+      const layout = normalizeItemLayout(countId);
+      if (!layout || !slot) return;
+      layout.focalXById[slot] = ITEM_FOCAL_DEFAULT;
+      layout.focalYById[slot] = ITEM_FOCAL_DEFAULT;
+      applyItemLayoutToPreview(countId);
+    }
+    if (store.confirmed.finish) unconfirmFinishSoft();
+    scheduleSave();
+    syncOpenLayoutFocalButtons();
+  }
+
+  function setLayoutFrameWidth(countId, slot, size) {
+    const layout = normalizeItemLayout(countId);
+    if (!layout || !slot) return;
+    pushLayoutUndo();
+    layout.sizeById[slot] = size === "H" ? "H" : "L";
+    applyItemLayoutToPreview(countId);
+    renderLayoutArrangeWire();
+    if (store.confirmed.finish) unconfirmFinishSoft();
+    scheduleSave();
+  }
+
+  function moveItemOrderNear(countId, fromId, toId, place) {
+    seedItemOrder(countId);
+    const order = store.itemOrders[countId];
+    const from = order.indexOf(fromId);
+    if (from < 0 || !toId || fromId === toId) return false;
+    order.splice(from, 1);
+    let at = order.indexOf(toId);
+    if (at < 0) {
+      order.splice(from, 0, fromId);
+      return false;
+    }
+    if (place === "after") at += 1;
+    order.splice(at, 0, fromId);
+    return true;
+  }
+
+  function bindLayoutInnerDrag(row, countId, slotId) {
+    const handle = row.querySelector(".layout-inner-handle");
+    if (!handle) return;
+    handle.addEventListener("pointerdown", (ev) => {
+      if (ev.button != null && ev.button !== 0) return;
+      ev.preventDefault();
+      ev.stopPropagation();
+      const list = row.parentElement;
+      let overId = null;
+      let place = "before";
+      let moved = false;
+      const startY = ev.clientY;
+      const onMove = (moveEv) => {
+        if (Math.abs(moveEv.clientY - startY) > 4) moved = true;
+        if (!moved || !list) return;
+        let best = null;
+        let bestDist = Infinity;
+        list.querySelectorAll(".layout-inner").forEach((el) => {
+          const id = el.getAttribute("data-item-id");
+          if (!id || id === slotId) return;
+          const r = el.getBoundingClientRect();
+          const dist = Math.abs(moveEv.clientY - (r.top + r.height / 2));
+          if (dist < bestDist) {
+            bestDist = dist;
+            best = el;
+          }
+        });
+        if (!best) return;
+        overId = best.getAttribute("data-item-id");
+        const r = best.getBoundingClientRect();
+        place = moveEv.clientY > r.top + r.height / 2 ? "after" : "before";
+        list.querySelectorAll(".layout-inner").forEach((el) => {
+          el.classList.toggle("is-drop-target", el === best);
+        });
+      };
+      const onUp = () => {
+        window.removeEventListener("pointermove", onMove, true);
+        window.removeEventListener("pointerup", onUp, true);
+        window.removeEventListener("pointercancel", onUp, true);
+        if (moved && overId) {
+          pushLayoutUndo();
+          if (moveItemOrderNear(countId, slotId, overId, place)) {
+            if (!store.layoutInnerByBlock) store.layoutInnerByBlock = {};
+            store.layoutInnerByBlock[countId] = slotId;
+            applyItemLayoutToPreview(countId);
+            renderLayoutArrangeWire();
+            if (store.confirmed.finish) unconfirmFinishSoft();
+            scheduleSave();
+          }
+        }
+      };
+      window.addEventListener("pointermove", onMove, true);
+      window.addEventListener("pointerup", onUp, true);
+      window.addEventListener("pointercancel", onUp, true);
+    });
+  }
+
+  function appendLayoutFrameTools(parent, blockId, slot) {
+    const imageName = layoutFrameImageName(blockId, slot);
+    const lockKey = layoutFrameLockKey(blockId, slot);
+    const sources = document.createElement("div");
+    sources.className = "layout-img-sources";
+    const selfBtn = document.createElement("button");
+    selfBtn.type = "button";
+    selfBtn.className = "layout-img-source";
+    selfBtn.textContent = "自分の画像から選ぶ";
+    selfBtn.addEventListener("click", (ev) => {
+      ev.preventDefault();
+      ev.stopPropagation();
+      const input = form.elements.namedItem(imageName);
+      if (input && typeof input.click === "function") input.click();
+    });
+    const galleryBtn = document.createElement("button");
+    galleryBtn.type = "button";
+    galleryBtn.className = "layout-img-source layout-img-source--gallery";
+    galleryBtn.textContent = "ギャラリーから選ぶ";
+    galleryBtn.addEventListener("click", (ev) => {
+      ev.preventDefault();
+      ev.stopPropagation();
+      openFreePhotoGalleryModal(imageName);
+    });
+    sources.appendChild(selfBtn);
+    sources.appendChild(galleryBtn);
+
+    const focal = document.createElement("div");
+    focal.className = "layout-focal";
+    const pad = document.createElement("div");
+    pad.className = "layout-focal-pad";
+    pad.setAttribute("role", "group");
+    pad.setAttribute("aria-label", "画像の位置");
+    pad.innerHTML = focalNudgeMarkup();
+    if (blockId === "hero") {
+      pad.setAttribute("data-focal-kind", "hero");
+      ensureHeroFocalDefaults();
+      syncFocalNudgeButtons(pad, store.heroFocalX, store.heroFocalY);
+    } else {
+      const countId = layoutImageCountId(blockId);
+      const layout = normalizeItemLayout(countId);
+      pad.setAttribute("data-focal-kind", "item");
+      pad.setAttribute("data-focal-for", countId);
+      pad.setAttribute("data-item-id", slot);
+      syncFocalNudgeButtons(
+        pad,
+        layout ? layout.focalXById[slot] : ITEM_FOCAL_DEFAULT,
+        layout ? layout.focalYById[slot] : ITEM_FOCAL_DEFAULT
+      );
+    }
+    pad.querySelectorAll("[data-focal-nudge]").forEach((btn) => {
+      btn.addEventListener("click", (ev) => {
+        ev.preventDefault();
+        ev.stopPropagation();
+        const dir = btn.getAttribute("data-focal-nudge");
+        if (blockId === "hero") nudgeHeroFocal(dir);
+        else nudgeItemFocal(layoutImageCountId(blockId), slot, dir);
+      });
+    });
+    const reset = document.createElement("button");
+    reset.type = "button";
+    reset.className = "layout-focal-reset";
+    reset.textContent = "元の位置に戻す";
+    reset.addEventListener("click", (ev) => {
+      ev.preventDefault();
+      ev.stopPropagation();
+      resetLayoutFrameFocal(blockId, slot);
+    });
+    focal.appendChild(pad);
+    focal.appendChild(reset);
+
+    const locked = !!(store.imgOmakaseLocks && store.imgOmakaseLocks[lockKey]);
+    const lockBtn = document.createElement("button");
+    lockBtn.type = "button";
+    lockBtn.className = "layout-lock-btn" + (locked ? " is-locked" : "");
+    lockBtn.textContent = locked ? "🔒" : "🔓";
+    lockBtn.setAttribute("aria-pressed", locked ? "true" : "false");
+    lockBtn.setAttribute("aria-label", locked ? "この写真は残します" : "この写真は選び直しの対象です");
+    lockBtn.addEventListener("click", (ev) => {
+      ev.preventDefault();
+      ev.stopPropagation();
+      if (!store.imgOmakaseLocks || typeof store.imgOmakaseLocks !== "object") store.imgOmakaseLocks = {};
+      store.imgOmakaseLocks[lockKey] = !store.imgOmakaseLocks[lockKey];
+      if (!store.layoutInnerByBlock) store.layoutInnerByBlock = {};
+      if (blockId !== "hero") store.layoutInnerByBlock[layoutImageCountId(blockId)] = slot;
+      scheduleSave();
+      renderLayoutArrangeWire();
+    });
+
+    parent.appendChild(sources);
+    parent.appendChild(focal);
+    parent.appendChild(lockBtn);
+  }
+
+  function renderLayoutImageInner(body, blockId) {
+    body.innerHTML = "";
+    const panel = document.createElement("div");
+    panel.className = "layout-image-panel";
+    if (blockId === "hero") {
+      appendLayoutFrameTools(panel, "hero", "hero");
+      body.appendChild(panel);
+      return;
+    }
+    const countId = layoutImageCountId(blockId);
+    seedItemOrder(countId);
+    const order = (store.itemOrders && store.itemOrders[countId]) || [];
+    const layout = normalizeItemLayout(countId);
+    const meta = COUNT_META[countId] || { min: 1, max: order.length || 1 };
+    const countRow = document.createElement("div");
+    countRow.className = "layout-image-count";
+    const minus = document.createElement("button");
+    minus.type = "button";
+    minus.className = "layout-count-btn";
+    minus.textContent = "−";
+    minus.setAttribute("aria-label", "枚数を減らす");
+    minus.disabled = order.length <= meta.min;
+    minus.addEventListener("click", (ev) => {
+      ev.preventDefault();
+      ev.stopPropagation();
+      adjustDraftCount(countId, -1, null);
+    });
+    const num = document.createElement("span");
+    num.className = "layout-image-count-num";
+    num.textContent = String(order.length);
+    const plus = document.createElement("button");
+    plus.type = "button";
+    plus.className = "layout-count-btn";
+    plus.textContent = "＋";
+    plus.setAttribute("aria-label", "枚数を増やす");
+    plus.disabled = order.length >= meta.max;
+    plus.addEventListener("click", (ev) => {
+      ev.preventDefault();
+      ev.stopPropagation();
+      requestAddDraftCount(countId, null, plus);
+    });
+    countRow.appendChild(minus);
+    countRow.appendChild(num);
+    countRow.appendChild(plus);
+    const gap = buildLayoutGapRow(countId);
+    if (gap) countRow.appendChild(gap);
+    panel.appendChild(countRow);
+
+    const list = document.createElement("div");
+    list.className = "layout-inner-list";
+    if (!store.layoutInnerByBlock) store.layoutInnerByBlock = {};
+    let openSlot = store.layoutInnerByBlock[countId] || "";
+    if (order.indexOf(openSlot) < 0) openSlot = order[0] || "";
+    order.forEach((slot) => {
+      const row = document.createElement("details");
+      row.className = "layout-inner" + (slot === openSlot ? " is-selected" : "");
+      row.setAttribute("data-item-id", slot);
+      row.setAttribute("name", "layout-inner-" + countId);
+      if (slot === openSlot) row.open = true;
+      const summary = document.createElement("summary");
+      summary.className = "layout-inner-summary";
+      const bar = document.createElement("span");
+      const sz = layout && layout.sizeById ? layout.sizeById[slot] : "L";
+      bar.className = "layout-mini-bar " + (sz === "H" ? "is-half" : "is-full");
+      bar.setAttribute("aria-hidden", "true");
+      const name = document.createElement("span");
+      name.className = "layout-inner-name";
+      name.textContent = layoutFrameLabel(blockId, slot);
+      const widths = document.createElement("span");
+      widths.className = "layout-width-picks";
+      widths.setAttribute("role", "group");
+      widths.setAttribute("aria-label", "横幅");
+      ["L", "H"].forEach((token) => {
+        const btn = document.createElement("button");
+        btn.type = "button";
+        btn.className = "layout-width-btn" + (sz === token ? " is-active" : "");
+        btn.textContent = token === "L" ? "いっぱい" : "半分";
+        btn.addEventListener("click", (ev) => {
+          ev.preventDefault();
+          ev.stopPropagation();
+          store.layoutInnerByBlock[countId] = slot;
+          setLayoutFrameWidth(countId, slot, token);
+        });
+        widths.appendChild(btn);
+      });
+      const handle = document.createElement("span");
+      handle.className = "layout-inner-handle";
+      handle.textContent = "⋮⋮";
+      handle.setAttribute("aria-label", "この枠の順番を変えられます");
+      summary.appendChild(bar);
+      summary.appendChild(name);
+      summary.appendChild(widths);
+      summary.appendChild(handle);
+      const inner = document.createElement("div");
+      inner.className = "layout-inner-body";
+      if (slot === openSlot) appendLayoutFrameTools(inner, blockId, slot);
+      row.appendChild(summary);
+      row.appendChild(inner);
+      row.addEventListener("toggle", () => {
+        if (!row.open) {
+          if (store.layoutInnerByBlock[countId] === slot) store.layoutInnerByBlock[countId] = "";
+          return;
+        }
+        store.layoutInnerByBlock[countId] = slot;
+        list.querySelectorAll(".layout-inner").forEach((el) => {
+          const on = el === row;
+          el.classList.toggle("is-selected", on);
+          if (!on && el.open) el.open = false;
+        });
+        if (!inner.childElementCount) appendLayoutFrameTools(inner, blockId, slot);
+      });
+      bindLayoutInnerDrag(row, countId, slot);
+      list.appendChild(row);
+    });
+    panel.appendChild(list);
+    body.appendChild(panel);
+  }
+
   function renderLayoutArrangeWire() {
+    restoreLayoutSectionInputs();
     const hosts = layoutArrangeHosts();
     const order = normalizeLayoutOrder(store.layoutOrder);
+    const openId = store.layoutAccordionId || "";
     if (hosts.length) {
       hosts.forEach((host) => {
         host.innerHTML = "";
@@ -13014,20 +14177,33 @@
           "layout-arrange-wire--mix"
         );
         host.classList.add("layout-arrange-wire--wide");
+        let openCell = null;
         order.forEach((id) => {
           const meta = LAYOUT_BLOCKS.find((b) => b.id === id);
           if (!meta) return;
           const displayLabel = layoutBlockDisplayLabel(meta);
           const on = isLayoutBlockActive(meta);
-          const cell = document.createElement("div");
+          const cell = document.createElement("details");
           cell.className = "layout-arrange-cell size-L layout-arrange-cell--structure" + (on ? "" : " is-layout-off");
           cell.setAttribute("data-layout-block", id);
+          cell.setAttribute("data-preview-target", meta.selector);
+          cell.setAttribute("name", "layout-arrange-section");
           cell.setAttribute("draggable", "false");
           cell.setAttribute("role", "listitem");
           cell.setAttribute(
             "aria-label",
             displayLabel + (on ? "（表示中・ドラッグで並び替え）" : "（非表示・ドラッグで並び替え）")
           );
+
+          const summary = document.createElement("summary");
+          summary.className = "layout-arrange-summary";
+
+          const diagram = buildLayoutMiniDiagram(meta);
+          if (diagram) summary.appendChild(diagram);
+
+          const name = document.createElement("span");
+          name.className = "layout-arrange-name";
+          name.textContent = displayLabel;
 
           const visLabel = document.createElement("label");
           visLabel.className = "layout-arrange-vis-label";
@@ -13036,7 +14212,6 @@
           vis.className = "layout-arrange-vis";
           vis.checked = on;
           vis.setAttribute("aria-label", displayLabel + "を表示");
-          /* ネイティブ toggle と再描画がぶつかると☑が戻るため、こちらで確定してから見た目を合わせる */
           vis.addEventListener("click", (ev) => {
             ev.preventDefault();
             ev.stopPropagation();
@@ -13057,18 +14232,74 @@
             vis.checked = isLayoutBlockActive(meta);
             window.setTimeout(() => syncLayoutBlockVisibilityRow(id), 0);
           });
-
-          const name = document.createElement("span");
-          name.className = "layout-arrange-name";
-          name.textContent = displayLabel;
-
+          visLabel.addEventListener("pointerdown", (ev) => {
+            ev.stopPropagation();
+          });
+          visLabel.addEventListener("click", (ev) => {
+            ev.stopPropagation();
+          });
           visLabel.appendChild(vis);
-          cell.appendChild(visLabel);
-          cell.appendChild(name);
-          cell.style.touchAction = "none";
+
+          const handle = document.createElement("span");
+          handle.className = "layout-arrange-handle";
+          handle.textContent = "⋮⋮";
+          handle.setAttribute("aria-label", "この段の順番を変えられます");
+          handle.title = "つかんだまま上下に動かすと、順番を変えられます";
+
+          summary.appendChild(name);
+          summary.appendChild(visLabel);
+          summary.appendChild(handle);
+
+          const body = document.createElement("div");
+          body.className = "layout-arrange-body";
+
+          const syncLayoutAccordion = () => {
+            if (!cell.open) {
+              if (store.layoutAccordionId === id) store.layoutAccordionId = "";
+              if (body.querySelector("[data-layout-input-home]")) restoreLayoutSectionInputs();
+              return;
+            }
+            store.layoutAccordionId = id;
+            host.querySelectorAll("details.layout-arrange-cell").forEach((el) => {
+              if (el !== cell && el.open) el.open = false;
+            });
+            restoreLayoutSectionInputs();
+            if (isLayoutImageBlock(id)) renderLayoutImageInner(body, id);
+            else if (LAYOUT_SECTION_INPUTS[id]) mountLayoutSectionInputs(body, id);
+            const sel = cell.getAttribute("data-preview-target") || meta.selector;
+            scrollPreviewTo(sel);
+          };
+          let layoutAccordionSyncedAt = 0;
+          const syncLayoutAccordionOnce = () => {
+            const now = Date.now();
+            if (now - layoutAccordionSyncedAt < 40) return;
+            layoutAccordionSyncedAt = now;
+            syncLayoutAccordion();
+          };
+
+          cell.appendChild(summary);
+          cell.appendChild(body);
+          summary.addEventListener("click", (ev) => {
+            if (ev.target.closest && ev.target.closest(".layout-arrange-handle, .layout-arrange-vis-label")) return;
+            window.setTimeout(syncLayoutAccordionOnce, 0);
+          });
+          cell.addEventListener("toggle", () => {
+            if (store._layoutAccordionRendering) return;
+            syncLayoutAccordionOnce();
+          });
           bindLayoutArrangeDrag(cell, id);
           host.appendChild(cell);
+          if (id === openId) openCell = cell;
         });
+        if (openCell) {
+          store._layoutAccordionRendering = true;
+          openCell.open = true;
+          store._layoutAccordionRendering = false;
+          const body = openCell.querySelector(".layout-arrange-body");
+          const bid = openCell.getAttribute("data-layout-block");
+          if (body && isLayoutImageBlock(bid)) renderLayoutImageInner(body, bid);
+          else if (body && LAYOUT_SECTION_INPUTS[bid]) mountLayoutSectionInputs(body, bid);
+        }
       });
     }
     renderLayoutCardWires();
@@ -13136,7 +14367,8 @@
       cells.forEach((el) => {
         const bid = el.getAttribute("data-layout-block");
         if (!bid || bid === store.layoutDragId) return;
-        const r = el.getBoundingClientRect();
+        const head = el.querySelector(".layout-arrange-summary") || el;
+        const r = head.getBoundingClientRect();
         const mid = r.top + r.height / 2;
         const dist = Math.abs(clientY - mid);
         if (dist < bestDist) {
@@ -13206,7 +14438,8 @@
     };
     cell.addEventListener("pointerdown", (ev) => {
       if (ev.button != null && ev.button !== 0) return;
-      if (isVisControl(ev.target)) return;
+      const onHandle = ev.target.closest && ev.target.closest(".layout-arrange-handle");
+      if (!onHandle || isVisControl(ev.target)) return;
       ev.preventDefault();
       ev.stopPropagation();
       finishOnce = false;
@@ -13328,6 +14561,24 @@
         },
         true
       );
+    }
+    const omakaseBtn = document.getElementById("layout-omakase-btn");
+    if (omakaseBtn && omakaseBtn.dataset.bound !== "1") {
+      omakaseBtn.dataset.bound = "1";
+      omakaseBtn.addEventListener("click", () => {
+        const slots = collectVisibleImageSlots();
+        omakaseBtn.disabled = true;
+        applyImgOmakaseFromCatalog({ onlyUnlocked: true, slots: slots }).then(
+          function () {
+            omakaseBtn.disabled = false;
+            renderLayoutArrangeWire();
+            scheduleSave();
+          },
+          function () {
+            omakaseBtn.disabled = false;
+          }
+        );
+      });
     }
     document.querySelectorAll("[data-layout-arrange-reset]").forEach((reset) => {
       if (reset.dataset.bound) return;
@@ -14296,8 +15547,947 @@
       }
     }
 
+    let dashCollapseLevel = 0;
+    let dashCollapseGen = 0;
+    let dashWaveTimer = 0;
+
+    function dashWaveMs(name, fallback) {
+      const raw = getComputedStyle(document.documentElement).getPropertyValue(name);
+      const n = parseFloat(raw);
+      return Number.isFinite(n) ? n : fallback;
+    }
+
+    function dashCollapseBlocked() {
+      const narrow = window.matchMedia && window.matchMedia("(max-width: 860px)").matches;
+      const previewHidden = document.documentElement.classList.contains("sample-flow-hide-preview");
+      return !!(narrow || previewHidden);
+    }
+
+    function clearDashWaveTimer() {
+      if (dashWaveTimer) window.clearTimeout(dashWaveTimer);
+      dashWaveTimer = 0;
+    }
+
+    function clearDashWaveMarks() {
+      document.querySelectorAll("[data-wave-row]").forEach(function (el) {
+        el.style.removeProperty("--wave-index");
+        el.removeAttribute("data-wave-row");
+      });
+      document.querySelectorAll(".dash-shutter-band").forEach(function (el) {
+        el.remove();
+      });
+      clearOpenMask();
+    }
+
+    function clearOpenMask() {
+      document.querySelectorAll(".dash-open-mask-svg, .dash-open-sheet").forEach(function (el) {
+        el.remove();
+      });
+      document.querySelectorAll("[data-open-mask]").forEach(function (el) {
+        el.style.maskImage = "";
+        el.style.webkitMaskImage = "";
+        el.style.maskRepeat = "";
+        el.style.webkitMaskRepeat = "";
+        el.style.maskSize = "";
+        el.style.webkitMaskSize = "";
+        el.style.maskPosition = "";
+        el.style.webkitMaskPosition = "";
+        el.removeAttribute("data-open-mask");
+      });
+      const shut = document.getElementById("dash-collapse-shut");
+      const pane = document.getElementById("dash-pane");
+      if (shut && pane && shut.hasAttribute("data-open-parked")) {
+        shut.removeAttribute("data-open-parked");
+        shut.style.zIndex = "";
+        pane.insertBefore(shut, pane.firstChild);
+      }
+    }
+
+    function buildEqualOpenMask(pane) {
+      clearOpenMask();
+      if (!pane) return 0;
+      const paneRect = pane.getBoundingClientRect();
+      const fullW = paneRect.width;
+      const fullH = paneRect.height;
+      if (fullW < 8 || fullH < 8) return 0;
+      const svgNS = "http://www.w3.org/2000/svg";
+      const dur = dashWaveMs("--dash-wave-dur", 800);
+      const gap = dashWaveMs("--dash-wave-gap", 40);
+      const slice = 28;
+      const count = Math.max(1, Math.ceil(fullH / slice));
+      const k = dur > 0 ? (fullW * gap) / (dur * slice) : 0;
+      const angle = Math.atan(k) * (180 / Math.PI);
+      const svg = document.createElementNS(svgNS, "svg");
+      svg.setAttribute("class", "dash-open-mask-svg");
+      svg.setAttribute("aria-hidden", "true");
+      svg.style.position = "absolute";
+      svg.style.width = "0";
+      svg.style.height = "0";
+      const mask = document.createElementNS(svgNS, "mask");
+      mask.setAttribute("id", "dash-open-mask");
+      mask.setAttribute("maskUnits", "userSpaceOnUse");
+      mask.setAttribute("maskContentUnits", "userSpaceOnUse");
+      mask.setAttribute("x", "0");
+      mask.setAttribute("y", "0");
+      mask.setAttribute("width", String(fullW));
+      mask.setAttribute("height", String(fullH));
+      const rect = document.createElementNS(svgNS, "rect");
+      rect.setAttribute("x", "0");
+      rect.setAttribute("y", "0");
+      rect.setAttribute("width", "0");
+      rect.setAttribute("height", String(fullH + 2));
+      rect.setAttribute("fill", "#fff");
+      rect.setAttribute("transform", "skewX(" + (-angle) + ")");
+      mask.appendChild(rect);
+      if (dur > 0) {
+        const total = Math.max(0, count - 1) * gap + dur;
+        rect.animate(
+          [{ width: "0px" }, { width: (fullW + k * fullH) + "px" }],
+          { duration: total, easing: "ease", fill: "both" }
+        );
+      }
+      svg.appendChild(mask);
+      document.body.appendChild(svg);
+      const sheet = document.createElement("div");
+      sheet.className = "dash-open-sheet";
+      sheet.setAttribute("aria-hidden", "true");
+      pane.appendChild(sheet);
+      const shut = document.getElementById("dash-collapse-shut");
+      const split = document.getElementById("atelier-split");
+      if (shut && split && shut.parentElement === pane) {
+        shut.setAttribute("data-open-parked", "");
+        shut.style.zIndex = "6";
+        split.appendChild(shut);
+      }
+      const size = fullW + "px " + fullH + "px";
+      pane.setAttribute("data-open-mask", "");
+      pane.style.webkitMaskImage = "url(#dash-open-mask)";
+      pane.style.maskImage = "url(#dash-open-mask)";
+      pane.style.webkitMaskRepeat = "no-repeat";
+      pane.style.maskRepeat = "no-repeat";
+      pane.style.webkitMaskSize = size;
+      pane.style.maskSize = size;
+      pane.style.webkitMaskPosition = "0 0";
+      pane.style.maskPosition = "0 0";
+      return count;
+    }
+
+    function clearDashSqueezeVisuals() {
+      const root = document.documentElement;
+      const pane = document.getElementById("dash-pane");
+      const header = document.querySelector("#dash-pane .dash-header");
+      root.classList.remove("dash-wave-squeeze");
+      if (header) {
+        header.style.transition = "none";
+        header.style.width = "";
+        header.style.transition = "";
+      }
+      if (!pane) return;
+      pane.style.transition = "none";
+      pane.style.clipPath = "";
+    }
+
+    function releaseDashPaneWidth() {
+      clearDashSqueezeVisuals();
+      const pane = document.getElementById("dash-pane");
+      if (!pane) return;
+      pane.style.transition = "";
+      pane.style.width = "";
+      pane.style.flex = "";
+      pane.style.minWidth = "";
+    }
+
+    function animateDashPaneWidth(targetPx) {
+      const pane = document.getElementById("dash-pane");
+      if (!pane) return;
+      const from = pane.getBoundingClientRect().width;
+      pane.style.flex = "0 0 auto";
+      pane.style.minWidth = "0";
+      pane.style.width = from + "px";
+      void pane.offsetWidth;
+      pane.style.transition = "width " + dashWaveMs("--dash-width-dur", 220) + "ms ease";
+      pane.style.width = targetPx + "px";
+    }
+
+    function rememberedDashWidth() {
+      const split = document.getElementById("atelier-split");
+      const pane = document.getElementById("dash-pane");
+      if (!split || !pane) return pane ? pane.getBoundingClientRect().width : 0;
+      const rect = split.getBoundingClientRect();
+      const pct = parseFloat(getComputedStyle(split).getPropertyValue("--preview-pct")) || 52;
+      const handleW = handle.getBoundingClientRect().width || 10;
+      return Math.max(280, rect.width - rect.width * (pct / 100) - handleW);
+    }
+
+    function waveRowVisible(el) {
+      if (!el || el.hidden) return false;
+      if (el.closest("summary")) return false;
+      const cs = getComputedStyle(el);
+      if (cs.display === "none" || cs.visibility === "hidden") return false;
+      const rect = el.getBoundingClientRect();
+      return rect.width > 8 && rect.height > 8;
+    }
+
+    /* 見えている行・塊だけ。ボタン内の文字や印は対象にしない */
+    function collectDashWaveRows() {
+      const pane = document.getElementById("dash-pane");
+      if (!pane) return [];
+      const active =
+        pane.querySelector("details.dash-block.is-wizard-active") ||
+        pane.querySelector("details.dash-block.is-active-step") ||
+        Array.prototype.find.call(pane.querySelectorAll(".dash-body details.dash-block"), function (el) {
+          return !el.hidden && el.open;
+        });
+      const rows = [];
+      function push(el) {
+        if (!waveRowVisible(el)) return;
+        if (rows.some(function (row) { return row === el || row.contains(el); })) return;
+        rows.push(el);
+      }
+      push(pane.querySelector(".dash-resume-notice"));
+      if (active) {
+        Array.prototype.forEach.call(active.children, function (child) {
+          if (child.matches("summary")) return;
+          if (child.matches(".entry-branch-grid, .easy-basics-fields")) {
+            Array.prototype.forEach.call(child.children, push);
+            return;
+          }
+          push(child);
+        });
+      }
+      push(pane.querySelector(".wizard-foot-dock"));
+      return rows;
+    }
+
+    function markDashShutter(direction, opts) {
+      opts = opts || {};
+      clearDashWaveMarks();
+      const header = document.querySelector("#dash-pane .dash-header");
+      let rows = [];
+      if (opts.headerOnly) {
+        if (header && waveRowVisible(header)) rows = [header];
+      } else {
+        rows = collectDashWaveRows();
+        if (opts.includeHeader && header && waveRowVisible(header)) {
+          rows = rows.filter(function (el) { return !header.contains(el); });
+          rows.push(header);
+        }
+      }
+      rows.sort(function (a, b) {
+        return a.getBoundingClientRect().top - b.getBoundingClientRect().top;
+      });
+      const dock = document.querySelector("#dash-pane .wizard-foot-dock");
+      if (dock && rows.indexOf(dock) >= 0) {
+        rows.splice(rows.indexOf(dock), 1);
+        rows.push(dock);
+      }
+      const last = rows.length - 1;
+      rows.forEach(function (el, index) {
+        const waveIndex = direction === "up" ? last - index : index;
+        el.setAttribute("data-wave-row", direction);
+        el.style.setProperty("--wave-index", String(waveIndex));
+      });
+      buildShutterBands(rows);
+      return rows.length;
+    }
+
+    function buildShutterBands(rows) {
+      const pane = document.getElementById("dash-pane");
+      if (!pane || !rows.length) return;
+      const paneRect = pane.getBoundingClientRect();
+      const header = pane.querySelector(".dash-header");
+      const sorted = rows.slice().sort(function (a, b) {
+        return a.getBoundingClientRect().top - b.getBoundingClientRect().top;
+      });
+      sorted.forEach(function (row, i) {
+        const rowRect = row.getBoundingClientRect();
+        let top = rowRect.top;
+        if (i === 0 && header && row !== header && !header.contains(row)) {
+          const headerBottom = header.getBoundingClientRect().bottom;
+          if (headerBottom <= rowRect.top + 1) top = headerBottom;
+        }
+        const nextTop = i < sorted.length - 1 ? sorted[i + 1].getBoundingClientRect().top : paneRect.bottom;
+        const band = document.createElement("div");
+        band.className = "dash-shutter-band";
+        band.setAttribute("data-wave-row", row.getAttribute("data-wave-row") || "up");
+        band.style.top = (top - paneRect.top) + "px";
+        band.style.height = Math.max(0, nextTop - top) + "px";
+        band.style.setProperty("--wave-index", row.style.getPropertyValue("--wave-index"));
+        pane.appendChild(band);
+      });
+    }
+
+    function shutterWait(count) {
+      const dur = dashWaveMs("--dash-wave-dur", 180);
+      const gap = dashWaveMs("--dash-wave-gap", 28);
+      if (dur <= 0 || count <= 0) return 0;
+      return Math.max(0, count - 1) * gap + dur;
+    }
+
+    function lockPreviewBox() {
+      const preview = document.querySelector(".preview-pane");
+      const split = document.getElementById("atelier-split");
+      if (!preview || !split) return;
+      const pr = preview.getBoundingClientRect();
+      const sr = split.getBoundingClientRect();
+      document.documentElement.classList.add("dash-preview-locked");
+      preview.style.left = (pr.left - sr.left) + "px";
+      preview.style.top = (pr.top - sr.top) + "px";
+      preview.style.width = pr.width + "px";
+      preview.style.height = pr.height + "px";
+      preview.style.right = "auto";
+    }
+
+    function unlockPreviewBox() {
+      const preview = document.querySelector(".preview-pane");
+      document.documentElement.classList.remove("dash-preview-locked");
+      if (!preview) return;
+      preview.style.left = "";
+      preview.style.top = "";
+      preview.style.width = "";
+      preview.style.height = "";
+      preview.style.right = "";
+      preview.style.transition = "";
+    }
+
+    function fitPreviewScaleToOpenWidth() {
+      const preview = document.querySelector(".preview-pane");
+      const split = document.getElementById("atelier-split");
+      const pane = document.getElementById("dash-pane");
+      if (!preview || !split || !pane || typeof window.applyPreviewFrameScale !== "function") return;
+      const sr = split.getBoundingClientRect();
+      const handleW = handle.getBoundingClientRect().width || 10;
+      const left = pane.getBoundingClientRect().width + handleW;
+      const saved = {
+        left: preview.style.left,
+        top: preview.style.top,
+        width: preview.style.width,
+        height: preview.style.height,
+        transition: preview.style.transition
+      };
+      preview.style.transition = "none";
+      preview.style.left = left + "px";
+      preview.style.width = Math.max(0, sr.width - left) + "px";
+      preview.style.top = "0px";
+      preview.style.height = sr.height + "px";
+      void preview.offsetWidth;
+      try {
+        window.applyPreviewFrameScale({
+          placeFit: document.body.classList.contains("hub-ui-layout") || document.body.classList.contains("hub-place-pick")
+        });
+      } finally {
+        preview.style.left = saved.left;
+        preview.style.top = saved.top;
+        preview.style.width = saved.width;
+        preview.style.height = saved.height;
+        preview.style.transition = saved.transition;
+        void preview.offsetWidth;
+      }
+    }
+
+    function shrinkPreviewWithWave(waitMs) {
+      const preview = document.querySelector(".preview-pane");
+      const split = document.getElementById("atelier-split");
+      const pane = document.getElementById("dash-pane");
+      if (!preview || !split || !pane || waitMs <= 0) return;
+      const sr = split.getBoundingClientRect();
+      const handleW = handle.getBoundingClientRect().width || 10;
+      const left = pane.getBoundingClientRect().width + handleW;
+      preview.style.transition = "none";
+      void preview.offsetWidth;
+      preview.style.transition = "left " + waitMs + "ms ease, width " + waitMs + "ms ease, top " + waitMs + "ms ease, height " + waitMs + "ms ease";
+      preview.style.left = left + "px";
+      preview.style.width = Math.max(0, sr.width - left) + "px";
+      preview.style.top = "0px";
+      preview.style.height = sr.height + "px";
+    }
+
+    function afterPaneWidth(targetPx, gen, level, next) {
+      const pane = document.getElementById("dash-pane");
+      const root = document.documentElement;
+      const widthDur = dashWaveMs("--dash-width-dur", 220);
+      root.classList.add("dash-pane-sizing");
+      if (!pane || widthDur <= 0) {
+        if (pane) {
+          pane.style.flex = "0 0 auto";
+          pane.style.minWidth = "0";
+          pane.style.transition = "none";
+          pane.style.width = targetPx + "px";
+        }
+        root.classList.remove("dash-pane-sizing");
+        if (gen === dashCollapseGen && dashCollapseLevel === level) next();
+        return;
+      }
+      animateDashPaneWidth(targetPx);
+      dashWaveTimer = window.setTimeout(function () {
+        root.classList.remove("dash-pane-sizing");
+        if (gen !== dashCollapseGen || dashCollapseLevel !== level) return;
+        next();
+      }, widthDur + 40);
+    }
+
+    function syncDashCollapseChrome(level) {
+      const shut = document.getElementById("dash-collapse-shut");
+      const root = document.documentElement;
+      const fullOn = root.classList.contains("dash-collapse-full") || root.classList.contains("dash-collapse-closing");
+      if (shut) {
+        shut.hidden = false;
+        shut.setAttribute("aria-label", level >= 2 || fullOn ? "操作パネルを元の幅に戻す" : "操作パネルをしまう");
+      }
+      if (level && !dashCollapseBlocked()) {
+        handle.setAttribute("aria-hidden", "true");
+        handle.tabIndex = -1;
+      } else {
+        handle.removeAttribute("aria-hidden");
+        handle.tabIndex = 0;
+      }
+    }
+
+    function settleHalf() {
+      if (dashCollapseLevel !== 1) return;
+      const root = document.documentElement;
+      root.classList.add("dash-collapse-half", "dash-collapse-settled");
+      root.classList.remove("dash-wave-out", "dash-pane-sizing", "dash-preview-fill", "dash-wave-reveal", "dash-wave-squeeze");
+      clearDashWaveMarks();
+      releaseDashPaneWidth();
+      syncDashCollapseChrome(1);
+      if (typeof window.applyPreviewWidthFromPane === "function") {
+        window.applyPreviewWidthFromPane();
+      }
+    }
+
+    function paintDashCollapseInstant(level) {
+      clearDashWaveTimer();
+      clearDashWaveMarks();
+      unlockPreviewBox();
+      releaseDashPaneWidth();
+      const root = document.documentElement;
+      root.classList.remove(
+        "dash-wave-out",
+        "dash-wave-in",
+        "dash-wave-reveal",
+        "dash-wave-squeeze",
+        "dash-collapse-closing",
+        "dash-title-tuck",
+        "dash-collapse-half",
+        "dash-collapse-full",
+        "dash-collapse-settled",
+        "dash-pane-sizing",
+        "dash-preview-locked",
+        "dash-preview-fill"
+      );
+      root.style.removeProperty("--dash-wave-lead");
+      if (level === 1) {
+        root.classList.add("dash-collapse-half", "dash-collapse-settled");
+      } else if (level === 2) {
+        root.classList.add("dash-collapse-full");
+      }
+      syncDashCollapseChrome(level);
+      if (typeof window.applyPreviewWidthFromPane === "function") {
+        window.applyPreviewWidthFromPane();
+      }
+    }
+
+    function expandPreviewToHalf(gen, next) {
+      const preview = document.querySelector(".preview-pane");
+      const split = document.getElementById("atelier-split");
+      const root = document.documentElement;
+      if (!preview || !split) {
+        if (gen === dashCollapseGen && dashCollapseLevel === 1) next();
+        return;
+      }
+      lockPreviewBox();
+      const sr = split.getBoundingClientRect();
+      const rem = parseFloat(getComputedStyle(document.documentElement).fontSize) || 16;
+      const finalLeft = 9 * rem;
+      const finalWidth = Math.max(0, sr.width - finalLeft);
+      const widthDur = dashWaveMs("--dash-width-dur", 220);
+      root.classList.add("dash-pane-sizing");
+      if (widthDur <= 0) {
+        preview.style.transition = "none";
+        preview.style.left = finalLeft + "px";
+        preview.style.width = finalWidth + "px";
+        preview.style.top = "0px";
+        preview.style.height = sr.height + "px";
+        root.classList.remove("dash-pane-sizing");
+        if (gen === dashCollapseGen && dashCollapseLevel === 1) next();
+        return;
+      }
+      preview.style.transition = "none";
+      void preview.offsetWidth;
+      preview.style.transition = "left " + widthDur + "ms ease, width " + widthDur + "ms ease, top " + widthDur + "ms ease, height " + widthDur + "ms ease";
+      preview.style.left = finalLeft + "px";
+      preview.style.width = finalWidth + "px";
+      preview.style.top = "0px";
+      preview.style.height = sr.height + "px";
+      dashWaveTimer = window.setTimeout(function () {
+        root.classList.remove("dash-pane-sizing");
+        if (gen !== dashCollapseGen || dashCollapseLevel !== 1) return;
+        next();
+      }, widthDur + 40);
+    }
+
+    function finishHalfWidth(gen) {
+      if (gen !== dashCollapseGen || dashCollapseLevel !== 1) return;
+      const root = document.documentElement;
+      const pane = document.getElementById("dash-pane");
+      const rem = parseFloat(getComputedStyle(document.documentElement).fontSize) || 16;
+      if (pane) {
+        pane.style.transition = "none";
+        pane.style.flex = "0 0 auto";
+        pane.style.minWidth = "0";
+        pane.style.width = (9 * rem) + "px";
+      }
+      root.classList.add("dash-collapse-half", "dash-collapse-settled", "dash-preview-fill");
+      root.classList.remove("dash-wave-out", "dash-wave-reveal", "dash-wave-squeeze");
+      clearDashWaveMarks();
+      clearDashSqueezeVisuals();
+      unlockPreviewBox();
+      settleHalf();
+    }
+
+    function startHalfSqueeze(gen, next) {
+      const pane = document.getElementById("dash-pane");
+      const root = document.documentElement;
+      if (!pane || gen !== dashCollapseGen || dashCollapseLevel !== 1) return;
+      const held = pane.getBoundingClientRect().width;
+      const rem = parseFloat(getComputedStyle(document.documentElement).fontSize) || 16;
+      const lead = 9 * rem;
+      const squeezeDur = dashWaveMs("--dash-squeeze-dur", 80);
+      const header = pane.querySelector(".dash-header");
+      const rightInset = Math.max(0, held - lead);
+      root.classList.add("dash-wave-squeeze");
+      if (squeezeDur <= 0 || rightInset <= 0) {
+        pane.style.transition = "none";
+        pane.style.clipPath = "inset(0 " + rightInset + "px 0 0)";
+        if (header) {
+          header.style.transition = "none";
+          header.style.width = lead + "px";
+        }
+        next();
+        return;
+      }
+      pane.style.transition = "none";
+      pane.style.clipPath = "inset(0 0 0 0)";
+      if (header) {
+        header.style.transition = "none";
+        header.style.width = held + "px";
+      }
+      void pane.offsetWidth;
+      pane.style.transition = "clip-path " + squeezeDur + "ms ease";
+      pane.style.clipPath = "inset(0 " + rightInset + "px 0 0)";
+      if (header) {
+        header.style.transition = "width " + squeezeDur + "ms ease";
+        header.style.width = lead + "px";
+      }
+      dashWaveTimer = window.setTimeout(function () {
+        if (gen !== dashCollapseGen || dashCollapseLevel !== 1) return;
+        next();
+      }, squeezeDur + 30);
+    }
+
+    function beginHalfFromOpen() {
+      dashCollapseLevel = 1;
+      const gen = ++dashCollapseGen;
+      const root = document.documentElement;
+      const pane = document.getElementById("dash-pane");
+      clearDashWaveTimer();
+      clearDashWaveMarks();
+      unlockPreviewBox();
+      root.classList.remove(
+        "dash-collapse-half",
+        "dash-collapse-full",
+        "dash-collapse-settled",
+        "dash-wave-out",
+        "dash-wave-in",
+        "dash-wave-reveal",
+        "dash-wave-squeeze",
+        "dash-title-tuck",
+        "dash-pane-sizing",
+        "dash-preview-locked",
+        "dash-preview-fill"
+      );
+      releaseDashPaneWidth();
+      syncDashCollapseChrome(1);
+      if (pane) {
+        const held = pane.getBoundingClientRect().width;
+        pane.style.flex = "0 0 auto";
+        pane.style.width = held + "px";
+      }
+      expandPreviewToHalf(gen, function () {
+        startHalfSqueeze(gen, function () {
+          const dur = dashWaveMs("--dash-wave-dur", 180);
+          const count = dur <= 0 ? 0 : markDashShutter("up");
+          if (dur <= 0 || !count) {
+            finishHalfWidth(gen);
+            return;
+          }
+          root.classList.add("dash-wave-out", "dash-wave-reveal");
+          syncDashCollapseChrome(1);
+          dashWaveTimer = window.setTimeout(function () {
+            if (gen !== dashCollapseGen || dashCollapseLevel !== 1) return;
+            finishHalfWidth(gen);
+          }, shutterWait(count) + 40);
+        });
+      });
+    }
+
+    function finishFull(gen) {
+      if (gen !== dashCollapseGen || dashCollapseLevel !== 2) return;
+      const root = document.documentElement;
+      const rem = parseFloat(getComputedStyle(document.documentElement).fontSize) || 16;
+      afterPaneWidth(1.35 * rem, gen, 2, function () {
+        clearDashWaveMarks();
+        root.classList.remove("dash-wave-out", "dash-title-tuck", "dash-collapse-half", "dash-collapse-settled");
+        root.classList.add("dash-collapse-full");
+        releaseDashPaneWidth();
+        syncDashCollapseChrome(2);
+        if (typeof window.applyPreviewWidthFromPane === "function") {
+          window.applyPreviewWidthFromPane();
+        }
+      });
+    }
+
+    function beginFullFromHalf() {
+      dashCollapseLevel = 2;
+      const gen = ++dashCollapseGen;
+      const root = document.documentElement;
+      clearDashWaveTimer();
+      clearDashWaveMarks();
+      root.classList.remove("dash-wave-out", "dash-wave-in", "dash-title-tuck", "dash-pane-sizing", "dash-preview-fill");
+      const ready = root.classList.contains("dash-collapse-half") && root.classList.contains("dash-collapse-settled");
+      if (!ready) {
+        unlockPreviewBox();
+        paintDashCollapseInstant(2);
+        return;
+      }
+      syncDashCollapseChrome(2);
+      const dur = dashWaveMs("--dash-wave-dur", 180);
+      const count = dur <= 0 ? 0 : markDashShutter("up", { headerOnly: true });
+      if (dur <= 0 || !count) {
+        finishFull(gen);
+        return;
+      }
+      root.classList.add("dash-wave-out");
+      dashWaveTimer = window.setTimeout(function () {
+        if (gen !== dashCollapseGen || dashCollapseLevel !== 2) return;
+        finishFull(gen);
+      }, shutterWait(count) + 40);
+    }
+
+    function beginOpen() {
+      dashCollapseLevel = 0;
+      const gen = ++dashCollapseGen;
+      const root = document.documentElement;
+      const pane = document.getElementById("dash-pane");
+      clearDashWaveTimer();
+      clearDashWaveMarks();
+      root.classList.remove("dash-wave-out", "dash-wave-in", "dash-wave-reveal", "dash-wave-squeeze", "dash-collapse-closing", "dash-title-tuck", "dash-pane-sizing", "dash-preview-fill");
+      clearDashSqueezeVisuals();
+      lockPreviewBox();
+      const target = rememberedDashWidth();
+      if (pane) {
+        pane.style.transition = "none";
+        pane.style.flex = "0 0 auto";
+        pane.style.minWidth = "0";
+        pane.style.width = target + "px";
+      }
+      root.classList.remove("dash-collapse-half", "dash-collapse-full", "dash-collapse-settled");
+      void (pane && pane.offsetWidth);
+      const dur = dashWaveMs("--dash-wave-dur", 800);
+      const count = dur <= 0 || !pane ? 0 : buildEqualOpenMask(pane);
+      if (dur > 0 && count) {
+        fitPreviewScaleToOpenWidth();
+        root.classList.add("dash-wave-in", "dash-wave-reveal");
+      }
+      const wait = dur <= 0 || !count ? 0 : shutterWait(count);
+      shrinkPreviewWithWave(wait);
+      syncDashCollapseChrome(0);
+      dashWaveTimer = window.setTimeout(function () {
+        if (gen !== dashCollapseGen || dashCollapseLevel !== 0) return;
+        root.classList.remove("dash-wave-in", "dash-wave-reveal");
+        root.style.removeProperty("--dash-wave-lead");
+        clearDashWaveMarks();
+        unlockPreviewBox();
+        releaseDashPaneWidth();
+        if (typeof window.applyPreviewWidthFromPane === "function") {
+          window.applyPreviewWidthFromPane();
+        }
+      }, (dur <= 0 ? 0 : shutterWait(count)) + 40);
+    }
+
+    function setupWaveTune() {
+      const panel = document.getElementById("wave-tune");
+      if (!panel) return;
+      const root = document.documentElement;
+      const fields = {
+        dur: { prop: "--dash-wave-dur", unit: "ms", step: 20, min: 0, max: 2000, fallback: 800 },
+        gap: { prop: "--dash-wave-gap", unit: "ms", step: 5, min: 0, max: 400, fallback: 40 }
+      };
+      const waveTunePark = {
+        shift: { prop: "--dash-wave-shift", unit: "px", step: 1, min: 0, max: 48, fallback: 6 }
+      };
+      const shiftPark = document.getElementById("wave-shift-park");
+      if (shiftPark) shiftPark.waveTunePark = waveTunePark;
+      function read(spec) {
+        const n = parseFloat(getComputedStyle(root).getPropertyValue(spec.prop));
+        return Number.isFinite(n) ? n : spec.fallback;
+      }
+      function clamp(spec, value) {
+        return Math.min(spec.max, Math.max(spec.min, value));
+      }
+      function write(key, value) {
+        const spec = fields[key];
+        const n = clamp(spec, value);
+        root.style.setProperty(spec.prop, n + spec.unit);
+        return n;
+      }
+      Object.keys(fields).forEach(function (key) {
+        const input = panel.querySelector('[data-wave-value="' + key + '"]');
+        if (input) input.value = String(read(fields[key]));
+      });
+      const edge = 28;
+      function placePanel(left, top) {
+        const maxL = Math.max(edge, window.innerWidth - panel.offsetWidth - edge);
+        const maxT = Math.max(edge, window.innerHeight - panel.offsetHeight - edge);
+        panel.style.left = Math.min(maxL, Math.max(edge, left)) + "px";
+        panel.style.top = Math.min(maxT, Math.max(edge, top)) + "px";
+        panel.style.right = "auto";
+        panel.style.bottom = "auto";
+      }
+      placePanel(
+        window.innerWidth - panel.offsetWidth > 160
+          ? window.innerWidth - panel.offsetWidth - 96
+          : (window.innerWidth - panel.offsetWidth) / 2,
+        window.innerHeight - panel.offsetHeight - 140
+      );
+      function stepButton(btn) {
+        const key = btn.getAttribute("data-wave-tune");
+        const spec = fields[key];
+        if (!spec) return;
+        const input = panel.querySelector('[data-wave-value="' + key + '"]');
+        const typed = input ? parseFloat(input.value) : NaN;
+        const base = Number.isFinite(typed) ? typed : read(spec);
+        const dir = parseFloat(btn.getAttribute("data-dir")) || 0;
+        const next = write(key, base + dir * spec.step);
+        if (input) input.value = String(next);
+      }
+      let fromPointer = false;
+      let holdDelay = 0;
+      let holdTick = 0;
+      function stopHold() {
+        window.clearTimeout(holdDelay);
+        window.clearInterval(holdTick);
+        holdDelay = 0;
+        holdTick = 0;
+        window.setTimeout(function () { fromPointer = false; }, 400);
+      }
+      panel.addEventListener("pointerdown", function (ev) {
+        const btn = ev.target.closest("[data-wave-tune]");
+        if (!btn || !panel.contains(btn) || ev.button !== 0) return;
+        ev.preventDefault();
+        fromPointer = true;
+        stepButton(btn);
+        try { btn.setPointerCapture(ev.pointerId); } catch (err) { /* 古い環境では離したときに止める */ }
+        holdDelay = window.setTimeout(function () {
+          holdTick = window.setInterval(function () { stepButton(btn); }, 90);
+        }, 280);
+      });
+      panel.addEventListener("pointerup", stopHold);
+      panel.addEventListener("pointercancel", stopHold);
+      panel.addEventListener("click", function (ev) {
+        const btn = ev.target.closest("[data-wave-tune]");
+        if (!btn || !panel.contains(btn)) return;
+        if (fromPointer) {
+          fromPointer = false;
+          return;
+        }
+        stepButton(btn);
+      });
+      const title = panel.querySelector(".wave-tune-title");
+      let drag = null;
+      if (title) {
+        title.addEventListener("pointerdown", function (ev) {
+          if (ev.button !== 0) return;
+          const rect = panel.getBoundingClientRect();
+          drag = { dx: ev.clientX - rect.left, dy: ev.clientY - rect.top, id: ev.pointerId };
+          panel.classList.add("is-dragging");
+          try { title.setPointerCapture(ev.pointerId); } catch (err) { drag = null; }
+        });
+        title.addEventListener("pointermove", function (ev) {
+          if (!drag || ev.pointerId !== drag.id) return;
+          placePanel(ev.clientX - drag.dx, ev.clientY - drag.dy);
+        });
+        function endDrag(ev) {
+          if (!drag || ev.pointerId !== drag.id) return;
+          drag = null;
+          panel.classList.remove("is-dragging");
+        }
+        title.addEventListener("pointerup", endDrag);
+        title.addEventListener("pointercancel", endDrag);
+      }
+      panel.addEventListener("input", function (ev) {
+        const input = ev.target;
+        const key = input && input.getAttribute && input.getAttribute("data-wave-value");
+        const spec = key && fields[key];
+        if (!spec) return;
+        const n = parseFloat(input.value);
+        if (!Number.isFinite(n)) return;
+        write(key, n);
+      });
+      panel.addEventListener("change", function (ev) {
+        const input = ev.target;
+        const key = input && input.getAttribute && input.getAttribute("data-wave-value");
+        const spec = key && fields[key];
+        if (!spec) return;
+        const n = parseFloat(input.value);
+        input.value = String(write(key, Number.isFinite(n) ? n : read(spec)));
+      });
+    }
+
+    function applyDashCollapse() {
+      if (dashCollapseBlocked()) {
+        const root = document.documentElement;
+        clearDashWaveTimer();
+        clearDashWaveMarks();
+        unlockPreviewBox();
+        releaseDashPaneWidth();
+        root.classList.remove(
+          "dash-wave-out",
+          "dash-wave-in",
+          "dash-wave-reveal",
+          "dash-wave-squeeze",
+          "dash-collapse-closing",
+          "dash-title-tuck",
+          "dash-collapse-half",
+          "dash-collapse-full",
+          "dash-collapse-settled",
+          "dash-pane-sizing",
+          "dash-preview-locked",
+          "dash-preview-fill"
+        );
+        syncDashCollapseChrome(0);
+        return;
+      }
+      paintDashCollapseInstant(dashCollapseLevel);
+    }
+
+    window.applyDashCollapse = applyDashCollapse;
+
+    function beginShutAll() {
+      dashCollapseLevel = 2;
+      const gen = ++dashCollapseGen;
+      const root = document.documentElement;
+      const pane = document.getElementById("dash-pane");
+      const preview = document.querySelector(".preview-pane");
+      const split = document.getElementById("atelier-split");
+      clearDashWaveTimer();
+      clearDashWaveMarks();
+      unlockPreviewBox();
+      root.classList.remove(
+        "dash-collapse-half",
+        "dash-collapse-full",
+        "dash-collapse-settled",
+        "dash-wave-out",
+        "dash-wave-in",
+        "dash-wave-reveal",
+        "dash-wave-squeeze",
+        "dash-title-tuck",
+        "dash-pane-sizing",
+        "dash-preview-locked",
+        "dash-preview-fill"
+      );
+      releaseDashPaneWidth();
+      root.classList.add("dash-collapse-closing");
+      syncDashCollapseChrome(2);
+      if (!pane || !preview || !split) {
+        paintDashCollapseInstant(2);
+        return;
+      }
+      const held = pane.getBoundingClientRect().width;
+      pane.style.flex = "0 0 auto";
+      pane.style.width = held + "px";
+      const rem = parseFloat(getComputedStyle(document.documentElement).fontSize) || 16;
+      const tab = 1.35 * rem;
+      const widthDur = dashWaveMs("--dash-width-dur", 220);
+      lockPreviewBox();
+      const sr = split.getBoundingClientRect();
+      const rightInset = Math.max(0, held - tab);
+      if (widthDur <= 0) {
+        finishShutAll(gen);
+        return;
+      }
+      root.classList.add("dash-pane-sizing");
+      pane.style.transition = "none";
+      pane.style.clipPath = "inset(0 0 0 0)";
+      preview.style.transition = "none";
+      void pane.offsetWidth;
+      pane.style.transition = "clip-path " + widthDur + "ms ease";
+      pane.style.clipPath = "inset(0 " + rightInset + "px 0 0)";
+      preview.style.transition = "left " + widthDur + "ms ease, width " + widthDur + "ms ease, top " + widthDur + "ms ease, height " + widthDur + "ms ease";
+      preview.style.left = "0px";
+      preview.style.width = sr.width + "px";
+      preview.style.top = "0px";
+      preview.style.height = sr.height + "px";
+      dashWaveTimer = window.setTimeout(function () {
+        if (gen !== dashCollapseGen || dashCollapseLevel !== 2) return;
+        finishShutAll(gen);
+      }, widthDur + 40);
+    }
+
+    function finishShutAll(gen) {
+      if (gen !== dashCollapseGen || dashCollapseLevel !== 2) return;
+      const root = document.documentElement;
+      const pane = document.getElementById("dash-pane");
+      const rem = parseFloat(getComputedStyle(document.documentElement).fontSize) || 16;
+      if (pane) {
+        pane.style.transition = "none";
+        pane.style.flex = "0 0 auto";
+        pane.style.minWidth = "0";
+        pane.style.width = (1.35 * rem) + "px";
+      }
+      root.classList.add("dash-collapse-full");
+      root.classList.remove("dash-collapse-closing", "dash-pane-sizing", "dash-wave-out", "dash-wave-reveal", "dash-wave-squeeze");
+      clearDashWaveMarks();
+      clearDashSqueezeVisuals();
+      unlockPreviewBox();
+      releaseDashPaneWidth();
+      syncDashCollapseChrome(2);
+      if (typeof window.applyPreviewWidthFromPane === "function") {
+        window.applyPreviewWidthFromPane();
+      }
+    }
+
+    const shutBtn = document.getElementById("dash-collapse-shut");
+    if (shutBtn) {
+      shutBtn.addEventListener("click", function () {
+        if (dashCollapseBlocked()) return;
+        if (dashCollapseLevel === 0) beginShutAll();
+        else beginOpen();
+      });
+    }
+    window.addEventListener("resize", function () {
+      if (dashCollapseBlocked()) applyDashCollapse();
+    });
+    applyDashCollapse();
+    setupWaveTune();
+
     function startDrag(ev) {
       if (window.matchMedia && window.matchMedia("(max-width: 860px)").matches) return;
+      if (
+        dashCollapseLevel !== 0 ||
+        document.documentElement.classList.contains("dash-collapse-half") ||
+        document.documentElement.classList.contains("dash-collapse-full") ||
+        document.documentElement.classList.contains("dash-wave-out") ||
+        document.documentElement.classList.contains("dash-wave-in") ||
+        document.documentElement.classList.contains("dash-wave-squeeze") ||
+        document.documentElement.classList.contains("dash-collapse-closing") ||
+        document.documentElement.classList.contains("dash-pane-sizing") ||
+        document.documentElement.classList.contains("dash-preview-locked")
+      ) {
+        return;
+      }
+      releaseDashPaneWidth();
       ev.preventDefault();
       document.body.classList.add("is-splitting");
       window.addEventListener("pointermove", onMove);
@@ -14538,11 +16728,18 @@
         entryBranch: store.entryBranch,
         hubEntrySource: store.hubEntrySource,
         easyFlowActive: !!store.easyFlowActive,
+      sampleFlowEntered: !!store.sampleFlowEntered,
+      sampleFlowAppliedId: store.sampleFlowAppliedId || null,
+      sampleOriginalPreset: store.sampleOriginalPreset || null,
         copyPathMode: store.copyPathMode === "keyword" || store.copyPathMode === "omakase" ? store.copyPathMode : null,
         imgPathMode: store.imgPathMode === "self" || store.imgPathMode === "omakase" ? store.imgPathMode : null,
         copyFrameIndex: Number(store.copyFrameIndex) || 0,
         copyDirIds: Array.isArray(store.copyDirIds) ? store.copyDirIds.slice() : [],
+        copyDirForbid: Array.isArray(store.copyDirForbid) ? store.copyDirForbid.slice() : [],
+        copyFieldSource: store.copyFieldSource && typeof store.copyFieldSource === "object" ? store.copyFieldSource : {},
+        copyHeroOnPhoto: store.copyHeroOnPhoto === true ? true : store.copyHeroOnPhoto === false ? false : null,
         hubImgPathMode: store.hubImgPathMode && typeof store.hubImgPathMode === "object" ? store.hubImgPathMode : {},
+        imgOmakaseLocks: Object.assign({}, store.imgOmakaseLocks || {}),
         sushiSampleId: store.sushiSampleId,
         sushiSampleKey: store.sushiSampleKey,
         sampleSectionCandidates: store.sampleSectionCandidates || {},
@@ -14575,6 +16772,14 @@
         snapshots: store.snapshots,
         fields: formToObject({ includeHidden: true })
       };
+      if (store.sampleCopySlots && typeof store.sampleCopySlots === "object") {
+        payload.sampleCopySlots = {
+          hero: !!store.sampleCopySlots.hero,
+          about: !!store.sampleCopySlots.about,
+          works: !!store.sampleCopySlots.works,
+          contact: !!store.sampleCopySlots.contact
+        };
+      }
       localStorage.setItem(STORAGE_KEY, JSON.stringify(payload));
     } catch (e) {
       /* ignore quota */
@@ -14649,8 +16854,17 @@
       }
       if (data.easyFlowActive != null) store.easyFlowActive = !!data.easyFlowActive;
       else if (data.easyP1Hold) store.easyFlowActive = !!data.easyP1Hold;
+      if (data.sampleFlowEntered != null) store.sampleFlowEntered = !!data.sampleFlowEntered;
+      if (data.sampleFlowAppliedId) store.sampleFlowAppliedId = String(data.sampleFlowAppliedId);
+      if (data.sampleOriginalPreset && PRESETS[data.sampleOriginalPreset]) {
+        store.sampleOriginalPreset = data.sampleOriginalPreset;
+      }
       if (data.copyPathMode === "keyword" || data.copyPathMode === "omakase") {
         store.copyPathMode = data.copyPathMode;
+      }
+      if (!store.sampleFlowEntered && data.sushiSampleId && (store.easyFlowActive || store.intakeDone || store.copyPathMode)) {
+        store.sampleFlowEntered = true;
+        if (!store.sampleFlowAppliedId) store.sampleFlowAppliedId = String(data.sushiSampleId);
       }
       if (data.imgPathMode === "self" || data.imgPathMode === "omakase") {
         store.imgPathMode = data.imgPathMode;
@@ -14658,10 +16872,29 @@
       if (data.copyFrameIndex != null) {
         store.copyFrameIndex = Math.max(0, Number(data.copyFrameIndex) || 0);
       }
+      if (data.sampleCopySlots && typeof data.sampleCopySlots === "object") {
+        store.sampleCopySlots = {
+          hero: !!data.sampleCopySlots.hero,
+          about: !!data.sampleCopySlots.about,
+          works: !!data.sampleCopySlots.works,
+          contact: !!data.sampleCopySlots.contact
+        };
+      }
       if (Array.isArray(data.copyDirIds)) store.copyDirIds = data.copyDirIds.slice();
+      if (Array.isArray(data.copyDirForbid)) store.copyDirForbid = data.copyDirForbid.slice();
+      if (data.copyFieldSource && typeof data.copyFieldSource === "object") {
+        store.copyFieldSource = data.copyFieldSource;
+      }
+      if (data.copyHeroOnPhoto === true || data.copyHeroOnPhoto === false) {
+        store.copyHeroOnPhoto = data.copyHeroOnPhoto;
+      }
       if (data.hubImgPathMode && typeof data.hubImgPathMode === "object") {
         store.hubImgPathMode = data.hubImgPathMode;
       }
+      store.imgOmakaseLocks =
+        data.imgOmakaseLocks && typeof data.imgOmakaseLocks === "object"
+          ? Object.assign({}, data.imgOmakaseLocks)
+          : {};
       if (data.sushiSampleId != null) store.sushiSampleId = data.sushiSampleId;
       if (data.sushiSampleKey != null) store.sushiSampleKey = data.sushiSampleKey;
       if (data.sampleSectionCandidates && typeof data.sampleSectionCandidates === "object") {
@@ -15194,10 +17427,19 @@
   }
 
   document.querySelectorAll('a[href*="help.html"]').forEach(function (link) {
-    link.addEventListener("click", function () {
+    link.addEventListener("click", function (ev) {
+      if (ev.metaKey || ev.ctrlKey || ev.shiftKey || ev.altKey || ev.button !== 0) return;
+      if (!window.PageShutter) {
+        saveDraft();
+        return;
+      }
+      ev.preventDefault();
       saveDraft();
+      window.PageShutter.go(link.href);
     });
   });
+
+  if (window.PageShutter) window.PageShutter.resume();
 
   loadDraft();
   ensureFontsConfirmedForMode();

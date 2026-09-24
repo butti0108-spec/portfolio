@@ -229,6 +229,15 @@
         /* keyword miss is soft: allow if no keywordIds on part */
         if ((p.keywordIds || []).length && !hit) return false;
       }
+      var forbidIds = opts.forbidKeywordIds || [];
+      var forbidAxes = opts.forbidAxisIds || [];
+      if (forbidIds.length && (p.keywordIds || []).some(function (k) { return forbidIds.indexOf(k) >= 0; })) {
+        return false;
+      }
+      if (forbidAxes.length && (p.axisIds || []).some(function (a) { return forbidAxes.indexOf(a) >= 0; })) {
+        return false;
+      }
+      if (axisId && forbidAxes.indexOf(axisId) >= 0) return false;
       var text = String(p.text || "");
       if (!text.trim()) return false;
       if (/おもてなし/.test(text)) return false;
@@ -236,28 +245,45 @@
     });
   }
 
-  function assembleSentence(parts, sectionId, axisId, keywordIds, rng, usedIds) {
+  function assembleSentence(parts, sectionId, axisId, keywordIds, rng, usedIds, forbid) {
     usedIds = usedIds || {};
+    forbid = forbid || {};
+    var forbidKeywordIds = forbid.keywordIds || [];
+    var forbidAxisIds = forbid.axisIds || [];
     function pickSlot(slot) {
       function poolFor(strictAvoidSession) {
-        var base = filterParts(parts, {
-          sectionId: sectionId,
-          axisId: axisId,
-          keywordIds: keywordIds,
-          slot: slot
-        });
-        if (!base.length) {
-          base = filterParts(parts, {
+        var tries = [
+          {
             sectionId: sectionId,
             axisId: axisId,
+            keywordIds: keywordIds,
+            forbidKeywordIds: forbidKeywordIds,
+            forbidAxisIds: forbidAxisIds,
             slot: slot
-          });
-        }
-        if (!base.length) {
-          base = filterParts(parts, { sectionId: sectionId, slot: slot });
-        }
-        if (!base.length) {
-          base = filterParts(parts, { slot: slot });
+          },
+          {
+            sectionId: sectionId,
+            axisId: axisId,
+            forbidKeywordIds: forbidKeywordIds,
+            forbidAxisIds: forbidAxisIds,
+            slot: slot
+          },
+          {
+            sectionId: sectionId,
+            forbidKeywordIds: forbidKeywordIds,
+            forbidAxisIds: forbidAxisIds,
+            slot: slot
+          },
+          {
+            forbidKeywordIds: forbidKeywordIds,
+            forbidAxisIds: forbidAxisIds,
+            slot: slot
+          }
+        ];
+        var base = [];
+        for (var t = 0; t < tries.length; t++) {
+          base = filterParts(parts, tries[t]);
+          if (base.length) break;
         }
         return base.filter(function (p) {
           if (usedIds[p.id]) return false;
@@ -289,6 +315,7 @@
     if (text && !/[。！？]$/.test(text)) text += "。";
     /* quality: avoid empty / too short */
     if (!text || text.length < 8) {
+      if (forbidKeywordIds.length || forbidAxisIds.length) return null;
       text = fallbackLine(sectionId, axisId);
     }
     return {
@@ -323,6 +350,7 @@
     var sampleKey = opts.sampleKey || "";
     var sectionId = opts.sectionId || "hero";
     var keywordIds = Array.isArray(opts.keywordIds) ? opts.keywordIds.slice() : [];
+    var forbidKeywordIds = Array.isArray(opts.forbidKeywordIds) ? opts.forbidKeywordIds.slice() : [];
     var presetAxes = opts.presetAxes || null; /* { hero: axisId, ... } for omakase */
     /* 生成のたびに salt を必ず更新（呼び出し側 salt があっても時刻・tick を混ぜる） */
     var salt = freshSalt(opts.salt || "");
@@ -355,16 +383,27 @@
         var preferred = [];
         if (presetAxes && presetAxes[sectionId]) preferred.push(presetAxes[sectionId]);
         preferred = preferred.concat(keywordToAxisHints(meta, keywordIds));
-        var axes = pickDistinctAxes(preferred, allAxisIds(meta), 3, rng);
+        var forbidAxes = keywordToAxisHints(meta, forbidKeywordIds);
+        var forbid = { keywordIds: forbidKeywordIds, axisIds: forbidAxes };
+        var axisPool = allAxisIds(meta).filter(function (id) {
+          return forbidAxes.indexOf(id) < 0;
+        });
+        preferred = preferred.filter(function (id) {
+          return forbidAxes.indexOf(id) < 0;
+        });
+        var wantCount = Math.min(3, axisPool.length);
+        var axes = wantCount ? pickDistinctAxes(preferred, axisPool, wantCount, rng) : [];
         var usedIds = {};
-        var candidates = axes.map(function (axisId) {
-          var built = assembleSentence(parts, sectionId, axisId, keywordIds, rng, usedIds);
-          return {
+        var candidates = [];
+        axes.forEach(function (axisId) {
+          var built = assembleSentence(parts, sectionId, axisId, keywordIds, rng, usedIds, forbid);
+          if (!built || !built.text) return;
+          candidates.push({
             label: axisLabel(meta, axisId),
             text: built.text,
             axisId: axisId,
             partIds: built.partIds
-          };
+          });
         });
         /* ensure unique texts — if collide, reassemble with salt bump */
         var seenText = {};
@@ -376,10 +415,13 @@
               c.axisId,
               keywordIds,
               mulberry32(hashSeed(salt + "|retry|" + i + "|" + freshSalt("retry"))),
-              usedIds
+              usedIds,
+              forbid
             );
-            c.text = rebuilt.text;
-            c.partIds = rebuilt.partIds;
+            if (rebuilt && rebuilt.text) {
+              c.text = rebuilt.text;
+              c.partIds = rebuilt.partIds;
+            }
           }
           seenText[c.text] = true;
         });

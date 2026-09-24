@@ -1285,14 +1285,17 @@ body.reset-draft-open {
   display: inline-flex;
   align-items: baseline;
   gap: 0.35rem;
-  min-width: 5.5rem;
+  width: 10.5rem;
+  min-width: 10.5rem;
+  flex: 0 0 10.5rem;
+  box-sizing: border-box;
   font-size: 0.72rem;
   font-weight: 700;
 }
 
 .atelier-chrome .preview-width-device,
 .atelier-chrome .preview-width-px {
-  color: #fff;
+  color: #152028;
 }
 
 .atelier-chrome .chrome-control--width {
@@ -1558,6 +1561,496 @@ body.is-splitting .split-handle {
 body.is-splitting {
   cursor: col-resize;
   user-select: none;
+}
+
+/* 左の操作パネル：通常 → 注文画面だけ → 左端のタブ。シャッターの時間と追従間隔 */
+html {
+  --dash-wave-dur: 800ms;
+  --dash-wave-gap: 40ms;
+  /* 移動量。そよ風調整からは外した。欄は #wave-shift-park。今の開く波は読まない */
+  --dash-wave-shift: 6px;
+  --dash-width-dur: 220ms;
+  --dash-title-tuck: 140ms;
+  --dash-squeeze-dur: 80ms;
+}
+
+.dash-collapse-shut,
+.dash-collapse-grip {
+  margin: 0;
+  width: 1.75rem;
+  height: 1.75rem;
+  padding: 0;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  color: #152028;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.dash-collapse-shut {
+  position: absolute;
+  left: 0;
+  top: 0.55rem;
+  z-index: 5;
+  width: 1.35rem;
+  height: 1.75rem;
+  border-radius: 0 0.45rem 0.45rem 0;
+  background: transparent;
+}
+
+.dash-collapse-grip {
+  display: none;
+}
+
+.dash-chevron {
+  width: 0.95rem;
+  height: 0.95rem;
+  display: block;
+}
+
+.dash-collapse-shut .dash-chevron--pair {
+  width: 1.35rem;
+}
+
+.dash-collapse-shut .dash-chevron--one {
+  display: block;
+  transform-origin: center;
+  transition: transform var(--dash-width-dur, 220ms) ease;
+}
+
+html.dash-collapse-closing .dash-collapse-shut,
+html.dash-collapse-full .dash-collapse-shut {
+  background: #efeae3;
+}
+
+html.dash-collapse-closing .dash-collapse-shut .dash-chevron--one,
+html.dash-collapse-full .dash-collapse-shut .dash-chevron--one {
+  transform: rotate(180deg);
+}
+
+.dash-collapse-shut[hidden],
+.dash-collapse-grip[hidden] {
+  display: none !important;
+}
+
+html.dash-collapse-half .dash-pane,
+html.dash-collapse-full .dash-pane {
+  flex: 0 0 auto;
+  min-width: 0;
+  max-width: none;
+}
+
+html.dash-collapse-half .preview-pane,
+html.dash-collapse-full .preview-pane,
+html.dash-preview-fill .preview-pane {
+  flex: 1 1 auto;
+  width: auto;
+  max-width: none;
+  min-width: 0;
+}
+
+html.dash-collapse-half .split-handle,
+html.dash-collapse-full .split-handle,
+html.dash-preview-fill .split-handle {
+  display: none;
+}
+
+html.dash-collapse-half .dash-pane {
+  width: 9rem;
+}
+
+html.dash-collapse-half.dash-collapse-settled .dash-body,
+html.dash-collapse-half.dash-collapse-settled .wizard-foot-dock,
+html.dash-collapse-half.dash-collapse-settled .wizard-head-dock,
+html.dash-collapse-half.dash-collapse-settled .dash-width-rail,
+html.dash-collapse-half.dash-collapse-settled .dash-resume-notice {
+  display: none !important;
+}
+
+html.dash-collapse-half .dash-header {
+  order: 1;
+  border-bottom: 0;
+  padding: 0.55rem 0.35rem 0.35rem;
+}
+
+html.dash-collapse-half .dash-header-row--top {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  gap: 0.2rem;
+}
+
+html.dash-collapse-half .dash-header-row--top .dash-title {
+  grid-column: 1;
+  justify-self: center;
+  font-size: 0.92rem;
+}
+
+html.dash-collapse-half .dash-collapse-shut {
+  grid-column: 2;
+  justify-self: end;
+}
+
+html.dash-collapse-half .dash-collapse-shut .dash-chevron--pair {
+  display: none;
+}
+
+html.dash-collapse-half .dash-collapse-shut .dash-chevron--one {
+  display: block;
+}
+
+/* しまう最初：中の並びは広げたまま、見える幅だけを注文画面の幅へ */
+html.dash-wave-squeeze .dash-header {
+  align-self: flex-start;
+  box-sizing: border-box;
+  border-bottom: 0;
+  padding: 0.55rem 0.35rem 0.35rem;
+  background: #efeae3;
+  position: relative;
+  z-index: 3;
+}
+
+html.dash-wave-squeeze .dash-header-row--top {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  gap: 0.2rem;
+}
+
+html.dash-wave-squeeze .dash-header-row--top .dash-title {
+  grid-column: 1;
+  justify-self: center;
+  font-size: 0.92rem;
+}
+
+html.dash-wave-squeeze .dash-collapse-shut {
+  grid-column: 2;
+  justify-self: end;
+}
+
+html.dash-wave-squeeze .dash-collapse-shut .dash-chevron--pair {
+  display: none;
+}
+
+html.dash-wave-squeeze .dash-collapse-shut .dash-chevron--one {
+  display: block;
+}
+
+html.dash-collapse-full .dash-pane {
+  width: 1.35rem;
+  background: transparent;
+  z-index: 2;
+}
+
+html.dash-collapse-full .atelier-split {
+  position: relative;
+}
+
+html.dash-collapse-full .preview-pane {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  max-width: none;
+  z-index: 1;
+}
+
+html.dash-collapse-full .dash-header,
+html.dash-collapse-full .dash-body,
+html.dash-collapse-full .wizard-foot-dock,
+html.dash-collapse-full .wizard-head-dock,
+html.dash-collapse-full .dash-width-rail,
+html.dash-collapse-full .dash-resume-notice {
+  display: none !important;
+}
+
+html.dash-collapse-full .dash-collapse-grip {
+  display: flex;
+  position: absolute;
+  left: 0;
+  top: 0.55rem;
+  width: 1.35rem;
+  height: 1.75rem;
+  margin: 0;
+  border-radius: 0 0.45rem 0.45rem 0;
+  background: #efeae3;
+  box-shadow: none;
+  transform: none;
+  z-index: 4;
+}
+
+html.dash-preview-locked .atelier-split {
+  position: relative;
+}
+
+html.dash-preview-locked .preview-pane {
+  position: absolute;
+  z-index: 1;
+  margin: 0;
+  flex: none;
+  max-width: none;
+}
+
+html.dash-preview-locked .dash-pane {
+  z-index: 2;
+}
+
+html.dash-wave-reveal .dash-pane {
+  background: transparent;
+}
+
+.dash-shutter-band {
+  position: absolute;
+  left: 0;
+  width: 100%;
+  z-index: -1;
+  background: #f4f2ee;
+  pointer-events: none;
+}
+
+html.dash-wave-out .dash-shutter-band {
+  animation: dash-shutter-shut var(--dash-wave-dur) ease both;
+  animation-delay: calc(var(--wave-index) * var(--dash-wave-gap));
+}
+
+html.dash-wave-in .dash-shutter-band {
+  animation: dash-shutter-open var(--dash-wave-dur) ease both;
+  animation-delay: calc(var(--wave-index) * var(--dash-wave-gap));
+  background: #fff;
+}
+
+html.dash-wave-in .dash-header {
+  background: #fff;
+}
+
+.dash-open-sheet {
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background: #fff;
+  z-index: -1;
+  pointer-events: none;
+}
+
+html.dash-wave-in body .dash-body > .fill-form,
+html.dash-wave-in body .dash-block.is-active-step,
+html.dash-wave-in body .dash-block.is-wizard-active {
+  overflow-y: auto;
+  scrollbar-gutter: stable;
+  scrollbar-color: transparent transparent;
+}
+
+html.dash-wave-in body .dash-body > .fill-form::-webkit-scrollbar,
+html.dash-wave-in body .dash-block.is-active-step::-webkit-scrollbar,
+html.dash-wave-in body .dash-block.is-wizard-active::-webkit-scrollbar {
+  background: transparent;
+}
+
+html.dash-wave-in body .dash-body > .fill-form::-webkit-scrollbar-thumb,
+html.dash-wave-in body .dash-block.is-active-step::-webkit-scrollbar-thumb,
+html.dash-wave-in body .dash-block.is-wizard-active::-webkit-scrollbar-thumb {
+  background: transparent;
+}
+
+html.dash-preview-locked .split-handle,
+html.dash-pane-sizing .split-handle,
+html.dash-wave-in .split-handle,
+html.dash-wave-out .split-handle {
+  visibility: hidden;
+}
+
+html.dash-wave-out [data-wave-row="up"],
+html.dash-wave-in [data-wave-row="down"] {
+  overflow: hidden;
+}
+
+html.dash-wave-out [data-wave-row="up"] {
+  animation: dash-shutter-shut var(--dash-wave-dur) ease both;
+  animation-delay: calc(var(--wave-index) * var(--dash-wave-gap));
+}
+
+html.dash-wave-in [data-wave-row="down"] {
+  animation: dash-shutter-open var(--dash-wave-dur) ease both;
+  animation-delay: calc(var(--wave-index) * var(--dash-wave-gap));
+}
+
+@keyframes dash-shutter-shut {
+  from { clip-path: inset(0 0 0 0); }
+  to { clip-path: inset(0 100% 0 0); }
+}
+
+html.dash-wave-out.dash-wave-squeeze .dash-block,
+html.dash-wave-out.dash-wave-squeeze .dash-group {
+  background: transparent;
+  border-color: transparent;
+  box-shadow: none;
+}
+
+html.dash-wave-out.dash-wave-squeeze [data-wave-row="up"]:not(.wizard-foot-dock) {
+  background-color: #fff;
+}
+
+html.dash-wave-out.dash-wave-squeeze .dash-shutter-band {
+  background: #fff;
+}
+
+html.dash-wave-out.dash-wave-squeeze [data-wave-row="up"],
+html.dash-wave-out.dash-wave-squeeze .dash-shutter-band {
+  animation-name: dash-shutter-shut-follow;
+}
+
+@keyframes dash-shutter-shut-follow {
+  from { clip-path: inset(0 calc(100% - 9rem) 0 0); }
+  to { clip-path: inset(0 100% 0 0); }
+}
+
+@keyframes dash-shutter-open {
+  from { clip-path: inset(0 100% 0 0); }
+  to { clip-path: inset(0 0 0 0); }
+}
+
+/* 全画面の次へ：6色の波。操作パネルの収納とは別 */
+#color-wave {
+  position: fixed;
+  inset: 0;
+  z-index: 130;
+  display: flex;
+  flex-direction: column;
+  pointer-events: auto;
+  background: transparent;
+}
+
+#color-wave[hidden] {
+  display: none !important;
+}
+
+.color-wave-row {
+  flex: 1 1 0;
+  display: flex;
+  min-height: 0;
+}
+
+.color-wave-cell {
+  flex: 1 1 0;
+  min-width: 0;
+  transform: scaleX(0);
+}
+
+/* 入口の保存選択から次の画面だけ。4行×16列。操作パネルの波、文章の次への波とは別 */
+#grid-shutter {
+  position: fixed;
+  inset: 0;
+  z-index: 140;
+  overflow: hidden;
+  pointer-events: auto;
+  background: transparent;
+}
+
+#grid-shutter[hidden] {
+  display: none !important;
+}
+
+.grid-shutter-cell {
+  position: absolute;
+  transform: scaleX(0);
+}
+
+/* 用途の画面から先へ進むとき。8本の帯が左右から互い違いに抜け、交差の瞬間に次の画面 */
+#cross-shutter {
+  position: fixed;
+  inset: 0;
+  z-index: 141;
+  overflow: hidden;
+  pointer-events: auto;
+  background: transparent;
+}
+
+#cross-shutter[hidden] {
+  display: none !important;
+}
+
+.cross-shutter-pane {
+  position: absolute;
+  left: 0;
+  transform: translateX(-100%);
+}
+
+@media (max-width: 860px) {
+  .dash-collapse-shut,
+  .dash-collapse-grip {
+    display: none !important;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    --dash-wave-dur: 0ms;
+    --dash-wave-gap: 0ms;
+    --dash-width-dur: 0ms;
+    --dash-title-tuck: 0ms;
+    --dash-squeeze-dur: 0ms;
+  }
+}
+
+/* そよ風調整は画面の外。#wave-tune は hidden。戻すときは hidden を外す */
+.wave-tune {
+  position: fixed;
+  z-index: 40;
+  width: 18rem;
+  margin: 0;
+  padding: 0.7rem 0.9rem 0.85rem;
+  border: 1px solid #c8c8c8;
+  background: #fff;
+  color: #152028;
+  font-size: 0.88rem;
+  line-height: 1.3;
+  box-shadow: 0 8px 22px rgba(20, 28, 36, 0.14);
+}
+.wave-tune-title {
+  margin: 0 0 0.5rem;
+  font-weight: 700;
+  cursor: grab;
+  user-select: none;
+  touch-action: none;
+}
+.wave-tune.is-dragging .wave-tune-title {
+  cursor: grabbing;
+}
+.wave-tune-row {
+  display: grid;
+  grid-template-columns: 5rem 2.15rem 3.6rem 1.7rem 2.15rem;
+  align-items: center;
+  gap: 0.35rem;
+  margin-top: 0.4rem;
+}
+.wave-tune-row button,
+.wave-tune-num {
+  margin: 0;
+  height: 2.15rem;
+  border: 1px solid #b7b7b7;
+  background: #fff;
+  color: inherit;
+  font: inherit;
+}
+.wave-tune-row button {
+  padding: 0;
+  cursor: pointer;
+  touch-action: none;
+  user-select: none;
+}
+.wave-tune-num {
+  width: 100%;
+  padding: 0 0.2rem;
+  text-align: right;
+}
+.wave-tune-unit {
+  color: #555;
 }
 
 .dash-pane {
@@ -3428,6 +3921,7 @@ body.wizard-mode .dash-block.is-wizard-active {
   min-height: 0;
   overflow-x: hidden;
   overflow-y: auto;
+  scrollbar-gutter: stable;
   -webkit-overflow-scrolling: touch;
   overscroll-behavior: contain;
   padding: 0.75rem 1rem 0.75rem;
@@ -6680,8 +7174,57 @@ body.atelier.color-mode-easy .preset-row--mood6 [data-easy-preset] {
   margin: 0;
   width: 100%;
   font-size: 0.68rem;
-  color: rgba(255, 255, 255, 0.72);
+  color: #4a5560;
   line-height: 1.3;
+}
+.preview-width-line {
+  display: inline-flex;
+  align-items: center;
+  flex: 0 0 auto;
+}
+.preview-look {
+  display: inline-flex;
+  align-items: center;
+  flex: 0 0 auto;
+  color: inherit;
+}
+.preview-look[hidden] {
+  display: none !important;
+}
+.preview-look-sep {
+  margin-left: 0;
+  margin-right: 3ch;
+  color: inherit;
+  font-weight: 400;
+  line-height: 1;
+}
+.preview-look-btn {
+  margin: 0;
+  padding: 0;
+  min-width: 1.65rem;
+  min-height: 1.65rem;
+  border: 1px solid currentColor;
+  border-radius: 0.3rem;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  font-size: 1rem;
+  font-weight: 700;
+  line-height: 1;
+  cursor: pointer;
+}
+.preview-look-btn + .preview-look-btn {
+  margin-left: 0.35rem;
+}
+.preview-look-btn:hover {
+  background: rgba(21, 32, 40, 0.06);
+}
+.preview-look-btn:disabled {
+  opacity: 0.35;
+  cursor: default;
+}
+.preview-scroll.is-look-enlarged {
+  align-items: flex-start;
 }
 .preview-width-ruler {
   display: inline-flex;
@@ -6941,10 +7484,15 @@ body.atelier.color-mode-easy .preset-row--mood6 [data-easy-preset] {
 }
 .preview-width-slot {
   min-height: 2.2rem;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.45rem 0.85rem;
 }
 .preview-width-rail .chrome-control--width,
 .preview-width-rail .chrome-control--in-hub {
-  width: 100%;
+  width: auto;
+  flex: 1 1 16rem;
   max-width: none;
   padding: 0;
   border: 0;
@@ -7091,6 +7639,201 @@ body.mode-detail .dash-block--layout-hub {
   height: auto !important;
   padding: 0.28rem 0.45rem !important;
   align-items: center;
+}
+.layout-arrange--expanded .layout-arrange-cell.layout-arrange-cell--structure,
+.layout-arrange-cell.layout-arrange-cell--structure.size-L {
+  display: block;
+  padding: 0 !important;
+  min-height: 0 !important;
+  height: auto !important;
+  align-items: stretch;
+  overflow: hidden;
+}
+.layout-arrange-summary {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  min-height: 2.75rem;
+  padding: 0.35rem 0.5rem;
+  cursor: pointer;
+  list-style: none;
+}
+.layout-arrange-summary::-webkit-details-marker {
+  display: none;
+}
+.layout-arrange-summary .layout-arrange-name {
+  flex: 1 1 auto;
+}
+.layout-mini {
+  display: flex;
+  flex-wrap: wrap;
+  align-content: center;
+  width: 2.4rem;
+  flex: 0 0 2.4rem;
+  gap: 3px;
+}
+.layout-mini[data-gap="tight"] {
+  gap: 1px;
+}
+.layout-mini[data-gap="loose"] {
+  gap: 6px;
+}
+.layout-mini-bar {
+  display: block;
+  height: 0.42rem;
+  border-radius: 2px;
+  background: #7f93a6;
+}
+.layout-mini-bar--wide,
+.layout-mini-bar.is-full {
+  flex: 1 0 100%;
+  width: 100%;
+}
+.layout-mini-bar.is-half {
+  flex: 1 0 calc(50% - 4px);
+  width: calc(50% - 4px);
+}
+.layout-arrange-summary .layout-arrange-handle {
+  margin-left: auto;
+  min-height: 1.7rem;
+  touch-action: none;
+}
+.layout-arrange-body {
+  padding: 0 0.7rem 0.75rem;
+}
+.layout-arrange-body:empty {
+  display: none;
+}
+.layout-omakase-bar {
+  margin: 0 0 0.75rem;
+}
+.layout-omakase-note {
+  margin: 0 0 0.4rem;
+  font-size: 0.82rem;
+}
+.layout-omakase-btn,
+.layout-img-source,
+.layout-width-btn,
+.layout-focal-reset,
+.layout-lock-btn {
+  font: inherit;
+  color: #152028;
+  background: #fff;
+  border: 1px solid #b7b7b7;
+  cursor: pointer;
+}
+.layout-omakase-btn {
+  min-height: 2.2rem;
+  padding: 0.35rem 0.8rem;
+}
+.layout-image-count {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.35rem;
+  margin-bottom: 0.45rem;
+}
+.layout-image-count-num {
+  min-width: 1.2rem;
+  text-align: center;
+}
+.layout-inner {
+  border: 1px solid rgba(20, 28, 36, 0.14);
+  border-radius: 0.45rem;
+  margin-top: 0.35rem;
+  background: #fff;
+}
+.layout-inner.is-selected {
+  border-color: #3d8a48;
+}
+.layout-inner-summary {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.35rem 0.45rem;
+  cursor: pointer;
+  list-style: none;
+}
+.layout-inner-summary::-webkit-details-marker {
+  display: none;
+}
+.layout-inner-summary .layout-mini-bar {
+  width: 1.4rem;
+  flex: 0 0 1.4rem;
+}
+.layout-inner-summary .layout-mini-bar.is-half {
+  width: 0.7rem;
+  flex-basis: 0.7rem;
+}
+.layout-inner-name {
+  flex: 1 1 auto;
+}
+.layout-width-picks {
+  display: inline-flex;
+  gap: 0.2rem;
+}
+.layout-width-btn,
+.layout-img-source,
+.layout-focal-reset {
+  min-height: 1.8rem;
+  padding: 0.15rem 0.45rem;
+}
+.layout-width-btn.is-active {
+  border-color: #3d8a48;
+  box-shadow: inset 0 0 0 1px #3d8a48;
+}
+.layout-inner-handle {
+  cursor: grab;
+  user-select: none;
+  touch-action: none;
+  padding: 0.15rem 0.3rem;
+}
+.layout-inner-body {
+  padding: 0.2rem 0.55rem 0.6rem;
+}
+.layout-img-sources {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.4rem;
+}
+.layout-img-source--gallery {
+  background: #f6f4ef;
+  border-color: #c4b8a4;
+}
+.layout-focal {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.55rem;
+  margin-top: 0.55rem;
+}
+.layout-focal-pad {
+  display: grid;
+  justify-items: center;
+  gap: 0.15rem;
+}
+.layout-focal-pad .item-focal-mid {
+  display: flex;
+  align-items: center;
+  gap: 0.2rem;
+}
+.layout-lock-btn {
+  margin-top: 0.45rem;
+  min-width: 2.4rem;
+  min-height: 2.2rem;
+  font-size: 1.1rem;
+}
+#hub-layout-stack .hub-nav-row--layout .hub-nav-back {
+  font-size: 0.82rem;
+  padding: 0.28rem 0.65rem;
+}
+#hub-layout-stack .hub-nav-row--layout .hub-nav-next {
+  font-size: 1.05rem;
+  padding: 0.7rem 1.5rem;
+}
+.dash-block.is-shared-image-ui .sample-img-wire-layout,
+.dash-block.is-shared-image-ui > .dash-note {
+  display: none;
 }
 .layout-arrange-main {
   flex-direction: row !important;
@@ -8195,17 +8938,33 @@ body.atelier.color-mode-easy .zone-badge[data-open-step="site-fonts"] {
   justify-content: flex-end;
 }
 
-/* サンプル本線：作成演出まで本番プレビュー非表示 */
-body.atelier.sample-flow-hide-preview .atelier-preview,
-body.atelier.sample-flow-hide-preview .preview-pane,
-body.atelier.sample-flow-hide-preview .atelier-preview-col {
-  visibility: hidden !important;
-  pointer-events: none !important;
+/* 文章の入力・条件指定：見本は畳み、中身は入口と同じ幅で真ん中へ（html側は描画前から） */
+html.sample-flow-hide-preview .atelier-preview,
+html.sample-flow-hide-preview .preview-pane,
+html.sample-flow-hide-preview .atelier-preview-col,
+html.sample-flow-hide-preview .split-handle,
+html.sample-flow-hide-preview #chrome-preview-width {
+  display: none !important;
 }
 
-body.atelier.sample-flow-hide-preview .atelier-dash {
-  max-width: 40rem;
-  margin-inline: auto;
+html.sample-flow-hide-preview .dash-pane {
+  flex: 1 1 auto;
+  width: 100%;
+  max-width: none;
+  min-width: 0;
+  align-items: center;
+  background: #fff;
+}
+
+/* 入口の選択画面と同じ幅で、真ん中に集める */
+html.sample-flow-hide-preview .dash-header,
+html.sample-flow-hide-preview .dash-body,
+html.sample-flow-hide-preview .wizard-head-dock,
+html.sample-flow-hide-preview .wizard-foot-dock,
+html.sample-flow-hide-preview .dash-width-rail {
+  width: min(56rem, 100%);
+  max-width: 100%;
+  box-sizing: border-box;
 }
 
 .sample-img-wire-layout {
@@ -8605,18 +9364,27 @@ html.is-capture-mode body.sample-flow-hide-preview #preview-root {
 .dash-width-rail .preview-width-px,
 .dash-width-rail .preview-width-meta,
 .dash-width-rail .preview-width-step-btn,
+.dash-width-rail .preview-look,
+.dash-width-rail .preview-look-sep,
+.dash-width-rail .preview-look-btn,
 .preview-width-rail .preview-width-hint,
 .preview-width-rail .preview-width-device,
 .preview-width-rail .preview-width-px,
 .preview-width-rail .preview-width-meta,
 .preview-width-rail .preview-width-step-btn,
 .preview-width-rail .preview-width-ruler,
+.preview-width-rail .preview-look,
+.preview-width-rail .preview-look-sep,
+.preview-width-rail .preview-look-btn,
 .chrome-control--in-hub,
 .chrome-control--in-hub .preview-width-hint,
 .chrome-control--in-hub .preview-width-device,
 .chrome-control--in-hub .preview-width-px,
 .chrome-control--in-hub .preview-width-meta,
-.chrome-control--in-hub .preview-width-step-btn {
+.chrome-control--in-hub .preview-width-step-btn,
+.chrome-control--in-hub .preview-look,
+.chrome-control--in-hub .preview-look-sep,
+.chrome-control--in-hub .preview-look-btn {
   color: #1a1f1c !important;
 }
 .chrome-control--in-hub .preview-width-hint {
@@ -9021,8 +9789,8 @@ body.hub-place-pick #preview-root [data-open-step] {
   cursor: pointer !important;
 }
 body.hub-place-pick .preview-width-rail {
-  opacity: 0.35;
-  pointer-events: none;
+  opacity: 1;
+  pointer-events: auto;
 }
 body.hub-place-section-open #preview-root [data-layout-block].is-hub-place-chosen {
   outline: 2px solid #2f8a45;
@@ -9053,9 +9821,17 @@ body.hub-shell-focus .wizard-head-dock,
 body.hub-shell-focus #wizard-top {
   display: none !important;
 }
-body.hub-shell-focus:not(.hub-place-editing) .wizard-foot-dock,
-body.hub-shell-focus:not(.hub-place-editing) #wizard-nav {
+body.hub-shell-focus:not(.hub-place-editing):not(.hub-shell-back) .wizard-foot-dock,
+body.hub-shell-focus:not(.hub-place-editing):not(.hub-shell-back) #wizard-nav {
   display: none !important;
+}
+body.hub-shell-focus.hub-shell-back .wizard-foot-dock {
+  display: block !important;
+  flex: 0 0 auto;
+  z-index: 3;
+}
+body.hub-shell-focus.hub-shell-back #wizard-nav {
+  display: flex !important;
 }
 /* 個別編集中は右下に戻る｜OK を常時出す */
 body.hub-shell-focus.hub-place-editing .wizard-foot-dock {
@@ -9107,6 +9883,7 @@ body.hub-shell-focus .dash-block.is-active-step {
   min-height: 0;
   overflow-x: hidden;
   overflow-y: auto;
+  scrollbar-gutter: stable;
   -webkit-overflow-scrolling: touch;
   overscroll-behavior: contain;
   margin: 0;
@@ -9855,6 +10632,12 @@ body.hub-shell-focus .dash-block.is-active-step {
   border-top: 1px solid rgba(0, 0, 0, 0.1);
 }
 
+html.sample-flow-hide-preview .wizard-foot-dock {
+  background: transparent;
+  border-top: 0;
+  box-shadow: none;
+}
+
 .wizard-foot-panel {
   background: transparent;
   box-shadow: none;
@@ -10347,6 +11130,9 @@ body.wizard-mode .dash-block.is-wizard-active .easy-copy-frame > .easy-copy-late
 }
 .easy-copy-dir-chip {
   appearance: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.28rem;
   border: 1px solid #c5ced6;
   border-radius: 999px;
   background: #fff;
@@ -10359,6 +11145,17 @@ body.wizard-mode .dash-block.is-wizard-active .easy-copy-frame > .easy-copy-late
   border-color: #3d8a48;
   box-shadow: 0 0 0 2px #3d8a48;
   background: #fff;
+}
+.easy-copy-dir-chip.is-forbid {
+  border-color: #b42318;
+  box-shadow: 0 0 0 2px #b42318;
+  background: #fff;
+}
+.easy-copy-dir-x {
+  color: #b42318;
+  font-weight: 800;
+  font-size: 1.05em;
+  line-height: 1;
 }
 
 /* おまかせ Coolors型：右パネルの枠一覧＋鍵 */
@@ -10490,6 +11287,43 @@ body.wizard-mode .dash-block.is-wizard-active .easy-copy-frame > .easy-copy-late
 }
 .easy-copy-frame-actions {
   margin: 0 0 0.5rem;
+}
+.easy-copy-frame-hint {
+  margin: 0.45rem 0 0;
+  font-size: 0.82rem;
+  line-height: 1.45;
+  color: #3a4450;
+}
+.easy-copy-frame-fields {
+  display: flex;
+  flex-direction: column;
+  gap: 0.9rem;
+  margin-top: 0.75rem;
+}
+.easy-copy-field-label {
+  margin: 0 0 0.35rem;
+  font-size: 0.78rem;
+  font-weight: 800;
+}
+.easy-copy-field-cands {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+.easy-copy-field-own {
+  margin-top: 0.45rem;
+}
+.easy-copy-field-input {
+  display: block;
+  width: 100%;
+  margin-top: 0.35rem;
+  box-sizing: border-box;
+}
+.easy-copy-hero-ask {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.45rem;
+  margin: 0.4rem 0 0.2rem;
 }
 @media (max-width: 720px) {
   .easy-copy-frame-cand-text {

@@ -12,7 +12,7 @@
   <!-- メーカー親CSS（ポートフォリオ根の style.css は読まない） -->
   <link rel="stylesheet" href="maker-base.css?v=cleanup-20260922">
   <link rel="icon" href="brand/mark-favicon.png?v=logo-7" type="image/png">
-  <link rel="stylesheet" href="sample-overrides.css?v=split-swap-20260923">
+  <link rel="stylesheet" href="sample-overrides.css?v=copy-ui-x-20260924">
   <link rel="stylesheet" href="free-photo-gallery/gallery.css?v=gallery-check-20260923">
   <script>
     (function () {
@@ -32,13 +32,38 @@
       } catch (e) { /* ignore */ }
     })();
   </script>
+  <script>
+    /* 文章の入力3画面は、描画前から見本と幅切り替えを出さない（更新時の点滅を止める） */
+    (function () {
+      try {
+        if (/[?&](?:embedPreview|capture)=1(?:&|$)/.test(location.search)) return;
+        var raw = localStorage.getItem("sample-1man-order-v23");
+        if (!raw) return;
+        var data = JSON.parse(raw);
+        if (!data || !data.easyFlowActive || data.entryBranch !== "sample") return;
+        if (data.uiMode && data.uiMode !== "guided") return;
+        var head;
+        if (data.copyPathMode === "omakase") head = ["easy-copy-path", "easy-basics", "easy-copy-omakase"];
+        else if (data.copyPathMode === "keyword") head = ["easy-copy-path", "easy-copy-dirs", "easy-basics", "easy-copy-frame"];
+        else head = ["easy-copy-path"];
+        var tail;
+        if (data.imgPathMode === "omakase" || data.imgPathMode === "self") tail = ["easy-img-path", "easy-img-wire", "easy-loading", "easy-done"];
+        else tail = ["easy-img-path"];
+        var id = head.concat(tail)[Number(data.wizardStepIndex) || 0];
+        if (id === "easy-copy-path" || id === "easy-copy-dirs" || id === "easy-basics") {
+          document.documentElement.classList.add("sample-flow-hide-preview");
+        }
+      } catch (e) { /* ignore */ }
+    })();
+  </script>
   <script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js" defer></script>
   <script src="vibe-dict.js" defer></script>
   <script src="easy-copy-dict.js?v=cleanup-20260922" defer></script>
-  <script src="copy-dict-engine.js?v=cleanup-20260922" defer></script>
+  <script src="copy-dict-engine.js?v=copy-ui-b-20260924" defer></script>
   <script src="sushi-belt.js?v=sushi-guide-session-20260922a" defer></script>
   <script src="free-photo-gallery/gallery.js?v=gallery-check-20260923" defer></script>
-  <script src="script.js?v=split-swap-20260923" defer></script>
+  <script src="page-shutter.js?v=shutter-all-20260924" defer></script>
+  <script src="script.js?v=copy-ui-x-20260924" defer></script>
   <script>
     (function () {
       var h = location.hostname;
@@ -175,7 +200,7 @@
             </span>
           </label>
         </div>
-        <p class="entry-intake-note entry-hero-text-note">サンプル本線では、キャッチ写真の上に文字を載せません（見本データのオン設定も本線ではオフにします）。載せたいときは、「自分で作る」か完成後の「編集する」でできます。</p>
+        <p class="entry-intake-note entry-hero-text-note">写真の上に言葉を出すかは、文章のところで選べます。出さないときは、その候補は出ません。店名の欄はそのまま残ります。</p>
         <button type="button" class="entry-step-back" data-entry-step-back>← ひとつ戻る</button>
       </fieldset>
 
@@ -405,6 +430,11 @@
 
     <div class="atelier-split" id="atelier-split">
       <section class="dash-pane" id="dash-pane" aria-label="注文画面">
+      <button type="button" class="dash-collapse-shut" id="dash-collapse-shut" aria-label="操作パネルをしまう">
+        <svg class="dash-chevron dash-chevron--one" viewBox="0 0 16 16" aria-hidden="true">
+          <path d="M10.4 3.1 5.5 8l4.9 4.9" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </button>
       <header class="dash-header">
         <div class="dash-header-row dash-header-row--top">
           <button type="button" class="preview-guide-btn" id="preview-guide-btn" data-open-color-mode aria-label="モード変更を開く" hidden>
@@ -451,8 +481,8 @@
             <label class="entry-branch-card">
               <input type="radio" name="easy_copy_path" value="omakase">
               <span class="entry-branch-card-inner">
-                <strong role="heading" aria-level="3">おまかせ</strong>
-                <span>サイト全体の流れに合わせて、こちらで文章を整えます（あとから直せます）</span>
+                <strong role="heading" aria-level="3">文章はすべておまかせ</strong>
+                <span>見本の枚数ぶん、すべての文章をこちらで決めます。あとから一つずつ直せます。</span>
               </span>
             </label>
           </div>
@@ -461,8 +491,8 @@
         <details class="dash-block dash-block--easy" data-step-id="easy-copy-dirs" hidden>
           <summary>方向</summary>
           <p class="easy-copy-later-hint">あとから、サイト内の文章は修正できます。まずは完成まで進みましょう。</p>
-          <p class="dash-subhead" role="heading" aria-level="3">どんな向きにしますか</p>
-          <p class="step-help">気になるものを選んでください（複数可）。全体で1つ以上選ぶと次へ進めます。</p>
+          <p class="dash-subhead" role="heading" aria-level="3">どんな雰囲気にしますか</p>
+          <p class="step-help">選んだ言葉を優先します。選んでいない言葉も、見比べ用の候補に入ることがあります。緑枠は使いたい言葉です。もう一度押すと赤枠と×になり、その言葉は使いません。もう一度押すと白に戻ります。</p>
           <div class="easy-copy-dirs" id="easy-copy-dirs-root"></div>
         </details>
 
@@ -518,16 +548,12 @@
           <div class="easy-copy-frame" id="easy-copy-frame-root">
             <p class="easy-copy-later-hint">あとから、サイト内の文章は修正できます。まずは完成まで進みましょう。</p>
             <p class="dash-subhead" id="easy-copy-frame-title" role="heading" aria-level="3">キャッチ</p>
-            <p class="step-help">左の見本と同じ文が「いまの文言」です。下の候補を選ぶと、左にもすぐ反映されます。</p>
-            <div class="easy-copy-frame-now" aria-live="polite">
-              <p class="easy-copy-frame-now-label">いまの文言</p>
-              <p class="easy-copy-frame-now-text" id="easy-copy-frame-now-text"></p>
+            <div id="easy-copy-hero-ask" hidden></div>
+            <div class="easy-copy-frame-actions" id="easy-copy-frame-reroll-wrap">
+              <button type="button" class="gct-btn" id="easy-copy-frame-reroll">おまかせで引き直す</button>
+              <p class="easy-copy-frame-hint">気に入る文章が見つかるまで、何度でも引き直せます。自分で入力した欄は、そのまま残ります。</p>
             </div>
-            <p class="easy-copy-frame-cands-label" id="easy-copy-frame-cands-label">候補（どれか選べます）</p>
-            <div class="easy-copy-frame-cands" id="easy-copy-frame-cands" role="listbox" aria-labelledby="easy-copy-frame-cands-label"></div>
-            <div class="easy-copy-frame-actions">
-              <button type="button" class="gct-btn" id="easy-copy-frame-reroll">別の案を出す</button>
-            </div>
+            <div class="easy-copy-frame-fields" id="easy-copy-frame-fields"></div>
           </div>
         </details>
 
@@ -601,7 +627,8 @@
         <details class="dash-block dash-block--easy" data-step-id="easy-img-wire" hidden>
           <summary>画像</summary>
           <p class="dash-subhead" role="heading" aria-level="3">写真を枠にはめる</p>
-          <p class="step-help">左のワイヤーで枠を選び、写真を入れます。枚数の増減は「編集する」からできます。</p>
+          <p class="step-help">見えている枠ごとに、写真を選べます。</p>
+          <div id="easy-img-layout-host"></div>
           <div class="sample-img-wire-layout">
             <div class="sample-img-wire-stage" aria-hidden="true">
               <button type="button" class="sample-wire-slot is-active" data-wire-slot="hero">キャッチ</button>
@@ -728,7 +755,7 @@
           </div>
 
           <div class="hub-layout-stack" id="hub-layout-stack" hidden>
-            <p class="hub-layout-lead">左クリックしたまま上下に動かすと、順番を変えられます。</p>
+            <p class="hub-layout-lead">見出しの右の印をつかんだまま上下に動かすと、順番を変えられます。</p>
             <div class="hub-layout-legend" role="note" aria-label="凡例">
               <p class="hub-layout-legend-mark"><span class="hub-legend-dot" aria-hidden="true">●</span> 表示中</p>
               <p class="hub-layout-legend-note">この印が付いている項目は、左側プレビューへ表示されます。</p>
@@ -738,14 +765,18 @@
             </div>
             <p class="layout-arrange-hint" id="layout-arrange-hint" hidden></p>
             <div class="layout-arrange layout-arrange--expanded layout-arrange--structure" id="layout-arrange">
+              <div class="layout-omakase-bar" id="layout-omakase-bar">
+                <p class="layout-omakase-note">残したい写真は鍵で固定できます。ギャラリーからおまかせは、固定していない写真をすべて選び直します。</p>
+                <button type="button" class="layout-omakase-btn" id="layout-omakase-btn">ギャラリーからおまかせ</button>
+              </div>
               <div class="layout-arrange-wire" id="layout-arrange-wire" role="list" aria-label="表示と並び"></div>
               <div class="layout-arrange-actions">
                 <button type="button" class="gct-btn layout-arrange-reset-btn" data-layout-arrange-reset id="layout-arrange-reset">並びを最初に戻す</button>
               </div>
             </div>
-            <div class="hub-nav-row">
-              <button type="button" class="gct-btn" id="hub-layout-back" data-hub-layout-back>戻る</button>
-              <button type="button" class="gct-btn gct-btn-primary" id="hub-layout-ok" data-hub-layout-ok>このレイアウトでOK</button>
+            <div class="hub-nav-row hub-nav-row--layout">
+              <button type="button" class="gct-btn hub-nav-back" id="hub-layout-back" data-hub-layout-back>戻る</button>
+              <button type="button" class="gct-btn gct-btn-primary hub-nav-next" id="hub-layout-ok" data-hub-layout-ok>次へ</button>
             </div>
           </div>
         </details>
@@ -1684,6 +1715,33 @@
       </div>
       </section>
 
+    </div>
+  </div>
+
+  <aside class="wave-tune" id="wave-tune" hidden aria-label="そよ風調整">
+    <p class="wave-tune-title" title="つかんで動かせます">そよ風調整</p>
+    <div class="wave-tune-row">
+      <span class="wave-tune-name">動作時間</span>
+      <button type="button" data-wave-tune="dur" data-dir="-1" aria-label="動作時間を20ミリ秒短く">−</button>
+      <input class="wave-tune-num" data-wave-value="dur" type="number" min="0" max="2000" step="20" inputmode="numeric" aria-label="動作時間（ミリ秒）">
+      <span class="wave-tune-unit">ms</span>
+      <button type="button" data-wave-tune="dur" data-dir="1" aria-label="動作時間を20ミリ秒長く">＋</button>
+    </div>
+    <div class="wave-tune-row">
+      <span class="wave-tune-name">波の間隔</span>
+      <button type="button" data-wave-tune="gap" data-dir="-1" aria-label="波の間隔を5ミリ秒短く">−</button>
+      <input class="wave-tune-num" data-wave-value="gap" type="number" min="0" max="400" step="5" inputmode="numeric" aria-label="波の間隔（ミリ秒）">
+      <span class="wave-tune-unit">ms</span>
+      <button type="button" data-wave-tune="gap" data-dir="1" aria-label="波の間隔を5ミリ秒長く">＋</button>
+    </div>
+  </aside>
+  <div id="wave-shift-park" hidden>
+    <div class="wave-tune-row">
+      <span class="wave-tune-name">移動量</span>
+      <button type="button" data-wave-tune="shift" data-dir="-1" aria-label="移動量を1ピクセル小さく">−</button>
+      <input class="wave-tune-num" data-wave-value="shift" type="number" min="0" max="48" step="1" inputmode="numeric" aria-label="移動量（ピクセル）">
+      <span class="wave-tune-unit">px</span>
+      <button type="button" data-wave-tune="shift" data-dir="1" aria-label="移動量を1ピクセル大きく">＋</button>
     </div>
   </div>
 </body>

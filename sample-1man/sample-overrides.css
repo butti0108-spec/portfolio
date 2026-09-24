@@ -1647,8 +1647,16 @@ html.dash-collapse-full .dash-collapse-shut .dash-chevron--one {
   transform: rotate(180deg);
 }
 
+html.dash-sheet-move .atelier-split {
+  position: relative;
+}
+
 html.dash-sheet-move .dash-pane {
   overflow: hidden;
+}
+
+html.dash-sheet-move .split-handle {
+  display: none;
 }
 
 html.dash-sheet-move .dash-pane > .dash-header,
@@ -1768,7 +1776,7 @@ html.dash-wave-squeeze .dash-collapse-shut .dash-chevron--one {
 }
 
 html.dash-collapse-full .dash-pane {
-  width: 1.35rem;
+  width: 0;
   background: transparent;
   overflow: visible;
   z-index: 2;

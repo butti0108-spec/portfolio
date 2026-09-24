@@ -16576,10 +16576,27 @@
       }
       unlockPreviewBox();
       releaseDashPaneWidth();
+      unparkDashShut();
       syncDashCollapseChrome(opening ? 0 : 2);
       if (typeof window.applyPreviewWidthFromPane === "function") {
         window.applyPreviewWidthFromPane();
       }
+    }
+
+    function parkDashShut() {
+      const shut = document.getElementById("dash-collapse-shut");
+      const splitEl = document.getElementById("atelier-split");
+      if (!shut || !splitEl || shut.hasAttribute("data-sheet-parked")) return;
+      shut.setAttribute("data-sheet-parked", "");
+      splitEl.appendChild(shut);
+    }
+
+    function unparkDashShut() {
+      const shut = document.getElementById("dash-collapse-shut");
+      const pane = document.getElementById("dash-pane");
+      if (!shut || !pane || !shut.hasAttribute("data-sheet-parked")) return;
+      shut.removeAttribute("data-sheet-parked");
+      pane.insertBefore(shut, pane.firstChild);
     }
 
     function followPreviewScale(token) {
@@ -16601,6 +16618,7 @@
       const dur = dashWaveMs(opening ? "--dash-open-ms" : "--dash-shut-ms", opening ? 360 : 220);
       if (!pane || !preview || !splitEl || dur <= 0) {
         cancelDashSheetAnims();
+        unparkDashShut();
         dashCollapseLevel = opening ? 0 : 2;
         paintDashCollapseInstant(opening ? 0 : 2);
         return;
@@ -16628,7 +16646,7 @@
       pane.style.transition = "none";
       pane.style.flex = "0 0 auto";
       pane.style.minWidth = "0";
-      const fromW = opening ? (liveW > face + 4 ? liveW : face) : liveW;
+      const fromW = opening ? (liveW > 4 ? liveW : 0) : liveW;
       pane.style.width = fromW + "px";
       lockPreviewBox();
       preview.style.maxWidth = "none";
@@ -16636,6 +16654,7 @@
       preview.style.transition = "none";
       root.style.setProperty("--dash-sheet-w", (opening ? openW : Math.max(fromW, openW)) + "px");
       root.classList.add("dash-sheet-move");
+      parkDashShut();
       if (opening) {
         root.classList.remove(
           "dash-collapse-full",
@@ -16648,7 +16667,7 @@
       }
       syncDashCollapseChrome(opening ? 0 : 2);
 
-      const toW = opening ? openW : face;
+      const toW = opening ? openW : 0;
       const previewFromLeft = preview.getBoundingClientRect().left - splitRect.left;
       const previewFromW = preview.getBoundingClientRect().width;
       const previewToLeft = opening ? toW + handleW : 0;

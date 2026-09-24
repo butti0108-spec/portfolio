@@ -12,7 +12,7 @@
   <!-- メーカー親CSS（ポートフォリオ根の style.css は読まない） -->
   <link rel="stylesheet" href="maker-base.css?v=cleanup-20260922">
   <link rel="icon" href="brand/mark-favicon.png?v=logo-7" type="image/png">
-  <link rel="stylesheet" href="sample-overrides.css?v=copy-ui-x-20260924">
+  <link rel="stylesheet" href="sample-overrides.css?v=copy-ui-later2-20260924">
   <link rel="stylesheet" href="free-photo-gallery/gallery.css?v=gallery-check-20260923">
   <script>
     (function () {
@@ -63,7 +63,7 @@
   <script src="sushi-belt.js?v=sushi-guide-session-20260922a" defer></script>
   <script src="free-photo-gallery/gallery.js?v=gallery-check-20260923" defer></script>
   <script src="page-shutter.js?v=shutter-all-20260924" defer></script>
-  <script src="script.js?v=copy-ui-x-20260924" defer></script>
+  <script src="script.js?v=copy-ui-later-20260924" defer></script>
   <script>
     (function () {
       var h = location.hostname;
@@ -444,6 +444,7 @@
           <h2 class="dash-title">注文画面</h2>
         </div>
         <p class="dash-resume-notice" role="note">ページを<strong>更新・開き直した</strong>ときは、<strong>写真を選び直し</strong>してください</p>
+        <p class="easy-copy-later-hint" id="easy-copy-later-hint" hidden>あとから、サイト内の文章は修正できます。まずは完成まで進みましょう。</p>
       </header>
 
       <div class="dash-width-rail" id="dash-width-rail" hidden>
@@ -467,7 +468,6 @@
 
         <details class="dash-block dash-block--easy" data-step-id="easy-copy-path" hidden>
           <summary>文章の決め方</summary>
-          <p class="easy-copy-later-hint">あとから、サイト内の文章は修正できます。まずは完成まで進みましょう。</p>
           <p class="dash-subhead" role="heading" aria-level="3">文章はどう決めますか</p>
           <p class="step-help">進め方をひとつ選んでください。あとから直せます。</p>
           <div class="entry-branch-grid easy-copy-path-grid" role="radiogroup" aria-label="文章の決め方">
@@ -490,15 +490,18 @@
 
         <details class="dash-block dash-block--easy" data-step-id="easy-copy-dirs" hidden>
           <summary>方向</summary>
-          <p class="easy-copy-later-hint">あとから、サイト内の文章は修正できます。まずは完成まで進みましょう。</p>
-          <p class="dash-subhead" role="heading" aria-level="3">どんな雰囲気にしますか</p>
-          <p class="step-help">選んだ言葉を優先します。選んでいない言葉も、見比べ用の候補に入ることがあります。緑枠は使いたい言葉です。もう一度押すと赤枠と×になり、その言葉は使いません。もう一度押すと白に戻ります。</p>
+          <p class="dash-subhead" role="heading" aria-level="3">どんな雰囲気にしたいですか？</p>
+          <p class="easy-copy-dir-legend">
+            <span class="easy-copy-dir-legend-want">緑枠＝使いたい言葉</span>
+            <span class="easy-copy-dir-legend-forbid">赤枠＝使わない言葉</span>
+            <span class="easy-copy-dir-legend-ref">枠なし＝候補に入ることもある言葉</span>
+          </p>
+          <p class="step-help">言葉を押すたびに、緑枠、赤枠、枠なしの順で変わります。</p>
           <div class="easy-copy-dirs" id="easy-copy-dirs-root"></div>
         </details>
 
         <details class="dash-block dash-block--easy" data-step-id="easy-basics" hidden>
           <summary>基本情報</summary>
-          <p class="easy-copy-later-hint">あとから、サイト内の文章は修正できます。まずは完成まで進みましょう。</p>
           <p class="dash-subhead" role="heading" aria-level="3">基本情報</p>
           <p class="step-help">お店のページに載せる最低限を入れます。あとから直せます。</p>
           <div class="easy-basics-fields">
@@ -532,7 +535,6 @@
 
         <details class="dash-block dash-block--easy" data-step-id="easy-copy-omakase" data-preview-target="#hero" hidden>
           <summary>おまかせ文章</summary>
-          <p class="easy-copy-later-hint">あとから、サイト内の文章は修正できます。まずは完成まで進みましょう。</p>
           <p class="dash-subhead" role="heading" aria-level="3">おまかせの文章</p>
           <p class="step-help">左の見本に載っています。「残す」を押した枠は、もう一度選んでも変わりません。残していない枠だけやり直せます。</p>
           <div class="easy-copy-omakase" id="easy-copy-omakase-root">
@@ -546,7 +548,6 @@
         <details class="dash-block dash-block--easy" data-step-id="easy-copy-frame" data-preview-target="#hero" hidden>
           <summary>枠の文章</summary>
           <div class="easy-copy-frame" id="easy-copy-frame-root">
-            <p class="easy-copy-later-hint">あとから、サイト内の文章は修正できます。まずは完成まで進みましょう。</p>
             <p class="dash-subhead" id="easy-copy-frame-title" role="heading" aria-level="3">キャッチ</p>
             <div id="easy-copy-hero-ask" hidden></div>
             <div class="easy-copy-frame-actions" id="easy-copy-frame-reroll-wrap">

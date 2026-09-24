@@ -11117,6 +11117,64 @@ body.wizard-mode .dash-block.is-wizard-active .easy-copy-frame > .easy-copy-late
   gap: 1rem;
   margin: 0.4rem 0 0.8rem;
 }
+.easy-copy-dir-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem 1.25rem;
+  margin: 0 0 0.35rem;
+  font-size: 0.82rem;
+  font-weight: 400;
+  line-height: 1.45;
+}
+.easy-copy-dir-legend-want {
+  color: #3d8a48;
+}
+.easy-copy-dir-legend-forbid {
+  color: #b42318;
+}
+.easy-copy-dir-legend-ref {
+  color: #121816;
+}
+.dash-block[data-step-id="easy-copy-dirs"] > .dash-subhead {
+  font-size: 1.05rem;
+  font-weight: 700;
+  line-height: 1.4;
+  color: #121816;
+}
+.dash-block[data-step-id="easy-copy-dirs"] .easy-copy-dir-heading {
+  font-size: 0.9rem;
+  font-weight: 700;
+}
+.dash-block[data-step-id="easy-copy-dirs"] .easy-copy-dir-chip {
+  font-weight: 400;
+}
+.dash-header .easy-copy-later-hint {
+  margin: 0.35rem 0 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: #2a3238;
+  font-size: 0.82rem;
+  font-weight: 400;
+  line-height: 1.45;
+}
+#easy-copy-later-hint[hidden] {
+  display: none !important;
+}
+body.copy-later-fixed .dash-pane > .dash-body {
+  padding-top: 0;
+}
+body.copy-later-fixed .dash-body > .fill-form {
+  padding-top: 0;
+}
+body.copy-later-fixed .dash-block.is-wizard-active {
+  margin-top: 0;
+  padding-top: 0;
+}
+body.copy-later-fixed .dash-block.is-wizard-active > .dash-subhead,
+body.copy-later-fixed .dash-block.is-wizard-active .easy-copy-frame > .dash-subhead {
+  margin-top: 0;
+}
 .easy-copy-dir-heading {
   margin: 0 0 0.4rem;
   font-size: 0.95rem;

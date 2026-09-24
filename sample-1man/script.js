@@ -7561,6 +7561,7 @@
       revealSamplePreview();
     }
     syncSampleFlowPreviewVisibility(step.id);
+    syncEasyCopyLaterHint(step.id);
 
     switchToDashTab();
     form.querySelectorAll(":scope > details.dash-block").forEach((d) => {
@@ -7664,6 +7665,9 @@
     normalizeWizardStepIndex();
     syncWizardNavVisibility();
     buildProgressBar();
+    const laterFlow = getFlowSteps();
+    const laterStep = laterFlow[store.wizardStepIndex];
+    syncEasyCopyLaterHint(laterStep && laterStep.id);
   }
 
   function previewPaneOnScreen(previewPane) {
@@ -8048,6 +8052,18 @@
     if (store.layoutSelected) return false;
     if (store.presetChosen) return false;
     return true;
+  }
+
+  function syncEasyCopyLaterHint(stepId) {
+    const on =
+      stepId === "easy-copy-path" ||
+      stepId === "easy-copy-dirs" ||
+      stepId === "easy-basics" ||
+      stepId === "easy-copy-omakase" ||
+      stepId === "easy-copy-frame";
+    const hint = document.getElementById("easy-copy-later-hint");
+    if (hint) hint.hidden = !on;
+    document.body.classList.toggle("copy-later-fixed", on);
   }
 
   function syncDashResumeNotice() {
@@ -10211,13 +10227,11 @@
         if (!box || currentCopyFrameId() !== secId) return;
         const three = (list || []).slice(0, 3);
         const forbidNote =
-          (store.copyDirForbid || []).length && !three.length
-            ? "入れないにした言葉が多いので、候補を出せませんでした。赤枠をもう一度押すと、白に戻ります。"
-            : (store.copyDirForbid || []).length && three.length < 3
-              ? "入れないにした言葉があるので、候補は出せた分だけです。"
-              : !three.length
-                ? "この条件では、候補を出せませんでした。"
-                : "";
+          (store.copyDirForbid || []).length && three.length < 3
+            ? "赤枠の言葉は、候補に入りません。"
+            : !three.length
+              ? "この条件では、候補を出せませんでした。"
+              : "";
         if (!three.length) {
           box.innerHTML = '<p class="easy-copy-frame-hint">' + escapeHtml(forbidNote) + "</p>";
           return;

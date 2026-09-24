@@ -7612,7 +7612,6 @@
       document.querySelectorAll('input[name="entry_sample_color"]').forEach(function (r) {
         r.checked = r.value === val;
       });
-      setSampleFlowPreviewHidden(false);
       paintEasyColorBars();
     }
     if (step.id === "easy-copy-omakase") {
@@ -11579,6 +11578,12 @@
           return;
         }
         runWithCrossShutter(function () { return enterSampleAfterPurpose(); }, warmSampleEntryDraft);
+      });
+    });
+    document.querySelectorAll('input[name="entry_sample_color"]').forEach((input) => {
+      input.addEventListener("change", () => {
+        if (!input.checked) return;
+        applyEasyColorChoice();
       });
     });
     gate.querySelectorAll("[data-entry-step-back]").forEach((btn) => {

@@ -33,7 +33,7 @@
     })();
   </script>
   <script>
-    /* サンプル本線の復元順。文章・色・基本情報でも見本は隠さない */
+    /* サンプル本線の復元順。見本は色合いから。基本情報と雰囲気は隠す */
     (function () {
       try {
         if (/[?&](?:embedPreview|capture)=1(?:&|$)/.test(location.search)) return;
@@ -42,14 +42,14 @@
         var data = JSON.parse(raw);
         if (!data || !data.easyFlowActive || data.entryBranch !== "sample") return;
         if (data.uiMode && data.uiMode !== "guided") return;
-        var ids = ["easy-basics", "easy-color", "easy-copy-dirs"];
+        var ids = ["easy-basics", "easy-copy-dirs", "easy-color"];
         if (data.imgPathMode === "omakase" || data.imgPathMode === "self") ids.push("easy-img-path", "easy-img-wire");
         else ids.push("easy-img-path");
         if (data.copyPathMode === "omakase") ids.push("easy-copy-path", "easy-copy-omakase");
         else if (data.copyPathMode === "keyword") ids.push("easy-copy-path", "easy-copy-frame");
         else ids.push("easy-copy-path");
         ids.push("easy-loading", "easy-done");
-        /* この順のどの画面でも、見本は隠さない */
+        /* 基本情報と雰囲気は見本を隠す。色合いから出す */
         void ids;
       } catch (e) { /* ignore */ }
     })();
@@ -61,7 +61,7 @@
   <script src="sushi-belt.js?v=sushi-guide-session-20260922a" defer></script>
   <script src="free-photo-gallery/gallery.js?v=gallery-check-20260923" defer></script>
   <script src="page-shutter.js?v=shutter-all-20260924" defer></script>
-  <script src="script.js?v=easy-folder-name-20260925" defer></script>
+  <script src="script.js?v=easy-mood-before-color-20260925" defer></script>
   <script>
     (function () {
       var h = location.hostname;

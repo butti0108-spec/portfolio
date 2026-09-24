@@ -5551,7 +5551,7 @@
   }
 
   function getEasyFlowStepIds() {
-    const ids = ["easy-basics", "easy-color", "easy-copy-dirs"]
+    const ids = ["easy-basics", "easy-copy-dirs", "easy-color"]
       .concat(getEasyImageFlowMid())
       .concat(getEasyCopyFlowTail())
       .concat(["easy-loading", "easy-done"]);
@@ -5723,7 +5723,7 @@
     bar.hidden = true;
   }
 
-  const EASY_FLOW_STAGE_LABELS = ["サンプル", "用途", "基本情報", "色合い", "雰囲気", "画像", "文章", "確定"];
+  const EASY_FLOW_STAGE_LABELS = ["サンプル", "用途", "基本情報", "雰囲気", "色合い", "画像", "文章", "確定"];
 
   function easyFlowStageIndex() {
     const gate = document.getElementById("entry-gate");
@@ -5740,8 +5740,8 @@
     const id = step && step.id;
     if (!id) return 0;
     if (id === "easy-basics") return 3;
-    if (id === "easy-color") return 4;
-    if (id === "easy-copy-dirs") return 5;
+    if (id === "easy-copy-dirs") return 4;
+    if (id === "easy-color") return 5;
     if (id === "easy-img-path" || id === "easy-img-wire" || id === "easy-img-omakase") return 6;
     if (
       id === "easy-copy-path" ||
@@ -9888,7 +9888,7 @@
   }
 
   function syncSampleFlowPreviewVisibility(stepId) {
-    setSampleFlowPreviewHidden(stepId === "easy-basics");
+    setSampleFlowPreviewHidden(stepId === "easy-basics" || stepId === "easy-copy-dirs");
   }
 
   let samplePreviewPopReady = false;

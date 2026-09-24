@@ -7531,6 +7531,7 @@
         (!brandEl || !String(brandEl.value || "").trim()) &&
         (!introEl || !String(introEl.value || "").trim());
       if (empty || !store.easyBasicsSeed) fillEasyBasicsFromFields();
+      else parkEasyBrandAsHint();
     }
     if (step.id === "easy-copy-omakase") {
       ensureOmakaseCopyReady().then(function () {
@@ -9942,11 +9943,30 @@
         seed[key] = String(mock[key] || "").trim();
         return;
       }
+      if (key === "brand") {
+        seed.brand = "";
+        return;
+      }
       el.setAttribute("placeholder", hints[key]);
       el.value = String(mock[key] || "").trim();
       seed[key] = String(el.value || "").trim();
     });
     store.easyBasicsSeed = seed;
+    parkEasyBrandAsHint();
+  }
+
+  function parkEasyBrandAsHint() {
+    const el = document.getElementById("easy-brand-name");
+    if (!el) return;
+    if (!store.easyBrandHint) {
+      store.easyBrandHint = String(fieldValue("brand_name") || store.sushiSampleBrand || "").trim();
+    }
+    const sample = String(store.easyBrandHint || "").trim();
+    const current = String(el.value || "").trim();
+    el.setAttribute("placeholder", sample || "例：〇〇カフェ");
+    if (!current || current === sample) el.value = "";
+    if (!store.easyBasicsSeed || typeof store.easyBasicsSeed !== "object") store.easyBasicsSeed = {};
+    store.easyBasicsSeed.brand = "";
   }
 
   function applyCopyTextToField(key, text) {
@@ -11111,6 +11131,7 @@
     store.copyScreenReturn = null;
     store.heroTextOnPhoto = false;
     store.easyBasicsSeed = null;
+    store.easyBrandHint = "";
     store.copyPresetId = null;
     store.copyOmakaseAxes = null;
     store.copyOmakaseLocks = {};
@@ -15968,7 +15989,10 @@
       const root = document.documentElement;
       const fullOn = root.classList.contains("dash-collapse-full") || root.classList.contains("dash-collapse-closing");
       if (shut) {
-        shut.hidden = false;
+        const blocked = dashCollapseBlocked();
+        shut.hidden = blocked;
+        if (blocked) shut.setAttribute("aria-hidden", "true");
+        else shut.removeAttribute("aria-hidden");
         shut.setAttribute("aria-label", level >= 2 || fullOn ? "操作パネルを元の幅に戻す" : "操作パネルをしまう");
       }
       if (level && !dashCollapseBlocked()) {
@@ -16499,8 +16523,15 @@
     if (shutBtn) {
       shutBtn.addEventListener("click", function () {
         if (dashCollapseBlocked()) return;
-        if (dashCollapseLevel === 0) beginShutAll();
-        else beginOpen();
+        clearDashWaveTimer();
+        clearDashWaveMarks();
+        if (dashCollapseLevel === 0) {
+          dashCollapseLevel = 2;
+          paintDashCollapseInstant(2);
+        } else {
+          dashCollapseLevel = 0;
+          paintDashCollapseInstant(0);
+        }
       });
     }
     window.addEventListener("resize", function () {

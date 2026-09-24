@@ -2255,6 +2255,8 @@
     galleryPicks: null,
     folderDirHandle: null,
     folderDisplayName: "",
+    projectFolderName: "",
+    projectNameAuto: "",
     pendingResumeFolderFiles: null,
     hubReturnBlockId: null,
     hubEntryRoute: null,
@@ -3686,6 +3688,7 @@
       vibeText: store.vibeText,
       intakeDone: store.intakeDone,
       saveMode: store.saveMode === "folder" || store.saveMode === "browser" ? store.saveMode : null,
+      projectFolderName: store.projectFolderName || "",
       entryBranch: store.entryBranch,
       hubEntrySource: store.hubEntrySource,
       easyFlowActive: !!store.easyFlowActive,
@@ -4184,19 +4187,98 @@
     return true;
   }
 
+  function projectStamp(date) {
+    const d = date || new Date();
+    const p = function (n) { return String(n).padStart(2, "0"); };
+    return d.getFullYear() + "-" + p(d.getMonth() + 1) + "-" + p(d.getDate()) + "-" + p(d.getHours()) + "-" + p(d.getMinutes()) + "-" + p(d.getSeconds());
+  }
+
+  function defaultProjectFolderName(date) {
+    return "かんたんホームページ工房-" + projectStamp(date);
+  }
+
+  function sanitizeProjectFolderName(raw) {
+    let name = String(raw || "").replace(/[\\/:*?"<>|]/g, "").replace(/[\u0000-\u001f]/g, "").trim();
+    name = name.replace(/[. ]+$/g, "").trim();
+    if (!name) name = defaultProjectFolderName(new Date());
+    return name;
+  }
+
+  function zipDownloadName() {
+    if (store.saveMode === "folder") {
+      const named = sanitizeProjectFolderName(store.projectFolderName || store.folderDisplayName || "");
+      if (named) return named + ".zip";
+    }
+    return defaultProjectFolderName(new Date()) + ".zip";
+  }
+
+  async function directoryNameTaken(parent, name) {
+    try {
+      await parent.getDirectoryHandle(name);
+      return true;
+    } catch (e) {
+      return false;
+    }
+  }
+
+  async function createFreshChildDir(parent, baseName) {
+    const base = sanitizeProjectFolderName(baseName);
+    let name = base;
+    let n = 2;
+    while (await directoryNameTaken(parent, name)) {
+      name = base + "-" + n;
+      n += 1;
+      if (n > 100) throw new Error("同じ名前のフォルダが続いています。名前を変えてください。");
+    }
+    const handle = await parent.getDirectoryHandle(name, { create: true });
+    return { handle: handle, name: name };
+  }
+
+  function syncEntryFolderNamePanel() {
+    const panel = document.getElementById("entry-save-folder-name");
+    const input = document.getElementById("entry-project-folder-name");
+    if (!panel || !input) return;
+    const folder = document.querySelector('input[name="entry_save_mode"][value="folder"]');
+    const on = !!(folder && folder.checked);
+    panel.hidden = !on;
+    if (!on) return;
+    if (!input.value.trim()) {
+      const name = store.projectFolderName || defaultProjectFolderName(new Date());
+      input.value = name;
+      if (!store.projectFolderName) store.projectNameAuto = name;
+    }
+  }
+
+  function fillProjectFolderNameForCreate() {
+    const input = document.getElementById("entry-project-folder-name");
+    let name = input ? String(input.value || "").trim() : "";
+    if (!name || name === store.projectNameAuto) {
+      name = defaultProjectFolderName(new Date());
+      store.projectNameAuto = name;
+      if (input) input.value = name;
+    }
+    return sanitizeProjectFolderName(name);
+  }
+
   async function pickProjectFolderForSave() {
     if (!supportsDirectoryPicker()) {
       throw new Error(
         "このブラウザではフォルダ保存に対応していません。残さず進むか、あとでZIPで残してください。"
       );
     }
-    const handle = await window.showDirectoryPicker({
+    const parent = await window.showDirectoryPicker({
       id: "sample-1man-project",
       mode: "readwrite",
       startIn: "documents"
     });
-    await setProjectFolderHandle(handle, { mode: "readwrite", persist: true });
-    return handle;
+    const wanted = fillProjectFolderNameForCreate();
+    const created = await createFreshChildDir(parent, wanted);
+    store.projectFolderName = created.name;
+    store.projectNameAuto = "";
+    const input = document.getElementById("entry-project-folder-name");
+    if (input) input.value = created.name;
+    await setProjectFolderHandle(created.handle, { mode: "readwrite", persist: true });
+    return created.handle;
   }
 
   async function pickProjectFolderForResume() {
@@ -4441,6 +4523,7 @@
     applyStudioDraft(draft);
     await applyResumeImagesFromDirHandle(dirHandle);
     store.saveMode = "folder";
+    if (dirHandle && dirHandle.name) store.projectFolderName = dirHandle.name;
     store.hubEntrySource = "detail-entry";
     store.entryBranch = "detail";
     store.layoutSelected = true;
@@ -8289,6 +8372,7 @@
       window.SushiBelt.unmount();
     }
     syncEasyFlowMeter();
+    if (next === "save") syncEntryFolderNamePanel();
   }
 
   function showEntryGate(startStep) {
@@ -11479,36 +11563,54 @@
     gate.querySelectorAll('input[name="entry_save_mode"]').forEach((input) => {
       bindChoiceReselect(input, () => {
         if (input.value === "folder") {
-          const prevMode = store.saveMode;
-          pickProjectFolderForSave()
-            .then(function () {
-              store.saveMode = "folder";
-              syncDashResumeNotice();
-              scheduleSave();
-              scheduleFolderWrite();
-              enterBranchAfterSaveChoice();
-            })
-            .catch(function (err) {
-              restoreSaveChoiceAfterFolderCancel(gate, prevMode);
-              const msg =
-                err && err.name === "AbortError"
-                  ? "フォルダ選択をキャンセルしました。もう一度選ぶか、「残さず」を選んでください。"
-                  : err && err.message
-                    ? String(err.message)
-                    : "フォルダを選べませんでした。";
-              window.alert(msg);
-            });
+          const nameInput = document.getElementById("entry-project-folder-name");
+          if (nameInput && !String(nameInput.value || "").trim() && !store.projectFolderName) {
+            const name = defaultProjectFolderName(new Date());
+            nameInput.value = name;
+            store.projectNameAuto = name;
+          }
+          syncEntryFolderNamePanel();
           return;
         }
         store.saveMode = "browser";
         store.folderDirHandle = null;
         store.folderDisplayName = "";
+        store.projectFolderName = "";
+        store.projectNameAuto = "";
         idbClearFolderHandle();
+        syncEntryFolderNamePanel();
         syncDashResumeNotice();
         scheduleSave();
         enterBranchAfterSaveChoice();
       });
     });
+    const pickFolderBtn = document.getElementById("entry-pick-folder");
+    if (pickFolderBtn) {
+      pickFolderBtn.addEventListener("click", () => {
+        const prevMode = store.saveMode;
+        pickProjectFolderForSave()
+          .then(function () {
+            store.saveMode = "folder";
+            syncDashResumeNotice();
+            scheduleSave();
+            scheduleFolderWrite();
+            enterBranchAfterSaveChoice();
+          })
+          .catch(function (err) {
+            if (!(err && err.name === "AbortError")) {
+              restoreSaveChoiceAfterFolderCancel(gate, prevMode);
+            }
+            syncEntryFolderNamePanel();
+            const msg =
+              err && err.name === "AbortError"
+                ? "フォルダ選択をキャンセルしました。もう一度選ぶか、「残さず」を選んでください。"
+                : err && err.message
+                  ? String(err.message)
+                  : "フォルダを選べませんでした。";
+            window.alert(msg);
+          });
+      });
+    }
     const resumeZipInput = document.getElementById("entry-resume-zip");
     const resumeLoadBtn = document.getElementById("entry-resume-load");
     const resumeFolderPick = document.getElementById("entry-resume-folder-pick");
@@ -17135,6 +17237,7 @@
         vibeText: store.vibeText,
         intakeDone: store.intakeDone,
         saveMode: store.saveMode === "folder" || store.saveMode === "browser" ? store.saveMode : null,
+        projectFolderName: store.projectFolderName || "",
         entryBranch: store.entryBranch,
         hubEntrySource: store.hubEntrySource,
         easyFlowActive: !!store.easyFlowActive,
@@ -17260,6 +17363,7 @@
       if (data.saveMode === "folder" || data.saveMode === "browser") {
         store.saveMode = data.saveMode;
       }
+      if (data.projectFolderName) store.projectFolderName = String(data.projectFolderName);
       if (data.entryBranch === "easy" || data.entryBranch === "detail" || data.entryBranch === "sample") {
         store.entryBranch = data.entryBranch === "easy" ? "sample" : data.entryBranch;
       }
@@ -17612,7 +17716,7 @@
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
     a.href = url;
-    a.download = "1man-order.zip";
+    a.download = zipDownloadName();
     document.body.appendChild(a);
     a.click();
     a.remove();

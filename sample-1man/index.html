@@ -12,7 +12,7 @@
   <!-- メーカー親CSS（ポートフォリオ根の style.css は読まない） -->
   <link rel="stylesheet" href="maker-base.css?v=cleanup-20260922">
   <link rel="icon" href="brand/mark-favicon.png?v=logo-7" type="image/png">
-  <link rel="stylesheet" href="sample-overrides.css?v=easy-flow-names-20260924">
+  <link rel="stylesheet" href="sample-overrides.css?v=easy-folder-name-20260925">
   <link rel="stylesheet" href="free-photo-gallery/gallery.css?v=gallery-check-20260923">
   <script>
     (function () {
@@ -61,7 +61,7 @@
   <script src="sushi-belt.js?v=sushi-guide-session-20260922a" defer></script>
   <script src="free-photo-gallery/gallery.js?v=gallery-check-20260923" defer></script>
   <script src="page-shutter.js?v=shutter-all-20260924" defer></script>
-  <script src="script.js?v=easy-flow-names-20260924" defer></script>
+  <script src="script.js?v=easy-folder-name-20260925" defer></script>
   <script>
     (function () {
       var h = location.hostname;
@@ -175,6 +175,13 @@
               <span>残さない場合、ページを更新すると写真は消えることがあります（文章などはブラウザ内に残ることがあります）。</span>
             </span>
           </label>
+        </div>
+        <div class="entry-save-folder-name" id="entry-save-folder-name" hidden>
+          <p class="entry-save-folder-hint">フォルダ名は入っています。変えたいときは、直せます。</p>
+          <label class="entry-save-folder-label" for="entry-project-folder-name">フォルダ名
+            <input type="text" id="entry-project-folder-name" name="entry_project_folder_name" autocomplete="off" spellcheck="false">
+          </label>
+          <button type="button" class="wizard-btn" id="entry-pick-folder">置き場所を選ぶ</button>
         </div>
       </fieldset>
 

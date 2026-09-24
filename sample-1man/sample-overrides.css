@@ -6787,6 +6787,36 @@ body.gct-preset-phase.mode-guided .dash-block.is-wizard-active .step-help {
   font-size: 0.82rem;
   color: #4a5560;
 }
+.entry-save-folder-name {
+  margin-top: 0.85rem;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.55rem;
+  max-width: 36rem;
+}
+.entry-save-folder-name[hidden] {
+  display: none !important;
+}
+.entry-save-folder-label {
+  display: flex;
+  flex-direction: column;
+  gap: 0.28rem;
+  width: 100%;
+  font-size: 0.82rem;
+  font-weight: 700;
+}
+.entry-save-folder-label input {
+  font: inherit;
+  font-weight: 400;
+  width: 100%;
+  box-sizing: border-box;
+  padding: 0.45rem 0.6rem;
+  border: 1px solid rgba(20, 28, 36, 0.28);
+  border-radius: 6px;
+  background: #fff;
+  color: #121816;
+}
 .entry-layout-grid--2x2 {
   grid-template-columns: 1fr 1fr;
   gap: 0.55rem;

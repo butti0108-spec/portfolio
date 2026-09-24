@@ -15990,23 +15990,6 @@
       }, widthDur + 40);
     }
 
-    function syncDashShutSpan() {
-      const shut = document.getElementById("dash-collapse-shut");
-      const header = document.querySelector("#dash-pane > .dash-header");
-      if (!shut) return;
-      const root = document.documentElement;
-      const open =
-        dashCollapseLevel === 0 &&
-        !root.classList.contains("dash-collapse-full") &&
-        !root.classList.contains("dash-collapse-closing") &&
-        !root.classList.contains("dash-collapse-half");
-      if (!open || !header) {
-        shut.style.height = "";
-        return;
-      }
-      shut.style.height = header.offsetHeight + "px";
-    }
-
     function syncDashCollapseChrome(level) {
       const shut = document.getElementById("dash-collapse-shut");
       const root = document.documentElement;
@@ -16025,7 +16008,6 @@
         handle.removeAttribute("aria-hidden");
         handle.tabIndex = 0;
       }
-      syncDashShutSpan();
     }
 
     function settleHalf() {
@@ -16560,14 +16542,7 @@
     }
     window.addEventListener("resize", function () {
       if (dashCollapseBlocked()) applyDashCollapse();
-      syncDashShutSpan();
     });
-    const dashHeader = document.querySelector("#dash-pane > .dash-header");
-    if (dashHeader && window.ResizeObserver) {
-      new ResizeObserver(function () {
-        syncDashShutSpan();
-      }).observe(dashHeader);
-    }
     applyDashCollapse();
     setupWaveTune();
 

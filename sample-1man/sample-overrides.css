@@ -1601,24 +1601,14 @@ html {
   left: 0;
   top: 0.55rem;
   z-index: 5;
-  width: 1.35rem;
-  height: 1.75rem;
-  border-radius: 0 0.45rem 0.45rem 0;
+  width: 2.5rem;
+  height: 2.5rem;
+  border-radius: 0 0.55rem 0.55rem 0;
   background: transparent;
 }
 
-html:not(.dash-collapse-full):not(.dash-collapse-closing):not(.dash-collapse-half) .dash-collapse-shut {
-  top: 0;
-  align-items: flex-start;
-  padding-top: 0.95rem;
-  box-sizing: border-box;
-  border-radius: 0;
-  background: #efeae3;
-  border-right: 1px solid rgba(0, 0, 0, 0.14);
-}
-
 html:not(.dash-collapse-full):not(.dash-collapse-closing) .dash-pane > .dash-header {
-  padding-left: 1.7rem;
+  padding-left: 2.85rem;
 }
 
 .dash-collapse-grip {
@@ -1637,6 +1627,8 @@ html:not(.dash-collapse-full):not(.dash-collapse-closing) .dash-pane > .dash-hea
 
 .dash-collapse-shut .dash-chevron--one {
   display: block;
+  width: 1.25rem;
+  height: 1.25rem;
   transform-origin: center;
   transition: transform var(--dash-width-dur, 220ms) ease;
 }
@@ -1644,16 +1636,11 @@ html:not(.dash-collapse-full):not(.dash-collapse-closing) .dash-pane > .dash-hea
 html.dash-collapse-closing .dash-collapse-shut,
 html.dash-collapse-full .dash-collapse-shut {
   background: #efeae3;
-  width: 2.5rem;
-  height: 2.5rem;
-  border-radius: 0 0.55rem 0.55rem 0;
 }
 
 html.dash-collapse-closing .dash-collapse-shut .dash-chevron--one,
 html.dash-collapse-full .dash-collapse-shut .dash-chevron--one {
   transform: rotate(180deg);
-  width: 1.25rem;
-  height: 1.25rem;
 }
 
 .dash-collapse-shut[hidden],

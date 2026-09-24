@@ -11224,14 +11224,17 @@
     scheduleSave();
   }
 
+  function entryPurposeKey(gate) {
+    if (!gate) return "";
+    const purposeEl = gate.querySelector('input[name="entry_purpose"]:checked');
+    if (!purposeEl || !PURPOSE_PACKS[purposeEl.value]) return "";
+    return purposeEl.value;
+  }
+
   async function warmSampleEntryDraft() {
     const gate = document.getElementById("entry-gate");
     if (!gate) return false;
-    let purposeEl = gate.querySelector('input[name="entry_purpose"]:checked');
-    if (!purposeEl && store.entryBranch === "sample") {
-      purposeEl = gate.querySelector('input[name="entry_purpose"][value="shop"]');
-    }
-    if (!purposeEl || purposeEl.value !== "shop") return false;
+    if (!entryPurposeKey(gate)) return false;
     if (shouldResumeSampleFlow()) return true;
     if (store.pendingSushi && store.pendingSushi.draft) return true;
     if (!(store.sushiSampleId && window.SushiBelt && window.SushiBelt.loadManifest)) return false;
@@ -11266,12 +11269,8 @@
   async function enterSampleAfterPurpose() {
     const gate = document.getElementById("entry-gate");
     if (!gate) return;
-    let purposeEl = gate.querySelector('input[name="entry_purpose"]:checked');
-    if (!purposeEl && store.entryBranch === "sample") {
-      purposeEl = gate.querySelector('input[name="entry_purpose"][value="shop"]');
-      if (purposeEl) purposeEl.checked = true;
-    }
-    if (!purposeEl || purposeEl.value !== "shop") return;
+    const purposeKey = entryPurposeKey(gate);
+    if (!purposeKey) return;
     if (shouldResumeSampleFlow()) {
       if (window.SushiBelt) window.SushiBelt.unmount();
       resumeSampleFlowAfterColor("keep");
@@ -11281,7 +11280,7 @@
     const draft = store.pendingSushi.draft;
     const layout = draft.layoutPattern === "b" || draft.layoutPattern === "c" ? draft.layoutPattern : "a";
     const moodFromDraft = draft.chosenPresetKey && PRESETS[draft.chosenPresetKey] ? draft.chosenPresetKey : "clinic";
-    applyIntakeSelections("shop", "sample", moodFromDraft, layout);
+    applyIntakeSelections(purposeKey, "sample", moodFromDraft, layout);
     store.entryBranch = "sample";
     store.easyFlowActive = true;
     store.hubEntrySource = "sample";
@@ -11299,12 +11298,8 @@
   async function finishSampleEntryFromGate() {
     const gate = document.getElementById("entry-gate");
     if (!gate) return;
-    let purposeEl = gate.querySelector('input[name="entry_purpose"]:checked');
-    if (!purposeEl && store.entryBranch === "sample") {
-      purposeEl = gate.querySelector('input[name="entry_purpose"][value="shop"]');
-      if (purposeEl) purposeEl.checked = true;
-    }
-    if (!purposeEl || purposeEl.value !== "shop") return;
+    const purposeKey = entryPurposeKey(gate);
+    if (!purposeKey) return;
     const colorElEarly = gate.querySelector('input[name="entry_sample_color"]:checked');
     const colorValEarly = colorElEarly ? colorElEarly.value : "keep";
     if (shouldResumeSampleFlow()) {
@@ -11320,7 +11315,7 @@
     const moodFromDraft = draft.chosenPresetKey && PRESETS[draft.chosenPresetKey] ? draft.chosenPresetKey : "clinic";
     const mood = colorVal === "keep" ? moodFromDraft : colorVal;
 
-    applyIntakeSelections("shop", "sample", mood, layout);
+    applyIntakeSelections(purposeKey, "sample", mood, layout);
     /* draft 適用前に本線フラグを立て、siteColorMode:detail の持ち越しを防ぐ */
     store.entryBranch = "sample";
     store.easyFlowActive = true;
@@ -11342,8 +11337,8 @@
   function finishDetailEntryFromGate() {
     const gate = document.getElementById("entry-gate");
     if (!gate) return;
-    const purposeEl = gate.querySelector('input[name="entry_purpose"]:checked');
-    if (!purposeEl || purposeEl.value !== "shop") return;
+    const purposeKey = entryPurposeKey(gate);
+    if (!purposeKey) return;
     const returning = store.hubEntrySource === "detail-entry";
     if (returning || store.sampleFlowEntered) {
       hideEntryGate();
@@ -11360,7 +11355,7 @@
     }
     hideEntryGate();
     store.hubEntrySource = "detail-entry";
-    applyIntakeSelections("shop", "detail", "clinic", "a");
+    applyIntakeSelections(purposeKey, "detail", "clinic", "a");
     /* モーダルより先にハブ殻へ。右側の縦位置を通常の編集ハブと揃える */
     openDetailLayoutHub();
     showDetailNoticeModal();
@@ -11369,14 +11364,14 @@
   function finishEasyEntryFromGate() {
     const gate = document.getElementById("entry-gate");
     if (!gate) return;
-    const purposeEl = gate.querySelector('input[name="entry_purpose"]:checked');
+    const purposeKey = entryPurposeKey(gate);
     const layoutEl = gate.querySelector('input[name="entry_layout"]:checked');
     const colorEl = gate.querySelector('input[name="entry_color"]:checked');
-    if (!purposeEl || purposeEl.value !== "shop") return;
+    if (!purposeKey) return;
     if (!layoutEl || (layoutEl.value !== "a" && layoutEl.value !== "b" && layoutEl.value !== "c")) return;
     if (!colorEl || EASY_PRESET_KEYS.indexOf(colorEl.value) < 0) return;
     hideEntryGate();
-    applyIntakeSelections("shop", "easy", colorEl.value, layoutEl.value);
+    applyIntakeSelections(purposeKey, "easy", colorEl.value, layoutEl.value);
   }
 
   function restoreSaveChoiceAfterFolderCancel(gate, prevMode) {

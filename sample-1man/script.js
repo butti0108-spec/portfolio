@@ -9793,8 +9793,8 @@
     if (typeof window.applyDashCollapse === "function") window.applyDashCollapse();
   }
 
-  function syncSampleFlowPreviewVisibility() {
-    setSampleFlowPreviewHidden(false);
+  function syncSampleFlowPreviewVisibility(stepId) {
+    setSampleFlowPreviewHidden(stepId === "easy-basics");
   }
 
   let samplePreviewPopReady = false;

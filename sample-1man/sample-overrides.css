@@ -9060,7 +9060,7 @@ body.atelier.color-mode-easy .zone-badge[data-open-step="site-fonts"] {
   justify-content: flex-end;
 }
 
-/* 文章の入力・条件指定：見本は畳み、中身は入口と同じ幅で真ん中へ（html側は描画前から） */
+/* 基本情報：見本は畳み、中身は入口と同じ幅で真ん中へ（html側は描画前から） */
 html.sample-flow-hide-preview .atelier-preview,
 html.sample-flow-hide-preview .preview-pane,
 html.sample-flow-hide-preview .atelier-preview-col,

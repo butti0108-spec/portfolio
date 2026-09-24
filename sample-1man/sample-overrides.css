@@ -1607,6 +1607,20 @@ html {
   background: transparent;
 }
 
+html:not(.dash-collapse-full):not(.dash-collapse-closing):not(.dash-collapse-half) .dash-collapse-shut {
+  top: 0;
+  align-items: flex-start;
+  padding-top: 0.95rem;
+  box-sizing: border-box;
+  border-radius: 0;
+  background: #efeae3;
+  border-right: 1px solid rgba(0, 0, 0, 0.14);
+}
+
+html:not(.dash-collapse-full):not(.dash-collapse-closing) .dash-pane > .dash-header {
+  padding-left: 1.7rem;
+}
+
 .dash-collapse-grip {
   display: none;
 }
@@ -1997,6 +2011,9 @@ html.dash-wave-out.dash-wave-squeeze .dash-shutter-band {
   .dash-collapse-shut,
   .dash-collapse-grip {
     display: none !important;
+  }
+  html:not(.dash-collapse-full):not(.dash-collapse-closing) .dash-pane > .dash-header {
+    padding-left: 1rem;
   }
 }
 

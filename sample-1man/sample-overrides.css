@@ -611,6 +611,39 @@ body.atelier.entry-gate-open .atelier-shell {
   border: 1px solid rgba(20, 28, 36, 0.18);
 }
 
+.easy-flow-meter {
+  margin: 0 0 0.55rem;
+  flex: 0 0 auto;
+  pointer-events: none;
+}
+
+.easy-flow-meter[hidden] {
+  display: none !important;
+}
+
+.easy-flow-meter-label {
+  margin: 0 0 0.28rem;
+  font-size: 0.95rem;
+  font-weight: 700;
+  line-height: 1.3;
+  color: #121816;
+}
+
+.easy-flow-meter-track {
+  height: 3px;
+  background: rgba(20, 28, 36, 0.12);
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.easy-flow-meter-fill {
+  display: block;
+  height: 100%;
+  width: 0;
+  background: #2d6a36;
+  border-radius: 999px;
+}
+
 .entry-mood-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;

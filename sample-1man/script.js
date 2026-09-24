@@ -5640,6 +5640,53 @@
     bar.hidden = true;
   }
 
+  const EASY_FLOW_STAGE_LABELS = ["サンプル", "用途", "基本情報", "色合い", "画像", "文章", "確定"];
+
+  function easyFlowStageIndex() {
+    const gate = document.getElementById("entry-gate");
+    const gateOpen = document.body.classList.contains("entry-gate-open");
+    if (gateOpen) {
+      if (store.entryBranch !== "sample") return 0;
+      const step = gate && gate.dataset.entryStep;
+      if (step === "sushi") return 1;
+      if (step === "purpose") return 2;
+      return 0;
+    }
+    if (!store.easyFlowActive || store.entryBranch !== "sample") return 0;
+    const step = getCurrentFlowStep();
+    const id = step && step.id;
+    if (!id) return 0;
+    if (id === "easy-basics") return 3;
+    if (id === "easy-color") return 4;
+    if (id === "easy-img-path" || id === "easy-img-wire" || id === "easy-img-omakase") return 5;
+    if (
+      id === "easy-copy-path" ||
+      id === "easy-copy-dirs" ||
+      id === "easy-copy-omakase" ||
+      id === "easy-copy-frame" ||
+      id.indexOf("easy-sec-") === 0
+    ) {
+      return 6;
+    }
+    if (id === "easy-loading" || id === "easy-done") return 7;
+    return 0;
+  }
+
+  function syncEasyFlowMeter() {
+    const n = easyFlowStageIndex();
+    document.querySelectorAll("[data-easy-flow-meter]").forEach(function (meter) {
+      const label = meter.querySelector("[data-easy-flow-meter-label]");
+      const fill = meter.querySelector("[data-easy-flow-meter-fill]");
+      if (!n) {
+        meter.hidden = true;
+        return;
+      }
+      meter.hidden = false;
+      if (label) label.textContent = EASY_FLOW_STAGE_LABELS[n - 1] + "\u3000" + n + " / 7";
+      if (fill) fill.style.width = (n / 7) * 100 + "%";
+    });
+  }
+
   function updateProgressBar() {
     buildProgressBar();
   }
@@ -7867,6 +7914,7 @@
   }
 
   function updateWizardUi() {
+    syncEasyFlowMeter();
     const step = getCurrentFlowStep();
     const progress = document.getElementById("wizard-progress");
     const coach = document.getElementById("wizard-coach");
@@ -8231,6 +8279,7 @@
     } else if (window.SushiBelt) {
       window.SushiBelt.unmount();
     }
+    syncEasyFlowMeter();
   }
 
   function showEntryGate(startStep) {

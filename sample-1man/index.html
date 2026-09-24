@@ -12,7 +12,7 @@
   <!-- メーカー親CSS（ポートフォリオ根の style.css は読まない） -->
   <link rel="stylesheet" href="maker-base.css?v=cleanup-20260922">
   <link rel="icon" href="brand/mark-favicon.png?v=logo-7" type="image/png">
-  <link rel="stylesheet" href="sample-overrides.css?v=easy-color-bars-20260924">
+  <link rel="stylesheet" href="sample-overrides.css?v=easy-flow-meter-20260924">
   <link rel="stylesheet" href="free-photo-gallery/gallery.css?v=gallery-check-20260923">
   <script>
     (function () {
@@ -61,7 +61,7 @@
   <script src="sushi-belt.js?v=sushi-guide-session-20260922a" defer></script>
   <script src="free-photo-gallery/gallery.js?v=gallery-check-20260923" defer></script>
   <script src="page-shutter.js?v=shutter-all-20260924" defer></script>
-  <script src="script.js?v=easy-color-bars-20260924" defer></script>
+  <script src="script.js?v=easy-flow-meter-20260924" defer></script>
   <script>
     (function () {
       var h = location.hostname;
@@ -150,6 +150,10 @@
         <p class="chrome-product-catch">作るも、直すも。</p>
         <h1 class="entry-gate-product-name">かんたんホームページ工房</h1>
       </header>
+      <div class="easy-flow-meter" data-easy-flow-meter hidden>
+        <p class="easy-flow-meter-label" data-easy-flow-meter-label></p>
+        <div class="easy-flow-meter-track" aria-hidden="true"><span class="easy-flow-meter-fill" data-easy-flow-meter-fill></span></div>
+      </div>
       <h2 class="entry-gate-title" id="entry-gate-title">ホームページをつくる</h2>
       <p class="entry-gate-lead" id="entry-gate-lead">進め方をひとつ選んでください。</p>
 
@@ -419,6 +423,10 @@
         </svg>
       </button>
       <header class="dash-header">
+        <div class="easy-flow-meter" data-easy-flow-meter hidden>
+          <p class="easy-flow-meter-label" data-easy-flow-meter-label></p>
+          <div class="easy-flow-meter-track" aria-hidden="true"><span class="easy-flow-meter-fill" data-easy-flow-meter-fill></span></div>
+        </div>
         <div class="dash-header-row dash-header-row--top">
           <button type="button" class="preview-guide-btn" id="preview-guide-btn" data-open-color-mode aria-label="モード変更を開く" hidden>
             <span class="preview-guide-num">モ</span>

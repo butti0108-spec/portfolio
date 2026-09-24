@@ -12,7 +12,7 @@
   <!-- メーカー親CSS（ポートフォリオ根の style.css は読まない） -->
   <link rel="stylesheet" href="maker-base.css?v=cleanup-20260922">
   <link rel="icon" href="brand/mark-favicon.png?v=logo-7" type="image/png">
-  <link rel="stylesheet" href="sample-overrides.css?v=copy-ui-basics-ph-20260924">
+  <link rel="stylesheet" href="sample-overrides.css?v=copy-ui-basics-role-20260924">
   <link rel="stylesheet" href="free-photo-gallery/gallery.css?v=gallery-check-20260923">
   <script>
     (function () {
@@ -63,7 +63,7 @@
   <script src="sushi-belt.js?v=sushi-guide-session-20260922a" defer></script>
   <script src="free-photo-gallery/gallery.js?v=gallery-check-20260923" defer></script>
   <script src="page-shutter.js?v=shutter-all-20260924" defer></script>
-  <script src="script.js?v=copy-ui-brand-hint-20260924" defer></script>
+  <script src="script.js?v=copy-ui-basics-role-20260924" defer></script>
   <script>
     (function () {
       var h = location.hostname;
@@ -507,28 +507,28 @@
           <div class="easy-basics-fields">
             <label class="easy-field" for="easy-brand-name">
               <span class="easy-field-label">店名 <span class="easy-field-req">必須</span></span>
-              <input type="text" id="easy-brand-name" name="easy_brand_name" maxlength="20" autocomplete="organization" placeholder="例：〇〇カフェ" required aria-required="true" aria-describedby="easy-brand-error">
+              <input type="text" id="easy-brand-name" name="easy_brand_name" maxlength="20" autocomplete="organization" placeholder="" required aria-required="true" aria-describedby="easy-brand-error">
               <span class="easy-field-error" id="easy-brand-error" hidden role="alert">店名を入れてください。</span>
             </label>
             <label class="easy-field" for="easy-intro">
               <span class="easy-field-label">紹介 <span class="easy-field-opt">任意</span></span>
-              <textarea id="easy-intro" name="easy_intro" rows="3" maxlength="200" placeholder="どんなお店か、短く"></textarea>
+              <textarea id="easy-intro" name="easy_intro" rows="3" maxlength="200" placeholder=""></textarea>
             </label>
             <label class="easy-field" for="easy-email">
               <span class="easy-field-label">連絡先メール <span class="easy-field-opt">任意</span></span>
-              <input type="email" id="easy-email" name="easy_email" maxlength="80" placeholder="info@example.com">
+              <input type="email" id="easy-email" name="easy_email" maxlength="80" placeholder="">
             </label>
             <label class="easy-field" for="easy-phone">
               <span class="easy-field-label">電話 <span class="easy-field-opt">任意</span></span>
-              <input type="tel" id="easy-phone" name="easy_phone" maxlength="20" placeholder="000-0000-0000">
+              <input type="tel" id="easy-phone" name="easy_phone" maxlength="20" placeholder="">
             </label>
             <label class="easy-field" for="easy-hours">
               <span class="easy-field-label">営業時間 <span class="easy-field-opt">任意</span></span>
-              <input type="text" id="easy-hours" name="easy_hours" maxlength="60" placeholder="例：平日 10:00–18:00／定休 水曜">
+              <input type="text" id="easy-hours" name="easy_hours" maxlength="60" placeholder="">
             </label>
             <label class="easy-field" for="easy-address">
               <span class="easy-field-label">住所 <span class="easy-field-opt">任意</span></span>
-              <input type="text" id="easy-address" name="easy_address" maxlength="80" placeholder="例：東京都〇〇区…">
+              <input type="text" id="easy-address" name="easy_address" maxlength="80" placeholder="">
             </label>
           </div>
         </details>
@@ -1701,6 +1701,7 @@
                   <p class="contact-band-lead" data-contact-note="1">1万円プランに送信フォームは含まれません。</p>
                   <p class="contact-band-lead" data-contact-note="2">メール掲載と、コピーできるところまでです。</p>
                   <p class="sample-mail">sample@example.com</p>
+                  <p class="sample-phone" hidden></p>
                 </div>
               </section>
             </main>

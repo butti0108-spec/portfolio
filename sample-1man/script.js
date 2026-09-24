@@ -2222,6 +2222,8 @@
     copyFrameSelected: {},
     copyFrameNow: {},
     sampleCopySlots: null,
+    easyBasicsHints: null,
+    easyBasicsApplied: false,
     easyAnswers: { mood: "calm", focus: "quality", guest: "first" },
     easyCopyCandidates: [],
     easyCopySelected: null,
@@ -3684,6 +3686,17 @@
       entryBranch: store.entryBranch,
       hubEntrySource: store.hubEntrySource,
       easyFlowActive: !!store.easyFlowActive,
+      easyBasicsApplied: !!store.easyBasicsApplied,
+      easyBasicsHints: store.easyBasicsHints
+        ? {
+            brand: String(store.easyBasicsHints.brand || ""),
+            intro: String(store.easyBasicsHints.intro || ""),
+            email: String(store.easyBasicsHints.email || ""),
+            phone: String(store.easyBasicsHints.phone || ""),
+            hours: String(store.easyBasicsHints.hours || ""),
+            address: String(store.easyBasicsHints.address || "")
+          }
+        : null,
       sampleFlowEntered: !!store.sampleFlowEntered,
       sampleFlowAppliedId: store.sampleFlowAppliedId || null,
       sampleOriginalPreset: store.sampleOriginalPreset || null,
@@ -7525,13 +7538,8 @@
       renderCopyDirsUi();
     }
     if (step.id === "easy-basics") {
-      const brandEl = document.getElementById("easy-brand-name");
-      const introEl = document.getElementById("easy-intro");
-      const empty =
-        (!brandEl || !String(brandEl.value || "").trim()) &&
-        (!introEl || !String(introEl.value || "").trim());
-      if (empty || !store.easyBasicsSeed) fillEasyBasicsFromFields();
-      else parkEasyBrandAsHint();
+      if (!store.easyBasicsHints && !store.easyBasicsApplied) captureEasyBasicsHintsFromSample();
+      paintEasyBasicsPlaceholders();
     }
     if (step.id === "easy-copy-omakase") {
       ensureOmakaseCopyReady().then(function () {
@@ -8288,38 +8296,40 @@
     };
   }
 
+  function setEasyExtraPublished(key, on, fieldName, text) {
+    store.draftExtras = store.draftExtras || { hours: false, access: false, address: false };
+    store.draftExtras[key] = !!on;
+    const toggle = document.querySelector('[data-extra-toggle="' + key + '"]');
+    if (toggle) toggle.checked = !!on;
+    setFieldValue(fieldName, on ? text : "");
+  }
+
   function applyEasyBasicsToForm(basics) {
     const b = basics || readEasyBasicsFromUi();
-    const seed = store.easyBasicsSeed || {};
-    if (b.brand && b.brand !== seed.brand) setFieldValue("brand_name", b.brand);
-    if (b.intro && b.intro !== seed.intro) setFieldValue("about_lead", b.intro);
-    if (b.email && b.email !== seed.email) setFieldValue("contact_email", b.email);
-    if (b.phone && b.phone !== seed.phone && seed.phone) {
-      const note = fieldValue("contact_note_1") || "";
-      if (note.indexOf(seed.phone) >= 0) setFieldValue("contact_note_1", note.replace(seed.phone, b.phone));
-    }
-    if (b.hours && b.hours !== seed.hours) {
-      const hoursToggle = document.querySelector('[data-extra-toggle="hours"]');
-      if (hoursToggle && !hoursToggle.checked) {
-        hoursToggle.checked = true;
-        hoursToggle.dispatchEvent(new Event("change", { bubbles: true }));
-      }
-      setFieldValue("hours_text", b.hours);
-      store.draftExtras = store.draftExtras || {};
-      store.draftExtras.hours = true;
-    }
-    if (b.address && b.address !== seed.address) {
-      const addressToggle = document.querySelector('[data-extra-toggle="address"]');
-      if (addressToggle && !addressToggle.checked) {
-        addressToggle.checked = true;
-        addressToggle.dispatchEvent(new Event("change", { bubbles: true }));
-      }
-      setFieldValue("address_text", b.address);
-      store.draftExtras = store.draftExtras || {};
-      store.draftExtras.address = true;
-    }
+    store.easyBasicsApplied = true;
+    if (b.brand) setFieldValue("brand_name", b.brand);
+    setFieldValue("about_lead", b.intro || "");
+    setFieldValue("contact_email", b.email || "");
+    setEasyExtraPublished("hours", !!b.hours, "hours_text", b.hours);
+    setEasyExtraPublished("address", !!b.address, "address_text", b.address);
     applyAllConfirmed();
     syncPreviewHeaderChrome();
+  }
+
+  function syncEasyBasicsPublish() {
+    if (!store.easyBasicsApplied) return;
+    const aboutLead = document.querySelector("#about .section-lead");
+    const intro = String(fieldValue("about_lead") || "").trim();
+    if (aboutLead) aboutLead.hidden = !intro;
+    const mail = document.querySelector("#contact .sample-mail");
+    const email = String(fieldValue("contact_email") || "").trim();
+    if (mail) mail.hidden = !email;
+    const phoneEl = document.querySelector("#contact .sample-phone");
+    const phone = String((document.getElementById("easy-phone") || {}).value || "").trim();
+    if (phoneEl) {
+      phoneEl.hidden = !phone;
+      phoneEl.textContent = phone;
+    }
   }
 
   function renderEasyQuestionLists() {
@@ -9909,64 +9919,55 @@
     applyHeroTextOverlay();
   }
 
-  function fillEasyBasicsFromFields() {
-    const note = fieldValue("contact_note_1") || "";
-    const phoneMatch = note.match(/0[\d\-]+/);
-    const mock = {
-      brand: fieldValue("brand_name") || String(store.sushiSampleBrand || "").trim() || "",
-      intro: fieldValue("about_lead") || "",
-      email: fieldValue("contact_email") || "",
-      phone: phoneMatch ? phoneMatch[0] : "",
-      hours: fieldValue("hours_text") || "",
-      address: fieldValue("address_text") || ""
-    };
-    const map = {
-      brand: "easy-brand-name",
-      intro: "easy-intro",
-      email: "easy-email",
-      phone: "easy-phone",
-      hours: "easy-hours",
-      address: "easy-address"
-    };
-    const hints = {
-      brand: "例：〇〇カフェ",
-      intro: "どんなお店か、短く",
-      email: "info@example.com",
-      phone: "000-0000-0000",
-      hours: "例：平日 10:00–18:00／定休 水曜",
-      address: "例：東京都〇〇区…"
-    };
-    const seed = {};
-    Object.keys(map).forEach(function (key) {
-      const el = document.getElementById(map[key]);
-      if (!el) {
-        seed[key] = String(mock[key] || "").trim();
-        return;
-      }
-      if (key === "brand") {
-        seed.brand = "";
-        return;
-      }
-      el.setAttribute("placeholder", hints[key]);
-      el.value = String(mock[key] || "").trim();
-      seed[key] = String(el.value || "").trim();
-    });
-    store.easyBasicsSeed = seed;
-    parkEasyBrandAsHint();
+  const EASY_BASICS_INPUTS = {
+    brand: "easy-brand-name",
+    intro: "easy-intro",
+    email: "easy-email",
+    phone: "easy-phone",
+    hours: "easy-hours",
+    address: "easy-address"
+  };
+
+  function samplePhoneFromNote(note) {
+    const m = String(note || "").match(/0\d{1,4}(?:[-\u2010-\u2015])\d{1,4}(?:[-\u2010-\u2015]\d{1,4})?/);
+    return m ? m[0] : "";
   }
 
-  function parkEasyBrandAsHint() {
-    const el = document.getElementById("easy-brand-name");
-    if (!el) return;
-    if (!store.easyBrandHint) {
-      store.easyBrandHint = String(fieldValue("brand_name") || store.sushiSampleBrand || "").trim();
-    }
-    const sample = String(store.easyBrandHint || "").trim();
-    const current = String(el.value || "").trim();
-    el.setAttribute("placeholder", sample || "例：〇〇カフェ");
-    if (!current || current === sample) el.value = "";
-    if (!store.easyBasicsSeed || typeof store.easyBasicsSeed !== "object") store.easyBasicsSeed = {};
-    store.easyBasicsSeed.brand = "";
+  function captureEasyBasicsHintsFromSample() {
+    const hints = {
+      brand: String(fieldValue("brand_name") || store.sushiSampleBrand || "").trim(),
+      intro: String(fieldValue("about_lead") || "").trim(),
+      email: String(fieldValue("contact_email") || "").trim(),
+      phone: samplePhoneFromNote(fieldValue("contact_note_1")),
+      hours: String(fieldValue("hours_text") || "").trim(),
+      address: String(fieldValue("address_text") || "").trim()
+    };
+    store.easyBasicsHints = hints;
+    store.easyBrandHint = hints.brand;
+    store.easyBasicsSeed = { brand: "", intro: "", email: "", phone: "", hours: "", address: "" };
+    return hints;
+  }
+
+  function paintEasyBasicsPlaceholders() {
+    const hints = store.easyBasicsHints || {};
+    Object.keys(EASY_BASICS_INPUTS).forEach(function (key) {
+      const el = document.getElementById(EASY_BASICS_INPUTS[key]);
+      if (!el) return;
+      const sample = String(hints[key] || "").trim();
+      el.setAttribute("placeholder", sample);
+      const current = String(el.value || "").trim();
+      if (!store.easyBasicsApplied && sample && current === sample) el.value = "";
+    });
+    store.easyBasicsSeed = { brand: "", intro: "", email: "", phone: "", hours: "", address: "" };
+  }
+
+  function fillEasyBasicsFromFields() {
+    captureEasyBasicsHintsFromSample();
+    Object.keys(EASY_BASICS_INPUTS).forEach(function (key) {
+      const el = document.getElementById(EASY_BASICS_INPUTS[key]);
+      if (el) el.value = "";
+    });
+    paintEasyBasicsPlaceholders();
   }
 
   function applyCopyTextToField(key, text) {
@@ -11131,6 +11132,8 @@
     store.copyScreenReturn = null;
     store.heroTextOnPhoto = false;
     store.easyBasicsSeed = null;
+    store.easyBasicsHints = null;
+    store.easyBasicsApplied = false;
     store.easyBrandHint = "";
     store.copyPresetId = null;
     store.copyOmakaseAxes = null;
@@ -13100,6 +13103,7 @@
     syncFooterBrand();
     applyAllItemLayoutsToPreview();
     applyAboutItemsDisplay();
+    syncEasyBasicsPublish();
   }
 
   function applyContactFlagsToPreview() {
@@ -16796,6 +16800,17 @@
         entryBranch: store.entryBranch,
         hubEntrySource: store.hubEntrySource,
         easyFlowActive: !!store.easyFlowActive,
+        easyBasicsApplied: !!store.easyBasicsApplied,
+        easyBasicsHints: store.easyBasicsHints
+          ? {
+              brand: String(store.easyBasicsHints.brand || ""),
+              intro: String(store.easyBasicsHints.intro || ""),
+              email: String(store.easyBasicsHints.email || ""),
+              phone: String(store.easyBasicsHints.phone || ""),
+              hours: String(store.easyBasicsHints.hours || ""),
+              address: String(store.easyBasicsHints.address || "")
+            }
+          : null,
       sampleFlowEntered: !!store.sampleFlowEntered,
       sampleFlowAppliedId: store.sampleFlowAppliedId || null,
       sampleOriginalPreset: store.sampleOriginalPreset || null,
@@ -16922,6 +16937,18 @@
       }
       if (data.easyFlowActive != null) store.easyFlowActive = !!data.easyFlowActive;
       else if (data.easyP1Hold) store.easyFlowActive = !!data.easyP1Hold;
+      store.easyBasicsApplied = !!data.easyBasicsApplied;
+      if (data.easyBasicsHints && typeof data.easyBasicsHints === "object") {
+        store.easyBasicsHints = {
+          brand: String(data.easyBasicsHints.brand || "").trim(),
+          intro: String(data.easyBasicsHints.intro || "").trim(),
+          email: String(data.easyBasicsHints.email || "").trim(),
+          phone: String(data.easyBasicsHints.phone || "").trim(),
+          hours: String(data.easyBasicsHints.hours || "").trim(),
+          address: String(data.easyBasicsHints.address || "").trim()
+        };
+        store.easyBrandHint = store.easyBasicsHints.brand;
+      }
       if (data.sampleFlowEntered != null) store.sampleFlowEntered = !!data.sampleFlowEntered;
       if (data.sampleFlowAppliedId) store.sampleFlowAppliedId = String(data.sampleFlowAppliedId);
       if (data.sampleOriginalPreset && PRESETS[data.sampleOriginalPreset]) {
@@ -17129,6 +17156,7 @@
         store.selfEditingStepId = "layout";
       }
       if (data.fields) applyFormObject(data.fields);
+      if (store.easyBasicsHints) paintEasyBasicsPlaceholders();
       if (data.draftExtras) {
         const migrated = { ...data.draftExtras };
         if (migrated.address == null && migrated.map != null) migrated.address = !!migrated.map;

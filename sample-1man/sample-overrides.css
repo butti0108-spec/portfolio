@@ -2357,15 +2357,23 @@ body.atelier.mode-detail #preview-root [data-open-step] {
 .preview-site .contact-band .section-label,
 .preview-site .contact-band h2,
 .preview-site .contact-band-lead,
-.preview-site .sample-mail {
+.preview-site .sample-mail,
+.preview-site .sample-phone {
   color: var(--contact-ink) !important;
   -webkit-text-fill-color: var(--contact-ink) !important;
 }
 
-.preview-site .sample-mail {
+.preview-site .sample-mail,
+.preview-site .sample-phone {
   overflow-wrap: anywhere;
   word-break: break-word;
   max-width: 100%;
+}
+
+.preview-site .sample-mail[hidden],
+.preview-site .sample-phone[hidden],
+.preview-site #about .section-lead[hidden] {
+  display: none !important;
 }
 
 .preview-site .skill-card img,

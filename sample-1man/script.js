@@ -8090,19 +8090,6 @@
     return HUB_IMG_STEP_IDS.indexOf(stepId) >= 0;
   }
 
-  function sessionHasUserPhoto() {
-    if (store.galleryPicks && Object.keys(store.galleryPicks).length) return true;
-    if (store.zipImageFiles && Object.keys(store.zipImageFiles).length) return true;
-    if (typeof form === "undefined" || !form) return false;
-    const inputs = form.querySelectorAll('input[type="file"]');
-    for (let i = 0; i < inputs.length; i++) {
-      const input = inputs[i];
-      if (input.files && input.files[0]) return true;
-      if (input.name && imageUrls[input.name]) return true;
-    }
-    return false;
-  }
-
   function syncDashResumeNotice() {
     const notice = document.querySelector(".dash-resume-notice");
     if (!notice) return;
@@ -8111,8 +8098,7 @@
       return;
     }
     const step = getCurrentFlowStep();
-    const onPhotoStep = photoResumeNoticeStep(step && step.id);
-    notice.hidden = !(onPhotoStep || sessionHasUserPhoto());
+    notice.hidden = !photoResumeNoticeStep(step && step.id);
   }
 
   function hideEntryGate() {
@@ -8304,13 +8290,7 @@
   function applyEasyBasicsToForm(basics) {
     const b = basics || readEasyBasicsFromUi();
     const seed = store.easyBasicsSeed || {};
-    if (b.brand) {
-      if (b.brand !== seed.brand) setFieldValue("brand_name", b.brand);
-      if (b.brand !== seed.brand) {
-        const hero = String(fieldValue("hero_title") || "").trim();
-        if (!hero || isPlaceholderBrand(hero) || hero === seed.brand) setFieldValue("hero_title", b.brand);
-      }
-    }
+    if (b.brand && b.brand !== seed.brand) setFieldValue("brand_name", b.brand);
     if (b.intro && b.intro !== seed.intro) setFieldValue("about_lead", b.intro);
     if (b.email && b.email !== seed.email) setFieldValue("contact_email", b.email);
     if (b.phone && b.phone !== seed.phone && seed.phone) {
@@ -10966,19 +10946,6 @@
               omakaseReroll.disabled = false;
             }
           );
-      });
-    }
-    const brand = document.getElementById("easy-brand-name");
-    if (brand && !brand.dataset.copyLiveBound) {
-      brand.dataset.copyLiveBound = "1";
-      brand.addEventListener("input", function () {
-        const v = String(brand.value || "").trim();
-        if (!v) return;
-        setFieldValue("brand_name", v);
-        setFieldValue("hero_title", v);
-        setFieldValue("about_name", v);
-        applyAllConfirmed();
-        syncPreviewHeaderChrome();
       });
     }
   }

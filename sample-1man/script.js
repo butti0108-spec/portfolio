@@ -1,4 +1,5 @@
 (() => {
+  let openLayoutOmakaseNotice = function () {};
   const root = document.getElementById("preview-root");
   const viewport = document.getElementById("preview-viewport");
   const form = document.getElementById("order-form");
@@ -655,6 +656,19 @@
     el.classList.add("has-step-tip");
   }
 
+  function setHoverTip(el, text) {
+    if (!el) return;
+    if (!text) {
+      el.removeAttribute("data-tip");
+      el.removeAttribute("title");
+      el.classList.remove("has-hover-tip");
+      return;
+    }
+    el.setAttribute("data-tip", text);
+    el.removeAttribute("title");
+    el.classList.add("has-hover-tip");
+  }
+
   function missingImageStepTip(item) {
     const name = item.name || "";
     if (name === "hero_image") return badgeDisplayName("hero-image");
@@ -903,6 +917,10 @@
   const ITEM_GAP_LABELS = { tight: "狭い", normal: "ふつう", loose: "広い" };
   const ITEM_FOCAL_STEP = 5;
   const ITEM_FOCAL_DEFAULT = 50;
+  const IMAGE_SCALE_MIN = 50;
+  const IMAGE_SCALE_MAX = 200;
+  const IMAGE_SCALE_STEP = 10;
+  const IMAGE_SCALE_DEFAULT = 100;
   /** キャッチ写真の既定＝従来 CSS の center top に合わせる */
   const HERO_FOCAL_X_DEFAULT = 50;
   const HERO_FOCAL_Y_DEFAULT = 0;
@@ -998,10 +1016,12 @@
     const sizeById = {};
     const focalXById = {};
     const focalYById = {};
+    const scaleById = {};
     slots.forEach((slot) => {
       sizeById[slot] = "L";
       focalXById[slot] = ITEM_FOCAL_DEFAULT;
       focalYById[slot] = ITEM_FOCAL_DEFAULT;
+      scaleById[slot] = IMAGE_SCALE_DEFAULT;
     });
     const gap = src && ITEM_GAP_STEPS.indexOf(src.gap) >= 0 ? src.gap : "normal";
     const hasIdMap = src && src.sizeById && typeof src.sizeById === "object" && !Array.isArray(src.sizeById);
@@ -1013,6 +1033,9 @@
         }
         if (src.focalYById && src.focalYById[slot] != null) {
           focalYById[slot] = normalizeFocalY(src.focalYById[slot]);
+        }
+        if (src.scaleById && src.scaleById[slot] != null) {
+          scaleById[slot] = normalizeImageScale(src.scaleById[slot]);
         }
       });
     } else if (src) {
@@ -1035,7 +1058,8 @@
       growDirs: [],
       sizeById: sizeById,
       focalXById: focalXById,
-      focalYById: focalYById
+      focalYById: focalYById,
+      scaleById: scaleById
     };
   }
 
@@ -1265,7 +1289,15 @@
       const size = fixed[i] || "L";
       item.hidden = false;
       item.setAttribute("data-item-size", size);
-      applyItemFocalToItem(id, item, slot, size, layout.focalXById[slot], layout.focalYById[slot]);
+      applyItemFocalToItem(
+        id,
+        item,
+        slot,
+        size,
+        layout.focalXById[slot],
+        layout.focalYById[slot],
+        layout.scaleById && layout.scaleById[slot]
+      );
     });
     (store.itemOrderParked[id] || []).forEach((slot) => {
       const item = previewItemEl(id, slot);
@@ -1288,7 +1320,11 @@
   function clearItemFocalOnItem(item) {
     if (!item) return;
     const img = itemFocalImage(item);
-    if (img) img.style.removeProperty("object-position");
+    if (img) {
+      img.style.removeProperty("object-position");
+      img.style.removeProperty("transform");
+      img.style.removeProperty("transform-origin");
+    }
     const nudge = item.querySelector(":scope > .item-focal-nudge");
     if (nudge) nudge.remove();
   }
@@ -1312,7 +1348,7 @@
     const label = nudge.querySelector(".item-focal-label");
     if (label) {
       label.textContent = "位置";
-      label.title = "左右 " + x + "%・上下 " + y + "%（左上0／右下100）";
+      setHoverTip(label, "左右 " + x + "%・上下 " + y + "%（左上0／右下100）");
     }
     const up = nudge.querySelector('[data-focal-nudge="up"]');
     const down = nudge.querySelector('[data-focal-nudge="down"]');
@@ -1324,14 +1360,39 @@
     if (right) right.disabled = x >= 100;
   }
 
-  function applyItemFocalToItem(countId, item, index, size, focalX, focalY) {
+  function normalizeImageScale(v) {
+    const n = Number(v);
+    if (!Number.isFinite(n)) return IMAGE_SCALE_DEFAULT;
+    const stepped = Math.round(n / IMAGE_SCALE_STEP) * IMAGE_SCALE_STEP;
+    return Math.max(IMAGE_SCALE_MIN, Math.min(IMAGE_SCALE_MAX, stepped));
+  }
+
+  function applyImageScaleToImg(img, scale, focalX, focalY) {
+    if (!img) return;
+    const x = normalizeFocalX(focalX);
+    const y = normalizeFocalY(focalY);
+    const s = normalizeImageScale(scale);
+    img.style.objectFit = "cover";
+    img.style.objectPosition = x + "% " + y + "%";
+    img.style.transformOrigin = x + "% " + y + "%";
+    if (s === IMAGE_SCALE_DEFAULT) img.style.removeProperty("transform");
+    else img.style.transform = "scale(" + s / 100 + ")";
+    if (img.classList.contains("skill-card-img") && img.parentElement) {
+      img.parentElement.style.overflow = "hidden";
+    }
+    if (img.classList.contains("work-thumb") && img.parentElement && !img.parentElement.classList.contains("work-thumb-clip")) {
+      const clip = document.createElement("span");
+      clip.className = "work-thumb-clip";
+      img.parentElement.insertBefore(clip, img);
+      clip.appendChild(img);
+    }
+  }
+
+  function applyItemFocalToItem(countId, item, index, size, focalX, focalY, scale) {
     const img = itemFocalImage(item);
     const x = normalizeFocalX(focalX);
     const y = normalizeFocalY(focalY);
-    if (img) {
-      img.style.objectFit = "cover";
-      img.style.objectPosition = x + "% " + y + "%";
-    }
+    if (img) applyImageScaleToImg(img, scale, x, y);
     syncItemFocalNudge(countId, item, index, true, x, y);
   }
 
@@ -1377,6 +1438,7 @@
   function ensureHeroFocalDefaults() {
     store.heroFocalX = normalizeFocalPercent(store.heroFocalX, HERO_FOCAL_X_DEFAULT);
     store.heroFocalY = normalizeFocalPercent(store.heroFocalY, HERO_FOCAL_Y_DEFAULT);
+    store.heroImageScale = normalizeImageScale(store.heroImageScale);
   }
 
   function applyHeroFocalToPreview() {
@@ -1385,10 +1447,7 @@
     const photo = root && root.querySelector(".hero-photo");
     const x = store.heroFocalX;
     const y = store.heroFocalY;
-    if (photo && !store.heroImageOff) {
-      photo.style.objectFit = "cover";
-      photo.style.objectPosition = x + "% " + y + "%";
-    }
+    if (photo && !store.heroImageOff) applyImageScaleToImg(photo, store.heroImageScale, x, y);
     syncHeroFocalNudge(stage, x, y);
   }
 
@@ -1770,24 +1829,37 @@
     ghost.hidden = false;
   }
 
-  function ensureLayoutDragGhost(cell, clientX, clientY) {
+  function ensureLayoutDragGhost(source, clientX, clientY) {
+    const faceSource =
+      source && source.querySelector(":scope > .layout-closed-line")
+        ? source.querySelector(":scope > .layout-closed-line")
+        : source && source.tagName === "DETAILS"
+          ? source.querySelector(":scope > summary") || source
+          : source;
+    const key =
+      (source && (source.getAttribute("data-layout-block") || source.getAttribute("data-item-id"))) ||
+      "frame";
     let ghost = document.getElementById("layout-arrange-ghost");
-    if (!ghost) {
+    if (ghost && ghost.getAttribute("data-ghost-key") !== key) {
+      ghost.remove();
+      ghost = null;
+    }
+    if (!ghost && faceSource) {
       ghost = document.createElement("div");
       ghost.id = "layout-arrange-ghost";
       ghost.className = "layout-arrange-ghost";
       ghost.setAttribute("aria-hidden", "true");
-      const label =
-        (cell.querySelector(".layout-arrange-name") &&
-          cell.querySelector(".layout-arrange-name").textContent) ||
-        cell.getAttribute("aria-label") ||
-        "枠";
-      const name = document.createElement("span");
-      name.className = "layout-arrange-ghost-name";
-      name.textContent = label;
-      ghost.appendChild(name);
-      const rect = cell.getBoundingClientRect();
-      ghost.style.width = Math.max(120, Math.round(rect.width)) + "px";
+      ghost.setAttribute("data-ghost-key", key);
+      const face = faceSource.cloneNode(true);
+      face.querySelectorAll("button, input, .layout-open-btn, .layout-arrange-handle, .layout-inner-handle").forEach((el) => {
+        el.remove();
+      });
+      face.querySelectorAll("img").forEach((img) => {
+        img.draggable = false;
+      });
+      ghost.appendChild(face);
+      const rect = faceSource.getBoundingClientRect();
+      ghost.style.width = Math.max(160, Math.round(rect.width)) + "px";
       document.body.appendChild(ghost);
     }
     placeLayoutDragGhost(clientX, clientY);
@@ -2208,6 +2280,7 @@
     easyLoadingPaused: false,
     hubImgPathMode: {},
     imgOmakaseLocks: {},
+    imgOmakaseSkipConfirm: false,
     imgOmakasePicks: {},
     imgOmakaseSalt: 0,
     copyDirIds: [],
@@ -2236,6 +2309,7 @@
     heroTextPlateTone: "white",
     heroFocalX: HERO_FOCAL_X_DEFAULT,
     heroFocalY: HERO_FOCAL_Y_DEFAULT,
+    heroImageScale: IMAGE_SCALE_DEFAULT,
     slotGradients: {},
     slotGradientPartners: {},
     partnerPickMode: false,
@@ -2254,6 +2328,7 @@
     zipImageFiles: null,
     galleryPicks: null,
     folderDirHandle: null,
+    projectFileHandle: null,
     folderDisplayName: "",
     projectFolderName: "",
     projectNameAuto: "",
@@ -2607,7 +2682,7 @@
       inkFrame.type = "button";
       inkFrame.className = "gct-ink-frame";
       inkFrame.setAttribute("aria-label", colorStepDisplayName(slot.stepId) + "を直す");
-      inkFrame.title = "色を選ぶ";
+      setHoverTip(inkFrame, "色を選ぶ");
       const bg = canGrad ? swatchBackgroundForSlot(slot.stepId, slot.hex) : slot.hex;
       inkFrame.innerHTML = '<span class="gct-ink-swatch" style="background:' + bg + '"></span>';
       if (detail) inkFrame.addEventListener("click", () => gctOpenPaletteColor(slot.stepId));
@@ -2700,8 +2775,8 @@
       b.className = "gct-grad-arrow" + ((store.slotGradients || {})[stepId] === d.id ? " is-active" : "");
       b.style.gridColumn = String(pos.col);
       b.style.gridRow = String(pos.row);
-      b.title = d.label + "（もう一度で解除）";
       b.setAttribute("aria-label", d.label + "へグラデ。選択中なら解除");
+      setHoverTip(b, d.label + "（もう一度で解除）");
       b.textContent = d.arrow;
       b.addEventListener("click", () => setSlotGradient(stepId, d.id));
       compass.appendChild(b);
@@ -2918,8 +2993,8 @@
       btn.style.top = c.y - minY + pad - size + "px";
       btn.style.width = size * 2 + "px";
       btn.style.height = size * 2 + "px";
-      btn.title = c.hex;
       btn.setAttribute("aria-label", c.hex);
+      setHoverTip(btn, c.hex);
       btn.dataset.hex = c.hex;
       if (best && best.q === c.q && best.r === c.r) btn.classList.add("is-active");
       map.appendChild(btn);
@@ -2938,8 +3013,8 @@
       btn.type = "button";
       btn.className = "gct-honey-cell gct-honey-cell--gray";
       btn.style.setProperty("--sw", hx);
-      btn.title = hx;
       btn.setAttribute("aria-label", hx);
+      setHoverTip(btn, hx);
       btn.dataset.hex = hx;
       if (hexDist(hx, cur) <= 8 && bestDist > 8) btn.classList.add("is-active");
       grayRow.appendChild(btn);
@@ -3675,6 +3750,7 @@
       heroTextOnPhoto: !!store.heroTextOnPhoto,
       heroFocalX: normalizeFocalPercent(store.heroFocalX, HERO_FOCAL_X_DEFAULT),
       heroFocalY: normalizeFocalPercent(store.heroFocalY, HERO_FOCAL_Y_DEFAULT),
+      heroImageScale: normalizeImageScale(store.heroImageScale),
       aboutItemsDisplay: normalizeAboutItemsDisplay(store.aboutItemsDisplay),
       heroTextPlate: normalizeHeroPlate(store.heroTextPlate),
       heroTextPlateTone: normalizeHeroPlateTone(store.heroTextPlateTone),
@@ -4176,7 +4252,32 @@
       throw new Error("フォルダへのアクセスが許可されませんでした。");
     }
     store.folderDirHandle = handle;
+    store.projectFileHandle = null;
     store.folderDisplayName = handle.name || "選択したフォルダ";
+    if (options.persist !== false) {
+      try {
+        await idbSetFolderHandle(handle);
+      } catch (e) {
+        /* 権限はメモリ上で継続 */
+      }
+    }
+    return true;
+  }
+
+  async function setProjectFileHandle(handle, opts) {
+    const options = opts || {};
+    if (!handle) {
+      store.projectFileHandle = null;
+      if (!options.keepIdb && !store.folderDirHandle) await idbClearFolderHandle();
+      return false;
+    }
+    const ok = await ensureFolderPermission(handle, "readwrite");
+    if (!ok) {
+      throw new Error("ファイルへの保存が許可されませんでした。");
+    }
+    store.projectFileHandle = handle;
+    store.folderDirHandle = null;
+    store.folderDisplayName = handle.name || "";
     if (options.persist !== false) {
       try {
         await idbSetFolderHandle(handle);
@@ -4206,8 +4307,10 @@
 
   function zipDownloadName() {
     if (store.saveMode === "folder") {
+      const fromFile = store.projectFileHandle && store.projectFileHandle.name;
+      if (fromFile && /\.zip$/i.test(fromFile)) return fromFile;
       const named = sanitizeProjectFolderName(store.projectFolderName || store.folderDisplayName || "");
-      if (named) return named + ".zip";
+      if (named) return named.replace(/\.zip$/i, "") + ".zip";
     }
     return defaultProjectFolderName(new Date()) + ".zip";
   }
@@ -4261,24 +4364,36 @@
   }
 
   async function pickProjectFolderForSave() {
-    if (!supportsDirectoryPicker()) {
+    if (typeof window.showSaveFilePicker !== "function") {
       throw new Error(
-        "このブラウザではフォルダ保存に対応していません。残さず進むか、あとでZIPで残してください。"
+        "このブラウザでは保存画面に対応していません。残さず進むか、あとでZIPで残してください。"
       );
     }
-    const parent = await window.showDirectoryPicker({
-      id: "sample-1man-project",
-      mode: "readwrite",
-      startIn: "documents"
-    });
     const wanted = fillProjectFolderNameForCreate();
-    const created = await createFreshChildDir(parent, wanted);
-    store.projectFolderName = created.name;
+    const handle = await window.showSaveFilePicker({
+      id: "sample-1man-project-file",
+      startIn: "documents",
+      suggestedName: wanted + ".zip",
+      types: [
+        {
+          description: "かんたんホームページ工房",
+          accept: { "application/zip": [".zip"] }
+        }
+      ]
+    });
+    const rawName = String((handle && handle.name) || wanted + ".zip");
+    const named = sanitizeProjectFolderName(rawName.replace(/\.zip$/i, ""));
+    store.projectFolderName = named;
     store.projectNameAuto = "";
     const input = document.getElementById("entry-project-folder-name");
-    if (input) input.value = created.name;
-    await setProjectFolderHandle(created.handle, { mode: "readwrite", persist: true });
-    return created.handle;
+    if (input) input.value = named;
+    await setProjectFileHandle(handle, { persist: true });
+    store.saveMode = "folder";
+    const wrote = await writeProjectFileNow();
+    if (!wrote || !wrote.ok) {
+      throw new Error("ファイルへ書き込めませんでした。");
+    }
+    return handle;
   }
 
   async function pickProjectFolderForResume() {
@@ -4415,8 +4530,44 @@
     return { ok: true, imageCount: names.length };
   }
 
+  async function buildContinuingZipBlob() {
+    if (!window.JSZip) {
+      throw new Error("ZIP用ライブラリの読み込みに失敗しました。");
+    }
+    const zip = new JSZip();
+    zip.file("order.json", JSON.stringify(buildFolderOrderPayload(), null, 2));
+    const images = collectResumeImageFilesMap();
+    const names = Object.keys(images);
+    for (let i = 0; i < names.length; i += 1) {
+      const key = names[i];
+      const file = images[key];
+      try {
+        const ext = guessExtFromFile(file, "png");
+        const outName = key + "." + ext;
+        const buf = await file.arrayBuffer();
+        zip.file("images/" + outName, buf);
+        zip.file("images/" + key + "_" + (file.name || outName), buf);
+      } catch (e) {
+        /* 1枚失敗しても他は続ける */
+      }
+    }
+    return zip.generateAsync({ type: "blob" });
+  }
+
+  async function writeProjectFileNow() {
+    const handle = store.projectFileHandle;
+    if (store.saveMode !== "folder" || !handle) return { ok: false, reason: "no-file" };
+    const allowed = await ensureFolderPermission(handle, "readwrite");
+    if (!allowed) return { ok: false, reason: "denied" };
+    const blob = await buildContinuingZipBlob();
+    const writable = await handle.createWritable();
+    await writable.write(blob);
+    await writable.close();
+    return { ok: true };
+  }
+
   function scheduleFolderWrite() {
-    if (store.saveMode !== "folder" || !store.folderDirHandle) return;
+    if (store.saveMode !== "folder" || (!store.projectFileHandle && !store.folderDirHandle)) return;
     window.clearTimeout(folderWriteTimer);
     folderWriteTimer = window.setTimeout(function () {
       flushFolderWrite().catch(function () {
@@ -4426,14 +4577,15 @@
   }
 
   async function flushFolderWrite() {
-    if (store.saveMode !== "folder" || !store.folderDirHandle) return;
+    if (store.saveMode !== "folder" || (!store.projectFileHandle && !store.folderDirHandle)) return;
     if (folderWriteInFlight) {
       folderWriteQueued = true;
       return;
     }
     folderWriteInFlight = true;
     try {
-      await writeProjectFolderNow();
+      if (store.projectFileHandle) await writeProjectFileNow();
+      else await writeProjectFolderNow();
     } finally {
       folderWriteInFlight = false;
       if (folderWriteQueued) {
@@ -4616,8 +4768,17 @@
       if (!handle) return;
       const ok = await ensureFolderPermission(handle, "readwrite");
       if (!ok) return;
-      store.folderDirHandle = handle;
-      store.folderDisplayName = handle.name || "保存フォルダ";
+      if (handle.kind === "file") {
+        store.projectFileHandle = handle;
+        store.folderDirHandle = null;
+        store.folderDisplayName = handle.name || "";
+        const base = String(handle.name || "").replace(/\.zip$/i, "");
+        if (base) store.projectFolderName = sanitizeProjectFolderName(base);
+      } else {
+        store.folderDirHandle = handle;
+        store.projectFileHandle = null;
+        store.folderDisplayName = handle.name || "保存フォルダ";
+      }
     } catch (e) {
       /* ignore */
     }
@@ -5531,7 +5692,7 @@
   }
 
   function getEasyImageFlowMid() {
-    if (store.imgPathMode === "omakase" || store.imgPathMode === "self") {
+    if (store.imgPathMode === "self") {
       return ["easy-img-path", "easy-img-wire"];
     }
     return ["easy-img-path"];
@@ -6044,15 +6205,28 @@
     });
   }
 
+  function imageUrlHeldForUndo(key, url) {
+    try {
+      const snap = layoutReplaceBefore && layoutReplaceBefore[key];
+      return !!(url && snap && snap.url === url);
+    } catch (e) {
+      return false;
+    }
+  }
+
+  function releaseReplacedImageUrl(key, url) {
+    if (!url || String(url).indexOf("blob:") !== 0) return;
+    if (imageUrlHeldForUndo(key, url)) return;
+    try {
+      URL.revokeObjectURL(url);
+    } catch (e) {
+      /* ignore */
+    }
+  }
+
   function setImageUrl(key, file) {
     const prev = imageUrls[key];
-    if (prev && String(prev).indexOf("blob:") === 0) {
-      try {
-        URL.revokeObjectURL(prev);
-      } catch (e) {
-        /* ignore */
-      }
-    }
+    if (prev) releaseReplacedImageUrl(key, prev);
     if (!file) {
       delete imageUrls[key];
       return null;
@@ -6064,14 +6238,8 @@
 
   function setRemoteImageUrl(key, url) {
     const prev = imageUrls[key];
-    if (prev && String(prev).indexOf("blob:") === 0) {
-      try {
-        URL.revokeObjectURL(prev);
-      } catch (e) {
-        /* ignore */
-      }
-    }
     const next = url == null ? "" : String(url).trim();
+    if (prev && prev !== next) releaseReplacedImageUrl(key, prev);
     if (!next) {
       delete imageUrls[key];
       return null;
@@ -7393,6 +7561,7 @@
           scheduleSave();
           return;
         }
+        rememberLayoutReplaceBefore(input.name);
         if (store.galleryPicks && store.galleryPicks[input.name]) {
           delete store.galleryPicks[input.name];
         }
@@ -7407,6 +7576,7 @@
         applyAllImages();
         scrollPreviewForImageInput(input.name);
         syncEasyImageStatuses();
+        if (document.getElementById("layout-arrange-wire")) renderLayoutArrangeWire();
         const cur = getCurrentFlowStep();
         if (cur && cur.id === "easy-img-wire" && inputHasFile(input.name)) {
           const slots = collectVisibleImageSlots();
@@ -7726,6 +7896,11 @@
     }
     if (step.id === "easy-img-wire") {
       syncEasyImageStatuses();
+      window.requestAnimationFrame(() => {
+        window.requestAnimationFrame(() => {
+          scrollPreviewFrameIntoView(currentImageFrameSelector());
+        });
+      });
     } else if (step.id === "easy-img-omakase") {
       setEasyPreviewFocus("easy-img-wire");
     } else {
@@ -7868,12 +8043,12 @@
 
   function placePreviewWidthControl() {
     const control = document.getElementById("chrome-preview-width");
-    const chromeLeft = document.querySelector(".atelier-chrome-left");
+    const chromeRight = document.querySelector(".atelier-chrome-right");
     const previewRail = document.getElementById("preview-width-rail");
     const dashSlot = document.getElementById("dash-preview-width-slot");
     const dashRail = document.getElementById("dash-width-rail");
     const previewPane = document.querySelector(".preview-pane");
-    if (!control || !chromeLeft) return;
+    if (!control || !chromeRight) return;
 
     const mode = store.hubUiMode || "home";
     const previewOn = previewPaneOnScreen(previewPane);
@@ -7898,14 +8073,9 @@
     control.hidden = false;
     control.removeAttribute("hidden");
 
-    /* 見本の幅はロゴの横に固定する（見本の上へ移すと、更新のたびにロゴ横が空く） */
-    const brand = chromeLeft.querySelector(".chrome-brand");
-    if (brand) {
-      if (brand.nextElementSibling !== control) {
-        chromeLeft.insertBefore(control, brand.nextSibling);
-      }
-    } else if (control.parentElement !== chromeLeft) {
-      chromeLeft.appendChild(control);
+    /* 見本の幅と大きさは右端。ロゴの横へ戻さない */
+    if (control.parentElement !== chromeRight) {
+      chromeRight.appendChild(control);
     }
     control.classList.remove("chrome-control--in-hub");
     if (previewRail) previewRail.hidden = true;
@@ -8678,9 +8848,6 @@
       '    <button type="button" class="fpg-modal-close" data-fpg-close>閉じる</button>' +
       "  </div>" +
       '  <div class="fpg-modal-body"><div data-fpg-mount></div></div>' +
-      '  <div class="fpg-modal-foot">' +
-      '    <button type="button" class="fpg-apply" data-fpg-apply disabled>この写真を枠に入れる</button>' +
-      "  </div>" +
       "</div>";
     document.body.appendChild(modal);
 
@@ -8688,15 +8855,6 @@
       if (ev.target === modal) closeFreePhotoGalleryModal();
     });
     modal.querySelector("[data-fpg-close]").addEventListener("click", () => closeFreePhotoGalleryModal());
-    modal.querySelector("[data-fpg-apply]").addEventListener("click", () => {
-      const slot = modal.getAttribute("data-fpg-slot");
-      const mount = modal.querySelector("[data-fpg-mount]");
-      const api = mount && mount._fpgApi;
-      const item = api && api.getSelected ? api.getSelected() : null;
-      if (!slot || !item) return;
-      applyGalleryPickToSlot(slot, item);
-      closeFreePhotoGalleryModal();
-    });
     document.addEventListener("keydown", (ev) => {
       if (ev.key === "Escape" && modal && !modal.hidden) {
         ev.preventDefault();
@@ -8708,6 +8866,7 @@
 
   function applyGalleryPickToSlot(inputName, item) {
     if (!inputName || !item || !item.path) return;
+    rememberLayoutReplaceBefore(inputName);
     const isWorkSlot = /^work_\d+_image$/.test(inputName);
     const relPath =
       isWorkSlot && item.trimCardPath
@@ -8740,6 +8899,7 @@
       applyWorkThumbFit(inputName);
     }
     syncEasyImageStatuses();
+    if (document.getElementById("layout-arrange-wire")) renderLayoutArrangeWire();
     const cur = getCurrentFlowStep();
     if (cur && cur.id === "easy-img-wire") {
       const slots = collectVisibleImageSlots();
@@ -8775,11 +8935,9 @@
     }
     const modal = ensureFreePhotoGalleryModal();
     const mount = modal.querySelector("[data-fpg-mount]");
-    const applyBtn = modal.querySelector("[data-fpg-apply]");
     modal._fpgPrevFocus = document.activeElement;
     modal.setAttribute("data-fpg-slot", inputName);
     modal.hidden = false;
-    applyBtn.disabled = true;
     if (mount._fpgApi && typeof mount._fpgApi.destroy === "function") {
       try {
         mount._fpgApi.destroy();
@@ -8795,14 +8953,12 @@
       imageBase: "free-photo-gallery",
       mode: "picker",
       selectedId: prevId,
-      onSelect(item) {
-        applyBtn.disabled = !item;
+      onConfirm(item) {
+        applyGalleryPickToSlot(inputName, item);
+        closeFreePhotoGalleryModal();
       }
     }).then((api) => {
       mount._fpgApi = api;
-      if (api && api.getSelected && api.getSelected()) {
-        applyBtn.disabled = false;
-      }
       const closeBtn = modal.querySelector("[data-fpg-close]");
       if (closeBtn) closeBtn.focus();
     });
@@ -8814,6 +8970,7 @@
       btn.dataset.easyPickBound = "1";
       btn.addEventListener("click", () => {
         const name = btn.getAttribute("data-easy-pick");
+        scrollPreviewFrameIntoView(previewSelectorForImageName(name));
         const input = form.elements.namedItem(name);
         if (input && input.type === "file") input.click();
       });
@@ -9970,6 +10127,9 @@
       draft.heroFocalY != null ? draft.heroFocalY : HERO_FOCAL_Y_DEFAULT,
       HERO_FOCAL_Y_DEFAULT
     );
+    store.heroImageScale = normalizeImageScale(
+      draft.heroImageScale != null ? draft.heroImageScale : IMAGE_SCALE_DEFAULT
+    );
     store.aboutItemsDisplay = normalizeAboutItemsDisplay(draft.aboutItemsDisplay);
     store.heroTextPlate = normalizeHeroPlate(draft.heroTextPlate || "round");
     store.heroTextPlateTone = normalizeHeroPlateTone(draft.heroTextPlateTone || "white");
@@ -10702,11 +10862,11 @@
         escapeHtml(text) +
         "</p>" +
         "</div>" +
-        '<button type="button" class="easy-copy-omakase-lock" data-omakase-lock="' +
+        '<button type="button" class="easy-copy-omakase-lock has-hover-tip" data-omakase-lock="' +
         secId +
         '" aria-pressed="' +
         (locked ? "true" : "false") +
-        '" title="' +
+        '" data-tip="' +
         (locked ? "固定をはずす" : "この文言を残す（もう一度では変わらない）") +
         '">' +
         (locked ? "はずす" : "残す") +
@@ -10921,11 +11081,11 @@
           escapeHtml(meta) +
           "</p>" +
           "</div>" +
-          '<button type="button" class="easy-img-omakase-lock" data-img-omakase-lock="' +
+          '<button type="button" class="easy-img-omakase-lock has-hover-tip" data-img-omakase-lock="' +
           slot.key +
           '" aria-pressed="' +
           (locked ? "true" : "false") +
-          '" title="' +
+          '" data-tip="' +
           (locked ? "固定をはずす" : "この写真を残す（もう一度では変わらない）") +
           '">' +
           (locked ? "はずす" : "残す") +
@@ -11056,13 +11216,21 @@
       imgPathRoot.dataset.imgPathBound = "1";
       imgPathRoot.querySelectorAll('input[name="easy_img_path"]').forEach(function (input) {
         bindChoiceReselect(input, function () {
-          store.imgPathMode = input.value === "omakase" ? "omakase" : "self";
+          const omakase = input.value === "omakase";
+          store.imgPathMode = omakase ? "omakase" : "self";
           store.confirmed["easy-img-path"] = true;
-          scheduleSave();
-          const flow = getFlowSteps();
-          const at = flow.findIndex(function (s) { return s.id === "easy-img-path"; });
-          if (at >= 0 && at < flow.length - 1) runWithCrossShutter(function () { showWizardStep(at + 1); });
-          else showWizardStep(Math.max(0, at));
+          const goNext = function () {
+            scheduleSave();
+            const flow = getFlowSteps();
+            const at = flow.findIndex(function (s) { return s.id === "easy-img-path"; });
+            if (at >= 0 && at < flow.length - 1) runWithCrossShutter(function () { showWizardStep(at + 1); });
+            else showWizardStep(Math.max(0, at));
+          };
+          if (!omakase) {
+            goNext();
+            return;
+          }
+          applyImgOmakaseFromCatalog({ onlyUnlocked: false, slots: collectVisibleImageSlots() }).then(goNext, goNext);
         });
       });
     }
@@ -11256,6 +11424,8 @@
     setupEasyImagePickers();
     setupSampleWireSlots();
     syncEasyImageStatuses();
+    const photo1Slot = document.getElementById("easy-img-photo1-slot");
+    if (photo1Slot) photo1Slot.remove();
   }
 
   function setupSampleWireSlots() {
@@ -11270,9 +11440,10 @@
       rootWire.querySelectorAll("[data-wire-slot]").forEach(function (b) {
         b.classList.toggle("is-active", b === btn);
       });
-      rootWire.querySelectorAll("[data-easy-slot]").forEach(function (p) {
+      document.querySelectorAll('.dash-block[data-step-id="easy-img-wire"] [data-easy-slot]').forEach(function (p) {
         p.classList.toggle("is-current", p.getAttribute("data-easy-slot") === slot);
       });
+      scrollPreviewFrameIntoView(previewSelectorForImageName(slot));
     });
   }
 
@@ -11286,6 +11457,7 @@
     store.imgPathMode = null;
     store.hubImgPathMode = {};
     store.imgOmakaseLocks = {};
+    store.imgOmakaseSkipConfirm = false;
     store.imgOmakasePicks = {};
     store.imgOmakaseSalt = 0;
     store.copyDirIds = [];
@@ -11574,6 +11746,7 @@
         }
         store.saveMode = "browser";
         store.folderDirHandle = null;
+        store.projectFileHandle = null;
         store.folderDisplayName = "";
         store.projectFolderName = "";
         store.projectNameAuto = "";
@@ -11603,7 +11776,7 @@
             syncEntryFolderNamePanel();
             const msg =
               err && err.name === "AbortError"
-                ? "フォルダ選択をキャンセルしました。もう一度選ぶか、「残さず」を選んでください。"
+                ? "保存をやめました。もう一度保存するか、「残さず、そのまま作る」を選んでください。"
                 : err && err.message
                   ? String(err.message)
                   : "フォルダを選べませんでした。";
@@ -11619,6 +11792,7 @@
         store.pendingResumeFolderFiles = null;
         if (resumeZipInput.files && resumeZipInput.files[0]) {
           store.folderDirHandle = null;
+          store.projectFileHandle = null;
           store.folderDisplayName = "";
         }
         setEntryResumeStatus("");
@@ -12439,6 +12613,7 @@
       /* ignore */
     }
     store.folderDirHandle = null;
+    store.projectFileHandle = null;
     store.folderDisplayName = "";
     store.pendingResumeFolderFiles = null;
     store.zipImageFiles = null;
@@ -13845,13 +14020,13 @@
   function layoutBlockDisplayLabel(meta) {
     if (!meta) return "";
     const fieldById = {
-      accordions: "about_section_name",
-      works: "works_section_name",
-      contact: "contact_section_name"
+      accordions: ["about_heading", "about_section_name"],
+      works: ["works_heading", "works_section_name"],
+      contact: ["contact_section_name", "contact_label"]
     };
-    const field = fieldById[meta.id];
-    if (field) {
-      const live = resolvePreviewText(fieldValue(field), field, "");
+    const fields = fieldById[meta.id] || [];
+    for (let i = 0; i < fields.length; i += 1) {
+      const live = resolvePreviewText(fieldValue(fields[i]), fields[i], "");
       if (live) return live;
     }
     return meta.label;
@@ -14134,12 +14309,88 @@
     return slots;
   }
 
+  function collectBlockImageSlots(blockId) {
+    return collectVisibleImageSlots().filter((slot) => {
+      if (blockId === "hero") return slot.key === "hero_image";
+      if (blockId === "photos") return String(slot.key).indexOf("about_image_") === 0;
+      if (blockId === "works") return /^work_\d+_image$/.test(slot.key);
+      return false;
+    });
+  }
+
+  function runLayoutSectionOmakase(blockId, button) {
+    const slots = collectBlockImageSlots(blockId);
+    let locked = 0;
+    slots.forEach((slot) => {
+      if (store.imgOmakaseLocks && store.imgOmakaseLocks[slot.key]) locked += 1;
+    });
+    const openCount = slots.length - locked;
+    if (!slots.length || openCount <= 0) {
+      openLayoutOmakaseNotice({
+        title: "この列の写真は固定中です",
+        body: "固定を外すと、おまかせで写真を替えられます。",
+        confirmLabel: "",
+        allowSkip: false
+      });
+      return;
+    }
+    const run = () => {
+      if (button) button.disabled = true;
+      applyImgOmakaseFromCatalog({ onlyUnlocked: true, slots: slots }).then(
+        function () {
+          if (button) button.disabled = false;
+          renderLayoutArrangeWire();
+          scheduleSave();
+        },
+        function () {
+          if (button) button.disabled = false;
+        }
+      );
+    };
+    if (store.imgOmakaseSkipConfirm) {
+      run();
+      return;
+    }
+    openLayoutOmakaseNotice({
+      title: "この列をおまかせにしますか",
+      body:
+        "固定していない写真が、ギャラリーの写真に替わります。固定中の写真は変わりません。\n替わる写真：" +
+        openCount +
+        "枚\n固定中：" +
+        locked +
+        "枚",
+      confirmLabel: "この列をおまかせ",
+      allowSkip: true,
+      onConfirm: function (skipNext) {
+        if (skipNext) {
+          store.imgOmakaseSkipConfirm = true;
+          scheduleSave();
+        }
+        run();
+      }
+    });
+  }
+
+  function syncOpenLayoutScale(box, scale) {
+    if (!box) return;
+    const s = normalizeImageScale(scale);
+    const label = box.querySelector(".layout-adjust-scale");
+    if (label) label.textContent = s + "%";
+    const inn = box.querySelector('[data-scale-nudge="in"]');
+    const out = box.querySelector('[data-scale-nudge="out"]');
+    if (inn) inn.disabled = s >= IMAGE_SCALE_MAX;
+    if (out) out.disabled = s <= IMAGE_SCALE_MIN;
+  }
+
   function syncOpenLayoutFocalButtons() {
     document.querySelectorAll(".layout-focal-pad").forEach((pad) => {
       const kind = pad.getAttribute("data-focal-kind");
+      const host = pad.closest(".layout-photo-tools") || pad.closest(".layout-adjust") || pad.parentElement;
+      const zoom = host && host.querySelector(".layout-adjust-zoom");
       if (kind === "hero") {
         ensureHeroFocalDefaults();
         syncFocalNudgeButtons(pad, store.heroFocalX, store.heroFocalY);
+        syncOpenLayoutScale(zoom, store.heroImageScale);
         return;
       }
       const countId = pad.getAttribute("data-focal-for");
@@ -14147,7 +14398,33 @@
       const layout = normalizeItemLayout(countId);
       if (!layout || !slot) return;
       syncFocalNudgeButtons(pad, layout.focalXById[slot], layout.focalYById[slot]);
+      syncOpenLayoutScale(zoom, layout.scaleById && layout.scaleById[slot]);
     });
+    syncLayoutMirrors();
+  }
+
+  function nudgeFrameImageScale(blockId, slot, dir) {
+    const delta = dir === "in" ? IMAGE_SCALE_STEP : -IMAGE_SCALE_STEP;
+    if (blockId === "hero") {
+      const current = normalizeImageScale(store.heroImageScale);
+      const next = normalizeImageScale(current + delta);
+      if (next === current) return;
+      store.heroImageScale = next;
+      applyHeroFocalToPreview();
+    } else {
+      const countId = layoutImageCountId(blockId);
+      const layout = normalizeItemLayout(countId);
+      if (!layout) return;
+      const current = normalizeImageScale(layout.scaleById && layout.scaleById[slot]);
+      const next = normalizeImageScale(current + delta);
+      if (next === current) return;
+      pushLayoutUndo();
+      layout.scaleById[slot] = next;
+      applyItemLayoutToPreview(countId);
+    }
+    if (store.confirmed.finish) unconfirmFinishSoft();
+    scheduleSave();
+    syncOpenLayoutFocalButtons();
   }
 
   function resetLayoutFrameFocal(blockId, slot) {
@@ -14184,6 +14461,7 @@
     const order = store.itemOrders[countId];
     const from = order.indexOf(fromId);
     if (from < 0 || !toId || fromId === toId) return false;
+    const before = order.join("\0");
     order.splice(from, 1);
     let at = order.indexOf(toId);
     if (at < 0) {
@@ -14192,7 +14470,15 @@
     }
     if (place === "after") at += 1;
     order.splice(at, 0, fromId);
-    return true;
+    return order.join("\0") !== before;
+  }
+
+  function itemDragPlace(fromId, toId, orderSnap) {
+    const order = orderSnap || [];
+    const fromIndex = order.indexOf(fromId);
+    const toIndex = order.indexOf(toId);
+    if (fromIndex < 0 || toIndex < 0) return "before";
+    return fromIndex < toIndex ? "after" : "before";
   }
 
   function bindLayoutInnerDrag(row, countId, slotId) {
@@ -14207,7 +14493,16 @@
       let place = "before";
       let moved = false;
       const startY = ev.clientY;
+      const orderSnap = (store.itemOrders[countId] || []).slice();
+      const face = row.querySelector(":scope > .layout-closed-line") || row;
+      const faceRect = face.getBoundingClientRect();
+      store._layoutGhostOffsetX = ev.clientX - faceRect.left;
+      store._layoutGhostOffsetY = ev.clientY - faceRect.top;
+      ensureLayoutDragGhost(row, ev.clientX, ev.clientY);
+      document.body.classList.add("is-inner-layout-dragging");
+      row.classList.add("is-holding");
       const onMove = (moveEv) => {
+        ensureLayoutDragGhost(row, moveEv.clientX, moveEv.clientY);
         if (Math.abs(moveEv.clientY - startY) > 4) moved = true;
         if (!moved || !list) return;
         let best = null;
@@ -14224,8 +14519,7 @@
         });
         if (!best) return;
         overId = best.getAttribute("data-item-id");
-        const r = best.getBoundingClientRect();
-        place = moveEv.clientY > r.top + r.height / 2 ? "after" : "before";
+        place = itemDragPlace(slotId, overId, orderSnap);
         list.querySelectorAll(".layout-inner").forEach((el) => {
           el.classList.toggle("is-drop-target", el === best);
         });
@@ -14234,11 +14528,13 @@
         window.removeEventListener("pointermove", onMove, true);
         window.removeEventListener("pointerup", onUp, true);
         window.removeEventListener("pointercancel", onUp, true);
+        removeLayoutDragGhost();
+        document.body.classList.remove("is-inner-layout-dragging");
+        row.classList.remove("is-holding");
+        if (list) list.querySelectorAll(".layout-inner").forEach((el) => el.classList.remove("is-drop-target"));
         if (moved && overId) {
           pushLayoutUndo();
           if (moveItemOrderNear(countId, slotId, overId, place)) {
-            if (!store.layoutInnerByBlock) store.layoutInnerByBlock = {};
-            store.layoutInnerByBlock[countId] = slotId;
             applyItemLayoutToPreview(countId);
             renderLayoutArrangeWire();
             if (store.confirmed.finish) unconfirmFinishSoft();
@@ -14252,9 +14548,730 @@
     });
   }
 
-  function appendLayoutFrameTools(parent, blockId, slot) {
-    const imageName = layoutFrameImageName(blockId, slot);
+  const layoutReplaceBefore = {};
+  let layoutPhotoToolsFor = "";
+  let layoutScrollPhoto = null;
+
+  function layoutBlockSlots(blockId) {
+    if (blockId === "hero") return ["hero"];
+    const countId = layoutImageCountId(blockId);
+    if (!countId) return [];
+    seedItemOrder(countId);
+    return (store.itemOrders[countId] || []).slice();
+  }
+
+  function layoutFrameViewState(blockId, slot) {
+    if (blockId === "hero") {
+      ensureHeroFocalDefaults();
+      return {
+        scale: store.heroImageScale,
+        focalX: store.heroFocalX,
+        focalY: store.heroFocalY
+      };
+    }
+    const countId = layoutImageCountId(blockId);
+    const layout = normalizeItemLayout(countId);
+    return {
+      scale: layout && layout.scaleById ? layout.scaleById[slot] : IMAGE_SCALE_DEFAULT,
+      focalX: layout ? layout.focalXById[slot] : ITEM_FOCAL_DEFAULT,
+      focalY: layout ? layout.focalYById[slot] : ITEM_FOCAL_DEFAULT
+    };
+  }
+
+  function layoutPreviewPhotoEl(blockId, slot) {
+    if (!root) return null;
+    if (blockId === "hero") return root.querySelector(".hero-photo");
+    const sel = layoutFramePreviewSelector(blockId, slot);
+    const item = sel ? root.querySelector(sel) : null;
+    if (!item) return null;
+    return item.querySelector("img") || item;
+  }
+
+  function layoutPreviewFrameRatio(blockId, slot) {
+    const sel = layoutFramePreviewSelector(blockId, slot);
+    const target = sel ? root.querySelector(sel) : null;
+    if (!target) return 0;
+    const img = target.querySelector("img") || (target.tagName === "IMG" ? target : null);
+    const el = img || target;
+    const w = el.offsetWidth;
+    const h = el.offsetHeight;
+    if (w < 8 || h < 8) return 0;
+    return w / h;
+  }
+
+  function rememberLayoutPhotoCenter(blockId, slot) {
+    if (!blockId || slot == null || slot === "") return;
+    const row = document.querySelector('[data-layout-photo="' + blockId + ":" + slot + '"]');
+    const y = row ? row.getBoundingClientRect().top : null;
+    layoutScrollPhoto = { blockId: blockId, slot: slot, y: y };
+  }
+
+  function scrollLayoutPhotoIntoCenter(blockId, slot) {
+    const row = document.querySelector('[data-layout-photo="' + blockId + ":" + slot + '"]');
+    if (!row) return;
+    let scroller = row.parentElement;
+    while (scroller && scroller !== document.body) {
+      const oy = getComputedStyle(scroller).overflowY;
+      if ((oy === "auto" || oy === "scroll") && scroller.scrollHeight > scroller.clientHeight + 1) break;
+      scroller = scroller.parentElement;
+    }
+    const inset = 10;
+    if (!scroller || scroller === document.body) {
+      row.scrollIntoView({ block: "start", behavior: "auto" });
+      return;
+    }
+    const delta = row.getBoundingClientRect().top - scroller.getBoundingClientRect().top - inset;
+    scroller.scrollTop += delta;
+  }
+
+  function setOnlyLayoutFrameOpen(openKey, slot) {
+    store.layoutInnerByBlock = {};
+    if (openKey && slot) store.layoutInnerByBlock[openKey] = slot;
+  }
+
+  function markLayoutMirror(el, blockId, slot, mode) {
+    el.classList.add("layout-mirror");
+    el.setAttribute("data-mirror-block", blockId);
+    el.setAttribute("data-mirror-slot", slot);
+    el.setAttribute("data-mirror-mode", mode);
+  }
+
+  function paintLayoutMirror(box) {
+    if (!box) return;
+    const blockId = box.getAttribute("data-mirror-block") || "";
+    const slot = box.getAttribute("data-mirror-slot") || "";
+    const mode = box.getAttribute("data-mirror-mode") || "current";
+    const img = box.querySelector("img");
+    const view = layoutFrameViewState(blockId, slot);
+    const countId = blockId === "hero" ? "" : layoutImageCountId(blockId);
+    const layout = countId ? normalizeItemLayout(countId) : null;
+    const half = !!(layout && layout.sizeById && layout.sizeById[slot] === "H");
+    const measured = layoutPreviewFrameRatio(blockId, slot);
+    const ratio = measured || (half ? 8 / 9 : 16 / 9);
+    if (mode === "thumb") {
+      const fixedW = 76;
+      const useRatio = measured > 0 ? measured : ratio;
+      box.style.width = fixedW + "px";
+      box.style.height = Math.max(24, Math.round(fixedW / useRatio)) + "px";
+      box.style.padding = "0";
+      box.classList.remove("is-half");
+      if (img) {
+        const x = normalizeFocalX(view.focalX);
+        const y = normalizeFocalY(view.focalY);
+        const s = normalizeImageScale(view.scale);
+        img.style.width = "100%";
+        img.style.height = "100%";
+        img.style.objectFit = "cover";
+        img.style.objectPosition = x + "% " + y + "%";
+        img.style.transformOrigin = x + "% " + y + "%";
+        if (s > 100) img.style.transform = "scale(" + s / 100 + ")";
+        else img.style.removeProperty("transform");
+      }
+      return;
+    }
+    const baseH = 132;
+    let boxW = Math.round(baseH * ratio);
+    let boxH = baseH;
+    const host = box.closest(".layout-photo-editor") || box.closest(".layout-arrange") || box.parentElement;
+    const maxW = host ? Math.max(72, host.clientWidth - 24) : boxW;
+    if (boxW > maxW) {
+      const fit = maxW / boxW;
+      boxW = Math.round(boxW * fit);
+      boxH = Math.round(boxH * fit);
+    }
+    box.style.width = boxW + "px";
+    box.style.height = boxH + "px";
+    if (img) applyImageScaleToImg(img, view.scale, view.focalX, view.focalY);
+  }
+
+  function paintLayoutSourceMap(box) {
+    if (!box) return;
+    const img = box.querySelector("img");
+    const win = box.querySelector(".layout-source-window");
+    if (!img || !win) return;
+    const nw = img.naturalWidth;
+    const nh = img.naturalHeight;
+    if (!nw || !nh) return;
+    const blockId = box.getAttribute("data-mirror-block") || "";
+    const slot = box.getAttribute("data-mirror-slot") || "";
+    const view = layoutFrameViewState(blockId, slot);
+    const measured = layoutPreviewFrameRatio(blockId, slot);
+    const frameRatio = measured > 0 ? measured : 16 / 9;
+    const frameH = 100;
+    const frameW = frameH * frameRatio;
+    const z = Math.max(0.5, normalizeImageScale(view.scale) / 100);
+    const x = normalizeFocalX(view.focalX) / 100;
+    const y = normalizeFocalY(view.focalY) / 100;
+    const cover = Math.max(frameW / nw, frameH / nh);
+    const offsetX = (nw * cover - frameW) * x;
+    const offsetY = (nh * cover - frameH) * y;
+    const vx = x * frameW * (1 - 1 / z);
+    const vy = y * frameH * (1 - 1 / z);
+    let left = (offsetX + vx) / cover / nw;
+    let top = (offsetY + vy) / cover / nh;
+    let width = frameW / z / cover / nw;
+    let height = frameH / z / cover / nh;
+    if (left < 0) {
+      width += left;
+      left = 0;
+    }
+    if (top < 0) {
+      height += top;
+      top = 0;
+    }
+    if (left + width > 1) width = 1 - left;
+    if (top + height > 1) height = 1 - top;
+    width = Math.max(0.04, Math.min(1, width));
+    height = Math.max(0.04, Math.min(1, height));
+    win.style.left = left * 100 + "%";
+    win.style.top = top * 100 + "%";
+    win.style.width = width * 100 + "%";
+    win.style.height = height * 100 + "%";
+  }
+
+  function syncLayoutMirrors() {
+    document.querySelectorAll(".layout-mirror").forEach(paintLayoutMirror);
+    document.querySelectorAll(".layout-source-map").forEach(paintLayoutSourceMap);
+  }
+
+  function layoutFramePreviewSrc(imageName) {
+    if (imageUrls[imageName]) return imageUrls[imageName];
+    let img = null;
+    if (imageName === "hero_image") img = root.querySelector(".hero-photo");
+    else if (String(imageName).indexOf("about_image_") === 0) {
+      const li = root.querySelector('#about-photos > [data-item-id="' + imageName + '"]');
+      img = li ? li.querySelector("img") : null;
+    } else if (/^work_\d+_image$/.test(imageName)) {
+      const n = imageName.match(/^work_(\d+)_image$/)[1];
+      const li = root.querySelector('#works-list > [data-item-id="work_' + n + '"]');
+      img = li ? li.querySelector("img") : null;
+    }
+    if (!img) return "";
+    return img.getAttribute("src") || "";
+  }
+
+  function layoutFramePreviewSelector(blockId, slot) {
+    if (blockId === "hero") return "#hero";
+    if (blockId === "photos") return '#about-photos > [data-item-id="' + slot + '"]';
+    if (blockId === "works") return '#works-list > [data-item-id="' + slot + '"]';
+    return "";
+  }
+
+  function previewZoomFactor() {
+    const viewport = document.getElementById("preview-viewport");
+    const z = viewport ? parseFloat(viewport.style.zoom) : 1;
+    return z > 0 ? z : 1;
+  }
+
+  function layoutSectionPreviewSelector(blockId) {
+    if (blockId === "hero") return "#hero";
+    if (blockId === "photos") return "#about-photos-block";
+    if (blockId === "works") return "#works";
+    return "";
+  }
+
+  function currentImageFrameSelector() {
+    const openId = store.layoutAccordionId || "";
+    const fromOpen = layoutSectionPreviewSelector(openId);
+    if (fromOpen) return fromOpen;
+    const inner = store.layoutInnerByBlock || {};
+    if (inner.hero) return "#hero";
+    if (inner["about-photos"]) return "#about-photos-block";
+    if (inner["works-list"]) return "#works";
+    return "#hero";
+  }
+
+  function previewSelectorForImageName(name) {
+    if (!name) return "";
+    if (name === "hero_image") return "#hero";
+    if (String(name).indexOf("about_image_") === 0) return "#about-photos-block";
+    if (/^work_\d+_image$/.test(name)) return "#works";
+    return "";
+  }
+
+  /* 縮んだ見本でも、最後の枠を上まで送れる余地を足す */
+  function ensurePreviewScrollTail(scroll) {
+    let tail = scroll.querySelector(".preview-scroll-tail");
+    if (!tail) {
+      tail = document.createElement("div");
+      tail.className = "preview-scroll-tail";
+      tail.setAttribute("aria-hidden", "true");
+      scroll.appendChild(tail);
+    }
+    const room = Math.max(0, scroll.clientHeight - 24);
+    tail.style.flex = "0 0 auto";
+    tail.style.width = "100%";
+    tail.style.height = room + "px";
+    tail.style.pointerEvents = "none";
+  }
+
+  /* 見本が zoom で縮んでいても、スクロール量は縮んだあとの画面位置で出す */
+  function scrollPreviewFrameIntoView(selector) {
+    const scroll = document.querySelector(".preview-scroll");
+    if (!scroll || !selector || !root) return;
+    const target = root.querySelector(selector);
+    if (!target) return;
+    ensurePreviewScrollTail(scroll);
+    const zoom = previewZoomFactor();
+    const prev = scroll.style.scrollBehavior;
+    scroll.style.scrollBehavior = "auto";
+    let ratio = 1;
+    for (let i = 0; i < 8; i++) {
+      const pane = scroll.getBoundingClientRect();
+      const box = target.getBoundingClientRect();
+      const layoutH = target.offsetHeight || box.height;
+      const rectIsLayout =
+        zoom < 0.999 &&
+        layoutH > 8 &&
+        Math.abs(box.height - layoutH) <= Math.abs(box.height - layoutH * zoom) + 1;
+      const scale = rectIsLayout ? zoom : 1;
+      const visualTop = box.top * scale;
+      const deltaScreen = visualTop - (pane.top + 12);
+      if (Math.abs(deltaScreen) <= 4) break;
+      const max = Math.max(0, scroll.scrollHeight - scroll.clientHeight);
+      const beforeTop = scroll.scrollTop;
+      const next = Math.max(0, Math.min(max, beforeTop + deltaScreen * ratio));
+      if (Math.abs(next - beforeTop) < 1) break;
+      scroll.scrollTop = next;
+      const movedScroll = scroll.scrollTop - beforeTop;
+      const movedScreen = visualTop - target.getBoundingClientRect().top * scale;
+      if (Math.abs(movedScreen) > 1 && Math.abs(movedScroll) > 1) {
+        ratio = movedScroll / movedScreen;
+      }
+    }
+    scroll.style.scrollBehavior = prev;
+  }
+
+  function focusPreviewLayoutFrame(blockId, slot) {
+    const sel = layoutFramePreviewSelector(blockId, slot);
+    root.querySelectorAll(".is-layout-focus").forEach((el) => el.classList.remove("is-layout-focus"));
+    if (!sel) return;
+    const target = root.querySelector(sel);
+    if (target) target.classList.add("is-layout-focus");
+  }
+
+  function layoutSizeWord(size) {
+    return size === "H" ? "ページ幅半分" : "ページ幅いっぱい";
+  }
+
+  function closeLayoutChoice() {
+    const menu = document.getElementById("layout-choice-pop");
+    if (menu) menu.remove();
+  }
+
+  function openLayoutChoice(anchor, options, onPick) {
+    closeLayoutChoice();
+    const menu = document.createElement("div");
+    menu.id = "layout-choice-pop";
+    menu.className = "layout-choice-pop";
+    menu.setAttribute("role", "listbox");
+    options.forEach((opt) => {
+      const btn = document.createElement("button");
+      btn.type = "button";
+      btn.className = "layout-choice-opt" + (opt.bold ? " is-bold" : " is-plain") + (opt.on ? " is-on" : "");
+      btn.textContent = opt.label;
+      btn.addEventListener("click", (ev) => {
+        ev.preventDefault();
+        ev.stopPropagation();
+        closeLayoutChoice();
+        onPick(opt.value);
+      });
+      menu.appendChild(btn);
+    });
+    document.body.appendChild(menu);
+    const rect = anchor.getBoundingClientRect();
+    menu.style.left = Math.round(rect.left) + "px";
+    menu.style.top = Math.round(rect.bottom + 4) + "px";
+    window.setTimeout(() => {
+      const closer = (ev) => {
+        if (menu.contains(ev.target)) return;
+        closeLayoutChoice();
+        document.removeEventListener("pointerdown", closer, true);
+      };
+      document.addEventListener("pointerdown", closer, true);
+    }, 0);
+  }
+
+  function stopSummaryToggle(ev) {
+    ev.preventDefault();
+    ev.stopPropagation();
+  }
+
+  function buildLayoutClosedFace(blockId) {
+    const face = document.createElement("div");
+    face.className = "layout-closed-face";
+    const countId = layoutImageCountId(blockId);
+    const order = layoutBlockSlots(blockId);
+    const layout = countId ? normalizeItemLayout(countId) : null;
+    const countLine = blockId === "hero" ? null : document.createElement("p");
+    if (countLine) {
+      countLine.className = "layout-closed-line layout-section-tools";
+      const meta = COUNT_META[countId] || { min: 1, max: order.length || 1 };
+      const minus = document.createElement("button");
+      minus.type = "button";
+      minus.className = "layout-count-btn";
+      minus.textContent = "−";
+      minus.setAttribute("aria-label", "枚数を減らす");
+      minus.disabled = order.length <= meta.min;
+      minus.addEventListener("click", (ev) => {
+        stopSummaryToggle(ev);
+        adjustDraftCount(countId, -1, null);
+      });
+      const num = document.createElement("span");
+      num.className = "layout-image-count-num";
+      num.textContent = order.length + "枚";
+      const plus = document.createElement("button");
+      plus.type = "button";
+      plus.className = "layout-count-btn";
+      plus.textContent = "＋";
+      plus.setAttribute("aria-label", "枚数を増やす");
+      plus.disabled = order.length >= meta.max;
+      plus.addEventListener("click", (ev) => {
+        stopSummaryToggle(ev);
+        requestAddDraftCount(countId, null, plus);
+      });
+      const countCluster = document.createElement("span");
+      countCluster.className = "layout-count-cluster";
+      countCluster.appendChild(minus);
+      countCluster.appendChild(num);
+      countCluster.appendChild(plus);
+      countLine.appendChild(countCluster);
+      const gapLead = document.createElement("span");
+      gapLead.className = "layout-gap-lead";
+      gapLead.textContent = "すき間幅調整";
+      const gapNow = (layout && layout.gap) || "normal";
+      const gapBtn = document.createElement("button");
+      gapBtn.type = "button";
+      gapBtn.className = "layout-tap";
+      gapBtn.textContent = ITEM_GAP_LABELS[gapNow] || "ふつう";
+      gapBtn.addEventListener("click", (ev) => {
+        stopSummaryToggle(ev);
+        openLayoutChoice(
+          gapBtn,
+          ITEM_GAP_STEPS.map((gap) => ({
+            value: gap,
+            label: ITEM_GAP_LABELS[gap],
+            bold: false,
+            on: gap === gapNow
+          })),
+          (gap) => {
+            setItemGap(countId, gap);
+            renderLayoutArrangeWire();
+          }
+        );
+      });
+      const gapCluster = document.createElement("span");
+      gapCluster.className = "layout-gap-cluster";
+      gapCluster.appendChild(gapLead);
+      gapCluster.appendChild(gapBtn);
+      countLine.appendChild(gapCluster);
+    }
+    const sectionOmakase = document.createElement("button");
+    sectionOmakase.type = "button";
+    sectionOmakase.className = "layout-section-omakase";
+    sectionOmakase.textContent = "おまかせ";
+    sectionOmakase.setAttribute("aria-label", "この列をギャラリーからおまかせ");
+    sectionOmakase.addEventListener("click", (ev) => {
+      stopSummaryToggle(ev);
+      runLayoutSectionOmakase(blockId, sectionOmakase);
+    });
+    if (countLine) {
+      countLine.appendChild(sectionOmakase);
+      face.appendChild(countLine);
+    }
+
+    if (!store.layoutInnerByBlock) store.layoutInnerByBlock = {};
+    const openKey = countId || blockId;
+    const openSlot = store.layoutInnerByBlock[openKey] || "";
+
+    order.forEach((slot) => {
+      const line = document.createElement("div");
+      line.className = "layout-closed-line";
+      const thumb = document.createElement("span");
+      thumb.className = "layout-closed-thumb";
+      markLayoutMirror(thumb, blockId, slot, "thumb");
+      const imageName = layoutFrameImageName(blockId, slot);
+      const src = layoutFramePreviewSrc(imageName);
+      if (src) {
+        const img = document.createElement("img");
+        img.alt = "";
+        img.src = src;
+        img.draggable = false;
+        thumb.appendChild(img);
+      }
+      const cluster = document.createElement("span");
+      cluster.className = "layout-closed-id";
+      if (countId) {
+        const handle = document.createElement("span");
+        handle.className = "layout-inner-handle";
+        handle.textContent = "⋮⋮";
+        handle.setAttribute("aria-label", "この枠の順番を変えられます");
+        setHoverTip(handle, "押したまま上下に動かすと、順番を変えられます");
+        cluster.appendChild(handle);
+      }
+      const locked = !!(store.imgOmakaseLocks && store.imgOmakaseLocks[imageName]);
+      const lockBtn = document.createElement("button");
+      lockBtn.type = "button";
+      lockBtn.className = "layout-lock-mark" + (locked ? " is-on" : "");
+      lockBtn.textContent = locked ? "🔒" : "🔓";
+      lockBtn.setAttribute("aria-label", locked ? "固定中" : "固定していない");
+      lockBtn.setAttribute("aria-pressed", locked ? "true" : "false");
+      lockBtn.addEventListener("click", (ev) => {
+        stopSummaryToggle(ev);
+        setLayoutFrameLocked(blockId, slot, !locked);
+      });
+      cluster.appendChild(lockBtn);
+      cluster.appendChild(thumb);
+      line.appendChild(cluster);
+      if (blockId === "hero") {
+        const blank = document.createElement("span");
+        blank.className = "layout-page-blank";
+        blank.setAttribute("aria-hidden", "true");
+        line.appendChild(blank);
+      } else {
+        const sz = layout && layout.sizeById ? layout.sizeById[slot] : "L";
+        const word = document.createElement("button");
+        word.type = "button";
+        word.className = "layout-tap layout-size-word " + (sz === "H" ? "is-half-word" : "is-full-word");
+        word.textContent = layoutSizeWord(sz);
+        word.addEventListener("click", (ev) => {
+          stopSummaryToggle(ev);
+          openLayoutChoice(
+            word,
+            [
+              { value: "L", label: layoutSizeWord("L"), bold: true, on: sz !== "H" },
+              { value: "H", label: layoutSizeWord("H"), bold: false, on: sz === "H" }
+            ],
+            (token) => setLayoutFrameWidth(countId, slot, token)
+          );
+        });
+        line.appendChild(word);
+      }
+      const openNow = openSlot === slot;
+      const openBtn = document.createElement("button");
+      openBtn.type = "button";
+      openBtn.className = "layout-open-btn" + (openNow ? " is-ok" : "");
+      openBtn.textContent = openNow ? "OK" : "開く";
+      openBtn.setAttribute("aria-expanded", openNow ? "true" : "false");
+      openBtn.addEventListener("click", (ev) => {
+        stopSummaryToggle(ev);
+        if (!store.layoutInnerByBlock) store.layoutInnerByBlock = {};
+        if (openNow) {
+          store.layoutInnerByBlock[openKey] = "";
+          renderLayoutArrangeWire();
+          return;
+        }
+        setOnlyLayoutFrameOpen(openKey, slot);
+        rememberLayoutPhotoCenter(blockId, slot);
+        renderLayoutArrangeWire();
+        focusPreviewLayoutFrame(blockId, slot);
+        scrollPreviewFrameIntoView(layoutSectionPreviewSelector(blockId));
+      });
+      line.appendChild(openBtn);
+      if (blockId === "hero") line.appendChild(sectionOmakase);
+      const row = document.createElement("div");
+      row.className = "layout-photo-row" + (countId ? " layout-inner" : "") + (openNow ? " is-open" : "");
+      row.setAttribute("data-layout-photo", blockId + ":" + slot);
+      if (countId) row.setAttribute("data-item-id", slot);
+      row.appendChild(line);
+      const editor = document.createElement("div");
+      editor.className = "layout-photo-editor";
+      if (openNow) appendLayoutPhotoEditor(editor, blockId, slot);
+      row.appendChild(editor);
+      if (countId) bindLayoutInnerDrag(row, countId, slot);
+      face.appendChild(row);
+    });
+    return face;
+  }
+
+  function layoutClosedMetaLine(blockId) {
+    if (blockId === "hero") return "写真1枚　並び：いっぱい";
+    const countId = layoutImageCountId(blockId);
+    const order = layoutBlockSlots(blockId);
+    const layout = normalizeItemLayout(countId);
+    const sizes = order.map((slot) => layoutSizeWord(layout && layout.sizeById ? layout.sizeById[slot] : "L"));
+    const gap = ITEM_GAP_LABELS[(layout && layout.gap) || "normal"] || "ふつう";
+    return "写真" + order.length + "枚　並び：" + (sizes.join("・") || "—") + "　すき間：" + gap;
+  }
+
+  function buildLayoutClosedThumbs(blockId) {
+    const wrap = document.createElement("span");
+    wrap.className = "layout-closed-thumbs";
+    layoutBlockSlots(blockId).forEach((slot) => {
+      const imageName = layoutFrameImageName(blockId, slot);
+      const fig = document.createElement("span");
+      fig.className = "layout-closed-thumb";
+      const src = layoutFramePreviewSrc(imageName);
+      if (src) {
+        const img = document.createElement("img");
+        img.alt = "";
+        img.src = src;
+        fig.appendChild(img);
+      } else {
+        fig.classList.add("is-empty");
+      }
+      const locked = !!(store.imgOmakaseLocks && store.imgOmakaseLocks[imageName]);
+      const mark = document.createElement("span");
+      mark.className = "layout-closed-lock" + (locked ? " is-locked" : "");
+      mark.textContent = locked ? "🔒" : "🔓";
+      mark.setAttribute("aria-label", locked ? "固定中" : "固定していない");
+      fig.appendChild(mark);
+      wrap.appendChild(fig);
+    });
+    return wrap;
+  }
+
+  function rememberLayoutReplaceBefore(imageName) {
+    const gallery = store.galleryPicks && store.galleryPicks[imageName];
+    layoutReplaceBefore[imageName] = {
+      src: layoutFramePreviewSrc(imageName) || "",
+      url: imageUrls[imageName] || "",
+      gallery: gallery ? Object.assign({}, gallery) : null
+    };
+  }
+
+  function undoLayoutImageOnce(imageName) {
+    const snap = layoutReplaceBefore[imageName];
+    if (!snap) return;
+    const input = form.elements.namedItem(imageName);
+    if (input && input.type === "file") {
+      try {
+        input.value = "";
+      } catch (e) {
+        /* ignore */
+      }
+    }
+    if (store.zipImageFiles && store.zipImageFiles[imageName]) delete store.zipImageFiles[imageName];
+    if (snap.gallery) {
+      if (!store.galleryPicks) store.galleryPicks = {};
+      store.galleryPicks[imageName] = snap.gallery;
+    } else if (store.galleryPicks) {
+      delete store.galleryPicks[imageName];
+    }
+    if (snap.url) setRemoteImageUrl(imageName, snap.url);
+    else setRemoteImageUrl(imageName, "");
+    applyImageSlotByName(imageName, !!snap.url);
+    delete layoutReplaceBefore[imageName];
+    if (store.confirmed.finish) unconfirmFinishSoft();
+    scheduleSave();
+    renderLayoutArrangeWire();
+  }
+
+  function setLayoutFrameLocked(blockId, slot, locked) {
     const lockKey = layoutFrameLockKey(blockId, slot);
+    if (!store.imgOmakaseLocks || typeof store.imgOmakaseLocks !== "object") store.imgOmakaseLocks = {};
+    if (!!store.imgOmakaseLocks[lockKey] === !!locked) return;
+    store.imgOmakaseLocks[lockKey] = !!locked;
+    closeLayoutChoice();
+    scheduleSave();
+    renderLayoutArrangeWire();
+  }
+
+  function toggleLayoutFrameLock(blockId, slot) {
+    const lockKey = layoutFrameLockKey(blockId, slot);
+    if (!store.imgOmakaseLocks || typeof store.imgOmakaseLocks !== "object") store.imgOmakaseLocks = {};
+    store.imgOmakaseLocks[lockKey] = !store.imgOmakaseLocks[lockKey];
+    if (!store.layoutInnerByBlock) store.layoutInnerByBlock = {};
+    if (blockId !== "hero") store.layoutInnerByBlock[layoutImageCountId(blockId)] = slot;
+    scheduleSave();
+    renderLayoutArrangeWire();
+  }
+
+
+  function appendLayoutAdjust(parent, blockId, slot) {
+    const block = document.createElement("section");
+    block.className = "layout-adjust";
+    const heading = document.createElement("p");
+    heading.className = "layout-edit-heading";
+    heading.textContent = "画像の調整";
+    const row = document.createElement("div");
+    row.className = "layout-adjust-row";
+    const zoom = document.createElement("div");
+    zoom.className = "layout-adjust-zoom";
+    zoom.setAttribute("role", "group");
+    zoom.setAttribute("aria-label", "拡大縮小");
+    zoom.innerHTML =
+      '<button type="button" data-scale-nudge="in">＋ 拡大</button>' +
+      '<span class="layout-adjust-scale">100%</span>' +
+      '<button type="button" data-scale-nudge="out">− 縮小</button>';
+    zoom.querySelectorAll("[data-scale-nudge]").forEach((btn) => {
+      btn.addEventListener("click", (ev) => {
+        ev.preventDefault();
+        ev.stopPropagation();
+        nudgeFrameImageScale(blockId, slot, btn.getAttribute("data-scale-nudge"));
+      });
+    });
+    const pad = document.createElement("div");
+    pad.className = "layout-focal-pad layout-adjust-pad";
+    pad.setAttribute("role", "group");
+    pad.setAttribute("aria-label", "画像の位置");
+    pad.innerHTML =
+      '<button type="button" class="item-focal-btn" data-focal-nudge="up" aria-label="上へ">↑</button>' +
+      '<div class="layout-adjust-mid">' +
+      '<button type="button" class="item-focal-btn" data-focal-nudge="left" aria-label="左へ">←</button>' +
+      '<button type="button" class="layout-focal-reset layout-adjust-home" data-focal-home>元の位置</button>' +
+      '<button type="button" class="item-focal-btn" data-focal-nudge="right" aria-label="右へ">→</button>' +
+      "</div>" +
+      '<button type="button" class="item-focal-btn" data-focal-nudge="down" aria-label="下へ">↓</button>';
+    if (blockId === "hero") {
+      pad.setAttribute("data-focal-kind", "hero");
+      ensureHeroFocalDefaults();
+      syncFocalNudgeButtons(pad, store.heroFocalX, store.heroFocalY);
+      syncOpenLayoutScale(zoom, store.heroImageScale);
+    } else {
+      const countId = layoutImageCountId(blockId);
+      const layout = normalizeItemLayout(countId);
+      pad.setAttribute("data-focal-kind", "item");
+      pad.setAttribute("data-focal-for", countId);
+      pad.setAttribute("data-item-id", slot);
+      syncFocalNudgeButtons(
+        pad,
+        layout ? layout.focalXById[slot] : ITEM_FOCAL_DEFAULT,
+        layout ? layout.focalYById[slot] : ITEM_FOCAL_DEFAULT
+      );
+      syncOpenLayoutScale(zoom, layout && layout.scaleById ? layout.scaleById[slot] : IMAGE_SCALE_DEFAULT);
+    }
+    pad.querySelectorAll("[data-focal-nudge]").forEach((btn) => {
+      btn.addEventListener("click", (ev) => {
+        ev.preventDefault();
+        ev.stopPropagation();
+        const dir = btn.getAttribute("data-focal-nudge");
+        if (blockId === "hero") nudgeHeroFocal(dir);
+        else nudgeItemFocal(layoutImageCountId(blockId), slot, dir);
+      });
+    });
+    const home = pad.querySelector("[data-focal-home]");
+    if (home) {
+      home.setAttribute("aria-label", "元の位置に戻す");
+      home.addEventListener("click", (ev) => {
+        ev.preventDefault();
+        ev.stopPropagation();
+        resetLayoutFrameFocal(blockId, slot);
+      });
+    }
+    row.appendChild(zoom);
+    row.appendChild(pad);
+    block.appendChild(heading);
+    block.appendChild(row);
+    parent.appendChild(block);
+  }
+
+  function appendLayoutPhotoEditor(parent, blockId, slot) {
+    const imageName = layoutFrameImageName(blockId, slot);
+    const nowSrc = layoutFramePreviewSrc(imageName);
+    const snap = layoutReplaceBefore[imageName];
+    const canUndo = !!(snap && snap.src && snap.src !== nowSrc);
+    const tools = document.createElement("div");
+    tools.className = "layout-photo-tools layout-photo-tools--plain";
+    const stepLabel = (text) => {
+      const p = document.createElement("p");
+      p.className = "layout-edit-step";
+      p.textContent = text;
+      return p;
+    };
+    const choose = document.createElement("section");
+    choose.className = "layout-edit-step-block";
+    choose.appendChild(stepLabel("画像を選ぶ"));
     const sources = document.createElement("div");
     sources.className = "layout-img-sources";
     const selfBtn = document.createElement("button");
@@ -14278,190 +15295,154 @@
     });
     sources.appendChild(selfBtn);
     sources.appendChild(galleryBtn);
-
-    const focal = document.createElement("div");
-    focal.className = "layout-focal";
-    const pad = document.createElement("div");
-    pad.className = "layout-focal-pad";
-    pad.setAttribute("role", "group");
-    pad.setAttribute("aria-label", "画像の位置");
-    pad.innerHTML = focalNudgeMarkup();
-    if (blockId === "hero") {
-      pad.setAttribute("data-focal-kind", "hero");
-      ensureHeroFocalDefaults();
-      syncFocalNudgeButtons(pad, store.heroFocalX, store.heroFocalY);
-    } else {
-      const countId = layoutImageCountId(blockId);
-      const layout = normalizeItemLayout(countId);
-      pad.setAttribute("data-focal-kind", "item");
-      pad.setAttribute("data-focal-for", countId);
-      pad.setAttribute("data-item-id", slot);
-      syncFocalNudgeButtons(
-        pad,
-        layout ? layout.focalXById[slot] : ITEM_FOCAL_DEFAULT,
-        layout ? layout.focalYById[slot] : ITEM_FOCAL_DEFAULT
-      );
+    const undoBtn = document.createElement("button");
+    undoBtn.type = "button";
+    undoBtn.className = "layout-image-undo";
+    undoBtn.textContent = "↺";
+    undoBtn.disabled = !(canUndo && nowSrc);
+    undoBtn.setAttribute("aria-label", "一つ前の画像に戻す");
+    setHoverTip(undoBtn, "一つ前の画像に戻す");
+    undoBtn.addEventListener("click", (ev) => {
+      ev.preventDefault();
+      ev.stopPropagation();
+      if (undoBtn.disabled) return;
+      undoLayoutImageOnce(imageName);
+    });
+    sources.appendChild(undoBtn);
+    choose.appendChild(sources);
+    tools.appendChild(choose);
+    parent.appendChild(tools);
+    appendLayoutAdjust(tools, blockId, slot);
+    const adjust = tools.querySelector(".layout-adjust");
+    const row = adjust && adjust.querySelector(".layout-adjust-row");
+    const zoom = row && row.querySelector(".layout-adjust-zoom");
+    const pad = row && row.querySelector(".layout-adjust-pad");
+    if (zoom && pad && adjust) {
+      const zoomBlock = document.createElement("section");
+      zoomBlock.className = "layout-edit-step-block";
+      zoomBlock.appendChild(stepLabel("拡大・縮小"));
+      zoomBlock.appendChild(zoom);
+      const posBlock = document.createElement("section");
+      posBlock.className = "layout-edit-step-block";
+      posBlock.appendChild(stepLabel("位置"));
+      posBlock.appendChild(pad);
+      adjust.innerHTML = "";
+      adjust.appendChild(zoomBlock);
+      adjust.appendChild(posBlock);
     }
-    pad.querySelectorAll("[data-focal-nudge]").forEach((btn) => {
-      btn.addEventListener("click", (ev) => {
-        ev.preventDefault();
-        ev.stopPropagation();
-        const dir = btn.getAttribute("data-focal-nudge");
-        if (blockId === "hero") nudgeHeroFocal(dir);
-        else nudgeItemFocal(layoutImageCountId(blockId), slot, dir);
-      });
-    });
-    const reset = document.createElement("button");
-    reset.type = "button";
-    reset.className = "layout-focal-reset";
-    reset.textContent = "元の位置に戻す";
-    reset.addEventListener("click", (ev) => {
-      ev.preventDefault();
-      ev.stopPropagation();
-      resetLayoutFrameFocal(blockId, slot);
-    });
-    focal.appendChild(pad);
-    focal.appendChild(reset);
-
-    const locked = !!(store.imgOmakaseLocks && store.imgOmakaseLocks[lockKey]);
-    const lockBtn = document.createElement("button");
-    lockBtn.type = "button";
-    lockBtn.className = "layout-lock-btn" + (locked ? " is-locked" : "");
-    lockBtn.textContent = locked ? "🔒" : "🔓";
-    lockBtn.setAttribute("aria-pressed", locked ? "true" : "false");
-    lockBtn.setAttribute("aria-label", locked ? "この写真は残します" : "この写真は選び直しの対象です");
-    lockBtn.addEventListener("click", (ev) => {
-      ev.preventDefault();
-      ev.stopPropagation();
-      if (!store.imgOmakaseLocks || typeof store.imgOmakaseLocks !== "object") store.imgOmakaseLocks = {};
-      store.imgOmakaseLocks[lockKey] = !store.imgOmakaseLocks[lockKey];
-      if (!store.layoutInnerByBlock) store.layoutInnerByBlock = {};
-      if (blockId !== "hero") store.layoutInnerByBlock[layoutImageCountId(blockId)] = slot;
-      scheduleSave();
-      renderLayoutArrangeWire();
-    });
-
-    parent.appendChild(sources);
-    parent.appendChild(focal);
-    parent.appendChild(lockBtn);
+    const mapStep = document.createElement("section");
+    mapStep.className = "layout-edit-step-block layout-source-step";
+    const map = document.createElement("div");
+    map.className = "layout-source-map";
+    map.setAttribute("data-mirror-block", blockId);
+    map.setAttribute("data-mirror-slot", slot);
+    const mapImg = document.createElement("img");
+    mapImg.alt = "";
+    mapImg.draggable = false;
+    if (nowSrc) mapImg.src = nowSrc;
+    mapImg.addEventListener("load", () => paintLayoutSourceMap(map));
+    const mapWin = document.createElement("div");
+    mapWin.className = "layout-source-window";
+    mapWin.setAttribute("aria-hidden", "true");
+    map.appendChild(mapImg);
+    map.appendChild(mapWin);
+    mapStep.appendChild(map);
+    tools.appendChild(mapStep);
+    paintLayoutSourceMap(map);
   }
 
   function renderLayoutImageInner(body, blockId) {
     body.innerHTML = "";
-    const panel = document.createElement("div");
-    panel.className = "layout-image-panel";
+    const countId = layoutImageCountId(blockId);
+    const order = blockId === "hero" ? ["hero"] : layoutBlockSlots(blockId);
+    if (!store.layoutInnerByBlock) store.layoutInnerByBlock = {};
+    let openSlot = blockId === "hero" ? "hero" : store.layoutInnerByBlock[countId] || "";
+    if (blockId !== "hero" && order.indexOf(openSlot) < 0) openSlot = "";
+
     if (blockId === "hero") {
-      appendLayoutFrameTools(panel, "hero", "hero");
+      const panel = document.createElement("div");
+      panel.className = "layout-image-panel";
+      appendLayoutPhotoEditor(panel, blockId, "hero");
       body.appendChild(panel);
+      focusPreviewLayoutFrame(blockId, "hero");
       return;
     }
-    const countId = layoutImageCountId(blockId);
-    seedItemOrder(countId);
-    const order = (store.itemOrders && store.itemOrders[countId]) || [];
-    const layout = normalizeItemLayout(countId);
-    const meta = COUNT_META[countId] || { min: 1, max: order.length || 1 };
-    const countRow = document.createElement("div");
-    countRow.className = "layout-image-count";
-    const minus = document.createElement("button");
-    minus.type = "button";
-    minus.className = "layout-count-btn";
-    minus.textContent = "−";
-    minus.setAttribute("aria-label", "枚数を減らす");
-    minus.disabled = order.length <= meta.min;
-    minus.addEventListener("click", (ev) => {
-      ev.preventDefault();
-      ev.stopPropagation();
-      adjustDraftCount(countId, -1, null);
-    });
-    const num = document.createElement("span");
-    num.className = "layout-image-count-num";
-    num.textContent = String(order.length);
-    const plus = document.createElement("button");
-    plus.type = "button";
-    plus.className = "layout-count-btn";
-    plus.textContent = "＋";
-    plus.setAttribute("aria-label", "枚数を増やす");
-    plus.disabled = order.length >= meta.max;
-    plus.addEventListener("click", (ev) => {
-      ev.preventDefault();
-      ev.stopPropagation();
-      requestAddDraftCount(countId, null, plus);
-    });
-    countRow.appendChild(minus);
-    countRow.appendChild(num);
-    countRow.appendChild(plus);
-    const gap = buildLayoutGapRow(countId);
-    if (gap) countRow.appendChild(gap);
-    panel.appendChild(countRow);
 
     const list = document.createElement("div");
     list.className = "layout-inner-list";
-    if (!store.layoutInnerByBlock) store.layoutInnerByBlock = {};
-    let openSlot = store.layoutInnerByBlock[countId] || "";
-    if (order.indexOf(openSlot) < 0) openSlot = order[0] || "";
     order.forEach((slot) => {
-      const row = document.createElement("details");
-      row.className = "layout-inner" + (slot === openSlot ? " is-selected" : "");
-      row.setAttribute("data-item-id", slot);
-      row.setAttribute("name", "layout-inner-" + countId);
-      if (slot === openSlot) row.open = true;
+      const card = document.createElement("details");
+      card.className = "layout-inner layout-photo-card";
+      card.setAttribute("data-item-id", slot);
       const summary = document.createElement("summary");
-      summary.className = "layout-inner-summary";
-      const bar = document.createElement("span");
-      const sz = layout && layout.sizeById ? layout.sizeById[slot] : "L";
-      bar.className = "layout-mini-bar " + (sz === "H" ? "is-half" : "is-full");
-      bar.setAttribute("aria-hidden", "true");
-      const name = document.createElement("span");
-      name.className = "layout-inner-name";
-      name.textContent = layoutFrameLabel(blockId, slot);
-      const widths = document.createElement("span");
-      widths.className = "layout-width-picks";
-      widths.setAttribute("role", "group");
-      widths.setAttribute("aria-label", "横幅");
-      ["L", "H"].forEach((token) => {
-        const btn = document.createElement("button");
-        btn.type = "button";
-        btn.className = "layout-width-btn" + (sz === token ? " is-active" : "");
-        btn.textContent = token === "L" ? "いっぱい" : "半分";
-        btn.addEventListener("click", (ev) => {
-          ev.preventDefault();
-          ev.stopPropagation();
-          store.layoutInnerByBlock[countId] = slot;
-          setLayoutFrameWidth(countId, slot, token);
-        });
-        widths.appendChild(btn);
-      });
+      summary.className = "layout-photo-summary";
+      const thumb = document.createElement("span");
+      thumb.className = "layout-target-thumb";
+      const src = layoutFramePreviewSrc(layoutFrameImageName(blockId, slot));
+      if (src) {
+        const img = document.createElement("img");
+        img.alt = "";
+        img.src = src;
+        img.draggable = false;
+        thumb.appendChild(img);
+      }
       const handle = document.createElement("span");
       handle.className = "layout-inner-handle";
       handle.textContent = "⋮⋮";
       handle.setAttribute("aria-label", "この枠の順番を変えられます");
-      summary.appendChild(bar);
-      summary.appendChild(name);
-      summary.appendChild(widths);
+      const openBtn = document.createElement("button");
+      openBtn.type = "button";
+      openBtn.className = "layout-open-btn";
+      const editor = document.createElement("div");
+      editor.className = "layout-photo-editor";
+      const syncCard = () => {
+        openBtn.textContent = card.open ? "閉じる" : "開く";
+        openBtn.setAttribute("aria-expanded", card.open ? "true" : "false");
+      };
+      summary.appendChild(thumb);
       summary.appendChild(handle);
-      const inner = document.createElement("div");
-      inner.className = "layout-inner-body";
-      if (slot === openSlot) appendLayoutFrameTools(inner, blockId, slot);
-      row.appendChild(summary);
-      row.appendChild(inner);
-      row.addEventListener("toggle", () => {
-        if (!row.open) {
-          if (store.layoutInnerByBlock[countId] === slot) store.layoutInnerByBlock[countId] = "";
-          return;
-        }
-        store.layoutInnerByBlock[countId] = slot;
-        list.querySelectorAll(".layout-inner").forEach((el) => {
-          const on = el === row;
-          el.classList.toggle("is-selected", on);
-          if (!on && el.open) el.open = false;
-        });
-        if (!inner.childElementCount) appendLayoutFrameTools(inner, blockId, slot);
+      summary.appendChild(openBtn);
+      card.appendChild(summary);
+      card.appendChild(editor);
+      if (slot === openSlot) {
+        card.open = true;
+        appendLayoutPhotoEditor(editor, blockId, slot);
+      }
+      syncCard();
+      openBtn.addEventListener("pointerdown", (ev) => {
+        ev.stopPropagation();
+        openBtn._wantOpen = !card.open;
       });
-      bindLayoutInnerDrag(row, countId, slot);
-      list.appendChild(row);
+      openBtn.addEventListener("click", (ev) => {
+        ev.preventDefault();
+        ev.stopPropagation();
+        const want = openBtn._wantOpen;
+        window.setTimeout(() => {
+          card.open = typeof want === "boolean" ? want : !card.open;
+        }, 0);
+      });
+      summary.addEventListener("click", (ev) => {
+        ev.preventDefault();
+      });
+      card.addEventListener("toggle", () => {
+        syncCard();
+        if (card.open) {
+          store.layoutInnerByBlock[countId] = slot;
+          list.querySelectorAll("details.layout-photo-card").forEach((el) => {
+            if (el !== card && el.open) el.open = false;
+          });
+          if (!editor.childElementCount) appendLayoutPhotoEditor(editor, blockId, slot);
+          focusPreviewLayoutFrame(blockId, slot);
+        } else if (store.layoutInnerByBlock[countId] === slot) {
+          store.layoutInnerByBlock[countId] = "";
+          editor.innerHTML = "";
+        }
+      });
+      bindLayoutInnerDrag(card, countId, slot);
+      list.appendChild(card);
     });
-    panel.appendChild(list);
-    body.appendChild(panel);
+    body.appendChild(list);
+    if (openSlot) focusPreviewLayoutFrame(blockId, openSlot);
   }
 
   function renderLayoutArrangeWire() {
@@ -14478,9 +15459,14 @@
         );
         host.classList.add("layout-arrange-wire--wide");
         let openCell = null;
+        const imageOnly = !!(
+          document.getElementById("easy-img-layout-host") &&
+          document.getElementById("easy-img-layout-host").contains(host)
+        );
         order.forEach((id) => {
           const meta = LAYOUT_BLOCKS.find((b) => b.id === id);
           if (!meta) return;
+          if (imageOnly && !isLayoutImageBlock(id)) return;
           const displayLabel = layoutBlockDisplayLabel(meta);
           const on = isLayoutBlockActive(meta);
           const cell = document.createElement("details");
@@ -14497,13 +15483,18 @@
 
           const summary = document.createElement("summary");
           summary.className = "layout-arrange-summary";
-
-          const diagram = buildLayoutMiniDiagram(meta);
-          if (diagram) summary.appendChild(diagram);
+          const imageBlock = isLayoutImageBlock(id);
+          if (imageBlock) summary.classList.add("layout-arrange-summary--image");
 
           const name = document.createElement("span");
           name.className = "layout-arrange-name";
           name.textContent = displayLabel;
+
+          if (!imageBlock) {
+            summary.appendChild(name);
+            const diagram = buildLayoutMiniDiagram(meta);
+            if (diagram) summary.appendChild(diagram);
+          }
 
           const visLabel = document.createElement("label");
           visLabel.className = "layout-arrange-vis-label";
@@ -14544,11 +15535,25 @@
           handle.className = "layout-arrange-handle";
           handle.textContent = "⋮⋮";
           handle.setAttribute("aria-label", "この段の順番を変えられます");
-          handle.title = "つかんだまま上下に動かすと、順番を変えられます";
+          setHoverTip(handle, "つかんだまま上下に動かすと、順番を変えられます");
 
-          summary.appendChild(name);
-          summary.appendChild(visLabel);
-          summary.appendChild(handle);
+          let head = null;
+          if (imageBlock) {
+            head = document.createElement("div");
+            head.className = "layout-closed-head";
+            head.appendChild(handle);
+            const headGap = document.createElement("span");
+            headGap.className = "layout-head-gap";
+            headGap.setAttribute("aria-hidden", "true");
+            head.appendChild(headGap);
+            head.appendChild(visLabel);
+            head.appendChild(name);
+            summary.appendChild(head);
+            summary.appendChild(buildLayoutClosedFace(id));
+          } else {
+            summary.appendChild(visLabel);
+            summary.appendChild(handle);
+          }
 
           const body = document.createElement("div");
           body.className = "layout-arrange-body";
@@ -14566,8 +15571,10 @@
             restoreLayoutSectionInputs();
             if (isLayoutImageBlock(id)) renderLayoutImageInner(body, id);
             else if (LAYOUT_SECTION_INPUTS[id]) mountLayoutSectionInputs(body, id);
-            const sel = cell.getAttribute("data-preview-target") || meta.selector;
-            scrollPreviewTo(sel);
+            if (!isLayoutImageBlock(id)) {
+              const sel = cell.getAttribute("data-preview-target") || meta.selector;
+              scrollPreviewTo(sel);
+            }
           };
           let layoutAccordionSyncedAt = 0;
           const syncLayoutAccordionOnce = () => {
@@ -14580,16 +15587,25 @@
           cell.appendChild(summary);
           cell.appendChild(body);
           summary.addEventListener("click", (ev) => {
-            if (ev.target.closest && ev.target.closest(".layout-arrange-handle, .layout-arrange-vis-label")) return;
-            window.setTimeout(syncLayoutAccordionOnce, 0);
+            if (imageBlock) {
+              ev.preventDefault();
+              return;
+            } else if (ev.target.closest && ev.target.closest(".layout-arrange-handle, .layout-arrange-vis-label")) {
+              return;
+            }
+            window.setTimeout(() => {
+              if (cell._syncOpenLabel) cell._syncOpenLabel();
+              syncLayoutAccordionOnce();
+            }, 0);
           });
           cell.addEventListener("toggle", () => {
+            if (cell._syncOpenLabel) cell._syncOpenLabel();
             if (store._layoutAccordionRendering) return;
             syncLayoutAccordionOnce();
           });
           bindLayoutArrangeDrag(cell, id);
           host.appendChild(cell);
-          if (id === openId) openCell = cell;
+          if (!imageBlock && id === openId) openCell = cell;
         });
         if (openCell) {
           store._layoutAccordionRendering = true;
@@ -14603,6 +15619,15 @@
       });
     }
     renderLayoutCardWires();
+    syncLayoutMirrors();
+    const pendingCenter = layoutScrollPhoto;
+    layoutScrollPhoto = null;
+    window.requestAnimationFrame(() => {
+      syncLayoutMirrors();
+      if (!pendingCenter) return;
+      scrollLayoutPhotoIntoCenter(pendingCenter.blockId, pendingCenter.slot);
+      scrollPreviewFrameIntoView(layoutSectionPreviewSelector(pendingCenter.blockId));
+    });
   }
 
   function bindLayoutArrangeDrag(cell, id) {
@@ -14862,24 +15887,126 @@
         true
       );
     }
+    openLayoutOmakaseNotice = function (opts) {
+      const options = opts || {};
+      let modal = document.getElementById("layout-omakase-notice");
+      if (!modal) {
+        modal = document.createElement("div");
+        modal.id = "layout-omakase-notice";
+        modal.className = "layout-notice";
+        modal.hidden = true;
+        modal.setAttribute("role", "dialog");
+        modal.setAttribute("aria-modal", "true");
+        modal.innerHTML =
+          '<div class="layout-notice-card">' +
+          '<p class="layout-notice-title" data-notice-title></p>' +
+          '<p class="layout-notice-body" data-notice-body></p>' +
+          '<label class="layout-notice-skip" data-notice-skip><input type="checkbox" data-notice-skip-input> 次回からこの確認を表示しない</label>' +
+          '<div class="layout-notice-actions">' +
+          '<button type="button" class="gct-btn" data-notice-cancel>キャンセル</button>' +
+          '<button type="button" class="gct-btn gct-btn-primary" data-notice-ok>実行</button>' +
+          '<button type="button" class="gct-btn gct-btn-primary" data-notice-close>閉じる</button>' +
+          "</div></div>";
+        document.body.appendChild(modal);
+        modal.addEventListener("click", (ev) => {
+          if (ev.target === modal) modal.hidden = true;
+        });
+      }
+      const title = modal.querySelector("[data-notice-title]");
+      const body = modal.querySelector("[data-notice-body]");
+      const skip = modal.querySelector("[data-notice-skip]");
+      const skipInput = modal.querySelector("[data-notice-skip-input]");
+      const cancel = modal.querySelector("[data-notice-cancel]");
+      const ok = modal.querySelector("[data-notice-ok]");
+      const close = modal.querySelector("[data-notice-close]");
+      title.textContent = options.title || "";
+      body.textContent = options.body || "";
+      skip.hidden = !options.allowSkip;
+      if (skipInput) skipInput.checked = false;
+      const confirming = !!options.confirmLabel;
+      cancel.hidden = !confirming;
+      ok.hidden = !confirming;
+      close.hidden = confirming;
+      if (confirming) ok.textContent = options.confirmLabel;
+      ok.onclick = () => {
+        modal.hidden = true;
+        if (typeof options.onConfirm === "function") options.onConfirm(!!(skipInput && skipInput.checked));
+      };
+      cancel.onclick = () => {
+        modal.hidden = true;
+      };
+      close.onclick = () => {
+        modal.hidden = true;
+      };
+      modal.hidden = false;
+    }
+
     const omakaseBtn = document.getElementById("layout-omakase-btn");
     if (omakaseBtn && omakaseBtn.dataset.bound !== "1") {
       omakaseBtn.dataset.bound = "1";
       omakaseBtn.addEventListener("click", () => {
         const slots = collectVisibleImageSlots();
-        omakaseBtn.disabled = true;
-        applyImgOmakaseFromCatalog({ onlyUnlocked: true, slots: slots }).then(
-          function () {
-            omakaseBtn.disabled = false;
-            renderLayoutArrangeWire();
-            scheduleSave();
-          },
-          function () {
-            omakaseBtn.disabled = false;
+        let locked = 0;
+        slots.forEach((slot) => {
+          if (store.imgOmakaseLocks && store.imgOmakaseLocks[slot.key]) locked += 1;
+        });
+        const openCount = slots.length - locked;
+        if (!slots.length || openCount <= 0) {
+          openLayoutOmakaseNotice({
+            title: "すべての画像がロックされています",
+            body: "このままでは、おまかせを実行しても画像は変わりません。変更したい画像のロックを解除してから、もう一度おまかせを押してください。",
+            confirmLabel: "",
+            allowSkip: false
+          });
+          return;
+        }
+        const run = () => {
+          omakaseBtn.disabled = true;
+          applyImgOmakaseFromCatalog({ onlyUnlocked: true, slots: slots }).then(
+            function () {
+              omakaseBtn.disabled = false;
+              renderLayoutArrangeWire();
+              scheduleSave();
+            },
+            function () {
+              omakaseBtn.disabled = false;
+            }
+          );
+        };
+        if (store.imgOmakaseSkipConfirm) {
+          run();
+          return;
+        }
+        openLayoutOmakaseNotice({
+          title: "おまかせを実行しますか？",
+          body:
+            "ロックしていない画像は、すべて新しい画像に変わります。ロック中の画像は変更されません。\n変更される画像：" +
+            openCount +
+            "枚\n固定中の画像：" +
+            locked +
+            "枚",
+          confirmLabel: "実行",
+          allowSkip: true,
+          onConfirm: function (skipNext) {
+            if (skipNext) {
+              store.imgOmakaseSkipConfirm = true;
+              scheduleSave();
+            }
+            run();
           }
-        );
+        });
       });
     }
+    const omakaseAgain = document.getElementById("layout-omakase-confirm-again");
+    if (omakaseAgain && omakaseAgain.dataset.bound !== "1") {
+      omakaseAgain.dataset.bound = "1";
+      omakaseAgain.addEventListener("click", () => {
+        store.imgOmakaseSkipConfirm = false;
+        omakaseAgain.hidden = true;
+        scheduleSave();
+      });
+    }
+    if (omakaseAgain) omakaseAgain.hidden = !store.imgOmakaseSkipConfirm;
     document.querySelectorAll("[data-layout-arrange-reset]").forEach((reset) => {
       if (reset.dataset.bound) return;
       reset.dataset.bound = "1";
@@ -15542,11 +16669,11 @@
       { id: "desktop", label: "PC", width: 1280 }
     ];
     let stepIndex = 4;
-    /* 100%は選んだ幅の実寸。開いた直後だけ枠に収め、その倍率を％で出す */
+    /* 100%は選んだ幅の実寸。開いた直後の見本は25%で固定する */
     const LOOK_MIN = 0.25;
     const LOOK_MAX = 2;
-    let lookScale = 1;
-    let lookTouched = false;
+    let lookScale = LOOK_MIN;
+    let lookTouched = true;
 
     function clampLook(n) {
       return Math.min(LOOK_MAX, Math.max(LOOK_MIN, n));
@@ -15743,6 +16870,7 @@
         const placeFit =
           !!store.hubPlacePickMode || store.hubUiMode === "layout";
         applyPreviewFrameScale({ placeFit });
+        syncLayoutMirrors();
         if (scrollEl && !placeFit) {
           scrollEl.scrollLeft = 0;
         }
@@ -15811,10 +16939,10 @@
     const shell = document.querySelector(".atelier-shell");
     if (!split || !handle) return;
 
-    const KEY = "sample-1man-split-pct";
+    const KEY = "sample-1man-split-pct-v2";
     const MIN = 28;
     const MAX = 72;
-    let pct = 52;
+    let pct = MIN;
     try {
       const saved = Number(localStorage.getItem(KEY));
       if (Number.isFinite(saved) && saved >= MIN && saved <= MAX) pct = saved;
@@ -15830,6 +16958,7 @@
       if (typeof window.applyPreviewWidthFromPane === "function") {
         window.applyPreviewWidthFromPane();
       }
+      syncLayoutMirrors();
     }
 
     function persist() {
@@ -15845,6 +16974,7 @@
     function clientToPct(clientX) {
       const rect = split.getBoundingClientRect();
       if (!rect.width) return pct;
+      /* 右端から見た見本の幅。左端からの割合は見本の幅にしない */
       return ((rect.right - clientX) / rect.width) * 100;
     }
 
@@ -17186,6 +18316,7 @@
       heroTextOnPhoto: !!store.heroTextOnPhoto,
       heroFocalX: normalizeFocalPercent(store.heroFocalX, HERO_FOCAL_X_DEFAULT),
       heroFocalY: normalizeFocalPercent(store.heroFocalY, HERO_FOCAL_Y_DEFAULT),
+      heroImageScale: normalizeImageScale(store.heroImageScale),
       heroTextPlate: normalizeHeroPlate(store.heroTextPlate),
       heroTextPlateTone: normalizeHeroPlateTone(store.heroTextPlateTone),
       note: "画像ファイルはZIPに含みますが、ブラウザ下書きには保存されません。"
@@ -17224,6 +18355,7 @@
         heroTextOnPhoto: !!store.heroTextOnPhoto,
         heroFocalX: normalizeFocalPercent(store.heroFocalX, HERO_FOCAL_X_DEFAULT),
         heroFocalY: normalizeFocalPercent(store.heroFocalY, HERO_FOCAL_Y_DEFAULT),
+        heroImageScale: normalizeImageScale(store.heroImageScale),
         aboutItemsDisplay: normalizeAboutItemsDisplay(store.aboutItemsDisplay),
         heroTextPlate: normalizeHeroPlate(store.heroTextPlate),
         heroTextPlateTone: normalizeHeroPlateTone(store.heroTextPlateTone),
@@ -17264,6 +18396,7 @@
         copyHeroOnPhoto: store.copyHeroOnPhoto === true ? true : store.copyHeroOnPhoto === false ? false : null,
         hubImgPathMode: store.hubImgPathMode && typeof store.hubImgPathMode === "object" ? store.hubImgPathMode : {},
         imgOmakaseLocks: Object.assign({}, store.imgOmakaseLocks || {}),
+        imgOmakaseSkipConfirm: !!store.imgOmakaseSkipConfirm,
         sushiSampleId: store.sushiSampleId,
         sushiSampleKey: store.sushiSampleKey,
         sampleSectionCandidates: store.sampleSectionCandidates || {},
@@ -17432,6 +18565,7 @@
         data.imgOmakaseLocks && typeof data.imgOmakaseLocks === "object"
           ? Object.assign({}, data.imgOmakaseLocks)
           : {};
+      store.imgOmakaseSkipConfirm = !!data.imgOmakaseSkipConfirm;
       if (data.sushiSampleId != null) store.sushiSampleId = data.sushiSampleId;
       if (data.sushiSampleKey != null) store.sushiSampleKey = data.sushiSampleKey;
       if (data.sampleSectionCandidates && typeof data.sampleSectionCandidates === "object") {
@@ -17523,6 +18657,9 @@
       }
       if (data.heroFocalY != null) {
         store.heroFocalY = normalizeFocalPercent(data.heroFocalY, HERO_FOCAL_Y_DEFAULT);
+      }
+      if (data.heroImageScale != null) {
+        store.heroImageScale = normalizeImageScale(data.heroImageScale);
       }
       if (data.aboutItemsDisplay != null) store.aboutItemsDisplay = normalizeAboutItemsDisplay(data.aboutItemsDisplay);
       if (data.heroTextPlate) store.heroTextPlate = normalizeHeroPlate(data.heroTextPlate);
@@ -17713,6 +18850,18 @@
     }
 
     const blob = await zip.generateAsync({ type: "blob" });
+    if (store.saveMode === "folder" && store.projectFileHandle) {
+      try {
+        const allowed = await ensureFolderPermission(store.projectFileHandle, "readwrite");
+        if (allowed) {
+          const writable = await store.projectFileHandle.createWritable();
+          await writable.write(blob);
+          await writable.close();
+        }
+      } catch (e) {
+        /* ダウンロードは続ける */
+      }
+    }
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
     a.href = url;

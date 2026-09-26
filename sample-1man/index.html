@@ -12,14 +12,14 @@
   <!-- メーカー親CSS（ポートフォリオ根の style.css は読まない） -->
   <link rel="stylesheet" href="maker-base.css?v=cleanup-20260922">
   <link rel="icon" href="brand/mark-favicon.png?v=logo-7" type="image/png">
-  <link rel="stylesheet" href="sample-overrides.css?v=easy-folder-name-20260925">
-  <link rel="stylesheet" href="free-photo-gallery/gallery.css?v=gallery-check-20260923">
+  <link rel="stylesheet" href="sample-overrides.css?v=phase2-open-one-b-20260926">
+  <link rel="stylesheet" href="free-photo-gallery/gallery.css?v=gallery-ask-20260926">
   <script>
     (function () {
       var h = location.hostname;
       var local = h === "127.0.0.1" || h === "localhost" || h === "[::1]";
       if (!local) return;
-      document.write('<link rel="stylesheet" href="review-mode.css?v=cleanup-20260922">');
+      document.write('<link rel="stylesheet" href="review-mode.css?v=shop-room28-20260926">');
     })();
   </script>
   <script>document.documentElement.classList.add("js");</script>
@@ -43,7 +43,7 @@
         if (!data || !data.easyFlowActive || data.entryBranch !== "sample") return;
         if (data.uiMode && data.uiMode !== "guided") return;
         var ids = ["easy-basics", "easy-copy-dirs", "easy-color"];
-        if (data.imgPathMode === "omakase" || data.imgPathMode === "self") ids.push("easy-img-path", "easy-img-wire");
+        if (data.imgPathMode === "self") ids.push("easy-img-path", "easy-img-wire");
         else ids.push("easy-img-path");
         if (data.copyPathMode === "omakase") ids.push("easy-copy-path", "easy-copy-omakase");
         else if (data.copyPathMode === "keyword") ids.push("easy-copy-path", "easy-copy-frame");
@@ -58,16 +58,16 @@
   <script src="vibe-dict.js" defer></script>
   <script src="easy-copy-dict.js?v=cleanup-20260922" defer></script>
   <script src="copy-dict-engine.js?v=copy-ui-b-20260924" defer></script>
-  <script src="sushi-belt.js?v=sushi-guide-session-20260922a" defer></script>
-  <script src="free-photo-gallery/gallery.js?v=gallery-check-20260923" defer></script>
+  <script src="sushi-belt.js?v=sushi-replace-up-20260926" defer></script>
+  <script src="free-photo-gallery/gallery.js?v=gallery-ask-20260926" defer></script>
   <script src="page-shutter.js?v=shutter-all-20260924" defer></script>
-  <script src="script.js?v=easy-mood-before-color-20260925" defer></script>
+  <script src="script.js?v=phase2-open-one-20260926" defer></script>
   <script>
     (function () {
       var h = location.hostname;
       var local = h === "127.0.0.1" || h === "localhost" || h === "[::1]";
       if (!local) return;
-      document.write('<script src="review-mode.js?v=cleanup-20260922" defer><\/script>');
+      document.write('<script src="review-mode.js?v=easy-image-even2-20260925" defer><\/script>');
     })();
   </script>
 </head>
@@ -165,7 +165,14 @@
             <input type="radio" name="entry_save_mode" value="folder">
             <span class="entry-branch-card-inner">
               <strong role="heading" aria-level="3">このパソコンに残して続ける</strong>
-              <span>保存先フォルダを選ぶと、変更のたびにこのパソコン内へ上書きします（当社サーバーには保存しません）</span>
+              <span>この名前で保存すると、変更のたびにこのパソコン内へ上書きします（当社サーバーには保存しません）</span>
+              <div class="entry-save-folder-name" id="entry-save-folder-name" hidden>
+                <p class="entry-save-folder-hint">名前は入っています。変えたいときは、直せます。</p>
+                <div class="entry-save-folder-label">名前
+                  <input type="text" id="entry-project-folder-name" name="entry_project_folder_name" autocomplete="off" spellcheck="false" aria-label="名前">
+                </div>
+                <button type="button" class="wizard-btn" id="entry-pick-folder">この名前で保存する</button>
+              </div>
             </span>
           </label>
           <label class="entry-branch-card">
@@ -175,13 +182,6 @@
               <span>残さない場合、ページを更新すると写真は消えることがあります（文章などはブラウザ内に残ることがあります）。</span>
             </span>
           </label>
-        </div>
-        <div class="entry-save-folder-name" id="entry-save-folder-name" hidden>
-          <p class="entry-save-folder-hint">フォルダ名は入っています。変えたいときは、直せます。</p>
-          <label class="entry-save-folder-label" for="entry-project-folder-name">フォルダ名
-            <input type="text" id="entry-project-folder-name" name="entry_project_folder_name" autocomplete="off" spellcheck="false">
-          </label>
-          <button type="button" class="wizard-btn" id="entry-pick-folder">置き場所を選ぶ</button>
         </div>
       </fieldset>
 
@@ -279,9 +279,9 @@
         </div>
 
         <div id="sushi-replace-modal" class="sushi-modal" hidden>
-          <div class="sushi-modal-card" role="dialog" aria-labelledby="sushi-replace-title">
-            <h2 id="sushi-replace-title">どれと入れ替えますか？</h2>
-            <p class="sushi-modal-note">上の枠は3つまでです。入れ替える枠を選ぶと、新しいサンプルに差し替わります。</p>
+          <div class="sushi-modal-card sushi-replace-card" role="dialog" aria-labelledby="sushi-replace-title">
+            <h2 id="sushi-replace-title">どの候補と入れ替えますか？</h2>
+            <p class="sushi-modal-note">外したい候補を選ぶと、その位置に新しいサンプルが入ります。</p>
             <div class="sushi-replace-list"></div>
             <button type="button" class="gct-btn" data-sushi-replace-cancel>やめる</button>
           </div>
@@ -362,9 +362,19 @@
   <div class="atelier-shell">
     <div class="atelier-chrome" id="atelier-chrome">
       <div class="atelier-chrome-left">
+        <a class="chrome-help-btn" href="help.html?return=order">ヘルプ</a>
+        <button type="button" class="dash-reset-btn" id="atelier-reset-btn" data-reset-draft>最初に戻す</button>
+      </div>
+      <div class="atelier-chrome-center" aria-label="商品名">
         <a class="chrome-brand chrome-brand--lockup" href="index.html" aria-label="アーチデザイン工房">
           <img class="chrome-brand-lockup" src="brand/logo-color.png?v=logo-6" width="200" height="200" alt="アーチデザイン工房">
         </a>
+        <div class="chrome-center-name">
+          <p class="chrome-product-catch">作るも、直すも。</p>
+          <h1 class="chrome-product-name">かんたんホームページ工房</h1>
+        </div>
+      </div>
+      <div class="atelier-chrome-right">
         <div class="chrome-control chrome-control--width" role="group" aria-label="見本の幅" id="chrome-preview-width">
           <p class="preview-width-hint">スマホ ← タップで切替 → PC</p>
           <div class="preview-width-ruler" id="preview-width-ruler" role="radiogroup" aria-label="見本の表示幅"></div>
@@ -381,14 +391,6 @@
             </span>
           </span>
         </div>
-      </div>
-      <div class="atelier-chrome-center" aria-label="商品名">
-        <p class="chrome-product-catch">作るも、直すも。</p>
-        <h1 class="chrome-product-name">かんたんホームページ工房</h1>
-      </div>
-      <div class="atelier-chrome-right">
-        <a class="chrome-help-btn" href="help.html?return=order">ヘルプ</a>
-        <button type="button" class="dash-reset-btn" id="atelier-reset-btn" data-reset-draft>最初に戻す</button>
       </div>
     </div>
 
@@ -469,8 +471,13 @@
 
         <details class="dash-block dash-block--easy" data-step-id="easy-copy-path" hidden>
           <summary>文章の決め方</summary>
-          <p class="dash-subhead" role="heading" aria-level="3">文章はどう決めますか</p>
-          <p class="step-help">進め方をひとつ選んでください。あとから直せます。</p>
+          <div class="dash-subhead-row">
+            <p class="dash-subhead" role="heading" aria-level="3">文章はどう決めますか</p>
+            <span class="hub-tip-wrap">
+              <button type="button" class="hub-tip-btn" data-hub-tip aria-expanded="false" aria-label="文章の決め方とは">?</button>
+              <span class="hub-tip-pop" hidden>キーワードから決めるか、すべておまかせにするか、選べます。あとから直せます。</span>
+            </span>
+          </div>
           <div class="entry-branch-grid easy-copy-path-grid" role="radiogroup" aria-label="文章の決め方">
             <label class="entry-branch-card">
               <input type="radio" name="easy_copy_path" value="keyword">
@@ -491,20 +498,30 @@
 
         <details class="dash-block dash-block--easy" data-step-id="easy-copy-dirs" hidden>
           <summary>方向</summary>
-          <p class="dash-subhead" role="heading" aria-level="3">どんな雰囲気にしたいですか？</p>
+          <div class="dash-subhead-row">
+            <p class="dash-subhead" role="heading" aria-level="3">どんな雰囲気にしたいですか？</p>
+            <span class="hub-tip-wrap">
+              <button type="button" class="hub-tip-btn" data-hub-tip aria-expanded="false" aria-label="雰囲気の選び方とは">?</button>
+              <span class="hub-tip-pop" hidden>言葉を押すと、使いたい、使わない、指定なし、の順で変わります。</span>
+            </span>
+          </div>
           <p class="easy-copy-dir-legend">
             <span class="easy-copy-dir-legend-want">緑枠＝使いたい言葉</span>
             <span class="easy-copy-dir-legend-forbid">赤枠＝使わない言葉</span>
             <span class="easy-copy-dir-legend-ref">指定なし＝候補に入ることもある言葉</span>
           </p>
-          <p class="step-help">言葉を押すたびに、緑枠、赤枠、指定なしの順で変わります。</p>
           <div class="easy-copy-dirs" id="easy-copy-dirs-root"></div>
         </details>
 
         <details class="dash-block dash-block--easy" data-step-id="easy-basics" hidden>
           <summary>基本情報</summary>
-          <p class="dash-subhead" role="heading" aria-level="3">基本情報</p>
-          <p class="step-help">お店のページに載せる最低限を入れます。あとから直せます。</p>
+          <div class="dash-subhead-row">
+            <p class="dash-subhead" role="heading" aria-level="3">基本情報</p>
+            <span class="hub-tip-wrap">
+              <button type="button" class="hub-tip-btn" data-hub-tip aria-expanded="false" aria-label="基本情報とは">?</button>
+              <span class="hub-tip-pop" hidden>お店のページに載せる名前や連絡先です。あとから直せます。</span>
+            </span>
+          </div>
           <div class="easy-basics-fields">
             <label class="easy-field" for="easy-brand-name">
               <span class="easy-field-label">店名 <span class="easy-field-req">必須</span></span>
@@ -536,8 +553,13 @@
 
         <details class="dash-block dash-block--easy" data-step-id="easy-color" data-preview-target="#preview-root" hidden>
           <summary>色合い</summary>
-          <p class="dash-subhead" role="heading" aria-level="3">色合いは？</p>
-          <p class="step-help">選んだサンプルのまま、色合いだけ変えられます。</p>
+          <div class="dash-subhead-row">
+            <p class="dash-subhead" role="heading" aria-level="3">色合いは？</p>
+            <span class="hub-tip-wrap">
+              <button type="button" class="hub-tip-btn" data-hub-tip aria-expanded="false" aria-label="色合いとは">?</button>
+              <span class="hub-tip-pop" hidden>選んだ見本のまま、色だけ変えられます。</span>
+            </span>
+          </div>
           <div class="entry-mood-row" id="entry-sample-color-row" role="radiogroup" aria-label="色合い">
             <label class="entry-choice"><input type="radio" name="entry_sample_color" value="keep"><span>このままでよい</span></label>
             <label class="entry-choice"><input type="radio" name="entry_sample_color" value="clinic"><span class="entry-color-choice"><span>紺・きれいめ</span><span class="entry-color-bars" aria-hidden="true"><i></i><i></i><i></i></span></span></label>
@@ -577,46 +599,71 @@
         <!-- 旧・枠ごと5択（フローから外す。DOMは残置） -->
                 <details class="dash-block dash-block--easy" data-step-id="easy-sec-hero" hidden>
           <summary>キャッチ文</summary>
-          <p class="dash-subhead" id="easy-sec-hero-title" role="heading" aria-level="3">キャッチの文章はどれにしますか</p>
-          <p class="step-help">選んだ内容に合わせて候補を作りました。1〜5からひとつ選んでください。</p>
+          <div class="dash-subhead-row">
+            <p class="dash-subhead" id="easy-sec-hero-title" role="heading" aria-level="3">キャッチの文章はどれにしますか</p>
+            <span class="hub-tip-wrap">
+              <button type="button" class="hub-tip-btn" data-hub-tip aria-expanded="false" aria-label="キャッチの候補とは">?</button>
+              <span class="hub-tip-pop" hidden>候補が5つあります。気に入ったものをひとつ選べます。</span>
+            </span>
+          </div>
           <div class="easy-copy-list" id="easy-sec-hero-list" role="radiogroup" aria-labelledby="easy-sec-hero-title"></div>
           <button type="button" class="gct-btn" data-sec-regen="hero">別の5案を作り直す</button>
         </details>
 
         <details class="dash-block dash-block--easy" data-step-id="easy-sec-about" hidden>
           <summary>紹介文</summary>
-          <p class="dash-subhead" id="easy-sec-about-title" role="heading" aria-level="3">紹介の文章はどれにしますか</p>
-          <p class="step-help">選んだ内容に合わせて候補を作りました。1〜5からひとつ選んでください。</p>
+          <div class="dash-subhead-row">
+            <p class="dash-subhead" id="easy-sec-about-title" role="heading" aria-level="3">紹介の文章はどれにしますか</p>
+            <span class="hub-tip-wrap">
+              <button type="button" class="hub-tip-btn" data-hub-tip aria-expanded="false" aria-label="紹介の候補とは">?</button>
+              <span class="hub-tip-pop" hidden>候補が5つあります。気に入ったものをひとつ選べます。</span>
+            </span>
+          </div>
           <div class="easy-copy-list" id="easy-sec-about-list" role="radiogroup" aria-labelledby="easy-sec-about-title"></div>
           <button type="button" class="gct-btn" data-sec-regen="about">別の5案を作り直す</button>
         </details>
 
         <details class="dash-block dash-block--easy" data-step-id="easy-sec-works" hidden>
           <summary>おすすめ文</summary>
-          <p class="dash-subhead" id="easy-sec-works-title" role="heading" aria-level="3">おすすめ枠の文章はどれにしますか</p>
-          <p class="step-help">選んだ内容に合わせて候補を作りました。1〜5からひとつ選んでください。</p>
+          <div class="dash-subhead-row">
+            <p class="dash-subhead" id="easy-sec-works-title" role="heading" aria-level="3">おすすめ枠の文章はどれにしますか</p>
+            <span class="hub-tip-wrap">
+              <button type="button" class="hub-tip-btn" data-hub-tip aria-expanded="false" aria-label="おすすめの候補とは">?</button>
+              <span class="hub-tip-pop" hidden>候補が5つあります。気に入ったものをひとつ選べます。</span>
+            </span>
+          </div>
           <div class="easy-copy-list" id="easy-sec-works-list" role="radiogroup" aria-labelledby="easy-sec-works-title"></div>
           <button type="button" class="gct-btn" data-sec-regen="works">別の5案を作り直す</button>
         </details>
 
         <details class="dash-block dash-block--easy" data-step-id="easy-sec-contact" hidden>
           <summary>連絡文</summary>
-          <p class="dash-subhead" id="easy-sec-contact-title" role="heading" aria-level="3">ご連絡枠の文章はどれにしますか</p>
-          <p class="step-help">選んだ内容に合わせて候補を作りました。1〜5からひとつ選んでください。</p>
+          <div class="dash-subhead-row">
+            <p class="dash-subhead" id="easy-sec-contact-title" role="heading" aria-level="3">ご連絡枠の文章はどれにしますか</p>
+            <span class="hub-tip-wrap">
+              <button type="button" class="hub-tip-btn" data-hub-tip aria-expanded="false" aria-label="ご連絡の候補とは">?</button>
+              <span class="hub-tip-pop" hidden>候補が5つあります。気に入ったものをひとつ選べます。</span>
+            </span>
+          </div>
           <div class="easy-copy-list" id="easy-sec-contact-list" role="radiogroup" aria-labelledby="easy-sec-contact-title"></div>
           <button type="button" class="gct-btn" data-sec-regen="contact">別の5案を作り直す</button>
         </details>
 
         <details class="dash-block dash-block--easy" data-step-id="easy-img-path" hidden>
           <summary>画像の決め方</summary>
-          <p class="dash-subhead" role="heading" aria-level="3">写真はどう決めますか</p>
-          <p class="step-help">進め方をひとつ選んでみられます。あとから選び直すこともできます。</p>
+          <div class="dash-subhead-row">
+            <p class="dash-subhead" role="heading" aria-level="3">写真はどう決めますか</p>
+            <span class="hub-tip-wrap">
+              <button type="button" class="hub-tip-btn" data-hub-tip aria-expanded="false" aria-label="写真の決め方とは">?</button>
+              <span class="hub-tip-pop" hidden>おまかせにするか、自分で選ぶか、選べます。あとから選び直せます。</span>
+            </span>
+          </div>
           <div class="entry-branch-grid easy-img-path-grid" role="radiogroup" aria-label="画像の決め方">
             <label class="entry-branch-card">
               <input type="radio" name="easy_img_path" value="omakase">
               <span class="entry-branch-card-inner">
                 <strong role="heading" aria-level="3">おまかせ</strong>
-                <span>こちらで写真の候補を整えます。気に入った枠は「残す」で固定できます</span>
+                <span>ギャラリーの写真に替えて、文章へ進みます</span>
               </span>
             </label>
             <label class="entry-branch-card">
@@ -643,8 +690,13 @@
 
         <details class="dash-block dash-block--easy" data-step-id="easy-img-wire" hidden>
           <summary>画像</summary>
-          <p class="dash-subhead" role="heading" aria-level="3">写真を枠にはめる</p>
-          <p class="step-help">見えている枠ごとに、写真を選べます。</p>
+          <div class="dash-subhead-row">
+            <p class="dash-subhead" role="heading" aria-level="3">写真を枠にはめる</p>
+            <span class="hub-tip-wrap">
+              <button type="button" class="hub-tip-btn" data-hub-tip aria-expanded="false" aria-label="写真を枠にはめるとは">?</button>
+              <span class="hub-tip-pop" hidden>枚数、すき間、拡大、位置は、この画面で整えられます。</span>
+            </span>
+          </div>
           <div id="easy-img-layout-host"></div>
           <div class="sample-img-wire-layout">
             <div class="sample-img-wire-stage" aria-hidden="true">
@@ -685,7 +737,7 @@
         <details class="dash-block dash-block--easy" data-step-id="easy-done" hidden>
           <summary>完成</summary>
           <p class="dash-subhead" role="heading" aria-level="3">できあがりを確認</p>
-          <p class="step-help">右の見本がいまの内容です。このまま進むか、編集するかを選んでください。</p>
+          <p class="step-help">右の見本がいまの内容です。このまま進みますか。直したいところがあれば、編集もできます。</p>
           <div class="easy-done-actions">
             <button type="button" class="gct-btn gct-btn-primary" id="easy-done-ok" data-easy-done-ok>これでいい</button>
             <button type="button" class="gct-btn" id="easy-done-edit" data-easy-done-edit>編集する</button>
@@ -783,8 +835,9 @@
             <p class="layout-arrange-hint" id="layout-arrange-hint" hidden></p>
             <div class="layout-arrange layout-arrange--expanded layout-arrange--structure" id="layout-arrange">
               <div class="layout-omakase-bar" id="layout-omakase-bar">
-                <p class="layout-omakase-note">残したい写真は鍵で固定できます。ギャラリーからおまかせは、固定していない写真をすべて選び直します。</p>
+                <p class="layout-omakase-note">固定中の写真は、おまかせで変わりません。</p>
                 <button type="button" class="layout-omakase-btn" id="layout-omakase-btn">ギャラリーからおまかせ</button>
+                <button type="button" class="layout-omakase-again" id="layout-omakase-confirm-again" hidden>確認をまた出す</button>
               </div>
               <div class="layout-arrange-wire" id="layout-arrange-wire" role="list" aria-label="表示と並び"></div>
               <div class="layout-arrange-actions">
@@ -1737,7 +1790,7 @@
   </div>
 
   <aside class="wave-tune" id="wave-tune" hidden aria-label="そよ風調整">
-    <p class="wave-tune-title" title="つかんで動かせます">そよ風調整</p>
+    <p class="wave-tune-title has-hover-tip" data-tip="つかんで動かせます">そよ風調整</p>
     <div class="wave-tune-row">
       <span class="wave-tune-name">動作時間</span>
       <button type="button" data-wave-tune="dur" data-dir="-1" aria-label="動作時間を20ミリ秒短く">−</button>

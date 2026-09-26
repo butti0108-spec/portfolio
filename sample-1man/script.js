@@ -15370,96 +15370,7 @@
 
   function renderLayoutImageInner(body, blockId) {
     body.innerHTML = "";
-    const countId = layoutImageCountId(blockId);
-    const order = blockId === "hero" ? ["hero"] : layoutBlockSlots(blockId);
-    if (!store.layoutInnerByBlock) store.layoutInnerByBlock = {};
-    let openSlot = blockId === "hero" ? "hero" : store.layoutInnerByBlock[countId] || "";
-    if (blockId !== "hero" && order.indexOf(openSlot) < 0) openSlot = "";
-
-    if (blockId === "hero") {
-      const panel = document.createElement("div");
-      panel.className = "layout-image-panel";
-      appendLayoutPhotoEditor(panel, blockId, "hero");
-      body.appendChild(panel);
-      focusPreviewLayoutFrame(blockId, "hero");
-      return;
-    }
-
-    const list = document.createElement("div");
-    list.className = "layout-inner-list";
-    order.forEach((slot) => {
-      const card = document.createElement("details");
-      card.className = "layout-inner layout-photo-card";
-      card.setAttribute("data-item-id", slot);
-      const summary = document.createElement("summary");
-      summary.className = "layout-photo-summary";
-      const thumb = document.createElement("span");
-      thumb.className = "layout-target-thumb";
-      const src = layoutFramePreviewSrc(layoutFrameImageName(blockId, slot));
-      if (src) {
-        const img = document.createElement("img");
-        img.alt = "";
-        img.src = src;
-        img.draggable = false;
-        thumb.appendChild(img);
-      }
-      const handle = document.createElement("span");
-      handle.className = "layout-inner-handle";
-      handle.textContent = "⋮⋮";
-      handle.setAttribute("aria-label", "この枠の順番を変えられます");
-      const openBtn = document.createElement("button");
-      openBtn.type = "button";
-      openBtn.className = "layout-open-btn";
-      const editor = document.createElement("div");
-      editor.className = "layout-photo-editor";
-      const syncCard = () => {
-        openBtn.textContent = card.open ? "閉じる" : "開く";
-        openBtn.setAttribute("aria-expanded", card.open ? "true" : "false");
-      };
-      summary.appendChild(thumb);
-      summary.appendChild(handle);
-      summary.appendChild(openBtn);
-      card.appendChild(summary);
-      card.appendChild(editor);
-      if (slot === openSlot) {
-        card.open = true;
-        appendLayoutPhotoEditor(editor, blockId, slot);
-      }
-      syncCard();
-      openBtn.addEventListener("pointerdown", (ev) => {
-        ev.stopPropagation();
-        openBtn._wantOpen = !card.open;
-      });
-      openBtn.addEventListener("click", (ev) => {
-        ev.preventDefault();
-        ev.stopPropagation();
-        const want = openBtn._wantOpen;
-        window.setTimeout(() => {
-          card.open = typeof want === "boolean" ? want : !card.open;
-        }, 0);
-      });
-      summary.addEventListener("click", (ev) => {
-        ev.preventDefault();
-      });
-      card.addEventListener("toggle", () => {
-        syncCard();
-        if (card.open) {
-          store.layoutInnerByBlock[countId] = slot;
-          list.querySelectorAll("details.layout-photo-card").forEach((el) => {
-            if (el !== card && el.open) el.open = false;
-          });
-          if (!editor.childElementCount) appendLayoutPhotoEditor(editor, blockId, slot);
-          focusPreviewLayoutFrame(blockId, slot);
-        } else if (store.layoutInnerByBlock[countId] === slot) {
-          store.layoutInnerByBlock[countId] = "";
-          editor.innerHTML = "";
-        }
-      });
-      bindLayoutInnerDrag(card, countId, slot);
-      list.appendChild(card);
-    });
-    body.appendChild(list);
-    if (openSlot) focusPreviewLayoutFrame(blockId, openSlot);
+    body.appendChild(buildLayoutClosedFace(blockId));
   }
 
   function renderLayoutArrangeWire() {
@@ -15566,7 +15477,6 @@
             head.appendChild(visLabel);
             head.appendChild(name);
             summary.appendChild(head);
-            summary.appendChild(buildLayoutClosedFace(id));
           } else {
             summary.appendChild(visLabel);
             summary.appendChild(handle);
@@ -15578,6 +15488,13 @@
           const syncLayoutAccordion = () => {
             if (!cell.open) {
               if (store.layoutAccordionId === id) store.layoutAccordionId = "";
+              if (isLayoutImageBlock(id)) {
+                const countId = layoutImageCountId(id);
+                const openKey = countId || id;
+                if (!store.layoutInnerByBlock) store.layoutInnerByBlock = {};
+                store.layoutInnerByBlock[openKey] = "";
+                body.innerHTML = "";
+              }
               if (body.querySelector("[data-layout-input-home]")) restoreLayoutSectionInputs();
               return;
             }
@@ -15604,10 +15521,15 @@
           cell.appendChild(summary);
           cell.appendChild(body);
           summary.addEventListener("click", (ev) => {
-            if (imageBlock) {
+            if (ev.target.closest && ev.target.closest(".layout-arrange-handle, .layout-arrange-vis-label, .layout-arrange-vis")) {
               ev.preventDefault();
               return;
-            } else if (ev.target.closest && ev.target.closest(".layout-arrange-handle, .layout-arrange-vis-label")) {
+            }
+            if (imageBlock) {
+              if (cell.open) {
+                ev.preventDefault();
+                cell.open = false;
+              }
               return;
             }
             window.setTimeout(() => {
@@ -15622,7 +15544,7 @@
           });
           bindLayoutArrangeDrag(cell, id);
           host.appendChild(cell);
-          if (!imageBlock && id === openId) openCell = cell;
+          if (id === openId) openCell = cell;
         });
         if (openCell) {
           store._layoutAccordionRendering = true;
@@ -16998,6 +16920,13 @@
 
     function onMove(ev) {
       const point = ev.touches && ev.touches[0] ? ev.touches[0] : ev;
+      document.documentElement.classList.remove("dash-preview-locked");
+      const preview = document.querySelector(".preview-pane");
+      if (preview) {
+        preview.style.position = "";
+        preview.style.left = "";
+        preview.style.width = "";
+      }
       setPct(clientToPct(point.clientX));
     }
 

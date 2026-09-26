@@ -11755,13 +11755,35 @@ body.copy-later-fixed .dash-block.is-wizard-active .easy-copy-frame > .dash-subh
 }
 .layout-arrange-summary--image {
   display: grid;
-  grid-template-columns: 2rem 1.15rem 1.6rem 14rem 2.1rem 2.2rem 5rem max-content max-content max-content;
+  grid-template-columns: 2rem 1.15rem 1.6rem minmax(0, 1fr);
   column-gap: 0.9rem;
   row-gap: 0.9rem;
   align-items: start;
   justify-content: start;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
   padding: 0.95rem 1.05rem 1.05rem;
   cursor: default;
+}
+.layout-arrange-cell--structure:has(.layout-arrange-summary--image) > .layout-arrange-body {
+  display: grid;
+  grid-template-columns: 2.1rem 2.2rem 5rem 9.2em 4.8em;
+  column-gap: 0.9rem;
+  row-gap: 0.9rem;
+  align-items: start;
+  justify-content: start;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+}
+.layout-arrange-body .layout-section-tools,
+.layout-arrange-body .layout-photo-row > .layout-closed-line {
+  grid-column: 1 / -1;
+}
+.layout-arrange-cell[data-layout-block="hero"] .layout-arrange-body .layout-photo-row > .layout-closed-line {
+  grid-column: 2 / -1;
 }
 .layout-closed-head {
   display: grid;
@@ -12045,10 +12067,7 @@ body.copy-later-fixed .dash-block.is-wizard-active .easy-copy-frame > .dash-subh
   flex: 0 0 auto;
 }
 .layout-open-btn {
-  position: absolute;
-  top: 0.35rem;
-  right: 0.35rem;
-  z-index: 4;
+  position: static;
   box-sizing: border-box;
   min-width: 4.8em;
   text-align: center;
@@ -12621,12 +12640,17 @@ body.wizard-mode .dash-block.is-wizard-active {
   min-width: 100%;
 }
 #easy-img-layout-host .layout-arrange-summary--image {
-  grid-template-columns: 2rem 1.15rem 1.6rem 14rem 2.1rem 2.2rem 5rem minmax(9.2em, max-content) 5.2rem 5.5rem;
+  grid-template-columns: 2rem 1.15rem 1.6rem minmax(0, 1fr);
+  width: 100%;
+  max-width: 100%;
 }
-/* 左が細いときだけ、開くが操作の外へ出ないように行の中へ折り返す */
-@container dash (max-width: 40rem) {
+#easy-img-layout-host .layout-arrange-cell--structure:has(.layout-arrange-summary--image) > .layout-arrange-body {
+  grid-template-columns: 2.1rem 2.2rem 5rem 9.2em 4.8em;
+}
+/* 左が列の合計より細いとき、開くが操作の外へ出ないように行の中へ折り返す */
+@container dash (max-width: 32rem) {
   #easy-img-layout-host {
-    overflow-x: hidden;
+    overflow-x: visible;
   }
   #easy-img-layout-host > .layout-arrange,
   #easy-img-layout-host > .layout-arrange--expanded,
@@ -12656,18 +12680,24 @@ body.wizard-mode .dash-block.is-wizard-active {
     align-items: center;
   }
   /* 見出しと枚数を同じ段に戻す。縦に積むと最後の開くが下のボタンの裏に入る */
-  #easy-img-layout-host .layout-arrange-summary--image {
+  #easy-img-layout-host .layout-arrange-summary--image,
+  #easy-img-layout-host .layout-arrange-cell--structure:has(.layout-arrange-summary--image) > .layout-arrange-body {
     display: flex;
     flex-wrap: wrap;
     align-items: center;
     column-gap: 0.45rem;
     row-gap: 0.7rem;
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
   }
   #easy-img-layout-host .layout-closed-head,
-  #easy-img-layout-host .layout-section-tools {
-    width: auto;
+  #easy-img-layout-host .layout-section-tools,
+  #easy-img-layout-host .layout-photo-row,
+  #easy-img-layout-host .layout-photo-row > .layout-closed-line {
+    width: 100%;
     max-width: 100%;
-    flex: 0 1 auto;
+    flex: 1 0 100%;
   }
   #easy-img-layout-host .layout-closed-head {
     display: flex;
@@ -12691,6 +12721,17 @@ body.wizard-mode .dash-block.is-wizard-active {
   #easy-img-layout-host .layout-photo-row > .layout-closed-line {
     flex: 1 0 100%;
   }
+  #easy-img-layout-host .layout-size-word {
+    width: 9.2em;
+    flex: 0 0 9.2em;
+  }
+  #easy-img-layout-host .layout-open-btn,
+  #easy-img-layout-host .layout-section-omakase {
+    box-sizing: border-box;
+    width: 4.8em;
+    flex: 0 0 4.8em;
+    margin-left: auto;
+  }
 }
 #easy-img-layout-host .layout-arrange-cell.layout-arrange-cell--structure.size-L {
   overflow: visible;
@@ -12706,7 +12747,7 @@ body.wizard-mode .dash-block.is-wizard-active {
   background: transparent;
   margin: 0;
 }
-@container dash (min-width: 40rem) {
+@container dash (min-width: 32rem) {
   #easy-img-layout-host .layout-page-blank {
     width: 9.2em;
     min-width: 9.2em;
@@ -12727,10 +12768,15 @@ body.wizard-mode .dash-block.is-wizard-active {
     grid-column: 3 / 5;
     justify-self: start;
   }
-  #easy-img-layout-host .layout-section-tools .layout-section-omakase {
-    grid-column: 6;
+  #easy-img-layout-host .layout-section-tools .layout-section-omakase,
+  #easy-img-layout-host .layout-arrange-cell[data-layout-block="hero"] .layout-arrange-body .layout-photo-row > .layout-closed-line > .layout-section-omakase {
+    grid-column: 5;
     justify-self: start;
     margin-left: 0;
+  }
+  #easy-img-layout-host .layout-arrange-cell[data-layout-block="hero"] .layout-arrange-body .layout-photo-row > .layout-closed-line > .layout-section-omakase {
+    grid-column: 4;
+    grid-row: 2;
   }
   #easy-img-layout-host .layout-photo-row.is-open .layout-photo-editor {
     width: 100%;

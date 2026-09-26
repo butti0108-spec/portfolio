@@ -13093,7 +13093,9 @@ body.wizard-mode .dash-block.is-wizard-active {
   min-width: 0;
 }
 .layout-photo-tools--plain .layout-zoom-end {
-  display: block;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   flex: 0 0 auto;
   box-sizing: border-box;
   margin: 0;
@@ -13102,15 +13104,21 @@ body.wizard-mode .dash-block.is-wizard-active {
   border-radius: 0.15rem;
   border: 1.5px solid #6d756f;
   background: #fff;
+  color: #152028;
+  font-weight: 700;
+  line-height: 1;
+  white-space: nowrap;
   cursor: pointer;
 }
 .layout-photo-tools--plain .layout-zoom-end--small {
   width: 2.5rem;
   height: 2.5rem;
+  font-size: 1.15rem;
 }
 .layout-photo-tools--plain .layout-zoom-end--large {
   width: 3.1rem;
   height: 3.1rem;
+  font-size: 1.45rem;
 }
 .layout-photo-tools--plain .layout-zoom-end:disabled {
   opacity: 0.45;

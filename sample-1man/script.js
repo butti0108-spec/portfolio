@@ -15306,7 +15306,7 @@
     const scaleNow = normalizeImageScale(view && view.scale);
     const rangeValue = IMAGE_SCALE_MAX + IMAGE_SCALE_MIN - scaleNow;
     zoom.innerHTML =
-      '<button type="button" class="layout-zoom-end layout-zoom-end--small" data-scale-nudge="in" aria-label="枠を一段小さく"></button>' +
+      '<button type="button" class="layout-zoom-end layout-zoom-end--small" data-scale-nudge="in" aria-label="枠を一段小さく">縮小</button>' +
       '<input class="layout-zoom-range-input" type="range" min="' +
       IMAGE_SCALE_MIN +
       '" max="' +
@@ -15316,7 +15316,7 @@
       '" value="' +
       rangeValue +
       '" aria-label="見ている範囲の大きさ">' +
-      '<button type="button" class="layout-zoom-end layout-zoom-end--large" data-scale-nudge="out" aria-label="枠を一段大きく"></button>';
+      '<button type="button" class="layout-zoom-end layout-zoom-end--large" data-scale-nudge="out" aria-label="枠を一段大きく">拡大</button>';
     zoom.querySelectorAll("[data-scale-nudge]").forEach((btn) => {
       btn.addEventListener("click", (ev) => {
         ev.preventDefault();

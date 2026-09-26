@@ -14376,6 +14376,10 @@
     const s = normalizeImageScale(scale);
     const label = box.querySelector(".layout-adjust-scale");
     if (label) label.textContent = s + "%";
+    const range = box.querySelector(".layout-zoom-range-input");
+    if (range && document.activeElement !== range) {
+      range.value = String(IMAGE_SCALE_MAX + IMAGE_SCALE_MIN - s);
+    }
     const inn = box.querySelector('[data-scale-nudge="in"]');
     const out = box.querySelector('[data-scale-nudge="out"]');
     if (inn) inn.disabled = s >= IMAGE_SCALE_MAX;
@@ -14419,6 +14423,28 @@
       const next = normalizeImageScale(current + delta);
       if (next === current) return;
       pushLayoutUndo();
+      layout.scaleById[slot] = next;
+      applyItemLayoutToPreview(countId);
+    }
+    if (store.confirmed.finish) unconfirmFinishSoft();
+    scheduleSave();
+    syncOpenLayoutFocalButtons();
+  }
+
+  function setFrameImageScale(blockId, slot, value, pushUndo) {
+    const next = normalizeImageScale(value);
+    if (blockId === "hero") {
+      const current = normalizeImageScale(store.heroImageScale);
+      if (next === current) return;
+      store.heroImageScale = next;
+      applyHeroFocalToPreview();
+    } else {
+      const countId = layoutImageCountId(blockId);
+      const layout = normalizeItemLayout(countId);
+      if (!layout) return;
+      const current = normalizeImageScale(layout.scaleById && layout.scaleById[slot]);
+      if (next === current) return;
+      if (pushUndo) pushLayoutUndo();
       layout.scaleById[slot] = next;
       applyItemLayoutToPreview(countId);
     }
@@ -14732,18 +14758,39 @@
 
   function alignOpenSourceMapToPad(box) {
     if (!box || !box.closest("#easy-img-layout-host")) return;
-    const tools = box.closest(".layout-photo-tools");
-    const down = tools && tools.querySelector("[data-focal-nudge='down']");
+    const row = box.closest(".layout-photo-row");
+    const scroller = document.querySelector(".dash-body > .fill-form");
     const img = box.querySelector("img");
-    if (!down || !img) return;
-    box.style.maxHeight = "";
-    img.style.maxHeight = "";
-    const limit = Math.round(down.getBoundingClientRect().bottom - box.getBoundingClientRect().top);
-    if (limit < 40) return;
-    box.style.maxHeight = limit + "px";
-    img.style.maxHeight = limit + "px";
-    img.style.width = "auto";
+    if (!row || !scroller || !img) return;
+    const nw = img.naturalWidth;
+    const nh = img.naturalHeight;
+    box.style.width = "100%";
+    box.style.maxWidth = "100%";
+    box.style.marginLeft = "0";
+    box.style.height = "auto";
+    img.style.width = "100%";
     img.style.height = "auto";
+    img.style.maxHeight = "none";
+    if (!nw || !nh) return;
+    const spare = Math.round(
+      scroller.getBoundingClientRect().bottom -
+        row.getBoundingClientRect().top -
+        (row.offsetHeight - box.offsetHeight) -
+        16
+    );
+    const tools = box.closest(".layout-photo-tools");
+    const sources = tools && tools.querySelector(".layout-img-sources");
+    const pad = tools && tools.querySelector(".layout-focal-pad");
+    const side = (sources ? sources.offsetWidth : 0) + (pad ? pad.offsetWidth : 0);
+    const toolsW = tools ? tools.clientWidth : 0;
+    const room = toolsW - side - 28;
+    const maxW = room >= 120 ? room : 160;
+    if (spare < 80 || !maxW) return;
+    const fullH = maxW * (nh / nw);
+    const w = fullH <= spare ? maxW : Math.min(maxW, Math.round(spare * (nw / nh)));
+    box.style.width = w + "px";
+    box.style.marginLeft = "0";
+    if (tools && tools.scrollWidth > tools.clientWidth + 1) tools.scrollLeft = tools.scrollWidth;
   }
 
   function syncLayoutMirrors() {
@@ -14855,6 +14902,64 @@
       if (Math.abs(movedScreen) > 1 && Math.abs(movedScroll) > 1) {
         ratio = movedScroll / movedScreen;
       }
+    }
+    scroll.style.scrollBehavior = prev;
+  }
+
+  function scrollDashChildToTop(el) {
+    if (!el) return;
+    const scroller = document.querySelector(".dash-body > .fill-form");
+    if (!scroller) {
+      el.scrollIntoView({ block: "start", behavior: "auto" });
+      return;
+    }
+    const host = document.querySelector("#easy-img-layout-host");
+    if (host) host.style.paddingBottom = "";
+    let delta = el.getBoundingClientRect().top - scroller.getBoundingClientRect().top;
+    if (delta > 1 && host) {
+      const max = Math.max(0, scroller.scrollHeight - scroller.clientHeight);
+      const need = scroller.scrollTop + delta;
+      if (need > max + 1) host.style.paddingBottom = Math.ceil(need - max) + "px";
+      delta = el.getBoundingClientRect().top - scroller.getBoundingClientRect().top;
+    }
+    scroller.scrollTop += delta;
+  }
+
+  function alignOpenPhotoWithPreview() {
+    const map = document.querySelector("#easy-img-layout-host .layout-photo-row.is-open .layout-source-map");
+    if (!map || !root) return;
+    const sel = layoutFramePreviewSelector(
+      map.getAttribute("data-mirror-block") || "",
+      map.getAttribute("data-mirror-slot") || ""
+    );
+    const scroll = document.querySelector(".preview-scroll");
+    const target = sel ? root.querySelector(sel) : null;
+    if (!scroll || !target) return;
+    ensurePreviewScrollTail(scroll);
+    const zoom = previewZoomFactor();
+    const prev = scroll.style.scrollBehavior;
+    scroll.style.scrollBehavior = "auto";
+    let ratio = 1;
+    for (let i = 0; i < 8; i++) {
+      const mapTop = map.getBoundingClientRect().top;
+      const box = target.getBoundingClientRect();
+      const layoutH = target.offsetHeight || box.height;
+      const rectIsLayout =
+        zoom < 0.999 &&
+        layoutH > 8 &&
+        Math.abs(box.height - layoutH) <= Math.abs(box.height - layoutH * zoom) + 1;
+      const scale = rectIsLayout ? zoom : 1;
+      const visualTop = box.top * scale;
+      const deltaScreen = visualTop - mapTop;
+      if (Math.abs(deltaScreen) <= 4) break;
+      const max = Math.max(0, scroll.scrollHeight - scroll.clientHeight);
+      const beforeTop = scroll.scrollTop;
+      const next = Math.max(0, Math.min(max, beforeTop + deltaScreen * ratio));
+      if (Math.abs(next - beforeTop) < 1) break;
+      scroll.scrollTop = next;
+      const movedScroll = scroll.scrollTop - beforeTop;
+      const movedScreen = visualTop - target.getBoundingClientRect().top * scale;
+      if (Math.abs(movedScreen) > 1 && Math.abs(movedScroll) > 1) ratio = movedScroll / movedScreen;
     }
     scroll.style.scrollBehavior = prev;
   }
@@ -15082,7 +15187,6 @@
         rememberLayoutPhotoCenter(blockId, slot);
         renderLayoutArrangeWire();
         focusPreviewLayoutFrame(blockId, slot);
-        scrollPreviewFrameIntoView(layoutSectionPreviewSelector(blockId));
       });
       line.appendChild(openBtn);
       if (blockId === "hero") line.appendChild(sectionOmakase);
@@ -15198,19 +15302,25 @@
   function appendLayoutAdjust(parent, blockId, slot) {
     const block = document.createElement("section");
     block.className = "layout-adjust";
-    const heading = document.createElement("p");
-    heading.className = "layout-edit-heading";
-    heading.textContent = "画像の調整";
     const row = document.createElement("div");
     row.className = "layout-adjust-row";
     const zoom = document.createElement("div");
     zoom.className = "layout-adjust-zoom";
-    zoom.setAttribute("role", "group");
-    zoom.setAttribute("aria-label", "拡大縮小");
+    const view = layoutFrameViewState(blockId, slot);
+    const scaleNow = normalizeImageScale(view && view.scale);
+    const rangeValue = IMAGE_SCALE_MAX + IMAGE_SCALE_MIN - scaleNow;
     zoom.innerHTML =
-      '<button type="button" data-scale-nudge="in">＋ 拡大</button>' +
-      '<span class="layout-adjust-scale">100%</span>' +
-      '<button type="button" data-scale-nudge="out">− 縮小</button>';
+      '<button type="button" class="layout-zoom-end layout-zoom-end--small" data-scale-nudge="in" aria-label="枠を一段小さく"></button>' +
+      '<input class="layout-zoom-range-input" type="range" min="' +
+      IMAGE_SCALE_MIN +
+      '" max="' +
+      IMAGE_SCALE_MAX +
+      '" step="' +
+      IMAGE_SCALE_STEP +
+      '" value="' +
+      rangeValue +
+      '" aria-label="見ている範囲の大きさ">' +
+      '<button type="button" class="layout-zoom-end layout-zoom-end--large" data-scale-nudge="out" aria-label="枠を一段大きく"></button>';
     zoom.querySelectorAll("[data-scale-nudge]").forEach((btn) => {
       btn.addEventListener("click", (ev) => {
         ev.preventDefault();
@@ -15218,6 +15328,18 @@
         nudgeFrameImageScale(blockId, slot, btn.getAttribute("data-scale-nudge"));
       });
     });
+    const range = zoom.querySelector(".layout-zoom-range-input");
+    let scaleUndoArmed = false;
+    if (range) {
+      range.addEventListener("pointerdown", () => {
+        scaleUndoArmed = true;
+      });
+      range.addEventListener("input", () => {
+        const raw = Number(range.value);
+        setFrameImageScale(blockId, slot, IMAGE_SCALE_MAX + IMAGE_SCALE_MIN - raw, scaleUndoArmed);
+        scaleUndoArmed = false;
+      });
+    }
     const pad = document.createElement("div");
     pad.className = "layout-focal-pad layout-adjust-pad";
     pad.setAttribute("role", "group");
@@ -15226,7 +15348,7 @@
       '<button type="button" class="item-focal-btn" data-focal-nudge="up" aria-label="上へ">↑</button>' +
       '<div class="layout-adjust-mid">' +
       '<button type="button" class="item-focal-btn" data-focal-nudge="left" aria-label="左へ">←</button>' +
-      '<button type="button" class="layout-focal-reset layout-adjust-home" data-focal-home>元の位置</button>' +
+      '<button type="button" class="layout-focal-reset layout-adjust-home" data-focal-home aria-label="元の位置に戻す"></button>' +
       '<button type="button" class="item-focal-btn" data-focal-nudge="right" aria-label="右へ">→</button>' +
       "</div>" +
       '<button type="button" class="item-focal-btn" data-focal-nudge="down" aria-label="下へ">↓</button>';
@@ -15259,6 +15381,7 @@
     });
     const home = pad.querySelector("[data-focal-home]");
     if (home) {
+      home.textContent = "";
       home.setAttribute("aria-label", "元の位置に戻す");
       home.addEventListener("click", (ev) => {
         ev.preventDefault();
@@ -15268,7 +15391,6 @@
     }
     row.appendChild(zoom);
     row.appendChild(pad);
-    block.appendChild(heading);
     block.appendChild(row);
     parent.appendChild(block);
   }
@@ -15276,19 +15398,8 @@
   function appendLayoutPhotoEditor(parent, blockId, slot) {
     const imageName = layoutFrameImageName(blockId, slot);
     const nowSrc = layoutFramePreviewSrc(imageName);
-    const snap = layoutReplaceBefore[imageName];
-    const canUndo = !!(snap && snap.src && snap.src !== nowSrc);
     const tools = document.createElement("div");
     tools.className = "layout-photo-tools layout-photo-tools--plain";
-    const stepLabel = (text) => {
-      const p = document.createElement("p");
-      p.className = "layout-edit-step";
-      p.textContent = text;
-      return p;
-    };
-    const choose = document.createElement("section");
-    choose.className = "layout-edit-step-block";
-    choose.appendChild(stepLabel("画像を選ぶ"));
     const sources = document.createElement("div");
     sources.className = "layout-img-sources";
     const selfBtn = document.createElement("button");
@@ -15310,45 +15421,16 @@
       ev.stopPropagation();
       openFreePhotoGalleryModal(imageName);
     });
+    const picked = !!(store.galleryPicks && store.galleryPicks[imageName]);
+    if (picked) galleryBtn.classList.add("is-on");
+    else selfBtn.classList.add("is-on");
     sources.appendChild(selfBtn);
     sources.appendChild(galleryBtn);
-    const undoBtn = document.createElement("button");
-    undoBtn.type = "button";
-    undoBtn.className = "layout-image-undo";
-    undoBtn.textContent = "↺";
-    undoBtn.disabled = !(canUndo && nowSrc);
-    undoBtn.setAttribute("aria-label", "一つ前の画像に戻す");
-    setHoverTip(undoBtn, "一つ前の画像に戻す");
-    undoBtn.addEventListener("click", (ev) => {
-      ev.preventDefault();
-      ev.stopPropagation();
-      if (undoBtn.disabled) return;
-      undoLayoutImageOnce(imageName);
-    });
-    sources.appendChild(undoBtn);
-    choose.appendChild(sources);
-    tools.appendChild(choose);
+    tools.appendChild(sources);
     parent.appendChild(tools);
     appendLayoutAdjust(tools, blockId, slot);
-    const adjust = tools.querySelector(".layout-adjust");
-    const row = adjust && adjust.querySelector(".layout-adjust-row");
-    const zoom = row && row.querySelector(".layout-adjust-zoom");
-    const pad = row && row.querySelector(".layout-adjust-pad");
-    if (zoom && pad && adjust) {
-      const zoomBlock = document.createElement("section");
-      zoomBlock.className = "layout-edit-step-block";
-      zoomBlock.appendChild(stepLabel("拡大・縮小"));
-      zoomBlock.appendChild(zoom);
-      const posBlock = document.createElement("section");
-      posBlock.className = "layout-edit-step-block";
-      posBlock.appendChild(stepLabel("位置"));
-      posBlock.appendChild(pad);
-      adjust.innerHTML = "";
-      adjust.appendChild(zoomBlock);
-      adjust.appendChild(posBlock);
-    }
     const mapStep = document.createElement("section");
-    mapStep.className = "layout-edit-step-block layout-source-step";
+    mapStep.className = "layout-source-step";
     const map = document.createElement("div");
     map.className = "layout-source-map";
     map.setAttribute("data-mirror-block", blockId);
@@ -15357,7 +15439,10 @@
     mapImg.alt = "";
     mapImg.draggable = false;
     if (nowSrc) mapImg.src = nowSrc;
-    mapImg.addEventListener("load", () => paintLayoutSourceMap(map));
+    mapImg.addEventListener("load", () => {
+      paintLayoutSourceMap(map);
+      alignOpenPhotoWithPreview();
+    });
     const mapWin = document.createElement("div");
     mapWin.className = "layout-source-window";
     mapWin.setAttribute("aria-hidden", "true");
@@ -15374,6 +15459,8 @@
   }
 
   function renderLayoutArrangeWire() {
+    const openHost = document.querySelector("#easy-img-layout-host");
+    if (openHost) openHost.style.paddingBottom = "";
     restoreLayoutSectionInputs();
     const hosts = layoutArrangeHosts();
     const order = normalizeLayoutOrder(store.layoutOrder);
@@ -15476,6 +15563,17 @@
             head.appendChild(headGap);
             head.appendChild(visLabel);
             head.appendChild(name);
+            const secOpen = document.createElement("button");
+            secOpen.type = "button";
+            secOpen.className = "layout-open-btn layout-section-open" + (id === openId ? " is-ok" : "");
+            secOpen.textContent = id === openId ? "OK" : "開く";
+            secOpen.setAttribute("aria-expanded", id === openId ? "true" : "false");
+            secOpen.addEventListener("click", (ev) => {
+              ev.preventDefault();
+              ev.stopPropagation();
+              cell.open = !cell.open;
+            });
+            head.appendChild(secOpen);
             summary.appendChild(head);
           } else {
             summary.appendChild(visLabel);
@@ -15486,6 +15584,12 @@
           body.className = "layout-arrange-body";
 
           const syncLayoutAccordion = () => {
+            const secBtn = summary.querySelector(".layout-section-open");
+            if (secBtn) {
+              secBtn.textContent = cell.open ? "OK" : "開く";
+              secBtn.classList.toggle("is-ok", !!cell.open);
+              secBtn.setAttribute("aria-expanded", cell.open ? "true" : "false");
+            }
             if (!cell.open) {
               if (store.layoutAccordionId === id) store.layoutAccordionId = "";
               if (isLayoutImageBlock(id)) {
@@ -15508,6 +15612,13 @@
             if (!isLayoutImageBlock(id)) {
               const sel = cell.getAttribute("data-preview-target") || meta.selector;
               scrollPreviewTo(sel);
+            } else {
+              window.requestAnimationFrame(() => {
+                const row = cell.querySelector(".layout-photo-row.is-open");
+                scrollDashChildToTop(row || cell);
+                if (row) alignOpenPhotoWithPreview();
+                else scrollPreviewFrameIntoView(layoutSectionPreviewSelector(id));
+              });
             }
           };
           let layoutAccordionSyncedAt = 0;
@@ -15521,7 +15632,7 @@
           cell.appendChild(summary);
           cell.appendChild(body);
           summary.addEventListener("click", (ev) => {
-            if (ev.target.closest && ev.target.closest(".layout-arrange-handle, .layout-arrange-vis-label, .layout-arrange-vis")) {
+            if (ev.target.closest && ev.target.closest(".layout-arrange-handle, .layout-arrange-vis-label, .layout-arrange-vis, .layout-section-open")) {
               ev.preventDefault();
               return;
             }
@@ -15565,8 +15676,18 @@
       syncLayoutMirrors();
       document.querySelectorAll("#easy-img-layout-host .layout-source-map").forEach(alignOpenSourceMapToPad);
       if (!pendingCenter) return;
-      scrollLayoutPhotoIntoCenter(pendingCenter.blockId, pendingCenter.slot);
-      scrollPreviewFrameIntoView(layoutSectionPreviewSelector(pendingCenter.blockId));
+      const row = document.querySelector(
+        '[data-layout-photo="' + pendingCenter.blockId + ":" + pendingCenter.slot + '"]'
+      );
+      scrollDashChildToTop(row);
+      const map = row && row.querySelector(".layout-source-map");
+      if (map) alignOpenSourceMapToPad(map);
+      alignOpenPhotoWithPreview();
+      window.requestAnimationFrame(() => {
+        scrollDashChildToTop(row);
+        if (map) alignOpenSourceMapToPad(map);
+        alignOpenPhotoWithPreview();
+      });
     });
   }
 
@@ -16869,6 +16990,7 @@
         return;
       }
       apply();
+      window.requestAnimationFrame(() => alignOpenPhotoWithPreview());
     };
     apply();
   }
@@ -16899,6 +17021,9 @@
         window.applyPreviewWidthFromPane();
       }
       syncLayoutMirrors();
+      const openMap = document.querySelector("#easy-img-layout-host .layout-photo-row.is-open .layout-source-map");
+      if (openMap) alignOpenSourceMapToPad(openMap);
+      alignOpenPhotoWithPreview();
     }
 
     function persist() {

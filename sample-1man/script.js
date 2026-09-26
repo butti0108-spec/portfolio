@@ -14776,20 +14776,13 @@
         (row.offsetHeight - box.offsetHeight) -
         16
     );
-    const tools = box.closest(".layout-photo-tools");
-    const sources = tools && tools.querySelector(".layout-img-sources");
-    const pad = tools && tools.querySelector(".layout-focal-pad");
-    const side = (sources ? sources.offsetWidth : 0) + (pad ? pad.offsetWidth : 0);
-    const toolsW = tools ? tools.clientWidth : 0;
-    const room = toolsW - side - 28;
-    const maxW = room >= 120 ? room : 160;
-    const fullH = nw && nh ? maxW * (nh / nw) : maxW;
-    const w = spare >= 80 && fullH > spare ? Math.min(maxW, Math.round(spare * (nw / nh))) : maxW;
+    const preferred = 168;
+    const fullH = preferred * (nh / nw);
+    const w = spare >= 80 && fullH > spare ? Math.max(72, Math.round(spare * (nw / nh))) : preferred;
     if (box.style.width !== w + "px") box.style.width = w + "px";
     img.style.width = "100%";
     box.style.visibility = "visible";
     box.style.marginLeft = "0";
-    if (tools && tools.scrollWidth > tools.clientWidth + 1) tools.scrollLeft = tools.scrollWidth;
   }
 
   function syncLayoutMirrors() {
@@ -15331,6 +15324,13 @@
         nudgeFrameImageScale(blockId, slot, btn.getAttribute("data-scale-nudge"));
       });
     });
+    const zoomBlock = document.createElement("div");
+    zoomBlock.className = "layout-zoom-block";
+    const zoomLabel = document.createElement("p");
+    zoomLabel.className = "layout-zoom-label";
+    zoomLabel.textContent = "拡大縮小";
+    zoomBlock.appendChild(zoomLabel);
+    zoomBlock.appendChild(zoom);
     const range = zoom.querySelector(".layout-zoom-range-input");
     let scaleUndoArmed = false;
     if (range) {
@@ -15384,15 +15384,15 @@
     });
     const home = pad.querySelector("[data-focal-home]");
     if (home) {
-      home.textContent = "";
-      home.setAttribute("aria-label", "元の位置に戻す");
+      home.textContent = "中央";
+      home.setAttribute("aria-label", "写真の中央に戻す");
       home.addEventListener("click", (ev) => {
         ev.preventDefault();
         ev.stopPropagation();
         resetLayoutFrameFocal(blockId, slot);
       });
     }
-    row.appendChild(zoom);
+    row.appendChild(zoomBlock);
     row.appendChild(pad);
     block.appendChild(row);
     parent.appendChild(block);
@@ -15429,9 +15429,12 @@
     else selfBtn.classList.add("is-on");
     sources.appendChild(selfBtn);
     sources.appendChild(galleryBtn);
+    const cluster = document.createElement("div");
+    cluster.className = "layout-photo-cluster";
     tools.appendChild(sources);
+    tools.appendChild(cluster);
     parent.appendChild(tools);
-    appendLayoutAdjust(tools, blockId, slot);
+    appendLayoutAdjust(cluster, blockId, slot);
     const mapStep = document.createElement("section");
     mapStep.className = "layout-source-step";
     const map = document.createElement("div");
@@ -15452,7 +15455,7 @@
     map.appendChild(mapImg);
     map.appendChild(mapWin);
     mapStep.appendChild(map);
-    tools.appendChild(mapStep);
+    cluster.appendChild(mapStep);
     paintLayoutSourceMap(map);
   }
 

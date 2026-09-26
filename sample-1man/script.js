@@ -14371,6 +14371,44 @@
     });
   }
 
+  function layoutPhotoReplaceLocked(blockId, slot) {
+    const key = layoutFrameLockKey(blockId, slot);
+    return !!(store.imgOmakaseLocks && store.imgOmakaseLocks[key]);
+  }
+
+  function showLayoutPhotoLockedNotice() {
+    openLayoutOmakaseNotice({
+      title: "おまかせを解除してください",
+      body: "変更したい画像のロックを解除してから、もう一度おまかせを押してください。",
+      confirmLabel: "",
+      allowSkip: false
+    });
+  }
+
+  function runLayoutPhotoOmakase(blockId, slot, button) {
+    if (layoutPhotoReplaceLocked(blockId, slot)) {
+      showLayoutPhotoLockedNotice();
+      return;
+    }
+    const imageName = layoutFrameImageName(blockId, slot);
+    const one = {
+      key: imageName,
+      input: imageName,
+      prefer: blockId === "hero" ? "wide" : "square",
+      label: blockId === "hero" ? "キャッチ" : layoutFrameLabel(blockId, slot)
+    };
+    if (button) button.disabled = true;
+    applyImgOmakaseFromCatalog({ onlyUnlocked: true, slots: [one] }).then(
+      function () {
+        if (button) button.disabled = false;
+        setLayoutFrameLocked(blockId, slot, true);
+      },
+      function () {
+        if (button) button.disabled = false;
+      }
+    );
+  }
+
   function syncOpenLayoutScale(box, scale) {
     if (!box) return;
     const s = normalizeImageScale(scale);
@@ -14476,21 +14514,6 @@
     if (!layout || !slot) return;
     pushLayoutUndo();
     layout.sizeById[slot] = size === "H" ? "H" : "L";
-    applyItemLayoutToPreview(countId);
-    renderLayoutArrangeWire();
-    if (store.confirmed.finish) unconfirmFinishSoft();
-    scheduleSave();
-  }
-
-  function setLayoutSectionPageWidth(blockId, size) {
-    const countId = layoutImageCountId(blockId);
-    const layout = countId ? normalizeItemLayout(countId) : null;
-    if (!layout) return;
-    const token = size === "H" ? "H" : "L";
-    pushLayoutUndo();
-    layoutBlockSlots(blockId).forEach((slot) => {
-      layout.sizeById[slot] = token;
-    });
     applyItemLayoutToPreview(countId);
     renderLayoutArrangeWire();
     if (store.confirmed.finish) unconfirmFinishSoft();
@@ -15026,92 +15049,70 @@
     ev.stopPropagation();
   }
 
-  function buildLayoutSectionTools(blockId) {
-    const tools = document.createElement("div");
-    tools.className = "layout-section-tools";
+  function appendLayoutHeadCountGap(head, blockId) {
     const countId = layoutImageCountId(blockId);
+    if (!countId) return;
     const order = layoutBlockSlots(blockId);
-    if (countId) {
-      const meta = COUNT_META[countId] || { min: 1, max: order.length || 1 };
-      const minus = document.createElement("button");
-      minus.type = "button";
-      minus.className = "layout-count-btn";
-      minus.textContent = "−";
-      minus.setAttribute("aria-label", "枚数を減らす");
-      minus.disabled = order.length <= meta.min;
-      minus.addEventListener("click", (ev) => {
-        stopSummaryToggle(ev);
-        adjustDraftCount(countId, -1, null);
-      });
-      const num = document.createElement("span");
-      num.className = "layout-image-count-num";
-      num.textContent = order.length + "枚";
-      const plus = document.createElement("button");
-      plus.type = "button";
-      plus.className = "layout-count-btn";
-      plus.textContent = "＋";
-      plus.setAttribute("aria-label", "枚数を増やす");
-      plus.disabled = order.length >= meta.max;
-      plus.addEventListener("click", (ev) => {
-        stopSummaryToggle(ev);
-        requestAddDraftCount(countId, null, plus);
-      });
-      const countCluster = document.createElement("span");
-      countCluster.className = "layout-count-cluster";
-      countCluster.appendChild(minus);
-      countCluster.appendChild(num);
-      countCluster.appendChild(plus);
-      tools.appendChild(countCluster);
-    }
-    const sectionOmakase = document.createElement("button");
-    sectionOmakase.type = "button";
-    sectionOmakase.className = "layout-section-omakase";
-    sectionOmakase.textContent = "おまかせ";
-    sectionOmakase.setAttribute("aria-label", "この列をギャラリーからおまかせ");
-    sectionOmakase.addEventListener("click", (ev) => {
+    const layout = normalizeItemLayout(countId);
+    const meta = COUNT_META[countId] || { min: 1, max: order.length || 1 };
+    const minus = document.createElement("button");
+    minus.type = "button";
+    minus.className = "layout-count-btn";
+    minus.textContent = "−";
+    minus.setAttribute("aria-label", "枚数を減らす");
+    minus.disabled = order.length <= meta.min;
+    minus.addEventListener("click", (ev) => {
       stopSummaryToggle(ev);
-      runLayoutSectionOmakase(blockId, sectionOmakase);
+      adjustDraftCount(countId, -1, null);
     });
-    tools.insertBefore(sectionOmakase, tools.firstChild);
-    return tools;
-  }
-
-  function buildLayoutOpenMeta(blockId) {
-    const countId = layoutImageCountId(blockId);
-    const meta = document.createElement("div");
-    meta.className = "layout-open-meta";
-    const gap = buildLayoutGapRow(countId);
-    if (gap) meta.appendChild(gap);
-    const layout = countId ? normalizeItemLayout(countId) : null;
-    const slots = layoutBlockSlots(blockId);
-    const sizes = slots.map((slot) => (layout && layout.sizeById && layout.sizeById[slot]) || "L");
-    const allHalf = sizes.length > 0 && sizes.every((size) => size === "H");
-    const allFull = sizes.length > 0 && sizes.every((size) => size !== "H");
-    const widthRow = document.createElement("div");
-    widthRow.className = "layout-gap-row layout-pagewidth-row";
-    widthRow.setAttribute("role", "group");
-    widthRow.setAttribute("aria-label", "ページ幅");
-    const lead = document.createElement("span");
-    lead.className = "layout-gap-lead";
-    lead.textContent = "ページ幅";
-    widthRow.appendChild(lead);
-    [
-      ["L", "いっぱい", allFull],
-      ["H", "半分", allHalf]
-    ].forEach((item) => {
-      const btn = document.createElement("button");
-      btn.type = "button";
-      btn.className = "layout-gap-btn" + (item[2] ? " is-active" : "");
-      btn.textContent = item[1];
-      btn.addEventListener("click", (ev) => {
-        ev.preventDefault();
-        ev.stopPropagation();
-        setLayoutSectionPageWidth(blockId, item[0]);
-      });
-      widthRow.appendChild(btn);
+    const num = document.createElement("span");
+    num.className = "layout-image-count-num";
+    num.textContent = order.length + "枚";
+    const plus = document.createElement("button");
+    plus.type = "button";
+    plus.className = "layout-count-btn";
+    plus.textContent = "＋";
+    plus.setAttribute("aria-label", "枚数を増やす");
+    plus.disabled = order.length >= meta.max;
+    plus.addEventListener("click", (ev) => {
+      stopSummaryToggle(ev);
+      requestAddDraftCount(countId, null, plus);
     });
-    meta.appendChild(widthRow);
-    return meta;
+    const countCluster = document.createElement("span");
+    countCluster.className = "layout-count-cluster";
+    countCluster.appendChild(minus);
+    countCluster.appendChild(num);
+    countCluster.appendChild(plus);
+    const gapNow = (layout && layout.gap) || "normal";
+    const gapLead = document.createElement("span");
+    gapLead.className = "layout-gap-lead";
+    gapLead.textContent = "すき間";
+    const gapBtn = document.createElement("button");
+    gapBtn.type = "button";
+    gapBtn.className = "layout-tap";
+    gapBtn.textContent = ITEM_GAP_LABELS[gapNow] || "ふつう";
+    gapBtn.addEventListener("click", (ev) => {
+      stopSummaryToggle(ev);
+      openLayoutChoice(
+        gapBtn,
+        ITEM_GAP_STEPS.map((gap) => ({
+          value: gap,
+          label: ITEM_GAP_LABELS[gap],
+          bold: false,
+          on: gap === gapNow
+        })),
+        (gap) => {
+          setItemGap(countId, gap);
+          renderLayoutArrangeWire();
+        }
+      );
+    });
+    const gapCluster = document.createElement("span");
+    gapCluster.className = "layout-gap-cluster";
+    gapCluster.appendChild(gapLead);
+    gapCluster.appendChild(gapBtn);
+    head.appendChild(countCluster);
+    head.appendChild(gapCluster);
   }
 
   function buildLayoutClosedFace(blockId) {
@@ -15119,6 +15120,7 @@
     face.className = "layout-closed-face";
     const countId = layoutImageCountId(blockId);
     const order = layoutBlockSlots(blockId);
+    const layout = countId ? normalizeItemLayout(countId) : null;
 
     if (!store.layoutInnerByBlock) store.layoutInnerByBlock = {};
     const openKey = countId || blockId;
@@ -15168,6 +15170,24 @@
         blank.className = "layout-page-blank";
         blank.setAttribute("aria-hidden", "true");
         line.appendChild(blank);
+      } else {
+        const sz = layout && layout.sizeById ? layout.sizeById[slot] : "L";
+        const word = document.createElement("button");
+        word.type = "button";
+        word.className = "layout-tap layout-size-word " + (sz === "H" ? "is-half-word" : "is-full-word");
+        word.textContent = layoutSizeWord(sz);
+        word.addEventListener("click", (ev) => {
+          stopSummaryToggle(ev);
+          openLayoutChoice(
+            word,
+            [
+              { value: "L", label: layoutSizeWord("L"), bold: true, on: sz !== "H" },
+              { value: "H", label: layoutSizeWord("H"), bold: false, on: sz === "H" }
+            ],
+            (token) => setLayoutFrameWidth(countId, slot, token)
+          );
+        });
+        line.appendChild(word);
       }
       const openNow = openSlot === slot;
       const openBtn = document.createElement("button");
@@ -15192,7 +15212,6 @@
       row.className = "layout-photo-row" + (countId ? " layout-inner" : "") + (openNow ? " is-open" : "");
       row.setAttribute("data-layout-photo", blockId + ":" + slot);
       if (countId) row.setAttribute("data-item-id", slot);
-      if (openNow && countId) row.appendChild(buildLayoutOpenMeta(blockId));
       row.appendChild(line);
       const editor = document.createElement("div");
       editor.className = "layout-photo-editor";
@@ -15417,6 +15436,10 @@
     selfBtn.addEventListener("click", (ev) => {
       ev.preventDefault();
       ev.stopPropagation();
+      if (layoutPhotoReplaceLocked(blockId, slot)) {
+        showLayoutPhotoLockedNotice();
+        return;
+      }
       const input = form.elements.namedItem(imageName);
       if (input && typeof input.click === "function") input.click();
     });
@@ -15427,13 +15450,27 @@
     galleryBtn.addEventListener("click", (ev) => {
       ev.preventDefault();
       ev.stopPropagation();
+      if (layoutPhotoReplaceLocked(blockId, slot)) {
+        showLayoutPhotoLockedNotice();
+        return;
+      }
       openFreePhotoGalleryModal(imageName);
+    });
+    const omakaseBtn = document.createElement("button");
+    omakaseBtn.type = "button";
+    omakaseBtn.className = "layout-img-source layout-photo-omakase";
+    omakaseBtn.textContent = "おまかせ";
+    omakaseBtn.addEventListener("click", (ev) => {
+      ev.preventDefault();
+      ev.stopPropagation();
+      runLayoutPhotoOmakase(blockId, slot, omakaseBtn);
     });
     const picked = !!(store.galleryPicks && store.galleryPicks[imageName]);
     if (picked) galleryBtn.classList.add("is-on");
     else selfBtn.classList.add("is-on");
     sources.appendChild(selfBtn);
     sources.appendChild(galleryBtn);
+    sources.appendChild(omakaseBtn);
     const cluster = document.createElement("div");
     cluster.className = "layout-photo-cluster";
     tools.appendChild(sources);
@@ -15568,12 +15605,9 @@
             head = document.createElement("div");
             head.className = "layout-closed-head";
             head.appendChild(handle);
-            const headGap = document.createElement("span");
-            headGap.className = "layout-head-gap";
-            headGap.setAttribute("aria-hidden", "true");
-            head.appendChild(headGap);
             head.appendChild(visLabel);
             head.appendChild(name);
+            appendLayoutHeadCountGap(head, id);
             const secOpen = document.createElement("button");
             secOpen.type = "button";
             secOpen.className = "layout-open-btn layout-section-open" + (id === openId ? " is-ok" : "");
@@ -15586,7 +15620,6 @@
             });
             head.appendChild(secOpen);
             summary.appendChild(head);
-            summary.appendChild(buildLayoutSectionTools(id));
           } else {
             summary.appendChild(visLabel);
             summary.appendChild(handle);

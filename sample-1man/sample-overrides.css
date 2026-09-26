@@ -11763,7 +11763,7 @@ body.copy-later-fixed .dash-block.is-wizard-active .easy-copy-frame > .dash-subh
 }
 .layout-arrange-cell--structure:has(.layout-arrange-summary--image) > .layout-arrange-body {
   display: grid;
-  grid-template-columns: 2.1rem 2.2rem 5rem minmax(0.4rem, 1fr) 4.8em;
+  grid-template-columns: 2.1rem 2.2rem 5rem 9.2em minmax(0.4rem, 1fr) 4.8em;
   padding-left: 1.05rem;
   padding-right: 1.05rem;
   column-gap: 0.9rem;
@@ -12663,7 +12663,7 @@ body.wizard-mode .dash-block.is-wizard-active {
   padding: 0;
 }
 #easy-img-layout-host .layout-arrange-cell--structure:has(.layout-arrange-summary--image) > .layout-arrange-body {
-  grid-template-columns: 2.1rem 2.2rem 5rem minmax(0.4rem, 1fr) 4.8em;
+  grid-template-columns: 2.1rem 2.2rem 5rem 9.2em minmax(0.4rem, 1fr) 4.8em;
 }
 #easy-img-layout-host .layout-arrange-body .layout-closed-line > .layout-open-btn {
   grid-column: -1;
@@ -12871,30 +12871,31 @@ body.wizard-mode .dash-block.is-wizard-active {
   min-width: 0;
   max-width: 100%;
 }
-#easy-img-layout-host .layout-open-meta {
+#easy-img-layout-host .layout-closed-head {
   display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 0.45rem;
+  flex-flow: row nowrap;
+  align-items: center;
+  grid-column: 1 / -1;
   width: 100%;
   min-width: 0;
   max-width: 100%;
+  column-gap: 0.55rem;
+  white-space: nowrap;
 }
-#easy-img-layout-host .layout-photo-row.is-open:has(.layout-open-meta) {
-  grid-template-rows: auto auto auto;
+#easy-img-layout-host .layout-closed-head .layout-count-cluster,
+#easy-img-layout-host .layout-closed-head .layout-gap-cluster {
+  flex: 0 0 auto;
+  white-space: nowrap;
 }
-#easy-img-layout-host .layout-photo-row.is-open:has(.layout-open-meta) > .layout-open-meta {
-  grid-column: 1;
-  grid-row: 1;
-}
-#easy-img-layout-host .layout-photo-row.is-open:has(.layout-open-meta) > .layout-closed-line {
-  grid-row: 2;
-}
-#easy-img-layout-host .layout-photo-row.is-open:has(.layout-open-meta) > .layout-photo-editor {
-  grid-row: 3;
-}
-#easy-img-layout-host .layout-photo-row.is-open:has(.layout-open-meta) > .layout-open-btn {
-  grid-row: 1 / span 3;
+#easy-img-layout-host .layout-arrange-summary--image .layout-arrange-name {
+  flex: 0 1 auto;
+  min-width: 0;
+  width: auto;
+  max-width: none;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  overflow-wrap: normal;
 }
 #easy-img-layout-host .layout-photo-row.is-open > .layout-open-btn {
   grid-column: 2;
@@ -12906,12 +12907,11 @@ body.wizard-mode .dash-block.is-wizard-active {
   flex: 0 0 4.8em;
 }
 #easy-img-layout-host .layout-photo-tools--plain {
-  display: grid;
-  grid-template-columns: max-content minmax(0, 1fr);
-  align-items: start;
-  justify-items: stretch;
-  column-gap: 0.7rem;
-  row-gap: 0.45rem;
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: flex-end;
+  align-items: flex-start;
+  gap: 0.45rem;
   width: 100%;
   max-width: 100%;
   min-width: 0;
@@ -12921,10 +12921,8 @@ body.wizard-mode .dash-block.is-wizard-active {
   overflow: visible;
 }
 #easy-img-layout-host .layout-photo-tools--plain > .layout-img-sources {
-  grid-column: 1;
-  grid-row: 1;
   align-self: start;
-  justify-self: start;
+  flex: 0 0 auto;
   width: 7.2rem;
   max-width: 7.2rem;
 }
@@ -12944,7 +12942,7 @@ body.wizard-mode .dash-block.is-wizard-active {
   width: max-content;
   max-width: 100%;
   min-width: 0;
-  margin-left: auto;
+  margin-left: 0;
 }
 #easy-img-layout-host .layout-photo-cluster > .layout-adjust,
 #easy-img-layout-host .layout-photo-cluster .layout-adjust-row {
@@ -12952,7 +12950,9 @@ body.wizard-mode .dash-block.is-wizard-active {
 }
 #easy-img-layout-host .layout-photo-cluster .layout-zoom-block {
   grid-area: zoom;
-  justify-self: stretch;
+  justify-self: end;
+  width: max-content;
+  max-width: 100%;
   min-width: 0;
 }
 #easy-img-layout-host .layout-zoom-label {
@@ -12976,7 +12976,7 @@ body.wizard-mode .dash-block.is-wizard-active {
   min-width: 0;
   margin: 0;
   overflow: visible;
-  justify-self: start;
+  justify-self: end;
   align-self: center;
 }
 #easy-img-layout-host .layout-source-map {
@@ -12993,10 +12993,9 @@ body.wizard-mode .dash-block.is-wizard-active {
 }
 @container dash (max-width: 540px) {
   #easy-img-layout-host .layout-photo-tools--plain {
-    grid-template-columns: minmax(0, 1fr);
-  }
-  #easy-img-layout-host .layout-photo-tools--plain > .layout-img-sources {
-    grid-row: 1;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: flex-start;
   }
   #easy-img-layout-host .layout-photo-cluster {
     grid-column: 1;

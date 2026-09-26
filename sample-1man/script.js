@@ -14764,11 +14764,9 @@
     if (!row || !scroller || !img) return;
     const nw = img.naturalWidth;
     const nh = img.naturalHeight;
-    box.style.width = "100%";
     box.style.maxWidth = "100%";
     box.style.marginLeft = "0";
     box.style.height = "auto";
-    img.style.width = "100%";
     img.style.height = "auto";
     img.style.maxHeight = "none";
     if (!nw || !nh) return;
@@ -14785,10 +14783,11 @@
     const toolsW = tools ? tools.clientWidth : 0;
     const room = toolsW - side - 28;
     const maxW = room >= 120 ? room : 160;
-    if (spare < 80 || !maxW) return;
-    const fullH = maxW * (nh / nw);
-    const w = fullH <= spare ? maxW : Math.min(maxW, Math.round(spare * (nw / nh)));
-    box.style.width = w + "px";
+    const fullH = nw && nh ? maxW * (nh / nw) : maxW;
+    const w = spare >= 80 && fullH > spare ? Math.min(maxW, Math.round(spare * (nw / nh))) : maxW;
+    if (box.style.width !== w + "px") box.style.width = w + "px";
+    img.style.width = "100%";
+    box.style.visibility = "visible";
     box.style.marginLeft = "0";
     if (tools && tools.scrollWidth > tools.clientWidth + 1) tools.scrollLeft = tools.scrollWidth;
   }
@@ -15098,7 +15097,7 @@
       runLayoutSectionOmakase(blockId, sectionOmakase);
     });
     if (countLine) {
-      countLine.appendChild(sectionOmakase);
+      countLine.insertBefore(sectionOmakase, countLine.firstChild);
       face.appendChild(countLine);
     }
 
@@ -15188,8 +15187,7 @@
         renderLayoutArrangeWire();
         focusPreviewLayoutFrame(blockId, slot);
       });
-      line.appendChild(openBtn);
-      if (blockId === "hero") line.appendChild(sectionOmakase);
+      if (blockId === "hero") line.insertBefore(sectionOmakase, line.firstChild);
       const row = document.createElement("div");
       row.className = "layout-photo-row" + (countId ? " layout-inner" : "") + (openNow ? " is-open" : "");
       row.setAttribute("data-layout-photo", blockId + ":" + slot);
@@ -15199,6 +15197,8 @@
       editor.className = "layout-photo-editor";
       if (openNow) appendLayoutPhotoEditor(editor, blockId, slot);
       row.appendChild(editor);
+      if (openNow) row.appendChild(openBtn);
+      else line.appendChild(openBtn);
       if (countId) bindLayoutInnerDrag(row, countId, slot);
       face.appendChild(row);
     });

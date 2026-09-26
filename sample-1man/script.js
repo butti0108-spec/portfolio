@@ -14482,6 +14482,21 @@
     scheduleSave();
   }
 
+  function setLayoutSectionPageWidth(blockId, size) {
+    const countId = layoutImageCountId(blockId);
+    const layout = countId ? normalizeItemLayout(countId) : null;
+    if (!layout) return;
+    const token = size === "H" ? "H" : "L";
+    pushLayoutUndo();
+    layoutBlockSlots(blockId).forEach((slot) => {
+      layout.sizeById[slot] = token;
+    });
+    applyItemLayoutToPreview(countId);
+    renderLayoutArrangeWire();
+    if (store.confirmed.finish) unconfirmFinishSoft();
+    scheduleSave();
+  }
+
   function moveItemOrderNear(countId, fromId, toId, place) {
     seedItemOrder(countId);
     const order = store.itemOrders[countId];
@@ -15016,7 +15031,6 @@
     tools.className = "layout-section-tools";
     const countId = layoutImageCountId(blockId);
     const order = layoutBlockSlots(blockId);
-    const layout = countId ? normalizeItemLayout(countId) : null;
     if (countId) {
       const meta = COUNT_META[countId] || { min: 1, max: order.length || 1 };
       const minus = document.createElement("button");
@@ -15047,36 +15061,7 @@
       countCluster.appendChild(minus);
       countCluster.appendChild(num);
       countCluster.appendChild(plus);
-      const gapLead = document.createElement("span");
-      gapLead.className = "layout-gap-lead";
-      gapLead.textContent = "すき間幅調整";
-      const gapNow = (layout && layout.gap) || "normal";
-      const gapBtn = document.createElement("button");
-      gapBtn.type = "button";
-      gapBtn.className = "layout-tap";
-      gapBtn.textContent = ITEM_GAP_LABELS[gapNow] || "ふつう";
-      gapBtn.addEventListener("click", (ev) => {
-        stopSummaryToggle(ev);
-        openLayoutChoice(
-          gapBtn,
-          ITEM_GAP_STEPS.map((gap) => ({
-            value: gap,
-            label: ITEM_GAP_LABELS[gap],
-            bold: false,
-            on: gap === gapNow
-          })),
-          (gap) => {
-            setItemGap(countId, gap);
-            renderLayoutArrangeWire();
-          }
-        );
-      });
-      const gapCluster = document.createElement("span");
-      gapCluster.className = "layout-gap-cluster";
-      gapCluster.appendChild(gapLead);
-      gapCluster.appendChild(gapBtn);
       tools.appendChild(countCluster);
-      tools.appendChild(gapCluster);
     }
     const sectionOmakase = document.createElement("button");
     sectionOmakase.type = "button";
@@ -15091,12 +15076,49 @@
     return tools;
   }
 
+  function buildLayoutOpenMeta(blockId) {
+    const countId = layoutImageCountId(blockId);
+    const meta = document.createElement("div");
+    meta.className = "layout-open-meta";
+    const gap = buildLayoutGapRow(countId);
+    if (gap) meta.appendChild(gap);
+    const layout = countId ? normalizeItemLayout(countId) : null;
+    const slots = layoutBlockSlots(blockId);
+    const sizes = slots.map((slot) => (layout && layout.sizeById && layout.sizeById[slot]) || "L");
+    const allHalf = sizes.length > 0 && sizes.every((size) => size === "H");
+    const allFull = sizes.length > 0 && sizes.every((size) => size !== "H");
+    const widthRow = document.createElement("div");
+    widthRow.className = "layout-gap-row layout-pagewidth-row";
+    widthRow.setAttribute("role", "group");
+    widthRow.setAttribute("aria-label", "ページ幅");
+    const lead = document.createElement("span");
+    lead.className = "layout-gap-lead";
+    lead.textContent = "ページ幅";
+    widthRow.appendChild(lead);
+    [
+      ["L", "いっぱい", allFull],
+      ["H", "半分", allHalf]
+    ].forEach((item) => {
+      const btn = document.createElement("button");
+      btn.type = "button";
+      btn.className = "layout-gap-btn" + (item[2] ? " is-active" : "");
+      btn.textContent = item[1];
+      btn.addEventListener("click", (ev) => {
+        ev.preventDefault();
+        ev.stopPropagation();
+        setLayoutSectionPageWidth(blockId, item[0]);
+      });
+      widthRow.appendChild(btn);
+    });
+    meta.appendChild(widthRow);
+    return meta;
+  }
+
   function buildLayoutClosedFace(blockId) {
     const face = document.createElement("div");
     face.className = "layout-closed-face";
     const countId = layoutImageCountId(blockId);
     const order = layoutBlockSlots(blockId);
-    const layout = countId ? normalizeItemLayout(countId) : null;
 
     if (!store.layoutInnerByBlock) store.layoutInnerByBlock = {};
     const openKey = countId || blockId;
@@ -15146,24 +15168,6 @@
         blank.className = "layout-page-blank";
         blank.setAttribute("aria-hidden", "true");
         line.appendChild(blank);
-      } else {
-        const sz = layout && layout.sizeById ? layout.sizeById[slot] : "L";
-        const word = document.createElement("button");
-        word.type = "button";
-        word.className = "layout-tap layout-size-word " + (sz === "H" ? "is-half-word" : "is-full-word");
-        word.textContent = layoutSizeWord(sz);
-        word.addEventListener("click", (ev) => {
-          stopSummaryToggle(ev);
-          openLayoutChoice(
-            word,
-            [
-              { value: "L", label: layoutSizeWord("L"), bold: true, on: sz !== "H" },
-              { value: "H", label: layoutSizeWord("H"), bold: false, on: sz === "H" }
-            ],
-            (token) => setLayoutFrameWidth(countId, slot, token)
-          );
-        });
-        line.appendChild(word);
       }
       const openNow = openSlot === slot;
       const openBtn = document.createElement("button");
@@ -15188,6 +15192,7 @@
       row.className = "layout-photo-row" + (countId ? " layout-inner" : "") + (openNow ? " is-open" : "");
       row.setAttribute("data-layout-photo", blockId + ":" + slot);
       if (countId) row.setAttribute("data-item-id", slot);
+      if (openNow && countId) row.appendChild(buildLayoutOpenMeta(blockId));
       row.appendChild(line);
       const editor = document.createElement("div");
       editor.className = "layout-photo-editor";

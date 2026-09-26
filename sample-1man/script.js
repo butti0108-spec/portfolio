@@ -15018,15 +15018,13 @@
     ev.stopPropagation();
   }
 
-  function buildLayoutClosedFace(blockId) {
-    const face = document.createElement("div");
-    face.className = "layout-closed-face";
+  function buildLayoutSectionTools(blockId) {
+    const tools = document.createElement("div");
+    tools.className = "layout-section-tools";
     const countId = layoutImageCountId(blockId);
     const order = layoutBlockSlots(blockId);
     const layout = countId ? normalizeItemLayout(countId) : null;
-    const countLine = blockId === "hero" ? null : document.createElement("p");
-    if (countLine) {
-      countLine.className = "layout-closed-line layout-section-tools";
+    if (countId) {
       const meta = COUNT_META[countId] || { min: 1, max: order.length || 1 };
       const minus = document.createElement("button");
       minus.type = "button";
@@ -15056,7 +15054,6 @@
       countCluster.appendChild(minus);
       countCluster.appendChild(num);
       countCluster.appendChild(plus);
-      countLine.appendChild(countCluster);
       const gapLead = document.createElement("span");
       gapLead.className = "layout-gap-lead";
       gapLead.textContent = "すき間幅調整";
@@ -15085,7 +15082,8 @@
       gapCluster.className = "layout-gap-cluster";
       gapCluster.appendChild(gapLead);
       gapCluster.appendChild(gapBtn);
-      countLine.appendChild(gapCluster);
+      tools.appendChild(countCluster);
+      tools.appendChild(gapCluster);
     }
     const sectionOmakase = document.createElement("button");
     sectionOmakase.type = "button";
@@ -15096,10 +15094,16 @@
       stopSummaryToggle(ev);
       runLayoutSectionOmakase(blockId, sectionOmakase);
     });
-    if (countLine) {
-      countLine.insertBefore(sectionOmakase, countLine.firstChild);
-      face.appendChild(countLine);
-    }
+    tools.insertBefore(sectionOmakase, tools.firstChild);
+    return tools;
+  }
+
+  function buildLayoutClosedFace(blockId) {
+    const face = document.createElement("div");
+    face.className = "layout-closed-face";
+    const countId = layoutImageCountId(blockId);
+    const order = layoutBlockSlots(blockId);
+    const layout = countId ? normalizeItemLayout(countId) : null;
 
     if (!store.layoutInnerByBlock) store.layoutInnerByBlock = {};
     const openKey = countId || blockId;
@@ -15187,7 +15191,6 @@
         renderLayoutArrangeWire();
         focusPreviewLayoutFrame(blockId, slot);
       });
-      if (blockId === "hero") line.insertBefore(sectionOmakase, line.firstChild);
       const row = document.createElement("div");
       row.className = "layout-photo-row" + (countId ? " layout-inner" : "") + (openNow ? " is-open" : "");
       row.setAttribute("data-layout-photo", blockId + ":" + slot);
@@ -15575,6 +15578,7 @@
             });
             head.appendChild(secOpen);
             summary.appendChild(head);
+            summary.appendChild(buildLayoutSectionTools(id));
           } else {
             summary.appendChild(visLabel);
             summary.appendChild(handle);
@@ -15615,7 +15619,7 @@
             } else {
               window.requestAnimationFrame(() => {
                 const row = cell.querySelector(".layout-photo-row.is-open");
-                scrollDashChildToTop(row || cell);
+                scrollDashChildToTop(cell);
                 if (row) alignOpenPhotoWithPreview();
                 else scrollPreviewFrameIntoView(layoutSectionPreviewSelector(id));
               });
@@ -15632,7 +15636,7 @@
           cell.appendChild(summary);
           cell.appendChild(body);
           summary.addEventListener("click", (ev) => {
-            if (ev.target.closest && ev.target.closest(".layout-arrange-handle, .layout-arrange-vis-label, .layout-arrange-vis, .layout-section-open")) {
+            if (ev.target.closest && ev.target.closest(".layout-arrange-handle, .layout-arrange-vis-label, .layout-arrange-vis, .layout-section-open, .layout-section-tools")) {
               ev.preventDefault();
               return;
             }
@@ -15679,12 +15683,13 @@
       const row = document.querySelector(
         '[data-layout-photo="' + pendingCenter.blockId + ":" + pendingCenter.slot + '"]'
       );
-      scrollDashChildToTop(row);
+      const accordion = row && row.closest(".layout-arrange-cell");
+      scrollDashChildToTop(accordion || row);
       const map = row && row.querySelector(".layout-source-map");
       if (map) alignOpenSourceMapToPad(map);
       alignOpenPhotoWithPreview();
       window.requestAnimationFrame(() => {
-        scrollDashChildToTop(row);
+        scrollDashChildToTop(accordion || row);
         if (map) alignOpenSourceMapToPad(map);
         alignOpenPhotoWithPreview();
       });

@@ -15619,7 +15619,7 @@
             } else {
               window.requestAnimationFrame(() => {
                 const row = cell.querySelector(".layout-photo-row.is-open");
-                scrollDashChildToTop(cell);
+                scrollDashChildToTop(row || cell);
                 if (row) alignOpenPhotoWithPreview();
                 else scrollPreviewFrameIntoView(layoutSectionPreviewSelector(id));
               });
@@ -15683,13 +15683,12 @@
       const row = document.querySelector(
         '[data-layout-photo="' + pendingCenter.blockId + ":" + pendingCenter.slot + '"]'
       );
-      const accordion = row && row.closest(".layout-arrange-cell");
-      scrollDashChildToTop(accordion || row);
+      scrollDashChildToTop(row);
       const map = row && row.querySelector(".layout-source-map");
       if (map) alignOpenSourceMapToPad(map);
       alignOpenPhotoWithPreview();
       window.requestAnimationFrame(() => {
-        scrollDashChildToTop(accordion || row);
+        scrollDashChildToTop(row);
         if (map) alignOpenSourceMapToPad(map);
         alignOpenPhotoWithPreview();
       });

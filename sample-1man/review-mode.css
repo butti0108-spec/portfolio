@@ -59,7 +59,8 @@ body.is-review-mode .atelier-chrome {
   border-bottom: 1px solid #e2e6ea;
 }
 
-body.is-review-mode .atelier-chrome-right {
+body.is-review-mode .chrome-help-btn,
+body.is-review-mode .dash-reset-btn {
   display: none !important;
 }
 

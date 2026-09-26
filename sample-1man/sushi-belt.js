@@ -192,9 +192,9 @@
       TILE_W +
       '" decoding="async" loading="eager" fetchpriority="low">' +
       "</div>" +
-      '<button type="button" class="sushi-tile-btn sushi-tile-btn--zoom" data-sushi-act="zoom" data-id="' +
+      '<button type="button" class="sushi-tile-btn sushi-tile-btn--zoom has-hover-tip" data-sushi-act="zoom" data-id="' +
       escapeAttr(sample.id) +
-      '" title="大きく見てみる" aria-label="大きく見てみる">🔍</button>' +
+      '" data-tip="大きく見てみる" aria-label="大きく見てみる">🔍</button>' +
       labelHtml +
       '<span class="sushi-tile-meta" hidden data-visible-site-h="' +
       visibleSiteH +
@@ -422,22 +422,44 @@
     list.innerHTML = "";
     for (var i = 0; i < MAX_STOCK; i++) {
       var s = stock[i];
+      if (!s) continue;
+      var name = s.brand || "No." + s.id;
       var btn = document.createElement("button");
       btn.type = "button";
       btn.className = "sushi-replace-choice";
       btn.setAttribute("data-replace-slot", String(i));
-      btn.textContent =
-        "上の枠" +
-        (i + 1) +
-        "と入れ替え：No." +
-        (s ? s.id + " " + (s.brand || "") : "（空）");
+      btn.setAttribute("aria-label", name + "と入れ替え");
+      btn.innerHTML =
+        '<span class="sushi-replace-shot"><img src="' +
+        escapeAttr(previewUrl(s)) +
+        '" alt=""></span>' +
+        '<span class="sushi-replace-name">' +
+        escapeHtml(name) +
+        "</span>";
       list.appendChild(btn);
     }
+    placeReplaceOverStock();
+  }
+
+  function placeReplaceOverStock() {
+    if (!els.replace || !els.stockBar) return;
+    var bar = els.stockBar.getBoundingClientRect();
+    if (!(bar.height > 0)) return;
+    var top = Math.max(8, Math.round(bar.top - 12));
+    els.replace.style.placeItems = "start center";
+    els.replace.style.paddingTop = top + "px";
+  }
+
+  function clearReplacePlace() {
+    if (!els.replace) return;
+    els.replace.style.placeItems = "";
+    els.replace.style.paddingTop = "";
   }
 
   function closeReplaceModal() {
     if (!els.replace) return;
     els.replace.hidden = true;
+    clearReplacePlace();
     delete els.replace.dataset.pendingId;
   }
 
@@ -1023,7 +1045,8 @@
     if (replaceBtn && els.replace && !els.replace.hidden) {
       var at = Number(replaceBtn.getAttribute("data-replace-slot"));
       var pending = findSample(els.replace.dataset.pendingId);
-      if (pending && at >= 0 && at < MAX_STOCK) {
+      if (pending && at >= 0 && at < MAX_STOCK && stock[at]) {
+        stock[at] = null;
         stock[at] = pending;
         selectedStockSlot = at;
         closeReplaceModal();

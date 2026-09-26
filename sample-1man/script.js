@@ -14727,6 +14727,23 @@
     win.style.top = top * 100 + "%";
     win.style.width = width * 100 + "%";
     win.style.height = height * 100 + "%";
+    window.requestAnimationFrame(() => alignOpenSourceMapToPad(box));
+  }
+
+  function alignOpenSourceMapToPad(box) {
+    if (!box || !box.closest("#easy-img-layout-host")) return;
+    const tools = box.closest(".layout-photo-tools");
+    const down = tools && tools.querySelector("[data-focal-nudge='down']");
+    const img = box.querySelector("img");
+    if (!down || !img) return;
+    box.style.maxHeight = "";
+    img.style.maxHeight = "";
+    const limit = Math.round(down.getBoundingClientRect().bottom - box.getBoundingClientRect().top);
+    if (limit < 40) return;
+    box.style.maxHeight = limit + "px";
+    img.style.maxHeight = limit + "px";
+    img.style.width = "auto";
+    img.style.height = "auto";
   }
 
   function syncLayoutMirrors() {
@@ -15624,6 +15641,7 @@
     layoutScrollPhoto = null;
     window.requestAnimationFrame(() => {
       syncLayoutMirrors();
+      document.querySelectorAll("#easy-img-layout-host .layout-source-map").forEach(alignOpenSourceMapToPad);
       if (!pendingCenter) return;
       scrollLayoutPhotoIntoCenter(pendingCenter.blockId, pendingCenter.slot);
       scrollPreviewFrameIntoView(layoutSectionPreviewSelector(pendingCenter.blockId));

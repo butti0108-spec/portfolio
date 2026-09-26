@@ -12620,6 +12620,9 @@ body.wizard-mode .dash-block.is-wizard-active {
   width: max-content;
   min-width: 100%;
 }
+#easy-img-layout-host .layout-arrange-summary--image {
+  grid-template-columns: 2rem 1.15rem 1.6rem 14rem 2.1rem 2.2rem 5rem minmax(9.2em, max-content) 5.2rem 5.5rem;
+}
 /* 左が細いときだけ、開くが操作の外へ出ないように行の中へ折り返す */
 @container dash (max-width: 40rem) {
   #easy-img-layout-host {
@@ -12703,30 +12706,78 @@ body.wizard-mode .dash-block.is-wizard-active {
   background: transparent;
   margin: 0;
 }
+@container dash (min-width: 40rem) {
+  #easy-img-layout-host .layout-page-blank {
+    width: 9.2em;
+    min-width: 9.2em;
+    height: 1px;
+  }
+  #easy-img-layout-host .layout-section-tools {
+    display: grid;
+    grid-template-columns: subgrid;
+    width: auto;
+    justify-content: start;
+    align-items: center;
+  }
+  #easy-img-layout-host .layout-section-tools .layout-count-cluster {
+    grid-column: 1 / 3;
+    justify-self: start;
+  }
+  #easy-img-layout-host .layout-section-tools .layout-gap-cluster {
+    grid-column: 3 / 5;
+    justify-self: start;
+  }
+  #easy-img-layout-host .layout-section-tools .layout-section-omakase {
+    grid-column: 6;
+    justify-self: start;
+    margin-left: 0;
+  }
+  #easy-img-layout-host .layout-photo-row.is-open .layout-photo-editor {
+    width: 100%;
+    min-width: 0;
+    max-width: 100%;
+    overflow: hidden;
+  }
+}
 #easy-img-layout-host .layout-photo-row.is-open .layout-photo-editor {
-  width: calc(100cqw - 5rem);
-  max-width: calc(100cqw - 5rem);
+  width: 100%;
+  max-width: 100%;
   min-width: 0;
   overflow: hidden;
   box-sizing: border-box;
 }
 #easy-img-layout-host .layout-photo-tools--plain {
   flex-wrap: wrap;
+  align-items: flex-start;
   width: 100%;
   max-width: 100%;
+  min-width: 0;
   margin-left: 0;
   margin-right: 0;
   box-sizing: border-box;
 }
-#easy-img-layout-host .layout-photo-tools--plain .layout-edit-step-block,
-#easy-img-layout-host .layout-photo-tools--plain .layout-adjust,
-#easy-img-layout-host .layout-photo-tools--plain .layout-img-source,
-#easy-img-layout-host .layout-source-map {
-  max-width: 100%;
-  min-width: 0;
+#easy-img-layout-host .layout-photo-tools--plain > .layout-edit-step-block:not(.layout-source-step),
+#easy-img-layout-host .layout-adjust {
+  flex: 0 0 auto;
 }
-#easy-img-layout-host .layout-photo-tools--plain .layout-img-source {
-  white-space: normal;
+#easy-img-layout-host .layout-source-step {
+  flex: 1 1 8rem;
+  align-items: stretch;
+  width: auto;
+  max-width: 100%;
+  min-width: min(100%, 8rem);
+  margin-left: 0;
+  overflow: hidden;
+}
+#easy-img-layout-host .layout-source-map {
+  width: auto;
+  max-width: 100%;
+  margin-left: 0;
+}
+#easy-img-layout-host .layout-source-map img {
+  width: auto;
+  height: auto;
+  max-width: 100%;
 }
 #easy-img-layout-host .layout-section-omakase {
   position: relative;

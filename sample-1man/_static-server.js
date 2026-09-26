@@ -296,6 +296,71 @@ const server = http.createServer(async (req, res) => {
       return await handleReviewDecision(req, res, query);
     }
 
+    if (req.method === "POST" && pathname === "/sample-1man/free-photo-gallery/__catalog-save") {
+      const galleryRoot = path.join(sampleRoot, "free-photo-gallery");
+      const catalogPath = path.join(galleryRoot, "catalog.json");
+      if (!fs.existsSync(catalogPath)) {
+        return send(res, 404, "application/json; charset=utf-8", JSON.stringify({ ok: false, reason: "missing-catalog" }));
+      }
+      const raw = (await readBody(req)).toString("utf8");
+      let parsed;
+      try {
+        parsed = JSON.parse(raw);
+      } catch (_) {
+        return send(res, 400, "application/json; charset=utf-8", JSON.stringify({ ok: false, reason: "bad-json" }));
+      }
+      if (!parsed || typeof parsed !== "object" || !Array.isArray(parsed.items)) {
+        return send(res, 400, "application/json; charset=utf-8", JSON.stringify({ ok: false, reason: "bad-payload" }));
+      }
+      const bak = path.join(
+        galleryRoot,
+        "catalog.bak-" + new Date().toISOString().replace(/[:.]/g, "-") + ".json"
+      );
+      fs.copyFileSync(catalogPath, bak);
+      const textOut = raw.trimEnd() + "\n";
+      fs.writeFileSync(catalogPath, textOut, "utf8");
+      return send(
+        res,
+        200,
+        "application/json; charset=utf-8",
+        JSON.stringify({ ok: true, bytes: Buffer.byteLength(textOut), backup: path.basename(bak) })
+      );
+    }
+
+    if (req.method === "POST" && pathname === "/sample-1man/free-photo-gallery/__image-save") {
+      const rel = String(query.path || "").replace(/\\/g, "/");
+      if (!rel || rel.includes("..") || rel.startsWith("/")) {
+        return send(res, 400, "application/json; charset=utf-8", JSON.stringify({ ok: false, reason: "bad-path" }));
+      }
+      if (
+        !rel.startsWith("ai-or-original/") &&
+        !rel.startsWith("trim-card/") &&
+        !rel.startsWith("approved/")
+      ) {
+        return send(res, 403, "application/json; charset=utf-8", JSON.stringify({ ok: false, reason: "path-not-allowed" }));
+      }
+      const galleryRoot = path.join(sampleRoot, "free-photo-gallery");
+      const target = path.resolve(galleryRoot, rel);
+      const rootN = path.resolve(galleryRoot) + path.sep;
+      if (!target.startsWith(rootN)) {
+        return send(res, 403, "application/json; charset=utf-8", JSON.stringify({ ok: false, reason: "path-escape" }));
+      }
+      if (!fs.existsSync(target) || !fs.statSync(target).isFile()) {
+        return send(res, 404, "application/json; charset=utf-8", JSON.stringify({ ok: false, reason: "missing-file" }));
+      }
+      const body = await readBody(req);
+      if (!body || body.length < 32) {
+        return send(res, 400, "application/json; charset=utf-8", JSON.stringify({ ok: false, reason: "empty-body" }));
+      }
+      fs.writeFileSync(target, body);
+      return send(
+        res,
+        200,
+        "application/json; charset=utf-8",
+        JSON.stringify({ ok: true, path: rel, bytes: body.length })
+      );
+    }
+
     if (pathname === "/") pathname = "/sample-1man/index.html";
     if (pathname.endsWith("/")) pathname = pathname + "index.html";
 

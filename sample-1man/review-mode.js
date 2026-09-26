@@ -83,7 +83,14 @@
     }
     if (el.label) {
       el.label.textContent = folder || "読み込み中…";
-      el.label.title = folder || "";
+      el.label.removeAttribute("title");
+      if (folder) {
+        el.label.setAttribute("data-tip", folder);
+        el.label.classList.add("has-hover-tip");
+      } else {
+        el.label.removeAttribute("data-tip");
+        el.label.classList.remove("has-hover-tip");
+      }
     }
     if (el.modeRead) el.modeRead.classList.toggle("is-on", viewMode === "read");
     if (el.modeFit) el.modeFit.classList.toggle("is-on", viewMode === "fit");

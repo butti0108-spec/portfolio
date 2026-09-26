@@ -94,7 +94,9 @@
       (s.blurb || "") +
       mark;
     el.label.textContent = labelText;
-    el.label.title = labelText;
+    el.label.removeAttribute("title");
+    el.label.setAttribute("data-tip", labelText);
+    el.label.classList.add("has-hover-tip");
     el.prev.disabled = index <= 0 || busy;
     el.next.disabled = index >= samples.length - 1 || busy;
     el.approve.disabled = busy || !frameReady;

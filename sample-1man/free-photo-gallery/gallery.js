@@ -1,6 +1,49 @@
 (() => {
-  const TAG_ORDER = ["person", "hand", "food", "drink", "indoor", "scenery", "nature", "animal"];
-  const SHAPE_ORDER = ["wide", "square"];
+  const TAG_ORDER = [
+    "cafe",
+    "salon",
+    "bakery",
+    "sweets",
+    "ramen",
+    "izakaya",
+    "bar",
+    "florist",
+    "pet",
+    "clinic",
+    "yoga",
+    "studio",
+    "gallery",
+    "cowork",
+    "hotel",
+    "person",
+    "hand",
+    "food",
+    "drink",
+    "indoor",
+    "scenery",
+    "nature",
+    "animal"
+  ];
+
+  function orderedTagKeys(catalog) {
+    const labels = (catalog && catalog.tagLabels) || {};
+    const keys = Object.keys(labels);
+    const seen = {};
+    const out = [];
+    TAG_ORDER.forEach((k) => {
+      if (labels[k] && !seen[k]) {
+        seen[k] = 1;
+        out.push(k);
+      }
+    });
+    keys.sort().forEach((k) => {
+      if (!seen[k]) {
+        seen[k] = 1;
+        out.push(k);
+      }
+    });
+    return out;
+  }
 
   function esc(s) {
     return String(s == null ? "" : s)
@@ -28,8 +71,8 @@
     let catalog = null;
     let selectedId = opts.selectedId || null;
     let selectedItem = null;
+    let askingId = null;
     const tagSet = new Set();
-    const shapeSet = new Set();
     let trimOnly = false;
 
     root.classList.add("fpg");
@@ -39,12 +82,18 @@
       mode === "standalone"
         ? '    <h1 class="fpg-title">写真ギャラリー</h1>'
         : '    <p class="fpg-title" role="heading" aria-level="2">写真ギャラリー</p>',
-      '    <p class="fpg-lead">お好みの写真はありますか。題材や形で絞り込めます。カード向けの上寄せ種もあります。</p>',
+      '    <p class="fpg-lead">お好みの写真はありますか。</p>',
       "  </header>",
       '  <div class="fpg-filters" hidden>',
-      '    <div class="fpg-filter-row" data-fpg-tags></div>',
-      '    <div class="fpg-filter-row" data-fpg-shapes></div>',
-      '    <div class="fpg-filter-row" data-fpg-trim></div>',
+      '    <section class="fpg-filter-block">',
+      '      <h2 class="fpg-filter-label">題材</h2>',
+      '      <div class="fpg-filter-grid" data-fpg-tags></div>',
+      "    </section>",
+      '    <section class="fpg-filter-block" data-fpg-trim-block hidden>',
+      '      <h2 class="fpg-filter-label">カード</h2>',
+      '      <p class="fpg-filter-note">縦の高さが半分です。上半分だけの写真で、カードにはめやすいです。</p>',
+      '      <div class="fpg-filter-grid" data-fpg-trim></div>',
+      "    </section>",
       "  </div>",
       '  <div class="fpg-toolbar">',
       '    <p class="fpg-count" data-fpg-count></p>',
@@ -59,7 +108,7 @@
 
     const elFilters = root.querySelector(".fpg-filters");
     const elTags = root.querySelector("[data-fpg-tags]");
-    const elShapes = root.querySelector("[data-fpg-shapes]");
+    const elTrimBlock = root.querySelector("[data-fpg-trim-block]");
     const elTrim = root.querySelector("[data-fpg-trim]");
     const elCount = root.querySelector("[data-fpg-count]");
     const elClear = root.querySelector("[data-fpg-clear]");
@@ -71,14 +120,6 @@
     function tagLabel(key) {
       const map = (catalog && catalog.tagLabels) || {};
       return map[key] || key;
-    }
-
-    function shapeLabel(key) {
-      const map = (catalog && catalog.shapeLabels) || {};
-      if (map[key]) return map[key];
-      if (key === "wide") return "全幅寄り";
-      if (key === "square") return "ふつう・半幅向け";
-      return key;
     }
 
     function itemHasTrim(item) {
@@ -97,7 +138,6 @@
           });
           if (!hit) return false;
         }
-        if (shapeSet.size && !shapeSet.has(item.shape)) return false;
         return true;
       });
     }
@@ -111,59 +151,41 @@
       }
       elStatus.hidden = false;
       elStatus.classList.add("is-ready");
-      elStatus.textContent =
-        "「" +
-        (selectedItem.sceneLabel || selectedItem.scene || "写真") +
-        "」を選んでいます。枠にはめ込めます。";
+      elStatus.textContent = "この写真を選んでいます。枠にはめ込めます。";
     }
 
     function renderFilters() {
-      const labels = (catalog && catalog.tagLabels) || {};
-      elTags.innerHTML =
-        '<span class="fpg-filter-label">題材</span>' +
-        TAG_ORDER.map((key) => {
-          if (!labels[key] && key === "hand") {
-            /* still show even if unused */
-          }
-          const checked = tagSet.has(key) ? " checked" : "";
+      elTags.innerHTML = orderedTagKeys(catalog)
+        .filter((key) => key !== "card-upper")
+        .map((key) => {
+          const on = tagSet.has(key);
           return (
-            '<label class="fpg-chip"><input type="checkbox" data-fpg-tag="' +
+            '<button type="button" class="fpg-chip' +
+            (on ? " is-on" : "") +
+            '" data-fpg-tag="' +
             esc(key) +
-            '"' +
-            checked +
-            "> " +
+            '" aria-pressed="' +
+            (on ? "true" : "false") +
+            '">' +
             esc(tagLabel(key)) +
-            "</label>"
+            "</button>"
           );
-        }).join("");
-
-      elShapes.innerHTML =
-        '<span class="fpg-filter-label">形</span>' +
-        SHAPE_ORDER.map((key) => {
-          const checked = shapeSet.has(key) ? " checked" : "";
-          return (
-            '<label class="fpg-chip"><input type="checkbox" data-fpg-shape="' +
-            esc(key) +
-            '"' +
-            checked +
-            "> " +
-            esc(shapeLabel(key)) +
-            "</label>"
-          );
-        }).join("");
+        })
+        .join("");
 
       const hasAnyTrim = ((catalog && catalog.items) || []).some(itemHasTrim);
-      if (elTrim) {
+      if (elTrimBlock && elTrim) {
         if (hasAnyTrim) {
           elTrim.innerHTML =
-            '<span class="fpg-filter-label">カード</span>' +
-            '<label class="fpg-chip"><input type="checkbox" data-fpg-trim-only' +
-            (trimOnly ? " checked" : "") +
-            "> 上寄せ種だけ</label>";
-          elTrim.hidden = false;
+            '<button type="button" class="fpg-chip' +
+            (trimOnly ? " is-on" : "") +
+            '" data-fpg-trim-only aria-pressed="' +
+            (trimOnly ? "true" : "false") +
+            '">上半分だけ</button>';
+          elTrimBlock.hidden = false;
         } else {
           elTrim.innerHTML = "";
-          elTrim.hidden = true;
+          elTrimBlock.hidden = true;
         }
       }
 
@@ -177,43 +199,39 @@
         items.length === total
           ? total + "枚あります"
           : items.length + " / " + total + "枚（絞り込み中）";
-      elClear.hidden = !(tagSet.size || shapeSet.size || trimOnly);
+      elClear.hidden = !(tagSet.size || trimOnly);
       elEmpty.hidden = items.length > 0;
       elGrid.hidden = items.length === 0;
 
       elGrid.innerHTML = items
         .map((item) => {
           const src = joinUrl(imageBase, item.path);
-          const selected = item.id === selectedId ? " is-selected" : "";
+          const asking = mode === "picker" && item.id === askingId;
+          const selected = mode !== "picker" && item.id === selectedId ? " is-selected" : "";
           const wide = item.shape === "wide" ? " is-wide" : "";
-          const pills = []
-            .concat(item.sceneLabel ? [item.sceneLabel] : [])
-            .concat(item.shape === "wide" ? [shapeLabel("wide")] : [])
-            .concat(itemHasTrim(item) ? ["上寄せ種"] : [])
-            .concat(
-              (item.tags || [])
-                .filter((t) => t !== "indoor" && t !== "card-upper")
-                .slice(0, 2)
-                .map(tagLabel)
-            );
+          const ask =
+            asking
+              ? '<span class="fpg-ask">' +
+                '<button type="button" class="fpg-ask-yes" data-fpg-yes>この画像にしますか</button>' +
+                '<button type="button" class="fpg-ask-no" data-fpg-no>やめますか</button>' +
+                "</span>"
+              : "";
+          const mark = mode === "picker" ? "" : '<span class="fpg-selected-mark" aria-hidden="true"></span>';
           return (
             '<li>' +
-            '<button type="button" class="fpg-card' +
+            '<div class="fpg-card' +
+            (asking ? " is-asking" : "") +
             selected +
             wide +
             '" data-fpg-id="' +
             esc(item.id) +
-            '" aria-pressed="' +
-            (item.id === selectedId ? "true" : "false") +
-            '">' +
-            '<span class="fpg-selected-mark">選んだ</span>' +
+            '" role="button" tabindex="0">' +
+            mark +
             '<span class="fpg-card-media"><img src="' +
             esc(src) +
             '" alt="" loading="lazy" decoding="async"></span>' +
-            '<span class="fpg-card-meta">' +
-            pills.map((p) => '<span class="fpg-pill">' + esc(p) + "</span>").join("") +
-            "</span>" +
-            "</button>" +
+            ask +
+            "</div>" +
             "</li>"
           );
         })
@@ -241,45 +259,68 @@
       return item;
     }
 
-    elTags.addEventListener("change", (ev) => {
-      const input = ev.target.closest("input[data-fpg-tag]");
-      if (!input) return;
-      const key = input.getAttribute("data-fpg-tag");
-      if (input.checked) tagSet.add(key);
-      else tagSet.delete(key);
-      renderGrid();
-    });
-
-    elShapes.addEventListener("change", (ev) => {
-      const input = ev.target.closest("input[data-fpg-shape]");
-      if (!input) return;
-      const key = input.getAttribute("data-fpg-shape");
-      if (input.checked) shapeSet.add(key);
-      else shapeSet.delete(key);
+    elTags.addEventListener("click", (ev) => {
+      const btn = ev.target.closest("button[data-fpg-tag]");
+      if (!btn) return;
+      const key = btn.getAttribute("data-fpg-tag");
+      if (tagSet.has(key)) tagSet.delete(key);
+      else tagSet.add(key);
+      renderFilters();
       renderGrid();
     });
 
     if (elTrim) {
-      elTrim.addEventListener("change", (ev) => {
-        const input = ev.target.closest("input[data-fpg-trim-only]");
-        if (!input) return;
-        trimOnly = !!input.checked;
+      elTrim.addEventListener("click", (ev) => {
+        const btn = ev.target.closest("button[data-fpg-trim-only]");
+        if (!btn) return;
+        trimOnly = !trimOnly;
+        renderFilters();
         renderGrid();
       });
     }
 
     elClear.addEventListener("click", () => {
       tagSet.clear();
-      shapeSet.clear();
       trimOnly = false;
       renderFilters();
       renderGrid();
     });
 
+    elGrid.addEventListener("keydown", (ev) => {
+      if (ev.key !== "Enter" && ev.key !== " ") return;
+      const card = ev.target.closest("[data-fpg-id]");
+      if (!card || ev.target !== card) return;
+      ev.preventDefault();
+      card.click();
+    });
+
     elGrid.addEventListener("click", (ev) => {
-      const btn = ev.target.closest("[data-fpg-id]");
-      if (!btn) return;
-      selectById(btn.getAttribute("data-fpg-id"));
+      const card = ev.target.closest("[data-fpg-id]");
+      if (!card) return;
+      if (ev.target.closest("[data-fpg-no]")) {
+        ev.preventDefault();
+        askingId = null;
+        renderGrid();
+        return;
+      }
+      if (ev.target.closest("[data-fpg-yes]")) {
+        ev.preventDefault();
+        const item = findItem(card.getAttribute("data-fpg-id"));
+        if (!item) return;
+        selectedId = item.id;
+        selectedItem = item;
+        if (onConfirm) onConfirm(item);
+        else if (onSelect) onSelect(item);
+        return;
+      }
+      if (mode === "picker") {
+        askingId = card.getAttribute("data-fpg-id");
+        renderGrid();
+        const yes = elGrid.querySelector(".fpg-ask-yes");
+        if (yes) yes.focus();
+        return;
+      }
+      selectById(card.getAttribute("data-fpg-id"));
     });
 
     const api = {
@@ -289,7 +330,6 @@
       selectById,
       clearFilters() {
         tagSet.clear();
-        shapeSet.clear();
         trimOnly = false;
         renderFilters();
         renderGrid();

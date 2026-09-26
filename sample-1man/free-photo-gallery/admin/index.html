@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex,nofollow">
+  <title>写真ギャラリー管理者（タグ・下半分トリム）</title>
+  <link rel="stylesheet" href="admin.css?v=checkdock">
+</head>
+<body>
+  <header class="adm-head">
+    <h1>写真ギャラリー管理者</h1>
+    <p>タグ付けと「下半分を切る」専用。お客様向け画面ではありません。</p>
+    <p class="adm-status" id="status" aria-live="polite"></p>
+  </header>
+
+  <div class="adm-layout">
+    <aside class="adm-side">
+      <label class="adm-field">絞り込み（タグ）
+        <select id="filterTag">
+          <option value="">すべて</option>
+        </select>
+      </label>
+      <label class="adm-field">検索（id / path）
+        <input type="search" id="filterText" placeholder="cafe, work-01 …">
+      </label>
+      <p class="adm-count" id="count"></p>
+      <div class="adm-multi">
+        <button type="button" id="btnMultiClear" hidden>選択をクリア</button>
+      </div>
+      <p class="adm-help" id="multiHint">左上のチェックで複数選択です。タグを保存すると、チェックは自動で外れます。写真自体を押すと、大きく見られます。</p>
+      <ul class="adm-thumbs" id="thumbs"></ul>
+    </aside>
+
+    <main class="adm-main" id="main">
+      <section class="adm-tag-dock" id="tagDock">
+        <h2>タグ</h2>
+        <p class="adm-help" id="tagHelp">緑が付いているタグです。押すと付き、もう一度押すと外れます。</p>
+        <div class="adm-tags" id="tagChecks"></div>
+        <div class="adm-newtag">
+          <input type="text" id="newTagKey" placeholder="キー（英小文字・ハイフン）" autocomplete="off">
+          <input type="text" id="newTagLabel" placeholder="表示名（日本語）" autocomplete="off">
+          <button type="button" id="btnAddTag">タグを追加</button>
+        </div>
+        <button type="button" class="adm-primary" id="btnSaveTags">この写真のタグを保存</button>
+      </section>
+      <div class="adm-stage">
+      <p class="adm-empty" id="emptyHint">左の写真を押すと、ここに大きく出ます。</p>
+      <div class="adm-detail" id="detail" hidden>
+        <div class="adm-preview-wrap">
+          <img id="preview" alt="">
+        </div>
+        <div class="adm-meta">
+          <p><strong id="itemId"></strong></p>
+          <p id="itemPath" class="adm-path"></p>
+          <p>シーン: <span id="itemScene"></span></p>
+        </div>
+
+        <section class="adm-block">
+          <h2>下半分を切る</h2>
+          <p class="adm-help">上半分だけ残します。幅はそのまま。確定するとファイルを上書きします。</p>
+          <button type="button" id="btnCropPreview">下半分を切る（確認）</button>
+          <button type="button" class="adm-danger" id="btnCropSave" hidden>確定して上書き保存</button>
+          <button type="button" id="btnCropCancel" hidden>やめる</button>
+          <canvas id="cropCanvas" hidden></canvas>
+        </section>
+      </div>
+      </div>
+    </main>
+  </div>
+
+  <script src="admin.js?v=tagfilter"></script>
+</body>
+</html>

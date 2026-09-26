@@ -7,12 +7,21 @@
   const footBack = document.getElementById("help-back-foot");
   const home = document.getElementById("help-home");
 
-  if (stickyBack) stickyBack.hidden = fromOrder;
-  if (footBack) footBack.hidden = fromOrder;
-
   document.querySelectorAll(".help-back-local").forEach((link) => {
     link.hidden = !fromOrder;
   });
+
+  /* 注文画面から開いた一覧には、見出しの「注文画面に戻る」を出す。項目の中では各項目のボタンを使う */
+  function syncOrderBack() {
+    if (!fromOrder) {
+      if (stickyBack) stickyBack.hidden = false;
+      if (footBack) footBack.hidden = false;
+      return;
+    }
+    const onHome = !!(home && !home.hidden);
+    if (stickyBack) stickyBack.hidden = !onHome;
+    if (footBack) footBack.hidden = !onHome;
+  }
 
   function resolveSectionId(id) {
     if (!id || id === "help-toc" || id === "help-home" || id === "help-search") return null;
@@ -32,6 +41,7 @@
     document.querySelectorAll(".help-toc-card").forEach((card) => {
       card.classList.remove("is-active");
     });
+    syncOrderBack();
     window.scrollTo({ top: 0, behavior: "smooth" });
   }
 
@@ -52,6 +62,7 @@
     document.querySelectorAll(".help-toc-card").forEach((card) => {
       card.classList.toggle("is-active", card.getAttribute("data-help-nav") === sectionId);
     });
+    syncOrderBack();
     requestAnimationFrame(() => {
       window.scrollTo({ top: 0, behavior: "smooth" });
       if (id !== sectionId) {
@@ -71,7 +82,32 @@
     showTopic(raw);
   }
 
+  if (window.PageShutter) window.PageShutter.resume();
+
   applyHash();
+  function openForward(id) {
+    function go() {
+      history.pushState(null, "", "#" + id);
+      showTopic(id);
+    }
+    if (!id) return;
+    if (window.PageShutter && window.PageShutter.isBusy()) return;
+    if (!window.PageShutter) {
+      go();
+      return;
+    }
+    window.PageShutter.play(go);
+  }
+
+  document.querySelectorAll(".help-toc-card").forEach((card) => {
+    card.addEventListener("click", (ev) => {
+      if (ev.metaKey || ev.ctrlKey || ev.shiftKey || ev.altKey || ev.button !== 0) return;
+      ev.preventDefault();
+      const id = card.getAttribute("data-help-nav") || String(card.getAttribute("href") || "").replace(/^#/, "");
+      openForward(id);
+    });
+  });
+
   window.addEventListener("hashchange", applyHash);
 
   document.querySelectorAll(".help-back-toc").forEach((link) => {
@@ -163,8 +199,7 @@
       a.textContent = item.label;
       a.addEventListener("click", (ev) => {
         ev.preventDefault();
-        history.pushState(null, "", "#" + item.id);
-        showTopic(item.id);
+        openForward(item.id);
       });
       li.appendChild(a);
       results.appendChild(li);

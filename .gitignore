@@ -10,6 +10,9 @@ sample-1man/**/chrome-profile*/
 sample-1man/**/chrome-dbg/
 sample-1man/**/chrome-profile2/
 
+# free-photo-gallery admin catalog backups
+sample-1man/free-photo-gallery/catalog.bak-*.json
+
 # OS junk
 Thumbs.db
 Desktop.ini

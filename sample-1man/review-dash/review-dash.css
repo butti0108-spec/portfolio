@@ -200,3 +200,21 @@ body.view-capture .stage {
 body.view-capture .frame-wrap {
   transition: none !important;
 }
+.has-hover-tip {
+  position: relative;
+}
+.has-hover-tip:hover::after,
+.has-hover-tip:focus-visible::after {
+  content: attr(data-tip);
+  position: absolute;
+  z-index: 50;
+  left: 0;
+  bottom: calc(100% + 0.35rem);
+  padding: 0.25rem 0.45rem;
+  border-radius: 0.3rem;
+  background: #111;
+  color: #fff;
+  font-size: 0.68rem;
+  white-space: nowrap;
+  pointer-events: none;
+}

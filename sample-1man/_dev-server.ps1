@@ -88,7 +88,7 @@ while ($true) {
     # Normalize trailing slash for API routes before rewriting dirs to index.html
     if ($pathOnly.EndsWith("/") -and $pathOnly.Length -gt 1) {
       $trimPath = $pathOnly.TrimEnd("/")
-      if ($trimPath -like "*/__capture-save" -or $trimPath -like "*/__review-decision" -or $trimPath -like "*/__draft-save") {
+      if ($trimPath -like "*/__capture-save" -or $trimPath -like "*/__review-decision" -or $trimPath -like "*/__draft-save" -or $trimPath -like "*/__catalog-save" -or $trimPath -like "*/__image-save") {
         $pathOnly = $trimPath
       }
     }
@@ -206,6 +206,80 @@ while ($true) {
       }
       $byteLen = $utf8.GetByteCount($textOut)
       $msg = "{`"ok`":true,`"key`":`"$key`",`"path`":`"sushi-samples/$key/draft.json`",`"bytes`":$byteLen}"
+      Write-Response $stream "200 OK" "application/json; charset=utf-8" ([Text.Encoding]::UTF8.GetBytes($msg))
+      continue
+    }
+
+    if ($method -eq "POST" -and $pathOnly -eq "/sample-1man/free-photo-gallery/__catalog-save") {
+      $galleryRoot = Join-Path $sampleRoot "free-photo-gallery"
+      $catalogPath = Join-Path $galleryRoot "catalog.json"
+      if (-not (Test-Path -LiteralPath $catalogPath -PathType Leaf)) {
+        Write-Response $stream "404 Not Found" "application/json; charset=utf-8" ([Text.Encoding]::UTF8.GetBytes('{"ok":false,"reason":"missing-catalog"}'))
+        continue
+      }
+      $raw = if ($bodyIn.Length -gt 0) { [Text.Encoding]::UTF8.GetString($bodyIn) } else { "" }
+      try {
+        $null = $raw | ConvertFrom-Json
+      } catch {
+        Write-Response $stream "400 Bad Request" "application/json; charset=utf-8" ([Text.Encoding]::UTF8.GetBytes('{"ok":false,"reason":"bad-json"}'))
+        continue
+      }
+      $utf8 = [Text.UTF8Encoding]::new($false)
+      $textOut = $raw.TrimEnd() + "`n"
+      $bak = Join-Path $galleryRoot ("catalog.bak-" + (Get-Date -Format "yyyyMMdd-HHmmss") + ".json")
+      try {
+        Copy-Item -LiteralPath $catalogPath -Destination $bak -Force
+        [IO.File]::WriteAllText($catalogPath, $textOut, $utf8)
+      } catch {
+        Write-Response $stream "500 Internal Server Error" "application/json; charset=utf-8" ([Text.Encoding]::UTF8.GetBytes('{"ok":false,"reason":"catalog-write-failed"}'))
+        continue
+      }
+      $byteLen = $utf8.GetByteCount($textOut)
+      $msg = "{`"ok`":true,`"bytes`":$byteLen,`"backup`":`"$([IO.Path]::GetFileName($bak))`"}"
+      Write-Response $stream "200 OK" "application/json; charset=utf-8" ([Text.Encoding]::UTF8.GetBytes($msg))
+      continue
+    }
+
+    if ($method -eq "POST" -and $pathOnly -eq "/sample-1man/free-photo-gallery/__image-save") {
+      $rel = $null
+      foreach ($pair in ($query -split "&")) {
+        if ($pair -like "path=*") { $rel = [Uri]::UnescapeDataString($pair.Substring(5)) }
+      }
+      if ([string]::IsNullOrWhiteSpace($rel) -or $rel.Contains("..") -or $rel.StartsWith("/") -or $rel.StartsWith("\")) {
+        Write-Response $stream "400 Bad Request" "application/json; charset=utf-8" ([Text.Encoding]::UTF8.GetBytes('{"ok":false,"reason":"bad-path"}'))
+        continue
+      }
+      $relN = $rel.Replace("\", "/")
+      if ($relN -notlike "ai-or-original/*" -and $relN -notlike "trim-card/*" -and $relN -notlike "approved/*") {
+        Write-Response $stream "403 Forbidden" "application/json; charset=utf-8" ([Text.Encoding]::UTF8.GetBytes('{"ok":false,"reason":"path-not-allowed"}'))
+        continue
+      }
+      $galleryRoot = Join-Path $sampleRoot "free-photo-gallery"
+      $target = [IO.Path]::GetFullPath((Join-Path $galleryRoot ($relN -replace "/", [IO.Path]::DirectorySeparatorChar)))
+      $rootN = [IO.Path]::GetFullPath($galleryRoot) + [IO.Path]::DirectorySeparatorChar
+      if (-not $target.StartsWith($rootN, [StringComparison]::OrdinalIgnoreCase)) {
+        Write-Response $stream "403 Forbidden" "application/json; charset=utf-8" ([Text.Encoding]::UTF8.GetBytes('{"ok":false,"reason":"path-escape"}'))
+        continue
+      }
+      if (-not (Test-Path -LiteralPath $target -PathType Leaf)) {
+        Write-Response $stream "404 Not Found" "application/json; charset=utf-8" ([Text.Encoding]::UTF8.GetBytes('{"ok":false,"reason":"missing-file"}'))
+        continue
+      }
+      if ($bodyIn.Length -lt 32) {
+        Write-Response $stream "400 Bad Request" "application/json; charset=utf-8" ([Text.Encoding]::UTF8.GetBytes('{"ok":false,"reason":"empty-body"}'))
+        continue
+      }
+      $tmpPath = Join-Path $env:TEMP ("fpg-img-" + [guid]::NewGuid().ToString("n") + ".jpg")
+      try {
+        [IO.File]::WriteAllBytes($tmpPath, $bodyIn)
+        Copy-Item -LiteralPath $tmpPath -Destination $target -Force
+      } catch {
+        Write-Response $stream "500 Internal Server Error" "application/json; charset=utf-8" ([Text.Encoding]::UTF8.GetBytes('{"ok":false,"reason":"image-write-failed"}'))
+        continue
+      } finally {
+        if (Test-Path -LiteralPath $tmpPath) { Remove-Item -LiteralPath $tmpPath -Force -ErrorAction SilentlyContinue }
+      }
+      $msg = "{`"ok`":true,`"path`":`"$relN`",`"bytes`":$($bodyIn.Length)}"
       Write-Response $stream "200 OK" "application/json; charset=utf-8" ([Text.Encoding]::UTF8.GetBytes($msg))
       continue
     }

@@ -1622,7 +1622,7 @@ body.reset-draft-open {
   flex-direction: row;
   min-height: 0;
   min-width: 0;
-  --preview-pct: 58%;
+  --preview-pct: 45%;
 }
 
 .preview-pane {
@@ -1649,8 +1649,9 @@ body.reset-draft-open {
   border-left: 1px solid rgba(0, 0, 0, 0.12);
   border-right: 1px solid rgba(255, 255, 255, 0.14);
   background: linear-gradient(90deg, #efeae3 0 40%, #2a2e2c 60% 100%);
-  cursor: col-resize;
-  touch-action: none;
+  cursor: default;
+  pointer-events: none;
+  touch-action: auto;
   position: relative;
   z-index: 5;
 }
@@ -7477,26 +7478,31 @@ body.atelier.color-mode-easy .preset-row--mood6 [data-easy-preset] {
 .preview-width-ruler {
   display: inline-flex;
   align-items: center;
-  gap: 0;
+  gap: 0.35rem;
 }
 .preview-width-dot {
-  width: 0.85rem;
-  height: 0.85rem;
-  padding: 0;
-  border: 2px solid rgba(21, 32, 40, 0.55);
-  border-radius: 50%;
+  width: auto;
+  height: auto;
+  margin: 0;
+  padding: 0.12rem 0.45rem;
+  border: 1px solid rgba(21, 32, 40, 0.35);
+  border-radius: 999px;
   background: #fff;
+  color: #152028;
+  font: inherit;
+  font-size: 0.72rem;
+  font-weight: 700;
+  line-height: 1.3;
   cursor: pointer;
+}
+.preview-width-tick {
+  display: none;
 }
 .preview-width-dot.is-on {
   background: #152028;
   border-color: #152028;
+  color: #fff;
   box-shadow: 0 0 0 2px rgba(21, 32, 40, 0.18);
-}
-.preview-width-tick {
-  width: 0.55rem;
-  height: 2px;
-  background: rgba(21, 32, 40, 0.35);
 }
 .chrome-help-btn {
   display: inline-flex;

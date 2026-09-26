@@ -16727,13 +16727,11 @@
     if (!viewport || !ruler) return;
 
     const WIDTH_STEPS = [
-      { id: "phone-s", label: "スマホ小", width: 360 },
       { id: "phone", label: "スマホ", width: 390 },
       { id: "tablet", label: "タブレット", width: 768 },
-      { id: "laptop", label: "ノート", width: 1024 },
       { id: "desktop", label: "PC", width: 1280 }
     ];
-    let stepIndex = 4;
+    let stepIndex = 2;
     /* 100%は選んだ幅の実寸。開いた直後の見本は25%で固定する */
     const LOOK_MIN = 0.25;
     const LOOK_MAX = 2;
@@ -16950,8 +16948,10 @@
         s.label +
         "（" +
         s.width +
-        'px）" aria-checked="false"></button>'
-    ).join('<span class="preview-width-tick" aria-hidden="true"></span>');
+        'px）">' +
+        s.label +
+        "</button>"
+    ).join("");
 
     ruler.querySelectorAll("[data-width-step]").forEach((btn) => {
       btn.addEventListener("click", () => {
@@ -17005,20 +17005,10 @@
     const shell = document.querySelector(".atelier-shell");
     if (!split || !handle) return;
 
-    const KEY = "sample-1man-split-pct-v2";
-    const MIN = 28;
-    const MAX = 72;
-    let pct = MIN;
-    try {
-      const saved = Number(localStorage.getItem(KEY));
-      if (Number.isFinite(saved) && saved >= MIN && saved <= MAX) pct = saved;
-    } catch (err) {
-      /* ignore */
-    }
+    const pct = 45;
 
     function setPct(next) {
-      pct = Math.max(MIN, Math.min(MAX, next));
-      const value = pct + "%";
+      const value = next + "%";
       if (shell) shell.style.setProperty("--preview-pct", value);
       split.style.setProperty("--preview-pct", value);
       if (typeof window.applyPreviewWidthFromPane === "function") {
@@ -17028,14 +17018,6 @@
       const openMap = document.querySelector("#easy-img-layout-host .layout-photo-row.is-open .layout-source-map");
       if (openMap) alignOpenSourceMapToPad(openMap);
       alignOpenPhotoWithPreview();
-    }
-
-    function persist() {
-      try {
-        localStorage.setItem(KEY, String(Math.round(pct)));
-      } catch (err) {
-        /* ignore */
-      }
     }
 
     setPct(pct);
@@ -17066,7 +17048,6 @@
       window.removeEventListener("pointercancel", onUp);
       window.removeEventListener("touchmove", onMove);
       window.removeEventListener("touchend", onUp);
-      persist();
       if (typeof window.applyPreviewWidthFromPane === "function") {
         window.applyPreviewWidthFromPane();
       }
@@ -18215,18 +18196,6 @@
       window.addEventListener("touchend", onUp);
     }
 
-    handle.addEventListener("pointerdown", startDrag);
-    handle.addEventListener("keydown", (ev) => {
-      if (ev.key === "ArrowLeft") {
-        ev.preventDefault();
-        setPct(pct + 2);
-        persist();
-      } else if (ev.key === "ArrowRight") {
-        ev.preventDefault();
-        setPct(pct - 2);
-        persist();
-      }
-    });
   }
 
   function setupChromeCollapse() {

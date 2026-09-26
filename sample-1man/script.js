@@ -14554,10 +14554,8 @@
       ev.stopPropagation();
       const list = row.parentElement;
       let overId = null;
-      let place = "before";
-      let moved = false;
+      let place = null;
       const startY = ev.clientY;
-      const orderSnap = (store.itemOrders[countId] || []).slice();
       const face = row.querySelector(":scope > .layout-closed-line") || row;
       const faceRect = face.getBoundingClientRect();
       store._layoutGhostOffsetX = ev.clientX - faceRect.left;
@@ -14565,40 +14563,57 @@
       ensureLayoutDragGhost(row, ev.clientX, ev.clientY);
       document.body.classList.add("is-inner-layout-dragging");
       row.classList.add("is-holding");
+      const clearInnerDropFrames = () => {
+        if (!list) return;
+        list.querySelectorAll(".layout-inner").forEach((el) => {
+          el.style.boxShadow = "";
+        });
+      };
+      const showInnerDropFrame = (target, dropPlace) => {
+        clearInnerDropFrames();
+        if (!target || !dropPlace) return;
+        target.style.boxShadow =
+          dropPlace === "before" ? "inset 0 3px 0 #3d8a48" : "inset 0 -3px 0 #3d8a48";
+      };
       const onMove = (moveEv) => {
         ensureLayoutDragGhost(row, moveEv.clientX, moveEv.clientY);
-        if (Math.abs(moveEv.clientY - startY) > 4) moved = true;
-        if (!moved || !list) return;
-        let best = null;
-        let bestDist = Infinity;
+        if (Math.abs(moveEv.clientY - startY) <= 4 || !list) {
+          overId = null;
+          place = null;
+          clearInnerDropFrames();
+          return;
+        }
+        const ghost = document.getElementById("layout-arrange-ghost");
+        const ghostRect = ghost ? ghost.getBoundingClientRect() : null;
+        const probeY = ghostRect ? ghostRect.top + ghostRect.height / 2 : moveEv.clientY;
+        let hit = null;
+        let hitPlace = null;
         list.querySelectorAll(".layout-inner").forEach((el) => {
           const id = el.getAttribute("data-item-id");
           if (!id || id === slotId) return;
           const r = el.getBoundingClientRect();
-          const dist = Math.abs(moveEv.clientY - (r.top + r.height / 2));
-          if (dist < bestDist) {
-            bestDist = dist;
-            best = el;
-          }
+          if (probeY < r.top || probeY > r.bottom) return;
+          const mid = r.top + r.height / 2;
+          hit = el;
+          hitPlace = probeY < mid ? "before" : "after";
         });
-        if (!best) return;
-        overId = best.getAttribute("data-item-id");
-        place = itemDragPlace(slotId, overId, orderSnap);
-        list.querySelectorAll(".layout-inner").forEach((el) => {
-          el.classList.toggle("is-drop-target", el === best);
-        });
+        overId = hit ? hit.getAttribute("data-item-id") : null;
+        place = hit ? hitPlace : null;
+        showInnerDropFrame(hit, hitPlace);
       };
       const onUp = () => {
         window.removeEventListener("pointermove", onMove, true);
         window.removeEventListener("pointerup", onUp, true);
         window.removeEventListener("pointercancel", onUp, true);
+        const dropId = overId;
+        const dropPlace = place;
         removeLayoutDragGhost();
         document.body.classList.remove("is-inner-layout-dragging");
         row.classList.remove("is-holding");
-        if (list) list.querySelectorAll(".layout-inner").forEach((el) => el.classList.remove("is-drop-target"));
-        if (moved && overId) {
+        clearInnerDropFrames();
+        if (dropId && dropPlace) {
           pushLayoutUndo();
-          if (moveItemOrderNear(countId, slotId, overId, place)) {
+          if (moveItemOrderNear(countId, slotId, dropId, dropPlace)) {
             applyItemLayoutToPreview(countId);
             renderLayoutArrangeWire();
             if (store.confirmed.finish) unconfirmFinishSoft();

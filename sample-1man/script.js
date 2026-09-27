@@ -8897,7 +8897,7 @@
       applyWorkThumbFit(inputName);
     }
     syncEasyImageStatuses();
-    if (document.getElementById("layout-arrange-wire")) renderLayoutArrangeWire();
+    if (document.getElementById("layout-arrange-wire")) refreshLayoutPhotoFace(inputName);
     const cur = getCurrentFlowStep();
     if (cur && cur.id === "easy-img-wire") {
       const slots = collectVisibleImageSlots();
@@ -14422,12 +14422,12 @@
     if (label) label.textContent = s + "%";
     const range = box.querySelector(".layout-zoom-range-input");
     if (range && document.activeElement !== range) {
-      range.value = String(IMAGE_SCALE_MAX + IMAGE_SCALE_MIN - s);
+      range.value = String(s);
     }
     const inn = box.querySelector('[data-scale-nudge="in"]');
     const out = box.querySelector('[data-scale-nudge="out"]');
-    if (inn) inn.disabled = s >= IMAGE_SCALE_MAX;
-    if (out) out.disabled = s <= IMAGE_SCALE_MIN;
+    if (inn) inn.disabled = s <= IMAGE_SCALE_MIN;
+    if (out) out.disabled = s >= IMAGE_SCALE_MAX;
   }
 
   function syncOpenLayoutFocalButtons() {
@@ -14452,7 +14452,7 @@
   }
 
   function nudgeFrameImageScale(blockId, slot, dir) {
-    const delta = dir === "in" ? IMAGE_SCALE_STEP : -IMAGE_SCALE_STEP;
+    const delta = dir === "in" ? -IMAGE_SCALE_STEP : IMAGE_SCALE_STEP;
     if (blockId === "hero") {
       const current = normalizeImageScale(store.heroImageScale);
       const next = normalizeImageScale(current + delta);
@@ -14847,6 +14847,34 @@
   function syncLayoutMirrors() {
     document.querySelectorAll(".layout-mirror").forEach(paintLayoutMirror);
     document.querySelectorAll(".layout-source-map").forEach(paintLayoutSourceMap);
+  }
+
+  function refreshLayoutPhotoFace(imageName) {
+    const src = layoutFramePreviewSrc(imageName);
+    document.querySelectorAll("#easy-img-layout-host .layout-photo-row").forEach((row) => {
+      const key = row.getAttribute("data-layout-photo") || "";
+      const cut = key.indexOf(":");
+      if (cut < 0) return;
+      if (layoutFrameImageName(key.slice(0, cut), key.slice(cut + 1)) !== imageName) return;
+      row.querySelectorAll(".layout-closed-thumb, .layout-source-map").forEach((box) => {
+        if (!src) return;
+        let img = box.querySelector("img");
+        if (!img) {
+          img = document.createElement("img");
+          img.alt = "";
+          img.draggable = false;
+          box.insertBefore(img, box.firstChild);
+        }
+        if (img.getAttribute("src") !== src) img.src = src;
+      });
+      const picked = !!(store.galleryPicks && store.galleryPicks[imageName]);
+      const selfBtn = row.querySelector(".layout-img-source:not(.layout-img-source--gallery)");
+      const galleryBtn = row.querySelector(".layout-img-source--gallery");
+      if (selfBtn) selfBtn.classList.toggle("is-on", !picked);
+      if (galleryBtn) galleryBtn.classList.toggle("is-on", picked);
+      row.querySelectorAll(".layout-mirror").forEach(paintLayoutMirror);
+      row.querySelectorAll(".layout-source-map").forEach(paintLayoutSourceMap);
+    });
   }
 
   function layoutFramePreviewSrc(imageName) {
@@ -15416,7 +15444,7 @@
     zoom.className = "layout-adjust-zoom";
     const view = layoutFrameViewState(blockId, slot);
     const scaleNow = normalizeImageScale(view && view.scale);
-    const rangeValue = IMAGE_SCALE_MAX + IMAGE_SCALE_MIN - scaleNow;
+    const rangeValue = scaleNow;
     zoom.innerHTML =
       '<button type="button" class="layout-zoom-end layout-zoom-end--small" data-scale-nudge="in" aria-label="枠を一段小さく">縮小</button>' +
       '<input class="layout-zoom-range-input" type="range" min="' +
@@ -15451,7 +15479,7 @@
       });
       range.addEventListener("input", () => {
         const raw = Number(range.value);
-        setFrameImageScale(blockId, slot, IMAGE_SCALE_MAX + IMAGE_SCALE_MIN - raw, scaleUndoArmed);
+        setFrameImageScale(blockId, slot, raw, scaleUndoArmed);
         scaleUndoArmed = false;
       });
     }

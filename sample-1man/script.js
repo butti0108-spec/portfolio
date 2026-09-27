@@ -332,6 +332,7 @@
   const STEPS = [
     { id: "easy-basics", label: "基本情報", needsConfirm: true, num: 0 },
     { id: "easy-color", label: "色合い", needsConfirm: true, num: 0 },
+    { id: "easy-color-stage", label: "色合い", needsConfirm: true, num: 0 },
     { id: "easy-copy-path", label: "文章の決め方", needsConfirm: true, num: 0 },
     { id: "easy-copy-dirs", label: "方向", needsConfirm: true, num: 0 },
     { id: "easy-copy-omakase", label: "おまかせ文章", needsConfirm: true, num: 0 },
@@ -758,6 +759,7 @@
   const EASY_FLOW_STEP_IDS = [
     "easy-basics",
     "easy-color",
+    "easy-color-stage",
     "easy-img-path",
     "easy-img-omakase",
     "easy-img-wire",
@@ -771,6 +773,7 @@
   const EASY_FLOW_STEP_SET = new Set([
     "easy-basics",
     "easy-color",
+    "easy-color-stage",
     "easy-copy-path",
     "easy-copy-dirs",
     "easy-copy-omakase",
@@ -5710,7 +5713,7 @@
   }
 
   function getEasyFlowStepIds() {
-    const ids = ["easy-basics", "easy-copy-dirs", "easy-color"]
+    const ids = ["easy-basics", "easy-copy-dirs", "easy-color", "easy-color-stage"]
       .concat(getEasyImageFlowMid())
       .concat(getEasyCopyFlowTail())
       .concat(["easy-loading", "easy-done"]);
@@ -5882,7 +5885,7 @@
     bar.hidden = true;
   }
 
-  const EASY_FLOW_STAGE_LABELS = ["サンプル", "用途", "基本情報", "雰囲気", "色合い", "画像", "文章", "確定"];
+  const EASY_FLOW_STAGE_LABELS = ["サンプル", "用途", "基本情報", "雰囲気", "色見本", "色合い", "画像", "文章", "確定"];
 
   function easyFlowStageIndex() {
     const gate = document.getElementById("entry-gate");
@@ -5901,16 +5904,17 @@
     if (id === "easy-basics") return 3;
     if (id === "easy-copy-dirs") return 4;
     if (id === "easy-color") return 5;
-    if (id === "easy-img-path" || id === "easy-img-wire" || id === "easy-img-omakase") return 6;
+    if (id === "easy-color-stage") return 6;
+    if (id === "easy-img-path" || id === "easy-img-wire" || id === "easy-img-omakase") return 7;
     if (
       id === "easy-copy-path" ||
       id === "easy-copy-omakase" ||
       id === "easy-copy-frame" ||
       id.indexOf("easy-sec-") === 0
     ) {
-      return 7;
+      return 8;
     }
-    if (id === "easy-loading" || id === "easy-done") return 8;
+    if (id === "easy-loading" || id === "easy-done") return 9;
     return 0;
   }
 
@@ -5924,8 +5928,8 @@
         return;
       }
       meter.hidden = false;
-      if (label) label.textContent = EASY_FLOW_STAGE_LABELS[n - 1] + "\u3000" + n + " / 8";
-      if (fill) fill.style.width = (n / 8) * 100 + "%";
+      if (label) label.textContent = EASY_FLOW_STAGE_LABELS[n - 1] + "\u3000" + n + " / 9";
+      if (fill) fill.style.width = (n / 9) * 100 + "%";
       const names = meter.querySelector("[data-easy-flow-meter-names]");
       if (names) {
         names.textContent = "";
@@ -7866,7 +7870,7 @@
       if (!store.easyBasicsHints && !store.easyBasicsApplied) captureEasyBasicsHintsFromSample();
       paintEasyBasicsPlaceholders();
     }
-    if (step.id !== "easy-color") {
+    if (step.id !== "easy-color-stage") {
       document.querySelectorAll("#layout-color-rows .layout-color-row.is-open").forEach(closeLayoutColorRow);
     }
     if (step.id === "easy-color") {
@@ -7877,6 +7881,8 @@
         r.checked = r.value === val;
       });
       paintEasyColorBars();
+    }
+    if (step.id === "easy-color-stage") {
       syncLayoutColorRows();
     }
     if (step.id === "easy-copy-omakase") {
@@ -13092,26 +13098,21 @@
 
   function rememberLayoutColorHoneyHome() {
     if (layoutColorHoneyHome) return layoutColorHoneyHome;
-    const host = document.getElementById("gct-pick-host");
-    const wrap = host ? host.closest(".gct-honey-wrap") : null;
-    const hint = document.getElementById("gct-pick-drag-hint");
-    if (!wrap || !hint) return null;
+    const layout = document.querySelector("#guided-color-trial .gct-pick-layout");
+    if (!layout) return null;
     layoutColorHoneyHome = {
-      wrap: wrap,
-      wrapParent: wrap.parentElement,
-      wrapNext: wrap.nextSibling,
-      hint: hint,
-      hintParent: hint.parentElement,
-      hintNext: hint.nextSibling
+      layout: layout,
+      parent: layout.parentElement,
+      next: layout.nextSibling
     };
     return layoutColorHoneyHome;
   }
 
   function restoreLayoutColorHoney() {
     const home = layoutColorHoneyHome;
-    if (!home) return;
-    if (home.hint && home.hintParent) home.hintParent.insertBefore(home.hint, home.hintNext);
-    if (home.wrap && home.wrapParent) home.wrapParent.insertBefore(home.wrap, home.wrapNext);
+    if (!home || !home.layout || !home.parent) return;
+    home.parent.insertBefore(home.layout, home.next);
+    if (store.guidedColorEditStepId) syncPickPartnerUnused(store.guidedColorEditStepId);
   }
 
   function showLayoutColorHoney(stepId) {
@@ -13125,7 +13126,12 @@
     store.guidedColorTrial._pickEntryHex = startHex;
     store.guidedColorTrial._pickEntryPartner = partnerHexForSlot(stepId);
     store.guidedColorTrial._pickHistory = [];
-    const paint = () => renderGctPickUi(stepId, { forceHoney: true });
+    const paint = () => {
+      renderGctPickUi(stepId, { forceHoney: true });
+      const inRow = document.querySelector(".layout-color-body .gct-pick-layout");
+      const partnerLabel = document.getElementById("gct-pick-partner-label");
+      if (inRow && partnerLabel) partnerLabel.textContent = "2色目";
+    };
     const host = document.getElementById("gct-pick-host");
     if (host && host.clientWidth < 40) window.requestAnimationFrame(paint);
     else paint();
@@ -13157,8 +13163,7 @@
     section.querySelectorAll(".layout-color-row.is-open").forEach(closeLayoutColorRow);
     const body = row.querySelector(".layout-color-body");
     body.hidden = false;
-    body.appendChild(home.hint);
-    body.appendChild(home.wrap);
+    body.appendChild(home.layout);
     row.classList.add("is-open");
     const btn = row.querySelector(".layout-color-open");
     btn.textContent = "OK";
@@ -13177,6 +13182,11 @@
       row.setAttribute("data-color-step", stepId);
       const line = document.createElement("div");
       line.className = "layout-color-line";
+      const handle = document.createElement("span");
+      handle.className = "layout-inner-handle";
+      handle.textContent = "⋮⋮";
+      handle.setAttribute("aria-label", "この枠の順番を変えられます");
+      setHoverTip(handle, "押したまま上下に動かすと、順番を変えられます");
       const label = document.createElement("p");
       label.className = "layout-color-name";
       label.textContent = name;
@@ -13192,13 +13202,52 @@
         if (row.classList.contains("is-open")) closeLayoutColorRow(row);
         else openLayoutColorRow(stepId);
       });
+      line.appendChild(handle);
       line.appendChild(label);
       line.appendChild(btn);
       row.appendChild(line);
       row.appendChild(body);
       rows.appendChild(row);
+      bindLayoutColorRowDrag(row);
     });
     syncLayoutColorRows();
+  }
+
+  function bindLayoutColorRowDrag(row) {
+    const handle = row.querySelector(".layout-inner-handle");
+    if (!handle) return;
+    handle.addEventListener("pointerdown", (ev) => {
+      if (ev.button != null && ev.button !== 0) return;
+      ev.preventDefault();
+      ev.stopPropagation();
+      const list = row.parentElement;
+      const onMove = (moveEv) => {
+        if (!list) return;
+        const rows = Array.from(list.querySelectorAll(":scope > .layout-color-row"));
+        const idx = rows.indexOf(row);
+        const prev = rows[idx - 1];
+        const next = rows[idx + 1];
+        if (prev) {
+          const rect = prev.getBoundingClientRect();
+          if (moveEv.clientY < rect.top + rect.height / 2) {
+            list.insertBefore(row, prev);
+            return;
+          }
+        }
+        if (next) {
+          const rect = next.getBoundingClientRect();
+          if (moveEv.clientY > rect.top + rect.height / 2) list.insertBefore(next, row);
+        }
+      };
+      const onUp = () => {
+        window.removeEventListener("pointermove", onMove, true);
+        window.removeEventListener("pointerup", onUp, true);
+        window.removeEventListener("pointercancel", onUp, true);
+      };
+      window.addEventListener("pointermove", onMove, true);
+      window.addEventListener("pointerup", onUp, true);
+      window.addEventListener("pointercancel", onUp, true);
+    });
   }
 
   function syncLayoutColorRows() {
@@ -19600,6 +19649,8 @@
   setupEntryGate();
   paintEasyColorBars();
   openDraftNotice();
+
+  document.documentElement.classList.add("dash-boot-ready");
 
   if (bootReview) {
     document.documentElement.classList.add("is-review-mode");

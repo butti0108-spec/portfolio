@@ -15532,14 +15532,14 @@
       const clearInnerDropFrames = () => {
         if (!list) return;
         list.querySelectorAll(".layout-inner").forEach((el) => {
+          el.classList.remove("is-drop-target");
           el.style.boxShadow = "";
         });
       };
-      const showInnerDropFrame = (target, dropPlace) => {
+      const showInnerDropFrame = (target) => {
         clearInnerDropFrames();
-        if (!target || !dropPlace) return;
-        target.style.boxShadow =
-          dropPlace === "before" ? "inset 0 3px 0 #3d8a48" : "inset 0 -3px 0 #3d8a48";
+        if (!target) return;
+        target.classList.add("is-drop-target");
       };
       const onMove = (moveEv) => {
         ensureLayoutDragGhost(row, moveEv.clientX, moveEv.clientY);
@@ -15549,23 +15549,30 @@
           clearInnerDropFrames();
           return;
         }
+        const goingDown = moveEv.clientY >= startY;
         const ghost = document.getElementById("layout-arrange-ghost");
         const ghostRect = ghost ? ghost.getBoundingClientRect() : null;
-        const probeY = ghostRect ? ghostRect.top + ghostRect.height / 2 : moveEv.clientY;
+        const probeY = ghostRect
+          ? (goingDown ? ghostRect.bottom : ghostRect.top)
+          : moveEv.clientY;
         let hit = null;
         let hitPlace = null;
+        let bestDist = Infinity;
         list.querySelectorAll(".layout-inner").forEach((el) => {
           const id = el.getAttribute("data-item-id");
           if (!id || id === slotId) return;
           const r = el.getBoundingClientRect();
           if (probeY < r.top || probeY > r.bottom) return;
-          const mid = r.top + r.height / 2;
-          hit = el;
-          hitPlace = probeY < mid ? "before" : "after";
+          const dist = goingDown ? probeY - r.top : r.bottom - probeY;
+          if (dist < bestDist) {
+            bestDist = dist;
+            hit = el;
+            hitPlace = goingDown ? "after" : "before";
+          }
         });
         overId = hit ? hit.getAttribute("data-item-id") : null;
         place = hit ? hitPlace : null;
-        showInnerDropFrame(hit, hitPlace);
+        showInnerDropFrame(hit);
       };
       const onUp = () => {
         window.removeEventListener("pointermove", onMove, true);

@@ -15193,7 +15193,9 @@
       lockBtn.setAttribute("aria-pressed", locked ? "true" : "false");
       lockBtn.addEventListener("click", (ev) => {
         stopSummaryToggle(ev);
-        setLayoutFrameLocked(blockId, slot, !locked);
+        const key = layoutFrameLockKey(blockId, slot);
+        const now = !!(store.imgOmakaseLocks && store.imgOmakaseLocks[key]);
+        setLayoutFrameLocked(blockId, slot, !now);
       });
       cluster.appendChild(lockBtn);
       cluster.appendChild(thumb);
@@ -15339,6 +15341,16 @@
     renderLayoutArrangeWire();
   }
 
+  function paintLayoutLockMark(blockId, slot, locked) {
+    const on = !!locked;
+    document.querySelectorAll('[data-layout-photo="' + blockId + ":" + slot + '"] .layout-lock-mark').forEach((btn) => {
+      btn.classList.toggle("is-on", on);
+      btn.textContent = on ? "🔒" : "🔓";
+      btn.setAttribute("aria-label", on ? "固定中" : "固定していない");
+      btn.setAttribute("aria-pressed", on ? "true" : "false");
+    });
+  }
+
   function setLayoutFrameLocked(blockId, slot, locked) {
     const lockKey = layoutFrameLockKey(blockId, slot);
     if (!store.imgOmakaseLocks || typeof store.imgOmakaseLocks !== "object") store.imgOmakaseLocks = {};
@@ -15346,7 +15358,7 @@
     store.imgOmakaseLocks[lockKey] = !!locked;
     closeLayoutChoice();
     scheduleSave();
-    renderLayoutArrangeWire();
+    paintLayoutLockMark(blockId, slot, locked);
   }
 
   function toggleLayoutFrameLock(blockId, slot) {
@@ -15473,7 +15485,9 @@
     const selfBtn = document.createElement("button");
     selfBtn.type = "button";
     selfBtn.className = "layout-img-source";
-    selfBtn.textContent = "自分の画像から選ぶ";
+    selfBtn.appendChild(document.createTextNode("自分の画像"));
+    selfBtn.appendChild(document.createElement("br"));
+    selfBtn.appendChild(document.createTextNode("から選ぶ"));
     selfBtn.addEventListener("click", (ev) => {
       ev.preventDefault();
       ev.stopPropagation();
@@ -15487,7 +15501,9 @@
     const galleryBtn = document.createElement("button");
     galleryBtn.type = "button";
     galleryBtn.className = "layout-img-source layout-img-source--gallery";
-    galleryBtn.textContent = "ギャラリーから選ぶ";
+    galleryBtn.appendChild(document.createTextNode("ギャラリー"));
+    galleryBtn.appendChild(document.createElement("br"));
+    galleryBtn.appendChild(document.createTextNode("から選ぶ"));
     galleryBtn.addEventListener("click", (ev) => {
       ev.preventDefault();
       ev.stopPropagation();

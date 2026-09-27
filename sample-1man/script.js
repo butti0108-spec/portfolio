@@ -14972,23 +14972,6 @@
     }
   }
 
-  function layoutAccordionScrollEl(cell) {
-    if (!cell) return null;
-    const host = document.querySelector("#easy-img-layout-host");
-    const cells = host ? host.querySelectorAll("details.layout-arrange-cell") : [];
-    let index = -1;
-    for (let i = 0; i < cells.length; i += 1) {
-      if (cells[i] === cell) {
-        index = i;
-        break;
-      }
-    }
-    if (index === 1) return cell.querySelector(".layout-arrange-body") || cell;
-    if (index === 2) return cell;
-    const row = cell.querySelector(".layout-photo-row.is-open");
-    return row || cell;
-  }
-
   function alignOpenPhotoWithPreview() {
     const map = document.querySelector("#easy-img-layout-host .layout-photo-row.is-open .layout-source-map");
     if (!map || !root) return;
@@ -15740,7 +15723,7 @@
             } else {
               window.requestAnimationFrame(() => {
                 const row = cell.querySelector(".layout-photo-row.is-open");
-                scrollDashChildToTop(layoutAccordionScrollEl(cell));
+                scrollDashChildToTop(cell);
                 if (row) alignOpenPhotoWithPreview();
                 else scrollPreviewFrameIntoView(layoutSectionPreviewSelector(id));
                 cell.querySelectorAll(".layout-photo-row.is-open .layout-source-map").forEach(alignOpenSourceMapToPad);
@@ -15803,7 +15786,7 @@
       const openCell = document.querySelector("#easy-img-layout-host details.layout-arrange-cell[open]");
       if (openCell) {
         const openRow = openCell.querySelector(".layout-photo-row.is-open");
-        scrollDashChildToTop(layoutAccordionScrollEl(openCell));
+        scrollDashChildToTop(openCell);
         if (openRow) alignOpenPhotoWithPreview();
         else scrollPreviewFrameIntoView(layoutSectionPreviewSelector(openCell.getAttribute("data-layout-block") || ""));
       }

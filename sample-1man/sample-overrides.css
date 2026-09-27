@@ -12951,11 +12951,11 @@ body.wizard-mode .dash-block.is-wizard-active {
 }
 #easy-img-layout-host .layout-photo-cluster .layout-zoom-block {
   grid-area: zoom;
-  justify-self: start;
+  justify-self: stretch;
   align-self: start;
-  width: 0;
+  width: 100%;
   min-width: 0;
-  max-width: none;
+  max-width: 100%;
   overflow: visible;
 }
 #easy-img-layout-host .layout-zoom-label {
@@ -13112,6 +13112,14 @@ body.wizard-mode .dash-block.is-wizard-active {
 }
 .layout-photo-tools--plain .layout-zoom-range-input {
   flex: 0 0 6.5rem;
+}
+#easy-img-layout-host .layout-photo-cluster .layout-adjust-zoom {
+  width: 100%;
+}
+#easy-img-layout-host .layout-photo-cluster .layout-zoom-range-input {
+  flex: 1 1 auto;
+  width: auto;
+  min-width: 2rem;
 }
 .layout-photo-tools--plain .layout-zoom-end {
   display: flex;

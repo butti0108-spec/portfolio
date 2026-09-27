@@ -9060,8 +9060,10 @@
       if (nav) stack.insertBefore(panel, nav);
       else stack.appendChild(panel);
       if (wire) wire.classList.remove("is-shared-image-ui");
+      document.querySelectorAll("#layout-color-section .layout-color-row.is-open").forEach(closeLayoutColorRow);
     } else if (wire) {
       wire.classList.remove("is-shared-image-ui");
+      document.querySelectorAll("#layout-color-section .layout-color-row.is-open").forEach(closeLayoutColorRow);
     }
     if (intoSampleStep || (stack && !stack.hidden)) renderLayoutArrangeWire();
   }
@@ -13066,6 +13068,140 @@
     applyLiveColors(true);
     scheduleSave();
     return true;
+  }
+
+  let layoutColorHoneyHome = null;
+
+  function layoutColorRowName(stepId) {
+    const names = {
+      "global-chrome-bg": "ヘッダーの背景色",
+      "global-chrome-ink": "ヘッダーの文字色",
+      "global-bg": "背景の色",
+      "hero-color": "キャッチの色",
+      "values-color": "下の枠の色",
+      "global-body": "本文の色",
+      "global-accent": "アクセントの色",
+      "global-card": "カードの色",
+      "contact-color": "ご連絡の色"
+    };
+    return names[stepId] || "";
+  }
+
+  function rememberLayoutColorHoneyHome() {
+    if (layoutColorHoneyHome) return layoutColorHoneyHome;
+    const host = document.getElementById("gct-pick-host");
+    const wrap = host ? host.closest(".gct-honey-wrap") : null;
+    const hint = document.getElementById("gct-pick-drag-hint");
+    if (!wrap || !hint) return null;
+    layoutColorHoneyHome = {
+      wrap: wrap,
+      wrapParent: wrap.parentElement,
+      wrapNext: wrap.nextSibling,
+      hint: hint,
+      hintParent: hint.parentElement,
+      hintNext: hint.nextSibling
+    };
+    return layoutColorHoneyHome;
+  }
+
+  function restoreLayoutColorHoney() {
+    const home = layoutColorHoneyHome;
+    if (!home) return;
+    if (home.hint && home.hintParent) home.hintParent.insertBefore(home.hint, home.hintNext);
+    if (home.wrap && home.wrapParent) home.wrapParent.insertBefore(home.wrap, home.wrapNext);
+  }
+
+  function showLayoutColorHoney(stepId) {
+    if (!GUIDED_COLOR_TUNE_IDS.includes(stepId)) return;
+    if (!store.presetChosen) markPresetChosen(store.chosenPresetKey || "clinic");
+    store.partnerPickMode = false;
+    store.guidedColorEditStepId = stepId;
+    const key = primaryColorKeyForStep(stepId);
+    const startHex = key ? store.draftColors[key] : "#ffffff";
+    if (!store.guidedColorTrial || typeof store.guidedColorTrial !== "object") store.guidedColorTrial = {};
+    store.guidedColorTrial._pickEntryHex = startHex;
+    store.guidedColorTrial._pickEntryPartner = partnerHexForSlot(stepId);
+    store.guidedColorTrial._pickHistory = [];
+    const paint = () => renderGctPickUi(stepId, { forceHoney: true });
+    const host = document.getElementById("gct-pick-host");
+    if (host && host.clientWidth < 40) window.requestAnimationFrame(paint);
+    else paint();
+  }
+
+  function closeLayoutColorRow(row) {
+    if (!row) return;
+    const stepId = row.getAttribute("data-color-step") || "";
+    row.classList.remove("is-open");
+    const body = row.querySelector(".layout-color-body");
+    if (body) body.hidden = true;
+    const btn = row.querySelector(".layout-color-open");
+    if (btn) {
+      btn.textContent = "開く";
+      btn.setAttribute("aria-expanded", "false");
+    }
+    restoreLayoutColorHoney();
+    if (stepId && store.guidedColorEditStepId === stepId) {
+      store.guidedColorEditStepId = null;
+      store.partnerPickMode = false;
+    }
+  }
+
+  function openLayoutColorRow(stepId) {
+    const section = document.getElementById("layout-color-section");
+    const row = section ? section.querySelector('[data-color-step="' + stepId + '"]') : null;
+    const home = rememberLayoutColorHoneyHome();
+    if (!row || !home) return;
+    section.querySelectorAll(".layout-color-row.is-open").forEach(closeLayoutColorRow);
+    const body = row.querySelector(".layout-color-body");
+    body.hidden = false;
+    body.appendChild(home.hint);
+    body.appendChild(home.wrap);
+    row.classList.add("is-open");
+    const btn = row.querySelector(".layout-color-open");
+    btn.textContent = "OK";
+    btn.setAttribute("aria-expanded", "true");
+    showLayoutColorHoney(stepId);
+  }
+
+  function mountLayoutColorSection() {
+    const rows = document.getElementById("layout-color-rows");
+    if (!rows || rows.childElementCount) return;
+    GUIDED_COLOR_TUNE_IDS.forEach((stepId) => {
+      const name = layoutColorRowName(stepId);
+      if (!name) return;
+      const row = document.createElement("div");
+      row.className = "layout-color-row";
+      row.setAttribute("data-color-step", stepId);
+      const line = document.createElement("div");
+      line.className = "layout-color-line";
+      const label = document.createElement("p");
+      label.className = "layout-color-name";
+      label.textContent = name;
+      const btn = document.createElement("button");
+      btn.type = "button";
+      btn.className = "layout-color-open";
+      btn.textContent = "開く";
+      btn.setAttribute("aria-expanded", "false");
+      const body = document.createElement("div");
+      body.className = "layout-color-body";
+      body.hidden = true;
+      btn.addEventListener("click", () => {
+        if (row.classList.contains("is-open")) closeLayoutColorRow(row);
+        else openLayoutColorRow(stepId);
+      });
+      line.appendChild(label);
+      line.appendChild(btn);
+      row.appendChild(line);
+      row.appendChild(body);
+      rows.appendChild(row);
+    });
+    document.querySelectorAll("#layout-color-section [data-preset]").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const open = document.querySelector("#layout-color-section .layout-color-row.is-open");
+        if (!open) return;
+        window.requestAnimationFrame(() => showLayoutColorHoney(open.getAttribute("data-color-step")));
+      });
+    });
   }
 
   function setupPresets() {
@@ -19291,6 +19427,7 @@
   setupImageResize();
   buildSwatches();
   setupPresets();
+  mountLayoutColorSection();
   setupCounts();
   setupHeroTextOverlayUi();
   applyHeroTextOverlay();

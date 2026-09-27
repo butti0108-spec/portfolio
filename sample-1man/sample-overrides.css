@@ -13372,3 +13372,74 @@ body.wizard-mode .dash-block.is-wizard-active {
 .layout-photo-ok:hover {
   background: #245a2c;
 }
+.layout-color-section {
+  margin-top: 1.35rem;
+  font-family: inherit;
+}
+.layout-color-moods {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.28rem;
+  margin: 0 0 0.9rem;
+}
+.layout-color-moods button {
+  margin: 0;
+  padding: 0.28rem 0.55rem;
+  border: 1px solid #c5ced6;
+  border-radius: 999px;
+  background: #fff;
+  color: #1a1f1c;
+  font-family: inherit;
+  font-size: 0.72rem;
+  font-weight: 500;
+  line-height: 1.3;
+  cursor: pointer;
+}
+.layout-color-moods button.is-active {
+  border-color: #245a2c;
+  background: #e7f6ea;
+}
+.layout-color-rows {
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+}
+.layout-color-line {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  min-width: 0;
+}
+.layout-color-name {
+  margin: 0;
+  font-family: inherit;
+  font-size: 0.8rem;
+  font-weight: 800;
+  line-height: 1.3;
+  color: #1a1f1c;
+}
+.layout-color-open {
+  margin: 0 0 0 auto;
+  padding: 0.2rem 0.55rem;
+  border: 1px solid #c5ced6;
+  border-radius: 999px;
+  background: #fff;
+  color: #1a1f1c;
+  font-family: inherit;
+  font-size: 0.72rem;
+  font-weight: 500;
+  line-height: 1.3;
+  cursor: pointer;
+}
+.layout-color-body {
+  margin-top: 0.45rem;
+  font-family: inherit;
+  font-size: 0.72rem;
+  font-weight: 500;
+  line-height: 1.3;
+}
+.layout-color-body,
+.layout-color-body * {
+  font-size: 0.72rem;
+  font-weight: 500;
+}

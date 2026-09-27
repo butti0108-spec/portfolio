@@ -12,7 +12,7 @@
   <!-- メーカー親CSS（ポートフォリオ根の style.css は読まない） -->
   <link rel="stylesheet" href="maker-base.css?v=cleanup-20260922">
   <link rel="icon" href="brand/mark-favicon.png?v=logo-8" type="image/png">
-  <link rel="stylesheet" href="sample-overrides.css?v=zoom-lock-20260927">
+  <link rel="stylesheet" href="sample-overrides.css?v=color-section-20260927">
   <link rel="stylesheet" href="free-photo-gallery/gallery.css?v=gallery-ask-20260926">
   <script>
     (function () {
@@ -61,7 +61,7 @@
   <script src="sushi-belt.js?v=sushi-replace-up-20260926" defer></script>
   <script src="free-photo-gallery/gallery.js?v=gallery-ask-20260926" defer></script>
   <script src="page-shutter.js?v=shutter-all-20260924" defer></script>
-  <script src="script.js?v=size-match2-20260927" defer></script>
+  <script src="script.js?v=color-section-20260927" defer></script>
   <script>
     (function () {
       var h = location.hostname;
@@ -698,6 +698,17 @@
             </span>
           </div>
           <div id="easy-img-layout-host"></div>
+          <section id="layout-color-section" class="layout-color-section" aria-label="色">
+            <div class="layout-color-moods" role="group" aria-label="雰囲気">
+              <button type="button" data-preset="clinic" data-easy-preset>紺・きれいめ</button>
+              <button type="button" data-preset="green" data-easy-preset>緑</button>
+              <button type="button" data-preset="cafe" data-easy-preset>ベージュ</button>
+              <button type="button" data-preset="ink" data-easy-preset>墨</button>
+              <button type="button" data-preset="brick" data-easy-preset>オレンジ</button>
+              <button type="button" data-preset="sakura" data-easy-preset>ピンク</button>
+            </div>
+            <div id="layout-color-rows" class="layout-color-rows"></div>
+          </section>
           <div class="sample-img-wire-layout">
             <div class="sample-img-wire-stage" aria-hidden="true">
               <button type="button" class="sample-wire-slot is-active" data-wire-slot="hero">キャッチ</button>

@@ -4077,6 +4077,7 @@ body.wizard-mode .dash-block.is-wizard-active {
   min-height: 0;
   overflow-x: hidden;
   overflow-y: auto;
+  overflow-anchor: none;
   scrollbar-gutter: stable;
   -webkit-overflow-scrolling: touch;
   overscroll-behavior: contain;
@@ -12950,12 +12951,15 @@ body.wizard-mode .dash-block.is-wizard-active {
 }
 #easy-img-layout-host .layout-photo-cluster .layout-zoom-block {
   grid-area: zoom;
-  justify-self: end;
-  width: max-content;
-  max-width: 100%;
+  justify-self: start;
+  align-self: start;
+  width: 0;
   min-width: 0;
+  max-width: none;
+  overflow: visible;
 }
 #easy-img-layout-host .layout-zoom-label {
+  width: max-content;
   margin: 0 0 0.2rem;
   font-size: 0.72rem;
   font-weight: 700;
@@ -13102,9 +13106,12 @@ body.wizard-mode .dash-block.is-wizard-active {
   display: flex;
   flex-direction: row;
   align-items: center;
-  gap: 0.4rem;
-  width: 100%;
+  gap: 0.45rem;
+  width: max-content;
   min-width: 0;
+}
+.layout-photo-tools--plain .layout-zoom-range-input {
+  flex: 0 0 6.5rem;
 }
 .layout-photo-tools--plain .layout-zoom-end {
   display: flex;

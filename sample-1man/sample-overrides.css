@@ -13060,7 +13060,7 @@ body.wizard-mode .dash-block.is-wizard-active {
   flex: 0 0 auto;
   display: grid;
   grid-template-columns: 7.2rem 7.2rem;
-  grid-template-rows: auto auto;
+  grid-template-rows: auto auto auto;
   align-items: start;
   align-content: start;
   column-gap: 0.55rem;
@@ -13077,6 +13077,13 @@ body.wizard-mode .dash-block.is-wizard-active {
   align-self: start;
   width: 7.2rem;
   max-width: 7.2rem;
+}
+#easy-img-layout-host .layout-photo-tools--plain .layout-lock-under {
+  grid-column: 1 / -1;
+  grid-row: 3;
+  justify-self: center;
+  align-self: start;
+  margin: 0;
 }
 #easy-img-layout-host .layout-photo-cluster {
   grid-column: 2;
@@ -13111,12 +13118,10 @@ body.wizard-mode .dash-block.is-wizard-active {
 }
 #easy-img-layout-host .layout-zoom-label {
   width: max-content;
+  height: calc(0.72rem * 1.3);
   margin: 0 0 0.2rem;
-  font-size: 0.72rem;
-  font-weight: 500;
-  line-height: 1.3;
-  color: #1a1f1c;
-  text-align: left;
+  overflow: hidden;
+  visibility: hidden;
 }
 #easy-img-layout-host .layout-img-source,
 #easy-img-layout-host .layout-photo-omakase,

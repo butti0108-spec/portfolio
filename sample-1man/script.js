@@ -15440,7 +15440,7 @@
     zoomBlock.className = "layout-zoom-block";
     const zoomLabel = document.createElement("p");
     zoomLabel.className = "layout-zoom-label";
-    zoomLabel.textContent = "拡大縮小";
+    zoomLabel.setAttribute("aria-hidden", "true");
     zoomBlock.appendChild(zoomLabel);
     zoomBlock.appendChild(zoom);
     const range = zoom.querySelector(".layout-zoom-range-input");
@@ -15560,9 +15560,23 @@
     const picked = !!(store.galleryPicks && store.galleryPicks[imageName]);
     if (picked) galleryBtn.classList.add("is-on");
     else selfBtn.classList.add("is-on");
+    const underLock = document.createElement("button");
+    underLock.type = "button";
+    const underLocked = !!(store.imgOmakaseLocks && store.imgOmakaseLocks[imageName]);
+    underLock.className = "layout-lock-mark layout-lock-under" + (underLocked ? " is-on" : "");
+    underLock.textContent = underLocked ? "🔒" : "🔓";
+    underLock.setAttribute("aria-label", underLocked ? "固定中" : "固定していない");
+    underLock.setAttribute("aria-pressed", underLocked ? "true" : "false");
+    underLock.addEventListener("click", (ev) => {
+      ev.preventDefault();
+      ev.stopPropagation();
+      const now = !!(store.imgOmakaseLocks && store.imgOmakaseLocks[imageName]);
+      setLayoutFrameLocked(blockId, slot, !now);
+    });
     sources.appendChild(selfBtn);
     sources.appendChild(galleryBtn);
     sources.appendChild(omakaseBtn);
+    sources.appendChild(underLock);
     const cluster = document.createElement("div");
     cluster.className = "layout-photo-cluster";
     tools.appendChild(sources);

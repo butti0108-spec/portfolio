@@ -15255,6 +15255,11 @@
         setOnlyLayoutFrameOpen(openKey, slot);
         applyLayoutPhotoRowOpen(row, blockId, slot, true);
         focusPreviewLayoutFrame(blockId, slot);
+        window.requestAnimationFrame(() => {
+          const panel = row.querySelector(".layout-photo-editor") || row;
+          scrollDashChildToTop(panel);
+          alignOpenPhotoWithPreview();
+        });
       });
       const row = document.createElement("div");
       row.className = "layout-photo-row" + (countId ? " layout-inner" : "") + (openNow ? " is-open" : "");
@@ -15723,9 +15728,13 @@
             } else {
               window.requestAnimationFrame(() => {
                 const row = cell.querySelector(".layout-photo-row.is-open");
-                scrollDashChildToTop(cell);
-                if (row) alignOpenPhotoWithPreview();
-                else scrollPreviewFrameIntoView(layoutSectionPreviewSelector(id));
+                if (row) {
+                  scrollDashChildToTop(row.querySelector(".layout-photo-editor") || row);
+                  alignOpenPhotoWithPreview();
+                } else {
+                  scrollDashChildToTop(cell);
+                  scrollPreviewFrameIntoView(layoutSectionPreviewSelector(id));
+                }
                 cell.querySelectorAll(".layout-photo-row.is-open .layout-source-map").forEach(alignOpenSourceMapToPad);
               });
             }
@@ -15786,9 +15795,13 @@
       const openCell = document.querySelector("#easy-img-layout-host details.layout-arrange-cell[open]");
       if (openCell) {
         const openRow = openCell.querySelector(".layout-photo-row.is-open");
-        scrollDashChildToTop(openCell);
-        if (openRow) alignOpenPhotoWithPreview();
-        else scrollPreviewFrameIntoView(layoutSectionPreviewSelector(openCell.getAttribute("data-layout-block") || ""));
+        if (openRow) {
+          scrollDashChildToTop(openRow.querySelector(".layout-photo-editor") || openRow);
+          alignOpenPhotoWithPreview();
+        } else {
+          scrollDashChildToTop(openCell);
+          scrollPreviewFrameIntoView(layoutSectionPreviewSelector(openCell.getAttribute("data-layout-block") || ""));
+        }
       }
       if (!pendingCenter) return;
       const row = document.querySelector(

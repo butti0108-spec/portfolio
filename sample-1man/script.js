@@ -2281,6 +2281,7 @@
     hubImgPathMode: {},
     imgOmakaseLocks: {},
     imgOmakaseSkipConfirm: false,
+    layoutLockNoticeSkip: false,
     imgOmakasePicks: {},
     imgOmakaseSalt: 0,
     copyDirIds: [],
@@ -14373,12 +14374,20 @@
     return !!(store.imgOmakaseLocks && store.imgOmakaseLocks[key]);
   }
 
+  function rememberLayoutLockNoticeSkip(skipNext) {
+    if (!skipNext || store.layoutLockNoticeSkip) return;
+    store.layoutLockNoticeSkip = true;
+    scheduleSave();
+  }
+
   function showLayoutPhotoLockedNotice() {
+    if (store.layoutLockNoticeSkip) return;
     openLayoutOmakaseNotice({
       title: "おまかせを解除してください",
       body: "変更したい画像のロックを解除してから、もう一度おまかせを押してください。",
       confirmLabel: "",
-      allowSkip: false
+      allowSkip: true,
+      onClose: rememberLayoutLockNoticeSkip
     });
   }
 
@@ -16123,9 +16132,14 @@
           "</div></div>";
         document.body.appendChild(modal);
         modal.addEventListener("click", (ev) => {
-          if (ev.target === modal) modal.hidden = true;
+          if (ev.target !== modal) return;
+          modal.hidden = true;
+          const opts = modal._noticeOpts || {};
+          const box = modal.querySelector("[data-notice-skip-input]");
+          if (typeof opts.onClose === "function") opts.onClose(!!(box && box.checked));
         });
       }
+      modal._noticeOpts = options;
       const title = modal.querySelector("[data-notice-title]");
       const body = modal.querySelector("[data-notice-body]");
       const skip = modal.querySelector("[data-notice-skip]");
@@ -16151,6 +16165,7 @@
       };
       close.onclick = () => {
         modal.hidden = true;
+        if (typeof options.onClose === "function") options.onClose(!!(skipInput && skipInput.checked));
       };
       modal.hidden = false;
     }
@@ -18591,6 +18606,7 @@
         hubImgPathMode: store.hubImgPathMode && typeof store.hubImgPathMode === "object" ? store.hubImgPathMode : {},
         imgOmakaseLocks: Object.assign({}, store.imgOmakaseLocks || {}),
         imgOmakaseSkipConfirm: !!store.imgOmakaseSkipConfirm,
+        layoutLockNoticeSkip: !!store.layoutLockNoticeSkip,
         sushiSampleId: store.sushiSampleId,
         sushiSampleKey: store.sushiSampleKey,
         sampleSectionCandidates: store.sampleSectionCandidates || {},
@@ -18760,6 +18776,7 @@
           ? Object.assign({}, data.imgOmakaseLocks)
           : {};
       store.imgOmakaseSkipConfirm = !!data.imgOmakaseSkipConfirm;
+      store.layoutLockNoticeSkip = !!data.layoutLockNoticeSkip;
       if (data.sushiSampleId != null) store.sushiSampleId = data.sushiSampleId;
       if (data.sushiSampleKey != null) store.sushiSampleKey = data.sushiSampleKey;
       if (data.sampleSectionCandidates && typeof data.sampleSectionCandidates === "object") {

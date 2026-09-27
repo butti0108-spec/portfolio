@@ -12858,13 +12858,13 @@ body.wizard-mode .dash-block.is-wizard-active {
   overflow: visible;
 }
 #easy-img-layout-host .layout-photo-row.is-open > .layout-closed-line .layout-inner-handle {
-  position: absolute;
-  left: calc(-1 * (2rem + 0.55rem));
-  top: 0.35rem;
-  z-index: 3;
+  position: static;
+  left: auto;
+  top: auto;
+  z-index: auto;
 }
 #easy-img-layout-host .layout-photo-row.is-open > .layout-closed-line .layout-lock-mark {
-  margin-left: calc(2rem + 1.15rem);
+  margin-left: 0;
 }
 #easy-img-layout-host .layout-photo-row.is-open {
   position: relative;

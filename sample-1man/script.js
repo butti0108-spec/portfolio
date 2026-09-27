@@ -14956,15 +14956,20 @@
       return;
     }
     const host = document.querySelector("#easy-img-layout-host");
+    const tail = (host && host.closest("details")) || host;
     if (host) host.style.paddingBottom = "";
-    let delta = el.getBoundingClientRect().top - scroller.getBoundingClientRect().top;
-    if (delta > 1 && host) {
+    if (tail && tail !== host) tail.style.paddingBottom = "";
+    for (let i = 0; i < 6; i++) {
+      const delta = el.getBoundingClientRect().top - scroller.getBoundingClientRect().top;
+      if (delta <= 1) break;
       const max = Math.max(0, scroller.scrollHeight - scroller.clientHeight);
-      const need = scroller.scrollTop + delta;
-      if (need > max + 1) host.style.paddingBottom = Math.ceil(need - max) + "px";
-      delta = el.getBoundingClientRect().top - scroller.getBoundingClientRect().top;
+      const room = max - scroller.scrollTop;
+      if (delta > room + 1 && tail) {
+        const have = parseFloat(tail.style.paddingBottom) || 0;
+        tail.style.paddingBottom = Math.ceil(have + delta - room) + "px";
+      }
+      scroller.scrollTop += el.getBoundingClientRect().top - scroller.getBoundingClientRect().top;
     }
-    scroller.scrollTop += delta;
   }
 
   function alignOpenPhotoWithPreview() {
@@ -15717,6 +15722,10 @@
               scrollPreviewTo(sel);
             } else {
               window.requestAnimationFrame(() => {
+                const row = cell.querySelector(".layout-photo-row.is-open");
+                scrollDashChildToTop(row || cell);
+                if (row) alignOpenPhotoWithPreview();
+                else scrollPreviewFrameIntoView(layoutSectionPreviewSelector(id));
                 cell.querySelectorAll(".layout-photo-row.is-open .layout-source-map").forEach(alignOpenSourceMapToPad);
               });
             }
@@ -15774,6 +15783,13 @@
     window.requestAnimationFrame(() => {
       syncLayoutMirrors();
       document.querySelectorAll("#easy-img-layout-host .layout-source-map").forEach(alignOpenSourceMapToPad);
+      const openCell = document.querySelector("#easy-img-layout-host details.layout-arrange-cell[open]");
+      if (openCell) {
+        const openRow = openCell.querySelector(".layout-photo-row.is-open");
+        scrollDashChildToTop(openRow || openCell);
+        if (openRow) alignOpenPhotoWithPreview();
+        else scrollPreviewFrameIntoView(layoutSectionPreviewSelector(openCell.getAttribute("data-layout-block") || ""));
+      }
       if (!pendingCenter) return;
       const row = document.querySelector(
         '[data-layout-photo="' + pendingCenter.blockId + ":" + pendingCenter.slot + '"]'

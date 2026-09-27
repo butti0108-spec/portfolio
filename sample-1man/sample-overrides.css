@@ -12274,6 +12274,21 @@ body.copy-later-fixed .dash-block.is-wizard-active .easy-copy-frame > .dash-subh
   background: #f3faf4;
   box-shadow: inset 0 0 0 2px #3d8a48;
 }
+.layout-photo-row.layout-inner > .layout-closed-line {
+  border: 1px solid rgba(20, 28, 36, 0.22);
+  border-radius: 0.45rem;
+  padding: 0.4rem 0.55rem;
+  background: #fff;
+  box-sizing: border-box;
+}
+.layout-photo-row.layout-inner.is-drop-target {
+  background: transparent;
+  box-shadow: none;
+}
+.layout-photo-row.layout-inner.is-drop-target > .layout-closed-line {
+  background: #f3faf4;
+  border-color: #3d8a48;
+}
 .layout-photo-row .layout-photo-editor:empty {
   display: none;
 }

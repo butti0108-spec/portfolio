@@ -14515,13 +14515,51 @@
     syncOpenLayoutFocalButtons();
   }
 
+  function layoutBlockIdForCount(countId) {
+    if (countId === "about-photos") return "photos";
+    if (countId === "works-list") return "works";
+    return "";
+  }
+
+  function paintLayoutSizeWords(countId) {
+    const blockId = layoutBlockIdForCount(countId);
+    const layout = normalizeItemLayout(countId);
+    if (!blockId || !layout) return;
+    document.querySelectorAll('#easy-img-layout-host [data-layout-photo^="' + blockId + ':"] .layout-size-word').forEach((word) => {
+      const row = word.closest("[data-layout-photo]");
+      const key = row ? row.getAttribute("data-layout-photo") || "" : "";
+      const slot = key.slice(key.indexOf(":") + 1);
+      const sz = layout.sizeById && layout.sizeById[slot] === "H" ? "H" : "L";
+      word.textContent = layoutSizeWord(sz);
+      word.classList.toggle("is-half-word", sz === "H");
+      word.classList.toggle("is-full-word", sz !== "H");
+    });
+  }
+
+  function paintLayoutSizeMirrors(countId) {
+    const blockId = layoutBlockIdForCount(countId);
+    if (!blockId) return;
+    document.querySelectorAll('#easy-img-layout-host [data-layout-photo^="' + blockId + ':"] .layout-closed-thumb').forEach(paintLayoutMirror);
+  }
+
   function setLayoutFrameWidth(countId, slot, size) {
     const layout = normalizeItemLayout(countId);
     if (!layout || !slot) return;
+    const form = document.querySelector(".dash-body > .fill-form");
+    const previewScroll = document.querySelector(".preview-scroll");
+    const formTop = form ? form.scrollTop : 0;
+    const previewTop = previewScroll ? previewScroll.scrollTop : 0;
+    const holdScroll = () => {
+      if (form) form.scrollTop = formTop;
+      if (previewScroll) previewScroll.scrollTop = previewTop;
+    };
     pushLayoutUndo();
     layout.sizeById[slot] = size === "H" ? "H" : "L";
     applyItemLayoutToPreview(countId);
-    renderLayoutArrangeWire();
+    paintLayoutSizeWords(countId);
+    paintLayoutSizeMirrors(countId);
+    holdScroll();
+    window.requestAnimationFrame(holdScroll);
     if (store.confirmed.finish) unconfirmFinishSoft();
     scheduleSave();
   }
@@ -14734,23 +14772,31 @@
     const measured = layoutPreviewFrameRatio(blockId, slot);
     const ratio = measured || (half ? 8 / 9 : 16 / 9);
     if (mode === "thumb") {
-      const fixedW = 76;
+      const maxW = 76;
+      const maxH = 46;
       const useRatio = measured > 0 ? measured : ratio;
-      box.style.width = fixedW + "px";
-      box.style.height = Math.max(24, Math.round(fixedW / useRatio)) + "px";
+      let boxW = maxW;
+      let boxH = Math.max(1, Math.round(maxW / useRatio));
+      if (boxH > maxH) {
+        boxH = maxH;
+        boxW = Math.max(1, Math.round(maxH * useRatio));
+      }
+      box.style.width = boxW + "px";
+      box.style.height = boxH + "px";
       box.style.padding = "0";
       box.classList.remove("is-half");
-      if (img) {
-        const x = normalizeFocalX(view.focalX);
-        const y = normalizeFocalY(view.focalY);
-        const s = normalizeImageScale(view.scale);
-        img.style.width = "100%";
-        img.style.height = "100%";
-        img.style.objectFit = "cover";
-        img.style.objectPosition = x + "% " + y + "%";
-        img.style.transformOrigin = x + "% " + y + "%";
-        if (s > 100) img.style.transform = "scale(" + s / 100 + ")";
-        else img.style.removeProperty("transform");
+      const imageName = layoutFrameImageName(blockId, slot);
+      const src = layoutFramePreviewSrc(imageName);
+      let face = img;
+      if (src) {
+        if (!face) {
+          face = document.createElement("img");
+          face.alt = "";
+          face.draggable = false;
+          box.insertBefore(face, box.firstChild);
+        }
+        if (face.getAttribute("src") !== src) face.src = src;
+        applyImageScaleToImg(face, view.scale, view.focalX, view.focalY);
       }
       return;
     }
@@ -15271,11 +15317,12 @@
         word.textContent = layoutSizeWord(sz);
         word.addEventListener("click", (ev) => {
           stopSummaryToggle(ev);
+          const now = layout && layout.sizeById && layout.sizeById[slot] === "H" ? "H" : "L";
           openLayoutChoice(
             word,
             [
-              { value: "L", label: layoutSizeWord("L"), bold: true, on: sz !== "H" },
-              { value: "H", label: layoutSizeWord("H"), bold: false, on: sz === "H" }
+              { value: "L", label: layoutSizeWord("L"), bold: true, on: now !== "H" },
+              { value: "H", label: layoutSizeWord("H"), bold: false, on: now === "H" }
             ],
             (token) => setLayoutFrameWidth(countId, slot, token)
           );
@@ -15638,6 +15685,7 @@
   function renderLayoutImageInner(body, blockId) {
     body.innerHTML = "";
     body.appendChild(buildLayoutClosedFace(blockId));
+    body.querySelectorAll(".layout-closed-thumb").forEach(paintLayoutMirror);
   }
 
   function renderLayoutArrangeWire() {

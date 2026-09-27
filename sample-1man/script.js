@@ -15076,91 +15076,83 @@
   }
 
   function appendLayoutHeadCountGap(head, blockId) {
-    if (blockId === "hero") {
-      const minus = document.createElement("button");
-      minus.type = "button";
-      minus.className = "layout-count-btn";
-      minus.textContent = "−";
-      minus.disabled = true;
-      minus.setAttribute("aria-label", "枚数を減らす");
-      const num = document.createElement("span");
-      num.className = "layout-image-count-num";
-      num.textContent = "1枚";
-      const plus = document.createElement("button");
-      plus.type = "button";
-      plus.className = "layout-count-btn";
-      plus.textContent = "＋";
-      plus.disabled = true;
-      plus.setAttribute("aria-label", "枚数を増やす");
-      const countCluster = document.createElement("span");
-      countCluster.className = "layout-count-cluster";
-      countCluster.appendChild(minus);
-      countCluster.appendChild(num);
-      countCluster.appendChild(plus);
-      head.appendChild(countCluster);
-      return;
-    }
     const countId = layoutImageCountId(blockId);
-    if (!countId) return;
-    const order = layoutBlockSlots(blockId);
-    const layout = normalizeItemLayout(countId);
-    const meta = COUNT_META[countId] || { min: 1, max: order.length || 1 };
+    const order = countId ? layoutBlockSlots(blockId) : [];
+    const layout = countId ? normalizeItemLayout(countId) : null;
+    const meta = countId ? (COUNT_META[countId] || { min: 1, max: order.length || 1 }) : null;
     const minus = document.createElement("button");
     minus.type = "button";
     minus.className = "layout-count-btn";
     minus.textContent = "−";
     minus.setAttribute("aria-label", "枚数を減らす");
-    minus.disabled = order.length <= meta.min;
-    minus.addEventListener("click", (ev) => {
-      stopSummaryToggle(ev);
-      adjustDraftCount(countId, -1, null);
-    });
     const num = document.createElement("span");
     num.className = "layout-image-count-num";
-    num.textContent = order.length + "枚";
     const plus = document.createElement("button");
     plus.type = "button";
     plus.className = "layout-count-btn";
     plus.textContent = "＋";
     plus.setAttribute("aria-label", "枚数を増やす");
-    plus.disabled = order.length >= meta.max;
-    plus.addEventListener("click", (ev) => {
-      stopSummaryToggle(ev);
-      requestAddDraftCount(countId, null, plus);
-    });
+    if (!countId) {
+      minus.disabled = true;
+      plus.disabled = true;
+      num.textContent = "1枚";
+    } else {
+      minus.disabled = order.length <= meta.min;
+      plus.disabled = order.length >= meta.max;
+      num.textContent = order.length + "枚";
+      minus.addEventListener("click", (ev) => {
+        stopSummaryToggle(ev);
+        adjustDraftCount(countId, -1, null);
+      });
+      plus.addEventListener("click", (ev) => {
+        stopSummaryToggle(ev);
+        requestAddDraftCount(countId, null, plus);
+      });
+    }
     const countCluster = document.createElement("span");
     countCluster.className = "layout-count-cluster";
+    const countLead = document.createElement("span");
+    countLead.className = "layout-count-lead";
+    countLead.textContent = "画像枚数";
+    countCluster.appendChild(countLead);
     countCluster.appendChild(minus);
     countCluster.appendChild(num);
     countCluster.appendChild(plus);
-    const gapNow = (layout && layout.gap) || "normal";
-    const gapLead = document.createElement("span");
-    gapLead.className = "layout-gap-lead";
-    gapLead.textContent = "すき間";
-    const gapBtn = document.createElement("button");
-    gapBtn.type = "button";
-    gapBtn.className = "layout-tap";
-    gapBtn.textContent = ITEM_GAP_LABELS[gapNow] || "ふつう";
-    gapBtn.addEventListener("click", (ev) => {
-      stopSummaryToggle(ev);
-      openLayoutChoice(
-        gapBtn,
-        ITEM_GAP_STEPS.map((gap) => ({
-          value: gap,
-          label: ITEM_GAP_LABELS[gap],
-          bold: false,
-          on: gap === gapNow
-        })),
-        (gap) => {
-          setItemGap(countId, gap);
-          renderLayoutArrangeWire();
-        }
-      );
+    countCluster.addEventListener("click", (ev) => {
+      if (ev.target.closest(".layout-count-btn:not(:disabled)")) return;
+      ev.preventDefault();
+      ev.stopPropagation();
     });
+    const gapNow = (layout && layout.gap) || "normal";
     const gapCluster = document.createElement("span");
     gapCluster.className = "layout-gap-cluster";
+    if (countId) gapCluster.setAttribute("data-gap-for", countId);
+    const gapLead = document.createElement("span");
+    gapLead.className = "layout-gap-lead";
+    gapLead.textContent = "すき間調整";
     gapCluster.appendChild(gapLead);
-    gapCluster.appendChild(gapBtn);
+    ITEM_GAP_STEPS.forEach((gap) => {
+      const btn = document.createElement("button");
+      btn.type = "button";
+      btn.className = "layout-gap-btn" + (countId && gap === gapNow ? " is-active" : "");
+      btn.setAttribute("data-gap", gap);
+      btn.textContent = ITEM_GAP_LABELS[gap];
+      if (!countId) {
+        btn.disabled = true;
+      } else {
+        btn.addEventListener("click", (ev) => {
+          stopSummaryToggle(ev);
+          setItemGap(countId, gap);
+          renderLayoutArrangeWire();
+        });
+      }
+      gapCluster.appendChild(btn);
+    });
+    gapCluster.addEventListener("click", (ev) => {
+      if (ev.target.closest(".layout-gap-btn:not(:disabled)")) return;
+      ev.preventDefault();
+      ev.stopPropagation();
+    });
     head.appendChild(countCluster);
     head.appendChild(gapCluster);
   }
@@ -15706,8 +15698,8 @@
           if (imageBlock) {
             head = document.createElement("div");
             head.className = "layout-closed-head";
-            head.appendChild(handle);
             head.appendChild(visLabel);
+            head.appendChild(handle);
             head.appendChild(name);
             appendLayoutHeadCountGap(head, id);
             const secOpen = document.createElement("button");

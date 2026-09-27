@@ -12739,6 +12739,9 @@ body.wizard-mode .dash-block.is-wizard-active {
     align-items: center;
     column-gap: 0.45rem;
   }
+  #easy-img-layout-host .layout-closed-head .layout-gap-cluster {
+    margin-left: 0.9rem;
+  }
   #easy-img-layout-host .layout-closed-head .layout-head-gap {
     display: none;
   }
@@ -12759,7 +12762,8 @@ body.wizard-mode .dash-block.is-wizard-active {
     width: 9.2em;
     flex: 0 0 9.2em;
   }
-  #easy-img-layout-host .layout-open-btn {
+  #easy-img-layout-host .layout-open-btn,
+  #easy-img-layout-host .layout-photo-row:not(.is-open):has(.layout-inner-handle) > .layout-closed-line > .layout-open-btn {
     box-sizing: border-box;
     width: 4.8em;
     flex: 0 0 4.8em;
@@ -12862,6 +12866,25 @@ body.wizard-mode .dash-block.is-wizard-active {
   left: auto;
   top: auto;
   z-index: auto;
+  margin-left: calc(2rem + 1.15rem);
+}
+/* 2層目の掴む点は、1段目と同じ縦の線からひとつ空けて、鍵のあった位置へ。鍵はその右。 */
+#easy-img-layout-host .layout-photo-row:not(.is-open):has(.layout-inner-handle) > .layout-closed-line {
+  display: flex;
+  align-items: center;
+  column-gap: 0.9rem;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+}
+#easy-img-layout-host .layout-photo-row:not(.is-open):has(.layout-inner-handle) > .layout-closed-line > .layout-open-btn {
+  margin-left: auto;
+  flex: 0 0 4.8rem;
+  width: 4.8rem;
+  grid-column: auto;
+}
+#easy-img-layout-host .layout-photo-row:not(.is-open):has(.layout-inner-handle) > .layout-closed-line .layout-inner-handle {
+  margin-left: 3rem;
 }
 #easy-img-layout-host .layout-photo-row.is-open > .layout-closed-line .layout-lock-mark {
   margin-left: 0;
@@ -12898,7 +12921,7 @@ body.wizard-mode .dash-block.is-wizard-active {
 }
 #easy-img-layout-host .layout-closed-head {
   display: grid;
-  grid-template-columns: auto auto minmax(0, 1fr) 6.5rem 1.75rem 2.75rem 1.75rem 4.8em;
+  grid-template-columns: auto auto minmax(0, 1fr) 11.2rem 1.35rem 13.2rem 3.6rem;
   align-items: center;
   grid-column: 1 / -1;
   width: 100%;
@@ -12907,42 +12930,81 @@ body.wizard-mode .dash-block.is-wizard-active {
   column-gap: 0.45rem;
   white-space: nowrap;
 }
-#easy-img-layout-host .layout-closed-head .layout-arrange-handle {
+#easy-img-layout-host .layout-closed-head .layout-arrange-vis-label {
   grid-column: 1;
   grid-row: 1;
 }
-#easy-img-layout-host .layout-closed-head .layout-arrange-vis-label {
+#easy-img-layout-host .layout-closed-head .layout-arrange-handle {
   grid-column: 2;
   grid-row: 1;
 }
+#easy-img-layout-host .layout-closed-head .layout-count-cluster,
 #easy-img-layout-host .layout-closed-head .layout-gap-cluster {
-  grid-column: 4;
-  grid-row: 1;
-  justify-content: flex-end;
+  display: inline-flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 0.28rem;
+  min-width: 0;
   white-space: nowrap;
+  box-sizing: border-box;
 }
 #easy-img-layout-host .layout-closed-head .layout-count-cluster {
-  display: contents;
-}
-#easy-img-layout-host .layout-closed-head .layout-count-btn:first-child {
-  grid-column: 5;
+  grid-column: 4;
   grid-row: 1;
-  justify-self: center;
+  width: 11.2rem;
 }
-#easy-img-layout-host .layout-closed-head .layout-image-count-num {
+#easy-img-layout-host .layout-closed-head .layout-gap-cluster {
   grid-column: 6;
   grid-row: 1;
-  text-align: center;
+  width: 13.2rem;
 }
-#easy-img-layout-host .layout-closed-head .layout-count-btn:last-child {
-  grid-column: 7;
-  grid-row: 1;
-  justify-self: center;
+#easy-img-layout-host .layout-closed-head .layout-count-btn {
+  flex: 0 0 1.75rem;
+  width: 1.75rem;
+  min-width: 1.75rem;
+  font-size: 0.72rem;
+  font-weight: 500;
+}
+#easy-img-layout-host .layout-closed-head .layout-image-count-num {
+  flex: 0 0 2.4rem;
+  width: 2.4rem;
+  text-align: center;
+  font-size: 0.72rem;
+  font-weight: 500;
+}
+#easy-img-layout-host .layout-closed-head .layout-count-lead,
+#easy-img-layout-host .layout-closed-head .layout-gap-lead,
+#easy-img-layout-host .layout-closed-head .layout-gap-btn,
+#easy-img-layout-host .layout-closed-head .layout-section-open {
+  font-size: 0.72rem;
+  font-weight: 500;
+}
+#easy-img-layout-host .layout-closed-head .layout-gap-btn {
+  flex: 0 0 auto;
+  margin: 0;
+  padding: 0.12rem 0.35rem;
+  border: 1px solid #c5ced6;
+  border-radius: 0.3rem;
+  background: #fff;
+  color: #1a1f1c;
+  font-family: inherit;
+  font-size: 0.72rem;
+  font-weight: 500;
+  line-height: 1.2;
+  cursor: pointer;
+}
+#easy-img-layout-host .layout-closed-head .layout-gap-btn:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+#easy-img-layout-host .layout-closed-head .layout-gap-btn.is-active {
+  border-color: #3d8a48;
+  font-weight: 500;
 }
 #easy-img-layout-host .layout-closed-head .layout-section-open {
-  grid-column: 8;
+  grid-column: 7;
   grid-row: 1;
-  width: 4.8em;
+  width: 3.6rem;
   justify-self: stretch;
 }
 #easy-img-layout-host .layout-arrange-summary--image .layout-arrange-name {
@@ -12952,10 +13014,17 @@ body.wizard-mode .dash-block.is-wizard-active {
   min-width: 0;
   width: auto;
   max-width: none;
+  font-size: 0.8rem;
+  font-weight: 800;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
   overflow-wrap: normal;
+}
+#easy-img-layout-host .layout-arrange-vis {
+  width: 0.72rem;
+  height: 0.72rem;
+  margin: 0;
 }
 #easy-img-layout-host .layout-photo-row.is-open > .layout-open-btn {
   grid-column: 2;
@@ -12963,8 +13032,10 @@ body.wizard-mode .dash-block.is-wizard-active {
   align-self: start;
   justify-self: stretch;
   margin-left: 0;
-  width: 4.8em;
-  flex: 0 0 4.8em;
+  width: 3.6rem;
+  flex: 0 0 3.6rem;
+  font-size: 0.72rem;
+  font-weight: 500;
 }
 #easy-img-layout-host .layout-photo-row.is-open > .layout-closed-line {
   column-gap: 1.15rem;
@@ -13042,10 +13113,25 @@ body.wizard-mode .dash-block.is-wizard-active {
   width: max-content;
   margin: 0 0 0.2rem;
   font-size: 0.72rem;
-  font-weight: 700;
+  font-weight: 500;
   line-height: 1.3;
   color: #1a1f1c;
   text-align: left;
+}
+#easy-img-layout-host .layout-img-source,
+#easy-img-layout-host .layout-photo-omakase,
+#easy-img-layout-host .layout-omakase-btn,
+#easy-img-layout-host .layout-adjust-home,
+#easy-img-layout-host .layout-focal-reset {
+  font-size: 0.72rem;
+  font-weight: 500;
+}
+#easy-img-layout-host .layout-adjust-pad .item-focal-btn {
+  font-size: 0.72rem;
+  font-weight: 500;
+}
+#easy-img-layout-host .layout-zoom-end {
+  font-weight: 500;
 }
 #easy-img-layout-host .layout-photo-cluster .layout-focal-pad {
   grid-area: pad;
@@ -13235,12 +13321,12 @@ body.wizard-mode .dash-block.is-wizard-active {
 .layout-photo-tools--plain .layout-zoom-end--small {
   width: 2.5rem;
   height: 2.5rem;
-  font-size: 1.15rem;
+  font-size: 0.72rem;
 }
 .layout-photo-tools--plain .layout-zoom-end--large {
   width: 3.1rem;
   height: 3.1rem;
-  font-size: 1.45rem;
+  font-size: 0.72rem;
 }
 .layout-photo-tools--plain .layout-zoom-end:disabled {
   opacity: 0.45;

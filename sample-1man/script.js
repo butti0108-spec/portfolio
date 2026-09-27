@@ -2440,6 +2440,7 @@
   }
 
   function primaryColorKeyForStep(stepId) {
+    if (store.layoutColorKey && store.guidedColorEditStepId === stepId) return store.layoutColorKey;
     const keys = COLOR_STEP_FIELDS[stepId];
     return keys && keys.length ? keys[0] : null;
   }
@@ -2627,6 +2628,7 @@
   }
 
   function gctSetPickTarget(isPartner) {
+    if (store.gradDirHintOpen && !store.gradDirHintSkip) return;
     const stepId = activeGctEditStepId();
     if (!stepId) return;
     const key = primaryColorKeyForStep(stepId);
@@ -2637,23 +2639,66 @@
     scheduleSave();
   }
 
-  function setSlotGradient(stepId, dirId) {
+  function slotGradStarted(stepId) {
+    return !!((store.slotGradOpen && store.slotGradOpen[stepId]) || slotHasGradient(stepId));
+  }
+
+  function startSlotSecondColor(stepId) {
+    const key = primaryColorKeyForStep(stepId);
+    if (!GRADIENT_BG_KEYS.has(key)) return;
+    if (!store.slotGradOpen) store.slotGradOpen = {};
+    store.slotGradOpen[stepId] = true;
+    if (!store.slotGradientPartners) store.slotGradientPartners = {};
+    const main = (key && store.draftColors[key]) || "#ffffff";
+    if (!store.slotGradientPartners[stepId]) store.slotGradientPartners[stepId] = main;
+    if (!store.slotGradients) store.slotGradients = {};
+    if (!store.slotGradients[stepId]) store.slotGradients[stepId] = "to bottom";
+    store.partnerPickMode = true;
+    if (store.guidedColorTrial) store.guidedColorTrial._pickHistory = [];
+    store.gradDirHintOpen = !store.gradDirHintSkip;
+    const skipBox = document.getElementById("gct-grad-dir-skip");
+    if (store.gradDirHintOpen && skipBox) skipBox.checked = false;
+    renderGctPickUi(stepId, { forceHoney: true });
+    scheduleSave();
+  }
+
+  function setSlotGradient(stepId, dirId, opts) {
     if (!store.slotGradients) store.slotGradients = {};
     const key = primaryColorKeyForStep(stepId);
     if (!GRADIENT_BG_KEYS.has(key)) return;
-    if (!dirId || store.slotGradients[stepId] === dirId) {
+    if (store.gradDirHintOpen && !store.gradDirHintSkip) return;
+    const keep = !!(opts && opts.keep);
+    if (!keep && (!dirId || store.slotGradients[stepId] === dirId)) {
       delete store.slotGradients[stepId];
-    } else {
+    } else if (dirId) {
       store.slotGradients[stepId] = dirId;
       if (!store.slotGradientPartners) store.slotGradientPartners = {};
       if (!store.slotGradientPartners[stepId]) store.slotGradientPartners[stepId] = "#ffffff";
     }
+    if (keep) {
+      if (!store.slotGradHintOff) store.slotGradHintOff = {};
+      store.slotGradHintOff[stepId] = true;
+    }
     renderGctPalette();
-    if (store.guidedColorPhase === "pick" && activeGctEditStepId() === stepId) {
+    const inColorRow = !!document.querySelector(".layout-color-body #gct-pick-compass");
+    if ((store.guidedColorPhase === "pick" && activeGctEditStepId() === stepId) || inColorRow) {
       renderPickGradCompass(stepId);
       updatePickMainSwatch(stepId);
       updatePickPartnerSwatch(stepId);
     }
+    applyLiveColors(true);
+    scheduleSave();
+  }
+
+  function clearSlotGradient(stepId) {
+    if (store.gradDirHintOpen && !store.gradDirHintSkip) return;
+    if (store.slotGradients) delete store.slotGradients[stepId];
+    if (store.slotGradOpen) delete store.slotGradOpen[stepId];
+    if (store.slotGradHintOff) delete store.slotGradHintOff[stepId];
+    if (store.slotGradientPartners) delete store.slotGradientPartners[stepId];
+    store.gradDirHintOpen = false;
+    store.partnerPickMode = false;
+    renderGctPickUi(stepId);
     applyLiveColors(true);
     scheduleSave();
   }
@@ -2712,16 +2757,55 @@
     const key = primaryColorKeyForStep(stepId);
     const canGrad = GRADIENT_BG_KEYS.has(key);
     const hasGrad = canGrad && slotHasGradient(stepId);
+    const inColorRow = !!(targetPartner && targetPartner.closest(".layout-color-body"));
+    const mainLabel = document.querySelector("#gct-pick-target-main .gct-pick-target-label");
+    const liveNote = document.getElementById("gct-pick-live-note");
+    if (liveNote) liveNote.hidden = !inColorRow;
+    if (mainLabel) {
+      mainLabel.textContent = inColorRow
+        ? (slotGradStarted(stepId) ? "1色目" : "単色")
+        : "現在色";
+    }
     if (targetPartner) {
-      targetPartner.classList.toggle("is-unused", canGrad && !hasGrad);
+      targetPartner.classList.toggle("is-unused", !inColorRow && canGrad && !hasGrad);
     }
     if (partnerLabel) {
-      partnerLabel.textContent =
-        hasGrad || !!store.partnerPickMode ? "2色目" : "未使用";
+      partnerLabel.textContent = inColorRow
+        ? slotGradStarted(stepId) ? "2色目" : "グラデーション"
+        : hasGrad || !!store.partnerPickMode ? "2色目" : "未使用";
     }
+    if (targetPartner) targetPartner.classList.toggle("is-grad-gate", inColorRow && canGrad && !slotGradStarted(stepId));
     if (help) {
-      help.hidden = !canGrad || hasGrad;
+      if (inColorRow) {
+        help.hidden = true;
+      } else {
+        help.textContent = "矢印を押すと、2色のグラデーションにできます。";
+        help.hidden = !canGrad || hasGrad;
+      }
     }
+  }
+
+  function pickLabelInk(hex) {
+    try {
+      const n = String(hex || "").replace("#", "");
+      const full = n.length === 3 ? n.split("").map((c) => c + c).join("") : n;
+      const r = parseInt(full.slice(0, 2), 16);
+      const g = parseInt(full.slice(2, 4), 16);
+      const b = parseInt(full.slice(4, 6), 16);
+      if ([r, g, b].some((v) => Number.isNaN(v))) return "";
+      const y = (r * 299 + g * 587 + b * 114) / 1000;
+      return y > 160 ? "#14202a" : "#ffffff";
+    } catch (e) {
+      return "";
+    }
+  }
+
+  function syncPickLabelInk(swatchEl, hex) {
+    const btn = swatchEl && swatchEl.closest(".gct-pick-target");
+    if (!btn || !btn.closest(".layout-color-body")) return;
+    const label = btn.querySelector(".gct-pick-target-label");
+    if (!label) return;
+    label.style.color = hex ? pickLabelInk(hex) : "";
   }
 
   function updatePickPartnerSwatch(stepId) {
@@ -2731,9 +2815,11 @@
       if (hasGrad) {
         el.style.background = partnerHexForSlot(stepId);
         el.style.backgroundImage = "";
+        syncPickLabelInk(el, partnerHexForSlot(stepId));
       } else {
         el.style.background = "";
         el.style.backgroundImage = "";
+        syncPickLabelInk(el, "");
       }
     }
     syncPickPartnerUnused(stepId);
@@ -2744,12 +2830,20 @@
     if (!el) return;
     const key = primaryColorKeyForStep(stepId);
     const hex = key ? store.draftColors[key] : "#ffffff";
-    el.style.background = GRADIENT_BG_KEYS.has(key) ? swatchBackgroundForSlot(stepId, hex) : hex;
+    const inRow = !!(el.closest && el.closest(".layout-color-body"));
+    if (inRow) {
+      el.style.background = hex;
+      el.style.backgroundImage = "none";
+    } else {
+      el.style.background = GRADIENT_BG_KEYS.has(key) ? swatchBackgroundForSlot(stepId, hex) : hex;
+    }
+    syncPickLabelInk(el, hex);
   }
 
   function renderPickGradCompass(stepId) {
     const compass = document.getElementById("gct-pick-compass");
     if (!compass) return;
+    const inRow = !!compass.closest(".layout-color-body");
     const compassSlots = [
       { dirId: "to top left", col: 1, row: 1 },
       { dirId: "to top", col: 2, row: 1 },
@@ -2764,27 +2858,111 @@
     compass.innerHTML = "";
     compassSlots.forEach((pos) => {
       if (pos.spacer) {
-        const center = document.createElement("span");
-        center.className = "gct-grad-center gct-grad-center--empty";
-        center.style.gridColumn = String(pos.col);
-        center.style.gridRow = String(pos.row);
-        center.setAttribute("aria-hidden", "true");
-        compass.appendChild(center);
+        if (inRow) {
+          const clearBtn = document.createElement("button");
+          clearBtn.type = "button";
+          clearBtn.className = "gct-grad-clear";
+          clearBtn.style.gridColumn = String(pos.col);
+          clearBtn.style.gridRow = String(pos.row);
+          clearBtn.textContent = "解除";
+          clearBtn.setAttribute("aria-label", "グラデーションを解除");
+          clearBtn.addEventListener("click", () => clearSlotGradient(stepId));
+          compass.appendChild(clearBtn);
+        } else {
+          const center = document.createElement("span");
+          center.className = "gct-grad-center gct-grad-center--empty";
+          center.style.gridColumn = String(pos.col);
+          center.style.gridRow = String(pos.row);
+          center.setAttribute("aria-hidden", "true");
+          compass.appendChild(center);
+        }
         return;
       }
       const d = GRADIENT_DIRS.find((x) => x.id === pos.dirId);
       if (!d) return;
       const b = document.createElement("button");
       b.type = "button";
-      b.className = "gct-grad-arrow" + ((store.slotGradients || {})[stepId] === d.id ? " is-active" : "");
+      const chosen = !!(store.slotGradHintOff && store.slotGradHintOff[stepId]);
+      const on = inRow
+        ? chosen && (store.slotGradients || {})[stepId] === d.id
+        : (store.slotGradients || {})[stepId] === d.id;
+      b.className = "gct-grad-arrow" + (on ? " is-active" : "");
       b.style.gridColumn = String(pos.col);
       b.style.gridRow = String(pos.row);
-      b.setAttribute("aria-label", d.label + "へグラデ。選択中なら解除");
-      setHoverTip(b, d.label + "（もう一度で解除）");
+      b.setAttribute("aria-label", inRow ? d.label + "へグラデ" : d.label + "へグラデ。選択中なら解除");
+      if (inRow) setHoverTip(b, d.label);
+      else setHoverTip(b, d.label + "（もう一度で解除）");
       b.textContent = d.arrow;
-      b.addEventListener("click", () => setSlotGradient(stepId, d.id));
+      b.addEventListener("click", () => setSlotGradient(stepId, d.id, inRow ? { keep: true } : undefined));
       compass.appendChild(b);
     });
+    syncGradDirHint();
+  }
+
+  function syncGradDirHint() {
+    const pop = document.getElementById("gct-grad-dir-pop");
+    const compass = document.getElementById("gct-pick-compass");
+    const layout = document.querySelector(".gct-pick-layout");
+    if (!pop) return;
+    const inRow = !!(layout && layout.closest(".layout-color-body"));
+    const show = !!(inRow && store.gradDirHintOpen && !store.gradDirHintSkip);
+    pop.hidden = !show;
+    if (layout) layout.classList.toggle("is-grad-dir-blocked", show);
+    if (compass) {
+      compass.classList.toggle("is-dir-locked", show);
+      compass.querySelectorAll(".gct-grad-arrow, .gct-grad-clear").forEach((btn) => {
+        btn.disabled = show;
+      });
+    }
+    ["gct-pick-target-main", "gct-pick-target-partner", "gct-pick-ok"].forEach((id) => {
+      const el = document.getElementById(id);
+      if (!el) return;
+      if (show) el.disabled = true;
+      else if (id !== "gct-pick-undo") el.disabled = false;
+    });
+    if (show) window.requestAnimationFrame(placeGradDirCard);
+    else {
+      const card = pop.querySelector(".gct-grad-dir-pop-card");
+      if (card) card.style.left = card.style.top = card.style.width = "";
+    }
+  }
+
+  function placeGradDirCard() {
+    const pop = document.getElementById("gct-grad-dir-pop");
+    const card = pop && pop.querySelector(".gct-grad-dir-pop-card");
+    const compass = document.getElementById("gct-pick-compass");
+    if (!pop || !card || !compass || pop.hidden) return;
+    const popR = pop.getBoundingClientRect();
+    const compR = compass.getBoundingClientRect();
+    const side = compass.closest(".gct-pick-side");
+    const sideR = side ? side.getBoundingClientRect() : compR;
+    const gap = 10;
+    card.style.position = "absolute";
+    card.style.width = Math.max(160, Math.min(sideR.width - 8, 352)) + "px";
+    const cardW = card.offsetWidth;
+    const cardH = card.offsetHeight;
+    let left = compR.left + compR.width / 2 - cardW / 2 - popR.left;
+    const minLeft = sideR.left - popR.left;
+    const maxLeft = sideR.right - popR.left - cardW;
+    if (left < minLeft) left = minLeft;
+    if (left > maxLeft) left = Math.max(minLeft, maxLeft);
+    const compassTop = compR.top - popR.top;
+    let top = compassTop - cardH - gap;
+    if (top < 8) top = 8;
+    card.style.left = Math.round(left) + "px";
+    card.style.top = Math.round(top) + "px";
+  }
+
+  function dismissGradDirHint() {
+    const skip = document.getElementById("gct-grad-dir-skip");
+    if (skip && skip.checked) store.gradDirHintSkip = true;
+    store.gradDirHintOpen = false;
+    if (skip) skip.checked = false;
+    const stepId = activeGctEditStepId();
+    if (stepId) renderPickGradCompass(stepId);
+    else syncGradDirHint();
+    syncPickUndoButton();
+    scheduleSave();
   }
 
   function currentPickHex() {
@@ -2796,6 +2974,7 @@
   }
 
   function applyHoneyPick(hex) {
+    if (store.gradDirHintOpen && !store.gradDirHintSkip) return;
     const trial = store.guidedColorTrial || (store.guidedColorTrial = {});
     if (!Array.isArray(trial._pickHistory)) trial._pickHistory = [];
     const prev = currentPickHex();
@@ -2844,7 +3023,7 @@
     if (!pickUndo) return;
     const trial = store.guidedColorTrial;
     const has = !!(trial && Array.isArray(trial._pickHistory) && trial._pickHistory.length);
-    pickUndo.disabled = !has;
+    pickUndo.disabled = !has || !!(store.gradDirHintOpen && !store.gradDirHintSkip);
   }
 
   const HONEY_RINGS = 11;
@@ -2865,9 +3044,13 @@
         ? forceAvail
         : (wrap && wrap.clientWidth) || (host && host.clientWidth) || 0)
     );
-    /* 余白8px。旧式は map が host より常に約4px広く、狭いペインで横クリップされた */
-    const avail = Math.max(120, Math.min((hostW || 280) - 8, 420));
     const denom = 2 * (Math.sqrt(3) * rings + 1);
+    /* 実幅があるときは列の内側に収める。無いときは従来の大きさ */
+    if (hostW > 8) {
+      const avail = Math.min(hostW - 8, 420);
+      return Math.min(11, avail / denom);
+    }
+    const avail = Math.max(120, Math.min(272, 420));
     return Math.max(4.5, Math.min(11, avail / denom));
   }
 
@@ -3091,7 +3274,8 @@
       const w = wrap.clientWidth;
       if (Math.abs(w - lastW) < 6) return;
       lastW = w;
-      if (store.guidedColorPhase !== "pick") return;
+      const inColorRow = !!(host.closest && host.closest(".layout-color-body"));
+      if (store.guidedColorPhase !== "pick" && !inColorRow) return;
       const map = host.querySelector(".gct-honey-map");
       if (!map || host.clientWidth <= 0) return;
       const hostW = host.clientWidth;
@@ -3143,7 +3327,8 @@
       shadeHost.innerHTML = "";
       shadeHost.hidden = true;
     }
-    if (gradBox) gradBox.hidden = !canGrad;
+    const inColorRow = !!(host.closest && host.closest(".layout-color-body"));
+    if (gradBox) gradBox.hidden = inColorRow ? !(canGrad && slotGradStarted(stepId)) : !canGrad;
     if (inkNote) inkNote.hidden = canGrad;
     if (targetPartner) targetPartner.hidden = !canGrad;
     if (targetMain) targetMain.classList.toggle("is-active", !partnerMode);
@@ -3762,6 +3947,7 @@
       guidedImageUnlocked: store.guidedImageUnlocked,
       guidedTextUnlocked: store.guidedTextUnlocked,
       presetChosen: store.presetChosen,
+      colorListOrder: Array.isArray(store.colorListOrder) ? store.colorListOrder.slice() : null,
       chosenPresetKey: store.chosenPresetKey,
       vibeColors: store.vibeColors,
       vibeReasons: store.vibeReasons,
@@ -3796,6 +3982,7 @@
       siteColorMode: store.siteColorMode,
       slotGradients: store.slotGradients || {},
       slotGradientPartners: store.slotGradientPartners || {},
+      gradDirHintSkip: !!store.gradDirHintSkip,
       randomHistory: store.randomHistory,
       guidedColorPhase: store.guidedColorPhase,
       guidedColorReturnPreset: store.guidedColorReturnPreset,
@@ -5599,9 +5786,34 @@
 
   function setupGuidedColorTrial() {
     const pickOk = document.getElementById("gct-pick-ok");
-    if (pickOk) pickOk.addEventListener("click", gctConfirmPick);
+    if (pickOk) {
+      pickOk.addEventListener("click", () => {
+        const row = pickOk.closest(".layout-color-row");
+        if (row) {
+          const stepId = row.getAttribute("data-color-step") || "";
+          const snap = stepId && captureColorSnapshot(stepId);
+          if (snap) {
+            store.snapshots[stepId] = snap;
+            store.confirmed[stepId] = true;
+          }
+          closeLayoutColorRow(row);
+          applyLiveColors(true);
+          scheduleSave();
+          return;
+        }
+        gctConfirmPick();
+      });
+    }
     const pickUndo = document.getElementById("gct-pick-undo");
     if (pickUndo) pickUndo.addEventListener("click", gctUndoPick);
+    const dirOk = document.getElementById("gct-grad-dir-ok");
+    if (dirOk && !dirOk.dataset.bound) {
+      dirOk.dataset.bound = "1";
+      dirOk.addEventListener("click", dismissGradDirHint);
+      window.addEventListener("resize", () => {
+        if (store.gradDirHintOpen && !store.gradDirHintSkip) placeGradDirCard();
+      });
+    }
     const targetMain = document.getElementById("gct-pick-target-main");
     const targetPartner = document.getElementById("gct-pick-target-partner");
     if (targetMain && !targetMain.dataset.bound) {
@@ -5610,7 +5822,14 @@
     }
     if (targetPartner && !targetPartner.dataset.bound) {
       targetPartner.dataset.bound = "1";
-      targetPartner.addEventListener("click", () => gctSetPickTarget(true));
+      targetPartner.addEventListener("click", () => {
+        const stepId = activeGctEditStepId();
+        if (stepId && targetPartner.closest(".layout-color-body") && !slotGradStarted(stepId)) {
+          startSlotSecondColor(stepId);
+          return;
+        }
+        gctSetPickTarget(true);
+      });
     }
     document.querySelectorAll("[data-gct-prev-step]").forEach((btn) => {
       btn.addEventListener("click", () => {
@@ -7171,14 +7390,15 @@
       });
       colors.pageBgSoft = softFrom(colors.pageBg);
       colors.bodyMuted = softMuted(colors.bodyInk);
-    } else if (current && COLOR_STEP_FIELDS[current.id]) {
-      COLOR_STEP_FIELDS[current.id].forEach((key) => {
+    } else if (current && (COLOR_STEP_FIELDS[current.id] || current.id === "easy-color-stage")) {
+      const keys = current.id === "easy-color-stage" ? SWATCH_KEYS : COLOR_STEP_FIELDS[current.id];
+      keys.forEach((key) => {
         if (store.draftColors[key] != null) colors[key] = draftColorForPreview(key);
       });
-      if (COLOR_STEP_FIELDS[current.id].includes("pageBg")) {
+      if (keys.includes("pageBg")) {
         colors.pageBgSoft = softFrom(colors.pageBg);
       }
-      if (COLOR_STEP_FIELDS[current.id].includes("bodyInk")) {
+      if (keys.includes("bodyInk")) {
         colors.bodyMuted = softMuted(colors.bodyInk);
       }
     }
@@ -8051,12 +8271,18 @@
 
   function placePreviewWidthControl() {
     const control = document.getElementById("chrome-preview-width");
-    const chromeRight = document.querySelector(".atelier-chrome-right");
     const previewRail = document.getElementById("preview-width-rail");
     const dashSlot = document.getElementById("dash-preview-width-slot");
     const dashRail = document.getElementById("dash-width-rail");
     const previewPane = document.querySelector(".preview-pane");
-    if (!control || !chromeRight) return;
+    if (!control || !previewPane) return;
+    const scroll = previewPane.querySelector(":scope > .preview-scroll");
+    if (scroll) {
+      if (control.nextElementSibling !== scroll) scroll.before(control);
+    } else if (control.parentElement !== previewPane) {
+      previewPane.prepend(control);
+    }
+    control.classList.remove("chrome-control--in-hub");
 
     const mode = store.hubUiMode || "home";
     const previewOn = previewPaneOnScreen(previewPane);
@@ -8080,12 +8306,6 @@
     }
     control.hidden = false;
     control.removeAttribute("hidden");
-
-    /* 見本の幅と大きさは右端。ロゴの横へ戻さない */
-    if (control.parentElement !== chromeRight) {
-      chromeRight.appendChild(control);
-    }
-    control.classList.remove("chrome-control--in-hub");
     if (previewRail) previewRail.hidden = true;
     if (dashRail) dashRail.hidden = true;
     if (dashSlot) dashSlot.hidden = true;
@@ -10103,6 +10323,7 @@
     } else {
       store.slotGradients = {};
     }
+    store.gradDirHintSkip = !!draft.gradDirHintSkip;
     if (draft.slotGradientPartners && typeof draft.slotGradientPartners === "object") {
       store.slotGradientPartners = Object.assign({}, draft.slotGradientPartners);
     } else {
@@ -12816,6 +13037,7 @@
     root.style.setProperty("--heading-scale", headingScale);
     root.style.setProperty("--radius", colors.radius);
     applyAccentBarToRoot();
+    paintLayoutColorChips();
     if (flash) {
       root.classList.remove("is-color-flash");
       void root.offsetWidth;
@@ -13115,11 +13337,19 @@
     if (store.guidedColorEditStepId) syncPickPartnerUnused(store.guidedColorEditStepId);
   }
 
-  function showLayoutColorHoney(stepId) {
+  function showLayoutColorHoney(stepId, colorKey) {
     if (!GUIDED_COLOR_TUNE_IDS.includes(stepId)) return;
     if (!store.presetChosen) markPresetChosen(store.chosenPresetKey || "clinic");
+    store.layoutColorKey = colorKey || null;
     store.partnerPickMode = false;
+    store.gradDirHintOpen = false;
     store.guidedColorEditStepId = stepId;
+    if (slotHasGradient(stepId)) {
+      if (!store.slotGradOpen) store.slotGradOpen = {};
+      store.slotGradOpen[stepId] = true;
+      if (!store.slotGradHintOff) store.slotGradHintOff = {};
+      store.slotGradHintOff[stepId] = true;
+    }
     const key = primaryColorKeyForStep(stepId);
     const startHex = key ? store.draftColors[key] : "#ffffff";
     if (!store.guidedColorTrial || typeof store.guidedColorTrial !== "object") store.guidedColorTrial = {};
@@ -13128,126 +13358,438 @@
     store.guidedColorTrial._pickHistory = [];
     const paint = () => {
       renderGctPickUi(stepId, { forceHoney: true });
-      const inRow = document.querySelector(".layout-color-body .gct-pick-layout");
-      const partnerLabel = document.getElementById("gct-pick-partner-label");
-      if (inRow && partnerLabel) partnerLabel.textContent = "2色目";
     };
     const host = document.getElementById("gct-pick-host");
     if (host && host.clientWidth < 40) window.requestAnimationFrame(paint);
     else paint();
   }
 
+  const COLOR_LIST_WHOLE = [
+    { stepId: "global-bg", name: "背景", chipKey: "pageBg" },
+    { stepId: "global-body", name: "本文", chipKey: "bodyInk" },
+    { stepId: "global-accent", name: "アクセント", chipKey: "accent" },
+    { stepId: "global-card", name: "カード", chipKey: "cardBg" }
+  ];
+  const COLOR_LIST_BAND = {
+    id: "band",
+    name: "上と下の帯",
+    chipKey: "chromeBg",
+    chipStep: "global-chrome-bg",
+    children: [
+      { stepId: "global-chrome-bg", name: "背景" },
+      { stepId: "global-chrome-ink", name: "文字" }
+    ]
+  };
+  const COLOR_LIST_MOVES = [
+    { id: "hero-color", name: "キャッチの文字", stepId: "hero-color", chipKey: "heroInk" },
+    { id: "values-color", name: "下の枠", stepId: "values-color", chipKey: "valuesBg" },
+    {
+      id: "contact",
+      name: "ご連絡",
+      children: [
+        { stepId: "contact-color", name: "背景", colorKey: "contactBg" },
+        { stepId: "contact-color", name: "文字", colorKey: "contactInk" }
+      ]
+    }
+  ];
+  const COLOR_MOVE_BLOCK = {
+    "hero-color": "hero",
+    "values-color": "values",
+    contact: "contact"
+  };
+
+  function placeAccentBarField(host) {
+    const field = document.querySelector(".accent-bar-field");
+    if (!field) return;
+    if (!field._accentHome) {
+      field._accentHome = { parent: field.parentElement, next: field.nextSibling };
+    }
+    if (host) host.appendChild(field);
+    else if (field._accentHome && field._accentHome.parent) {
+      field._accentHome.parent.insertBefore(field, field._accentHome.next);
+    }
+  }
+
   function closeLayoutColorRow(row) {
     if (!row) return;
     const stepId = row.getAttribute("data-color-step") || "";
     row.classList.remove("is-open");
-    const body = row.querySelector(".layout-color-body");
+    const body = row.querySelector(":scope > .layout-color-body");
     if (body) body.hidden = true;
-    const btn = row.querySelector(".layout-color-open");
+    const btn = row.querySelector(":scope > .layout-color-line > .layout-color-open");
     if (btn) {
       btn.textContent = "開く";
       btn.setAttribute("aria-expanded", "false");
     }
     restoreLayoutColorHoney();
+    placeAccentBarField(null);
+    store.gradDirHintOpen = false;
+    store.layoutColorKey = null;
+    const dirPop = document.getElementById("gct-grad-dir-pop");
+    if (dirPop) dirPop.hidden = true;
     if (stepId && store.guidedColorEditStepId === stepId) {
       store.guidedColorEditStepId = null;
       store.partnerPickMode = false;
     }
+    const group = row.closest(".layout-color-group");
+    if (group && group !== row) group.classList.remove("is-honey");
   }
 
-  function openLayoutColorRow(stepId) {
-    const section = document.getElementById("layout-color-section");
-    const row = section ? section.querySelector('[data-color-step="' + stepId + '"]') : null;
+  function closeColorGroup(group) {
+    if (!group) return;
+    group.querySelectorAll(".layout-color-sub.is-open").forEach(closeLayoutColorRow);
+    group.classList.remove("is-open", "is-honey");
+    const body = group.querySelector(":scope > .layout-color-group-body");
+    if (body) body.hidden = true;
+    const btn = group.querySelector(":scope > .layout-color-line > .layout-color-open");
+    if (btn) {
+      btn.textContent = "開く";
+      btn.setAttribute("aria-expanded", "false");
+    }
+  }
+
+  function closeOpenColorScreens() {
+    const rows = document.getElementById("layout-color-rows");
+    if (!rows) return;
+    rows.querySelectorAll(":scope > .layout-color-group.is-open").forEach(closeColorGroup);
+    rows.querySelectorAll(":scope > .layout-color-move.is-open").forEach(closeLayoutColorRow);
+  }
+
+  function openLayoutColorHoney(unit) {
+    const stepId = unit.getAttribute("data-color-step") || "";
+    const colorKey = unit.getAttribute("data-color-key") || "";
     const home = rememberLayoutColorHoneyHome();
-    if (!row || !home) return;
-    section.querySelectorAll(".layout-color-row.is-open").forEach(closeLayoutColorRow);
-    const body = row.querySelector(".layout-color-body");
+    if (!stepId || !home) return;
+    const group = unit.closest(".layout-color-group");
+    if (group) {
+      group.querySelectorAll(".layout-color-sub.is-open").forEach((openSub) => {
+        if (openSub !== unit) closeLayoutColorRow(openSub);
+      });
+      group.classList.add("is-open", "is-honey");
+    } else {
+      closeOpenColorScreens();
+    }
+    const body = unit.querySelector(":scope > .layout-color-body");
+    if (!body) return;
     body.hidden = false;
     body.appendChild(home.layout);
-    row.classList.add("is-open");
-    const btn = row.querySelector(".layout-color-open");
-    btn.textContent = "OK";
-    btn.setAttribute("aria-expanded", "true");
-    showLayoutColorHoney(stepId);
+    unit.classList.add("is-open");
+    const btn = unit.querySelector(":scope > .layout-color-line > .layout-color-open");
+    if (btn) btn.setAttribute("aria-expanded", "true");
+    showLayoutColorHoney(stepId, colorKey || null);
+    if (stepId === "global-accent") placeAccentBarField(body);
   }
 
-  function mountLayoutColorSection() {
+  function openColorGroup(group) {
+    closeOpenColorScreens();
+    group.classList.add("is-open");
+    group.classList.remove("is-honey");
+    const body = group.querySelector(":scope > .layout-color-group-body");
+    if (body) body.hidden = false;
+    const btn = group.querySelector(":scope > .layout-color-line > .layout-color-open");
+    if (btn) {
+      btn.textContent = "開く";
+      btn.setAttribute("aria-expanded", "true");
+    }
+  }
+
+  function colorMoveOrder() {
+    const blockToMove = { hero: "hero-color", values: "values-color", contact: "contact" };
+    const out = [];
+    normalizeLayoutOrder(store.layoutOrder).forEach((id) => {
+      const moveId = blockToMove[id];
+      if (moveId && out.indexOf(moveId) < 0) out.push(moveId);
+    });
+    COLOR_LIST_MOVES.forEach((item) => {
+      if (out.indexOf(item.id) < 0) out.push(item.id);
+    });
+    return out;
+  }
+
+  function syncColorMoveRowsFromPreview() {
     const rows = document.getElementById("layout-color-rows");
-    if (!rows || rows.childElementCount) return;
-    GUIDED_COLOR_TUNE_IDS.forEach((stepId) => {
-      const name = layoutColorRowName(stepId);
-      if (!name) return;
-      const row = document.createElement("div");
-      row.className = "layout-color-row";
-      row.setAttribute("data-color-step", stepId);
-      const line = document.createElement("div");
-      line.className = "layout-color-line";
+    if (!rows) return;
+    const byId = {};
+    rows.querySelectorAll(":scope > .layout-color-move").forEach((el) => {
+      byId[el.getAttribute("data-color-move")] = el;
+    });
+    colorMoveOrder().forEach((id) => {
+      if (byId[id]) rows.appendChild(byId[id]);
+    });
+  }
+
+  function saveColorMoveOrder() {
+    const list = document.getElementById("layout-color-rows");
+    if (!list) return;
+    const moveIds = Array.from(list.querySelectorAll(":scope > .layout-color-move")).map((el) => el.getAttribute("data-color-move"));
+    store.colorListOrder = moveIds;
+    const wanted = moveIds.map((id) => COLOR_MOVE_BLOCK[id]).filter(Boolean);
+    const order = normalizeLayoutOrder(store.layoutOrder).slice();
+    const slots = [];
+    order.forEach((id, index) => {
+      if (wanted.indexOf(id) >= 0) slots.push(index);
+    });
+    if (slots.length === wanted.length) {
+      wanted.forEach((id, index) => {
+        order[slots[index]] = id;
+      });
+      store.layoutOrder = order;
+      applyLayoutOrderToPreview();
+    }
+    scheduleSave();
+  }
+
+  function colorChipSpec(item) {
+    if (item.chipKey) {
+      return [{ key: item.chipKey, stepId: item.chipStep || item.stepId, label: "表示色" }];
+    }
+    if (item.id === "contact" && item.children) {
+      return item.children.map((child) => ({
+        key: child.colorKey,
+        stepId: child.stepId,
+        label: child.name
+      }));
+    }
+    return [];
+  }
+
+  function makeColorChips(item) {
+    const specs = colorChipSpec(item);
+    if (!specs.length) return null;
+    const wrap = document.createElement("span");
+    wrap.className = "layout-color-chips";
+    specs.forEach((spec) => {
+      if (!spec.key) return;
+      const chip = document.createElement("span");
+      chip.className = "layout-color-chip";
+      const label = document.createElement("span");
+      label.className = "layout-color-chip-label";
+      label.textContent = spec.label;
+      const swatch = document.createElement("span");
+      swatch.className = "layout-color-chip-swatch";
+      swatch.setAttribute("data-chip-key", spec.key);
+      swatch.setAttribute("data-chip-step", spec.stepId || "");
+      chip.appendChild(label);
+      chip.appendChild(swatch);
+      wrap.appendChild(chip);
+    });
+    return wrap;
+  }
+
+  function paintLayoutColorChips() {
+    const rows = document.getElementById("layout-color-rows");
+    if (!rows) return;
+    const colors = getEffectiveColors();
+    rows.querySelectorAll(".layout-color-chip-swatch").forEach((swatch) => {
+      const key = swatch.getAttribute("data-chip-key");
+      const stepId = swatch.getAttribute("data-chip-step");
+      const hex = colors[key] || "#ffffff";
+      const dir = stepId && store.slotGradients && store.slotGradients[stepId];
+      if (dir && GRADIENT_BG_KEYS.has(key)) {
+        swatch.style.backgroundImage = "linear-gradient(" + dir + ", " + hex + ", " + partnerHexForSlot(stepId) + ")";
+      } else {
+        swatch.style.backgroundImage = "none";
+      }
+      swatch.style.backgroundColor = hex;
+    });
+  }
+
+  function makeColorLine(name, opts) {
+    const line = document.createElement("div");
+    line.className = "layout-color-line";
+    if (opts && opts.handle) {
       const handle = document.createElement("span");
       handle.className = "layout-inner-handle";
       handle.textContent = "⋮⋮";
       handle.setAttribute("aria-label", "この枠の順番を変えられます");
       setHoverTip(handle, "押したまま上下に動かすと、順番を変えられます");
-      const label = document.createElement("p");
-      label.className = "layout-color-name";
-      label.textContent = name;
-      const btn = document.createElement("button");
-      btn.type = "button";
-      btn.className = "layout-color-open";
-      btn.textContent = "開く";
-      btn.setAttribute("aria-expanded", "false");
-      const body = document.createElement("div");
-      body.className = "layout-color-body";
-      body.hidden = true;
-      btn.addEventListener("click", () => {
-        if (row.classList.contains("is-open")) closeLayoutColorRow(row);
-        else openLayoutColorRow(stepId);
-      });
       line.appendChild(handle);
-      line.appendChild(label);
-      line.appendChild(btn);
-      row.appendChild(line);
-      row.appendChild(body);
-      rows.appendChild(row);
-      bindLayoutColorRowDrag(row);
-    });
-    syncLayoutColorRows();
+    } else if (opts && opts.spacer) {
+      const spacer = document.createElement("span");
+      spacer.className = "layout-color-grip-spacer";
+      spacer.setAttribute("aria-hidden", "true");
+      line.appendChild(spacer);
+    }
+    const label = document.createElement("p");
+    label.className = "layout-color-name";
+    label.textContent = name;
+    line.appendChild(label);
+    return line;
   }
 
-  function bindLayoutColorRowDrag(row) {
-    const handle = row.querySelector(".layout-inner-handle");
+  function makeColorOpen(line, onOpen) {
+    const btn = document.createElement("button");
+    btn.type = "button";
+    btn.className = "layout-color-open";
+    btn.textContent = "開く";
+    btn.setAttribute("aria-expanded", "false");
+    btn.addEventListener("click", onOpen);
+    line.appendChild(btn);
+    return btn;
+  }
+
+  function makeColorSub(item) {
+    const sub = document.createElement("div");
+    sub.className = "layout-color-row layout-color-sub";
+    sub.setAttribute("data-color-step", item.stepId);
+    if (item.colorKey) sub.setAttribute("data-color-key", item.colorKey);
+    const line = makeColorLine(item.name);
+    const chips = makeColorChips(item);
+    if (chips) line.appendChild(chips);
+    makeColorOpen(line, () => {
+      if (sub.classList.contains("is-open")) closeLayoutColorRow(sub);
+      else openLayoutColorHoney(sub);
+    });
+    const body = document.createElement("div");
+    body.className = "layout-color-body";
+    body.hidden = true;
+    sub.appendChild(line);
+    sub.appendChild(body);
+    return sub;
+  }
+
+  function makeColorGroup(item, kind) {
+    const movable = kind === "move";
+    const group = document.createElement("div");
+    group.className = "layout-color-row layout-color-group " + (movable ? "layout-color-move" : "layout-color-pin");
+    if (!item.id) group.classList.add("layout-color-whole");
+    if (movable) group.setAttribute("data-color-move", item.id);
+    const line = makeColorLine(item.name, movable ? { handle: true } : { spacer: true });
+    const chips = makeColorChips(item);
+    if (chips) line.appendChild(chips);
+    else if (!item.id && item.children) {
+      const note = document.createElement("span");
+      note.className = "layout-color-contents";
+      note.textContent = item.children.map((child) => child.name).join("・");
+      line.appendChild(note);
+    } else {
+      const gap = document.createElement("span");
+      gap.className = "layout-color-chips";
+      line.appendChild(gap);
+    }
+    makeColorOpen(line, () => {
+      if (group.classList.contains("is-open")) closeColorGroup(group);
+      else openColorGroup(group);
+    });
+    const body = document.createElement("div");
+    body.className = "layout-color-group-body";
+    body.hidden = true;
+    const subs = document.createElement("div");
+    subs.className = "layout-color-subs";
+    item.children.forEach((child) => subs.appendChild(makeColorSub(child)));
+    const done = document.createElement("button");
+    done.type = "button";
+    done.className = "gct-btn gct-btn-primary layout-color-done";
+    done.textContent = "これでOK";
+    done.addEventListener("click", () => closeColorGroup(group));
+    body.appendChild(subs);
+    body.appendChild(done);
+    group.appendChild(line);
+    group.appendChild(body);
+    if (movable) bindLayoutColorMoveDrag(group);
+    return group;
+  }
+
+  function makeColorDirect(item) {
+    const row = document.createElement("div");
+    row.className = "layout-color-row layout-color-move";
+    row.setAttribute("data-color-move", item.id);
+    row.setAttribute("data-color-step", item.stepId);
+    const line = makeColorLine(item.name, { handle: true });
+    line.appendChild(makeColorChips(item));
+    makeColorOpen(line, () => {
+      if (row.classList.contains("is-open")) closeLayoutColorRow(row);
+      else openLayoutColorHoney(row);
+    });
+    const body = document.createElement("div");
+    body.className = "layout-color-body";
+    body.hidden = true;
+    row.appendChild(line);
+    row.appendChild(body);
+    bindLayoutColorMoveDrag(row);
+    return row;
+  }
+
+  function bindLayoutColorMoveDrag(row) {
+    const handle = row.querySelector(":scope > .layout-color-line > .layout-inner-handle");
     if (!handle) return;
     handle.addEventListener("pointerdown", (ev) => {
       if (ev.button != null && ev.button !== 0) return;
+      if (row.classList.contains("is-open")) return;
       ev.preventDefault();
       ev.stopPropagation();
       const list = row.parentElement;
+      if (!list) return;
+      const startY = ev.clientY;
+      const originTop = row.getBoundingClientRect().top;
+      let touched = null;
+      row.classList.add("is-dragging");
       const onMove = (moveEv) => {
-        if (!list) return;
-        const rows = Array.from(list.querySelectorAll(":scope > .layout-color-row"));
-        const idx = rows.indexOf(row);
-        const prev = rows[idx - 1];
-        const next = rows[idx + 1];
-        if (prev) {
-          const rect = prev.getBoundingClientRect();
-          if (moveEv.clientY < rect.top + rect.height / 2) {
-            list.insertBefore(row, prev);
-            return;
+        const pins = list.querySelectorAll(":scope > .layout-color-pin");
+        const pin = pins.length ? pins[pins.length - 1] : null;
+        let dy = moveEv.clientY - startY;
+        if (pin) {
+          const floor = pin.getBoundingClientRect().bottom - originTop;
+          if (dy < floor) dy = floor;
+        }
+        row.style.transform = "translateY(" + dy + "px)";
+        const mine = row.getBoundingClientRect();
+        let best = null;
+        let bestArea = 0;
+        list.querySelectorAll(":scope > .layout-color-move").forEach((other) => {
+          other.classList.remove("is-touch");
+          if (other === row) return;
+          const rect = other.getBoundingClientRect();
+          const overlapW = Math.min(mine.right, rect.right) - Math.max(mine.left, rect.left);
+          const overlapH = Math.min(mine.bottom, rect.bottom) - Math.max(mine.top, rect.top);
+          const area = overlapW > 0 && overlapH > 0 ? overlapW * overlapH : 0;
+          if (area > bestArea) {
+            bestArea = area;
+            best = other;
           }
-        }
-        if (next) {
-          const rect = next.getBoundingClientRect();
-          if (moveEv.clientY > rect.top + rect.height / 2) list.insertBefore(next, row);
-        }
+        });
+        if (best) best.classList.add("is-touch");
+        touched = best;
       };
       const onUp = () => {
         window.removeEventListener("pointermove", onMove, true);
         window.removeEventListener("pointerup", onUp, true);
         window.removeEventListener("pointercancel", onUp, true);
+        row.style.transform = "";
+        row.classList.remove("is-dragging");
+        list.querySelectorAll(":scope > .layout-color-move.is-touch").forEach((el) => el.classList.remove("is-touch"));
+        if (touched && touched.parentElement === list) {
+          const moves = Array.from(list.querySelectorAll(":scope > .layout-color-move"));
+          const from = moves.indexOf(row);
+          const to = moves.indexOf(touched);
+          if (from >= 0 && to >= 0 && from !== to) {
+            if (from < to) touched.after(row);
+            else touched.before(row);
+            saveColorMoveOrder();
+          }
+        }
+        touched = null;
       };
       window.addEventListener("pointermove", onMove, true);
       window.addEventListener("pointerup", onUp, true);
       window.addEventListener("pointercancel", onUp, true);
     });
+  }
+
+  function mountLayoutColorSection() {
+    const rows = document.getElementById("layout-color-rows");
+    if (!rows || rows.childElementCount) return;
+    rows.appendChild(makeColorGroup({ name: "全体色", children: COLOR_LIST_WHOLE }, "pin"));
+    rows.appendChild(makeColorGroup(COLOR_LIST_BAND, "pin"));
+    const byId = {};
+    COLOR_LIST_MOVES.forEach((item) => {
+      byId[item.id] = item.children ? makeColorGroup(item, "move") : makeColorDirect(item);
+    });
+    colorMoveOrder().forEach((id) => {
+      if (byId[id]) rows.appendChild(byId[id]);
+    });
+    paintLayoutColorChips();
+    syncLayoutColorRows();
   }
 
   function syncLayoutColorRows() {
@@ -13939,6 +14481,7 @@
       access: !!(store.draftExtras && store.draftExtras.access),
       address: !!(store.draftExtras && store.draftExtras.address)
     });
+    syncColorMoveRowsFromPreview();
   }
 
   function swapLayoutBlocks(aId, bId) {
@@ -14690,6 +15233,131 @@
     syncOpenLayoutFocalButtons();
   }
 
+  function setLayoutFrameFocal(blockId, slot, x, y, pushUndo) {
+    const nx = normalizeFocalX(x);
+    const ny = normalizeFocalY(y);
+    if (blockId === "hero") {
+      ensureHeroFocalDefaults();
+      if (nx === store.heroFocalX && ny === store.heroFocalY) return false;
+      if (pushUndo) pushLayoutUndo();
+      store.heroFocalX = nx;
+      store.heroFocalY = ny;
+      applyHeroFocalToPreview();
+    } else {
+      const countId = layoutImageCountId(blockId);
+      const layout = normalizeItemLayout(countId);
+      if (!layout || !slot) return false;
+      if (nx === layout.focalXById[slot] && ny === layout.focalYById[slot]) return false;
+      if (pushUndo) pushLayoutUndo();
+      layout.focalXById[slot] = nx;
+      layout.focalYById[slot] = ny;
+      applyItemLayoutToPreview(countId);
+    }
+    if (store.confirmed.finish) unconfirmFinishSoft();
+    scheduleSave();
+    syncOpenLayoutFocalButtons();
+    return true;
+  }
+
+  function focalFromWindowRatios(map, blockId, slot, leftRatio, topRatio) {
+    const img = map.querySelector("img");
+    const view = layoutFrameViewState(blockId, slot);
+    const nw = img ? img.naturalWidth : 0;
+    const nh = img ? img.naturalHeight : 0;
+    if (!nw || !nh) return { x: view.focalX, y: view.focalY };
+    const measured = layoutPreviewFrameRatio(blockId, slot);
+    const frameRatio = measured > 0 ? measured : 16 / 9;
+    const frameH = 100;
+    const frameW = frameH * frameRatio;
+    const z = Math.max(0.5, normalizeImageScale(view.scale) / 100);
+    const cover = Math.max(frameW / nw, frameH / nh);
+    const denomX = nw * cover - frameW + frameW * (1 - 1 / z);
+    const denomY = nh * cover - frameH + frameH * (1 - 1 / z);
+    const x = denomX ? (leftRatio * cover * nw) / denomX : view.focalX / 100;
+    const y = denomY ? (topRatio * cover * nh) / denomY : view.focalY / 100;
+    return {
+      x: Math.max(0, Math.min(100, x * 100)),
+      y: Math.max(0, Math.min(100, y * 100))
+    };
+  }
+
+  function applyLiveFrameFocal(blockId, slot, x, y, scale) {
+    const img = layoutPreviewPhotoEl(blockId, slot);
+    if (!img) return;
+    const s = normalizeImageScale(scale);
+    img.style.objectFit = "cover";
+    img.style.objectPosition = x + "% " + y + "%";
+    img.style.transformOrigin = x + "% " + y + "%";
+    if (s === IMAGE_SCALE_DEFAULT) img.style.removeProperty("transform");
+    else img.style.transform = "scale(" + s / 100 + ")";
+  }
+
+  function bindSoloFrameDrag(map, blockId, slot) {
+    if (!map || map.dataset.frameDragBound === "1") return;
+    map.dataset.frameDragBound = "1";
+    map.addEventListener("pointerdown", (ev) => {
+      if (ev.button !== 0) return;
+      if (ev.target.closest("button, a, input, .hub-tip-wrap")) return;
+      const win = map.querySelector(".layout-source-window");
+      if (!win) return;
+      const mapRect = map.getBoundingClientRect();
+      const winRect = win.getBoundingClientRect();
+      const grabX = ev.clientX - winRect.left;
+      const grabY = ev.clientY - winRect.top;
+      const start = layoutFrameViewState(blockId, slot);
+      const scale = start.scale;
+      const live = { x: start.focalX, y: start.focalY, px: ev.clientX, py: ev.clientY };
+      let raf = 0;
+      map.classList.add("is-grabbing");
+      if (map.setPointerCapture) {
+        try { map.setPointerCapture(ev.pointerId); } catch (err) { /* pointer already gone */ }
+      }
+      const place = () => {
+        const rect = map.getBoundingClientRect();
+        const maxL = Math.max(0, rect.width - winRect.width);
+        const maxT = Math.max(0, rect.height - winRect.height);
+        const left = Math.max(0, Math.min(maxL, live.px - rect.left - grabX));
+        const top = Math.max(0, Math.min(maxT, live.py - rect.top - grabY));
+        win.style.left = (left / Math.max(1, rect.width)) * 100 + "%";
+        win.style.top = (top / Math.max(1, rect.height)) * 100 + "%";
+        const focal = focalFromWindowRatios(map, blockId, slot, left / Math.max(1, rect.width), top / Math.max(1, rect.height));
+        live.x = focal.x;
+        live.y = focal.y;
+        applyLiveFrameFocal(blockId, slot, live.x, live.y, scale);
+      };
+      const move = (e) => {
+        live.px = e.clientX;
+        live.py = e.clientY;
+        if (raf) return;
+        raf = window.requestAnimationFrame(() => {
+          raf = 0;
+          place();
+        });
+      };
+      const up = (e) => {
+        if (raf) {
+          window.cancelAnimationFrame(raf);
+          raf = 0;
+        }
+        live.px = e.clientX;
+        live.py = e.clientY;
+        place();
+        map.classList.remove("is-grabbing");
+        if (map.releasePointerCapture) {
+          try { map.releasePointerCapture(e.pointerId); } catch (err) { /* already released */ }
+        }
+        map.removeEventListener("pointermove", move);
+        map.removeEventListener("pointerup", up);
+        map.removeEventListener("pointercancel", up);
+        setLayoutFrameFocal(blockId, slot, live.x, live.y, true);
+        paintLayoutSourceMap(map);
+      };
+      map.addEventListener("pointermove", move);
+      map.addEventListener("pointerup", up);
+      map.addEventListener("pointercancel", up);
+    });
+  }
+
   function resetLayoutFrameFocal(blockId, slot) {
     if (blockId === "hero") {
       store.heroFocalX = HERO_FOCAL_X_DEFAULT;
@@ -14990,6 +15658,12 @@
         }
         if (face.getAttribute("src") !== src) face.src = src;
         applyImageScaleToImg(face, view.scale, view.focalX, view.focalY);
+        if (blockId === "hero") {
+          face.style.objectFit = "contain";
+          face.style.removeProperty("transform");
+          box.style.overflow = "visible";
+          box.style.height = "auto";
+        }
       }
       return;
     }
@@ -15060,6 +15734,40 @@
     const scroller = document.querySelector(".dash-body > .fill-form");
     const img = box.querySelector("img");
     if (!row || !scroller || !img) return;
+    if (box.closest("#easy-img-layout-host.is-photo-solo")) {
+      const cell = box.closest(".layout-arrange-cell");
+      const tools = box.closest(".layout-photo-tools--plain");
+      const sources = tools ? tools.querySelector(".layout-img-sources") : null;
+      const zoom = tools ? tools.querySelector(".layout-zoom-block") : null;
+      const scroller = document.querySelector(".dash-body > .fill-form");
+      const inner = tools ? tools.clientWidth : 0;
+      const sideMin = 108;
+      const maxW = Math.max(140, inner - sideMin * 2);
+      const rowGap = tools ? parseFloat(getComputedStyle(tools).rowGap) || 0 : 0;
+      const padB = cell ? parseFloat(getComputedStyle(cell).paddingBottom) || 0 : 0;
+      const above = (sources ? sources.offsetHeight : 0) + (zoom ? zoom.offsetHeight : 0);
+      const toolsTop = tools ? tools.getBoundingClientRect().top : 0;
+      const limit = scroller ? scroller.getBoundingClientRect().bottom : toolsTop + 420;
+      const avail = Math.max(180, Math.round(limit - toolsTop - above - rowGap * 2 - padB - 8));
+      const nw = img.naturalWidth;
+      const nh = img.naturalHeight;
+      let h = avail;
+      let w = nw && nh ? Math.round(h * (nw / nh)) : maxW;
+      if (w > maxW) {
+        w = maxW;
+        h = nw && nh ? Math.round(w * (nh / nw)) : h;
+      }
+      box.style.width = w + "px";
+      box.style.height = h + "px";
+      box.style.maxWidth = "none";
+      box.style.marginLeft = "0";
+      box.style.marginBottom = "0";
+      box.style.visibility = "visible";
+      img.style.width = "100%";
+      img.style.height = "100%";
+      img.style.maxHeight = "none";
+      return;
+    }
     const nw = img.naturalWidth;
     const nh = img.naturalHeight;
     box.style.maxWidth = "100%";
@@ -15432,7 +16140,7 @@
 
   function layoutPhotoOpenWord(row, open) {
     if (!open) return "開く";
-    return easyImgPhotoHostRow(row) ? "戻る" : "OK";
+    return easyImgPhotoHostRow(row) ? "これでOK" : "OK";
   }
 
   function syncEasyImgPhotoSolo() {
@@ -15492,7 +16200,9 @@
     editor.innerHTML = "";
     if (open) {
       appendLayoutPhotoEditor(editor, blockId, slot);
-      row.appendChild(btn);
+      const step = editor.querySelector(".layout-source-step");
+      if (easyImgPhotoHostRow(row) && step) step.appendChild(btn);
+      else row.appendChild(btn);
       const map = editor.querySelector(".layout-source-map");
       if (map) alignOpenSourceMapToPad(map);
       syncEasyImgPhotoSolo();
@@ -15840,6 +16550,11 @@
         resetLayoutFrameFocal(blockId, slot);
       });
     }
+    if (parent.closest("#easy-img-layout-host") && home && zoom) {
+      home.textContent = "中央に戻す";
+      home.classList.add("layout-focal-reset--solo");
+      zoom.appendChild(home);
+    }
     row.appendChild(zoomBlock);
     row.appendChild(pad);
     block.appendChild(row);
@@ -15938,6 +16653,24 @@
     mapWin.setAttribute("aria-hidden", "true");
     map.appendChild(mapImg);
     map.appendChild(mapWin);
+    if (parent.closest("#easy-img-layout-host")) {
+      const tipWrap = document.createElement("span");
+      tipWrap.className = "hub-tip-wrap layout-frame-tip";
+      const tipBtn = document.createElement("button");
+      tipBtn.type = "button";
+      tipBtn.className = "hub-tip-btn";
+      tipBtn.setAttribute("data-hub-tip", "");
+      tipBtn.setAttribute("aria-label", "枠の動かし方");
+      tipBtn.textContent = "?";
+      const pop = document.createElement("p");
+      pop.className = "hub-tip-pop";
+      pop.textContent = "白い枠を動かすと、表示したい部分に合わせられます。";
+      tipWrap.appendChild(tipBtn);
+      tipWrap.appendChild(pop);
+      map.appendChild(tipWrap);
+      setupHubTips(map);
+      bindSoloFrameDrag(map, blockId, slot);
+    }
     mapStep.appendChild(map);
     cluster.appendChild(mapStep);
     paintLayoutSourceMap(map);
@@ -18925,6 +19658,7 @@
         guidedImageUnlocked: store.guidedImageUnlocked,
         guidedTextUnlocked: store.guidedTextUnlocked,
         presetChosen: store.presetChosen,
+        colorListOrder: Array.isArray(store.colorListOrder) ? store.colorListOrder.slice() : null,
         chosenPresetKey: store.chosenPresetKey,
         vibeColors: store.vibeColors,
         vibeReasons: store.vibeReasons,
@@ -18970,6 +19704,7 @@
         siteColorMode: store.siteColorMode,
         slotGradients: store.slotGradients || {},
         slotGradientPartners: store.slotGradientPartners || {},
+        gradDirHintSkip: !!store.gradDirHintSkip,
         randomHistory: store.randomHistory,
         guidedColorPhase: store.guidedColorPhase,
         guidedColorReturnPreset: store.guidedColorReturnPreset,
@@ -19153,6 +19888,7 @@
       if (data.slotGradients && typeof data.slotGradients === "object") {
         store.slotGradients = data.slotGradients;
       }
+      store.gradDirHintSkip = !!data.gradDirHintSkip;
       if (data.slotGradientPartners && typeof data.slotGradientPartners === "object") {
         store.slotGradientPartners = data.slotGradientPartners;
       } else if (data.gradientPartnerHex) {
@@ -19181,6 +19917,7 @@
         store.guidedImageUnlocked = true;
       }
       if (data.presetChosen != null) store.presetChosen = !!data.presetChosen;
+      if (Array.isArray(data.colorListOrder)) store.colorListOrder = data.colorListOrder.slice();
       if (data.chosenPresetKey != null) store.chosenPresetKey = data.chosenPresetKey;
       if (data.vibeColors) store.vibeColors = data.vibeColors;
       if (Array.isArray(data.vibeReasons)) store.vibeReasons = data.vibeReasons;

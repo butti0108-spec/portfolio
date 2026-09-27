@@ -15634,6 +15634,7 @@
           vis.className = "layout-arrange-vis";
           vis.checked = on;
           vis.setAttribute("aria-label", displayLabel + "を表示");
+          setHoverTip(vis, "チェックを外すと、見本から外せます。");
           vis.addEventListener("click", (ev) => {
             ev.preventDefault();
             ev.stopPropagation();

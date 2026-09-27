@@ -12897,23 +12897,58 @@ body.wizard-mode .dash-block.is-wizard-active {
   max-width: 100%;
 }
 #easy-img-layout-host .layout-closed-head {
-  display: flex;
-  flex-flow: row nowrap;
+  display: grid;
+  grid-template-columns: auto auto minmax(0, 1fr) 6.5rem 1.75rem 2.75rem 1.75rem 4.8em;
   align-items: center;
   grid-column: 1 / -1;
   width: 100%;
   min-width: 0;
   max-width: 100%;
-  column-gap: 0.55rem;
+  column-gap: 0.45rem;
   white-space: nowrap;
 }
-#easy-img-layout-host .layout-closed-head .layout-count-cluster,
+#easy-img-layout-host .layout-closed-head .layout-arrange-handle {
+  grid-column: 1;
+  grid-row: 1;
+}
+#easy-img-layout-host .layout-closed-head .layout-arrange-vis-label {
+  grid-column: 2;
+  grid-row: 1;
+}
 #easy-img-layout-host .layout-closed-head .layout-gap-cluster {
-  flex: 0 0 auto;
+  grid-column: 4;
+  grid-row: 1;
+  justify-content: flex-end;
   white-space: nowrap;
+}
+#easy-img-layout-host .layout-closed-head .layout-count-cluster {
+  display: contents;
+}
+#easy-img-layout-host .layout-closed-head .layout-count-btn:first-child {
+  grid-column: 5;
+  grid-row: 1;
+  justify-self: center;
+}
+#easy-img-layout-host .layout-closed-head .layout-image-count-num {
+  grid-column: 6;
+  grid-row: 1;
+  text-align: center;
+}
+#easy-img-layout-host .layout-closed-head .layout-count-btn:last-child {
+  grid-column: 7;
+  grid-row: 1;
+  justify-self: center;
+}
+#easy-img-layout-host .layout-closed-head .layout-section-open {
+  grid-column: 8;
+  grid-row: 1;
+  width: 4.8em;
+  justify-self: stretch;
 }
 #easy-img-layout-host .layout-arrange-summary--image .layout-arrange-name {
-  flex: 0 1 auto;
+  grid-column: 3;
+  grid-row: 1;
+  flex: 1 1 auto;
   min-width: 0;
   width: auto;
   max-width: none;

@@ -15067,6 +15067,30 @@
   }
 
   function appendLayoutHeadCountGap(head, blockId) {
+    if (blockId === "hero") {
+      const minus = document.createElement("button");
+      minus.type = "button";
+      minus.className = "layout-count-btn";
+      minus.textContent = "−";
+      minus.disabled = true;
+      minus.setAttribute("aria-label", "枚数を減らす");
+      const num = document.createElement("span");
+      num.className = "layout-image-count-num";
+      num.textContent = "1枚";
+      const plus = document.createElement("button");
+      plus.type = "button";
+      plus.className = "layout-count-btn";
+      plus.textContent = "＋";
+      plus.disabled = true;
+      plus.setAttribute("aria-label", "枚数を増やす");
+      const countCluster = document.createElement("span");
+      countCluster.className = "layout-count-cluster";
+      countCluster.appendChild(minus);
+      countCluster.appendChild(num);
+      countCluster.appendChild(plus);
+      head.appendChild(countCluster);
+      return;
+    }
     const countId = layoutImageCountId(blockId);
     if (!countId) return;
     const order = layoutBlockSlots(blockId);

@@ -12,7 +12,7 @@
   <!-- メーカー親CSS（ポートフォリオ根の style.css は読まない） -->
   <link rel="stylesheet" href="maker-base.css?v=cleanup-20260922">
   <link rel="icon" href="brand/mark-favicon.png?v=logo-8" type="image/png">
-  <link rel="stylesheet" href="sample-overrides.css?v=color-list-20260927h">
+  <link rel="stylesheet" href="sample-overrides.css?v=img-keep-20260927">
   <link rel="stylesheet" href="free-photo-gallery/gallery.css?v=gallery-ask-20260926">
   <script>
     (function () {
@@ -67,7 +67,7 @@
   <script src="sushi-belt.js?v=sushi-replace-up-20260926" defer></script>
   <script src="free-photo-gallery/gallery.js?v=gallery-ask-20260926" defer></script>
   <script src="page-shutter.js?v=shutter-all-20260924" defer></script>
-  <script src="script.js?v=color-list-20260927g" defer></script>
+  <script src="script.js?v=img-keep-20260927" defer></script>
   <script>
     (function () {
       var h = location.hostname;
@@ -481,22 +481,22 @@
             <p class="dash-subhead" role="heading" aria-level="3">文章はどう決めますか</p>
             <span class="hub-tip-wrap">
               <button type="button" class="hub-tip-btn" data-hub-tip aria-expanded="false" aria-label="文章の決め方とは">?</button>
-              <span class="hub-tip-pop" hidden>キーワードから決めるか、すべておまかせにするか、選べます。あとから直せます。</span>
+              <span class="hub-tip-pop" hidden>すべておまかせにするか、キーワードから決めるか、選べます。あとから直せます。</span>
             </span>
           </div>
           <div class="entry-branch-grid easy-copy-path-grid" role="radiogroup" aria-label="文章の決め方">
-            <label class="entry-branch-card">
-              <input type="radio" name="easy_copy_path" value="keyword">
-              <span class="entry-branch-card-inner">
-                <strong role="heading" aria-level="3">キーワードから決める</strong>
-                <span>雰囲気などを選んでから、枠ごとに文章候補を見比べます</span>
-              </span>
-            </label>
             <label class="entry-branch-card">
               <input type="radio" name="easy_copy_path" value="omakase">
               <span class="entry-branch-card-inner">
                 <strong role="heading" aria-level="3">文章はすべておまかせ</strong>
                 <span>見本の枚数ぶん、すべての文章をこちらで決めます。あとから一つずつ直せます。</span>
+              </span>
+            </label>
+            <label class="entry-branch-card">
+              <input type="radio" name="easy_copy_path" value="keyword">
+              <span class="entry-branch-card-inner">
+                <strong role="heading" aria-level="3">キーワードから決める</strong>
+                <span>雰囲気などを選んでから、枠ごとに文章候補を見比べます</span>
               </span>
             </label>
           </div>

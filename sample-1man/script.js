@@ -2287,6 +2287,7 @@
     layoutLockNoticeSkip: false,
     imgOmakasePicks: {},
     imgOmakaseSalt: 0,
+    sampleKeptImagePaths: null,
     copyDirIds: [],
     copyDirForbid: [],
     copyFieldSource: {},
@@ -7618,6 +7619,48 @@
     return false;
   }
 
+  function sampleDefaultSrc(name) {
+    const src = IMAGE_DEFAULTS[name];
+    if (src == null) return "";
+    const text = String(src).trim();
+    if (!text || text.indexOf("blob:") === 0) return "";
+    return text;
+  }
+
+  function visibleUnfilledImageSlots() {
+    return collectVisibleImageSlots().filter(function (slot) {
+      return !inputHasFile(slot.input);
+    });
+  }
+
+  function adoptVisibleSampleImages(slots) {
+    if (!store.sampleKeptImagePaths || typeof store.sampleKeptImagePaths !== "object") {
+      store.sampleKeptImagePaths = {};
+    }
+    (slots || []).forEach(function (slot) {
+      const name = slot.input;
+      if (inputHasFile(name)) return;
+      const src = sampleDefaultSrc(name);
+      if (!src) return;
+      setRemoteImageUrl(name, src);
+      applyImageSlotByName(name, true);
+      store.sampleKeptImagePaths[name] = src;
+    });
+    scheduleSave();
+  }
+
+  function restoreKeptSampleImages() {
+    const paths = store.sampleKeptImagePaths;
+    if (!paths || typeof paths !== "object") return;
+    Object.keys(paths).forEach(function (name) {
+      const src = paths[name];
+      if (src == null || String(src).trim() === "") return;
+      if (inputHasFile(name)) return;
+      setRemoteImageUrl(name, String(src).trim());
+      applyImageSlotByName(name, true);
+    });
+  }
+
   function requiredImageInputs() {
     const list = [{ name: "hero_image", label: "キャッチ画像" }];
     seedItemOrder("about-photos");
@@ -12590,6 +12633,29 @@
     if (step.id === "easy-done") {
       return;
     }
+    if (step.id === "easy-img-wire") {
+      const miss = visibleUnfilledImageSlots();
+      if (miss.length) {
+        const bare = miss.filter(function (slot) {
+          return !sampleDefaultSrc(slot.input);
+        });
+        if (bare.length) {
+          showValidationNotice("見えている枠に写真があると、次へ進めます。");
+          return;
+        }
+        openLayoutOmakaseNotice({
+          title: "変更していない画像があります。",
+          body: "このまま次へ進んでよろしいですか。",
+          confirmLabel: "はい",
+          allowSkip: false,
+          onConfirm: function () {
+            adoptVisibleSampleImages(miss);
+            wizardNext();
+          }
+        });
+        return;
+      }
+    }
     const err = getStepValidationError(step.id);
     if (err) {
       showValidationNotice(err);
@@ -13795,12 +13861,7 @@
   function syncLayoutColorRows() {
     const section = document.getElementById("layout-color-section");
     if (!section) return;
-    const picked = document.querySelector('input[name="entry_sample_color"]:checked');
-    const show = !!(picked && EASY_PRESET_KEYS.indexOf(picked.value) >= 0);
-    if (!show) {
-      section.querySelectorAll(".layout-color-row.is-open").forEach(closeLayoutColorRow);
-    }
-    section.hidden = !show;
+    section.hidden = false;
   }
 
   function setupPresets() {
@@ -19693,6 +19754,10 @@
         hubImgPathMode: store.hubImgPathMode && typeof store.hubImgPathMode === "object" ? store.hubImgPathMode : {},
         imgOmakaseLocks: Object.assign({}, store.imgOmakaseLocks || {}),
         imgOmakaseSkipConfirm: !!store.imgOmakaseSkipConfirm,
+        sampleKeptImagePaths:
+          store.sampleKeptImagePaths && typeof store.sampleKeptImagePaths === "object"
+            ? Object.assign({}, store.sampleKeptImagePaths)
+            : null,
         layoutLockNoticeSkip: !!store.layoutLockNoticeSkip,
         sushiSampleId: store.sushiSampleId,
         sushiSampleKey: store.sushiSampleKey,
@@ -19864,6 +19929,10 @@
           ? Object.assign({}, data.imgOmakaseLocks)
           : {};
       store.imgOmakaseSkipConfirm = !!data.imgOmakaseSkipConfirm;
+      store.sampleKeptImagePaths =
+        data.sampleKeptImagePaths && typeof data.sampleKeptImagePaths === "object"
+          ? Object.assign({}, data.sampleKeptImagePaths)
+          : null;
       store.layoutLockNoticeSkip = !!data.layoutLockNoticeSkip;
       if (data.sushiSampleId != null) store.sushiSampleId = data.sushiSampleId;
       if (data.sushiSampleKey != null) store.sushiSampleKey = data.sushiSampleKey;
@@ -20077,6 +20146,7 @@
       syncHueSelectFromDraft();
       syncLogoModePanels();
       syncLogoPresentation();
+      restoreKeptSampleImages();
       suppressSave = false;
       return true;
     } catch (e) {

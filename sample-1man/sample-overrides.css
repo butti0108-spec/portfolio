@@ -12674,6 +12674,9 @@ body.wizard-mode .dash-block.is-wizard-active[data-step-id="easy-img-wire"] > su
   margin: 0 0 0.75rem;
   font-size: 0.8rem;
 }
+.layout-notice-skip[hidden] {
+  display: none;
+}
 .layout-notice-actions {
   display: flex;
   justify-content: flex-end;

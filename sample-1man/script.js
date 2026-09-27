@@ -7866,6 +7866,9 @@
       if (!store.easyBasicsHints && !store.easyBasicsApplied) captureEasyBasicsHintsFromSample();
       paintEasyBasicsPlaceholders();
     }
+    if (step.id !== "easy-color") {
+      document.querySelectorAll("#layout-color-rows .layout-color-row.is-open").forEach(closeLayoutColorRow);
+    }
     if (step.id === "easy-color") {
       const chosen = store.chosenPresetKey;
       const keep = !chosen || chosen === store.sampleOriginalPreset;
@@ -7874,6 +7877,7 @@
         r.checked = r.value === val;
       });
       paintEasyColorBars();
+      syncLayoutColorRows();
     }
     if (step.id === "easy-copy-omakase") {
       ensureOmakaseCopyReady().then(function () {
@@ -9060,10 +9064,8 @@
       if (nav) stack.insertBefore(panel, nav);
       else stack.appendChild(panel);
       if (wire) wire.classList.remove("is-shared-image-ui");
-      document.querySelectorAll("#layout-color-section .layout-color-row.is-open").forEach(closeLayoutColorRow);
     } else if (wire) {
       wire.classList.remove("is-shared-image-ui");
-      document.querySelectorAll("#layout-color-section .layout-color-row.is-open").forEach(closeLayoutColorRow);
     }
     if (intoSampleStep || (stack && !stack.hidden)) renderLayoutArrangeWire();
   }
@@ -11874,6 +11876,7 @@
       input.addEventListener("change", () => {
         if (!input.checked) return;
         applyEasyColorChoice();
+        syncLayoutColorRows();
       });
     });
     gate.querySelectorAll("[data-entry-step-back]").forEach((btn) => {
@@ -13195,13 +13198,18 @@
       row.appendChild(body);
       rows.appendChild(row);
     });
-    document.querySelectorAll("#layout-color-section [data-preset]").forEach((btn) => {
-      btn.addEventListener("click", () => {
-        const open = document.querySelector("#layout-color-section .layout-color-row.is-open");
-        if (!open) return;
-        window.requestAnimationFrame(() => showLayoutColorHoney(open.getAttribute("data-color-step")));
-      });
-    });
+    syncLayoutColorRows();
+  }
+
+  function syncLayoutColorRows() {
+    const section = document.getElementById("layout-color-section");
+    if (!section) return;
+    const picked = document.querySelector('input[name="entry_sample_color"]:checked');
+    const show = !!(picked && EASY_PRESET_KEYS.indexOf(picked.value) >= 0);
+    if (!show) {
+      section.querySelectorAll(".layout-color-row.is-open").forEach(closeLayoutColorRow);
+    }
+    section.hidden = !show;
   }
 
   function setupPresets() {

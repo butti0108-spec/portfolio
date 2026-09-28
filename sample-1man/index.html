@@ -12,7 +12,7 @@
   <!-- メーカー親CSS（ポートフォリオ根の style.css は読まない） -->
   <link rel="stylesheet" href="maker-base.css?v=cleanup-20260922">
   <link rel="icon" href="brand/mark-favicon.png?v=logo-8" type="image/png">
-  <link rel="stylesheet" href="sample-overrides.css?v=copy-axis-20260928">
+  <link rel="stylesheet" href="sample-overrides.css?v=copy-keep2-20260928">
   <link rel="stylesheet" href="free-photo-gallery/gallery.css?v=gallery-ask-20260926">
   <script>
     (function () {
@@ -67,7 +67,7 @@
   <script src="sushi-belt.js?v=sushi-replace-up-20260926" defer></script>
   <script src="free-photo-gallery/gallery.js?v=gallery-ask-20260926" defer></script>
   <script src="page-shutter.js?v=shutter-all-20260924" defer></script>
-  <script src="script.js?v=copy-axis-20260928" defer></script>
+  <script src="script.js?v=copy-keep2-20260928" defer></script>
   <script>
     (function () {
       var h = location.hostname;
@@ -581,6 +581,10 @@
           <summary>色調整</summary>
           <div class="dash-subhead-row">
             <p class="dash-subhead" role="heading" aria-level="3">色調整</p>
+            <span class="hub-tip-wrap">
+              <button type="button" class="hub-tip-btn" data-hub-tip aria-expanded="false" aria-label="色調整とは">?</button>
+              <span class="hub-tip-pop" hidden>見本の色を、一つずつ直せます。順番も変えられます。</span>
+            </span>
           </div>
           <section id="layout-color-section" class="layout-color-section" aria-label="色" hidden>
             <div id="layout-color-rows" class="layout-color-rows"></div>
@@ -590,9 +594,12 @@
         <details class="dash-block dash-block--easy" data-step-id="easy-copy-omakase" data-preview-target="#hero" hidden>
           <summary>おまかせ文章</summary>
           <p class="dash-subhead" role="heading" aria-level="3">おまかせの文章</p>
-          <p class="step-help">鍵で残せます。もう一度を押すと、その枠だけ別の文章になります。</p>
+          <p class="step-help">左の見本に載っています。「残す」を押した枠は、もう一度選んでも変わりません。残していない枠だけやり直せます。</p>
           <div class="easy-copy-omakase" id="easy-copy-omakase-root">
             <div class="easy-copy-omakase-list" id="easy-copy-omakase-list" aria-live="polite"></div>
+            <div class="easy-copy-omakase-actions">
+              <button type="button" class="gct-btn" id="easy-copy-omakase-reroll">残していない枠をもう一度</button>
+            </div>
           </div>
         </details>
 

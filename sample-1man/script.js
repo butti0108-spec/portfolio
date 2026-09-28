@@ -11041,6 +11041,12 @@
       if (!store.copyOmakaseLocks[options.onlySec]) {
         store.copyOmakaseAxes[options.onlySec] = pickOmakaseAxis(store.copyOmakaseAxes[options.onlySec]);
       }
+    } else if (options.rerollUnlocked) {
+      COPY_FRAME_ORDER.forEach(function (secId) {
+        if (store.copyOmakaseLocks[secId]) return;
+        if (secId === "hero" && store.copyHeroOnPhoto !== true) return;
+        store.copyOmakaseAxes[secId] = pickOmakaseAxis(store.copyOmakaseAxes[secId]);
+      });
     } else if (!onlyUnlocked) {
       const axis = pickOmakaseAxis(null);
       COPY_FRAME_ORDER.forEach(function (secId) {
@@ -11189,24 +11195,17 @@
         escapeHtml(text) +
         "</p>" +
         "</div>" +
-        '<div class="easy-copy-omakase-row-actions">' +
-        (secId !== "hero" || store.copyHeroOnPhoto === true
-          ? '<button type="button" class="gct-btn easy-copy-omakase-reroll" data-omakase-reroll="' +
-            secId +
-            '"' +
-            (locked ? " disabled" : "") +
-            ">もう一度</button>"
-          : "") +
-        '<button type="button" class="easy-copy-omakase-lock' +
+        '<button type="button" class="easy-img-omakase-lock' +
         (locked ? " is-on" : "") +
         '" data-omakase-lock="' +
         secId +
         '" aria-pressed="' +
         (locked ? "true" : "false") +
+        '" data-tip="' +
+        (locked ? "固定をはずす" : "この文章を残す（もう一度では変わらない）") +
         '">' +
-        (locked ? "はずす" : "鍵") +
+        (locked ? "はずす" : "残す") +
         "</button>" +
-        "</div>" +
         "</div>"
       );
     }).join("");
@@ -11233,17 +11232,23 @@
         scheduleSave();
       });
     });
-    host.querySelectorAll("[data-omakase-reroll]").forEach(function (btn) {
-      btn.addEventListener("click", function () {
-        const secId = btn.getAttribute("data-omakase-reroll");
-        if (!secId || store.copyOmakaseLocks[secId]) return;
-        btn.disabled = true;
-        applyOmakaseFromDict({ onlyUnlocked: true, onlySec: secId }).then(function () {
-          renderCopyOmakaseUi();
-          scheduleSave();
-        });
+    const rerollAll = document.getElementById("easy-copy-omakase-reroll");
+    if (rerollAll && !rerollAll.dataset.bound) {
+      rerollAll.dataset.bound = "1";
+      rerollAll.addEventListener("click", function () {
+        rerollAll.disabled = true;
+        applyOmakaseFromDict({ onlyUnlocked: true, rerollUnlocked: true }).then(
+          function () {
+            renderCopyOmakaseUi();
+            scheduleSave();
+            rerollAll.disabled = false;
+          },
+          function () {
+            rerollAll.disabled = false;
+          }
+        );
       });
-    });
+    }
     updateWizardUi();
   }
 
@@ -11428,7 +11433,9 @@
           escapeHtml(meta) +
           "</p>" +
           "</div>" +
-          '<button type="button" class="easy-img-omakase-lock has-hover-tip" data-img-omakase-lock="' +
+          '<button type="button" class="easy-img-omakase-lock has-hover-tip' +
+          (locked ? " is-on" : "") +
+          '" data-img-omakase-lock="' +
           slot.key +
           '" aria-pressed="' +
           (locked ? "true" : "false") +
@@ -16374,9 +16381,9 @@
       const locked = !!(store.imgOmakaseLocks && store.imgOmakaseLocks[imageName]);
       const lockBtn = document.createElement("button");
       lockBtn.type = "button";
-      lockBtn.className = "layout-lock-mark" + (locked ? " is-on" : "");
-      lockBtn.textContent = locked ? "🔒" : "🔓";
-      lockBtn.setAttribute("aria-label", locked ? "固定中" : "固定していない");
+      lockBtn.className = "layout-lock-mark easy-img-omakase-lock" + (locked ? " is-on" : "");
+      lockBtn.textContent = locked ? "はずす" : "残す";
+      lockBtn.setAttribute("aria-label", locked ? "はずす" : "残す");
       lockBtn.setAttribute("aria-pressed", locked ? "true" : "false");
       lockBtn.addEventListener("click", (ev) => {
         stopSummaryToggle(ev);
@@ -16501,8 +16508,8 @@
       const locked = !!(store.imgOmakaseLocks && store.imgOmakaseLocks[imageName]);
       const mark = document.createElement("span");
       mark.className = "layout-closed-lock" + (locked ? " is-locked" : "");
-      mark.textContent = locked ? "🔒" : "🔓";
-      mark.setAttribute("aria-label", locked ? "固定中" : "固定していない");
+      mark.textContent = locked ? "はずす" : "残す";
+      mark.setAttribute("aria-label", locked ? "はずす" : "残す");
       fig.appendChild(mark);
       wrap.appendChild(fig);
     });
@@ -16549,8 +16556,8 @@
     const on = !!locked;
     document.querySelectorAll('[data-layout-photo="' + blockId + ":" + slot + '"] .layout-lock-mark').forEach((btn) => {
       btn.classList.toggle("is-on", on);
-      btn.textContent = on ? "🔒" : "🔓";
-      btn.setAttribute("aria-label", on ? "固定中" : "固定していない");
+      btn.textContent = on ? "はずす" : "残す";
+      btn.setAttribute("aria-label", on ? "はずす" : "残す");
       btn.setAttribute("aria-pressed", on ? "true" : "false");
     });
   }
@@ -16737,9 +16744,9 @@
     const underLock = document.createElement("button");
     underLock.type = "button";
     const underLocked = !!(store.imgOmakaseLocks && store.imgOmakaseLocks[imageName]);
-    underLock.className = "layout-lock-mark layout-lock-under" + (underLocked ? " is-on" : "");
-    underLock.textContent = underLocked ? "🔒" : "🔓";
-    underLock.setAttribute("aria-label", underLocked ? "固定中" : "固定していない");
+    underLock.className = "layout-lock-mark layout-lock-under easy-img-omakase-lock" + (underLocked ? " is-on" : "");
+    underLock.textContent = underLocked ? "はずす" : "残す";
+    underLock.setAttribute("aria-label", underLocked ? "はずす" : "残す");
     underLock.setAttribute("aria-pressed", underLocked ? "true" : "false");
     underLock.addEventListener("click", (ev) => {
       ev.preventDefault();

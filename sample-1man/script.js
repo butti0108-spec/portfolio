@@ -2433,6 +2433,7 @@
 
   let saveTimer = null;
   let suppressSave = false;
+  let laneQueryHold = false;
 
   const GUIDED_COLOR_TUNE_IDS = COLOR_STEP_IDS_ORDERED.slice(1);
 
@@ -8802,6 +8803,7 @@
         window.SushiBelt.setup();
         window.SushiBelt.mount({
           onConfirm: function (payload) {
+            laneQueryHold = false;
             store.pendingSushi = payload;
             store.sushiSampleId = payload.sample && payload.sample.id;
             store.sushiSampleKey = payload.sample && payload.sample.key;
@@ -19696,7 +19698,7 @@
   }
 
   function saveDraft() {
-    if (suppressSave) return;
+    if (suppressSave || laneQueryHold) return;
     if (document.documentElement.classList.contains("is-embed-preview")) return;
     try {
       const payload = {
@@ -20543,6 +20545,23 @@
   openDraftNotice();
 
   document.documentElement.classList.add("dash-boot-ready");
+
+  if (bootParams.get("lane") === "1") {
+    window.clearTimeout(saveTimer);
+    laneQueryHold = true;
+    store.entryBranch = "sample";
+    if (!store.saveMode) store.saveMode = "browser";
+    const laneGate = document.getElementById("entry-gate");
+    if (laneGate) {
+      const branchRadio = laneGate.querySelector('input[name="entry_branch"][value="sample"]');
+      if (branchRadio) branchRadio.checked = true;
+      const saveRadio = laneGate.querySelector(
+        'input[name="entry_save_mode"][value="' + store.saveMode + '"]'
+      );
+      if (saveRadio) saveRadio.checked = true;
+    }
+    showEntryGate("sushi");
+  }
 
   if (bootReview) {
     document.documentElement.classList.add("is-review-mode");

@@ -11745,22 +11745,21 @@ body.copy-later-fixed .dash-block.is-wizard-active .easy-copy-frame > .dash-subh
   white-space: pre-wrap;
   word-break: break-word;
 }
+.easy-copy-omakase-row-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  flex: 0 0 auto;
+}
+.easy-copy-omakase-reroll {
+  flex: 0 0 auto;
+  min-height: 2rem;
+  height: 2rem;
+  padding: 0 0.65rem;
+  font-size: 0.78rem;
+}
 .easy-copy-omakase-lock {
   flex: 0 0 auto;
-  appearance: none;
-  border: 1px solid #c5ced6;
-  border-radius: 0;
-  background: #fff;
-  color: #1a1f1c;
-  font-size: 0.78rem;
-  font-weight: 700;
-  padding: 0.35rem 0.55rem;
-  cursor: pointer;
-  white-space: nowrap;
-}
-.easy-copy-omakase-row.is-locked .easy-copy-omakase-lock {
-  border-color: #3d8a48;
-  color: #2d6b36;
 }
 .easy-copy-omakase-actions {
   margin-top: 0.75rem;

@@ -10816,38 +10816,32 @@
     if (title) title.textContent = COPY_FRAME_LABEL[secId] || secId;
     const showAsk = secId === "hero" && store.copyHeroOnPhoto == null;
     if (ask) ask.hidden = !showAsk;
-    if (rerollWrap) rerollWrap.hidden = showAsk;
-    if (showAsk) {
-      if (host) host.innerHTML = "";
-      if (ask) {
-        ask.hidden = false;
-        ask.innerHTML =
-          '<p class="step-help">写真の上に言葉を出しますか</p>' +
-          '<div class="easy-copy-hero-ask">' +
-          '<button type="button" class="gct-btn" data-hero-copy="1">出す</button>' +
-          '<button type="button" class="gct-btn" data-hero-copy="0">出さない</button>' +
-          "</div>";
-        ask.querySelectorAll("[data-hero-copy]").forEach(function (btn) {
-          btn.addEventListener("click", function () {
-            const on = btn.getAttribute("data-hero-copy") === "1";
-            store.copyHeroOnPhoto = on;
-            store.heroTextOnPhoto = on;
-            applyHeroTextOverlay();
-            if (!on && !visibleCopyFields("hero").length) {
-              const order = activeCopyFrameOrder();
-              if ((store.copyFrameIndex || 0) < order.length - 1) {
-                store.copyFrameIndex = (store.copyFrameIndex || 0) + 1;
-              }
+    if (rerollWrap) rerollWrap.hidden = false;
+    if (showAsk && ask) {
+      ask.hidden = false;
+      ask.innerHTML =
+        '<p class="step-help">写真の上に言葉を出しますか</p>' +
+        '<div class="easy-copy-hero-ask">' +
+        '<button type="button" class="gct-btn" data-hero-copy="1">出す</button>' +
+        '<button type="button" class="gct-btn" data-hero-copy="0">出さない</button>' +
+        "</div>";
+      ask.querySelectorAll("[data-hero-copy]").forEach(function (btn) {
+        btn.addEventListener("click", function () {
+          const on = btn.getAttribute("data-hero-copy") === "1";
+          store.copyHeroOnPhoto = on;
+          store.heroTextOnPhoto = on;
+          applyHeroTextOverlay();
+          if (!on && !visibleCopyFields("hero").length) {
+            const order = activeCopyFrameOrder();
+            if ((store.copyFrameIndex || 0) < order.length - 1) {
+              store.copyFrameIndex = (store.copyFrameIndex || 0) + 1;
             }
-            renderCopyFrameUi();
-            scheduleSave();
-            updateWizardUi();
-          });
+          }
+          renderCopyFrameUi();
+          scheduleSave();
+          updateWizardUi();
         });
-      }
-      scrollCopyFramePreview(secId);
-      updateWizardUi();
-      return;
+      });
     }
     if (!host) return;
     const fields = visibleCopyFields(secId);
@@ -11028,6 +11022,7 @@
 
     if (!dict || typeof dict.pickOmakasePreset !== "function") {
       COPY_FRAME_ORDER.forEach(function (secId) {
+        if (options.onlySec && secId !== options.onlySec) return;
         if (onlyUnlocked && store.copyOmakaseLocks[secId]) return;
         const line = fallbackStubThree(secId)[0];
         applyCopyTextToSection(secId, line && line.text);
@@ -11044,6 +11039,7 @@
       store.copyOmakaseAxes = preset.axes || store.copyOmakaseAxes || null;
       var chain = Promise.resolve();
       COPY_FRAME_ORDER.forEach(function (secId) {
+        if (options.onlySec && secId !== options.onlySec) return;
         if (onlyUnlocked && store.copyOmakaseLocks[secId]) return;
         if (secId === "hero" && store.copyHeroOnPhoto !== true) return;
         chain = chain.then(function () {
@@ -11136,15 +11132,26 @@
         escapeHtml(text) +
         "</p>" +
         "</div>" +
-        '<button type="button" class="easy-copy-omakase-lock has-hover-tip" data-omakase-lock="' +
+        '<div class="easy-copy-omakase-row-actions">' +
+        (!locked && (secId !== "hero" || store.copyHeroOnPhoto === true)
+          ? '<button type="button" class="gct-btn easy-copy-omakase-reroll" data-omakase-reroll="' +
+            secId +
+            '">もう一度</button>'
+          : "") +
+        '<button type="button" class="layout-lock-mark easy-copy-omakase-lock' +
+        (locked ? " is-on" : "") +
+        '" data-omakase-lock="' +
         secId +
         '" aria-pressed="' +
         (locked ? "true" : "false") +
+        '" aria-label="' +
+        (locked ? "固定中" : "固定していない") +
         '" data-tip="' +
-        (locked ? "固定をはずす" : "この文言を残す（もう一度では変わらない）") +
+        (locked ? "固定をはずせます" : "この枠の文章を残せます") +
         '">' +
-        (locked ? "はずす" : "残す") +
+        (locked ? "🔒" : "🔓") +
         "</button>" +
+        "</div>" +
         "</div>"
       );
     }).join("");
@@ -11169,6 +11176,17 @@
         store.copyOmakaseLocks[secId] = !store.copyOmakaseLocks[secId];
         renderCopyOmakaseUi();
         scheduleSave();
+      });
+    });
+    host.querySelectorAll("[data-omakase-reroll]").forEach(function (btn) {
+      btn.addEventListener("click", function () {
+        const secId = btn.getAttribute("data-omakase-reroll");
+        if (!secId || store.copyOmakaseLocks[secId]) return;
+        btn.disabled = true;
+        applyOmakaseFromDict({ onlyUnlocked: true, onlySec: secId }).then(function () {
+          renderCopyOmakaseUi();
+          scheduleSave();
+        });
       });
     });
     updateWizardUi();
@@ -11553,26 +11571,6 @@
           renderCopyFrameUi();
           scheduleSave();
         });
-      });
-    }
-    const omakaseReroll = document.getElementById("easy-copy-omakase-reroll");
-    if (omakaseReroll && !omakaseReroll.dataset.bound) {
-      omakaseReroll.dataset.bound = "1";
-      omakaseReroll.addEventListener("click", function () {
-        omakaseReroll.disabled = true;
-        applyOmakaseFromDict({ onlyUnlocked: true })
-          .then(function () {
-            renderCopyOmakaseUi();
-            scheduleSave();
-          })
-          .then(
-            function () {
-              omakaseReroll.disabled = false;
-            },
-            function () {
-              omakaseReroll.disabled = false;
-            }
-          );
       });
     }
   }

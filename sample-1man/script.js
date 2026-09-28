@@ -331,10 +331,10 @@
   /* 色番号は見本サイトの上→下・左→右（ヘッダー／フッターは背景→文字の2工程）。0は章の注意（注文画面のみ） */
   const STEPS = [
     { id: "easy-basics", label: "基本情報", needsConfirm: true, num: 0 },
-    { id: "easy-color", label: "色合い", needsConfirm: true, num: 0 },
-    { id: "easy-color-stage", label: "色合い", needsConfirm: true, num: 0 },
+    { id: "easy-color", label: "配色", needsConfirm: true, num: 0 },
+    { id: "easy-color-stage", label: "色調整", needsConfirm: true, num: 0 },
     { id: "easy-copy-path", label: "文章の決め方", needsConfirm: true, num: 0 },
-    { id: "easy-copy-dirs", label: "方向", needsConfirm: true, num: 0 },
+    { id: "easy-copy-dirs", label: "どの言葉を使いますか", needsConfirm: true, num: 0 },
     { id: "easy-copy-omakase", label: "おまかせ文章", needsConfirm: true, num: 0 },
     { id: "easy-copy-frame", label: "枠の文章", needsConfirm: true, num: 0 },
     { id: "easy-sec-hero", label: "キャッチ文", needsConfirm: true, num: 0 },
@@ -5925,7 +5925,7 @@
     if (store.copyPathMode === "omakase") {
       tail = ["easy-copy-path", "easy-copy-omakase"];
     } else if (store.copyPathMode === "keyword") {
-      tail = ["easy-copy-path"];
+      tail = ["easy-copy-path", "easy-copy-dirs"];
       if (activeCopyFrameOrder().length) tail.push("easy-copy-frame");
     } else {
       tail = ["easy-copy-path"];
@@ -5934,7 +5934,7 @@
   }
 
   function getEasyFlowStepIds() {
-    const ids = ["easy-basics", "easy-copy-dirs", "easy-color", "easy-color-stage"]
+    const ids = ["easy-basics", "easy-color", "easy-color-stage"]
       .concat(getEasyImageFlowMid())
       .concat(getEasyCopyFlowTail())
       .concat(["easy-loading", "easy-done"]);
@@ -6106,7 +6106,7 @@
     bar.hidden = true;
   }
 
-  const EASY_FLOW_STAGE_LABELS = ["サンプル", "用途", "基本情報", "雰囲気", "色見本", "色合い", "画像", "文章", "確定"];
+  const EASY_FLOW_STAGE_LABELS = ["サンプル", "利用用途", "基本情報", "配色", "色調整", "画像", "文章", "確定"];
 
   function easyFlowStageIndex() {
     const gate = document.getElementById("entry-gate");
@@ -6123,19 +6123,19 @@
     const id = step && step.id;
     if (!id) return 0;
     if (id === "easy-basics") return 3;
-    if (id === "easy-copy-dirs") return 4;
-    if (id === "easy-color") return 5;
-    if (id === "easy-color-stage") return 6;
-    if (id === "easy-img-path" || id === "easy-img-wire" || id === "easy-img-omakase") return 7;
+    if (id === "easy-color") return 4;
+    if (id === "easy-color-stage") return 5;
+    if (id === "easy-img-path" || id === "easy-img-wire" || id === "easy-img-omakase") return 6;
     if (
       id === "easy-copy-path" ||
+      id === "easy-copy-dirs" ||
       id === "easy-copy-omakase" ||
       id === "easy-copy-frame" ||
       id.indexOf("easy-sec-") === 0
     ) {
-      return 8;
+      return 7;
     }
-    if (id === "easy-loading" || id === "easy-done") return 9;
+    if (id === "easy-loading" || id === "easy-done") return 8;
     return 0;
   }
 
@@ -6149,8 +6149,8 @@
         return;
       }
       meter.hidden = false;
-      if (label) label.textContent = EASY_FLOW_STAGE_LABELS[n - 1] + "\u3000" + n + " / 9";
-      if (fill) fill.style.width = (n / 9) * 100 + "%";
+      if (label) label.textContent = EASY_FLOW_STAGE_LABELS[n - 1] + "\u3000" + n + " / 8";
+      if (fill) fill.style.width = (n / 8) * 100 + "%";
       const names = meter.querySelector("[data-easy-flow-meter-names]");
       if (names) {
         names.textContent = "";
@@ -7505,7 +7505,7 @@
     }
     if (stepId === "easy-color") {
       const colorEl = document.querySelector('input[name="entry_sample_color"]:checked');
-      if (!colorEl) return "色合いを選んでください。";
+      if (!colorEl) return "配色を選んでください。";
       return "";
     }
     if (stepId === "easy-copy-omakase") {
@@ -10318,7 +10318,7 @@
   }
 
   function syncSampleFlowPreviewVisibility(stepId) {
-    setSampleFlowPreviewHidden(stepId === "easy-basics" || stepId === "easy-copy-dirs");
+    setSampleFlowPreviewHidden(stepId === "easy-basics");
   }
 
   let samplePreviewPopReady = false;

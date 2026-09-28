@@ -656,7 +656,7 @@ body.atelier.entry-gate-open .atelier-shell {
 
 .easy-flow-meter-names {
   display: grid;
-  grid-template-columns: repeat(9, minmax(0, 1fr));
+  grid-template-columns: repeat(8, minmax(0, 1fr));
   gap: 0;
   margin: 0.38rem 0 0;
   pointer-events: none;
@@ -685,6 +685,18 @@ body.atelier.entry-gate-open .atelier-shell {
   border-radius: 999px;
   background: #2d6a36;
   vertical-align: 0.05em;
+}
+
+@media (max-width: 720px) {
+  .easy-flow-meter-name {
+    font-size: 0.58rem;
+  }
+
+  .easy-flow-meter-name.is-now::before {
+    width: 0.28rem;
+    height: 0.28rem;
+    margin-right: 0.08rem;
+  }
 }
 
 .entry-mood-grid {

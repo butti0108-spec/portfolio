@@ -12,7 +12,7 @@
   <!-- メーカー親CSS（ポートフォリオ根の style.css は読まない） -->
   <link rel="stylesheet" href="maker-base.css?v=cleanup-20260922">
   <link rel="icon" href="brand/mark-favicon.png?v=logo-8" type="image/png">
-  <link rel="stylesheet" href="sample-overrides.css?v=color-swatch-20260928c">
+  <link rel="stylesheet" href="sample-overrides.css?v=flow8b-20260928">
   <link rel="stylesheet" href="free-photo-gallery/gallery.css?v=gallery-ask-20260926">
   <script>
     (function () {
@@ -67,7 +67,7 @@
   <script src="sushi-belt.js?v=sushi-replace-up-20260926" defer></script>
   <script src="free-photo-gallery/gallery.js?v=gallery-ask-20260926" defer></script>
   <script src="page-shutter.js?v=shutter-all-20260924" defer></script>
-  <script src="script.js?v=lane-open-20260928" defer></script>
+  <script src="script.js?v=flow8-20260928" defer></script>
   <script>
     (function () {
       var h = location.hostname;
@@ -496,16 +496,16 @@
               <input type="radio" name="easy_copy_path" value="keyword">
               <span class="entry-branch-card-inner">
                 <strong role="heading" aria-level="3">キーワードから決める</strong>
-                <span>雰囲気などを選んでから、枠ごとに文章候補を見比べます</span>
+                <span>使う言葉を選んでから、枠ごとに文章候補を見比べます</span>
               </span>
             </label>
           </div>
         </details>
 
         <details class="dash-block dash-block--easy" data-step-id="easy-copy-dirs" hidden>
-          <summary>方向</summary>
+          <summary>どの言葉を使いますか</summary>
           <div class="dash-subhead-row">
-            <p class="dash-subhead" role="heading" aria-level="3">どんな雰囲気にしたいですか？</p>
+            <p class="dash-subhead" role="heading" aria-level="3">どの言葉を使いますか</p>
             <span class="hub-tip-wrap">
               <button type="button" class="hub-tip-btn" data-hub-tip aria-expanded="false" aria-label="雰囲気の選び方とは">?</button>
               <span class="hub-tip-pop" hidden>言葉を押すと、使いたい、使わない、指定なし、の順で変わります。</span>
@@ -558,15 +558,15 @@
         </details>
 
         <details class="dash-block dash-block--easy" data-step-id="easy-color" data-preview-target="#preview-root" hidden>
-          <summary>色合い</summary>
+          <summary>配色</summary>
           <div class="dash-subhead-row">
-            <p class="dash-subhead" role="heading" aria-level="3">色合いは？</p>
+            <p class="dash-subhead" role="heading" aria-level="3">配色</p>
             <span class="hub-tip-wrap">
               <button type="button" class="hub-tip-btn" data-hub-tip aria-expanded="false" aria-label="色合いとは">?</button>
               <span class="hub-tip-pop" hidden>選んだ見本のまま、色だけ変えられます。</span>
             </span>
           </div>
-          <div class="entry-mood-row" id="entry-sample-color-row" role="radiogroup" aria-label="色合い">
+          <div class="entry-mood-row" id="entry-sample-color-row" role="radiogroup" aria-label="配色">
             <label class="entry-choice"><input type="radio" name="entry_sample_color" value="keep"><span>このままでよい</span></label>
             <label class="entry-choice"><input type="radio" name="entry_sample_color" value="clinic"><span class="entry-color-choice"><span>紺・きれいめ</span><span class="entry-color-bars" aria-hidden="true"><i></i><i></i><i></i></span></span></label>
             <label class="entry-choice"><input type="radio" name="entry_sample_color" value="green"><span class="entry-color-choice"><span>緑</span><span class="entry-color-bars" aria-hidden="true"><i></i><i></i><i></i></span></span></label>
@@ -578,9 +578,9 @@
         </details>
 
         <details class="dash-block dash-block--easy" data-step-id="easy-color-stage" data-preview-target="#preview-root" hidden>
-          <summary>色合い</summary>
+          <summary>色調整</summary>
           <div class="dash-subhead-row">
-            <p class="dash-subhead" role="heading" aria-level="3">色合い</p>
+            <p class="dash-subhead" role="heading" aria-level="3">色調整</p>
           </div>
           <section id="layout-color-section" class="layout-color-section" aria-label="色" hidden>
             <div id="layout-color-rows" class="layout-color-rows"></div>

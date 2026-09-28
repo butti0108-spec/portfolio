@@ -11760,6 +11760,21 @@ body.copy-later-fixed .dash-block.is-wizard-active .easy-copy-frame > .dash-subh
 }
 .easy-copy-omakase-lock {
   flex: 0 0 auto;
+  min-height: 2rem;
+  height: 2rem;
+  padding: 0 0.65rem;
+  border: 1px solid #c5ced6;
+  border-radius: 999px;
+  background: #fff;
+  color: #1a1f1c;
+  font-size: 0.78rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+.easy-copy-omakase-row.is-locked .easy-copy-omakase-lock {
+  border-color: #3d8a48;
+  background: #e7f6ea;
+  color: #2d6b36;
 }
 .easy-copy-omakase-actions {
   margin-top: 0.75rem;

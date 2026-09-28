@@ -10816,7 +10816,6 @@
     if (title) title.textContent = COPY_FRAME_LABEL[secId] || secId;
     const showAsk = secId === "hero" && store.copyHeroOnPhoto == null;
     if (ask) ask.hidden = !showAsk;
-    if (rerollWrap) rerollWrap.hidden = false;
     if (showAsk && ask) {
       ask.hidden = false;
       ask.innerHTML =
@@ -10831,18 +10830,19 @@
           store.copyHeroOnPhoto = on;
           store.heroTextOnPhoto = on;
           applyHeroTextOverlay();
-          if (!on && !visibleCopyFields("hero").length) {
-            const order = activeCopyFrameOrder();
-            if ((store.copyFrameIndex || 0) < order.length - 1) {
-              store.copyFrameIndex = (store.copyFrameIndex || 0) + 1;
-            }
-          }
           renderCopyFrameUi();
           scheduleSave();
           updateWizardUi();
         });
       });
     }
+    if (showAsk || (secId === "hero" && store.copyHeroOnPhoto === false)) {
+      if (host) host.innerHTML = "";
+      if (rerollWrap) rerollWrap.hidden = true;
+      updateWizardUi();
+      return;
+    }
+    if (rerollWrap) rerollWrap.hidden = false;
     if (!host) return;
     const fields = visibleCopyFields(secId);
     host.innerHTML = fields
@@ -11002,6 +11002,16 @@
     });
   }
 
+  const OMAKASE_AXIS_IDS = ["ease", "bright", "craft", "warm", "clear", "invite"];
+
+  function pickOmakaseAxis(exceptId) {
+    const pool = OMAKASE_AXIS_IDS.filter(function (id) {
+      return id !== exceptId;
+    });
+    const list = pool.length ? pool : OMAKASE_AXIS_IDS.slice();
+    return list[Math.floor(Math.random() * list.length)];
+  }
+
   function applyOmakaseFromDict(opts) {
     const options = opts || {};
     const onlyUnlocked = !!options.onlyUnlocked;
@@ -11009,85 +11019,130 @@
     if (!store.copyOmakaseLocks || typeof store.copyOmakaseLocks !== "object") {
       store.copyOmakaseLocks = {};
     }
+    if (!store.copyOmakaseAxes || typeof store.copyOmakaseAxes !== "object") {
+      store.copyOmakaseAxes = {};
+    }
+    if (!store.copyFieldSource || typeof store.copyFieldSource !== "object") {
+      store.copyFieldSource = {};
+    }
+    if (!store.copyFieldAxis || typeof store.copyFieldAxis !== "object") {
+      store.copyFieldAxis = {};
+    }
     store.copyOmakaseSalt = (Number(store.copyOmakaseSalt) || 0) + 1;
     const saltBase =
       "omakase|" +
-      (store.copyPresetId || "omakase-flow-v1") +
-      "|" +
       store.copyOmakaseSalt +
       "|" +
       Date.now() +
       "|" +
       Math.random().toString(36).slice(2, 10);
 
-    if (!dict || typeof dict.pickOmakasePreset !== "function") {
+    if (options.onlySec) {
+      if (!store.copyOmakaseLocks[options.onlySec]) {
+        store.copyOmakaseAxes[options.onlySec] = pickOmakaseAxis(store.copyOmakaseAxes[options.onlySec]);
+      }
+    } else if (!onlyUnlocked) {
+      const axis = pickOmakaseAxis(null);
       COPY_FRAME_ORDER.forEach(function (secId) {
-        if (options.onlySec && secId !== options.onlySec) return;
-        if (onlyUnlocked && store.copyOmakaseLocks[secId]) return;
-        const line = fallbackStubThree(secId)[0];
-        applyCopyTextToSection(secId, line && line.text);
+        store.copyOmakaseAxes[secId] = axis;
       });
-      return Promise.resolve();
+      store.copyPresetId = "single-" + axis;
     }
 
-    const pickPreset = onlyUnlocked && store.copyOmakaseAxes
-      ? Promise.resolve({ id: store.copyPresetId || "omakase-flow-v1", axes: store.copyOmakaseAxes })
-      : dict.pickOmakasePreset(Math.random);
+    function sectionFields(secId) {
+      return visibleCopyFields(secId).filter(function (field) {
+        /* 基本情報で決めた紹介は、おまかせが上書きしない */
+        if (field.key === "about_lead" && store.easyBasicsApplied) return false;
+        return store.copyFieldSource[field.key] !== "custom";
+      });
+    }
 
-    return pickPreset.then(function (preset) {
-      store.copyPresetId = preset.id || store.copyPresetId || "omakase-flow-v1";
-      store.copyOmakaseAxes = preset.axes || store.copyOmakaseAxes || null;
-      var chain = Promise.resolve();
+    function writeField(field, text, axisId) {
+      applyCopyTextToField(field.key, text);
+      store.copyFieldSource[field.key] = "cand";
+      store.copyFieldAxis[field.key] = axisId;
+      const el = form.elements[field.key];
+      if (el) el.setAttribute("data-copy-axis", axisId);
+    }
+
+    if (!dict || typeof dict.generateThree !== "function") {
       COPY_FRAME_ORDER.forEach(function (secId) {
         if (options.onlySec && secId !== options.onlySec) return;
         if (onlyUnlocked && store.copyOmakaseLocks[secId]) return;
         if (secId === "hero" && store.copyHeroOnPhoto !== true) return;
-        chain = chain.then(function () {
-          if (!store.copyFieldSource || typeof store.copyFieldSource !== "object") store.copyFieldSource = {};
-          const fields = visibleCopyFields(secId).filter(function (field) {
-            /* 基本情報で決めた紹介は、おまかせが生成も上書きもしない */
-            if (field.key === "about_lead" && store.easyBasicsApplied) return false;
-            return store.copyFieldSource[field.key] !== "custom";
-          });
-          if (!fields.length) return;
-          const pool = [];
-          let round = 0;
-          function pull() {
-            if (pool.length >= fields.length || round >= 4) return Promise.resolve();
-            round += 1;
-            return dict
-              .generateThree({
-                sampleKey: store.sushiSampleKey || "",
-                sitePurpose: store.sitePurpose || null,
-                sceneTag: null,
-                sectionId: secId,
-                keywordIds: store.copyDirIds || [],
-                forbidKeywordIds: store.copyDirForbid || [],
-                presetAxes: store.copyOmakaseAxes,
-                salt: saltBase + "|" + secId + "|" + round
-              })
-              .then(function (res) {
-                (res.candidates || []).forEach(function (c) {
-                  if (!c || !c.text) return;
-                  if (pool.some(function (p) { return p.text === c.text; })) return;
-                  pool.push(c);
+        const axisId = store.copyOmakaseAxes[secId];
+        const axisLabel = {
+          ease: "やすらぎ",
+          bright: "明るさ",
+          craft: "こだわり",
+          warm: "あたたかさ",
+          clear: "わかりやすさ",
+          invite: "誘い"
+        }[axisId];
+        const line = (fallbackStubThree(secId) || []).find(function (item) {
+          return item && item.label === axisLabel;
+        });
+        const fields = sectionFields(secId);
+        fields.forEach(function (field) {
+          if (line && line.text) writeField(field, line.text, axisId);
+        });
+        if (line && line.text) store.copyFrameNow[secId] = line.text;
+      });
+      return Promise.resolve();
+    }
+
+    let chain = Promise.resolve();
+    COPY_FRAME_ORDER.forEach(function (secId) {
+      if (options.onlySec && secId !== options.onlySec) return;
+      if (onlyUnlocked && store.copyOmakaseLocks[secId]) return;
+      if (secId === "hero" && store.copyHeroOnPhoto !== true) return;
+      chain = chain.then(function () {
+        const axisId = store.copyOmakaseAxes[secId];
+        const fields = sectionFields(secId);
+        if (!fields.length || !axisId) return;
+        const keptIntro =
+          secId === "about" && store.easyBasicsApplied ? String(fieldValue("about_lead") || "") : "";
+        let fieldChain = Promise.resolve();
+        fields.forEach(function (field, index) {
+          fieldChain = fieldChain.then(function () {
+            const axes = {};
+            axes[secId] = axisId;
+            let tries = 0;
+            function once() {
+              tries += 1;
+              return dict
+                .generateThree({
+                  sampleKey: store.sushiSampleKey || "",
+                  sitePurpose: store.sitePurpose || null,
+                  sceneTag: null,
+                  sectionId: secId,
+                  keywordIds: [],
+                  forbidKeywordIds: [],
+                  presetAxes: axes,
+                  salt: saltBase + "|" + secId + "|" + field.key + "|" + index + "|" + tries
+                })
+                .then(function (res) {
+                  const hit = ((res && res.candidates) || []).find(function (c) {
+                    return c && c.text && c.axisId === axisId;
+                  });
+                  if (hit) return hit;
+                  if (tries < 3) return once();
+                  return null;
                 });
-                if (!(res.candidates || []).length) return;
-                return pull();
-              });
-          }
-          return pull().then(function () {
-            fields.forEach(function (field, i) {
-              if (!pool[i]) return;
-              applyCopyTextToField(field.key, pool[i].text);
-              store.copyFieldSource[field.key] = "cand";
+            }
+            return once().then(function (hit) {
+              if (!hit) return;
+              writeField(field, hit.text, axisId);
+              if (!store.copyFrameNow[secId] || index === 0) store.copyFrameNow[secId] = hit.text;
             });
-            if (pool[0]) store.copyFrameNow[secId] = pool[0].text;
           });
         });
+        return fieldChain.then(function () {
+          if (keptIntro) store.copyFrameNow[secId] = keptIntro;
+        });
       });
-      return chain;
     });
+    return chain;
   }
 
   function ensureOmakaseCopyReady() {
@@ -11123,6 +11178,8 @@
         (locked ? " is-locked" : "") +
         '" data-omakase-sec="' +
         secId +
+        '" data-omakase-axis="' +
+        escapeHtml((store.copyOmakaseAxes && store.copyOmakaseAxes[secId]) || "") +
         '">' +
         '<div class="easy-copy-omakase-main">' +
         '<p class="easy-copy-omakase-label">' +
@@ -11133,23 +11190,21 @@
         "</p>" +
         "</div>" +
         '<div class="easy-copy-omakase-row-actions">' +
-        (!locked && (secId !== "hero" || store.copyHeroOnPhoto === true)
+        (secId !== "hero" || store.copyHeroOnPhoto === true
           ? '<button type="button" class="gct-btn easy-copy-omakase-reroll" data-omakase-reroll="' +
             secId +
-            '">もう一度</button>'
+            '"' +
+            (locked ? " disabled" : "") +
+            ">もう一度</button>"
           : "") +
-        '<button type="button" class="layout-lock-mark easy-copy-omakase-lock' +
+        '<button type="button" class="easy-copy-omakase-lock' +
         (locked ? " is-on" : "") +
         '" data-omakase-lock="' +
         secId +
         '" aria-pressed="' +
         (locked ? "true" : "false") +
-        '" aria-label="' +
-        (locked ? "固定中" : "固定していない") +
-        '" data-tip="' +
-        (locked ? "固定をはずせます" : "この枠の文章を残せます") +
         '">' +
-        (locked ? "🔒" : "🔓") +
+        (locked ? "はずす" : "鍵") +
         "</button>" +
         "</div>" +
         "</div>"

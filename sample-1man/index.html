@@ -12,7 +12,7 @@
   <!-- メーカー親CSS（ポートフォリオ根の style.css は読まない） -->
   <link rel="stylesheet" href="maker-base.css?v=cleanup-20260922">
   <link rel="icon" href="brand/mark-favicon.png?v=logo-8" type="image/png">
-  <link rel="stylesheet" href="sample-overrides.css?v=copy-ui-20260928">
+  <link rel="stylesheet" href="sample-overrides.css?v=copy-axis-20260928">
   <link rel="stylesheet" href="free-photo-gallery/gallery.css?v=gallery-ask-20260926">
   <script>
     (function () {
@@ -67,7 +67,7 @@
   <script src="sushi-belt.js?v=sushi-replace-up-20260926" defer></script>
   <script src="free-photo-gallery/gallery.js?v=gallery-ask-20260926" defer></script>
   <script src="page-shutter.js?v=shutter-all-20260924" defer></script>
-  <script src="script.js?v=copy-ui-20260928" defer></script>
+  <script src="script.js?v=copy-axis-20260928" defer></script>
   <script>
     (function () {
       var h = location.hostname;
@@ -590,7 +590,7 @@
         <details class="dash-block dash-block--easy" data-step-id="easy-copy-omakase" data-preview-target="#hero" hidden>
           <summary>おまかせ文章</summary>
           <p class="dash-subhead" role="heading" aria-level="3">おまかせの文章</p>
-          <p class="step-help">気に入った枠は、鍵で残せます。もう一度を押すと、その枠だけ別の文章になります。</p>
+          <p class="step-help">鍵で残せます。もう一度を押すと、その枠だけ別の文章になります。</p>
           <div class="easy-copy-omakase" id="easy-copy-omakase-root">
             <div class="easy-copy-omakase-list" id="easy-copy-omakase-list" aria-live="polite"></div>
           </div>
@@ -602,7 +602,7 @@
             <p class="dash-subhead" id="easy-copy-frame-title" role="heading" aria-level="3">キャッチ</p>
             <div id="easy-copy-hero-ask" hidden></div>
             <div class="easy-copy-frame-actions" id="easy-copy-frame-reroll-wrap">
-              <button type="button" class="gct-btn" id="easy-copy-frame-reroll">おまかせで引き直す</button>
+              <button type="button" class="gct-btn" id="easy-copy-frame-reroll">もう一度</button>
               <p class="easy-copy-frame-hint">気に入る文章が見つかるまで、何度でも引き直せます。自分で入力した欄は、そのまま残ります。</p>
             </div>
             <div class="easy-copy-frame-fields" id="easy-copy-frame-fields"></div>

@@ -583,8 +583,18 @@ body.atelier.entry-gate-open .atelier-shell {
   margin-top: 0.15rem;
 }
 
+#entry-sample-color-row {
+  width: 58%;
+  max-width: 100%;
+  margin-inline: auto;
+}
+
 #entry-sample-color-row .entry-choice {
   align-items: center;
+}
+
+#entry-sample-color-row .entry-color-choice > span:not(.entry-color-bars) {
+  white-space: nowrap;
 }
 
 .entry-color-choice {
@@ -600,7 +610,7 @@ body.atelier.entry-gate-open .atelier-shell {
   display: flex;
   flex-direction: column;
   gap: 3px;
-  width: 2.75rem;
+  width: 5.5rem;
   flex: 0 0 auto;
 }
 

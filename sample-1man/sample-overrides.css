@@ -12987,6 +12987,151 @@ body.wizard-mode .dash-block.is-wizard-active {
   overflow: visible;
   position: relative;
   z-index: 1;
+  margin-bottom: 0.4rem;
+}
+#easy-img-layout-host .layout-closed-head--list {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  width: 100%;
+  min-height: 2.4rem;
+  padding: 0.2rem 0.45rem;
+  box-sizing: border-box;
+}
+#easy-img-layout-host .layout-closed-head--list .layout-count-cluster,
+#easy-img-layout-host .layout-closed-head--list .layout-gap-cluster,
+#easy-img-layout-host .layout-closed-head--list .layout-arrange-vis-label {
+  display: none !important;
+}
+#easy-img-layout-host .layout-frames-tools {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.55rem 0.85rem;
+  margin: 0 0 0.85rem;
+  padding: 0.55rem 0.45rem 0.35rem;
+  box-sizing: border-box;
+}
+#easy-img-layout-host .layout-frames-layout-label {
+  flex: 1 0 100%;
+  margin: 0.15rem 0 0;
+  color: #152028;
+  font-size: 0.9rem;
+  font-weight: 700;
+  line-height: 1.35;
+}
+[data-step-id="easy-img-wire"].is-easy-drill > .dash-subhead-row,
+[data-step-id="easy-img-wire"].is-easy-drill > .dash-note {
+  display: none !important;
+}
+body:has([data-step-id="easy-img-wire"].is-easy-drill) .wizard-foot-dock {
+  display: none !important;
+}
+#easy-img-layout-host.is-section-solo .layout-arrange-cell:not([open]),
+#easy-img-layout-host.is-photo-solo .layout-arrange-cell:not(:has(.layout-photo-row.is-open)) {
+  display: none !important;
+}
+#easy-img-layout-host.is-section-solo .layout-arrange-cell[open] {
+  width: 100%;
+  /* frame top pad: 0.75-0.95rem (match copy cards) */
+  padding: 0.75rem 0.85rem 0.85rem !important;
+  box-sizing: border-box;
+}
+#easy-img-layout-host.is-section-solo .layout-arrange-summary,
+#easy-img-layout-host.is-section-solo .layout-arrange-summary--image {
+  padding: 0 !important;
+  min-height: 0;
+  row-gap: 0;
+}
+#easy-img-layout-host.is-section-solo .layout-closed-head--list {
+  min-height: 0;
+  padding: 0 0 0.25rem;
+  margin: 0;
+  align-items: flex-start;
+}
+#easy-img-layout-host.is-section-solo .layout-closed-head--list .layout-arrange-name {
+  flex: 1 1 auto;
+  text-align: left;
+  line-height: 1.35;
+  padding-top: 0;
+}
+#easy-img-layout-host.is-section-solo .layout-closed-head--list .layout-section-open {
+  min-height: 2.2rem;
+  padding: 0.35rem 0.7rem;
+  font-size: 0.9rem;
+}
+#easy-img-layout-host.is-section-solo .layout-arrange-actions {
+  display: none !important;
+}
+#easy-img-layout-host.is-section-solo .layout-arrange-handle,
+#easy-img-layout-host.is-photo-solo .layout-arrange-handle {
+  display: none !important;
+}
+#easy-img-layout-host.is-photo-solo .layout-frames-tools {
+  display: none !important;
+}
+#easy-img-layout-host.is-section-solo .layout-arrange-body {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+#easy-img-layout-host.is-section-solo .layout-frames-tools {
+  display: flex;
+  flex-flow: row wrap;
+  align-items: center;
+  justify-content: flex-start;
+  width: 100%;
+  max-width: 100%;
+  margin: 0 0 0.45rem;
+  padding: 0;
+  gap: 0.45rem 1rem;
+  box-sizing: border-box;
+}
+#easy-img-layout-host.is-section-solo .layout-frames-tools .layout-count-cluster,
+#easy-img-layout-host.is-section-solo .layout-frames-tools .layout-gap-cluster {
+  display: inline-flex;
+  flex-flow: row nowrap;
+  align-items: center;
+  flex: 0 0 auto;
+  gap: 0.28rem;
+}
+#easy-img-layout-host.is-section-solo .layout-closed-face,
+#easy-img-layout-host.is-section-solo .layout-photo-row {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+#easy-img-layout-host.is-section-solo .layout-photo-row:not(.is-open) > .layout-closed-line {
+  display: flex;
+  flex-flow: row nowrap;
+  align-items: center;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  column-gap: 0.55rem;
+  grid-template-columns: none;
+  box-sizing: border-box;
+}
+#easy-img-layout-host.is-section-solo .layout-photo-row:not(.is-open) > .layout-closed-line > .layout-closed-id {
+  display: inline-flex;
+  flex-flow: row nowrap;
+  align-items: center;
+  flex: 0 0 auto;
+  gap: 0.35rem;
+}
+#easy-img-layout-host.is-section-solo .layout-photo-row:not(.is-open) > .layout-closed-line > .layout-frame-name {
+  flex: 1 1 auto;
+  min-width: 0;
+  width: auto;
+  white-space: nowrap;
+}
+#easy-img-layout-host.is-section-solo .layout-photo-row:not(.is-open) > .layout-closed-line > .layout-open-btn {
+  margin-left: auto;
+  flex: 0 0 auto;
 }
 #easy-img-layout-host .layout-arrange-cell.layout-arrange-cell--structure.size-L:hover {
   z-index: 30;
@@ -13451,7 +13596,8 @@ body.wizard-mode .dash-block.is-wizard-active {
 #easy-img-layout-host.is-photo-solo .layout-arrange-cell:has(.layout-photo-row.is-open) {
   overflow: visible;
   width: 100%;
-  padding: 1.75rem !important;
+  /* ???????: 0.75?0.95rem??????????????? */
+  padding: 0.85rem !important;
   box-sizing: border-box;
 }
 body:has([data-step-id="easy-img-wire"].is-photo-solo) .wizard-foot-dock {
@@ -13492,7 +13638,7 @@ body:has([data-step-id="easy-img-wire"].is-photo-solo) .wizard-foot-dock {
   justify-content: stretch;
   width: 100%;
   margin: 0;
-  padding: 0;
+  padding: 0 0.55rem 0.85rem;
   column-gap: 0;
   row-gap: 0.85rem;
   box-sizing: border-box;
@@ -13506,10 +13652,26 @@ body:has([data-step-id="easy-img-wire"].is-photo-solo) .wizard-foot-dock {
   justify-self: stretch;
   width: 100%;
   max-width: 100%;
-  margin: 0.65rem 0 0.85rem;
-  padding: 0.35rem 0.55rem;
+  margin: 0 0 0.35rem;
+  padding: 0.15rem 0.55rem;
   gap: 0.9rem;
   box-sizing: border-box;
+}
+#easy-img-layout-host .layout-frame-name {
+  flex: 1 1 auto;
+  min-width: 0;
+  margin: 0 0.35rem;
+  color: #152028;
+  font-size: 0.95rem;
+  font-weight: 700;
+  line-height: 1.3;
+}
+#easy-img-layout-host .layout-photo-row:not(.is-open) {
+  margin: 0 0 0.35rem;
+}
+#easy-img-layout-host .layout-photo-row:not(.is-open) > .layout-closed-line {
+  min-height: 2.55rem;
+  padding: 0.25rem 0.55rem;
 }
 #easy-img-layout-host.is-photo-solo .layout-img-source,
 #easy-img-layout-host.is-photo-solo .layout-photo-omakase {

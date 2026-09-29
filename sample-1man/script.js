@@ -17126,7 +17126,8 @@
     head.appendChild(gapCluster);
   }
 
-  let easyImgPhotoHistory = false;
+  let easyImgHistoryDepth = 0;
+  let easyImgMutePop = false;
 
   function easyImgPhotoHostRow(row) {
     return !!(row && row.closest && row.closest("#easy-img-layout-host"));
@@ -17142,12 +17143,29 @@
     return easyImgPhotoHostRow(row) ? "これでOK" : "OK";
   }
 
-  function syncEasyImgPhotoSolo() {
+  function syncEasyImgLevels() {
     const host = document.getElementById("easy-img-layout-host");
     const block = document.querySelector('[data-step-id="easy-img-wire"]');
-    const open = !!(host && host.querySelector(".layout-photo-row.is-open"));
-    if (host) host.classList.toggle("is-photo-solo", open);
-    if (block) block.classList.toggle("is-photo-solo", open);
+    if (!host) return;
+    const photoOpen = !!host.querySelector(".layout-photo-row.is-open");
+    const sectionOpen = !!host.querySelector("details.layout-arrange-cell[open]");
+    host.classList.toggle("is-photo-solo", photoOpen);
+    host.classList.toggle("is-section-solo", sectionOpen && !photoOpen);
+    host.classList.toggle("is-easy-drill", sectionOpen || photoOpen);
+    if (block) {
+      block.classList.toggle("is-photo-solo", photoOpen);
+      block.classList.toggle("is-section-solo", sectionOpen && !photoOpen);
+      block.classList.toggle("is-easy-drill", sectionOpen || photoOpen);
+    }
+  }
+
+  function syncEasyImgPhotoSolo() {
+    syncEasyImgLevels();
+  }
+
+  function closeEasyImgSection(cell) {
+    if (!cell) return;
+    cell.open = false;
   }
 
   function closeEasyImgSoloPhoto() {
@@ -17155,7 +17173,7 @@
     if (!host) return;
     const row = host.querySelector(".layout-photo-row.is-open");
     if (!row) {
-      syncEasyImgPhotoSolo();
+      syncEasyImgLevels();
       return;
     }
     const photoKey = row.getAttribute("data-layout-photo") || "";
@@ -17167,23 +17185,66 @@
     if (!store.layoutInnerByBlock) store.layoutInnerByBlock = {};
     if (openKey) store.layoutInnerByBlock[openKey] = "";
     applyLayoutPhotoRowOpen(row, blockId, slot, false);
+    if (blockId === "hero") {
+      const cell = row.closest("details.layout-arrange-cell");
+      if (cell) {
+        closeEasyImgSection(cell);
+        const secBtn = cell.querySelector(".layout-section-open");
+        if (secBtn) {
+          secBtn.textContent = "開く";
+          secBtn.classList.remove("is-ok");
+          secBtn.setAttribute("aria-expanded", "false");
+        }
+        if (store.layoutAccordionId === "hero") store.layoutAccordionId = "";
+        const body = cell.querySelector(".layout-arrange-body");
+        if (body) body.innerHTML = "";
+      }
+    }
+    syncEasyImgLevels();
   }
 
   function bindEasyImgPhotoPop() {
     if (bindEasyImgPhotoPop.done) return;
     bindEasyImgPhotoPop.done = true;
     window.addEventListener("popstate", () => {
-      if (!easyImgPhotoHistory) return;
-      easyImgPhotoHistory = false;
-      closeEasyImgSoloPhoto();
+      if (easyImgMutePop) {
+        easyImgMutePop = false;
+        return;
+      }
+      if (easyImgHistoryDepth <= 0) return;
+      easyImgHistoryDepth -= 1;
+      const host = document.getElementById("easy-img-layout-host");
+      if (!host) return;
+      const openRow = host.querySelector(".layout-photo-row.is-open");
+      if (openRow) {
+        closeEasyImgSoloPhoto();
+        return;
+      }
+      const openCell = host.querySelector("details.layout-arrange-cell[open]");
+      if (openCell) closeEasyImgSection(openCell);
+      syncEasyImgLevels();
     });
   }
 
-  function rememberEasyImgPhotoOpen() {
+  function rememberEasyImgLevel() {
     bindEasyImgPhotoPop();
-    if (easyImgPhotoHistory) return;
-    history.pushState({ easyImgPhoto: 1 }, "", location.href);
-    easyImgPhotoHistory = true;
+    history.pushState({ easyImgLevel: 1 }, "", location.href);
+    easyImgHistoryDepth += 1;
+  }
+
+  function rememberEasyImgPhotoOpen() {
+    rememberEasyImgLevel();
+  }
+
+  function popEasyImgHistoryQuiet() {
+    if (easyImgHistoryDepth <= 0) return;
+    easyImgHistoryDepth -= 1;
+    easyImgMutePop = true;
+    try {
+      history.back();
+    } catch (err) {
+      easyImgMutePop = false;
+    }
   }
 
   function applyLayoutPhotoRowOpen(row, blockId, slot, open) {
@@ -17199,16 +17260,17 @@
     editor.innerHTML = "";
     if (open) {
       appendLayoutPhotoEditor(editor, blockId, slot);
+      const inEasy = easyImgPhotoHostRow(row);
       const step = editor.querySelector(".layout-source-step");
-      if (easyImgPhotoHostRow(row) && step) step.appendChild(btn);
+      if (inEasy && step) step.appendChild(btn);
       else row.appendChild(btn);
       const map = editor.querySelector(".layout-source-map");
       if (map) alignOpenSourceMapToPad(map);
-      syncEasyImgPhotoSolo();
+      syncEasyImgLevels();
       return;
     }
     line.appendChild(btn);
-    syncEasyImgPhotoSolo();
+    syncEasyImgLevels();
   }
 
   function buildLayoutClosedFace(blockId) {
@@ -17239,7 +17301,7 @@
       }
       const cluster = document.createElement("span");
       cluster.className = "layout-closed-id";
-      if (countId) {
+      if (countId && !(isEasyImgSharedMount() && order.length < 2)) {
         const handle = document.createElement("span");
         handle.className = "layout-inner-handle";
         handle.textContent = "⋮⋮";
@@ -17262,13 +17324,17 @@
       });
       if (!isEasyImgSharedMount()) cluster.appendChild(lockBtn);
       cluster.appendChild(thumb);
+      const frameLabel = document.createElement("span");
+      frameLabel.className = "layout-frame-name";
+      frameLabel.textContent = layoutFrameLabel(blockId, slot);
       line.appendChild(cluster);
+      line.appendChild(frameLabel);
       if (blockId === "hero") {
         const blank = document.createElement("span");
         blank.className = "layout-page-blank";
         blank.setAttribute("aria-hidden", "true");
         line.appendChild(blank);
-      } else {
+      } else if (!isEasyImgSharedMount()) {
         const sz = layout && layout.sizeById ? layout.sizeById[slot] : "L";
         const word = document.createElement("button");
         word.type = "button";
@@ -17291,20 +17357,19 @@
       const openBtn = document.createElement("button");
       openBtn.type = "button";
       openBtn.className = "layout-open-btn" + (openNow ? " is-ok" : "");
-      openBtn.textContent = openNow ? "OK" : "開く";
+      openBtn.textContent = openNow ? (isEasyImgSharedMount() ? "これでOK" : "OK") : "開く";
       openBtn.setAttribute("aria-expanded", openNow ? "true" : "false");
       openBtn.addEventListener("click", (ev) => {
         stopSummaryToggle(ev);
         if (!store.layoutInnerByBlock) store.layoutInnerByBlock = {};
         const inEasy = easyImgPhotoHostRow(row);
         if (row.classList.contains("is-open")) {
-          store.layoutInnerByBlock[openKey] = "";
-          applyLayoutPhotoRowOpen(row, blockId, slot, false);
-          if (inEasy && easyImgPhotoHistory) {
-            easyImgPhotoHistory = false;
-            try {
-              history.back();
-            } catch (err) { /* 履歴が無くても閉じたまま */ }
+          if (inEasy) {
+            closeEasyImgSoloPhoto();
+            popEasyImgHistoryQuiet();
+          } else {
+            store.layoutInnerByBlock[openKey] = "";
+            applyLayoutPhotoRowOpen(row, blockId, slot, false);
           }
           return;
         }
@@ -17316,6 +17381,19 @@
             const otherSlot = photoKey.slice(photoKey.indexOf(":") + 1);
             applyLayoutPhotoRowOpen(other, blockId, otherSlot, false);
           });
+        }
+        if (inEasy) {
+          const host = row.closest("#easy-img-layout-host");
+          if (host) {
+            host.querySelectorAll(".layout-photo-row.is-open").forEach((other) => {
+              if (other === row) return;
+              const photoKey = other.getAttribute("data-layout-photo") || "";
+              const sep = photoKey.indexOf(":");
+              const otherBlock = sep >= 0 ? photoKey.slice(0, sep) : "";
+              const otherSlot = sep >= 0 ? photoKey.slice(sep + 1) : "";
+              applyLayoutPhotoRowOpen(other, otherBlock, otherSlot, false);
+            });
+          }
         }
         setOnlyLayoutFrameOpen(openKey, slot);
         applyLayoutPhotoRowOpen(row, blockId, slot, true);
@@ -17341,8 +17419,11 @@
       editor.className = "layout-photo-editor";
       if (openNow) appendLayoutPhotoEditor(editor, blockId, slot);
       row.appendChild(editor);
-      if (openNow) row.appendChild(openBtn);
-      else line.appendChild(openBtn);
+      if (openNow) {
+        const step = editor.querySelector(".layout-source-step");
+        if (isEasyImgSharedMount() && step) step.appendChild(openBtn);
+        else row.appendChild(openBtn);
+      } else line.appendChild(openBtn);
       if (countId) bindLayoutInnerDrag(row, countId, slot);
       face.appendChild(row);
     });
@@ -17693,13 +17774,19 @@
 
   function renderLayoutImageInner(body, blockId) {
     body.innerHTML = "";
+    if (isEasyImgSharedMount() && blockId !== "hero") {
+      const tools = document.createElement("div");
+      tools.className = "layout-frames-tools";
+      appendLayoutHeadCountGap(tools, blockId);
+      body.appendChild(tools);
+    }
     body.appendChild(buildLayoutClosedFace(blockId));
     body.querySelectorAll(".layout-photo-row").forEach((row) => {
       const btn = row.querySelector(".layout-open-btn");
       if (btn) btn.textContent = layoutPhotoOpenWord(row, row.classList.contains("is-open"));
     });
     body.querySelectorAll(".layout-closed-thumb").forEach(paintLayoutMirror);
-    syncEasyImgPhotoSolo();
+    syncEasyImgLevels();
   }
 
   function renderLayoutArrangeWire() {
@@ -17801,20 +17888,44 @@
           let head = null;
           if (imageBlock) {
             head = document.createElement("div");
-            head.className = "layout-closed-head";
-            head.appendChild(visLabel);
+            head.className = "layout-closed-head" + (imageOnly ? " layout-closed-head--list" : "");
+            if (!imageOnly) head.appendChild(visLabel);
             head.appendChild(handle);
             head.appendChild(name);
-            appendLayoutHeadCountGap(head, id);
+            if (!imageOnly) appendLayoutHeadCountGap(head, id);
             const secOpen = document.createElement("button");
             secOpen.type = "button";
             secOpen.className = "layout-open-btn layout-section-open" + (id === openId ? " is-ok" : "");
-            secOpen.textContent = id === openId ? "OK" : "開く";
+            secOpen.textContent = id === openId ? (imageOnly ? "これでOK" : "OK") : "開く";
             secOpen.setAttribute("aria-expanded", id === openId ? "true" : "false");
             secOpen.addEventListener("click", (ev) => {
               ev.preventDefault();
               ev.stopPropagation();
-              cell.open = !cell.open;
+              if (imageOnly && cell.open) {
+                const openRow = cell.querySelector(".layout-photo-row.is-open");
+                if (openRow) return;
+                cell.open = false;
+                secOpen.textContent = "開く";
+                secOpen.classList.remove("is-ok");
+                secOpen.setAttribute("aria-expanded", "false");
+                if (isLayoutImageBlock(id)) {
+                  const countId = layoutImageCountId(id);
+                  const openKey = countId || id;
+                  if (!store.layoutInnerByBlock) store.layoutInnerByBlock = {};
+                  store.layoutInnerByBlock[openKey] = "";
+                  body.innerHTML = "";
+                }
+                if (store.layoutAccordionId === id) store.layoutAccordionId = "";
+                syncEasyImgLevels();
+                popEasyImgHistoryQuiet();
+                return;
+              }
+              const willOpen = !cell.open;
+              cell.open = willOpen;
+              if (willOpen) {
+                syncLayoutAccordionOnce();
+                if (imageOnly) rememberEasyImgLevel();
+              }
             });
             head.appendChild(secOpen);
             summary.appendChild(head);
@@ -17829,7 +17940,8 @@
           const syncLayoutAccordion = () => {
             const secBtn = summary.querySelector(".layout-section-open");
             if (secBtn) {
-              secBtn.textContent = cell.open ? "OK" : "開く";
+              const openWord = imageOnly ? "これでOK" : "OK";
+              secBtn.textContent = cell.open ? openWord : "開く";
               secBtn.classList.toggle("is-ok", !!cell.open);
               secBtn.setAttribute("aria-expanded", cell.open ? "true" : "false");
             }
@@ -17843,6 +17955,7 @@
                 body.innerHTML = "";
               }
               if (body.querySelector("[data-layout-input-home]")) restoreLayoutSectionInputs();
+              syncEasyImgLevels();
               return;
             }
             store.layoutAccordionId = id;
@@ -17852,6 +17965,27 @@
             restoreLayoutSectionInputs();
             if (isLayoutImageBlock(id)) renderLayoutImageInner(body, id);
             else if (LAYOUT_SECTION_INPUTS[id]) mountLayoutSectionInputs(body, id);
+            if (imageOnly && isLayoutImageBlock(id)) {
+              if (id === "hero") {
+                const row = body.querySelector(".layout-photo-row");
+                const slot =
+                  (row && (row.getAttribute("data-item-id") || "").trim()) ||
+                  (layoutBlockSlots("hero")[0] || "hero");
+                if (row) {
+                  setOnlyLayoutFrameOpen("hero", slot);
+                  applyLayoutPhotoRowOpen(row, "hero", slot, true);
+                  focusPreviewLayoutFrame("hero", slot);
+                  const scroller = document.querySelector(".dash-body > .fill-form");
+                  if (scroller) scroller.scrollTop = 0;
+                }
+              } else {
+                scrollPreviewFrameIntoView(layoutSectionPreviewSelector(id));
+                const scroller = document.querySelector(".dash-body > .fill-form");
+                if (scroller) scroller.scrollTop = 0;
+              }
+              syncEasyImgLevels();
+              return;
+            }
             if (!isLayoutImageBlock(id)) {
               const sel = cell.getAttribute("data-preview-target") || meta.selector;
               scrollPreviewTo(sel);
@@ -17870,6 +18004,7 @@
                 cell.querySelectorAll(".layout-photo-row.is-open .layout-source-map").forEach(alignOpenSourceMapToPad);
               });
             }
+            syncEasyImgLevels();
           };
           let layoutAccordionSyncedAt = 0;
           const syncLayoutAccordionOnce = () => {
@@ -17889,7 +18024,7 @@
             if (imageBlock) {
               if (cell.open) {
                 ev.preventDefault();
-                if (cell.closest("#easy-img-layout-host.is-photo-solo")) return;
+                if (imageOnly || cell.closest("#easy-img-layout-host.is-photo-solo")) return;
                 cell.open = false;
               }
               return;
@@ -17912,11 +18047,21 @@
           openCell.open = true;
           const body = openCell.querySelector(".layout-arrange-body");
           const bid = openCell.getAttribute("data-layout-block");
-          if (body && isLayoutImageBlock(bid)) renderLayoutImageInner(body, bid);
-          else if (body && LAYOUT_SECTION_INPUTS[bid]) mountLayoutSectionInputs(body, bid);
+          if (body && isLayoutImageBlock(bid)) {
+            renderLayoutImageInner(body, bid);
+            if (imageOnly && bid === "hero") {
+              const row = body.querySelector(".layout-photo-row");
+              const slot = layoutBlockSlots("hero")[0] || "hero";
+              if (row) {
+                setOnlyLayoutFrameOpen("hero", slot);
+                applyLayoutPhotoRowOpen(row, "hero", slot, true);
+              }
+            }
+          } else if (body && LAYOUT_SECTION_INPUTS[bid]) mountLayoutSectionInputs(body, bid);
         }
       });
       store._layoutAccordionRendering = false;
+      syncEasyImgLevels();
     }
     renderLayoutCardWires();
     syncLayoutMirrors();

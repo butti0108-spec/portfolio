@@ -396,6 +396,146 @@
   cursor: not-allowed;
 }
 
+.fpg-sample-omakase {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(9.5rem, 0.4fr);
+  gap: 0.85rem 1.1rem;
+  align-items: start;
+  margin: 0 0 1.25rem;
+  padding: 1rem 1.05rem 1.15rem;
+  border: 1px solid var(--fpg-line, #d8dde3);
+  border-radius: 0.55rem;
+  background: #f7f8fa;
+  box-sizing: border-box;
+}
+
+.fpg-sample-omakase[hidden] {
+  display: none !important;
+}
+
+.fpg-sample-omakase-lead {
+  grid-column: 1 / -1;
+}
+
+.fpg-sample-omakase-title {
+  margin: 0;
+  color: #1f2429;
+  font-size: 1rem;
+  font-weight: 700;
+  line-height: 1.4;
+}
+
+.fpg-sample-omakase-note {
+  margin: 0.4rem 0 0;
+  color: #4a5560;
+  font-size: 0.9rem;
+  line-height: 1.45;
+}
+
+.fpg-sample-genres {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-column: 1;
+  grid-row: 2;
+  gap: 0.7rem;
+  margin: 0;
+  min-width: 0;
+}
+
+.fpg-sample-genre {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  min-width: 0;
+  min-height: 2.7rem;
+  padding: 0.45rem 0.35rem;
+  border: 1px solid #7d8792;
+  border-radius: 0.55rem;
+  background: #fff;
+  color: #1f2429;
+  font: inherit;
+  font-size: 0.95rem;
+  font-weight: 600;
+  line-height: 1.2;
+  cursor: pointer;
+  box-sizing: border-box;
+}
+
+.fpg-sample-genre.is-on {
+  border-color: #256047;
+  background: #eef6f0;
+}
+
+.fpg-sample-genre:disabled {
+  opacity: 0.55;
+  cursor: wait;
+}
+
+.fpg-sample-omakase-ok {
+  grid-column: 1;
+  grid-row: 3;
+  width: 100%;
+  min-width: 0;
+  min-height: 2.85rem;
+  margin: 0;
+  padding: 0.55rem 0.7rem;
+  border: 0;
+  border-radius: 0.55rem;
+  background: #399d26;
+  color: #fff;
+  font: inherit;
+  font-size: 0.95rem;
+  font-weight: 700;
+  line-height: 1.25;
+  cursor: pointer;
+  box-sizing: border-box;
+}
+
+.fpg-sample-omakase-ok:disabled {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+
+.fpg-sample-omakase-pick {
+  grid-column: 2;
+  grid-row: 2 / 4;
+  margin: 0;
+  min-width: 0;
+  min-height: 8.5rem;
+  aspect-ratio: 4 / 3;
+  border-radius: 0.5rem;
+  overflow: hidden;
+  background: #e4e7eb;
+  box-sizing: border-box;
+}
+
+.fpg-sample-omakase-pick img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.fpg-sample-omakase-pick img[hidden] {
+  display: none;
+}
+
+@media (max-width: 40rem) {
+  .fpg-sample-omakase {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .fpg-sample-omakase-pick {
+    grid-column: 1;
+    grid-row: 3;
+    min-height: 10rem;
+  }
+  .fpg-sample-omakase-ok {
+    grid-column: 1;
+    grid-row: 4;
+  }
+}
+
 @media (min-width: 48rem) {
   .fpg-modal {
     padding: 1.5rem;

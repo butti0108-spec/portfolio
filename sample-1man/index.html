@@ -12,8 +12,8 @@
   <!-- メーカー親CSS（ポートフォリオ根の style.css は読まない） -->
   <link rel="stylesheet" href="maker-base.css?v=cleanup-20260922">
   <link rel="icon" href="brand/mark-favicon.png?v=logo-8" type="image/png">
-  <link rel="stylesheet" href="sample-overrides.css?v=copy-keep2-20260928">
-  <link rel="stylesheet" href="free-photo-gallery/gallery.css?v=gallery-ask-20260926">
+  <link rel="stylesheet" href="sample-overrides.css?v=size-choice-no-green-20260929">
+  <link rel="stylesheet" href="free-photo-gallery/gallery.css?v=omakase-ok-20260929">
   <script>
     (function () {
       var h = location.hostname;
@@ -48,9 +48,7 @@
         var data = JSON.parse(raw);
         if (!data || !data.easyFlowActive || data.entryBranch !== "sample") return;
         if (data.uiMode && data.uiMode !== "guided") return;
-        var ids = ["easy-basics", "easy-copy-dirs", "easy-color"];
-        if (data.imgPathMode === "self") ids.push("easy-img-path", "easy-img-wire");
-        else ids.push("easy-img-path");
+        var ids = ["easy-basics", "easy-copy-dirs", "easy-color", "easy-img-wire"];
         if (data.copyPathMode === "omakase") ids.push("easy-copy-path", "easy-copy-omakase");
         else if (data.copyPathMode === "keyword") ids.push("easy-copy-path", "easy-copy-frame");
         else ids.push("easy-copy-path");
@@ -66,8 +64,8 @@
   <script src="copy-dict-engine.js?v=copy-ui-b-20260924" defer></script>
   <script src="sushi-belt.js?v=sushi-replace-up-20260926" defer></script>
   <script src="free-photo-gallery/gallery.js?v=gallery-ask-20260926" defer></script>
-  <script src="page-shutter.js?v=shutter-all-20260924" defer></script>
-  <script src="script.js?v=copy-keep2-20260928" defer></script>
+  <script src="page-shutter.js?v=sample-only-20260929" defer></script>
+  <script src="script.js?v=size-choice-no-green-20260929" defer></script>
   <script>
     (function () {
       var h = location.hostname;
@@ -568,7 +566,7 @@
           </div>
           <div class="entry-mood-row" id="entry-sample-color-row" role="radiogroup" aria-label="配色">
             <label class="entry-choice"><input type="radio" name="entry_sample_color" value="keep"><span>このままでよい</span></label>
-            <label class="entry-choice"><input type="radio" name="entry_sample_color" value="clinic"><span class="entry-color-choice"><span>紺・きれいめ</span><span class="entry-color-bars" aria-hidden="true"><i></i><i></i><i></i></span></span></label>
+            <label class="entry-choice"><input type="radio" name="entry_sample_color" value="clinic"><span class="entry-color-choice"><span>紺</span><span class="entry-color-bars" aria-hidden="true"><i></i><i></i><i></i></span></span></label>
             <label class="entry-choice"><input type="radio" name="entry_sample_color" value="green"><span class="entry-color-choice"><span>緑</span><span class="entry-color-bars" aria-hidden="true"><i></i><i></i><i></i></span></span></label>
             <label class="entry-choice"><input type="radio" name="entry_sample_color" value="cafe"><span class="entry-color-choice"><span>ベージュ</span><span class="entry-color-bars" aria-hidden="true"><i></i><i></i><i></i></span></span></label>
             <label class="entry-choice"><input type="radio" name="entry_sample_color" value="ink"><span class="entry-color-choice"><span>墨</span><span class="entry-color-bars" aria-hidden="true"><i></i><i></i><i></i></span></span></label>
@@ -592,15 +590,15 @@
         </details>
 
         <details class="dash-block dash-block--easy" data-step-id="easy-copy-omakase" data-preview-target="#hero" hidden>
-          <summary>おまかせ文章</summary>
-          <p class="dash-subhead" role="heading" aria-level="3">おまかせの文章</p>
-          <p class="step-help">左の見本に載っています。「残す」を押した枠は、もう一度選んでも変わりません。残していない枠だけやり直せます。</p>
-          <div class="easy-copy-omakase" id="easy-copy-omakase-root">
-            <div class="easy-copy-omakase-list" id="easy-copy-omakase-list" aria-live="polite"></div>
-            <div class="easy-copy-omakase-actions">
-              <button type="button" class="gct-btn" id="easy-copy-omakase-reroll">残していない枠をもう一度</button>
-            </div>
+          <summary>文章</summary>
+          <div class="dash-subhead-row">
+            <p class="dash-subhead" role="heading" aria-level="3">文章</p>
+            <span class="hub-tip-wrap">
+              <button type="button" class="hub-tip-btn" data-hub-tip aria-expanded="false" aria-label="文章とは">?</button>
+              <span class="hub-tip-pop" hidden>段を開いて、その文だけ候補を見比べられます。順番は点で変えられます。</span>
+            </span>
           </div>
+          <div id="easy-copy-list-host" class="easy-copy-list-host" aria-live="polite"></div>
         </details>
 
         <details class="dash-block dash-block--easy" data-step-id="easy-copy-frame" data-preview-target="#hero" hidden>

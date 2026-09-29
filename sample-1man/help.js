@@ -86,17 +86,9 @@
 
   applyHash();
   function openForward(id) {
-    function go() {
-      history.pushState(null, "", "#" + id);
-      showTopic(id);
-    }
     if (!id) return;
-    if (window.PageShutter && window.PageShutter.isBusy()) return;
-    if (!window.PageShutter) {
-      go();
-      return;
-    }
-    window.PageShutter.play(go);
+    history.pushState(null, "", "#" + id);
+    showTopic(id);
   }
 
   document.querySelectorAll(".help-toc-card").forEach((card) => {

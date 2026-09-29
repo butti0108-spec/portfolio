@@ -335,7 +335,7 @@
     { id: "easy-color-stage", label: "色調整", needsConfirm: true, num: 0 },
     { id: "easy-copy-path", label: "文章の決め方", needsConfirm: true, num: 0 },
     { id: "easy-copy-dirs", label: "どの言葉を使いますか", needsConfirm: true, num: 0 },
-    { id: "easy-copy-omakase", label: "おまかせ文章", needsConfirm: true, num: 0 },
+    { id: "easy-copy-omakase", label: "文章", needsConfirm: true, num: 0 },
     { id: "easy-copy-frame", label: "枠の文章", needsConfirm: true, num: 0 },
     { id: "easy-sec-hero", label: "キャッチ文", needsConfirm: true, num: 0 },
     { id: "easy-sec-about", label: "紹介文", needsConfirm: true, num: 0 },
@@ -714,7 +714,7 @@
   const INTRO_STEP_IDS = new Set(["purpose", "layout", "guide"]);
   const EASY_PRESET_KEYS = ["clinic", "green", "cafe", "ink", "brick", "sakura"];
   const EASY_PRESET_LABELS = {
-    clinic: "紺・きれいめ",
+    clinic: "紺",
     green: "緑",
     cafe: "ベージュ",
     ink: "墨",
@@ -722,7 +722,7 @@
     sakura: "ピンク"
   };
   const DETAIL_PRESET_LABELS = {
-    clinic: "紺・きれいめ",
+    clinic: "紺",
     green: "緑",
     cafe: "ベージュ",
     ink: "墨",
@@ -5917,7 +5917,7 @@
   }
 
   function getEasyImageFlowMid() {
-    return ["easy-img-path", "easy-img-wire"];
+    return ["easy-img-wire"];
   }
 
   function getEasyCopyFlowTail() {
@@ -5925,8 +5925,7 @@
     if (store.copyPathMode === "omakase") {
       tail = ["easy-copy-path", "easy-copy-omakase"];
     } else if (store.copyPathMode === "keyword") {
-      tail = ["easy-copy-path", "easy-copy-dirs"];
-      if (activeCopyFrameOrder().length) tail.push("easy-copy-frame");
+      tail = ["easy-copy-path", "easy-copy-dirs", "easy-copy-omakase"];
     } else {
       tail = ["easy-copy-path"];
     }
@@ -7509,9 +7508,6 @@
       return "";
     }
     if (stepId === "easy-copy-omakase") {
-      if (store.copyHeroOnPhoto == null) {
-        return "写真の上に言葉を出すか、出さないか、選んでから進んでください。";
-      }
       return "";
     }
     if (stepId === "easy-copy-frame") {
@@ -8150,9 +8146,7 @@
       syncLayoutColorRows();
     }
     if (step.id === "easy-copy-omakase") {
-      ensureOmakaseCopyReady().then(function () {
-        renderCopyOmakaseUi();
-      });
+      renderCopyListUi();
     }
     if (step.id === "easy-copy-frame") {
       if (store.copyFrameIndex == null) store.copyFrameIndex = 0;
@@ -8202,6 +8196,7 @@
       d.classList.toggle("is-wizard-active", active);
       d.classList.toggle("is-active-step", active);
     });
+    if (step.id === "easy-img-wire") mountSharedImageUi(true);
 
     updateWizardUi();
     applyLiveColors(false);
@@ -8807,7 +8802,7 @@
             store.pendingSushi = payload;
             store.sushiSampleId = payload.sample && payload.sample.id;
             store.sushiSampleKey = payload.sample && payload.sample.key;
-            runWithCrossShutter(function () { setEntryGateStep("purpose"); });
+            playSampleColorShutter(function () { setEntryGateStep("purpose"); });
           }
         });
       }
@@ -9173,6 +9168,14 @@
     }
     syncEasyImageStatuses();
     if (document.getElementById("layout-arrange-wire")) refreshLayoutPhotoFace(inputName);
+    const modalOpen = (function () {
+      const modal = document.getElementById("fpg-modal");
+      return !!(modal && !modal.hidden);
+    })();
+    if (modalOpen || isEasyImgSharedMount()) {
+      scheduleSave();
+      return;
+    }
     const cur = getCurrentFlowStep();
     if (cur && cur.id === "easy-img-wire") {
       const slots = collectVisibleImageSlots();
@@ -9201,16 +9204,191 @@
     el.style.objectPosition = "center top";
   }
 
-  function openFreePhotoGalleryModal(inputName) {
+  const SAMPLE_GALLERY_GENRES = [
+    { key: "outdoor", label: "屋外", tags: ["scenery", "nature", "tatemono"] },
+    { key: "shop", label: "店内", tags: ["indoor", "hotel", "cowork"] },
+    { key: "food", label: "飲食", tags: ["food", "drink", "sweets", "cafe", "bakery", "bar", "izakaya", "ramen"] },
+    { key: "people", label: "人物", tags: ["person", "hand"] },
+    { key: "work", label: "仕事", tags: ["salon", "yoga", "studio", "clinic"] },
+    { key: "nature", label: "自然", tags: ["florist", "animal", "nature"] }
+  ];
+
+  function sampleGenreByKey(genreKey) {
+    for (let i = 0; i < SAMPLE_GALLERY_GENRES.length; i += 1) {
+      if (SAMPLE_GALLERY_GENRES[i].key === genreKey) return SAMPLE_GALLERY_GENRES[i];
+    }
+    return null;
+  }
+
+  function galleryPickUrl(item, inputName) {
+    if (!item || !item.path) return "";
+    const isWorkSlot = /^work_\d+_image$/.test(inputName);
+    const relPath =
+      isWorkSlot && item.trimCardPath
+        ? String(item.trimCardPath).replace(/^\/+/, "")
+        : String(item.path).replace(/^\/+/, "");
+    return "free-photo-gallery/" + relPath;
+  }
+
+  function paintSampleOmakasePick(strip, item, inputName) {
+    const fig = strip && strip.querySelector("[data-fpg-sample-pick]");
+    const img = fig && fig.querySelector("img");
+    const ok = strip && strip.querySelector("[data-fpg-sample-ok]");
+    if (!fig || !img) return;
+    const url = galleryPickUrl(item, inputName);
+    if (!url) {
+      img.removeAttribute("src");
+      img.hidden = true;
+      if (ok) ok.disabled = true;
+      return;
+    }
+    img.hidden = false;
+    img.src = url;
+    if (ok) ok.disabled = false;
+  }
+
+  function ensureSampleGalleryOmakase(modal, inputName) {
+    const body = modal.querySelector(".fpg-modal-body");
+    if (!body) return;
+    let strip = modal.querySelector("[data-fpg-sample-omakase]");
+    if (strip && !strip.querySelector("[data-fpg-sample-ok]")) {
+      strip.remove();
+      strip = null;
+    }
+    if (!strip) {
+      strip = document.createElement("div");
+      strip.className = "fpg-sample-omakase";
+      strip.setAttribute("data-fpg-sample-omakase", "");
+      strip.innerHTML =
+        '<div class="fpg-sample-omakase-lead">' +
+        '<p class="fpg-sample-omakase-title">おまかせ</p>' +
+        '<p class="fpg-sample-omakase-note">ジャンルを選ぶと、参考の写真が1枚入ります。</p>' +
+        "</div>" +
+        '<div class="fpg-sample-genres" data-fpg-sample-genres role="group" aria-label="おまかせ"></div>' +
+        '<button type="button" class="fpg-sample-omakase-ok" data-fpg-sample-ok disabled>この画像にしますか</button>' +
+        '<figure class="fpg-sample-omakase-pick" data-fpg-sample-pick><img alt="" hidden></figure>';
+      const mount = body.querySelector("[data-fpg-mount]");
+      if (mount) body.insertBefore(strip, mount);
+      else body.appendChild(strip);
+      const genresHost = strip.querySelector("[data-fpg-sample-genres]");
+      SAMPLE_GALLERY_GENRES.forEach(function (g) {
+        const btn = document.createElement("button");
+        btn.type = "button";
+        btn.className = "fpg-sample-genre";
+        btn.setAttribute("data-fpg-sample-genre", g.key);
+        btn.textContent = g.label;
+        genresHost.appendChild(btn);
+      });
+      strip.addEventListener("click", function (ev) {
+        const okBtn = ev.target.closest("[data-fpg-sample-ok]");
+        if (okBtn && strip.contains(okBtn)) {
+          if (okBtn.disabled) return;
+          closeFreePhotoGalleryModal();
+          return;
+        }
+        const btn = ev.target.closest("[data-fpg-sample-genre]");
+        if (!btn || !strip.contains(btn)) return;
+        const genre = btn.getAttribute("data-fpg-sample-genre");
+        const slot = modal.getAttribute("data-fpg-slot");
+        if (!genre || !slot) return;
+        pickSampleGenrePhoto(slot, genre, btn, strip);
+      });
+    }
+    strip.hidden = false;
+    modal.setAttribute("data-fpg-slot", inputName);
+    const prevId =
+      store.galleryPicks && store.galleryPicks[inputName] ? store.galleryPicks[inputName].id : "";
+    if (prevId) {
+      loadPhotoCatalog().then(function (catalog) {
+        const items = (catalog && catalog.items) || [];
+        const found = items.filter(function (it) {
+          return it && it.id === prevId;
+        })[0];
+        if (found) paintSampleOmakasePick(strip, found, inputName);
+      });
+    } else {
+      paintSampleOmakasePick(strip, null, inputName);
+    }
+  }
+
+  function hideSampleGalleryOmakase(modal) {
+    const strip = modal && modal.querySelector("[data-fpg-sample-omakase]");
+    if (strip) strip.hidden = true;
+  }
+
+  function pickSampleGenrePhoto(inputName, genreKey, button, strip) {
+    if (!inputName || !genreKey) return;
+    const genre = sampleGenreByKey(genreKey);
+    const tags = genre && genre.tags ? genre.tags : [];
+    if (!tags.length) return;
+    if (button) button.disabled = true;
+    loadPhotoCatalog()
+      .then(function (catalog) {
+        const items = (catalog && catalog.items) || [];
+        const tagged = items.filter(function (it) {
+          if (!it || !Array.isArray(it.tags)) return false;
+          for (let i = 0; i < tags.length; i += 1) {
+            if (it.tags.indexOf(tags[i]) >= 0) return true;
+          }
+          return false;
+        });
+        if (!store.sampleGenreLastId || typeof store.sampleGenreLastId !== "object") {
+          store.sampleGenreLastId = {};
+        }
+        const memKey = inputName + "|" + genreKey;
+        const lastId = store.sampleGenreLastId[memKey] || "";
+        const prefer = /^work_\d+_image$/.test(inputName);
+        let pool = tagged.filter(function (it) {
+          return it && it.id !== lastId;
+        });
+        if (!pool.length) pool = tagged.slice();
+        if (prefer) {
+          const withTrim = pool.filter(function (it) {
+            return it && it.trimCardPath;
+          });
+          if (withTrim.length) pool = withTrim;
+        }
+        if (!pool.length) {
+          window.alert("このジャンルの写真は、いま見つかりませんでした。");
+          return;
+        }
+        const item = pool[Math.floor(Math.random() * pool.length)];
+        store.sampleGenreLastId[memKey] = item.id;
+        applyGalleryPickToSlot(inputName, item);
+        paintSampleOmakasePick(strip || (button && button.closest("[data-fpg-sample-omakase]")), item, inputName);
+        const host = strip || (button && button.closest("[data-fpg-sample-omakase]"));
+        if (host) {
+          host.querySelectorAll("[data-fpg-sample-genre]").forEach(function (el) {
+            el.classList.toggle("is-on", el.getAttribute("data-fpg-sample-genre") === genreKey);
+          });
+        }
+        alignOpenPhotoWithPreview();
+        scheduleSave();
+      })
+      .then(
+        function () {
+          if (button) button.disabled = false;
+        },
+        function () {
+          if (button) button.disabled = false;
+          window.alert("ギャラリーを読み込めませんでした。");
+        }
+      );
+  }
+
+  function openFreePhotoGalleryModal(inputName, opts) {
     if (!window.FreePhotoGallery || typeof window.FreePhotoGallery.mount !== "function") {
       window.alert("ギャラリーを読み込めませんでした。ページを更新してもう一度開けますか。");
       return;
     }
+    const options = opts || {};
     const modal = ensureFreePhotoGalleryModal();
     const mount = modal.querySelector("[data-fpg-mount]");
     modal._fpgPrevFocus = document.activeElement;
     modal.setAttribute("data-fpg-slot", inputName);
     modal.hidden = false;
+    if (options.sampleGenreOmakase) ensureSampleGalleryOmakase(modal, inputName);
+    else hideSampleGalleryOmakase(modal);
     if (mount._fpgApi && typeof mount._fpgApi.destroy === "function") {
       try {
         mount._fpgApi.destroy();
@@ -9253,7 +9431,7 @@
       btn.dataset.easyGalleryBound = "1";
       btn.addEventListener("click", () => {
         const name = btn.getAttribute("data-easy-gallery");
-        if (name) openFreePhotoGalleryModal(name);
+        if (name) openFreePhotoGalleryModal(name, { sampleGenreOmakase: true });
       });
     });
     setupHubImagePathUi();
@@ -9328,9 +9506,9 @@
     if (!panel) return;
     if (intoSampleStep) {
       const host = document.getElementById("easy-img-layout-host");
-      if (host && panel.parentElement !== host) host.appendChild(panel);
+      if (host) host.appendChild(panel);
       if (wire) wire.classList.add("is-shared-image-ui");
-    } else if (stack && panel.parentElement !== stack) {
+    } else if (stack) {
       const nav = stack.querySelector(".hub-nav-row--layout");
       if (nav) stack.insertBefore(panel, nav);
       else stack.appendChild(panel);
@@ -10562,12 +10740,26 @@
     paintEasyBasicsPlaceholders();
   }
 
+  function paintCopyPreviewFieldText(key, text) {
+    const node = copyPreviewNodeForField(key);
+    if (!node) return;
+    const raw = String(text == null ? "" : text);
+    if (/^acc_\d+_body$/.test(key)) {
+      const item = node.closest("[data-sample-item]") || node;
+      setAccordionBody(item, raw);
+      return;
+    }
+    node.textContent = raw;
+  }
+
   function applyCopyTextToField(key, text) {
     if (!key) return;
     setFieldValue(key, text);
     if (!store.copyFieldNow || typeof store.copyFieldNow !== "object") store.copyFieldNow = {};
     store.copyFieldNow[key] = String(text || "");
     applyAllConfirmed();
+    paintCopyPreviewFieldText(key, text);
+    paintCopyFieldRing(key);
     syncPreviewHeaderChrome();
   }
 
@@ -10774,8 +10966,8 @@
         sitePurpose: store.sitePurpose || null,
         sceneTag: null,
         sectionId: secId,
-        keywordIds: store.copyDirIds || [],
-        forbidKeywordIds: store.copyDirForbid || [],
+        keywordIds: store.copyPathMode === "keyword" ? store.copyDirIds || [] : [],
+        forbidKeywordIds: store.copyPathMode === "keyword" ? store.copyDirForbid || [] : [],
         presetAxes: store.copyPathMode === "omakase" ? store.copyOmakaseAxes : null,
         salt: salt
       })
@@ -11162,94 +11354,880 @@
     return applyOmakaseFromDict({ onlyUnlocked: anyLock });
   }
 
-  function renderCopyOmakaseUi() {
-    const host = document.getElementById("easy-copy-omakase-list");
-    if (!host) return;
-    if (!store.copyOmakaseLocks || typeof store.copyOmakaseLocks !== "object") {
-      store.copyOmakaseLocks = {};
-    }
-    const ask =
-      store.copyHeroOnPhoto == null
-        ? '<div class="easy-copy-hero-ask" id="easy-copy-omakase-hero-ask">' +
-          '<p class="step-help">写真の上に言葉を出しますか</p>' +
-          '<button type="button" class="gct-btn" data-hero-copy="1">出す</button>' +
-          '<button type="button" class="gct-btn" data-hero-copy="0">出さない</button>' +
-          "</div>"
-        : "";
-    host.innerHTML = ask + COPY_FRAME_ORDER.map(function (secId) {
-      const locked = !!store.copyOmakaseLocks[secId];
-      const text = store.copyFrameNow[secId] || readCurrentSectionText(secId) || "（準備中）";
-      return (
-        '<div class="easy-copy-omakase-row' +
-        (locked ? " is-locked" : "") +
-        '" data-omakase-sec="' +
-        secId +
-        '" data-omakase-axis="' +
-        escapeHtml((store.copyOmakaseAxes && store.copyOmakaseAxes[secId]) || "") +
-        '">' +
-        '<div class="easy-copy-omakase-main">' +
-        '<p class="easy-copy-omakase-label">' +
-        escapeHtml(COPY_FRAME_LABEL[secId] || secId) +
-        "</p>" +
-        '<p class="easy-copy-omakase-text">' +
-        escapeHtml(text) +
-        "</p>" +
-        "</div>" +
-        '<button type="button" class="easy-img-omakase-lock' +
-        (locked ? " is-on" : "") +
-        '" data-omakase-lock="' +
-        secId +
-        '" aria-pressed="' +
-        (locked ? "true" : "false") +
-        '" data-tip="' +
-        (locked ? "固定をはずす" : "この文章を残す（もう一度では変わらない）") +
-        '">' +
-        (locked ? "はずす" : "残す") +
-        "</button>" +
-        "</div>"
-      );
-    }).join("");
-    host.querySelectorAll("[data-hero-copy]").forEach(function (btn) {
-      btn.addEventListener("click", function () {
-        const on = btn.getAttribute("data-hero-copy") === "1";
-        store.copyHeroOnPhoto = on;
-        store.heroTextOnPhoto = on;
-        applyHeroTextOverlay();
-        const done = function () {
-          renderCopyOmakaseUi();
-          scheduleSave();
-        };
-        if (on) applyOmakaseFromDict({ onlyUnlocked: true }).then(done);
-        else done();
-      });
+  const COPY_LIST_SECTIONS = [
+    { id: "hero", label: "キャッチ", countId: null, layoutId: "hero" },
+    { id: "values", label: "下の枠", countId: "hero-values", layoutId: "values", kind: "pair", titleKey: "value_", textKey: "value_", titleSuffix: "_title", textSuffix: "_text", titleLabel: "見出し", textLabel: "文" },
+    { id: "accordions", label: "開く項目", countId: "about-accordions", layoutId: "accordions", kind: "pair", titleKey: "acc_", textKey: "acc_", titleSuffix: "_title", textSuffix: "_body", titleLabel: "見出し", textLabel: "文" },
+    { id: "works", label: "カード", countId: "works-list", layoutId: "works", kind: "pair", titleKey: "work_", textKey: "work_", titleSuffix: "_title", textSuffix: "_text", titleLabel: "見出し", textLabel: "文" },
+    { id: "contact", label: "ご連絡", countId: null, layoutId: "contact" }
+  ];
+
+  function copyListSectionById(id) {
+    return COPY_LIST_SECTIONS.find(function (s) {
+      return s.id === id;
     });
-    host.querySelectorAll("[data-omakase-lock]").forEach(function (btn) {
-      btn.addEventListener("click", function () {
-        const secId = btn.getAttribute("data-omakase-lock");
-        if (!secId) return;
-        store.copyOmakaseLocks[secId] = !store.copyOmakaseLocks[secId];
-        renderCopyOmakaseUi();
+  }
+
+  function ensureCopyListOrder() {
+    const allowed = COPY_LIST_SECTIONS.map(function (s) {
+      return s.id;
+    });
+    if (!Array.isArray(store.copyListOrder)) store.copyListOrder = allowed.slice();
+    const seen = {};
+    store.copyListOrder = store.copyListOrder.filter(function (id) {
+      if (seen[id] || allowed.indexOf(id) < 0) return false;
+      seen[id] = 1;
+      return true;
+    });
+    allowed.forEach(function (id) {
+      if (!seen[id]) store.copyListOrder.push(id);
+    });
+    return store.copyListOrder;
+  }
+
+  function copyListCount(sec) {
+    if (!sec || !sec.countId) return 1;
+    if (sec.countId === "works-list") {
+      seedItemOrder("works-list");
+      const order = (store.itemOrders && store.itemOrders["works-list"]) || [];
+      return order.length || countForCopy("works-list", 1);
+    }
+    return countForCopy(sec.countId, 1);
+  }
+
+  function copyListItemFields(sec, index) {
+    if (!sec || sec.kind !== "pair") return [];
+    const n = index;
+    return [
+      { key: sec.titleKey + n + sec.titleSuffix, label: sec.titleLabel },
+      { key: sec.textKey + n + sec.textSuffix, label: sec.textLabel }
+    ];
+  }
+
+  function copyListOpenState() {
+    if (!store.copyListOpen || typeof store.copyListOpen !== "object") return null;
+    return store.copyListOpen;
+  }
+
+  function setCopyListOpen(next) {
+    store.copyListOpen = next || null;
+    if (!next) store.copyListFocusField = null;
+  }
+
+  let easyCopySoloHistory = false;
+
+  function syncEasyCopyListSolo() {
+    const host = document.getElementById("easy-copy-list-host");
+    const block = document.querySelector('[data-step-id="easy-copy-omakase"]');
+    const open = !!copyListOpenState();
+    if (host) host.classList.toggle("is-copy-solo", open);
+    if (block) block.classList.toggle("is-copy-solo", open);
+  }
+
+  function closeEasyCopyListSolo() {
+    if (!copyListOpenState()) {
+      syncEasyCopyListSolo();
+      return;
+    }
+    setCopyListOpen(null);
+    clearCopyFieldRing();
+    renderCopyListUi({ keepScroll: true });
+    scheduleSave();
+  }
+
+  function bindEasyCopySoloPop() {
+    if (bindEasyCopySoloPop.done) return;
+    bindEasyCopySoloPop.done = true;
+    window.addEventListener("popstate", function () {
+      if (!easyCopySoloHistory) return;
+      easyCopySoloHistory = false;
+      closeEasyCopyListSolo();
+    });
+  }
+
+  function rememberEasyCopySoloOpen() {
+    bindEasyCopySoloPop();
+    if (easyCopySoloHistory) return;
+    history.pushState({ easyCopySolo: 1 }, "", location.href);
+    easyCopySoloHistory = true;
+  }
+
+  function clearEasyCopySoloHistory() {
+    if (!easyCopySoloHistory) return;
+    easyCopySoloHistory = false;
+    if (history.state && history.state.easyCopySolo) {
+      try {
+        history.back();
+      } catch (e) { /* ignore */ }
+    }
+  }
+
+  function copyListDashScrollEl() {
+    return (
+      document.querySelector(".dash-body") ||
+      document.querySelector("#dash") ||
+      document.getElementById("easy-copy-list-host")
+    );
+  }
+
+  function clearCopyFieldRing() {
+    document.querySelectorAll("#preview-root .is-copy-field-ring").forEach(function (el) {
+      el.classList.remove("is-copy-field-ring");
+    });
+  }
+
+  function copyPreviewNodeForField(fieldKey) {
+    const rootEl = document.getElementById("preview-root");
+    if (!rootEl || !fieldKey) return null;
+    if (fieldKey === "hero_title") return rootEl.querySelector("#hero-title");
+    let m = /^hero_lead_(\d+)$/.exec(fieldKey);
+    if (m) {
+      const nodes = rootEl.querySelectorAll("#hero-leads [data-sample-item]");
+      return nodes[Number(m[1]) - 1] || null;
+    }
+    m = /^value_(\d+)_(title|text)$/.exec(fieldKey);
+    if (m) {
+      const li = rootEl.querySelectorAll("#hero-values [data-sample-item]")[Number(m[1]) - 1];
+      if (!li) return null;
+      if (m[2] === "title") return li.querySelector(".hero-value-title");
+      return li.querySelector("p:last-child") || li.querySelector("p");
+    }
+    m = /^acc_(\d+)_(title|body)$/.exec(fieldKey);
+    if (m) {
+      const item = rootEl.querySelectorAll("#about-accordions [data-sample-item]")[Number(m[1]) - 1];
+      if (!item) return null;
+      if (m[2] === "title") return item.querySelector("summary");
+      return item.querySelector(".accordion-body") || item;
+    }
+    m = /^work_(\d+)_(title|text)$/.exec(fieldKey);
+    if (m) {
+      const item =
+        rootEl.querySelector('#works-list > [data-item-id="work_' + m[1] + '"]') ||
+        rootEl.querySelectorAll("#works-list [data-sample-item]")[Number(m[1]) - 1];
+      if (!item) return null;
+      if (m[2] === "title") return item.querySelector("h3");
+      return item.querySelector(".work-item-copy p") || item.querySelector("p");
+    }
+    if (fieldKey === "contact_label") return rootEl.querySelector("#contact-label");
+    if (fieldKey === "contact_note_1") return rootEl.querySelector('[data-contact-note="1"]');
+    if (fieldKey === "contact_note_2") return rootEl.querySelector('[data-contact-note="2"]');
+    return null;
+  }
+
+  function paintCopyFieldRing(fieldKey) {
+    clearCopyFieldRing();
+    const node = copyPreviewNodeForField(fieldKey);
+    if (node) node.classList.add("is-copy-field-ring");
+  }
+
+  function scrollCopyListPreview(sectionId, fieldKey) {
+    const sec = copyListSectionById(sectionId);
+    const meta = sec && LAYOUT_BLOCKS.find(function (b) {
+      return b.id === sec.layoutId;
+    });
+    if (meta && meta.selector) scrollPreviewTo(meta.selector);
+    if (fieldKey) {
+      window.requestAnimationFrame(function () {
+        paintCopyFieldRing(fieldKey);
+        const node = copyPreviewNodeForField(fieldKey);
+        if (node && typeof node.scrollIntoView === "function") {
+          try {
+            node.scrollIntoView({ block: "nearest", inline: "nearest" });
+          } catch (e) { /* ignore */ }
+        }
+      });
+    } else {
+      clearCopyFieldRing();
+    }
+  }
+
+  function applyCopyListOrderToLayout() {
+    const list = ensureCopyListOrder();
+    const layoutIds = list
+      .map(function (id) {
+        const sec = copyListSectionById(id);
+        return sec && sec.layoutId;
+      })
+      .filter(Boolean);
+    const set = {};
+    layoutIds.forEach(function (id) {
+      set[id] = 1;
+    });
+    const order = normalizeLayoutOrder(store.layoutOrder);
+    let at = order.findIndex(function (id) {
+      return set[id];
+    });
+    if (at < 0) at = 0;
+    const kept = order.filter(function (id) {
+      return !set[id];
+    });
+    kept.splice(at, 0, ...layoutIds);
+    store.layoutOrder = normalizeLayoutOrder(kept);
+    applyLayoutOrderToPreview();
+  }
+
+  function copyListDefaultFocus(sec, itemIndex) {
+    if (!sec) return null;
+    if (sec.id === "hero") {
+      if (store.copyHeroOnPhoto === false || store.heroTextOnPhoto === false) return null;
+      return "hero_title";
+    }
+    if (sec.id === "contact") return "contact_label";
+    const fields = copyListItemFields(sec, itemIndex);
+    return fields[0] ? fields[0].key : null;
+  }
+
+  function fieldMaxLen(key) {
+    const n = Number(FIELD_MAX[key]);
+    return Number.isFinite(n) && n > 0 ? n : 40;
+  }
+
+  function renderCopyListCandidates(box, fieldKey, sectionId) {
+    if (!box || !fieldKey) return;
+    const forbidNote =
+      store.copyPathMode === "keyword" && (store.copyDirForbid || []).length
+        ? "赤枠の言葉は、候補に入りません。"
+        : "";
+    const paint = function (list) {
+      if (!box) return;
+      const three = (list || []).slice(0, 3);
+      if (!three.length) {
+        box.innerHTML =
+          '<p class="easy-copy-frame-hint">' +
+          escapeHtml(forbidNote || "この条件では、候補を出せませんでした。") +
+          "</p>";
+        return;
+      }
+      const now = String((store.copyFieldNow && store.copyFieldNow[fieldKey]) || fieldValue(fieldKey) || "");
+      box.innerHTML = three
+        .map(function (c, i) {
+          const on = now && String(c.text || "") === now;
+          return (
+            '<button type="button" class="easy-copy-frame-cand' +
+            (on ? " is-picked" : "") +
+            '" data-copy-pick="' +
+            i +
+            '"><span class="easy-copy-frame-cand-label">' +
+            escapeHtml(c.label) +
+            '</span><span class="easy-copy-frame-cand-text">' +
+            escapeHtml(c.text) +
+            "</span></button>"
+          );
+        })
+        .join("");
+      box.querySelectorAll("[data-copy-pick]").forEach(function (btn) {
+        btn.addEventListener("click", function () {
+          const cand = three[Number(btn.getAttribute("data-copy-pick"))];
+          if (!cand) return;
+          if (!store.copyFieldSource || typeof store.copyFieldSource !== "object") store.copyFieldSource = {};
+          store.copyFieldSource[fieldKey] = "cand";
+          applyCopyTextToField(fieldKey, cand.text);
+          box.querySelectorAll(".easy-copy-frame-cand").forEach(function (el) {
+            el.classList.toggle("is-picked", el === btn);
+          });
+          const ownInput = box.parentElement && box.parentElement.querySelector(".easy-copy-field-input");
+          if (ownInput) {
+            ownInput.hidden = true;
+            ownInput.value = "";
+          }
+          const countEl = box.parentElement && box.parentElement.querySelector(".easy-copy-field-count");
+          if (countEl) countEl.hidden = true;
+          scheduleSave();
+        });
+      });
+    };
+    const dictSec =
+      sectionId === "values" || sectionId === "hero"
+        ? "hero"
+        : sectionId === "accordions"
+          ? "about"
+          : sectionId === "works"
+            ? "works"
+            : "contact";
+    ensureCopyFieldCandidates(dictSec, fieldKey, false).then(paint);
+  }
+
+  function copyListDictSec(sectionId) {
+    return sectionId === "values" || sectionId === "hero"
+      ? "hero"
+      : sectionId === "accordions"
+        ? "about"
+        : sectionId === "works"
+          ? "works"
+          : "contact";
+  }
+
+  function appendCopyListOkBtn(wrap, closeFn) {
+    const ok = document.createElement("button");
+    ok.type = "button";
+    ok.className = "layout-open-btn is-ok easy-copy-list-ok";
+    ok.textContent = "これでOK";
+    ok.addEventListener("click", function (ev) {
+      ev.stopPropagation();
+      closeFn();
+    });
+    wrap.appendChild(ok);
+    return ok;
+  }
+
+  function buildCopyListEditor(sec, itemIndex) {
+    const wrap = document.createElement("div");
+    wrap.className = "easy-copy-list-editor";
+    const focusKey = store.copyListFocusField || copyListDefaultFocus(sec, itemIndex);
+    const closeSolo = function () {
+      clearEasyCopySoloHistory();
+      setCopyListOpen(null);
+      clearCopyFieldRing();
+      renderCopyListUi({ keepScroll: true });
+      scheduleSave();
+    };
+
+    if (sec.id === "hero") {
+      const overlay = document.createElement("div");
+      overlay.className = "hero-overlay-row";
+      overlay.setAttribute("role", "group");
+      overlay.setAttribute("aria-label", "写真に文字を載せるか");
+      [["1", "載せる"], ["0", "載せない"]].forEach(function (pair) {
+        const btn = document.createElement("button");
+        btn.type = "button";
+        btn.className = "gct-btn";
+        const on = pair[0] === "1";
+        const now = store.copyHeroOnPhoto !== false && store.heroTextOnPhoto !== false;
+        btn.classList.toggle("is-active", on ? now : !now);
+        btn.setAttribute("aria-pressed", on ? (now ? "true" : "false") : (!now ? "true" : "false"));
+        btn.textContent = pair[1];
+        btn.addEventListener("click", function () {
+          store.copyHeroOnPhoto = on;
+          store.heroTextOnPhoto = on;
+          applyHeroTextOverlay();
+          if (on) applyAllConfirmed();
+          store.copyListFocusField = on ? "hero_title" : null;
+          renderCopyListUi({ keepScroll: true });
+          scheduleSave();
+        });
+        overlay.appendChild(btn);
+      });
+      wrap.appendChild(overlay);
+
+      const showText = store.copyHeroOnPhoto !== false && store.heroTextOnPhoto !== false;
+      if (!showText) {
+        const note = document.createElement("p");
+        note.className = "dash-note";
+        note.textContent = "載せないあいだは、キャッチの文章候補は出ません。";
+        wrap.appendChild(note);
+        appendCopyListOkBtn(wrap, closeSolo);
+        return wrap;
+      }
+
+      const size = document.createElement("fieldset");
+      size.className = "inline-fieldset";
+      size.innerHTML = "<legend>タイトルの大きさ</legend>";
+      [
+        ["0.8", "小さめ"],
+        ["1", "標準"],
+        ["1.35", "大きめ"]
+      ].forEach(function (pair) {
+        const lab = document.createElement("label");
+        const input = document.createElement("input");
+        input.type = "radio";
+        input.name = "copy_list_headingScale";
+        input.value = pair[0];
+        const cur = String(fieldValue("headingScale") || "1");
+        input.checked = cur === pair[0];
+        input.addEventListener("change", function () {
+          setFieldValue("headingScale", pair[0]);
+          applyAllConfirmed();
+          scheduleSave();
+        });
+        lab.appendChild(input);
+        lab.appendChild(document.createTextNode(" " + pair[1]));
+        size.appendChild(lab);
+      });
+      wrap.appendChild(size);
+
+      const plate = document.createElement("div");
+      plate.className = "hero-overlay-options";
+      plate.innerHTML = '<p class="dash-note dash-field-label">文字の下地（形）</p>';
+      const plateRow = document.createElement("div");
+      plateRow.className = "hero-overlay-row";
+      [
+        ["none", "なし（白抜き）"],
+        ["rect", "四角"],
+        ["round", "角まる"],
+        ["oval", "楕円"]
+      ].forEach(function (pair) {
+        const btn = document.createElement("button");
+        btn.type = "button";
+        btn.className = "gct-btn";
+        const cur = normalizeHeroPlate(store.heroTextPlate);
+        btn.classList.toggle("is-active", cur === pair[0]);
+        btn.textContent = pair[1];
+        btn.addEventListener("click", function () {
+          store.heroTextPlate = normalizeHeroPlate(pair[0]);
+          applyHeroTextOverlay();
+          renderCopyListUi({ keepScroll: true });
+          scheduleSave();
+        });
+        plateRow.appendChild(btn);
+      });
+      plate.appendChild(plateRow);
+      const toneRow = document.createElement("div");
+      toneRow.className = "hero-overlay-row";
+      toneRow.style.marginTop = "0.45rem";
+      [["white", "白"], ["dark", "黒"]].forEach(function (pair) {
+        const btn = document.createElement("button");
+        btn.type = "button";
+        btn.className = "gct-btn";
+        const cur = normalizeHeroPlateTone(store.heroTextPlateTone);
+        btn.classList.toggle("is-active", cur === pair[0]);
+        btn.textContent = pair[1];
+        btn.addEventListener("click", function () {
+          store.heroTextPlateTone = normalizeHeroPlateTone(pair[0]);
+          applyHeroTextOverlay();
+          renderCopyListUi({ keepScroll: true });
+          scheduleSave();
+        });
+        toneRow.appendChild(btn);
+      });
+      if (normalizeHeroPlate(store.heroTextPlate) !== "none") plate.appendChild(toneRow);
+      wrap.appendChild(plate);
+
+      const leadCount = document.createElement("div");
+      leadCount.className = "layout-count-cluster";
+      leadCount.innerHTML = '<span class="layout-count-lead">サブキャッチの行数</span>';
+      const minus = document.createElement("button");
+      minus.type = "button";
+      minus.className = "layout-count-btn";
+      minus.textContent = "−";
+      const num = document.createElement("span");
+      num.className = "layout-image-count-num";
+      const leads = countForCopy("hero-leads", 1);
+      num.textContent = leads + "行";
+      const plus = document.createElement("button");
+      plus.type = "button";
+      plus.className = "layout-count-btn";
+      plus.textContent = "＋";
+      const meta = COUNT_META["hero-leads"] || { min: 1, max: 3 };
+      minus.disabled = leads <= meta.min;
+      plus.disabled = leads >= meta.max;
+      minus.addEventListener("click", function () {
+        adjustDraftCount("hero-leads", -1, null);
+        renderCopyListUi({ keepScroll: true });
+      });
+      plus.addEventListener("click", function () {
+        adjustDraftCount("hero-leads", 1, null);
+        renderCopyListUi({ keepScroll: true });
+      });
+      leadCount.appendChild(minus);
+      leadCount.appendChild(num);
+      leadCount.appendChild(plus);
+      wrap.appendChild(leadCount);
+
+      const fields = [{ key: "hero_title", label: "タイトル" }];
+      for (let i = 1; i <= leads; i += 1) {
+        fields.push({ key: "hero_lead_" + i, label: "サブキャッチ" + i + "行目" });
+      }
+      appendCopyListFieldUi(wrap, fields, focusKey, "hero");
+      appendCopyListOkBtn(wrap, closeSolo);
+      return wrap;
+    }
+
+    if (sec.id === "contact") {
+      appendCopyListFieldUi(
+        wrap,
+        [
+          { key: "contact_label", label: "見出し" },
+          { key: "contact_note_1", label: "補足1" },
+          { key: "contact_note_2", label: "補足2" }
+        ],
+        focusKey,
+        "contact"
+      );
+      appendCopyListOkBtn(wrap, closeSolo);
+      return wrap;
+    }
+
+    appendCopyListFieldUi(wrap, copyListItemFields(sec, itemIndex), focusKey, sec.id);
+    appendCopyListOkBtn(wrap, closeSolo);
+    return wrap;
+  }
+
+  function appendCopyListFieldUi(wrap, fields, focusKey, sectionId) {
+    if (!store.copyFieldSource || typeof store.copyFieldSource !== "object") store.copyFieldSource = {};
+    const active = focusKey && fields.some(function (f) {
+      return f.key === focusKey;
+    })
+      ? focusKey
+      : fields[0] && fields[0].key;
+    store.copyListFocusField = active || null;
+
+    fields.forEach(function (field) {
+      const sec = document.createElement("section");
+      sec.className = "easy-copy-field" + (field.key === active ? " is-copy-field-active" : "");
+      sec.setAttribute("data-copy-field", field.key);
+      const label = document.createElement("p");
+      label.className = "easy-copy-field-label";
+      label.textContent = field.label;
+      sec.appendChild(label);
+      sec.addEventListener("click", function () {
+        if (store.copyListFocusField === field.key) return;
+        store.copyListFocusField = field.key;
+        scrollCopyListPreview(sectionId, field.key);
+        renderCopyListUi({ keepScroll: true });
+      });
+
+      if (field.key === active) {
+        const cands = document.createElement("div");
+        cands.className = "easy-copy-field-cands";
+        cands.setAttribute("data-copy-cands", field.key);
+        sec.appendChild(cands);
+        const actions = document.createElement("div");
+        actions.className = "easy-copy-frame-actions";
+        const reroll = document.createElement("button");
+        reroll.type = "button";
+        reroll.className = "gct-btn";
+        reroll.textContent = "もう一度";
+        reroll.addEventListener("click", function (ev) {
+          ev.stopPropagation();
+          const scrollEl = copyListDashScrollEl();
+          const y = scrollEl ? scrollEl.scrollTop : 0;
+          store.copyFrameCandidates[field.key] = null;
+          ensureCopyFieldCandidates(copyListDictSec(sectionId), field.key, true).then(function () {
+            renderCopyListCandidates(cands, field.key, sectionId);
+            if (scrollEl) scrollEl.scrollTop = y;
+            scheduleSave();
+          });
+        });
+        actions.appendChild(reroll);
+        sec.appendChild(actions);
+        renderCopyListCandidates(cands, field.key, sectionId);
+      }
+
+      const own = document.createElement("div");
+      own.className = "easy-copy-field-own";
+      const ownBtn = document.createElement("button");
+      ownBtn.type = "button";
+      ownBtn.className = "gct-btn";
+      ownBtn.textContent = "自分で入力する";
+      const input = document.createElement("textarea");
+      input.className = "easy-copy-field-input";
+      input.rows = 2;
+      input.setAttribute("placeholder", "ここに書けます");
+      const max = fieldMaxLen(field.key);
+      input.setAttribute("maxlength", String(max));
+      const counter = document.createElement("p");
+      counter.className = "easy-copy-field-count";
+      counter.hidden = true;
+      function paintCount() {
+        const len = String(input.value || "").length;
+        counter.textContent = field.label + " " + len + " / " + max;
+        counter.hidden = false;
+      }
+      const showInput = store.copyFieldSource[field.key] === "custom";
+      if (showInput) {
+        input.value = String((store.copyFieldNow && store.copyFieldNow[field.key]) || "");
+        input.hidden = false;
+        paintCount();
+      } else {
+        input.value = "";
+        input.hidden = true;
+      }
+      ownBtn.addEventListener("click", function (ev) {
+        ev.stopPropagation();
+        store.copyListFocusField = field.key;
+        if (store.copyFieldSource[field.key] !== "custom") {
+          store.copyFieldSource[field.key] = "custom";
+          input.value = "";
+        }
+        input.hidden = false;
+        input.focus();
+        paintCount();
+        paintCopyFieldRing(field.key);
+      });
+      input.addEventListener("focus", function () {
+        store.copyListFocusField = field.key;
+        paintCopyFieldRing(field.key);
+        paintCount();
+      });
+      input.addEventListener("input", function () {
+        let v = String(input.value || "");
+        if (v.length > max) {
+          v = v.slice(0, max);
+          input.value = v;
+        }
+        store.copyFieldSource[field.key] = "custom";
+        applyCopyTextToField(field.key, v);
+        paintCount();
         scheduleSave();
       });
+      own.appendChild(ownBtn);
+      own.appendChild(input);
+      own.appendChild(counter);
+      sec.appendChild(own);
+      wrap.appendChild(sec);
     });
-    const rerollAll = document.getElementById("easy-copy-omakase-reroll");
-    if (rerollAll && !rerollAll.dataset.bound) {
-      rerollAll.dataset.bound = "1";
-      rerollAll.addEventListener("click", function () {
-        rerollAll.disabled = true;
-        applyOmakaseFromDict({ onlyUnlocked: true, rerollUnlocked: true }).then(
-          function () {
-            renderCopyOmakaseUi();
-            scheduleSave();
-            rerollAll.disabled = false;
-          },
-          function () {
-            rerollAll.disabled = false;
+  }
+
+  function renderCopyListUi(opts) {
+    const host = document.getElementById("easy-copy-list-host");
+    if (!host) return;
+    const keepScroll = !!(opts && opts.keepScroll);
+    const scrollEl = keepScroll ? copyListDashScrollEl() : null;
+    const savedY = scrollEl ? scrollEl.scrollTop : 0;
+    ensureCopyListOrder();
+    if (!store.copyFieldSource || typeof store.copyFieldSource !== "object") store.copyFieldSource = {};
+    if (!store.copyFrameCandidates || typeof store.copyFrameCandidates !== "object") {
+      store.copyFrameCandidates = {};
+    }
+    const open = copyListOpenState();
+    host.innerHTML = "";
+    const list = document.createElement("div");
+    list.className = "easy-copy-list-wire";
+    list.setAttribute("role", "list");
+
+    ensureCopyListOrder().forEach(function (secId, secIndex) {
+      const sec = copyListSectionById(secId);
+      if (!sec) return;
+      const cell = document.createElement("div");
+      cell.className = "easy-copy-list-cell";
+      cell.setAttribute("data-copy-sec", sec.id);
+      cell.setAttribute("role", "listitem");
+      if (open && open.sectionId !== sec.id) {
+        cell.hidden = true;
+      }
+
+      const head = document.createElement("div");
+      head.className = "easy-copy-list-head layout-closed-line";
+      const handle = document.createElement("span");
+      handle.className = "layout-inner-handle";
+      handle.textContent = "⋮⋮";
+      handle.setAttribute("aria-label", "この段の順番を変えられます");
+      setHoverTip(handle, "つかんだまま上下に動かすと、順番を変えられます");
+      bindCopyListDrag(handle, cell, sec.id);
+      const name = document.createElement("p");
+      name.className = "easy-copy-list-name";
+      name.textContent = sec.label;
+      head.appendChild(handle);
+      head.appendChild(name);
+
+      if (sec.countId) {
+        const countCluster = document.createElement("span");
+        countCluster.className = "layout-count-cluster";
+        const n = copyListCount(sec);
+        const meta = COUNT_META[sec.countId] || { min: 1, max: 3 };
+        const minus = document.createElement("button");
+        minus.type = "button";
+        minus.className = "layout-count-btn";
+        minus.textContent = "−";
+        minus.disabled = n <= meta.min;
+        const num = document.createElement("span");
+        num.className = "layout-image-count-num";
+        num.textContent = String(n);
+        const plus = document.createElement("button");
+        plus.type = "button";
+        plus.className = "layout-count-btn";
+        plus.textContent = "＋";
+        plus.disabled = n >= meta.max;
+        minus.addEventListener("click", function (ev) {
+          ev.stopPropagation();
+          const beforeFocus = store.copyListFocusField;
+          const beforeOpen = copyListOpenState();
+          adjustDraftCount(sec.countId, -1, null);
+          if (beforeOpen && beforeOpen.sectionId === sec.id) {
+            const after = copyListCount(sec);
+            if (beforeOpen.itemIndex > after) {
+              clearEasyCopySoloHistory();
+              setCopyListOpen(null);
+              clearCopyFieldRing();
+            } else if (beforeFocus) {
+              const still = copyListItemFields(sec, beforeOpen.itemIndex).some(function (f) {
+                return f.key === beforeFocus;
+              });
+              if (!still) {
+                store.copyListFocusField = null;
+                clearCopyFieldRing();
+              }
+            }
           }
-        );
+          renderCopyListUi({ keepScroll: true });
+          scheduleSave();
+        });
+        plus.addEventListener("click", function (ev) {
+          ev.stopPropagation();
+          if (sec.countId === "works-list") requestAddDraftCount(sec.countId, null, plus);
+          else adjustDraftCount(sec.countId, 1, null);
+          renderCopyListUi({ keepScroll: true });
+          scheduleSave();
+        });
+        countCluster.appendChild(minus);
+        countCluster.appendChild(num);
+        countCluster.appendChild(plus);
+        head.appendChild(countCluster);
+      }
+      cell.appendChild(head);
+
+      const body = document.createElement("div");
+      body.className = "easy-copy-list-body";
+
+      if (sec.kind === "pair") {
+        const n = copyListCount(sec);
+        for (let i = 1; i <= n; i += 1) {
+          const row = document.createElement("div");
+          row.className = "easy-copy-list-row layout-photo-row";
+          row.setAttribute("data-copy-item", String(i));
+          const isOpen = !!(open && open.sectionId === sec.id && Number(open.itemIndex) === i);
+          if (open && open.sectionId === sec.id && !isOpen) row.hidden = true;
+          if (isOpen) row.classList.add("is-open");
+          const line = document.createElement("div");
+          line.className = "layout-closed-line";
+          const label = document.createElement("p");
+          label.className = "easy-copy-list-item-label";
+          label.textContent = sec.label + i;
+          const openBtn = document.createElement("button");
+          openBtn.type = "button";
+          openBtn.className = "layout-open-btn" + (isOpen ? " is-ok" : "");
+          openBtn.textContent = isOpen ? "これでOK" : "開く";
+          openBtn.addEventListener("click", function () {
+            if (isOpen) {
+              clearEasyCopySoloHistory();
+              setCopyListOpen(null);
+              clearCopyFieldRing();
+            } else {
+              setCopyListOpen({ sectionId: sec.id, itemIndex: i });
+              store.copyListFocusField = copyListDefaultFocus(sec, i);
+              rememberEasyCopySoloOpen();
+              scrollCopyListPreview(sec.id, store.copyListFocusField);
+            }
+            renderCopyListUi({ keepScroll: !!isOpen });
+            scheduleSave();
+          });
+          line.appendChild(label);
+          line.appendChild(openBtn);
+          row.appendChild(line);
+          if (isOpen) {
+            const editor = document.createElement("div");
+            editor.className = "easy-copy-list-editor-host";
+            editor.appendChild(buildCopyListEditor(sec, i));
+            row.appendChild(editor);
+            scrollCopyListPreview(sec.id, store.copyListFocusField);
+          }
+          body.appendChild(row);
+        }
+      } else {
+        const row = document.createElement("div");
+        row.className = "easy-copy-list-row layout-photo-row";
+        const isOpen = !!(open && open.sectionId === sec.id);
+        if (isOpen) row.classList.add("is-open");
+        const line = document.createElement("div");
+        line.className = "layout-closed-line";
+        const openBtn = document.createElement("button");
+        openBtn.type = "button";
+        openBtn.className = "layout-open-btn" + (isOpen ? " is-ok" : "");
+        openBtn.textContent = isOpen ? "これでOK" : "開く";
+        openBtn.addEventListener("click", function () {
+          if (isOpen) {
+            clearEasyCopySoloHistory();
+            setCopyListOpen(null);
+            clearCopyFieldRing();
+          } else {
+            setCopyListOpen({ sectionId: sec.id, itemIndex: null });
+            store.copyListFocusField = copyListDefaultFocus(sec, null);
+            rememberEasyCopySoloOpen();
+            scrollCopyListPreview(sec.id, store.copyListFocusField);
+          }
+          renderCopyListUi({ keepScroll: !!isOpen });
+          scheduleSave();
+        });
+        line.appendChild(openBtn);
+        row.appendChild(line);
+        if (isOpen) {
+          const editor = document.createElement("div");
+          editor.className = "easy-copy-list-editor-host";
+          editor.appendChild(buildCopyListEditor(sec, null));
+          row.appendChild(editor);
+          scrollCopyListPreview(sec.id, store.copyListFocusField);
+        }
+        body.appendChild(row);
+      }
+
+      cell.appendChild(body);
+      list.appendChild(cell);
+    });
+
+    host.appendChild(list);
+    syncEasyCopyListSolo();
+    if (!open) clearCopyFieldRing();
+    updateWizardUi();
+    if (keepScroll && scrollEl) {
+      window.requestAnimationFrame(function () {
+        scrollEl.scrollTop = savedY;
       });
     }
-    updateWizardUi();
+  }
+
+  let copyListDrag = null;
+
+  function bindCopyListDrag(handle, cell, secId) {
+    handle.addEventListener("pointerdown", function (ev) {
+      if (ev.button != null && ev.button !== 0) return;
+      if (copyListOpenState()) return;
+      ev.preventDefault();
+      const host = document.getElementById("easy-copy-list-host");
+      if (!host) return;
+      copyListDrag = {
+        id: secId,
+        startY: ev.clientY,
+        order: ensureCopyListOrder().slice()
+      };
+      cell.classList.add("is-dragging");
+      handle.setPointerCapture(ev.pointerId);
+      function onMove(ev2) {
+        if (!copyListDrag) return;
+        const cells = Array.from(host.querySelectorAll(".easy-copy-list-cell"));
+        const over = cells.find(function (c) {
+          const r = c.getBoundingClientRect();
+          return ev2.clientY >= r.top && ev2.clientY <= r.bottom;
+        });
+        if (!over) return;
+        const overId = over.getAttribute("data-copy-sec");
+        if (!overId || overId === copyListDrag.id) return;
+        const from = copyListDrag.order.indexOf(copyListDrag.id);
+        const to = copyListDrag.order.indexOf(overId);
+        if (from < 0 || to < 0 || from === to) return;
+        const next = copyListDrag.order.slice();
+        next.splice(from, 1);
+        next.splice(to, 0, copyListDrag.id);
+        copyListDrag.order = next;
+        store.copyListOrder = next.slice();
+        const list = host.querySelector(".easy-copy-list-wire");
+        if (!list) return;
+        next.forEach(function (id) {
+          const node = host.querySelector('.easy-copy-list-cell[data-copy-sec="' + id + '"]');
+          if (node) list.appendChild(node);
+        });
+      }
+      function onUp() {
+        handle.releasePointerCapture(ev.pointerId);
+        handle.removeEventListener("pointermove", onMove);
+        handle.removeEventListener("pointerup", onUp);
+        handle.removeEventListener("pointercancel", onUp);
+        cell.classList.remove("is-dragging");
+        if (copyListDrag) {
+          store.copyListOrder = copyListDrag.order.slice();
+          applyCopyListOrderToLayout();
+          copyListDrag = null;
+          renderCopyListUi();
+          scheduleSave();
+        }
+      }
+      handle.addEventListener("pointermove", onMove);
+      handle.addEventListener("pointerup", onUp);
+      handle.addEventListener("pointercancel", onUp);
+    });
+  }
+
+  function renderCopyOmakaseUi() {
+    renderCopyListUi();
   }
 
   function loadPhotoCatalog() {
@@ -12527,156 +13505,42 @@
     return true;
   }
 
-  const GRID_SHUTTER_ROWS = 4;
-  const GRID_SHUTTER_COLS = 16;
-  const GRID_SHUTTER_DUR = 900;
-  const GRID_SHUTTER_STAGGER = 48;
-  let gridShutterBusy = false;
+  /* 格子シャッター・左右帯は使わない。サンプル後は6色タイル波だけ */
 
-  function gridShutterSpan() {
-    return (GRID_SHUTTER_COLS - 1) * GRID_SHUTTER_STAGGER + GRID_SHUTTER_DUR;
-  }
-
-  function ensureGridShutter() {
-    let layer = document.getElementById("grid-shutter");
-    if (layer) return layer;
-    layer = document.createElement("div");
-    layer.id = "grid-shutter";
-    layer.hidden = true;
-    layer.setAttribute("aria-hidden", "true");
-    const keys = Object.keys(COLOR_WAVE_FIELD);
-    for (let r = 0; r < GRID_SHUTTER_ROWS; r++) {
-      for (let c = 0; c < GRID_SHUTTER_COLS; c++) {
-        const cell = document.createElement("div");
-        cell.className = "grid-shutter-cell";
-        cell.dataset.row = String(r);
-        cell.dataset.col = String(c);
-        const along = r % 2 === 0 ? c : GRID_SHUTTER_COLS - 1 - c;
-        const key = keys[(along + r * 2) % keys.length];
-        cell.style.background = colorWaveHex(key);
-        cell.style.left = (c * 100) / GRID_SHUTTER_COLS + "%";
-        cell.style.top = (r * 100) / GRID_SHUTTER_ROWS + "%";
-        cell.style.width = "calc(100% / " + GRID_SHUTTER_COLS + " + 1px)";
-        cell.style.height = "calc(100% / " + GRID_SHUTTER_ROWS + " + 1px)";
-        layer.appendChild(cell);
-      }
-    }
-    document.body.appendChild(layer);
-    return layer;
-  }
-
-  function playGridShutter(onCovered) {
-    if (gridShutterBusy) return false;
-    const layer = ensureGridShutter();
-    const cells = layer.querySelectorAll(".grid-shutter-cell");
-    gridShutterBusy = true;
-    layer.hidden = false;
-    const span = gridShutterSpan();
-    const ease = "cubic-bezier(0.77, 0, 0.175, 1)";
-    cells.forEach(function (cell) {
-      const row = Number(cell.dataset.row) || 0;
-      const col = Number(cell.dataset.col) || 0;
-      const order = row % 2 === 0 ? col : GRID_SHUTTER_COLS - 1 - col;
-      cell.style.transformOrigin = row % 2 === 0 ? "left center" : "right center";
-      cell.style.transform = "scaleX(0)";
-      cell.animate(
-        [{ transform: "scaleX(0)" }, { transform: "scaleX(1)" }],
-        {
-          duration: GRID_SHUTTER_DUR,
-          delay: order * GRID_SHUTTER_STAGGER,
-          easing: ease,
-          fill: "both"
-        }
-      );
-    });
-    window.setTimeout(function () {
-      try {
-        onCovered();
-      } finally {
-        cells.forEach(function (cell) {
-          const row = Number(cell.dataset.row) || 0;
-          const col = Number(cell.dataset.col) || 0;
-          const order = row % 2 === 0 ? col : GRID_SHUTTER_COLS - 1 - col;
-          cell.getAnimations().forEach(function (anim) { anim.cancel(); });
-          cell.style.transform = "scaleX(1)";
-          cell.animate(
-            [{ transform: "scaleX(1)" }, { transform: "scaleX(0)" }],
-            {
-              duration: GRID_SHUTTER_DUR,
-              delay: order * GRID_SHUTTER_STAGGER,
-              easing: ease,
-              fill: "both"
-            }
-          );
-        });
-        window.setTimeout(function () {
-          cells.forEach(function (cell) {
-            cell.getAnimations().forEach(function (anim) { anim.cancel(); });
-            cell.style.transform = "scaleX(0)";
-          });
-          layer.hidden = true;
-          gridShutterBusy = false;
-        }, span + 40);
-      }
-    }, span + 20);
-    return true;
-  }
-
-  let crossShutterBusy = false;
-
-  function playCrossShutter(onCross, alreadyBusy) {
-    if (!window.PageShutter) {
+  /** サンプル確定→用途だけ。6色タイルが順に埋まる波。それ以外の進みでは使わない */
+  function playSampleColorShutter(onCross) {
+    if (colorWaveBusy) return false;
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
       if (onCross) onCross();
       return true;
     }
-    if (!alreadyBusy && (crossShutterBusy || gridShutterBusy || window.PageShutter.isBusy())) return false;
-    crossShutterBusy = true;
-    var started = window.PageShutter.play(function () {
-      try { if (onCross) onCross(); } catch (err) { /* 切替に失敗しても帯は抜ける */ }
-    }, function () {
-      crossShutterBusy = false;
+    const started = playColorWave(function () {
+      try {
+        if (onCross) onCross();
+      } catch (err) { /* 切替に失敗しても波は抜ける */ }
     });
     if (!started) {
-      crossShutterBusy = false;
+      if (onCross) onCross();
       return false;
     }
     return true;
   }
 
+  /** シャッターなしで進む（進捗バーのテンポを優先） */
   function runWithCrossShutter(next, prepare) {
-    if (crossShutterBusy || gridShutterBusy || (window.PageShutter && window.PageShutter.isBusy())) return;
-    crossShutterBusy = true;
-    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    Promise.resolve(prepare && prepare()).then(function (ready) {
-      if (ready === false) {
-        crossShutterBusy = false;
-        return;
-      }
-      if (reduced) {
-        crossShutterBusy = false;
+    Promise.resolve(prepare && prepare()).then(
+      function (ready) {
+        if (ready === false) return;
         next();
-        return;
+      },
+      function () {
+        /* prepare 失敗時は進まない */
       }
-      if (!playCrossShutter(next, true)) {
-        crossShutterBusy = false;
-        next();
-      }
-    }, function () {
-      crossShutterBusy = false;
-    });
+    );
   }
 
   function enterBranchAfterSaveChoice() {
-    if (gridShutterBusy || crossShutterBusy) return;
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
-      setEntryGateStep("branch");
-      return;
-    }
-    if (!playGridShutter(function () {
-      setEntryGateStep("branch");
-    })) {
-      setEntryGateStep("branch");
-    }
+    setEntryGateStep("branch");
   }
 
   function wizardNext() {
@@ -16151,7 +17015,7 @@
     options.forEach((opt) => {
       const btn = document.createElement("button");
       btn.type = "button";
-      btn.className = "layout-choice-opt" + (opt.bold ? " is-bold" : " is-plain") + (opt.on ? " is-on" : "");
+      btn.className = "layout-choice-opt" + (opt.bold ? " is-bold" : " is-plain");
       btn.textContent = opt.label;
       btn.addEventListener("click", (ev) => {
         ev.preventDefault();
@@ -16266,6 +17130,11 @@
 
   function easyImgPhotoHostRow(row) {
     return !!(row && row.closest && row.closest("#easy-img-layout-host"));
+  }
+
+  function isEasyImgSharedMount() {
+    const panel = document.getElementById("layout-arrange");
+    return !!(panel && panel.closest("#easy-img-layout-host"));
   }
 
   function layoutPhotoOpenWord(row, open) {
@@ -16391,7 +17260,7 @@
         const now = !!(store.imgOmakaseLocks && store.imgOmakaseLocks[key]);
         setLayoutFrameLocked(blockId, slot, !now);
       });
-      cluster.appendChild(lockBtn);
+      if (!isEasyImgSharedMount()) cluster.appendChild(lockBtn);
       cluster.appendChild(thumb);
       line.appendChild(cluster);
       if (blockId === "hero") {
@@ -16407,12 +17276,11 @@
         word.textContent = layoutSizeWord(sz);
         word.addEventListener("click", (ev) => {
           stopSummaryToggle(ev);
-          const now = layout && layout.sizeById && layout.sizeById[slot] === "H" ? "H" : "L";
           openLayoutChoice(
             word,
             [
-              { value: "L", label: layoutSizeWord("L"), bold: true, on: now !== "H" },
-              { value: "H", label: layoutSizeWord("H"), bold: false, on: now === "H" }
+              { value: "L", label: layoutSizeWord("L"), bold: true },
+              { value: "H", label: layoutSizeWord("H"), bold: false }
             ],
             (token) => setLayoutFrameWidth(countId, slot, token)
           );
@@ -16430,12 +17298,14 @@
         if (!store.layoutInnerByBlock) store.layoutInnerByBlock = {};
         const inEasy = easyImgPhotoHostRow(row);
         if (row.classList.contains("is-open")) {
-          if (inEasy && easyImgPhotoHistory) {
-            history.back();
-            return;
-          }
           store.layoutInnerByBlock[openKey] = "";
           applyLayoutPhotoRowOpen(row, blockId, slot, false);
+          if (inEasy && easyImgPhotoHistory) {
+            easyImgPhotoHistory = false;
+            try {
+              history.back();
+            } catch (err) { /* 履歴が無くても閉じたまま */ }
+          }
           return;
         }
         const face = row.parentElement;
@@ -16694,20 +17564,27 @@
   function appendLayoutPhotoEditor(parent, blockId, slot) {
     const imageName = layoutFrameImageName(blockId, slot);
     const nowSrc = layoutFramePreviewSrc(imageName);
+    const inEasySample = isEasyImgSharedMount();
     const tools = document.createElement("div");
     tools.className = "layout-photo-tools layout-photo-tools--plain";
     const sources = document.createElement("div");
-    sources.className = "layout-img-sources";
+    sources.className = "layout-img-sources" + (inEasySample ? " is-sample-two" : "");
     const selfBtn = document.createElement("button");
     selfBtn.type = "button";
     selfBtn.className = "layout-img-source";
-    selfBtn.appendChild(document.createTextNode("自分の画像"));
-    selfBtn.appendChild(document.createElement("br"));
-    selfBtn.appendChild(document.createTextNode("から選ぶ"));
+    if (inEasySample) {
+      selfBtn.appendChild(document.createTextNode("端末から"));
+      selfBtn.appendChild(document.createElement("br"));
+      selfBtn.appendChild(document.createTextNode("選ぶ"));
+    } else {
+      selfBtn.appendChild(document.createTextNode("自分の画像"));
+      selfBtn.appendChild(document.createElement("br"));
+      selfBtn.appendChild(document.createTextNode("から選ぶ"));
+    }
     selfBtn.addEventListener("click", (ev) => {
       ev.preventDefault();
       ev.stopPropagation();
-      if (layoutPhotoReplaceLocked(blockId, slot)) {
+      if (!inEasySample && layoutPhotoReplaceLocked(blockId, slot)) {
         showLayoutPhotoLockedNotice();
         return;
       }
@@ -16717,47 +17594,55 @@
     const galleryBtn = document.createElement("button");
     galleryBtn.type = "button";
     galleryBtn.className = "layout-img-source layout-img-source--gallery";
-    galleryBtn.appendChild(document.createTextNode("ギャラリー"));
-    galleryBtn.appendChild(document.createElement("br"));
-    galleryBtn.appendChild(document.createTextNode("から選ぶ"));
+    if (inEasySample) {
+      galleryBtn.appendChild(document.createTextNode("ギャラリー"));
+      galleryBtn.appendChild(document.createElement("br"));
+      galleryBtn.appendChild(document.createTextNode("から選ぶ"));
+    } else {
+      galleryBtn.appendChild(document.createTextNode("ギャラリー"));
+      galleryBtn.appendChild(document.createElement("br"));
+      galleryBtn.appendChild(document.createTextNode("から選ぶ"));
+    }
     galleryBtn.addEventListener("click", (ev) => {
       ev.preventDefault();
       ev.stopPropagation();
-      if (layoutPhotoReplaceLocked(blockId, slot)) {
+      if (!inEasySample && layoutPhotoReplaceLocked(blockId, slot)) {
         showLayoutPhotoLockedNotice();
         return;
       }
-      openFreePhotoGalleryModal(imageName);
-    });
-    const omakaseBtn = document.createElement("button");
-    omakaseBtn.type = "button";
-    omakaseBtn.className = "layout-img-source layout-photo-omakase";
-    omakaseBtn.textContent = "おまかせ";
-    omakaseBtn.addEventListener("click", (ev) => {
-      ev.preventDefault();
-      ev.stopPropagation();
-      runLayoutPhotoOmakase(blockId, slot, omakaseBtn);
+      openFreePhotoGalleryModal(imageName, { sampleGenreOmakase: inEasySample });
     });
     const picked = !!(store.galleryPicks && store.galleryPicks[imageName]);
     if (picked) galleryBtn.classList.add("is-on");
     else selfBtn.classList.add("is-on");
-    const underLock = document.createElement("button");
-    underLock.type = "button";
-    const underLocked = !!(store.imgOmakaseLocks && store.imgOmakaseLocks[imageName]);
-    underLock.className = "layout-lock-mark layout-lock-under easy-img-omakase-lock" + (underLocked ? " is-on" : "");
-    underLock.textContent = underLocked ? "はずす" : "残す";
-    underLock.setAttribute("aria-label", underLocked ? "はずす" : "残す");
-    underLock.setAttribute("aria-pressed", underLocked ? "true" : "false");
-    underLock.addEventListener("click", (ev) => {
-      ev.preventDefault();
-      ev.stopPropagation();
-      const now = !!(store.imgOmakaseLocks && store.imgOmakaseLocks[imageName]);
-      setLayoutFrameLocked(blockId, slot, !now);
-    });
     sources.appendChild(selfBtn);
     sources.appendChild(galleryBtn);
-    sources.appendChild(omakaseBtn);
-    sources.appendChild(underLock);
+    if (!inEasySample) {
+      const omakaseBtn = document.createElement("button");
+      omakaseBtn.type = "button";
+      omakaseBtn.className = "layout-img-source layout-photo-omakase";
+      omakaseBtn.textContent = "おまかせ";
+      omakaseBtn.addEventListener("click", (ev) => {
+        ev.preventDefault();
+        ev.stopPropagation();
+        runLayoutPhotoOmakase(blockId, slot, omakaseBtn);
+      });
+      const underLock = document.createElement("button");
+      underLock.type = "button";
+      const underLocked = !!(store.imgOmakaseLocks && store.imgOmakaseLocks[imageName]);
+      underLock.className = "layout-lock-mark layout-lock-under easy-img-omakase-lock" + (underLocked ? " is-on" : "");
+      underLock.textContent = underLocked ? "はずす" : "残す";
+      underLock.setAttribute("aria-label", underLocked ? "はずす" : "残す");
+      underLock.setAttribute("aria-pressed", underLocked ? "true" : "false");
+      underLock.addEventListener("click", (ev) => {
+        ev.preventDefault();
+        ev.stopPropagation();
+        const now = !!(store.imgOmakaseLocks && store.imgOmakaseLocks[imageName]);
+        setLayoutFrameLocked(blockId, slot, !now);
+      });
+      sources.appendChild(omakaseBtn);
+      sources.appendChild(underLock);
+    }
     const cluster = document.createElement("div");
     cluster.className = "layout-photo-cluster";
     tools.appendChild(sources);
@@ -20557,17 +21442,9 @@
   document.querySelectorAll('a[href*="help.html"]').forEach(function (link) {
     link.addEventListener("click", function (ev) {
       if (ev.metaKey || ev.ctrlKey || ev.shiftKey || ev.altKey || ev.button !== 0) return;
-      if (!window.PageShutter) {
-        saveDraft();
-        return;
-      }
-      ev.preventDefault();
       saveDraft();
-      window.PageShutter.go(link.href);
     });
   });
-
-  if (window.PageShutter) window.PageShutter.resume();
 
   loadDraft();
   ensureFontsConfirmedForMode();

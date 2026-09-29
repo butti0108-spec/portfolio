@@ -27,7 +27,7 @@ body.atelier.entry-gate-open .atelier-shell {
   pointer-events: none;
 }
 
-/* —— entry gate（フル画面・透過なし・端まで白） —— */
+/* ?? entry gate???????????????? ?? */
 .entry-gate {
   position: fixed;
   inset: 0;
@@ -585,7 +585,7 @@ body.atelier.entry-gate-open .atelier-shell {
 }
 
 #entry-sample-color-row {
-  width: 58%;
+  width: min(100%, 22rem);
   max-width: 100%;
   margin-inline: auto;
 }
@@ -595,7 +595,11 @@ body.atelier.entry-gate-open .atelier-shell {
 }
 
 #entry-sample-color-row .entry-color-choice > span:not(.entry-color-bars) {
-  white-space: nowrap;
+  min-width: 0;
+  flex: 1 1 auto;
+  white-space: normal;
+  overflow-wrap: anywhere;
+  line-height: 1.35;
 }
 
 .entry-color-choice {
@@ -611,7 +615,8 @@ body.atelier.entry-gate-open .atelier-shell {
   display: flex;
   flex-direction: column;
   gap: 3px;
-  width: 5.5rem;
+  width: 4.75rem;
+  max-width: 28%;
   flex: 0 0 auto;
 }
 
@@ -978,7 +983,7 @@ body.atelier.color-mode-easy #easy-color-note {
 .entry-gate-card:hover,
 .entry-gate-card:focus-visible {
   border-color: #3d8a48;
-  background: rgba(255, 255, 255, 0.06); /* 操作中は枠だけ。地色は変えない */
+  background: rgba(255, 255, 255, 0.06); /* ??????????????? */
   outline: none;
 }
 
@@ -1166,7 +1171,7 @@ body.atelier.color-mode-easy #easy-color-note {
   text-align: center;
 }
 
-/* —— reset draft confirm (viewport center) —— */
+/* ?? reset draft confirm (viewport center) ?? */
 .reset-draft-modal[hidden] {
   display: none !important;
 }
@@ -1276,12 +1281,12 @@ body.reset-draft-open {
   overflow: hidden;
 }
 
-/* —— top chrome —— */
+/* ?? top chrome ?? */
 .atelier-chrome {
   position: relative;
   flex: 0 0 auto;
   display: grid;
-  /* 左右は中身の幅を下回らない。店名の列が左右の裏に入らない */
+  /* ???????????????????????????? */
   grid-template-columns: minmax(max-content, 1fr) minmax(min-content, auto) minmax(max-content, 1fr);
   align-items: center;
   gap: 0.75rem 1.25rem;
@@ -1499,7 +1504,7 @@ body.reset-draft-open {
   background: #163f72;
 }
 
-/* —— side menu drawer —— */
+/* ?? side menu drawer ?? */
 .atelier-menu[hidden] {
   display: none !important;
 }
@@ -1682,7 +1687,7 @@ body.reset-draft-open {
   color: #555;
 }
 
-/* —— split row —— */
+/* ?? split row ?? */
 .atelier-split {
   flex: 1 1 auto;
   display: flex;
@@ -1734,16 +1739,16 @@ body.is-splitting {
   user-select: none;
 }
 
-/* 左の操作パネル：通常 → 注文画面だけ → 左端のタブ。シャッターの時間と追従間隔 */
+/* ?????????? ? ?????? ? ??????????????????? */
 html {
   --dash-wave-dur: 800ms;
   --dash-wave-gap: 40ms;
-  /* 移動量。そよ風調整からは外した。欄は #wave-shift-park。今の開く波は読まない */
+  /* ?????????????????? #wave-shift-park??????????? */
   --dash-wave-shift: 6px;
   --dash-width-dur: 220ms;
   --dash-title-tuck: 140ms;
   --dash-squeeze-dur: 80ms;
-  /* 試しの時間。閉じは短く、開きは少し長く。実機で変えてよい */
+  /* ???????????????????????????? */
   --dash-shut-ms: 220ms;
   --dash-open-ms: 360ms;
   --dash-shut-ease: cubic-bezier(0.16, 0.84, 0.3, 1);
@@ -1903,7 +1908,7 @@ html.dash-collapse-half .dash-collapse-shut .dash-chevron--one {
   display: block;
 }
 
-/* しまう最初：中の並びは広げたまま、見える幅だけを注文画面の幅へ */
+/* ??????????????????????????????? */
 html.dash-wave-squeeze .dash-header {
   align-self: flex-start;
   box-sizing: border-box;
@@ -2117,7 +2122,7 @@ html.dash-wave-out.dash-wave-squeeze .dash-shutter-band {
   to { clip-path: inset(0 0 0 0); }
 }
 
-/* 全画面の次へ：6色の波。操作パネルの収納とは別 */
+/* ???????6??????????????? */
 #color-wave {
   position: fixed;
   inset: 0;
@@ -2144,7 +2149,7 @@ html.dash-wave-out.dash-wave-squeeze .dash-shutter-band {
   transform: scaleX(0);
 }
 
-/* 入口の保存選択から次の画面だけ。4行×16列。操作パネルの波、文章の次への波とは別 */
+/* ????????????????4??16???????????????????? */
 #grid-shutter {
   position: fixed;
   inset: 0;
@@ -2163,7 +2168,7 @@ html.dash-wave-out.dash-wave-squeeze .dash-shutter-band {
   transform: scaleX(0);
 }
 
-/* 用途の画面から先へ進むとき。8本の帯が左右から互い違いに抜け、交差の瞬間に次の画面 */
+/* ??????????????8?????????????????????????? */
 #cross-shutter {
   position: fixed;
   inset: 0;
@@ -2205,7 +2210,7 @@ html.dash-wave-out.dash-wave-squeeze .dash-shutter-band {
   }
 }
 
-/* そよ風調整は画面の外。#wave-tune は hidden。戻すときは hidden を外す */
+/* ???????????#wave-tune ? hidden?????? hidden ??? */
 .wave-tune {
   position: fixed;
   z-index: 40;
@@ -2357,7 +2362,7 @@ html.dash-wave-out.dash-wave-squeeze .dash-shutter-band {
   box-sizing: border-box;
 }
 
-/* 幅は JS の段階指定が正。CSS で枠内に潰さない */
+/* ?? JS ????????CSS ???????? */
 .preview-viewport.is-desktop,
 .preview-viewport.is-mobile,
 .preview-viewport.is-phone,
@@ -2398,7 +2403,7 @@ html.dash-wave-out.dash-wave-squeeze .dash-shutter-band {
 .preview-site .site-header {
   background-color: var(--chrome-bg) !important;
   background-image: var(--chrome-bg-image, none) !important;
-  /* sticky は止めるが、番号バッジの基準に relative が必要 */
+  /* sticky ??????????????? relative ??? */
   position: relative !important;
   top: auto !important;
 }
@@ -2465,7 +2470,7 @@ html.dash-wave-out.dash-wave-squeeze .dash-shutter-band {
   -webkit-text-stroke: 0 !important;
 }
 
-/* カードのリンクボタンはアクセント（親の本文色 !important で黒くしない） */
+/* ?????????????????????? !important ??????? */
 .preview-site .work-link {
   background: var(--accent, var(--brand)) !important;
   border-color: var(--accent, var(--brand)) !important;
@@ -2497,7 +2502,7 @@ html.dash-wave-out.dash-wave-squeeze .dash-shutter-band {
   max-width: 100%;
 }
 
-/* 左プレビューは確認専用 */
+/* ??????????? */
 #preview-root .preview-hit,
 #preview-root .zone-badge {
   cursor: default !important;
@@ -2531,7 +2536,7 @@ body.atelier.mode-detail #preview-root [data-open-step] {
 .preview-site .accordion-body {
   border-top-color: color-mix(in srgb, var(--body-ink, #222) 14%, transparent) !important;
 }
-/* 親の style.css が .work-item a { background:#fff } 固定のため、墨などで本文色が明るいと白抜けする。カード地スロットに合わせる */
+/* ?? style.css ? .work-item a { background:#fff } ????????????????????????????????????? */
 .preview-site .work-item a,
 .preview-site .work-item-pending,
 .preview-site .work-item-static {
@@ -2549,7 +2554,7 @@ body.atelier.mode-detail #preview-root [data-open-step] {
   background-color: var(--contact-bg) !important;
   background-image: var(--contact-bg-image, none) !important;
 }
-/* 親style未読込時でもご連絡は中央（Live Server直下対策） */
+/* ?style?????????????Live Server????? */
 .preview-site .contact-band-inner {
   max-width: none;
   text-align: center !important;
@@ -2729,7 +2734,7 @@ body.atelier.mode-detail #preview-root [data-open-step] {
 
 
 
-/* —— zone badges / wizard / dash (kept + adapted) —— */
+/* ?? zone badges / wizard / dash (kept + adapted) ?? */
 .preview-hit {
   position: relative;
 }
@@ -2792,7 +2797,7 @@ body.atelier.mode-detail #preview-root [data-open-step] {
   background: #8b3a2a;
 }
 
-/* 簡単モード：色番号はプリセットだけ（ダッシュと同じ） */
+/* ?????????????????????????? */
 body.atelier.color-mode-easy .zone-badge[data-open-step="global-chrome-bg"],
 body.atelier.color-mode-easy .zone-badge[data-open-step="global-chrome-ink"],
 body.atelier.color-mode-easy .zone-badge[data-open-step="global-bg"],
@@ -3002,7 +3007,7 @@ body.mode-guided .dash-block.is-text-chapter.is-wizard-active {
   padding: 0.25rem 0.15rem 0.5rem;
 }
 
-/* dash-subhead は Ver1.1 Phase1（H2）側。note/sub は System寄りのためここでは触らない */
+/* dash-subhead ? Ver1.1 Phase1?H2???note/sub ? System????????????? */
 body.mode-guided .dash-block.is-text-chapter.is-wizard-active .dash-note,
 body.mode-guided .dash-block.is-text-chapter.is-wizard-active .dash-sub {
   font-size: 0.95rem;
@@ -3063,7 +3068,7 @@ body.mode-guided #wizard-back {
   background: rgba(255, 255, 255, 0.25);
 }
 
-/* —— 番号バッジ：枠ごとに座標を分けて重ならないようにする —— */
+/* ?? ?????????????????????????? ?? */
 .preview-site .site-header .zone-badge[data-open-step="global-chrome-bg"] {
   top: 0.4rem;
   left: 0.45rem;
@@ -3276,7 +3281,7 @@ body.wizard-mode .dash-block {
 
 body.wizard-mode .dash-block.is-wizard-active {
   display: block;
-  /* 前の画面（非表示）との区切り余白を足さない。見出しは進捗の線の直下 */
+  /* ????????????????????????????????? */
   margin-top: 0;
 }
 
@@ -3428,7 +3433,7 @@ body.wizard-mode .dash-block.is-wizard-active {
   border-radius: 4px;
 }
 
-/* —— 制作フロー —— */
+/* ?? ????? ?? */
 .make-flow {
   margin: 0 0 1rem;
   padding: 0.75rem 0.85rem;
@@ -3666,7 +3671,7 @@ body.wizard-mode .dash-block.is-wizard-active {
   background: #fff;
 }
 
-/* —— 確定行 —— */
+/* ?? ??? ?? */
 .confirm-row {
   display: flex;
   flex-wrap: wrap;
@@ -3716,7 +3721,7 @@ body.wizard-mode .dash-block.is-wizard-active {
   font-weight: 700;
 }
 
-/* —— 色フィールド —— */
+/* ?? ?????? ?? */
 .color-field {
   margin: 0.75rem 0;
   padding-bottom: 0.65rem;
@@ -4035,7 +4040,7 @@ body.wizard-mode .dash-block.is-wizard-active {
 
 
 
-/* —— dash header (grid: intro | title | actions) —— */
+/* ?? dash header (grid: intro | title | actions) ?? */
 .dash-header {
   flex: 0 0 auto;
   padding: 0.55rem 1rem 0.5rem;
@@ -4159,7 +4164,7 @@ body.wizard-mode .dash-block.is-wizard-active {
   padding: 0.75rem 1rem 0.75rem;
 }
 
-/* —— layout picker：既定は ▢ 縦積み。広いときだけ ▢▢▢ —— */
+/* ?? layout picker???? ? ?????????? ??? ?? */
 .layout-picker-row {
   display: grid;
   grid-template-columns: 1fr;
@@ -4174,7 +4179,7 @@ body.wizard-mode .dash-block.is-wizard-active {
   margin: 0.5rem 0 0;
 }
 
-/* 縦積み時：カード内は左右（ラベル｜ワイヤ）で高さを抑える */
+/* ???????????????????????????? */
 .layout-picker-row--step .layout-card,
 .layout-picker-row--menu .layout-card {
   flex-direction: row;
@@ -4195,7 +4200,7 @@ body.wizard-mode .dash-block.is-wizard-active {
   align-self: flex-start;
 }
 
-/* 注文ペイン：狭い＝縦優先／広い＝横に詰めて縦スクロール減 */
+/* ???????????????????????????? */
 @container dash (min-width: 420px) {
   #purpose-picker {
     display: grid;
@@ -4230,7 +4235,7 @@ body.wizard-mode .dash-block.is-wizard-active {
   }
 }
 
-/* レイアウト：ある程度の幅から ▢▢▢（横並び） */
+/* ?????????????? ???????? */
 @container dash (min-width: 480px) {
   .layout-picker-row--step {
     grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -4464,7 +4469,7 @@ body.wizard-mode .dash-block.is-wizard-active {
   min-height: 0.42rem;
 }
 
-/* 余り半幅の空マス（プレビューの半枠と幅を揃える） */
+/* ???????????????????????? */
 .layout-card-wire .lw-spacer {
   background: transparent;
   border-style: dashed;
@@ -4487,8 +4492,8 @@ body.wizard-mode .dash-block.is-wizard-active {
   min-width: 0;
 }
 
-/* 枚数は「何個あるか」だけ。列数は読める最小幅で自動（狭い＝下へ折り返し）
-   ※ .is-item-layout-manual のときは編集ハブの大／小指定が優先 */
+/* ????????????????????????????????????
+   ? .is-item-layout-manual ????????????????? */
 .preview-site #about-photos.skill-cards,
 .preview-site #works-list.work-list,
 .preview-site #hero-values.hero-value-list,
@@ -4520,7 +4525,7 @@ body.wizard-mode .dash-block.is-wizard-active {
 .preview-site #works-list.work-list.is-item-layout-manual {
   grid-template-columns: repeat(var(--item-layout-cols, 2), minmax(0, 1fr));
 }
-/* 写真・カード・キャッチ：縦横5%刻みの位置調整 */
+/* ??????????????5%??????? */
 .preview-site #about-photos > [data-sample-item],
 .preview-site #works-list > [data-sample-item],
 .preview-site .hero-stage {
@@ -4593,12 +4598,12 @@ html.is-capture-mode .item-focal-nudge,
 body.sample-flow-hide-preview .item-focal-nudge {
   display: none !important;
 }
-/* 編集ハブ外（入口など）では出さない */
+/* ????????????????? */
 body.atelier:not(.mode-detail) .item-focal-nudge {
   display: none !important;
 }
 
-/* A（全幅）: 下の枠・カードは幅が足りれば横並びを優先（手動大／小は除外） */
+/* A????: ?????????????????????????????? */
 #preview-root[data-layout="a"] #hero-values.hero-value-list,
 #preview-root[data-layout="a"] #works-list.work-list:not(.is-item-layout-manual) {
   grid-template-columns: repeat(auto-fit, minmax(min(100%, 9.5rem), 1fr));
@@ -4619,7 +4624,7 @@ body.atelier:not(.mode-detail) .item-focal-nudge {
   height: auto;
 }
 
-/* 同じ行＝外枠の高さ揃え。中身は上揃え（文字は引き伸ばさない） */
+/* ?????????????????????????????? */
 .preview-site #hero-values.hero-value-list > li {
   display: flex;
   flex-direction: column;
@@ -4688,7 +4693,7 @@ body.atelier:not(.mode-detail) .item-focal-nudge {
   box-sizing: border-box;
 }
 
-/* 下の枠の区切り線：横並びのときだけ左線 */
+/* ??????????????????? */
 .preview-site #hero-values li + li {
   border-left: 0;
 }
@@ -4698,7 +4703,7 @@ body.atelier:not(.mode-detail) .item-focal-nudge {
   }
 }
 
-/* B: 半幅ブロック内は必ず1列（横割り禁止） */
+/* B: ??????????1???????? */
 #preview-root[data-layout="b"] #hero-values,
 #preview-root[data-layout="b"] #about-photos,
 #preview-root[data-layout="b"] #about-accordions,
@@ -4721,17 +4726,17 @@ body.atelier:not(.mode-detail) .item-focal-nudge {
 #preview-root[data-layout="c"] [data-layout-size="S"] #about-photos.is-item-layout-manual,
 #preview-root[data-layout="c"] [data-layout-size="S"] .skill-cards.is-item-layout-manual,
 #preview-root[data-layout="c"] [data-layout-size="S"] .work-list.is-item-layout-manual {
-  /* 半幅: 列は最大2（--item-layout-cols を JS/見本側で2以下に保つ） */
+  /* ??: ????2?--item-layout-cols ? JS/????2?????? */
   grid-template-columns: repeat(var(--item-layout-cols, 1), minmax(0, 1fr));
 }
 
-/* —— preview layouts: A横長 / B左右分割 / C混合 —— */
+/* ?? preview layouts: A?? / B???? / C?? ?? */
 #preview-root[data-layout] main {
   display: flex;
   flex-direction: column;
 }
 
-/* A: 横長＝縦積みの全幅枠（ヘッダーと同じ shell 幅に収める。端まで伸ばさない） */
+/* A: ?????????????????? shell ??????????????? */
 #preview-root[data-layout="a"] [data-layout-block] {
   min-width: 0;
   max-width: 100%;
@@ -4797,7 +4802,7 @@ body.atelier:not(.mode-detail) .item-focal-nudge {
   max-height: none;
   object-fit: cover;
 }
-/* Aのカード・下の枠は横並び可（上の auto-fit）。縦積み強制はしない */
+/* A???????????????? auto-fit??????????? */
 #preview-root[data-layout="a"] #works .work-list,
 #preview-root[data-layout="a"] #works-list.work-list {
   display: grid;
@@ -4829,7 +4834,7 @@ body.atelier:not(.mode-detail) .item-focal-nudge {
   min-width: 0;
 }
 
-/* B: 左右分割 — stretch で半幅の高さ差の白抜けを埋める */
+/* B: ???? ? stretch ??????????????? */
 #preview-root[data-layout="b"] main {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -4850,7 +4855,7 @@ body.atelier:not(.mode-detail) .item-focal-nudge {
   grid-template-columns: 1fr;
 }
 
-/* B/C: 写真・カード画像は横長に揃える（半幅で原寸縦長になるのを防ぐ） */
+/* B/C: ??????????????????????????????? */
 #preview-root[data-layout="b"] #about-photos .skill-card-img,
 #preview-root[data-layout="b"] #about-photos-block .skill-card-img,
 #preview-root[data-layout="c"] #about-photos .skill-card-img,
@@ -4884,7 +4889,7 @@ body.atelier:not(.mode-detail) .item-focal-nudge {
   object-fit: cover;
 }
 
-/* C: 混合 — 半幅同士は stretch */
+/* C: ?? ? ????? stretch */
 #preview-root[data-layout="c"] main {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -4903,7 +4908,7 @@ body.atelier:not(.mode-detail) .item-focal-nudge {
   grid-template-columns: 1fr;
 }
 
-/* 密化: 営業・アクセス・住所の縦余白を詰める */
+/* ??: ?????????????????? */
 #preview-root [data-layout-block="hours"],
 #preview-root [data-layout-block="access"],
 #preview-root [data-layout-block="address"] {
@@ -4935,7 +4940,7 @@ body.atelier:not(.mode-detail) .item-focal-nudge {
   max-width: 100%;
   box-sizing: border-box;
 }
-/* L枠は通常の .shell 幅（ガター込み）を維持。100%強制でヘッダーより外へ出さない */
+/* L????? .shell ????????????100%??????????????? */
 #preview-root [data-layout-block="values"] {
   padding-top: 0.35rem;
   padding-bottom: 0.35rem;
@@ -4954,7 +4959,7 @@ body.atelier:not(.mode-detail) .item-focal-nudge {
   }
 }
 
-/* プレビュー幅ドット（窓が広くてもスマホ枠なら1列） */
+/* ??????????????????????1?? */
 .preview-viewport.is-phone #preview-root[data-layout="b"] main,
 .preview-viewport.is-phone #preview-root[data-layout="c"] main,
 .preview-viewport.is-mobile #preview-root[data-layout="b"] main,
@@ -4966,7 +4971,7 @@ body.atelier:not(.mode-detail) .item-focal-nudge {
   grid-column: auto;
 }
 
-/* レイアウト並びワイヤー */
+/* ??????????? */
 .layout-arrange {
   margin-top: 0.85rem;
   padding: 0.7rem 0.75rem 0.8rem;
@@ -5024,11 +5029,11 @@ body.atelier:not(.mode-detail) .item-focal-nudge {
 .layout-arrange-cell.is-dragging {
   opacity: 0.35;
   cursor: grabbing;
-  border-color: #3d8a48; /* 操作中＝緑枠のみ（塗りは使わない） */
+  border-color: #3d8a48; /* ????????????????? */
   background: #fff;
   box-shadow: none;
 }
-/* 選択＝通常の操作可能（白＋グレー）。緑はドロップ／ドラッグ中だけ */
+/* ???????????????????????????????? */
 .layout-arrange-cell.is-selected {
   border-color: rgba(20, 28, 36, 0.22);
   background: #fff;
@@ -5037,7 +5042,7 @@ body.atelier:not(.mode-detail) .item-focal-nudge {
 .layout-arrange-cell.is-drop-target {
   border-color: #3d8a48;
   background: #fff;
-  box-shadow: 0 0 0 1px #3d8a48; /* 「ここで離せます」＝操作中 */
+  box-shadow: 0 0 0 1px #3d8a48; /* ????????????? */
 }
 .layout-arrange-ghost {
   position: fixed;
@@ -5350,7 +5355,7 @@ body.is-item-grow-open .item-grow-popover:not([hidden]) {
   display: none !important;
 }
 
-/* キャッチ写真：初期は写真のみ。「これは見本です」は写真の上に出さない */
+/* ?????????????????????????????????? */
 .preview-site .hero-mock-notice {
   display: none !important;
 }
@@ -5366,7 +5371,7 @@ body.is-item-grow-open .item-grow-popover:not([hidden]) {
   color: #fff;
 }
 
-/* 本番キャッチ文は「載せる」のときだけ出す（見本写真でも可） */
+/* ????????????????????????????? */
 .preview-site .hero-stage .hero-copy {
   visibility: hidden;
 }
@@ -5380,7 +5385,7 @@ body.is-item-grow-open .item-grow-popover:not([hidden]) {
   pointer-events: none;
 }
 
-/* キャッチ枠あり・画像なし（色地＋文字） */
+/* ??????????????????? */
 .preview-site .hero-stage.is-hero-image-off {
   aspect-ratio: auto;
   min-height: clamp(14rem, 42vw, 28rem);
@@ -5747,7 +5752,7 @@ body.is-item-grow-open .item-grow-popover:not([hidden]) {
   text-decoration: none;
 }
 
-/* —— ガイド色・試着UI（Coolors型・独自レイアウト） —— */
+/* ?? ???????UI?Coolors?????????? ?? */
 .guided-color-trial {
   margin-top: 1rem;
   padding: 1rem 0.85rem 1.1rem;
@@ -6254,7 +6259,7 @@ body.gct-preset-phase.mode-guided .dash-block.is-wizard-active .step-help {
   color: #1a4d8c;
 }
 
-/* —— extra recovered / gap-fill —— */
+/* ?? extra recovered / gap-fill ?? */
 .wizard-progress-seg.is-done {
   background: #3d8a48;
   border-color: #2f6e38;
@@ -6508,7 +6513,7 @@ body.gct-preset-phase.mode-guided .dash-block.is-wizard-active .step-help {
   margin-bottom: 0.75rem;
 }
 .gct-pick-layout--split {
-  /* ハニカム（chooser）を主役に。広いとき右／狭いとき上 */
+  /* ?????chooser????????????????? */
   grid-template-columns: minmax(0, 1.35fr) minmax(10.5rem, 0.92fr);
   grid-template-areas: "chooser side";
   align-items: start;
@@ -6566,7 +6571,7 @@ body.gct-preset-phase.mode-guided .dash-block.is-wizard-active .step-help {
   line-height: 1.4;
   color: #4a5560;
 }
-/* 狭いときはハニカム → 操作の順 */
+/* ????????? ? ???? */
 @container gct-pick-phase (max-width: 36rem) {
   .gct-pick-layout--split {
     grid-template-columns: 1fr;
@@ -6975,7 +6980,7 @@ body.is-layout-dragging .has-hover-tip::after {
   font-size: 0.6rem;
   line-height: 1.15;
 }
-/* ワイヤーは見出し直後から上詰め。伸縮させず A（住所込み7本）も枠内へ */
+/* ????????????????????? A?????7?????? */
 .entry-layout-grid--2x2 .layout-card-wire {
   display: flex;
   flex-direction: column;
@@ -7189,7 +7194,7 @@ body.gct-pick-phase #easy-color-note {
   width: 100%;
   justify-content: center;
 }
-/* 色選択中は下の「確定」足を隠し、出口は「この色にする」だけにする */
+/* ???????????????????????????????? */
 body.gct-pick-phase #wizard-nav {
   display: none !important;
 }
@@ -7483,7 +7488,7 @@ body.atelier.color-mode-easy .preset-row--mood6 [data-easy-preset] {
   display: block;
 }
 
-/* —— メニュー撤廃後のクロム／モード／表紙コンパクト —— */
+/* ?? ??????????????????????? ?? */
 .chrome-control--badges {
   display: none !important;
 }
@@ -7657,7 +7662,7 @@ body.atelier.color-mode-easy .preset-row--mood6 [data-easy-preset] {
   align-items: stretch;
   justify-content: center;
   gap: 0.85rem;
-  /* ハブ入口カードと同じ高さ感。無理に高くしない */
+  /* ?????????????????????? */
   min-height: 0;
   padding: 0.85rem 1rem;
   border-radius: 0.7rem;
@@ -7670,7 +7675,7 @@ body.atelier.color-mode-easy .preset-row--mood6 [data-easy-preset] {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  gap: 0.5rem; /* hub-entry-card の title→note と同じ */
+  gap: 0.5rem; /* hub-entry-card ? title?note ??? */
   margin: 0;
   padding: 0;
 }
@@ -7679,7 +7684,7 @@ body.atelier.color-mode-easy .preset-row--mood6 [data-easy-preset] {
   font-size: 1.05rem;
   font-weight: 700;
   line-height: 1.35;
-  color: #1a1f1c; /* 通常案内＝黒（警告赤は使わない） */
+  color: #1a1f1c; /* ???????????????? */
 }
 .detail-notice-text {
   margin: 0;
@@ -7839,7 +7844,7 @@ body.atelier.color-mode-easy .preset-row--mood6 [data-easy-preset] {
   background: transparent;
   color: #1a1f1c;
 }
-/* 左プレビューは見るだけ（並びドラッグなし） */
+/* ????????????????????? */
 #preview-root main [data-layout-block],
 #preview-root [data-layout-block].is-preview-dragging,
 #preview-root main.is-preview-layout-dragging [data-layout-block] {
@@ -8186,7 +8191,7 @@ body.mode-detail .dash-block--layout-hub {
 #easy-img-photo1-slot {
   display: none;
 }
-/* 写真を枠にはめる：箱の上余白を外し、枠を説明の直下から始める（編集ハブの箱は変えない） */
+/* ??????????????????????????????????????????? */
 body.wizard-mode #easy-img-layout-host > .layout-arrange,
 body.wizard-mode #easy-img-layout-host > .layout-arrange--expanded {
   margin-top: 0;
@@ -8229,7 +8234,7 @@ body.wizard-mode #easy-img-layout-host .layout-arrange-actions {
   padding-top: 0 !important;
   border-top: 0 !important;
 }
-/* ドラッグ中は掴みカーソルだけ。子のクリックを切らない（残留で操作不能になるため） */
+/* ???????????????????????????????????????? */
 .layout-arrange-wire.is-dragging-layout .layout-arrange-cell {
   cursor: grabbing;
 }
@@ -8286,7 +8291,7 @@ body.wizard-mode #easy-img-layout-host .layout-arrange-actions {
   display: none !important;
 }
 
-/* 進捗バー廃止・旧色UI残骸は出さない */
+/* ?????????UI??????? */
 .wizard-progress-bar,
 .color-field,
 .swatch-row,
@@ -8321,12 +8326,12 @@ body.wizard-mode #easy-img-layout-host .layout-arrange-actions {
   margin: 0 0 0.35rem;
   font-size: 0.78rem;
 }
-/* 見本プレビュー：キャッチ枠は横長比で固定（縦写真でも一段下に文字が落ちない） */
+/* ?????????????????????????????????????? */
 .preview-site .hero-stage {
   overflow: hidden;
   aspect-ratio: 2752 / 1536;
 }
-/* 保険: 親／コピー style の虹が漏れても見本キャッチには出さない（フェーズ3） */
+/* ??: ????? style ????????????????????????3? */
 .preview-site .hero-stage::before,
 .preview-site .hero-stage::after {
   content: none !important;
@@ -8350,7 +8355,7 @@ body.wizard-mode #easy-img-layout-host .layout-arrange-actions {
   min-width: 0;
   min-height: 0;
 }
-/* キャッチ写真：文字オン／オフ＋下地パネル */
+/* ???????????????????? */
 .preview-site .hero-copy-plate {
   display: inline-block;
   max-width: min(36rem, 92%);
@@ -8476,7 +8481,7 @@ body.atelier.color-mode-easy .zone-badge[data-open-step="site-fonts"] {
   margin-top: 0.65rem;
 }
 
-/* —— 回転寿司（上ストック＋通路レーン） —— */
+/* ?? ????????????????? ?? */
 .entry-gate[data-entry-step="sushi"] .entry-gate-panel--full {
   width: min(72rem, 100%);
   max-width: 100%;
@@ -8503,7 +8508,7 @@ body.atelier.color-mode-easy .zone-badge[data-open-step="site-fonts"] {
 }
 
 #entry-sushi-field.sushi-shelf {
-  /* レーンは画面に約4〜5枚見える大きさ。上枠は小さくしてレーンを主役に */
+  /* ????????4?5??????????????????????? */
   --sushi-tile-w: 210px;
   --sushi-tile-h: 296px;
   --sushi-tile-gap: 18px;
@@ -8528,7 +8533,7 @@ body.atelier.color-mode-easy .zone-badge[data-open-step="site-fonts"] {
   display: none !important;
 }
 
-/* 寿司ステップ中は看板・工程タイトルを消し、レーンに余白を寄せる */
+/* ??????????????????????????????? */
 #entry-gate[data-entry-step="sushi"] .entry-gate-banner,
 #entry-gate[data-entry-step="sushi"] .entry-gate-title,
 #entry-gate[data-entry-step="sushi"] .entry-gate-lead {
@@ -8550,11 +8555,11 @@ body.atelier.color-mode-easy .zone-badge[data-open-step="site-fonts"] {
   gap: 0.35rem;
   flex: 0 0 auto;
   min-width: 0;
-  /* ①②行とレーンのあいだ（矢印がレーンを食わない余白） */
+  /* ?????????????????????????? */
   margin-bottom: 0.85rem;
 }
 
-/* 旧1・2・3番号の位置：最上段に戻る／操作のヒント */
+/* ?1?2?3??????????????????? */
 .sushi-chrome {
   display: flex;
   align-items: center;
@@ -8586,14 +8591,14 @@ body.atelier.color-mode-easy .zone-badge[data-open-step="site-fonts"] {
 }
 
 /*
-  旧左右テキスト枠の空きに①②。枠の両脇に余白を残し、その中央に置く。
-  ②は右端枠の右側から、その枠の高さ中央を指す。
+  ??????????????????????????????????
+  ???????????????????????
 */
 .sushi-upper-band {
   display: grid;
   grid-template-columns: minmax(11.5rem, 1.1fr) auto minmax(11.5rem, 1.1fr);
   align-items: center;
-  /* ←先端と右端枠のあいだは側の padding で約1文字分 */
+  /* ?????????????? padding ??1??? */
   column-gap: 0.25rem;
   row-gap: 0;
   padding: 0.45rem 0.35rem 0;
@@ -8606,13 +8611,13 @@ body.atelier.color-mode-easy .zone-badge[data-open-step="site-fonts"] {
   padding-inline: 0.35rem;
 }
 .sushi-side--add {
-  /* ①は3枠・②と同じ横列（縦中央） */
+  /* ??3????????????? */
   align-self: center;
   justify-content: center;
   padding-bottom: 0;
 }
 .sushi-side--confirm {
-  /* 先端を枠寄りに置き、padding で1文字分あける */
+  /* ??????????padding ?1?????? */
   justify-content: flex-start;
   padding-left: 1.45rem;
   padding-right: 0.35rem;
@@ -8741,7 +8746,7 @@ body.atelier.color-mode-easy .zone-badge[data-open-step="site-fonts"] {
   letter-spacing: 0;
   line-height: 1;
 }
-/* 控えめな指差し三角。主役はレーンのサンプル */
+/* ????????????????????? */
 .sushi-flow-arrow {
   flex: 0 0 auto;
   box-sizing: border-box;
@@ -8804,7 +8809,7 @@ body.atelier.color-mode-easy .zone-badge[data-open-step="site-fonts"] {
   }
 }
 
-/* 上枠ポップ：3枠の上にかぶせる（視線を画面中央へ飛ばさない） */
+/* ??????3??????????????????????? */
 .sushi-slot-pop {
   position: fixed;
   inset: 0;
@@ -8868,13 +8873,13 @@ body.atelier.color-mode-easy .zone-badge[data-open-step="site-fonts"] {
   position: relative;
   margin: 0;
   border-radius: 1rem;
-  /* 大理石の白い床イメージ：明るく・圧を出さない */
+  /* ?????????????????????? */
   background:
     linear-gradient(180deg, rgba(255, 255, 255, 0.55), rgba(248, 246, 242, 0.9)),
     #f3f1ec;
   border: 1px solid rgba(20, 28, 36, 0.07);
   overflow: hidden;
-  /* 上段を上げた分、レーン帯が残りの縦を使う（タイル寸法は拡大しない） */
+  /* ????????????????????????????????? */
   flex: 1 1 auto;
   align-self: stretch;
   width: 100%;
@@ -8909,7 +8914,7 @@ body.atelier.color-mode-easy .zone-badge[data-open-step="site-fonts"] {
   gap: var(--sushi-tile-gap);
   width: max-content;
   will-change: transform;
-  /* 端余白は .sushi-lane の padding 側へ（一周計測を単純に保つ） */
+  /* ???? .sushi-lane ? padding ?????????????? */
   padding-inline: 0;
 }
 
@@ -8999,7 +9004,7 @@ body.atelier.color-mode-easy .zone-badge[data-open-step="site-fonts"] {
   width: 100%;
   height: auto;
   max-width: none;
-  /* 横幅＝タイル幅・縦横比維持。枠で下を切る＝ページ上部のみ */
+  /* ???????????????????????????? */
   object-position: top center;
   pointer-events: none;
 }
@@ -9058,7 +9063,7 @@ body.atelier.color-mode-easy .zone-badge[data-open-step="site-fonts"] {
   padding: 1rem;
 }
 
-/* 操作のヒントだけ上端へ（レーンより先に案内を置く） */
+/* ????????????????????????? */
 #sushi-guide-modal.sushi-modal {
   place-items: start center;
   align-content: start;
@@ -9067,7 +9072,7 @@ body.atelier.color-mode-easy .zone-badge[data-open-step="site-fonts"] {
   transition: background 0.35s ease;
 }
 
-/* 閉じるとき：カードが「操作のヒント」へ吸い込まれる間 */
+/* ?????????????????????????? */
 #sushi-guide-modal.sushi-modal.is-sucking {
   background: rgba(10, 14, 18, 0);
   pointer-events: none;
@@ -9094,7 +9099,7 @@ body.atelier.color-mode-easy .zone-badge[data-open-step="site-fonts"] {
 }
 
 .sushi-modal-card.sushi-guide-card {
-  /* 説明が自然に折り返せる横幅。必要以上に広げない */
+  /* ??????????????????????? */
   --sushi-guide-title-size: 1.4rem;
   padding: 0.9rem 1.4rem 1.1rem;
   width: min(34rem, calc(100vw - 2rem));
@@ -9106,7 +9111,7 @@ body.atelier.color-mode-easy .zone-badge[data-open-step="site-fonts"] {
 }
 
 .sushi-guide-card #sushi-guide-title {
-  /* 100%・太字 */
+  /* 100%??? */
   margin: 0 0 1.4rem;
   font-size: var(--sushi-guide-title-size);
   font-weight: 800;
@@ -9127,7 +9132,7 @@ body.atelier.color-mode-easy .zone-badge[data-open-step="site-fonts"] {
 }
 
 .sushi-guide-heading {
-  /* 75〜80%・やや太字 */
+  /* 75?80%????? */
   margin: 0 0 0.35rem;
   font-size: calc(var(--sushi-guide-title-size) * 0.78);
   font-weight: 700;
@@ -9136,7 +9141,7 @@ body.atelier.color-mode-easy .zone-badge[data-open-step="site-fonts"] {
 }
 
 .sushi-guide-text {
-  /* 65〜70%・通常 */
+  /* 65?70%??? */
   margin: 0;
   font-size: calc(var(--sushi-guide-title-size) * 0.68);
   font-weight: 400;
@@ -9218,10 +9223,10 @@ body.atelier.color-mode-easy .zone-badge[data-open-step="site-fonts"] {
   z-index: 85;
   display: grid;
   place-items: center;
-  /* 左右にページが残る余白（全幅感を避ける） */
+  /* ???????????????????? */
   padding: 0.9rem clamp(0.75rem, 3vw, 1.6rem);
   box-sizing: border-box;
-  /* 真っ黒で締めず、落ち着いた薄い色 */
+  /* ???????????????? */
   background: rgba(232, 229, 222, 0.88);
   opacity: 0;
   pointer-events: none;
@@ -9241,7 +9246,7 @@ body.atelier.color-mode-easy .zone-badge[data-open-step="site-fonts"] {
 .sushi-zoom-layer[hidden] { display: none !important; }
 
 .sushi-zoom-inner {
-  /* 横幅およそ2/3。ページが切り替わったように見えない */
+  /* ?????2/3?????????????????? */
   width: min(66.67vw, 1200px);
   max-width: calc(100vw - 1.5rem);
   height: calc(100vh - 2.2rem);
@@ -9292,7 +9297,7 @@ body.atelier.color-mode-easy .zone-badge[data-open-step="site-fonts"] {
   cursor: pointer;
 }
 
-/* 旧チュートリアル残骸：ガイドモーダルは .sushi-modal を使用 */
+/* ??????????????????? .sushi-modal ??? */
 .sushi-tutorial {
   display: none !important;
 }
@@ -9344,7 +9349,7 @@ body.atelier.color-mode-easy .zone-badge[data-open-step="site-fonts"] {
   justify-content: flex-end;
 }
 
-/* 基本情報：見本は畳み、中身は入口と同じ幅で真ん中へ（html側は描画前から） */
+/* ??????????????????????????html???????? */
 html.sample-flow-hide-preview .atelier-preview,
 html.sample-flow-hide-preview .preview-pane,
 html.sample-flow-hide-preview .atelier-preview-col,
@@ -9362,7 +9367,7 @@ html.sample-flow-hide-preview .dash-pane {
   background: #fff;
 }
 
-/* 入口の選択画面と同じ幅で、真ん中に集める */
+/* ???????????????????? */
 html.sample-flow-hide-preview .dash-header,
 html.sample-flow-hide-preview .dash-body,
 html.sample-flow-hide-preview .wizard-head-dock,
@@ -9461,7 +9466,7 @@ body.atelier.sample-preview-pop .preview-pane {
   100% { transform: scale(1); opacity: 1; }
 }
 
-/* 撮影専用 (?capture=1) — プレビューサイト枠だけをフル高さで出す */
+/* ???? (?capture=1) ? ??????????????????? */
 html.is-capture-mode,
 html.is-capture-mode body {
   margin: 0 !important;
@@ -9469,7 +9474,7 @@ html.is-capture-mode body {
   background: #fff !important;
   overflow: hidden !important;
   min-height: 0 !important;
-  /* height は JS がフッター下端で固定する（auto !important にしない） */
+  /* height ? JS ?????????????auto !important ????? */
 }
 
 html.is-capture-mode body.atelier {
@@ -9552,7 +9557,7 @@ html.is-capture-mode #preview-root {
   padding-bottom: 0 !important;
 }
 
-/* フッターより下に余白を作らない */
+/* ??????????????? */
 html.is-capture-mode #preview-root .site-footer,
 html.is-capture-mode #preview-footer {
   margin-bottom: 0 !important;
@@ -9576,7 +9581,7 @@ html.is-capture-mode body.sample-flow-hide-preview #preview-root {
   pointer-events: none !important;
 }
 
-/* —— 2026-09-11 UIアップ —— */
+/* ?? 2026-09-11 UI??? ?? */
 .hub-abc-block {
   display: none !important;
 }
@@ -9709,7 +9714,7 @@ html.is-capture-mode body.sample-flow-hide-preview #preview-root {
   font-weight: 700;
 }
 
-/* 操作UI：端まで白（ショーケース）。両脇だけ灰／クリームにしない */
+/* ??UI???????????????????????????? */
 .entry-gate {
   background: #fff;
 }
@@ -9932,7 +9937,7 @@ html.is-capture-mode body.sample-flow-hide-preview #preview-root {
   margin-top: 0.55rem;
 }
 
-/* 開閉できるUI：右端の下向き三角で統一 */
+/* ?????UI???????????? */
 .ui-disclosure-chevron {
   flex: 0 0 auto;
   width: 1.1rem;
@@ -9946,7 +9951,7 @@ html.is-capture-mode body.sample-flow-hide-preview #preview-root {
   transition: transform 0.15s ease;
 }
 .ui-disclosure-chevron::before {
-  content: "▼";
+  content: "?";
 }
 .font-picker-block.is-open .ui-disclosure-chevron,
 .font-picker-toggle[aria-expanded="true"] .ui-disclosure-chevron {
@@ -9967,7 +9972,7 @@ html.is-capture-mode body.sample-flow-hide-preview #preview-root {
 .preview-site .accordion summary::-webkit-details-marker {
   display: none;
 }
-/* 親 style.css の ::before 三角は墨テーマで黒固定のため消す。プレビューは ::after のみ */
+/* ? style.css ? ::before ??????????????????????? ::after ?? */
 .preview-site .accordion summary::before {
   content: none !important;
   display: none !important;
@@ -9977,16 +9982,16 @@ html.is-capture-mode body.sample-flow-hide-preview #preview-root {
 }
 .dash-block > summary::after,
 .dash-group > summary::after {
-  content: "▼";
+  content: "?";
   flex: 0 0 auto;
   font-size: 0.72rem;
   line-height: 1;
   color: #3a454e;
   transition: transform 0.15s ease;
 }
-/* 墨など本文が明るいときも見えるよう、見出し色に追従 */
+/* ????????????????????????? */
 .preview-site .accordion summary::after {
-  content: "▼";
+  content: "?";
   flex: 0 0 auto;
   font-size: 0.72rem;
   line-height: 1;
@@ -10018,7 +10023,7 @@ html.is-capture-mode body.sample-flow-hide-preview #preview-root {
   cursor: grabbing;
 }
 
-/* PCプレビュー：中央に痩せない */
+/* PC????????????? */
 .preview-viewport.is-desktop .preview-site {
   --shell: min(100%, 74rem);
   --gutter: clamp(1rem, 2.2vw, 1.6rem);
@@ -10038,8 +10043,8 @@ html.is-capture-mode body.sample-flow-hide-preview #preview-root {
   width: 100%;
 }
 
-/* —— 検証①：編集ハブ入口＋場所から Fit —— */
-/* display:flex が [hidden] を上書きして全パネル同時表示になるのを防ぐ */
+/* ?? ??????????????? Fit ?? */
+/* display:flex ? [hidden] ????????????????????? */
 .hub-entry[hidden],
 .hub-place-pick[hidden],
 .hub-place-section[hidden],
@@ -10060,12 +10065,12 @@ html.is-capture-mode body.sample-flow-hide-preview #preview-root {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  justify-content: center; /* カード内重心＝中央付近 */
+  justify-content: center; /* ??????????? */
   gap: 0.5rem;
   width: 100%;
   min-height: 3.6rem;
   padding: 0.85rem 1rem;
-  border: 1px solid rgba(20, 28, 36, 0.16); /* 操作可能＝グレー枠 */
+  border: 1px solid rgba(20, 28, 36, 0.16); /* ????????? */
   border-radius: 0.7rem;
   background: #fff;
   text-align: left;
@@ -10075,7 +10080,7 @@ html.is-capture-mode body.sample-flow-hide-preview #preview-root {
 }
 .hub-entry-card:hover:not(:disabled),
 .hub-entry-card:focus-visible:not(:disabled) {
-  border-color: #3d8a48; /* 操作中＝ダークグリーン枠（塗りは増やさない） */
+  border-color: #3d8a48; /* ?????????????????????? */
   background: #fff;
   box-shadow: none;
   outline: none;
@@ -10252,7 +10257,7 @@ body.hub-place-pick #preview-root [data-layout-block]:not(.is-hub-place-hot) {
   opacity: 0.42;
   pointer-events: none;
 }
-/* レイアウト変更＝全体俯瞰。薄くしない（ズームのみ） */
+/* ????????????????????????? */
 body.hub-ui-layout #preview-root [data-layout-block],
 body.hub-ui-layout #preview-root [data-layout-block]:not(.is-hub-place-hot) {
   opacity: 1;
@@ -10296,7 +10301,7 @@ body.hub-place-section-open #preview-root [data-layout-block]:not(.is-hub-place-
   }
 }
 
-/* —— ハブ作業中の殻：今の一段だけ見える —— */
+/* ?? ????????????????? ?? */
 body.hub-shell-focus .dash-resume-notice,
 body.hub-shell-focus .dash-width-rail,
 body.hub-shell-focus .wizard-head-dock,
@@ -10315,7 +10320,7 @@ body.hub-shell-focus.hub-shell-back .wizard-foot-dock {
 body.hub-shell-focus.hub-shell-back #wizard-nav {
   display: flex !important;
 }
-/* 個別編集中は右下に戻る｜OK を常時出す */
+/* ????????????OK ????? */
 body.hub-shell-focus.hub-place-editing .wizard-foot-dock {
   display: block !important;
   flex: 0 0 auto;
@@ -10333,7 +10338,7 @@ body.hub-shell-focus .atelier-shell {
   max-height: 100dvh;
   overflow: hidden;
 }
-/* レビュー編集バー分を引いて、下の戻る｜OK が画面外に落ちないようにする */
+/* ???????????????????OK ?????????????? */
 body.is-review-editing {
   --review-edit-bar-offset: 3.6rem;
 }
@@ -10402,7 +10407,7 @@ body.hub-shell-focus .hub-task-where-btn {
   font-size: 1.08rem;
 }
 
-/* —— レイアウト変更：構造のみ（表示／並び） —— */
+/* ?? ??????????????????? ?? */
 .hub-layout-lead {
   margin: 0.35rem 0 0.55rem;
   font-size: 0.95rem;
@@ -10479,7 +10484,7 @@ body.hub-shell-focus .hub-task-where-btn {
   line-height: 1.4;
   white-space: normal;
 }
-/* ハブ一覧の戻るをスクロール末尾に隠さない */
+/* ???????????????????? */
 body.hub-shell-focus .hub-place-pick,
 body.hub-shell-focus .hub-place-section,
 body.hub-shell-focus .hub-task-pick,
@@ -10518,7 +10523,7 @@ body.hub-shell-focus .hub-nav-row {
   margin-top: 0.45rem;
 }
 
-/* そのまま表示：常時開・矢印なし */
+/* ??????????????? */
 #about-accordions.is-flat-items details.accordion > summary {
   pointer-events: none;
   cursor: default;
@@ -10595,7 +10600,7 @@ body.hub-shell-focus .hub-nav-row {
 body.hub-shell-focus .layout-arrange-cell--structure {
   min-height: 3.2rem;
 }
-/* 狭い画面でもハブ中は幅定規を注文カラムに出さない */
+/* ???????????????????????? */
 body.hub-shell-focus .dash-width-rail,
 body.hub-shell-focus .dash-preview-width-slot {
   display: none !important;
@@ -10609,12 +10614,12 @@ body.hub-shell-focus .dash-preview-width-slot {
   }
 }
 
-/* ===== UI分類 Ver1.1 Phase1: Hierarchy（H1〜H4）— 共通看板H1基準 2026-09-17 =====
-   H1＝かんたんホームページ工房（共通看板）／キャッチはHではない
-   H2＝各ページ・工程タイトル（dash-title／entry-gate-title 等）
-   H3＝ページ内の選択単位・セクション
-   生成ホームページ本文の見出しは対象外
-   階段: H1 1.05／H2 0.98／H3 0.9／H4 0.82（H2をH1より強くしない） */
+/* ===== UI?? Ver1.1 Phase1: Hierarchy?H1?H4?? ????H1?? 2026-09-17 =====
+   H1?????????????????????????H????
+   H2?????????????dash-title?entry-gate-title ??
+   H3????????????????
+   ??????????????????
+   ??: H1 1.05?H2 0.98?H3 0.9?H4 0.82?H2?H1???????? */
 .entry-gate-banner {
   position: relative;
   display: flex;
@@ -10703,7 +10708,7 @@ body.mode-guided .dash-block.is-text-chapter.is-wizard-active .dash-subhead {
   font-weight: 600;
 }
 
-/* カード内タイトルは Content/H3（カードの枠・選択演出は Phase2） */
+/* ????????? Content/H3???????????? Phase2? */
 .hub-entry-card-title,
 .entry-branch-card-inner strong {
   font-size: 0.9rem;
@@ -10720,8 +10725,8 @@ body.mode-guided .dash-block.is-text-chapter.is-wizard-active .dash-subhead {
   color: #4a524c;
 }
 
-/* ===== UI分類 Ver1.1 Phase2: Button / Toggle / Selection Card — 2026-09-13 =====
-   Hierarchy（Phase1）と System（Phase3）は触らない。タイトル字サイズは Phase1 のまま。 */
+/* ===== UI?? Ver1.1 Phase2: Button / Toggle / Selection Card ? 2026-09-13 =====
+   Hierarchy?Phase1?? System?Phase3???????????????? Phase1 ???? */
 .wizard-btn {
   font-size: 0.9rem;
   font-weight: 600;
@@ -10817,9 +10822,9 @@ body.mode-guided .dash-block.is-text-chapter.is-wizard-active .dash-subhead {
   background: #fff;
 }
 
-/* ===== UI分類 Ver1.1 Phase3: System — 2026-09-13 =====
-   Hierarchy / Button・Toggle・Selection Card の本線差は触らない。
-   H3 な dash-note は .dash-field-label のみ項目名寄り（案内 note は System のまま）。 */
+/* ===== UI?? Ver1.1 Phase3: System ? 2026-09-13 =====
+   Hierarchy / Button?Toggle?Selection Card ??????????
+   H3 ? dash-note ? .dash-field-label ?????????? note ? System ????? */
 .step-help,
 .entry-gate-lead,
 .atelier-menu-lead,
@@ -10869,7 +10874,7 @@ body.mode-guided .dash-block.is-text-chapter.is-wizard-active .dash-subhead {
   margin: 0.45rem 0;
 }
 
-/* 意味は H3・クラスは note だった項目名（最小クラス分離） */
+/* ??? H3????? note ??????????????? */
 .dash-note.dash-field-label {
   margin: 0.65rem 0 0.35rem;
   font-size: 0.9rem;
@@ -10893,7 +10898,7 @@ body.mode-guided .dash-block.is-text-chapter.is-wizard-active .dash-subhead {
   color: #5a4a20;
 }
 
-/* loading は見出し風でも System（H2 スケールに乗せない） */
+/* loading ??????? System?H2 ?????????? */
 .easy-loading-panel .dash-subhead,
 #easy-loading-title {
   margin: 0;
@@ -10916,15 +10921,15 @@ body.mode-guided .dash-block.is-text-chapter.is-wizard-active .dash-sub {
   color: #555;
 }
 
-/* ===== 余白適用 Phase1: 業界標準初期値（24 / 16 / 8 / 32）— 2026-09-13 =====
-   根拠: docs/進行中/2026-09-13-業界標準-余白尺度調査.md
-   字サイズ・色・本線塗りは触らない。違和感は ±4/8px で後調整。 */
+/* ===== ???? Phase1: ????????24 / 16 / 8 / 32?? 2026-09-13 =====
+   ??: docs/???/2026-09-13-????-??????.md
+   ????????????????????? ?4/8px ????? */
 .entry-gate-title {
-  margin-bottom: 1rem; /* H2→次 16px */
+  margin-bottom: 1rem; /* H2?? 16px */
 }
 
-/* H1→次 ≈24px: hub圧縮ヘッダでも合計で届くよう pb+pt を合わせる
-   （header と body のあいだに rail / head-dock があるので + 隣接セレクタは使えない） */
+/* H1?? ?24px: hub?????????????? pb+pt ?????
+   ?header ? body ????? rail / head-dock ????? + ???????????? */
 .dash-header,
 body.hub-shell-focus .dash-header {
   padding-bottom: 0.75rem; /* 12px */
@@ -10936,14 +10941,14 @@ body.hub-shell-focus .dash-header {
 }
 
 .dash-pane > .dash-body {
-  padding-top: 0.75rem; /* 12px → header下と合わせて ≈24px */
+  padding-top: 0.75rem; /* 12px ? header?????? ?24px */
 }
 
 .dash-subhead,
 .dash-block--easy .dash-subhead,
 .finish-summary-title {
-  margin-top: 2rem; /* セクション間 32px（前ブロックからの区切り） */
-  margin-bottom: 1rem; /* H2→中身 16px */
+  margin-top: 2rem; /* ?????? 32px????????????? */
+  margin-bottom: 1rem; /* H2??? 16px */
 }
 
 .dash-block > .dash-subhead:first-child,
@@ -10953,16 +10958,16 @@ body.hub-shell-focus .dash-header {
 }
 
 .easy-field {
-  gap: 0.5rem; /* H3→入力 8px */
+  gap: 0.5rem; /* H3??? 8px */
 }
 
 .fill-block {
-  gap: 1rem; /* フォーム項目間 16px */
+  gap: 1rem; /* ??????? 16px */
 }
 
 .fill-block legend,
 .inline-fieldset legend {
-  margin-bottom: 0.5rem; /* H3→入力 8px */
+  margin-bottom: 0.5rem; /* H3??? 8px */
 }
 
 .fill-block label,
@@ -10971,40 +10976,40 @@ body.hub-shell-focus .dash-header {
 }
 
 .easy-basics-fields {
-  gap: 1rem; /* フォーム項目間 16px */
+  gap: 1rem; /* ??????? 16px */
 }
 
 .dash-note.dash-field-label {
   margin-top: 1rem;
-  margin-bottom: 0.5rem; /* H3→部品 8px */
+  margin-bottom: 0.5rem; /* H3??? 8px */
 }
 
 .dash-note:not(.dash-field-label),
 .step-help {
   margin-top: 0.5rem;
-  margin-bottom: 0.5rem; /* System↔対象 4–8px 帯 */
+  margin-bottom: 0.5rem; /* System??? 4?8px ? */
 }
 
 .entry-branch-card-inner,
 .hub-entry-card {
-  padding: 1rem; /* カード 16px */
+  padding: 1rem; /* ??? 16px */
 }
 
 .hub-entry-cards,
 .entry-branch-grid {
-  gap: 1rem; /* Card→Card 16px */
+  gap: 1rem; /* Card?Card 16px */
 }
 
 .dash-block + .dash-block,
 .dash-group + .dash-group {
-  margin-top: 2rem; /* Section→Section 32px */
+  margin-top: 2rem; /* Section?Section 32px */
 }
 
-/* ===== 余白適用 Phase2: Hierarchy垂直リズム（32→16→8）— 2026-09-13 =====
-   根拠: 調査 Ver0.1.1（親→子16／孫8／兄弟32）
-   字サイズ・色・意味分類は触らない。 */
-/* できること(H1) → キャッチ(H2相当): 32px
-   header下12 + body上20。途中の form/details/section 上余白は潰す */
+/* ===== ???? Phase2: Hierarchy??????32?16?8?? 2026-09-13 =====
+   ??: ?? Ver0.1.1????16??8???32?
+   ????????????????? */
+/* ?????(H1) ? ????(H2??): 32px
+   header?12 + body?20???? form/details/section ?????? */
 body.hub-place-section-open .dash-pane > .dash-body {
   padding-top: 1.25rem; /* 20px */
 }
@@ -11019,7 +11024,7 @@ body.hub-place-section-open .hub-place-section {
   margin-bottom: 0.8rem;
 }
 
-/* ハブの場所見出しは「最初の子」なので上32を付けない（H1側で取る） */
+/* ???????????????????32??????H1????? */
 .hub-place-section,
 .hub-task-where {
   gap: 0;
@@ -11028,15 +11033,15 @@ body.hub-place-section-open .hub-place-section {
 .hub-place-section-title,
 .hub-task-where-title {
   margin-top: 0;
-  margin-bottom: 1rem; /* H2→中身 16px（色・画像・文字へ） */
+  margin-bottom: 1rem; /* H2??? 16px?????????? */
 }
 
-/* 同グループの子どうし（色／画像／文字）: 8px */
+/* ???????????????????: 8px */
 .hub-place-section-actions {
   gap: 0.5rem;
 }
 
-/* 場所・やりたいこと一覧はカード列: 16px */
+/* ????????????????: 16px */
 .hub-place-names,
 .hub-task-names,
 .hub-task-where-names {
@@ -11048,13 +11053,13 @@ body.hub-place-section-open .hub-place-section {
   gap: 1rem;
 }
 
-/* カード内タイトル→説明: 8px帯 */
+/* ???????????: 8px? */
 .hub-entry-card,
 .hub-task-name-btn {
   gap: 0.5rem;
 }
 
-/* 操作列（戻る等）はグループ外: セクション寄り */
+/* ??????????????: ??????? */
 .hub-place-section .hub-nav-row,
 .hub-task-where .hub-nav-row,
 .hub-place-pick .hub-nav-row,
@@ -11063,9 +11068,9 @@ body.hub-place-section-open .hub-place-section {
   padding-top: 0;
 }
 
-/* ===== 装飾引き算（標準化・2026-09-13）=====
-   検証トグルは廃止。役割のない枠・地・影を外した状態を標準とする。
-   残す: 本線Button／選択中（緑枠）／エラー・警告／フォーカスリング */
+/* ===== ??????????2026-09-13?=====
+   ????????????????????????????????
+   ??: ??Button???????????????????????? */
 .dash-pane {
   background: #f6f6f5;
   color: #1a1a1a;
@@ -11133,12 +11138,12 @@ body.hub-place-section-open #preview-root [data-layout-block].is-hub-place-chose
   box-shadow: none;
 }
 
-/* ===== UI色状態 正式標準（2026-09-13 最終合意）=====
-   目的: 色を装飾ではなく「状態を伝える言語」にする。
-   通常 = 白＋薄いグレー枠／操作中 = ダークグリーン枠のみ（地色は変えない）
-   廃止 = 緑背景・青Hover枠・青Hover地・操作中の背景色変化・クリック瞬間フラッシュ
-   例外 = Primary Button の緑塗り（前進役）。見本サイトのテーマ色（プレビュー内容）は対象外。
-   正本: docs/確定/2026-09-13-UI色状態標準.md */
+/* ===== UI??? ?????2026-09-13 ?????=====
+   ??: ??????????????????????
+   ?? = ???????????? = ???????????????????
+   ?? = ?????Hover???Hover???????????????????????
+   ?? = Primary Button ??????????????????????????????????
+   ??: docs/??/2026-09-13-UI?????.md */
 :root {
   --ui-rest-bg: #fff;
   --ui-rest-border: rgba(20, 28, 36, 0.16);
@@ -11147,7 +11152,7 @@ body.hub-place-section-open #preview-root [data-layout-block].is-hub-place-chose
   --ui-primary-fill-hover: #245a2c;
 }
 
-/* 選択カード／一覧／Toggle 系の操作中（catch-all） */
+/* ?????????Toggle ??????catch-all? */
 .entry-branch-card:hover .entry-branch-card-inner,
 .entry-branch-card:has(input:checked) .entry-branch-card-inner,
 .entry-color-wire-card:hover .entry-color-wire-card-inner,
@@ -11213,12 +11218,12 @@ body.hub-place-section-open #preview-root [data-layout-block].is-hub-place-chose
 .entry-gate-card:hover,
 .entry-gate-card:focus-visible {
   border-color: var(--ui-active-border) !important;
-  /* 暗い入口面は地色を変えず枠だけ */
+  /* ??????????????? */
   background: rgba(255, 255, 255, 0.06) !important;
   box-shadow: none !important;
 }
 
-/* Primary 本線は塗りを維持（状態言語とは別役） */
+/* Primary ?????????????????? */
 #wizard-next,
 .wizard-btn#wizard-next,
 .btn.btn-primary,
@@ -11244,7 +11249,7 @@ body.hub-place-section-open #preview-root [data-layout-block].is-hub-place-chose
 
 
 
-/* 検品・調整（ローカル専用カード） */
+/* ???????????????? */
 .hub-entry-card--dev {
   border-style: dashed;
   border-color: rgba(90, 101, 112, 0.45);
@@ -11279,12 +11284,12 @@ body.hub-place-section-open #preview-root [data-layout-block].is-hub-place-chose
   gap: 0.5rem;
 }
 
-/* 寿司虫眼鏡：iframe内は見本本体だけ */
+/* ??????iframe???????? */
 html.is-embed-preview,
 body.is-embed-preview {
   background: #fff !important;
 }
-/* 拡大時の黒点：縮小zoom由来の ::marker 幽霊を共通側で抑止（個別見本は触らない） */
+/* ?????????zoom??? ::marker ???????????????????? */
 body.is-embed-preview .preview-site ul,
 body.is-embed-preview .preview-site ol {
   list-style: none !important;
@@ -11337,7 +11342,7 @@ body.is-embed-preview .atelier-preview {
   max-width: none !important;
   flex: none !important;
 }
-/* 虫眼鏡は注文画面との分割を使わず、見本をPC幅いっぱいに */
+/* ????????????????????PC?????? */
 body.is-embed-preview .atelier-split {
   display: block !important;
   width: 100% !important;
@@ -11352,14 +11357,14 @@ body.is-embed-preview.sample-flow-hide-preview .atelier-preview-col {
   visibility: visible !important;
   pointer-events: auto !important;
 }
-/* embed: draft適用前は中身を見せない（初期キャンバスのチラつき防止） */
+/* embed: draft??????????????????????????? */
 html.is-embed-pending body.is-embed-preview .atelier-shell,
 html.is-embed-pending body.is-embed-preview .preview-pane,
 html.is-embed-pending body.is-embed-preview #preview-root {
   visibility: hidden !important;
 }
 html.is-embed-pending body.is-embed-preview::before {
-  content: "見本を準備しています…";
+  content: "???????????";
   display: grid;
   place-items: center;
   min-height: 60vh;
@@ -11437,7 +11442,7 @@ body.is-embed-preview .site-footer {
   margin-bottom: 0 !important;
 }
 
-/* —— メーカー画面・端まで白（ショーケース）2026-09-21 —— */
+/* ?? ???????????????????2026-09-21 ?? */
 body.atelier.entry-gate-open,
 .entry-gate {
   background: #fff !important;
@@ -11463,8 +11468,8 @@ body.atelier.entry-gate-open,
 .sushi-zoom-pending {
   background: #fff;
 }
-/* —— 文章決め方・方向・枠UI（スタブ骨格 2026-09-22） —— */
-/* 文章工程共通：あとから直せる案内（画像工程には出さない） */
+/* ?? ??????????UI?????? 2026-09-22? ?? */
+/* ???????????????????????????? */
 .easy-copy-later-hint {
   margin: 0 0 0.65rem;
   padding: 0.45rem 0.6rem;
@@ -11475,7 +11480,7 @@ body.atelier.entry-gate-open,
   line-height: 1.45;
 }
 
-/* 見出しを線の直下へ（summary隠れ後も :first-child にならないため明示） */
+/* ??????????summary???? :first-child ?????????? */
 body.wizard-mode .dash-block.is-wizard-active > summary + .dash-subhead,
 body.wizard-mode .dash-block.is-wizard-active > summary + .easy-copy-later-hint + .dash-subhead,
 body.wizard-mode .dash-block.is-wizard-active > summary + .easy-copy-frame > .dash-subhead,
@@ -11709,7 +11714,7 @@ body.copy-later-fixed .dash-block.is-wizard-active .easy-copy-frame > .dash-subh
   line-height: 1;
 }
 
-/* おまかせ Coolors型：右パネルの枠一覧＋鍵 */
+/* ???? Coolors???????????? */
 .easy-copy-omakase {
   margin: 0.35rem 0 0.5rem;
 }
@@ -11756,7 +11761,7 @@ body.copy-later-fixed .dash-block.is-wizard-active .easy-copy-frame > .dash-subh
   margin-top: 0.75rem;
 }
 
-/* いまの文言＝表示のみ／候補＝選べる、を見た目で分ける */
+/* ?????????????????????????? */
 .easy-copy-frame-now {
   margin: 0 0 0.55rem;
   padding: 0.55rem 0.7rem;
@@ -11868,7 +11873,7 @@ body.copy-later-fixed .dash-block.is-wizard-active .easy-copy-frame > .dash-subh
   }
 }
 
-/* 基本情報・店名必須の目立たせ（後勝ち） */
+/* ??????????????????? */
 .easy-field--required {
   padding: 0.7rem 0.75rem 0.8rem;
   border: 1px solid rgba(45, 106, 54, 0.35);
@@ -11908,7 +11913,7 @@ body.copy-later-fixed .dash-block.is-wizard-active .easy-copy-frame > .dash-subh
   display: none !important;
 }
 
-/* 画像編集：閉じた行は確認、開いた中は変更 */
+/* ???????????????????? */
 .layout-arrange-cell--structure:has(.layout-arrange-summary--image) {
   position: relative;
 }
@@ -12277,9 +12282,6 @@ body.copy-later-fixed .dash-block.is-wizard-active .easy-copy-frame > .dash-subh
   border-radius: 0.65rem;
   padding: 0.28rem 0.4rem;
   cursor: pointer;
-}
-.layout-choice-opt.is-on {
-  box-shadow: inset 0 0 0 2px #3d8a48;
 }
 .layout-photo-summary {
   position: relative;
@@ -12875,7 +12877,7 @@ body.wizard-mode .dash-block.is-wizard-active {
   grid-column: -1;
   justify-self: stretch;
 }
-/* 左が列の合計より細いとき、開くが操作の外へ出ないように行の中へ折り返す */
+/* ??????????????????????????????????? */
 @container dash (max-width: 32rem) {
   #easy-img-layout-host {
     overflow-x: visible;
@@ -12907,7 +12909,7 @@ body.wizard-mode .dash-block.is-wizard-active {
     flex-wrap: wrap;
     align-items: center;
   }
-  /* 見出しと枚数を同じ段に戻す。縦に積むと最後の開くが下のボタンの裏に入る */
+  /* ??????????????????????????????????? */
   #easy-img-layout-host .layout-arrange-summary--image,
   #easy-img-layout-host .layout-arrange-cell--structure:has(.layout-arrange-summary--image) > .layout-arrange-body {
     display: flex;
@@ -12934,8 +12936,17 @@ body.wizard-mode .dash-block.is-wizard-active {
     column-gap: 0.45rem;
     row-gap: 0.4rem;
   }
+  #easy-img-layout-host .layout-closed-head .layout-count-cluster {
+    flex: 1 1 calc(100% - 5rem);
+    min-width: min(100%, 12rem);
+  }
   #easy-img-layout-host .layout-closed-head .layout-gap-cluster {
-    margin-left: 0.9rem;
+    flex: 1 1 100%;
+    margin-left: 0;
+  }
+  #easy-img-layout-host .layout-closed-head .layout-count-lead,
+  #easy-img-layout-host .layout-closed-head .layout-gap-lead {
+    flex: 0 0 auto;
   }
   #easy-img-layout-host .layout-closed-head .layout-head-gap {
     display: none;
@@ -13074,7 +13085,7 @@ body.wizard-mode .dash-block.is-wizard-active {
   z-index: auto;
   margin-left: calc(2rem + 1.15rem);
 }
-/* 2層目の掴む点は、1段目と同じ縦の線からひとつ空けて、鍵のあった位置へ。鍵はその右。 */
+/* 2????????1???????????????????????????????? */
 #easy-img-layout-host .layout-photo-row:not(.is-open):has(.layout-inner-handle) > .layout-closed-line {
   display: flex;
   flex-wrap: wrap;
@@ -13155,10 +13166,11 @@ body.wizard-mode .dash-block.is-wizard-active {
   align-items: center;
   justify-content: flex-start;
   gap: 0.28rem;
-  min-width: max-content;
+  min-width: 0;
   max-width: 100%;
-  flex: 0 0 auto;
-  white-space: nowrap;
+  flex: 0 1 auto;
+  flex-wrap: wrap;
+  white-space: normal;
   box-sizing: border-box;
 }
 #easy-img-layout-host .layout-closed-head .layout-count-btn {
@@ -13266,13 +13278,26 @@ body.wizard-mode .dash-block.is-wizard-active {
   grid-template-rows: auto auto auto;
   align-items: start;
   align-content: start;
-  column-gap: 0.55rem;
-  row-gap: 0.55rem;
+  column-gap: 0.75rem;
+  row-gap: 0.75rem;
   width: max-content;
   max-width: none;
   margin-left: calc(2rem + 1.15rem - 0.1rem);
   padding-top: calc(0.72rem * 1.3 + 0.2rem + 2.8rem);
   box-sizing: border-box;
+}
+#easy-img-layout-host .layout-photo-tools--plain > .layout-img-sources.is-sample-two {
+  grid-template-rows: auto;
+  column-gap: 0.9rem;
+  margin: 0.85rem 0 0.85rem calc(2rem + 1.15rem - 0.1rem);
+  padding-top: 0.85rem;
+  padding-bottom: 0.35rem;
+}
+#easy-img-layout-host #layout-omakase-btn,
+#easy-img-layout-host #layout-omakase-confirm-again,
+#easy-img-layout-host .layout-lock-mark,
+#easy-img-layout-host .layout-photo-omakase {
+  display: none !important;
 }
 #easy-img-layout-host .layout-photo-tools--plain .layout-photo-omakase {
   grid-column: 1 / -1;
@@ -13481,9 +13506,10 @@ body:has([data-step-id="easy-img-wire"].is-photo-solo) .wizard-foot-dock {
   justify-self: stretch;
   width: 100%;
   max-width: 100%;
-  margin: 0;
-  padding: 0 0.35rem;
-  gap: 0.75rem;
+  margin: 0.65rem 0 0.85rem;
+  padding: 0.35rem 0.55rem;
+  gap: 0.9rem;
+  box-sizing: border-box;
 }
 #easy-img-layout-host.is-photo-solo .layout-img-source,
 #easy-img-layout-host.is-photo-solo .layout-photo-omakase {
@@ -13612,8 +13638,10 @@ body:has([data-step-id="easy-img-wire"].is-photo-solo) .wizard-foot-dock {
   justify-items: start;
   width: 100%;
   max-width: 100%;
-  margin: 0;
-  gap: 0;
+  margin: 0.35rem 0 0.75rem;
+  gap: 0.85rem 1rem;
+  padding: 0 0.35rem 0.35rem;
+  box-sizing: border-box;
 }
 #easy-img-layout-host.is-photo-solo .layout-source-map {
   grid-column: 1;
@@ -13657,6 +13685,7 @@ body:has([data-step-id="easy-img-wire"].is-photo-solo) .wizard-foot-dock {
   align-self: center;
   flex: 0 0 auto;
   width: auto;
+  max-width: 100%;
   min-height: 7.5rem;
   margin: 0 0.2rem 0 1.15rem;
   padding: 1.2rem 1rem;
@@ -13666,6 +13695,38 @@ body:has([data-step-id="easy-img-wire"].is-photo-solo) .wizard-foot-dock {
   font-weight: 800;
   line-height: 1.2;
   border-radius: 0.9rem;
+  box-sizing: border-box;
+}
+@media (max-width: 40rem) {
+  #easy-img-layout-host.is-photo-solo .layout-source-step {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: auto auto;
+    justify-items: stretch;
+    gap: 0.75rem;
+    margin: 0.35rem 0 0.65rem;
+    padding: 0 0.55rem 0.55rem;
+  }
+  #easy-img-layout-host.is-photo-solo .layout-source-map {
+    grid-column: 1;
+    justify-self: center;
+    max-width: 100%;
+  }
+  #easy-img-layout-host.is-photo-solo .layout-source-step > .layout-open-btn {
+    grid-column: 1;
+    justify-self: stretch;
+    align-self: stretch;
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    min-height: 2.75rem;
+    height: auto;
+    margin: 0;
+    padding: 0.55rem 1rem;
+    font-size: 0.95rem;
+    font-weight: 700;
+    line-height: 1.25;
+    border-radius: 999px;
+  }
 }
 #easy-img-layout-host [data-layout-block="hero"] .layout-arrange-name {
   overflow: visible;
@@ -13702,7 +13763,7 @@ body:has([data-step-id="easy-img-wire"].is-photo-solo) .wizard-foot-dock {
   text-align: left;
   line-height: 1.45;
 }
-/* 先頭の掴みは上に出すと見出しの裏で切れる。下へ出して枠の表に乗せる */
+/* ????????????????????????????????? */
 #easy-img-layout-host .layout-arrange-wire > .layout-arrange-cell:first-child .has-hover-tip:hover::after,
 #easy-img-layout-host .layout-arrange-wire > .layout-arrange-cell:first-child .has-hover-tip:focus-visible::after {
   top: calc(100% + 0.28rem);
@@ -13893,6 +13954,7 @@ body:has([data-step-id="easy-img-wire"].is-photo-solo) .wizard-foot-dock {
   font-weight: 800;
   line-height: 1.3;
   color: #1a1f1c;
+  min-width: 0;
 }
 .layout-color-rows:has(> .layout-color-row.is-open) > .layout-color-row:not(.is-open) {
   display: none;
@@ -13916,7 +13978,7 @@ body:has([data-step-id="easy-img-wire"].is-photo-solo) .wizard-foot-dock {
 }
 .layout-color-rows > .layout-color-row > .layout-color-line {
   display: grid;
-  grid-template-columns: 2rem minmax(7rem, auto) minmax(0, 1fr) auto;
+  grid-template-columns: 2rem minmax(0, 7.5rem) minmax(0, 1fr) auto;
   align-items: center;
   column-gap: 0.45rem;
 }
@@ -13924,17 +13986,18 @@ body:has([data-step-id="easy-img-wire"].is-photo-solo) .wizard-foot-dock {
   display: flex;
   justify-content: center;
   align-items: flex-end;
-  gap: 0.55rem;
+  gap: 0.4rem;
   min-width: 0;
+  max-width: 100%;
 }
 .layout-color-chip {
   display: flex;
   flex-direction: column;
   align-items: stretch;
   gap: 0.18rem;
-  flex: 1 1 6.5rem;
+  flex: 1 1 3.2rem;
   max-width: 9rem;
-  min-width: 5.5rem;
+  min-width: 0;
 }
 .layout-color-chip-label {
   font-size: 0.68rem;
@@ -13950,12 +14013,14 @@ body:has([data-step-id="easy-img-wire"].is-photo-solo) .wizard-foot-dock {
   border-radius: 0.2rem;
 }
 .layout-color-contents {
-  justify-self: center;
+  justify-self: stretch;
+  min-width: 0;
   font-size: 0.75rem;
   font-weight: 700;
   line-height: 1.3;
   color: #1a1f1c;
-  white-space: nowrap;
+  white-space: normal;
+  overflow-wrap: anywhere;
 }
 .layout-color-sub > .layout-color-line {
   display: grid;
@@ -13967,14 +14032,30 @@ body:has([data-step-id="easy-img-wire"].is-photo-solo) .wizard-foot-dock {
   grid-template-columns: 5.5rem minmax(0, 1fr) auto;
 }
 .layout-color-group:not(.is-honey) .layout-color-sub .layout-color-chip {
-  flex: 0 0 9rem;
-  width: 9rem;
+  flex: 1 1 4.5rem;
+  width: auto;
   max-width: 9rem;
-  min-width: 9rem;
+  min-width: 0;
 }
 .layout-color-row.is-open > .layout-color-line > .layout-color-chips,
 .layout-color-row.is-open > .layout-color-line > .layout-color-grip-spacer {
   display: none;
+}
+@container dash (max-width: 32rem) {
+  .layout-color-rows > .layout-color-row > .layout-color-line {
+    grid-template-columns: 2rem minmax(0, 1fr) auto;
+    grid-template-rows: auto auto;
+    row-gap: 0.35rem;
+  }
+  .layout-color-rows > .layout-color-row > .layout-color-line > .layout-color-chips,
+  .layout-color-rows > .layout-color-row > .layout-color-line > .layout-color-contents {
+    grid-column: 1 / -1;
+    justify-self: stretch;
+  }
+  .layout-color-chip {
+    flex: 1 1 0;
+    min-width: 0;
+  }
 }
 .layout-color-move.is-touch {
   background: #e7f6ea;
@@ -13993,6 +14074,18 @@ body:has([data-step-id="easy-img-wire"].is-photo-solo) .wizard-foot-dock {
   gap: 0.75rem 1rem;
   align-items: center;
   margin-top: 0.35rem;
+}
+@media (max-width: 40rem) {
+  .layout-color-group-body {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 0.65rem;
+  }
+  .layout-color-done {
+    min-width: 0;
+    width: 100%;
+    min-height: 2.6rem;
+    justify-self: stretch;
+  }
 }
 .layout-color-group.is-honey > .layout-color-group-body {
   display: block;
@@ -14013,12 +14106,27 @@ body:has([data-step-id="easy-img-wire"].is-photo-solo) .wizard-foot-dock {
   min-width: 7.5rem;
   min-height: 3.2rem;
   justify-content: center;
+  box-sizing: border-box;
+}
+@media (max-width: 40rem) {
+  .layout-color-done {
+    min-width: 0;
+    min-height: 2.6rem;
+    padding-left: 0.9rem;
+    padding-right: 0.9rem;
+    font-size: 0.92rem;
+  }
 }
 .layout-color-body .accent-bar-field {
   margin-top: 0.8rem;
 }
 .layout-color-row.is-open > .layout-color-line > .layout-color-name {
   font-size: 1.7rem;
+}
+@media (max-width: 40rem) {
+  .layout-color-row.is-open > .layout-color-line > .layout-color-name {
+    font-size: 1.15rem;
+  }
 }
 .layout-color-open {
   margin: 0 0 0 auto;
@@ -14091,7 +14199,7 @@ body:has([data-step-id="easy-color-stage"] .layout-color-row.is-open) .wizard-fo
   width: 100%;
 }
 .layout-color-body .gct-pick-target.is-active:not(.is-grad-gate) .gct-pick-target-label::after {
-  content: "✓";
+  content: "?";
   margin-left: 0.55rem;
   font-weight: 800;
 }
@@ -14151,6 +14259,22 @@ body:has([data-step-id="easy-color-stage"] .layout-color-row.is-open) .wizard-fo
 .layout-color-body .gct-pick-layout--split {
   grid-template-columns: minmax(0, 1.35fr) minmax(16rem, 0.92fr);
   grid-template-areas: "chooser side";
+}
+@container layout-color-body (max-width: 36rem) {
+  .layout-color-body .gct-pick-layout--split {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-areas:
+      "chooser"
+      "side";
+  }
+}
+@media (max-width: 40rem) {
+  .layout-color-body .gct-pick-layout--split {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-areas:
+      "chooser"
+      "side";
+  }
 }
 .layout-color-body .gct-pick-chooser-label {
   margin-bottom: 0.05rem;
@@ -14244,4 +14368,102 @@ body:has([data-step-id="easy-color-stage"] .layout-color-row.is-open) [data-step
 .layout-color-body > :not(.gct-pick-layout) {
   font-size: 0.72rem;
   font-weight: 500;
+}
+
+/* ??????i??2?i???????J?????j */
+.easy-copy-list-host {
+  margin-top: 0.35rem;
+}
+.easy-copy-list-wire {
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+}
+.easy-copy-list-cell {
+  border: 1px solid #d5dde5;
+  background: #fff;
+  padding: 0.45rem 0.55rem;
+}
+.easy-copy-list-cell.is-dragging {
+  opacity: 0.72;
+}
+.easy-copy-list-head {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  flex-wrap: wrap;
+}
+.easy-copy-list-name {
+  margin: 0;
+  font-size: 0.9rem;
+  font-weight: 800;
+  color: #12181c;
+}
+.easy-copy-list-body {
+  margin-top: 0.35rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+}
+.easy-copy-list-row > .layout-closed-line {
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  min-height: 2.2rem;
+}
+.easy-copy-list-item-label {
+  margin: 0;
+  flex: 1;
+  font-size: 0.86rem;
+  font-weight: 700;
+}
+.easy-copy-list-editor-host {
+  margin-top: 0.45rem;
+}
+.easy-copy-list-editor .easy-copy-field {
+  margin-bottom: 0.75rem;
+}
+.easy-copy-field.is-copy-field-active {
+  border-left: 3px solid #3d8a48;
+  padding-left: 0.55rem;
+}
+.easy-copy-field-count {
+  margin: 0.25rem 0 0;
+  font-size: 0.78rem;
+  color: #4a5560;
+}
+#preview-root .is-copy-field-ring {
+  outline: 2px solid #3d8a48;
+  outline-offset: 3px;
+  background: transparent !important;
+}
+[data-step-id="easy-copy-omakase"].is-copy-solo > .dash-subhead-row {
+  display: none !important;
+}
+.easy-copy-list-host.is-copy-solo .easy-copy-list-cell[hidden],
+.easy-copy-list-host.is-copy-solo .easy-copy-list-row[hidden] {
+  display: none !important;
+}
+.easy-copy-list-host.is-copy-solo .easy-copy-list-row.is-open > .layout-closed-line {
+  display: none !important;
+}
+.easy-copy-list-host.is-copy-solo .easy-copy-list-head {
+  display: none !important;
+}
+body:has([data-step-id="easy-copy-omakase"].is-copy-solo) .wizard-foot-dock {
+  display: none !important;
+}
+.easy-copy-list-editor .easy-copy-list-ok {
+  margin-top: 0.85rem;
+  display: inline-flex;
+}
+.easy-copy-frame-cand.is-picked {
+  outline: 2px solid #3d8a48;
+  outline-offset: 1px;
+}
+.easy-copy-field-input {
+  display: block;
+  width: 100%;
+  margin-top: 0.35rem;
+  box-sizing: border-box;
 }

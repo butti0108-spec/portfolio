@@ -2262,6 +2262,7 @@
     entryBranch: null,
     hubEntrySource: null,
     easyFlowActive: false,
+    sampleFinishNoBack: false,
     pendingSushi: null,
     sampleFlowEntered: false,
     sampleFlowAppliedId: null,
@@ -3960,6 +3961,7 @@
       entryBranch: store.entryBranch,
       hubEntrySource: store.hubEntrySource,
       easyFlowActive: !!store.easyFlowActive,
+      sampleFinishNoBack: !!store.sampleFinishNoBack,
       easyBasicsApplied: !!store.easyBasicsApplied,
       siteNameConfirmed: !!store.siteNameConfirmed,
       easyBasicsHints: store.easyBasicsHints
@@ -5934,7 +5936,7 @@
       .concat(getEasyImageFlowMid())
       .concat(["easy-site-name"])
       .concat(getEasyCopyFlowTail())
-      .concat(["easy-loading", "easy-done"]);
+      .concat(["easy-done"]);
     if (store.copyScreenReturn === "hub" && ids.indexOf("easy-copy-frame") < 0) {
       const at = ids.indexOf("easy-copy-path");
       if (at >= 0) ids.splice(at + 1, 0, "easy-copy-frame");
@@ -6114,6 +6116,10 @@
       if (step === "sushi") return 1;
       if (step === "purpose") return 2;
       return 0;
+    }
+    if (store.sampleFinishNoBack && store.entryBranch === "sample") {
+      const finishStep = getCurrentFlowStep();
+      if (finishStep && finishStep.id === "finish") return 8;
     }
     if (!store.easyFlowActive || store.entryBranch !== "sample") return 0;
     const step = getCurrentFlowStep();
@@ -8336,7 +8342,15 @@
         !!store.guidedColorEditStepId;
       if (!skipPresetScroll) {
         const sel = block.getAttribute("data-preview-target");
-        if (sel) window.setTimeout(() => scrollPreviewTo(sel), 50);
+        const keepPreviewTop = step.id === "finish" && store.sampleFinishNoBack;
+        if (keepPreviewTop) {
+          window.setTimeout(() => scrollPreviewTo("#preview-root"), 50);
+          window.requestAnimationFrame(() => {
+            block.scrollTop = 0;
+            const dashBody = document.querySelector(".dash-body");
+            if (dashBody) dashBody.scrollTop = 0;
+          });
+        } else if (sel) window.setTimeout(() => scrollPreviewTo(sel), 50);
         const hit = root.querySelector('[data-open-step="' + step.id + '"].preview-hit') ||
           root.querySelector('.preview-hit[data-open-step="' + step.id + '"]');
         if (hit) {
@@ -8666,6 +8680,9 @@
       } else if (!onEasyFlow) {
         backBtn.textContent = "ひとつ戻る";
       }
+      if (store.sampleFinishNoBack && step && step.id === "finish") {
+        backBtn.hidden = true;
+      }
     }
     if (nextBtn) {
       nextBtn.hidden =
@@ -8817,8 +8834,6 @@
       stepId === "easy-copy-frame";
     const hint = document.getElementById("easy-copy-later-hint");
     if (hint) hint.hidden = !on;
-    const omakaseHint = document.getElementById("easy-copy-omakase-hint");
-    if (omakaseHint) omakaseHint.hidden = stepId !== "easy-copy-omakase";
     document.body.classList.toggle("copy-later-fixed", on);
   }
 
@@ -9721,6 +9736,7 @@
 
   function leaveEasyFlowToFinish() {
     confirmEasyImagesForFinish();
+    store.sampleFinishNoBack = true;
     store.easyFlowActive = false;
     setSampleFlowPreviewHidden(false);
     /* 提出面を出す。detail のままだと syncDetailDashVisibility が finish を隠す */
@@ -12526,7 +12542,22 @@
         scheduleSave();
       });
 
+      const omakaseTip = document.createElement("span");
+      omakaseTip.className = "hub-tip-wrap";
+      const omakaseTipBtn = document.createElement("button");
+      omakaseTipBtn.type = "button";
+      omakaseTipBtn.className = "hub-tip-btn";
+      omakaseTipBtn.setAttribute("data-hub-tip", "");
+      omakaseTipBtn.setAttribute("aria-label", "おまかせとは");
+      omakaseTipBtn.textContent = "?";
+      const omakasePop = document.createElement("span");
+      omakasePop.className = "hub-tip-pop";
+      omakasePop.hidden = true;
+      omakasePop.textContent = "おまかせは、何度でも出せます。こちらを参考にして、文章をご記入ください。";
+      omakaseTip.appendChild(omakaseTipBtn);
+      omakaseTip.appendChild(omakasePop);
       actions.appendChild(omakaseBtn);
+      actions.appendChild(omakaseTip);
       actions.appendChild(resetBtn);
       box.appendChild(input);
       box.appendChild(counter);
@@ -12536,6 +12567,7 @@
       wrap.appendChild(sec);
       growCopyField(input);
     });
+    setupHubTips(wrap);
 
     if (active) {
       if (!copyListRenderKeepScroll) scrollCopyListPreview(sectionId, active);
@@ -14366,6 +14398,7 @@
 
   function wizardBack() {
     const step = getCurrentFlowStep();
+    if (store.sampleFinishNoBack && step && step.id === "finish") return;
     if (
       step &&
       step.id === "layout" &&
@@ -21627,6 +21660,7 @@
         entryBranch: store.entryBranch,
         hubEntrySource: store.hubEntrySource,
         easyFlowActive: !!store.easyFlowActive,
+        sampleFinishNoBack: !!store.sampleFinishNoBack,
         easyBasicsApplied: !!store.easyBasicsApplied,
         siteNameConfirmed: !!store.siteNameConfirmed,
         easyBasicsHints: store.easyBasicsHints
@@ -21773,6 +21807,7 @@
       }
       if (data.easyFlowActive != null) store.easyFlowActive = !!data.easyFlowActive;
       else if (data.easyP1Hold) store.easyFlowActive = !!data.easyP1Hold;
+      store.sampleFinishNoBack = !!data.sampleFinishNoBack;
       store.easyBasicsApplied = !!data.easyBasicsApplied;
       store.siteNameConfirmed = !!data.siteNameConfirmed;
       if (data.easyBasicsHints && typeof data.easyBasicsHints === "object") {

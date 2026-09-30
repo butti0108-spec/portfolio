@@ -13337,12 +13337,6 @@ body:has([data-step-id="easy-img-wire"].is-easy-drill) .wizard-foot-dock {
   box-sizing: border-box;
 }
 /* 案内文の下から「表題 / これでOK」までを 0.875rem。画像も文章も同じ */
-body:has([data-step-id="easy-img-wire"].is-easy-drill) .dash-header,
-body:has([data-step-id="easy-copy-omakase"].is-easy-drill) .dash-header,
-body.hub-shell-focus:has([data-step-id="easy-img-wire"].is-easy-drill) .dash-header,
-body.hub-shell-focus:has([data-step-id="easy-copy-omakase"].is-easy-drill) .dash-header {
-  padding-bottom: 0;
-}
 body.wizard-mode.mode-guided:has([data-step-id="easy-img-wire"].is-easy-drill) .dash-pane > .dash-body,
 body.wizard-mode.mode-guided:has([data-step-id="easy-copy-omakase"].is-easy-drill) .dash-pane > .dash-body {
   padding-top: 0;
@@ -15319,14 +15313,28 @@ body:has([data-step-id="easy-copy-omakase"].is-easy-drill) .wizard-foot-dock {
 .easy-copy-name-warn[hidden] {
   display: none !important;
 }
-.dash-header .easy-copy-omakase-hint {
-  margin: 0.2rem 0 0;
+#easy-copy-later-hint[hidden] {
+  display: none !important;
+}
+.wizard-foot-dock .dash-resume-notice,
+.wizard-foot-dock .easy-copy-later-hint {
+  margin: 0 0 0.45rem;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+  text-align: center;
   font-size: 0.82rem;
+  font-weight: 400;
   line-height: 1.45;
   color: #2a3238;
 }
-#easy-copy-omakase-hint[hidden] {
-  display: none !important;
+#easy-copy-list-host .easy-copy-field-actions .hub-tip-wrap {
+  align-items: center;
+  margin-left: 0;
+}
+#easy-copy-list-host .easy-copy-field-actions .hub-tip-btn {
+  top: 0;
 }
 body.is-site-name-dawn .dash-body {
   background: #fff;

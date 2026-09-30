@@ -12,7 +12,7 @@
   <!-- メーカー親CSS（ポートフォリオ根の style.css は読まない） -->
   <link rel="stylesheet" href="maker-base.css?v=cleanup-20260922">
   <link rel="icon" href="brand/mark-favicon.png?v=logo-8" type="image/png">
-  <link rel="stylesheet" href="sample-overrides.css?v=name-line-20260930b">
+  <link rel="stylesheet" href="sample-overrides.css?v=meter-fixed-20260930">
   <link rel="stylesheet" href="free-photo-gallery/gallery.css?v=omakase-ok-20260929">
   <script>
     (function () {
@@ -52,7 +52,7 @@
         if (data.copyPathMode === "omakase") ids.push("easy-copy-path", "easy-copy-omakase");
         else if (data.copyPathMode === "keyword") ids.push("easy-copy-path", "easy-copy-frame");
         else ids.push("easy-copy-path");
-        ids.push("easy-loading", "easy-done");
+        ids.push("easy-done");
         /* 基本情報と雰囲気は見本を隠す。色合いから出す */
         void ids;
       } catch (e) { /* ignore */ }
@@ -65,7 +65,7 @@
   <script src="sushi-belt.js?v=mihon-word-20260930" defer></script>
   <script src="free-photo-gallery/gallery.js?v=gallery-ask-20260926" defer></script>
   <script src="page-shutter.js?v=sample-only-20260929" defer></script>
-  <script src="script.js?v=name-line-20260930b" defer></script>
+  <script src="script.js?v=finish-noback-20260930" defer></script>
   <script>
     (function () {
       var h = location.hostname;
@@ -456,9 +456,6 @@
           <div class="easy-flow-meter-track" aria-hidden="true"><span class="easy-flow-meter-fill" data-easy-flow-meter-fill></span></div>
           <p class="easy-flow-meter-names" data-easy-flow-meter-names></p>
         </div>
-        <p class="dash-resume-notice" role="note">ページを<strong>更新・開き直した</strong>ときは、<strong>写真を選び直し</strong>してください</p>
-        <p class="easy-copy-later-hint" id="easy-copy-later-hint" hidden>あとから、サイト内の画像も文章も修正できます。まずは完成まで進みましょう。</p>
-        <p class="easy-copy-omakase-hint" id="easy-copy-omakase-hint" hidden>おまかせは何度でも押せます。出た文を参考に、直せます。</p>
       </header>
 
       <div class="dash-width-rail" id="dash-width-rail" hidden>
@@ -734,15 +731,6 @@
             </div>
           </div>
           <p class="dash-note">写真を増やしたり枠を変えたい場合は、最後の「編集する」からできます。</p>
-        </details>
-
-        <details class="dash-block dash-block--easy" data-step-id="easy-loading" hidden>
-          <summary>作成中</summary>
-          <div class="easy-loading-panel sample-create-anim" id="easy-loading-panel">
-            <p class="dash-subhead" id="easy-loading-title" role="heading" aria-level="3">奥へ吸い込んでいます</p>
-            <div class="easy-loading-bar" aria-hidden="true"><span class="easy-loading-bar-fill"></span></div>
-            <p class="easy-loading-note">しばらくお待ちください</p>
-          </div>
         </details>
 
         <details class="dash-block dash-block--easy" data-step-id="easy-done" hidden>
@@ -1528,6 +1516,8 @@
       <div class="wizard-foot-dock" id="wizard-foot-dock">
         <div class="wizard-foot-panel" id="wizard-foot-panel" hidden role="alert"></div>
         <p class="wizard-foot-guide" id="wizard-foot-guide" hidden></p>
+        <p class="dash-resume-notice" role="note">ページを<strong>更新・開き直した</strong>ときは、<strong>写真を選び直し</strong>してください</p>
+        <p class="easy-copy-later-hint" id="easy-copy-later-hint" hidden>あとから、サイト内の画像も文章も修正できます。まずは完成まで進みましょう。</p>
         <nav class="wizard-foot" id="wizard-nav" aria-label="作成ステップ">
           <button type="button" class="wizard-btn" id="wizard-back">ひとつ戻る</button>
           <button type="button" class="wizard-btn" id="wizard-next">次へ</button>

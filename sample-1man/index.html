@@ -12,7 +12,7 @@
   <!-- メーカー親CSS（ポートフォリオ根の style.css は読まない） -->
   <link rel="stylesheet" href="maker-base.css?v=cleanup-20260922">
   <link rel="icon" href="brand/mark-favicon.png?v=logo-8" type="image/png">
-  <link rel="stylesheet" href="sample-overrides.css?v=listing-name-b-20260930">
+  <link rel="stylesheet" href="sample-overrides.css?v=name-line-20260930b">
   <link rel="stylesheet" href="free-photo-gallery/gallery.css?v=omakase-ok-20260929">
   <script>
     (function () {
@@ -62,10 +62,10 @@
   <script src="vibe-dict.js" defer></script>
   <script src="easy-copy-dict.js?v=cleanup-20260922" defer></script>
   <script src="copy-dict-engine.js?v=copy-ui-b-20260924" defer></script>
-  <script src="sushi-belt.js?v=sushi-replace-up-20260926" defer></script>
+  <script src="sushi-belt.js?v=mihon-word-20260930" defer></script>
   <script src="free-photo-gallery/gallery.js?v=gallery-ask-20260926" defer></script>
   <script src="page-shutter.js?v=sample-only-20260929" defer></script>
-  <script src="script.js?v=listing-name-b-20260930" defer></script>
+  <script src="script.js?v=name-line-20260930b" defer></script>
   <script>
     (function () {
       var h = location.hostname;
@@ -195,8 +195,8 @@
           <label class="entry-branch-card">
             <input type="radio" name="entry_branch" value="sample">
             <span class="entry-branch-card-inner">
-              <strong role="heading" aria-level="3">サンプルから選ぶ</strong>
-              <span>サンプルを見て掴み、あとから自分の内容を入れます</span>
+              <strong role="heading" aria-level="3">見本から選ぶ</strong>
+              <span>見本を見て掴み、あとから自分の内容を入れます</span>
             </span>
           </label>
           <label class="entry-branch-card">
@@ -240,11 +240,11 @@
       </fieldset>
 
       <fieldset class="entry-intake-block sushi-shelf" id="entry-sushi-field" data-entry-step="sushi" hidden>
-        <legend class="sushi-sr-only">サンプルを選ぶ</legend>
+        <legend class="sushi-sr-only">見本を選ぶ</legend>
         <div id="sushi-boot-loading" class="sushi-boot-loading" hidden aria-busy="true" aria-live="polite">
           <div class="sushi-boot-loading-inner">
             <div class="sushi-boot-spinner" aria-hidden="true"></div>
-            <p id="sushi-boot-loading-msg" class="sushi-boot-loading-msg">ただいまサンプルをレーンに流しています…</p>
+            <p id="sushi-boot-loading-msg" class="sushi-boot-loading-msg">ただいま見本をレーンに流しています…</p>
           </div>
         </div>
         <div class="sushi-stage-top">
@@ -255,7 +255,7 @@
           <div class="sushi-upper-band">
             <div class="sushi-side sushi-side--add">
               <p class="sushi-flow-guide sushi-flow-guide--add">
-                <span class="sushi-flow-line"><span class="sushi-flow-num" aria-hidden="true">①</span><span class="sushi-flow-words">クリックしてサンプル追加</span></span>
+                <span class="sushi-flow-line"><span class="sushi-flow-num" aria-hidden="true">①</span><span class="sushi-flow-words">クリックして見本追加</span></span>
                 <span class="sushi-flow-arrow sushi-flow-arrow--down" aria-hidden="true"></span>
               </p>
             </div>
@@ -268,7 +268,7 @@
           </div>
         </div>
         <div class="sushi-lane-wrap">
-          <div class="sushi-lane" id="sushi-lane" aria-label="サンプルの列（短くクリックで上の枠へ。ドラッグで送れます）">
+          <div class="sushi-lane" id="sushi-lane" aria-label="見本の列（短くクリックで上の枠へ。ドラッグで送れます）">
             <div class="sushi-lane-track" id="sushi-lane-track"></div>
           </div>
         </div>
@@ -285,7 +285,7 @@
         <div id="sushi-replace-modal" class="sushi-modal" hidden>
           <div class="sushi-modal-card sushi-replace-card" role="dialog" aria-labelledby="sushi-replace-title">
             <h2 id="sushi-replace-title">どの候補と入れ替えますか？</h2>
-            <p class="sushi-modal-note">外したい候補を選ぶと、その位置に新しいサンプルが入ります。</p>
+            <p class="sushi-modal-note">外したい候補を選ぶと、その位置に新しい見本が入ります。</p>
             <div class="sushi-replace-list"></div>
             <button type="button" class="gct-btn" data-sushi-replace-cancel>やめる</button>
           </div>
@@ -293,19 +293,19 @@
 
         <div id="sushi-guide-modal" class="sushi-modal" hidden>
           <div class="sushi-modal-card sushi-guide-card" role="dialog" aria-labelledby="sushi-guide-title">
-            <h2 id="sushi-guide-title">サンプルの選び方</h2>
+            <h2 id="sushi-guide-title">見本の選び方</h2>
             <div class="sushi-guide-body">
               <section class="sushi-guide-block">
-                <h3 class="sushi-guide-heading">① サンプルを追加する</h3>
-                <p class="sushi-guide-text">下のサンプルをクリックすると、上の枠に入ります。</p>
+                <h3 class="sushi-guide-heading">① 見本を追加する</h3>
+                <p class="sushi-guide-text">下の見本をクリックすると、上の枠に入ります。</p>
               </section>
               <section class="sushi-guide-block">
-                <h3 class="sushi-guide-heading">② サンプルを確定する</h3>
-                <p class="sushi-guide-text">上の枠をクリックすると、そのサンプルで進められます。</p>
+                <h3 class="sushi-guide-heading">② 見本を確定する</h3>
+                <p class="sushi-guide-text">上の枠をクリックすると、その見本で進められます。</p>
               </section>
               <section class="sushi-guide-block">
                 <h3 class="sushi-guide-heading">大きく見たいとき</h3>
-                <p class="sushi-guide-text">虫眼鏡をクリックすると、サンプルを大きく見られます。</p>
+                <p class="sushi-guide-text">虫眼鏡をクリックすると、見本を大きく見られます。</p>
               </section>
               <section class="sushi-guide-block sushi-guide-block--note">
                 <p class="sushi-guide-text">上の枠がいっぱいのときは、入れ替える枠を選べます。</p>
@@ -359,7 +359,7 @@
   </div>
 
   <div class="atelier-mobile-tabs" role="tablist" aria-label="画面切替">
-    <button type="button" class="atelier-tab is-active" data-tab="preview">サンプル画面</button>
+    <button type="button" class="atelier-tab is-active" data-tab="preview">見本画面</button>
     <button type="button" class="atelier-tab" data-tab="dash">注文画面</button>
   </div>
 
@@ -457,7 +457,8 @@
           <p class="easy-flow-meter-names" data-easy-flow-meter-names></p>
         </div>
         <p class="dash-resume-notice" role="note">ページを<strong>更新・開き直した</strong>ときは、<strong>写真を選び直し</strong>してください</p>
-        <p class="easy-copy-later-hint" id="easy-copy-later-hint" hidden>あとから、サイト内の文章は修正できます。まずは完成まで進みましょう。</p>
+        <p class="easy-copy-later-hint" id="easy-copy-later-hint" hidden>あとから、サイト内の画像も文章も修正できます。まずは完成まで進みましょう。</p>
+        <p class="easy-copy-omakase-hint" id="easy-copy-omakase-hint" hidden>おまかせは何度でも押せます。出た文を参考に、直せます。</p>
       </header>
 
       <div class="dash-width-rail" id="dash-width-rail" hidden>
@@ -538,12 +539,11 @@
         <details class="dash-block dash-block--easy" data-step-id="easy-site-name" hidden>
           <summary>名前</summary>
           <div class="easy-site-name-dawn">
-            <p class="easy-site-name-lead">ホームページに出す名前を、ここにどうぞ。</p>
-            <p class="easy-site-name-note">会社名でも、個人名でも、プロジェクト名でも、同じ一行。</p>
-            <input type="text" id="easy-site-name-input" class="easy-site-name-input" maxlength="20" autocomplete="organization" aria-label="ホームページに出す名前">
-            <div id="easy-site-name-ask" class="easy-site-name-ask" hidden>
-              <p>ここから、文章の入力を始めますか</p>
-              <button type="button" class="gct-btn gct-btn-primary" id="easy-site-name-ok">OK</button>
+            <p class="easy-site-name-lead">ホームページタイトルをご記入ください。</p>
+            <p class="easy-site-name-note">会社名、個人名、プロジェクト名など</p>
+            <input type="text" id="easy-site-name-input" class="easy-site-name-input" maxlength="20" autocomplete="organization" aria-label="ホームページタイトル">
+            <div id="easy-site-name-ask" class="easy-site-name-ask">
+              <button type="button" class="gct-btn gct-btn-primary" id="easy-site-name-ok">開始します</button>
             </div>
           </div>
         </details>
@@ -1303,7 +1303,7 @@
             <div class="step-font-embed">
               <div data-font-host="catch"></div>
             </div>
-            <p class="dash-note easy-only-note" id="hero-text-easy-note">サンプル本線では写真の上に文字を載せません（見本draftのオンも本線ではオフ）。編集ハブでは「載せる」にできます。</p>
+            <p class="dash-note easy-only-note" id="hero-text-easy-note">見本本線では写真の上に文字を載せません（見本draftのオンも本線ではオフ）。編集ハブでは「載せる」にできます。</p>
           </div>
         </details>
 
@@ -1547,7 +1547,7 @@
         tabindex="-1"
       ></div>
 
-      <section class="preview-pane" aria-label="サンプル画面">
+      <section class="preview-pane" aria-label="見本画面">
         <div class="preview-width-rail" id="preview-width-rail" hidden>
           <div id="preview-width-slot" class="preview-width-slot"></div>
         </div>

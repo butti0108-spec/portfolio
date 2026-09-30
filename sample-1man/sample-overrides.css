@@ -15264,8 +15264,9 @@ body:has([data-step-id="easy-copy-omakase"].is-easy-drill) .wizard-foot-dock {
 .easy-listing-host {
   display: flex;
   flex-direction: column;
-  gap: 0.45rem;
+  gap: 0.7rem;
   margin: 0.2rem 0 0.4rem;
+  padding: 0.35rem 0.2rem;
 }
 .easy-listing-btn {
   display: block;
@@ -15283,27 +15284,23 @@ body:has([data-step-id="easy-copy-omakase"].is-easy-drill) .wizard-foot-dock {
   cursor: pointer;
 }
 .easy-listing-btn.is-on {
-  color: #1d5c28;
-  background: #e7f6ea;
-  border-color: #3d8a48;
-  box-shadow: inset 0 0 0 1px #3d8a48;
+  color: #243028;
+  background: #fff;
+  border-color: #c5ced6;
+  outline: 1px solid #3d8a48;
+  outline-offset: 3px;
 }
 .easy-copy-name-line {
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-  margin: 0 0 0.85rem;
-}
-.easy-copy-name-cap {
-  flex: 0 0 auto;
-  font-size: 0.95rem;
-  font-weight: 800;
+  display: block;
+  margin: 0;
 }
 .easy-copy-name-input {
-  flex: 1 1 auto;
+  display: block;
+  width: 100%;
   min-width: 0;
   margin: 0;
   padding: 0.35rem 0.15rem;
+  box-sizing: border-box;
   font: inherit;
   font-size: 1.15rem;
   line-height: 1.4;
@@ -15313,13 +15310,27 @@ body:has([data-step-id="easy-copy-omakase"].is-easy-drill) .wizard-foot-dock {
   border-bottom: 1px solid rgba(20, 28, 36, 0.28);
   border-radius: 0;
 }
+.easy-copy-name-warn {
+  margin: 0.4rem 0 0.85rem;
+  font-size: 0.9rem;
+  line-height: 1.45;
+  color: #8a3b2a;
+}
+.easy-copy-name-warn[hidden] {
+  display: none !important;
+}
+.dash-header .easy-copy-omakase-hint {
+  margin: 0.2rem 0 0;
+  font-size: 0.82rem;
+  line-height: 1.45;
+  color: #2a3238;
+}
+#easy-copy-omakase-hint[hidden] {
+  display: none !important;
+}
 body.is-site-name-dawn .dash-body {
-  background-color: #243028;
-  background-image: repeating-linear-gradient(
-    -18deg,
-    rgba(255, 255, 255, 0.045) 0 1px,
-    transparent 1px 16px
-  );
+  background: #fff;
+  background-image: none;
 }
 body.is-site-name-dawn .wizard-foot-dock,
 body.is-site-name-dawn #wizard-nav {
@@ -15327,33 +15338,41 @@ body.is-site-name-dawn #wizard-nav {
 }
 body.is-site-name-dawn .dash-body > .fill-form,
 body.is-site-name-dawn .dash-block[data-step-id="easy-site-name"] {
-  background: transparent;
+  background: #fff;
 }
 body.is-site-name-dawn .dash-block[data-step-id="easy-site-name"] {
+  width: 100%;
   min-height: 62vh;
   display: flex;
-  align-items: center;
+  flex-direction: column;
+  align-items: stretch;
   justify-content: center;
   border: none;
   box-shadow: none;
+  box-sizing: border-box;
 }
 .easy-site-name-dawn {
-  width: min(32rem, 100%);
+  width: 100%;
+  max-width: 100%;
   margin: 0 auto;
+  padding: 0 0.75rem;
+  box-sizing: border-box;
   text-align: center;
+  container-type: inline-size;
 }
 .easy-site-name-lead {
   margin: 0 0 0.55rem;
-  font-size: 1.85rem;
+  font-size: clamp(0.68rem, 4.4cqi, 1.85rem);
   font-weight: 800;
   line-height: 1.35;
-  color: #fff;
+  white-space: nowrap;
+  color: #121816;
 }
 .easy-site-name-note {
-  margin: 0 0 1.35rem;
-  font-size: 1rem;
+  margin: 0 0 1.15rem;
+  font-size: 0.95rem;
   line-height: 1.5;
-  color: rgba(255, 255, 255, 0.82);
+  color: #5c656c;
 }
 .easy-site-name-input {
   display: block;
@@ -15362,24 +15381,29 @@ body.is-site-name-dawn .dash-block[data-step-id="easy-site-name"] {
   padding: 0.35rem 0.2rem 0.5rem;
   box-sizing: border-box;
   font: inherit;
-  font-size: 1.7rem;
+  font-size: 1.35rem;
   font-weight: 700;
   line-height: 1.3;
   text-align: center;
-  color: #fff;
+  color: #121816;
+  caret-color: #121816;
   background: transparent;
   border: none;
-  border-bottom: 2px solid rgba(255, 255, 255, 0.88);
+  border-bottom: 2px solid rgba(20, 28, 36, 0.45);
   border-radius: 0;
 }
 .easy-site-name-ask {
-  margin-top: 1.5rem;
-}
-.easy-site-name-ask p {
-  margin: 0 0 0.75rem;
-  font-size: 1.15rem;
-  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 2.75rem;
+  margin-top: 1rem;
 }
 .easy-site-name-ask .gct-btn {
-  min-width: 6.5rem;
+  visibility: hidden;
+  min-width: 8rem;
+  min-height: 2.5rem;
+}
+.easy-site-name-ask.is-ready .gct-btn {
+  visibility: visible;
 }

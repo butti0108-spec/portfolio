@@ -259,7 +259,7 @@
     if (!els.track) return;
     if (!laneSamples.length) {
       els.track.innerHTML =
-        '<p class="sushi-lane-empty">選んだサンプルのため、いま流れるサンプルはありません</p>';
+        '<p class="sushi-lane-empty">選んだ見本のため、いま流れる見本はありません</p>';
       loopWidth = 0;
       offsetX = 0;
       applyTrackTransform();
@@ -580,8 +580,8 @@
       "&v=sushi-zoom-live-v8";
     els.zoomInner.innerHTML =
       '<div class="sushi-zoom-frame is-pending">' +
-      '<p class="sushi-zoom-pending" aria-live="polite">サンプルを準備しています…</p>' +
-      '<iframe class="sushi-zoom-iframe" title="サンプルプレビュー No.' +
+      '<p class="sushi-zoom-pending" aria-live="polite">見本を準備しています…</p>' +
+      '<iframe class="sushi-zoom-iframe" title="見本プレビュー No.' +
       escapeAttr(sample.id) +
       '" src="' +
       escapeAttr(src) +
@@ -631,7 +631,7 @@
   }
 
   var BOOT_MSGS = [
-    "ただいまサンプルをレーンに流しています…",
+    "ただいま見本をレーンに流しています…",
     "並べ方を調整しています…",
     "まもなく表示します…"
   ];
@@ -1095,7 +1095,7 @@
     }
     if (!sample) {
       window.alert(
-        "まだ上の枠にサンプルがありません。下のサンプルを短くクリックすると、ここに入れられます。"
+        "まだ上の枠に見本がありません。下の見本を短くクリックすると、ここに入れられます。"
       );
       return;
     }

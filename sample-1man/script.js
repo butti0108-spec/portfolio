@@ -6103,7 +6103,7 @@
     bar.hidden = true;
   }
 
-  const EASY_FLOW_STAGE_LABELS = ["サンプル", "利用用途", "記載項目", "配色", "色調整", "画像", "名前", "文章", "確定"];
+  const EASY_FLOW_STAGE_LABELS = ["見本", "利用用途", "記載項目", "配色", "色調整", "画像", "文章", "確定"];
 
   function easyFlowStageIndex() {
     const gate = document.getElementById("entry-gate");
@@ -6122,8 +6122,7 @@
     if (id === "easy-basics") return 3;
     if (id === "easy-color") return 4;
     if (id === "easy-color-stage") return 5;
-    if (id === "easy-img-path" || id === "easy-img-wire" || id === "easy-img-omakase") return 6;
-    if (id === "easy-site-name") return 7;
+    if (id === "easy-img-path" || id === "easy-img-wire" || id === "easy-img-omakase" || id === "easy-site-name") return 6;
     if (
       id === "easy-copy-path" ||
       id === "easy-copy-dirs" ||
@@ -6131,9 +6130,9 @@
       id === "easy-copy-frame" ||
       id.indexOf("easy-sec-") === 0
     ) {
-      return 8;
+      return 7;
     }
-    if (id === "easy-loading" || id === "easy-done") return 9;
+    if (id === "easy-loading" || id === "easy-done") return 8;
     return 0;
   }
 
@@ -7611,6 +7610,7 @@
       return "";
     }
     if (stepId === "easy-copy-omakase") {
+      if (!homepageName()) return "ホームページタイトルをご記入ください。入力しないと、先へ進めません。";
       return "";
     }
     if (stepId === "easy-copy-frame") {
@@ -8817,6 +8817,8 @@
       stepId === "easy-copy-frame";
     const hint = document.getElementById("easy-copy-later-hint");
     if (hint) hint.hidden = !on;
+    const omakaseHint = document.getElementById("easy-copy-omakase-hint");
+    if (omakaseHint) omakaseHint.hidden = stepId !== "easy-copy-omakase";
     document.body.classList.toggle("copy-later-fixed", on);
   }
 
@@ -8871,7 +8873,7 @@
     }
     if (step === "sushi") {
       return {
-        title: "サンプルを選ぶ",
+        title: "見本を選ぶ",
         lead: ""
       };
     }
@@ -9066,7 +9068,7 @@
     const ok = document.getElementById("easy-site-name-ok");
     if (!input || !ask || !ok) return;
     const syncAsk = function () {
-      ask.hidden = !String(input.value || "").trim();
+      ask.classList.toggle("is-ready", !!String(input.value || "").trim());
     };
     if (!input.dataset.bound) {
       input.dataset.bound = "1";
@@ -9828,7 +9830,7 @@
       },
       {
         label: "進め方",
-        detail: isDetail ? "自分で作る" : "サンプルから選ぶ"
+        detail: isDetail ? "自分で作る" : "見本から選ぶ"
       },
       {
         label: "配色",
@@ -12571,25 +12573,34 @@
     host.innerHTML = "";
     const nameLine = document.createElement("label");
     nameLine.className = "easy-copy-name-line";
-    const nameCap = document.createElement("span");
-    nameCap.className = "easy-copy-name-cap";
-    nameCap.textContent = "名前";
     const nameInput = document.createElement("input");
     nameInput.type = "text";
     nameInput.className = "easy-copy-name-input";
     nameInput.maxLength = 20;
-    nameInput.setAttribute("aria-label", "名前");
+    nameInput.setAttribute("aria-label", "ホームページタイトル");
     nameInput.value = homepageName();
+    const nameWarn = document.createElement("p");
+    nameWarn.className = "easy-copy-name-warn";
+    nameWarn.textContent = "ホームページタイトルをご記入ください。入力しないと、先へ進めません。";
+    const syncNameWarn = function () {
+      nameWarn.hidden = !!String(nameInput.value || "").trim();
+    };
     nameInput.addEventListener("input", function () {
       const next = String(nameInput.value || "").trim();
       setFieldValue("brand_name", nameInput.value);
       store.siteNameConfirmed = !!next && !isPlaceholderBrand(next);
+      syncNameWarn();
+      if (next) {
+        const status = document.getElementById("wizard-status");
+        if (status) status.textContent = "";
+      }
       syncPreviewHeaderChrome();
       scheduleSave();
     });
-    nameLine.appendChild(nameCap);
+    syncNameWarn();
     nameLine.appendChild(nameInput);
     host.appendChild(nameLine);
+    host.appendChild(nameWarn);
     const list = document.createElement("div");
     list.className = "easy-copy-list-wire";
     list.setAttribute("role", "list");

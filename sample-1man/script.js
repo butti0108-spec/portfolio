@@ -330,7 +330,8 @@
 
   /* 色番号は見本サイトの上→下・左→右（ヘッダー／フッターは背景→文字の2工程）。0は章の注意（注文画面のみ） */
   const STEPS = [
-    { id: "easy-basics", label: "基本情報", needsConfirm: true, num: 0 },
+    { id: "easy-basics", label: "記載項目", needsConfirm: true, num: 0 },
+    { id: "easy-site-name", label: "名前", needsConfirm: true, num: 0 },
     { id: "easy-color", label: "配色", needsConfirm: true, num: 0 },
     { id: "easy-color-stage", label: "色調整", needsConfirm: true, num: 0 },
     { id: "easy-copy-path", label: "文章の決め方", needsConfirm: true, num: 0 },
@@ -763,6 +764,7 @@
     "easy-img-path",
     "easy-img-omakase",
     "easy-img-wire",
+    "easy-site-name",
     "easy-copy-path",
     "easy-copy-dirs",
     "easy-copy-omakase",
@@ -772,6 +774,7 @@
   ];
   const EASY_FLOW_STEP_SET = new Set([
     "easy-basics",
+    "easy-site-name",
     "easy-color",
     "easy-color-stage",
     "easy-copy-path",
@@ -862,6 +865,7 @@
   };
   let easyLoadingTimer = null;
   let easyLoadingMsgTimer = null;
+  let placeMarkOn = true;
 
   const GUIDED_STEP_IDS = [].concat(
     COLOR_STEP_IDS_ORDERED,
@@ -920,9 +924,9 @@
   const ITEM_GAP_LABELS = { tight: "狭い", normal: "ふつう", loose: "広い" };
   const ITEM_FOCAL_STEP = 5;
   const ITEM_FOCAL_DEFAULT = 50;
-  const IMAGE_SCALE_MIN = 50;
+  const IMAGE_SCALE_MIN = 100;
   const IMAGE_SCALE_MAX = 200;
-  const IMAGE_SCALE_STEP = 10;
+  const IMAGE_SCALE_STEP = 1;
   const IMAGE_SCALE_DEFAULT = 100;
   /** キャッチ写真の既定＝従来 CSS の center top に合わせる */
   const HERO_FOCAL_X_DEFAULT = 50;
@@ -1370,6 +1374,10 @@
     return Math.max(IMAGE_SCALE_MIN, Math.min(IMAGE_SCALE_MAX, stepped));
   }
 
+  function imageScaleLabel(scale) {
+    return normalizeImageScale(scale) + "%";
+  }
+
   function applyImageScaleToImg(img, scale, focalX, focalY) {
     if (!img) return;
     const x = normalizeFocalX(focalX);
@@ -1422,13 +1430,6 @@
         layout.focalYById[slot] = next;
         changed = true;
       }
-    } else if (dir === "left" || dir === "right") {
-      const delta = dir === "left" ? -ITEM_FOCAL_STEP : ITEM_FOCAL_STEP;
-      const next = normalizeFocalX(Number(layout.focalXById[slot]) + delta);
-      if (next !== layout.focalXById[slot]) {
-        layout.focalXById[slot] = next;
-        changed = true;
-      }
     }
     if (!changed) return;
     pushLayoutUndo();
@@ -1472,13 +1473,6 @@
       const next = normalizeFocalPercent(store.heroFocalY + delta, HERO_FOCAL_Y_DEFAULT);
       if (next !== store.heroFocalY) {
         store.heroFocalY = next;
-        changed = true;
-      }
-    } else if (dir === "left" || dir === "right") {
-      const delta = dir === "left" ? -ITEM_FOCAL_STEP : ITEM_FOCAL_STEP;
-      const next = normalizeFocalPercent(store.heroFocalX + delta, HERO_FOCAL_X_DEFAULT);
-      if (next !== store.heroFocalX) {
-        store.heroFocalX = next;
         changed = true;
       }
     }
@@ -1884,8 +1878,9 @@
     removeLayoutDragGhost();
     const host = document.getElementById("layout-arrange-wire");
     if (host) host.classList.remove("is-dragging-layout");
-    document.querySelectorAll(".layout-arrange-cell").forEach((el) => {
-      el.classList.remove("is-dragging", "is-drop-target", "is-drop-deny", "is-selected");
+    document.querySelectorAll(".layout-arrange-cell, .layout-photo-row, .easy-copy-list-row").forEach((el) => {
+      el.style.transform = "";
+      el.classList.remove("is-dragging", "is-drop-target", "is-drop-deny", "is-selected", "is-touch", "is-holding");
     });
     document.querySelectorAll("#preview-root [data-layout-block]").forEach((el) => {
       el.classList.remove("is-preview-dragging", "is-preview-drop-target");
@@ -1965,7 +1960,7 @@
     contactBg: "#1a4d8c",
     contactInk: "#ffffff",
     radius: "0.6rem",
-    headingScale: "1",
+    headingScale: "1.15",
     accentBar: "mid"
   };
 
@@ -2305,13 +2300,16 @@
     sampleCopySlots: null,
     easyBasicsHints: null,
     easyBasicsApplied: false,
+    siteNameConfirmed: false,
     easyAnswers: { mood: "calm", focus: "quality", guest: "first" },
     easyCopyCandidates: [],
     easyCopySelected: null,
     siteColorMode: "easy",
     heroTextOnPhoto: false,
     heroTextPlate: "round",
+    heroTextPlateLast: "round",
     heroTextPlateTone: "white",
+    heroTextPos: "center",
     heroFocalX: HERO_FOCAL_X_DEFAULT,
     heroFocalY: HERO_FOCAL_Y_DEFAULT,
     heroImageScale: IMAGE_SCALE_DEFAULT,
@@ -3944,7 +3942,9 @@
       heroImageScale: normalizeImageScale(store.heroImageScale),
       aboutItemsDisplay: normalizeAboutItemsDisplay(store.aboutItemsDisplay),
       heroTextPlate: normalizeHeroPlate(store.heroTextPlate),
+      heroTextPlateLast: heroPlateLastShape(),
       heroTextPlateTone: normalizeHeroPlateTone(store.heroTextPlateTone),
+      heroTextPos: normalizeHeroTextPos(store.heroTextPos),
       finishLockedOnce: store.finishLockedOnce,
       guidedImageUnlocked: store.guidedImageUnlocked,
       guidedTextUnlocked: store.guidedTextUnlocked,
@@ -3961,6 +3961,7 @@
       hubEntrySource: store.hubEntrySource,
       easyFlowActive: !!store.easyFlowActive,
       easyBasicsApplied: !!store.easyBasicsApplied,
+      siteNameConfirmed: !!store.siteNameConfirmed,
       easyBasicsHints: store.easyBasicsHints
         ? {
             brand: String(store.easyBasicsHints.brand || ""),
@@ -5921,20 +5922,17 @@
   }
 
   function getEasyCopyFlowTail() {
-    let tail;
-    if (store.copyPathMode === "omakase") {
-      tail = ["easy-copy-path", "easy-copy-omakase"];
-    } else if (store.copyPathMode === "keyword") {
-      tail = ["easy-copy-path", "easy-copy-dirs", "easy-copy-omakase"];
-    } else {
-      tail = ["easy-copy-path"];
+    /* 一覧が本線。一括おまかせ画面は出さない。キーワード時だけ言葉選びを挟む */
+    if (store.copyPathMode === "keyword") {
+      return ["easy-copy-dirs", "easy-copy-omakase"];
     }
-    return tail;
+    return ["easy-copy-omakase"];
   }
 
   function getEasyFlowStepIds() {
     const ids = ["easy-basics", "easy-color", "easy-color-stage"]
       .concat(getEasyImageFlowMid())
+      .concat(["easy-site-name"])
       .concat(getEasyCopyFlowTail())
       .concat(["easy-loading", "easy-done"]);
     if (store.copyScreenReturn === "hub" && ids.indexOf("easy-copy-frame") < 0) {
@@ -6105,7 +6103,7 @@
     bar.hidden = true;
   }
 
-  const EASY_FLOW_STAGE_LABELS = ["サンプル", "利用用途", "基本情報", "配色", "色調整", "画像", "文章", "確定"];
+  const EASY_FLOW_STAGE_LABELS = ["サンプル", "利用用途", "記載項目", "配色", "色調整", "画像", "名前", "文章", "確定"];
 
   function easyFlowStageIndex() {
     const gate = document.getElementById("entry-gate");
@@ -6125,6 +6123,7 @@
     if (id === "easy-color") return 4;
     if (id === "easy-color-stage") return 5;
     if (id === "easy-img-path" || id === "easy-img-wire" || id === "easy-img-omakase") return 6;
+    if (id === "easy-site-name") return 7;
     if (
       id === "easy-copy-path" ||
       id === "easy-copy-dirs" ||
@@ -6132,9 +6131,9 @@
       id === "easy-copy-frame" ||
       id.indexOf("easy-sec-") === 0
     ) {
-      return 7;
+      return 8;
     }
-    if (id === "easy-loading" || id === "easy-done") return 8;
+    if (id === "easy-loading" || id === "easy-done") return 9;
     return 0;
   }
 
@@ -6148,8 +6147,9 @@
         return;
       }
       meter.hidden = false;
-      if (label) label.textContent = EASY_FLOW_STAGE_LABELS[n - 1] + "\u3000" + n + " / 8";
-      if (fill) fill.style.width = (n / 8) * 100 + "%";
+      const stageCount = EASY_FLOW_STAGE_LABELS.length;
+      if (label) label.textContent = EASY_FLOW_STAGE_LABELS[n - 1] + "\u3000" + n + " / " + stageCount;
+      if (fill) fill.style.width = (n / stageCount) * 100 + "%";
       const names = meter.querySelector("[data-easy-flow-meter-names]");
       if (names) {
         names.textContent = "";
@@ -6527,14 +6527,116 @@
     return "round";
   }
 
+  function heroPlateLastShape() {
+    const v = normalizeHeroPlate(store.heroTextPlateLast || "round");
+    return v === "none" ? "round" : v;
+  }
+
+  function setHeroPlatePresence(on) {
+    if (on) {
+      store.heroTextPlate = heroPlateLastShape();
+      return;
+    }
+    if (store.heroTextPlate && store.heroTextPlate !== "none") {
+      store.heroTextPlateLast = store.heroTextPlate;
+    }
+    store.heroTextPlate = "none";
+  }
+
   function normalizeHeroPlateTone(tone) {
     return tone === "dark" ? "dark" : "white";
+  }
+
+  /* キャッチ文字の九位置（ハニカム八矢印＋中央） */
+  const HERO_TEXT_POS_IDS = [
+    "center",
+    "top",
+    "top-right",
+    "right",
+    "bottom-right",
+    "bottom",
+    "bottom-left",
+    "left",
+    "top-left"
+  ];
+  const HERO_TEXT_POS_COMPASS = [
+    { id: "top-left", label: "左上", arrow: "↖", col: 1, row: 1 },
+    { id: "top", label: "上", arrow: "↑", col: 2, row: 1 },
+    { id: "top-right", label: "右上", arrow: "↗", col: 3, row: 1 },
+    { id: "left", label: "左", arrow: "←", col: 1, row: 2 },
+    { id: "center", label: "中央", arrow: "", col: 2, row: 2, center: true },
+    { id: "right", label: "右", arrow: "→", col: 3, row: 2 },
+    { id: "bottom-left", label: "左下", arrow: "↙", col: 1, row: 3 },
+    { id: "bottom", label: "下", arrow: "↓", col: 2, row: 3 },
+    { id: "bottom-right", label: "右下", arrow: "↘", col: 3, row: 3 }
+  ];
+
+  function normalizeHeroTextPos(pos) {
+    return HERO_TEXT_POS_IDS.indexOf(pos) >= 0 ? pos : "center";
+  }
+
+  function applyHeroTextPos() {
+    const stage = root.querySelector(".hero-stage");
+    if (!stage) return;
+    const pos = normalizeHeroTextPos(store.heroTextPos);
+    store.heroTextPos = pos;
+    HERO_TEXT_POS_IDS.forEach(function (id) {
+      stage.classList.remove("hero-text-pos-" + id);
+    });
+    stage.classList.add("hero-text-pos-" + pos);
   }
 
   /** 編集ハブで載せる／載せないを触れられるか（サンプル本線では操作しない） */
   function heroTextOverlayAllowed() {
     if (store.easyFlowActive) return false;
     return store.siteColorMode === "detail";
+  }
+
+  let heroCopyFitFrame = 0;
+  let copyListRenderKeepScroll = false;
+
+  function scheduleHeroCopyFitCheck() {
+    if (heroCopyFitFrame) window.cancelAnimationFrame(heroCopyFitFrame);
+    heroCopyFitFrame = window.requestAnimationFrame(function () {
+      heroCopyFitFrame = window.requestAnimationFrame(function () {
+        heroCopyFitFrame = 0;
+        syncHeroCopyFitNotice();
+      });
+    });
+  }
+
+  function syncHeroCopyFitNotice() {
+    const note = document.getElementById("easy-copy-hero-fit-note");
+    const stage = root && root.querySelector(".hero-stage.is-hero-text-on");
+    const copy = stage && stage.querySelector(".hero-copy");
+    const plate = stage && stage.querySelector(".hero-copy-plate");
+    if (!note) return;
+    if (!copy || !plate || copy.clientWidth < 8 || copy.clientHeight < 8) {
+      note.hidden = true;
+      return;
+    }
+    const cs = window.getComputedStyle(copy);
+    const padT = parseFloat(cs.paddingTop) || 0;
+    const padR = parseFloat(cs.paddingRight) || 0;
+    const padB = parseFloat(cs.paddingBottom) || 0;
+    const padL = parseFloat(cs.paddingLeft) || 0;
+    const cr = copy.getBoundingClientRect();
+    const pr = plate.getBoundingClientRect();
+    const overflows = pr.top < cr.top + padT - 1
+      || pr.bottom > cr.bottom - padB + 1
+      || pr.left < cr.left + padL - 1
+      || pr.right > cr.right - padR + 1;
+    note.hidden = !overflows;
+  }
+
+  function bindHeroCopyFitWatch() {
+    const stage = root && root.querySelector(".hero-stage");
+    if (!stage || stage.dataset.fitWatch === "1" || typeof ResizeObserver !== "function") return;
+    stage.dataset.fitWatch = "1";
+    const watch = new ResizeObserver(function () {
+      scheduleHeroCopyFitCheck();
+    });
+    watch.observe(stage);
   }
 
   function applyHeroTextOverlay() {
@@ -6555,7 +6657,10 @@
       stage.classList.add("hero-plate-" + plate);
       stage.classList.add("hero-plate-tone-" + tone);
     }
+    applyHeroTextPos();
     syncHeroTextOverlayUi();
+    bindHeroCopyFitWatch();
+    scheduleHeroCopyFitCheck();
   }
 
   function syncHeroTextOverlayUi() {
@@ -6589,8 +6694,6 @@
       btn.classList.toggle("is-active", tone === v);
       btn.setAttribute("aria-pressed", tone === v ? "true" : "false");
     });
-    const toneRow = document.getElementById("hero-plate-tone-row");
-    if (toneRow) toneRow.hidden = plate === "none";
   }
 
   function setupHeroTextOverlayUi() {
@@ -7137,12 +7240,14 @@
 
   function normalizeHeadingScale(raw) {
     const v = String(raw || "").trim();
-    if (v === "0.8" || v === "1" || v === "1.35") return v;
+    if (v === "0.8" || v === "1") return "1";
+    if (v === "1.15" || v === "1.35") return "1.15";
+    if (v === "2.5") return "2.5";
     const n = Number(v);
     if (!Number.isFinite(n) || n <= 0) return DEFAULTS.headingScale;
-    if (n < 0.9) return "0.8";
-    if (n > 1.15) return "1.35";
-    return "1";
+    if (n < 1.08) return "1";
+    if (n < 1.8) return "1.15";
+    return "2.5";
   }
 
   function normalizeAccentBar(raw) {
@@ -7497,9 +7602,7 @@
       }
       return "";
     }
-    if (stepId === "easy-basics") {
-      const brand = String((document.getElementById("easy-brand-name") || {}).value || "").trim();
-      if (!brand) return "店名を入れてください。";
+    if (stepId === "easy-basics" || stepId === "easy-site-name") {
       return "";
     }
     if (stepId === "easy-color") {
@@ -7745,6 +7848,23 @@
     counter.classList.toggle("is-max", n >= max);
   }
 
+  function growCopyField(el) {
+    if (!el || !el.classList || !el.classList.contains("is-copy-frame")) return;
+    if (!el.offsetWidth) return;
+    el.style.height = "auto";
+    el.style.height = el.scrollHeight + "px";
+  }
+
+  function applyCopyFrame(el, key) {
+    if (!el || String(el.tagName || "").toLowerCase() !== "textarea") return;
+    if (key === "extra_notes" || el.id === "review-ng-note") return;
+    el.classList.add("is-copy-frame");
+    el.classList.remove("is-copy-half");
+    el.style.removeProperty("--copy-lines");
+    el.rows = 1;
+    growCopyField(el);
+  }
+
   function setupCharLimits() {
     Object.keys(FIELD_MAX).forEach((name) => {
       const el = form.elements.namedItem(name);
@@ -7752,6 +7872,7 @@
       if (el instanceof RadioNodeList) return;
       const max = FIELD_MAX[name];
       el.setAttribute("maxlength", String(max));
+      applyCopyFrame(el, name, max);
       let counter = form.querySelector('[data-char-for="' + name + '"]');
       if (!counter) {
         counter = document.createElement("span");
@@ -7762,6 +7883,8 @@
       }
       syncCharCounter(el);
     });
+    const intro = document.getElementById("easy-intro");
+    if (intro) applyCopyFrame(intro, "about_lead", 200);
   }
 
   function imageMaxEdgeForName(name) {
@@ -8127,8 +8250,10 @@
       renderCopyDirsUi();
     }
     if (step.id === "easy-basics") {
-      if (!store.easyBasicsHints && !store.easyBasicsApplied) captureEasyBasicsHintsFromSample();
-      paintEasyBasicsPlaceholders();
+      renderEasyListingUi();
+    }
+    if (step.id === "easy-site-name") {
+      bindSiteNameStep();
     }
     if (step.id !== "easy-color-stage") {
       document.querySelectorAll("#layout-color-rows .layout-color-row.is-open").forEach(closeLayoutColorRow);
@@ -8159,6 +8284,7 @@
       mountSharedImageUi(true);
     } else {
       mountSharedImageUi(false);
+      if (step.id !== "easy-copy-omakase") clearPreviewPlaceMark();
     }
     if (step.id === "easy-img-wire") {
       syncEasyImageStatuses();
@@ -8185,6 +8311,7 @@
     if (step.id === "easy-done") {
       revealSamplePreview();
     }
+    document.body.classList.toggle("is-site-name-dawn", step.id === "easy-site-name");
     syncSampleFlowPreviewVisibility(step.id);
     syncEasyCopyLaterHint(step.id);
     syncDashResumeNotice();
@@ -8322,6 +8449,7 @@
       previewPane.prepend(control);
     }
     control.classList.remove("chrome-control--in-hub");
+    bindPlaceMarkSwitch();
 
     const mode = store.hubUiMode || "home";
     const previewOn = previewPaneOnScreen(previewPane);
@@ -8443,6 +8571,7 @@
   }
 
   function updateWizardUi() {
+    document.querySelectorAll("textarea.is-copy-frame").forEach(growCopyField);
     syncEasyFlowMeter();
     const step = getCurrentFlowStep();
     const progress = document.getElementById("wizard-progress");
@@ -8474,6 +8603,7 @@
     document.body.classList.toggle("hub-shell-back", !!hubShellBack);
     const hideFootNav =
       selfList ||
+      (step && step.id === "easy-site-name") ||
       isGuidedColorTrialFootHidden() ||
       store.guidedColorPhase === "pick" ||
       (onLayout && !hubShellBack);
@@ -8750,7 +8880,7 @@
         title: "用途を選ぶ",
         lead: store.entryBranch === "detail"
           ? "用途のあと、編集ハブ（並び替え）へ進みます。"
-          : "用途を選ぶと、次に基本情報へ進みます。"
+          : "用途を選ぶと、次に記載項目へ進みます。"
       };
     }
     return {
@@ -8888,7 +9018,7 @@
     showWizardStep(0);
     window.setTimeout(() => scrollPreviewTo("#preview-root"), 40);
     const status = document.getElementById("wizard-status");
-    if (status) status.textContent = "基本情報を入力してください。";
+    if (status) status.textContent = "載せる項目を選べます。";
     scheduleSave();
   }
 
@@ -8901,6 +9031,64 @@
       hours: String((document.getElementById("easy-hours") || {}).value || "").trim(),
       address: String((document.getElementById("easy-address") || {}).value || "").trim()
     };
+  }
+
+  function homepageName() {
+    if (!store.siteNameConfirmed) return "";
+    const name = String(fieldValue("brand_name") || "").trim();
+    if (!name || isPlaceholderBrand(name)) return "";
+    return name;
+  }
+
+  function renderEasyListingUi() {
+    const host = document.getElementById("easy-listing-host");
+    if (!host) return;
+    host.innerHTML = "";
+    LAYOUT_BLOCKS.forEach(function (meta) {
+      const on = isLayoutBlockActive(meta);
+      const btn = document.createElement("button");
+      btn.type = "button";
+      btn.className = "easy-listing-btn" + (on ? " is-on" : "");
+      btn.textContent = meta.label;
+      btn.setAttribute("aria-pressed", on ? "true" : "false");
+      btn.addEventListener("click", function () {
+        commitLayoutBlockVisibility(meta.id, !isLayoutBlockActive(meta));
+        renderEasyListingUi();
+        syncLayoutColorRows();
+      });
+      host.appendChild(btn);
+    });
+  }
+
+  function bindSiteNameStep() {
+    const input = document.getElementById("easy-site-name-input");
+    const ask = document.getElementById("easy-site-name-ask");
+    const ok = document.getElementById("easy-site-name-ok");
+    if (!input || !ask || !ok) return;
+    const syncAsk = function () {
+      ask.hidden = !String(input.value || "").trim();
+    };
+    if (!input.dataset.bound) {
+      input.dataset.bound = "1";
+      input.addEventListener("input", syncAsk);
+      ok.addEventListener("click", function () {
+        const name = String(input.value || "").trim();
+        if (!name) return;
+        setFieldValue("brand_name", name);
+        store.siteNameConfirmed = true;
+        syncPreviewHeaderChrome();
+        scheduleSave();
+        const flow = getFlowSteps();
+        const nameIdx = flow.findIndex(function (s) { return s.id === "easy-site-name"; });
+        const dest = nameIdx >= 0 ? nameIdx + 1 : flow.findIndex(function (s) { return s.id === "easy-copy-omakase"; });
+        if (dest >= 0) showWizardStep(dest);
+      });
+    }
+    input.value = "";
+    syncAsk();
+    window.setTimeout(function () {
+      try { input.focus(); } catch (e) { /* ignore */ }
+    }, 40);
   }
 
   function setEasyExtraPublished(key, on, fieldName, text) {
@@ -10496,7 +10684,7 @@
   }
 
   function syncSampleFlowPreviewVisibility(stepId) {
-    setSampleFlowPreviewHidden(stepId === "easy-basics");
+    setSampleFlowPreviewHidden(false);
   }
 
   let samplePreviewPopReady = false;
@@ -10584,7 +10772,12 @@
     );
     store.aboutItemsDisplay = normalizeAboutItemsDisplay(draft.aboutItemsDisplay);
     store.heroTextPlate = normalizeHeroPlate(draft.heroTextPlate || "round");
+    const loadedPlateLast = draft.heroTextPlateLast
+      ? normalizeHeroPlate(draft.heroTextPlateLast)
+      : store.heroTextPlate;
+    store.heroTextPlateLast = loadedPlateLast === "none" ? "round" : loadedPlateLast;
     store.heroTextPlateTone = normalizeHeroPlateTone(draft.heroTextPlateTone || "white");
+    store.heroTextPos = normalizeHeroTextPos(draft.heroTextPos || "center");
     /* 見本の連絡ラベルON/OFF（無いときは小さめラベルOFF＝見出し重複を避ける） */
     if (draft.draftContact && typeof draft.draftContact === "object") {
       store.draftContact = {
@@ -10887,7 +11080,9 @@
 
   function countForCopy(id, fallback) {
     const n = Number(store.draftCounts[id]);
-    if (!Number.isFinite(n) || n < 1) return fallback;
+    if (!Number.isFinite(n)) return fallback;
+    if (id === "hero-leads" && n === 0) return 0;
+    if (n < 1) return fallback;
     return n;
   }
 
@@ -10969,12 +11164,19 @@
         keywordIds: store.copyPathMode === "keyword" ? store.copyDirIds || [] : [],
         forbidKeywordIds: store.copyPathMode === "keyword" ? store.copyDirForbid || [] : [],
         presetAxes: store.copyPathMode === "omakase" ? store.copyOmakaseAxes : null,
+        maxChars: fieldKey ? fieldMaxLen(fieldKey) : 0,
         salt: salt
       })
       .then(function (res) {
-        return (res.candidates || []).map(function (c) {
-          return { label: c.label, text: c.text, axisId: c.axisId };
-        });
+        const max = fieldKey ? fieldMaxLen(fieldKey) : 0;
+        return (res.candidates || [])
+          .map(function (c) {
+            return { label: c.label, text: c.text, axisId: c.axisId };
+          })
+          .filter(function (c) {
+            if (!max) return true;
+            return String(c.text || "").length <= max;
+          });
       })
       .catch(function () {
         return (store.copyDirForbid || []).length ? [] : fallbackStubThree(secId);
@@ -11317,11 +11519,13 @@
                   keywordIds: [],
                   forbidKeywordIds: [],
                   presetAxes: axes,
+                  maxChars: fieldMaxLen(field.key),
                   salt: saltBase + "|" + secId + "|" + field.key + "|" + index + "|" + tries
                 })
                 .then(function (res) {
+                  const max = fieldMaxLen(field.key);
                   const hit = ((res && res.candidates) || []).find(function (c) {
-                    return c && c.text && c.axisId === axisId;
+                    return c && c.text && c.axisId === axisId && String(c.text).length <= max;
                   });
                   if (hit) return hit;
                   if (tries < 3) return once();
@@ -11359,8 +11563,19 @@
     { id: "values", label: "下の枠", countId: "hero-values", layoutId: "values", kind: "pair", titleKey: "value_", textKey: "value_", titleSuffix: "_title", textSuffix: "_text", titleLabel: "見出し", textLabel: "文" },
     { id: "accordions", label: "開く項目", countId: "about-accordions", layoutId: "accordions", kind: "pair", titleKey: "acc_", textKey: "acc_", titleSuffix: "_title", textSuffix: "_body", titleLabel: "見出し", textLabel: "文" },
     { id: "works", label: "カード", countId: "works-list", layoutId: "works", kind: "pair", titleKey: "work_", textKey: "work_", titleSuffix: "_title", textSuffix: "_text", titleLabel: "見出し", textLabel: "文" },
+    { id: "hours", label: "営業時間", layoutId: "hours", singleKey: "hours_text", singleLabel: "文" },
+    { id: "access", label: "アクセス", layoutId: "access", singleKey: "access_text", singleLabel: "文" },
+    { id: "address", label: "住所", layoutId: "address", singleKey: "address_text", singleLabel: "文" },
     { id: "contact", label: "ご連絡", countId: null, layoutId: "contact" }
   ];
+
+  function copySectionIsListed(sec) {
+    if (!sec) return false;
+    const blockId = sec.layoutId || sec.id;
+    const meta = LAYOUT_BLOCKS.find(function (b) { return b.id === blockId; });
+    if (!meta) return true;
+    return isLayoutBlockActive(meta);
+  }
 
   function copyListSectionById(id) {
     return COPY_LIST_SECTIONS.find(function (s) {
@@ -11379,8 +11594,18 @@
       seen[id] = 1;
       return true;
     });
-    allowed.forEach(function (id) {
-      if (!seen[id]) store.copyListOrder.push(id);
+    allowed.forEach(function (id, index) {
+      if (seen[id]) return;
+      let at = store.copyListOrder.length;
+      for (let j = index + 1; j < allowed.length; j += 1) {
+        const pos = store.copyListOrder.indexOf(allowed[j]);
+        if (pos >= 0) {
+          at = pos;
+          break;
+        }
+      }
+      store.copyListOrder.splice(at, 0, id);
+      seen[id] = 1;
     });
     return store.copyListOrder;
   }
@@ -11395,6 +11620,21 @@
     return countForCopy(sec.countId, 1);
   }
 
+  function copyListItemIndices(sec) {
+    if (!sec || sec.kind !== "pair") return [];
+    if (sec.countId === "works-list") {
+      seedItemOrder("works-list");
+      return ((store.itemOrders && store.itemOrders["works-list"]) || []).map(function (slot) {
+        const m = /(\d+)/.exec(String(slot || ""));
+        return m ? Number(m[1]) : 1;
+      });
+    }
+    const n = copyListCount(sec);
+    const out = [];
+    for (let i = 1; i <= n; i += 1) out.push(i);
+    return out;
+  }
+
   function copyListItemFields(sec, index) {
     if (!sec || sec.kind !== "pair") return [];
     const n = index;
@@ -11404,6 +11644,97 @@
     ];
   }
 
+  function swapCopyPairItems(sec, fromIndex, toIndex) {
+    if (!sec || sec.kind !== "pair") return false;
+    if (!fromIndex || !toIndex || fromIndex === toIndex) return false;
+    const a = copyListItemFields(sec, fromIndex);
+    const b = copyListItemFields(sec, toIndex);
+    if (!a.length || a.length !== b.length) return false;
+    a.forEach(function (fa, i) {
+      const va = String(
+        (store.copyFieldNow && store.copyFieldNow[fa.key]) || fieldValue(fa.key) || ""
+      );
+      const vb = String(
+        (store.copyFieldNow && store.copyFieldNow[b[i].key]) || fieldValue(b[i].key) || ""
+      );
+      applyCopyTextToField(fa.key, vb);
+      applyCopyTextToField(b[i].key, va);
+      if (store.copyFieldSource && typeof store.copyFieldSource === "object") {
+        const sa = store.copyFieldSource[fa.key];
+        const sb = store.copyFieldSource[b[i].key];
+        store.copyFieldSource[fa.key] = sb;
+        store.copyFieldSource[b[i].key] = sa;
+      }
+    });
+    return true;
+  }
+
+  function bindCopyListItemDrag(row, sec, itemIndex) {
+    const handle = row.querySelector(".layout-inner-handle");
+    if (!handle || !sec) return;
+    handle.addEventListener("pointerdown", function (ev) {
+      if (ev.button != null && ev.button !== 0) return;
+      ev.preventDefault();
+      ev.stopPropagation();
+      const list = row.parentElement;
+      if (!list) return;
+      const startY = ev.clientY;
+      let touched = null;
+      row.classList.add("is-dragging");
+      function onMove(ev2) {
+        row.style.transform = "translateY(" + (ev2.clientY - startY) + "px)";
+        const mine = row.getBoundingClientRect();
+        let best = null;
+        let bestArea = 0;
+        list.querySelectorAll(".easy-copy-list-row[data-copy-item]").forEach(function (other) {
+          other.classList.remove("is-touch");
+          if (other === row) return;
+          const rect = other.getBoundingClientRect();
+          const overlapW = Math.min(mine.right, rect.right) - Math.max(mine.left, rect.left);
+          const overlapH = Math.min(mine.bottom, rect.bottom) - Math.max(mine.top, rect.top);
+          const area = overlapW > 0 && overlapH > 0 ? overlapW * overlapH : 0;
+          if (area > bestArea) {
+            bestArea = area;
+            best = other;
+          }
+        });
+        if (best) best.classList.add("is-touch");
+        touched = best;
+      }
+      function onUp() {
+        window.removeEventListener("pointermove", onMove, true);
+        window.removeEventListener("pointerup", onUp, true);
+        window.removeEventListener("pointercancel", onUp, true);
+        row.style.transform = "";
+        row.classList.remove("is-dragging");
+        list.querySelectorAll(".easy-copy-list-row.is-touch").forEach(function (el) {
+          el.classList.remove("is-touch");
+        });
+        const toIndex = touched ? Number(touched.getAttribute("data-copy-item")) : null;
+        touched = null;
+        if (!toIndex || toIndex === itemIndex) return;
+        if (sec.countId === "works-list") {
+          const fromId = "work_" + itemIndex;
+          const toId = "work_" + toIndex;
+          if (moveItemOrderNear("works-list", fromId, toId, itemIndex < toIndex ? "after" : "before")) {
+            applyItemLayoutToPreview("works-list");
+            renderCopyListUi({ keepScroll: true });
+            scheduleSave();
+          }
+          return;
+        }
+        if (swapCopyPairItems(sec, itemIndex, toIndex)) {
+          applyAllConfirmed();
+          renderCopyListUi({ keepScroll: true });
+          scheduleSave();
+        }
+      }
+      window.addEventListener("pointermove", onMove, true);
+      window.addEventListener("pointerup", onUp, true);
+      window.addEventListener("pointercancel", onUp, true);
+    });
+  }
+
   function copyListOpenState() {
     if (!store.copyListOpen || typeof store.copyListOpen !== "object") return null;
     return store.copyListOpen;
@@ -11411,7 +11742,7 @@
 
   function setCopyListOpen(next) {
     store.copyListOpen = next || null;
-    if (!next) store.copyListFocusField = null;
+    if (!next || next.kind !== "item") store.copyListFocusField = null;
   }
 
   let easyCopySoloHistory = false;
@@ -11419,9 +11750,22 @@
   function syncEasyCopyListSolo() {
     const host = document.getElementById("easy-copy-list-host");
     const block = document.querySelector('[data-step-id="easy-copy-omakase"]');
-    const open = !!copyListOpenState();
-    if (host) host.classList.toggle("is-copy-solo", open);
-    if (block) block.classList.toggle("is-copy-solo", open);
+    const open = copyListOpenState();
+    const sectionSolo = !!(open && open.kind === "section");
+    const itemSolo = !!(open && open.kind === "item");
+    const drilling = !!(sectionSolo || itemSolo);
+    if (host) {
+      host.classList.toggle("is-copy-section-solo", sectionSolo);
+      host.classList.toggle("is-copy-item-solo", itemSolo);
+      host.classList.toggle("is-copy-solo", drilling);
+    }
+    if (block) {
+      block.classList.toggle("is-copy-section-solo", sectionSolo);
+      block.classList.toggle("is-copy-item-solo", itemSolo);
+      block.classList.toggle("is-copy-solo", drilling);
+      block.classList.toggle("is-easy-drill", drilling);
+    }
+    syncCopyPlaceMark();
   }
 
   function closeEasyCopyListSolo() {
@@ -11433,6 +11777,59 @@
     clearCopyFieldRing();
     renderCopyListUi({ keepScroll: true });
     scheduleSave();
+  }
+
+  function truncateCopyLead(text, maxChars) {
+    const raw = String(text || "").replace(/\s+/g, " ").trim();
+    if (!raw) return "";
+    const max = maxChars || 16;
+    if (raw.length <= max) return raw;
+    return raw.slice(0, max) + "…";
+  }
+
+  function copyListFieldDisplayText(key) {
+    if (!key) return "";
+    if (store.copyFieldNow && Object.prototype.hasOwnProperty.call(store.copyFieldNow, key)) {
+      const now = store.copyFieldNow[key];
+      if (now != null && String(now).trim() !== "") return String(now).trim();
+      /* 明示的に空にした欄は、用途の例文に戻さない */
+      if (store.copyFieldSource && store.copyFieldSource[key] === "custom") return "";
+    }
+    return resolvePreviewText(fieldValue(key), key, "");
+  }
+
+  function copyListItemLeadText(sec, itemIndex) {
+    if (!sec) return "";
+    if (sec.id === "hero") {
+      if (store.copyHeroOnPhoto === false || store.heroTextOnPhoto === false) return "";
+      return copyListFieldDisplayText("hero_title");
+    }
+    if (sec.id === "contact") {
+      return (
+        copyListFieldDisplayText("contact_label") ||
+        copyListFieldDisplayText("contact_note_1") ||
+        ""
+      );
+    }
+    const fields = copyListItemFields(sec, itemIndex);
+    if (!fields.length) return "";
+    const title = copyListFieldDisplayText(fields[0].key);
+    if (title) return title;
+    if (fields[1]) return copyListFieldDisplayText(fields[1].key);
+    return "";
+  }
+
+  function copyListItemRowLabel(sec, itemIndex) {
+    const lead = truncateCopyLead(copyListItemLeadText(sec, itemIndex), 16);
+    return lead || "まだ書いていません";
+  }
+
+  function copyListSectionRowLabel(sec) {
+    if (!sec) return "";
+    if (sec.kind === "pair") return sec.label;
+    const lead = truncateCopyLead(copyListItemLeadText(sec, null), 16);
+    if (lead) return lead;
+    return sec.label;
   }
 
   function bindEasyCopySoloPop() {
@@ -11516,6 +11913,7 @@
 
   function paintCopyFieldRing(fieldKey) {
     clearCopyFieldRing();
+    if (fieldKey === "hero_title" || /^hero_lead_\d+$/.test(String(fieldKey || ""))) return;
     const node = copyPreviewNodeForField(fieldKey);
     if (node) node.classList.add("is-copy-field-ring");
   }
@@ -11573,6 +11971,7 @@
       return "hero_title";
     }
     if (sec.id === "contact") return "contact_label";
+    if (sec.singleKey) return sec.singleKey;
     const fields = copyListItemFields(sec, itemIndex);
     return fields[0] ? fields[0].key : null;
   }
@@ -11670,21 +12069,111 @@
     return ok;
   }
 
+  function appendCopyListOkFoot(wrap, closeFn) {
+    const foot = document.createElement("div");
+    foot.className = "easy-copy-list-ok-foot";
+    appendCopyListOkBtn(foot, closeFn);
+    wrap.appendChild(foot);
+  }
+
+  function rememberCopyOmakaseEdge(fieldKey, text) {
+    if (!store.copyOmakaseEdges || typeof store.copyOmakaseEdges !== "object") store.copyOmakaseEdges = {};
+    const t = String(text || "").trim();
+    store.copyOmakaseEdges[fieldKey] = {
+      head: t.slice(0, 8),
+      tail: t.slice(-8)
+    };
+  }
+
+  function copyOmakaseEdgeBlocked(fieldKey, text) {
+    const prev = store.copyOmakaseEdges && store.copyOmakaseEdges[fieldKey];
+    if (!prev) return false;
+    const t = String(text || "").trim();
+    if (!t) return false;
+    const head = t.slice(0, 8);
+    const tail = t.slice(-8);
+    return (prev.head && head === prev.head) || (prev.tail && tail === prev.tail);
+  }
+
+  function runCopyFieldOmakase(fieldKey, sectionId, onDone) {
+    const dictSec = copyListDictSec(sectionId);
+    let tries = 0;
+    function pull() {
+      tries += 1;
+      ensureCopyFieldCandidates(dictSec, fieldKey, true).then(function (list) {
+        const three = (list || []).slice(0, 3);
+        let pick = three[0];
+        for (let i = 0; i < three.length; i += 1) {
+          if (!copyOmakaseEdgeBlocked(fieldKey, three[i].text)) {
+            pick = three[i];
+            break;
+          }
+        }
+        if ((!pick || copyOmakaseEdgeBlocked(fieldKey, pick.text)) && tries < 4) {
+          pull();
+          return;
+        }
+        if (!pick) {
+          if (onDone) onDone();
+          return;
+        }
+        const max = fieldMaxLen(fieldKey);
+        if (max && String(pick.text || "").length > max) {
+          if (tries < 6) {
+            pull();
+            return;
+          }
+          if (onDone) onDone();
+          return;
+        }
+        if (!store.copyFieldSource || typeof store.copyFieldSource !== "object") store.copyFieldSource = {};
+        store.copyFieldSource[fieldKey] = "cand";
+        applyCopyTextToField(fieldKey, pick.text);
+        rememberCopyOmakaseEdge(fieldKey, pick.text);
+        scheduleSave();
+        if (onDone) onDone();
+      });
+    }
+    pull();
+  }
+
   function buildCopyListEditor(sec, itemIndex) {
     const wrap = document.createElement("div");
     wrap.className = "easy-copy-list-editor";
-    const focusKey = store.copyListFocusField || copyListDefaultFocus(sec, itemIndex);
-    const closeSolo = function () {
+    const closeToSectionOrList = function () {
       clearEasyCopySoloHistory();
-      setCopyListOpen(null);
-      clearCopyFieldRing();
+      if (sec.kind === "pair") {
+        setCopyListOpen({ kind: "section", sectionId: sec.id });
+      } else {
+        setCopyListOpen(null);
+        clearCopyFieldRing();
+      }
       renderCopyListUi({ keepScroll: true });
       scheduleSave();
     };
 
+    const head = document.createElement("div");
+    head.className = "easy-copy-item-head";
+    const title = document.createElement("p");
+    title.className = "easy-copy-item-title";
+    title.textContent =
+      sec.kind === "pair"
+        ? copyListItemRowLabel(sec, itemIndex) === "まだ書いていません"
+          ? sec.label
+          : copyListItemRowLabel(sec, itemIndex)
+        : sec.label;
+    head.appendChild(title);
+    if (sec.id !== "hero") wrap.appendChild(head);
+
     if (sec.id === "hero") {
+      const board = document.createElement("div");
+      board.className = "easy-copy-hero-board";
+      const catchCell = document.createElement("div");
+      catchCell.className = "easy-copy-hero-catch";
+      catchCell.appendChild(title);
+
       const overlay = document.createElement("div");
-      overlay.className = "hero-overlay-row";
+      overlay.className = "hero-overlay-row easy-copy-hero-ask-row";
       overlay.setAttribute("role", "group");
       overlay.setAttribute("aria-label", "写真に文字を載せるか");
       [["1", "載せる"], ["0", "載せない"]].forEach(function (pair) {
@@ -11707,32 +12196,72 @@
         });
         overlay.appendChild(btn);
       });
-      wrap.appendChild(overlay);
+      catchCell.appendChild(overlay);
+      board.appendChild(catchCell);
 
       const showText = store.copyHeroOnPhoto !== false && store.heroTextOnPhoto !== false;
       if (!showText) {
+        wrap.appendChild(board);
         const note = document.createElement("p");
         note.className = "dash-note";
-        note.textContent = "載せないあいだは、キャッチの文章候補は出ません。";
+        note.textContent = "載せないあいだは、キャッチ用のおまかせは出ません。";
         wrap.appendChild(note);
-        appendCopyListOkBtn(wrap, closeSolo);
+        appendCopyListOkFoot(wrap, closeToSectionOrList);
         return wrap;
       }
 
+      const leadRow = document.createElement("div");
+      leadRow.className = "hero-overlay-options easy-copy-hero-leads";
+      leadRow.innerHTML = '<p class="dash-note dash-field-label">サブキャッチ</p>';
+      const countCluster = document.createElement("span");
+      countCluster.className = "layout-count-cluster";
+      const leadMax = (COUNT_META["hero-leads"] && COUNT_META["hero-leads"].max) || 3;
+      const leadNow = countForCopy("hero-leads", 0);
+      const minus = document.createElement("button");
+      minus.type = "button";
+      minus.className = "layout-count-btn";
+      minus.textContent = "−";
+      minus.setAttribute("aria-label", "サブキャッチを減らす");
+      minus.disabled = leadNow <= 0;
+      const num = document.createElement("span");
+      num.className = "layout-image-count-num";
+      num.textContent = leadNow <= 0 ? "出さない" : leadNow + " / " + leadMax;
+      const plus = document.createElement("button");
+      plus.type = "button";
+      plus.className = "layout-count-btn";
+      plus.textContent = "＋";
+      plus.setAttribute("aria-label", "サブキャッチを増やす");
+      plus.disabled = leadNow >= leadMax;
+      function setHeroLeads(next) {
+        const n = Math.max(0, Math.min(leadMax, next));
+        store.draftCounts["hero-leads"] = n;
+        applyCountToPreview("hero-leads", n);
+        syncCountLabels();
+        renderCopyListUi({ keepScroll: true });
+        scheduleSave();
+      }
+      minus.addEventListener("click", function () { setHeroLeads(leadNow - 1); });
+      plus.addEventListener("click", function () { setHeroLeads(leadNow + 1); });
+      countCluster.appendChild(minus);
+      countCluster.appendChild(num);
+      countCluster.appendChild(plus);
+      leadRow.appendChild(countCluster);
+      board.appendChild(leadRow);
+
       const size = document.createElement("fieldset");
-      size.className = "inline-fieldset";
-      size.innerHTML = "<legend>タイトルの大きさ</legend>";
+      size.className = "inline-fieldset easy-copy-hero-size";
+      size.innerHTML = "<legend>文字の大きさ</legend>";
       [
-        ["0.8", "小さめ"],
-        ["1", "標準"],
-        ["1.35", "大きめ"]
+        ["1", "小さめ"],
+        ["1.15", "標準"],
+        ["2.5", "大きめ"]
       ].forEach(function (pair) {
         const lab = document.createElement("label");
         const input = document.createElement("input");
         input.type = "radio";
         input.name = "copy_list_headingScale";
         input.value = pair[0];
-        const cur = String(fieldValue("headingScale") || "1");
+        const cur = normalizeHeadingScale(fieldValue("headingScale") || DEFAULTS.headingScale);
         input.checked = cur === pair[0];
         input.addEventListener("change", function () {
           setFieldValue("headingScale", pair[0]);
@@ -11743,92 +12272,126 @@
         lab.appendChild(document.createTextNode(" " + pair[1]));
         size.appendChild(lab);
       });
-      wrap.appendChild(size);
+      board.appendChild(size);
 
       const plate = document.createElement("div");
-      plate.className = "hero-overlay-options";
-      plate.innerHTML = '<p class="dash-note dash-field-label">文字の下地（形）</p>';
-      const plateRow = document.createElement("div");
-      plateRow.className = "hero-overlay-row";
-      [
-        ["none", "なし（白抜き）"],
-        ["rect", "四角"],
-        ["round", "角まる"],
-        ["oval", "楕円"]
-      ].forEach(function (pair) {
+      plate.className = "hero-overlay-options easy-copy-hero-plate-span";
+      const presenceLabel = document.createElement("p");
+      presenceLabel.className = "dash-note dash-field-label";
+      presenceLabel.textContent = "文字の下地";
+      plate.appendChild(presenceLabel);
+      const presenceRow = document.createElement("div");
+      presenceRow.className = "hero-overlay-row easy-copy-hero-plate-line";
+      const plateOn = normalizeHeroPlate(store.heroTextPlate) !== "none";
+      [["0", "なし"], ["1", "あり"]].forEach(function (pair) {
         const btn = document.createElement("button");
         btn.type = "button";
         btn.className = "gct-btn";
-        const cur = normalizeHeroPlate(store.heroTextPlate);
-        btn.classList.toggle("is-active", cur === pair[0]);
+        const on = pair[0] === "1";
+        btn.classList.toggle("is-active", on ? plateOn : !plateOn);
+        btn.setAttribute("aria-pressed", (on ? plateOn : !plateOn) ? "true" : "false");
         btn.textContent = pair[1];
         btn.addEventListener("click", function () {
-          store.heroTextPlate = normalizeHeroPlate(pair[0]);
+          setHeroPlatePresence(on);
           applyHeroTextOverlay();
           renderCopyListUi({ keepScroll: true });
           scheduleSave();
         });
-        plateRow.appendChild(btn);
+        presenceRow.appendChild(btn);
       });
-      plate.appendChild(plateRow);
-      const toneRow = document.createElement("div");
-      toneRow.className = "hero-overlay-row";
-      toneRow.style.marginTop = "0.45rem";
-      [["white", "白"], ["dark", "黒"]].forEach(function (pair) {
-        const btn = document.createElement("button");
-        btn.type = "button";
-        btn.className = "gct-btn";
-        const cur = normalizeHeroPlateTone(store.heroTextPlateTone);
-        btn.classList.toggle("is-active", cur === pair[0]);
-        btn.textContent = pair[1];
-        btn.addEventListener("click", function () {
-          store.heroTextPlateTone = normalizeHeroPlateTone(pair[0]);
-          applyHeroTextOverlay();
-          renderCopyListUi({ keepScroll: true });
-          scheduleSave();
+      if (plateOn) {
+        [["white", "白"], ["dark", "黒"]].forEach(function (pair) {
+          const btn = document.createElement("button");
+          btn.type = "button";
+          btn.className = "gct-btn easy-copy-hero-tone";
+          const cur = normalizeHeroPlateTone(store.heroTextPlateTone);
+          btn.classList.toggle("is-active", cur === pair[0]);
+          btn.setAttribute("aria-pressed", cur === pair[0] ? "true" : "false");
+          btn.textContent = pair[1];
+          btn.addEventListener("click", function () {
+            store.heroTextPlateTone = normalizeHeroPlateTone(pair[0]);
+            applyHeroTextOverlay();
+            renderCopyListUi({ keepScroll: true });
+            scheduleSave();
+          });
+          presenceRow.appendChild(btn);
         });
-        toneRow.appendChild(btn);
-      });
-      if (normalizeHeroPlate(store.heroTextPlate) !== "none") plate.appendChild(toneRow);
-      wrap.appendChild(plate);
-
-      const leadCount = document.createElement("div");
-      leadCount.className = "layout-count-cluster";
-      leadCount.innerHTML = '<span class="layout-count-lead">サブキャッチの行数</span>';
-      const minus = document.createElement("button");
-      minus.type = "button";
-      minus.className = "layout-count-btn";
-      minus.textContent = "−";
-      const num = document.createElement("span");
-      num.className = "layout-image-count-num";
-      const leads = countForCopy("hero-leads", 1);
-      num.textContent = leads + "行";
-      const plus = document.createElement("button");
-      plus.type = "button";
-      plus.className = "layout-count-btn";
-      plus.textContent = "＋";
-      const meta = COUNT_META["hero-leads"] || { min: 1, max: 3 };
-      minus.disabled = leads <= meta.min;
-      plus.disabled = leads >= meta.max;
-      minus.addEventListener("click", function () {
-        adjustDraftCount("hero-leads", -1, null);
-        renderCopyListUi({ keepScroll: true });
-      });
-      plus.addEventListener("click", function () {
-        adjustDraftCount("hero-leads", 1, null);
-        renderCopyListUi({ keepScroll: true });
-      });
-      leadCount.appendChild(minus);
-      leadCount.appendChild(num);
-      leadCount.appendChild(plus);
-      wrap.appendChild(leadCount);
-
-      const fields = [{ key: "hero_title", label: "タイトル" }];
-      for (let i = 1; i <= leads; i += 1) {
-        fields.push({ key: "hero_lead_" + i, label: "サブキャッチ" + i + "行目" });
       }
-      appendCopyListFieldUi(wrap, fields, focusKey, "hero");
-      appendCopyListOkBtn(wrap, closeSolo);
+      plate.appendChild(presenceRow);
+      if (plateOn) {
+        const plateRow = document.createElement("div");
+        plateRow.className = "hero-overlay-row hero-overlay-row--shapes";
+        [
+          ["rect", "四角"],
+          ["round", "角まる"],
+          ["oval", "楕円"]
+        ].forEach(function (pair) {
+          const btn = document.createElement("button");
+          btn.type = "button";
+          btn.className = "gct-btn";
+          const cur = normalizeHeroPlate(store.heroTextPlate);
+          btn.classList.toggle("is-active", cur === pair[0]);
+          btn.setAttribute("aria-pressed", cur === pair[0] ? "true" : "false");
+          btn.textContent = pair[1];
+          btn.addEventListener("click", function () {
+            store.heroTextPlate = normalizeHeroPlate(pair[0]);
+            store.heroTextPlateLast = store.heroTextPlate;
+            applyHeroTextOverlay();
+            renderCopyListUi({ keepScroll: true });
+            scheduleSave();
+          });
+          plateRow.appendChild(btn);
+        });
+        plate.appendChild(plateRow);
+      }
+      const posBox = document.createElement("div");
+      posBox.className = "hero-overlay-options easy-copy-hero-pos";
+      posBox.innerHTML = '<p class="dash-note dash-field-label">文字の位置</p>';
+      const compass = document.createElement("div");
+      compass.className = "gct-grad-compass hero-text-pos-compass";
+      compass.setAttribute("role", "group");
+      compass.setAttribute("aria-label", "キャッチ文字の位置");
+      const curPos = normalizeHeroTextPos(store.heroTextPos);
+      HERO_TEXT_POS_COMPASS.forEach(function (slot) {
+        const btn = document.createElement("button");
+        btn.type = "button";
+        btn.style.gridColumn = String(slot.col);
+        btn.style.gridRow = String(slot.row);
+        if (slot.center) {
+          btn.className = "gct-grad-clear" + (curPos === slot.id ? " is-active" : "");
+          btn.textContent = "中央";
+          btn.setAttribute("aria-label", "中央");
+        } else {
+          btn.className = "gct-grad-arrow" + (curPos === slot.id ? " is-active" : "");
+          btn.textContent = slot.arrow;
+          btn.setAttribute("aria-label", slot.label);
+          setHoverTip(btn, slot.label);
+        }
+        btn.setAttribute("aria-pressed", curPos === slot.id ? "true" : "false");
+        btn.addEventListener("click", function () {
+          store.heroTextPos = normalizeHeroTextPos(slot.id);
+          applyHeroTextPos();
+          compass.querySelectorAll("button").forEach(function (el) {
+            const onBtn = el === btn;
+            el.classList.toggle("is-active", onBtn);
+            el.setAttribute("aria-pressed", onBtn ? "true" : "false");
+          });
+          scheduleSave();
+        });
+        compass.appendChild(btn);
+      });
+      posBox.appendChild(compass);
+      board.appendChild(plate);
+      board.appendChild(posBox);
+      wrap.appendChild(board);
+
+      const fields = [{ key: "hero_title", label: "見出し" }];
+      const leads = countForCopy("hero-leads", 1);
+      for (let i = 1; i <= leads; i += 1) {
+        fields.push({ key: "hero_lead_" + i, label: "サブキャッチ" + i });
+      }
+      appendCopyListFieldUi(wrap, fields, store.copyListFocusField || "hero_title", "hero");
+      appendCopyListOkFoot(wrap, closeToSectionOrList);
       return wrap;
     }
 
@@ -11840,114 +12403,113 @@
           { key: "contact_note_1", label: "補足1" },
           { key: "contact_note_2", label: "補足2" }
         ],
-        focusKey,
+        store.copyListFocusField || "contact_label",
         "contact"
       );
-      appendCopyListOkBtn(wrap, closeSolo);
+      appendCopyListOkFoot(wrap, closeToSectionOrList);
       return wrap;
     }
 
-    appendCopyListFieldUi(wrap, copyListItemFields(sec, itemIndex), focusKey, sec.id);
-    appendCopyListOkBtn(wrap, closeSolo);
+    if (sec.singleKey) {
+      appendCopyListFieldUi(
+        wrap,
+        [{ key: sec.singleKey, label: sec.singleLabel || "文" }],
+        store.copyListFocusField || sec.singleKey,
+        sec.id
+      );
+      appendCopyListOkFoot(wrap, closeToSectionOrList);
+      return wrap;
+    }
+
+    appendCopyListFieldUi(
+      wrap,
+      copyListItemFields(sec, itemIndex),
+      store.copyListFocusField || copyListDefaultFocus(sec, itemIndex),
+      sec.id
+    );
+    appendCopyListOkFoot(wrap, closeToSectionOrList);
     return wrap;
   }
 
   function appendCopyListFieldUi(wrap, fields, focusKey, sectionId) {
     if (!store.copyFieldSource || typeof store.copyFieldSource !== "object") store.copyFieldSource = {};
-    const active = focusKey && fields.some(function (f) {
-      return f.key === focusKey;
-    })
-      ? focusKey
-      : fields[0] && fields[0].key;
+    const active =
+      focusKey && fields.some(function (f) {
+        return f.key === focusKey;
+      })
+        ? focusKey
+        : fields[0] && fields[0].key;
     store.copyListFocusField = active || null;
 
     fields.forEach(function (field) {
       const sec = document.createElement("section");
       sec.className = "easy-copy-field" + (field.key === active ? " is-copy-field-active" : "");
       sec.setAttribute("data-copy-field", field.key);
+
       const label = document.createElement("p");
       label.className = "easy-copy-field-label";
       label.textContent = field.label;
       sec.appendChild(label);
-      sec.addEventListener("click", function () {
-        if (store.copyListFocusField === field.key) return;
-        store.copyListFocusField = field.key;
-        scrollCopyListPreview(sectionId, field.key);
-        renderCopyListUi({ keepScroll: true });
-      });
 
-      if (field.key === active) {
-        const cands = document.createElement("div");
-        cands.className = "easy-copy-field-cands";
-        cands.setAttribute("data-copy-cands", field.key);
-        sec.appendChild(cands);
-        const actions = document.createElement("div");
-        actions.className = "easy-copy-frame-actions";
-        const reroll = document.createElement("button");
-        reroll.type = "button";
-        reroll.className = "gct-btn";
-        reroll.textContent = "もう一度";
-        reroll.addEventListener("click", function (ev) {
-          ev.stopPropagation();
-          const scrollEl = copyListDashScrollEl();
-          const y = scrollEl ? scrollEl.scrollTop : 0;
-          store.copyFrameCandidates[field.key] = null;
-          ensureCopyFieldCandidates(copyListDictSec(sectionId), field.key, true).then(function () {
-            renderCopyListCandidates(cands, field.key, sectionId);
-            if (scrollEl) scrollEl.scrollTop = y;
-            scheduleSave();
-          });
-        });
-        actions.appendChild(reroll);
-        sec.appendChild(actions);
-        renderCopyListCandidates(cands, field.key, sectionId);
-      }
-
-      const own = document.createElement("div");
-      own.className = "easy-copy-field-own";
-      const ownBtn = document.createElement("button");
-      ownBtn.type = "button";
-      ownBtn.className = "gct-btn";
-      ownBtn.textContent = "自分で入力する";
-      const input = document.createElement("textarea");
-      input.className = "easy-copy-field-input";
-      input.rows = 2;
-      input.setAttribute("placeholder", "ここに書けます");
       const max = fieldMaxLen(field.key);
+      const input = document.createElement("textarea");
+      input.className = "easy-copy-field-input easy-copy-field-input--solo";
+      input.setAttribute("placeholder", "ここに書けます");
       input.setAttribute("maxlength", String(max));
+      applyCopyFrame(input, field.key, max);
+      input.value = copyListFieldDisplayText(field.key);
+      growCopyField(input);
+
+      const box = document.createElement("div");
+      box.className = "easy-copy-field-box";
       const counter = document.createElement("p");
       counter.className = "easy-copy-field-count";
-      counter.hidden = true;
       function paintCount() {
-        const len = String(input.value || "").length;
-        counter.textContent = field.label + " " + len + " / " + max;
-        counter.hidden = false;
+        counter.textContent = String(input.value || "").length + " / " + max;
       }
-      const showInput = store.copyFieldSource[field.key] === "custom";
-      if (showInput) {
-        input.value = String((store.copyFieldNow && store.copyFieldNow[field.key]) || "");
-        input.hidden = false;
-        paintCount();
-      } else {
-        input.value = "";
-        input.hidden = true;
-      }
-      ownBtn.addEventListener("click", function (ev) {
+      paintCount();
+
+      const actions = document.createElement("div");
+      actions.className = "easy-copy-field-actions";
+      const omakaseBtn = document.createElement("button");
+      omakaseBtn.type = "button";
+      omakaseBtn.className = "layout-img-source easy-copy-omakase-btn";
+      omakaseBtn.textContent = "おまかせ";
+      const resetBtn = document.createElement("button");
+      resetBtn.type = "button";
+      resetBtn.className = "layout-img-source easy-copy-reset-btn";
+      resetBtn.textContent = "リセット";
+
+      omakaseBtn.addEventListener("click", function (ev) {
         ev.stopPropagation();
         store.copyListFocusField = field.key;
-        if (store.copyFieldSource[field.key] !== "custom") {
-          store.copyFieldSource[field.key] = "custom";
-          input.value = "";
-        }
-        input.hidden = false;
-        input.focus();
+        omakaseBtn.disabled = true;
+        runCopyFieldOmakase(field.key, sectionId, function () {
+          omakaseBtn.disabled = false;
+          input.value = copyListFieldDisplayText(field.key);
+          growCopyField(input);
+          paintCount();
+          paintCopyFieldRing(field.key);
+          scrollCopyListPreview(sectionId, field.key);
+        });
+      });
+      resetBtn.addEventListener("click", function (ev) {
+        ev.stopPropagation();
+        store.copyFieldSource[field.key] = "custom";
+        applyCopyTextToField(field.key, "");
+        input.value = "";
+        growCopyField(input);
         paintCount();
         paintCopyFieldRing(field.key);
+        scheduleSave();
       });
+
       input.addEventListener("focus", function () {
         store.copyListFocusField = field.key;
         paintCopyFieldRing(field.key);
-        paintCount();
+        wrap.querySelectorAll(".easy-copy-field").forEach(function (el) {
+          el.classList.toggle("is-copy-field-active", el.getAttribute("data-copy-field") === field.key);
+        });
       });
       input.addEventListener("input", function () {
         let v = String(input.value || "");
@@ -11957,21 +12519,33 @@
         }
         store.copyFieldSource[field.key] = "custom";
         applyCopyTextToField(field.key, v);
+        growCopyField(input);
         paintCount();
         scheduleSave();
       });
-      own.appendChild(ownBtn);
-      own.appendChild(input);
-      own.appendChild(counter);
-      sec.appendChild(own);
+
+      actions.appendChild(omakaseBtn);
+      actions.appendChild(resetBtn);
+      box.appendChild(input);
+      box.appendChild(counter);
+      sec.appendChild(box);
+      sec.appendChild(actions);
+
       wrap.appendChild(sec);
+      growCopyField(input);
     });
+
+    if (active) {
+      if (!copyListRenderKeepScroll) scrollCopyListPreview(sectionId, active);
+      paintCopyFieldRing(active);
+    }
   }
 
   function renderCopyListUi(opts) {
     const host = document.getElementById("easy-copy-list-host");
     if (!host) return;
     const keepScroll = !!(opts && opts.keepScroll);
+    copyListRenderKeepScroll = keepScroll;
     const scrollEl = keepScroll ? copyListDashScrollEl() : null;
     const savedY = scrollEl ? scrollEl.scrollTop : 0;
     ensureCopyListOrder();
@@ -11979,75 +12553,153 @@
     if (!store.copyFrameCandidates || typeof store.copyFrameCandidates !== "object") {
       store.copyFrameCandidates = {};
     }
-    const open = copyListOpenState();
+    let open = copyListOpenState();
+    /* 旧形式の open を新形式へ */
+    if (open && !open.kind) {
+      if (open.itemIndex != null) {
+        open.kind = "item";
+      } else {
+        const sec0 = copyListSectionById(open.sectionId);
+        open.kind = sec0 && sec0.kind === "pair" ? "section" : "item";
+      }
+      store.copyListOpen = open;
+    }
+    if (open && open.sectionId && !copySectionIsListed(copyListSectionById(open.sectionId))) {
+      store.copyListOpen = null;
+      open = null;
+    }
     host.innerHTML = "";
+    const nameLine = document.createElement("label");
+    nameLine.className = "easy-copy-name-line";
+    const nameCap = document.createElement("span");
+    nameCap.className = "easy-copy-name-cap";
+    nameCap.textContent = "名前";
+    const nameInput = document.createElement("input");
+    nameInput.type = "text";
+    nameInput.className = "easy-copy-name-input";
+    nameInput.maxLength = 20;
+    nameInput.setAttribute("aria-label", "名前");
+    nameInput.value = homepageName();
+    nameInput.addEventListener("input", function () {
+      const next = String(nameInput.value || "").trim();
+      setFieldValue("brand_name", nameInput.value);
+      store.siteNameConfirmed = !!next && !isPlaceholderBrand(next);
+      syncPreviewHeaderChrome();
+      scheduleSave();
+    });
+    nameLine.appendChild(nameCap);
+    nameLine.appendChild(nameInput);
+    host.appendChild(nameLine);
     const list = document.createElement("div");
     list.className = "easy-copy-list-wire";
     list.setAttribute("role", "list");
 
-    ensureCopyListOrder().forEach(function (secId, secIndex) {
+    ensureCopyListOrder().forEach(function (secId) {
       const sec = copyListSectionById(secId);
-      if (!sec) return;
+      if (!sec || !copySectionIsListed(sec)) return;
       const cell = document.createElement("div");
-      cell.className = "easy-copy-list-cell";
+      cell.className = "easy-copy-list-cell layout-arrange-cell--structure";
       cell.setAttribute("data-copy-sec", sec.id);
       cell.setAttribute("role", "listitem");
-      if (open && open.sectionId !== sec.id) {
-        cell.hidden = true;
-      }
 
+      const sectionOpen = !!(open && open.sectionId === sec.id && open.kind === "section");
+      const itemOpenHere = !!(open && open.sectionId === sec.id && open.kind === "item");
+      if (open && open.sectionId !== sec.id) cell.hidden = true;
+
+      /* —— 一覧の細い行 —— */
       const head = document.createElement("div");
-      head.className = "easy-copy-list-head layout-closed-line";
+      head.className = "easy-copy-list-head layout-closed-head--list";
       const handle = document.createElement("span");
-      handle.className = "layout-inner-handle";
+      handle.className = "layout-arrange-handle";
       handle.textContent = "⋮⋮";
       handle.setAttribute("aria-label", "この段の順番を変えられます");
       setHoverTip(handle, "つかんだまま上下に動かすと、順番を変えられます");
-      bindCopyListDrag(handle, cell, sec.id);
+      if (!open) bindCopyListDrag(handle, cell, sec.id);
       const name = document.createElement("p");
-      name.className = "easy-copy-list-name";
-      name.textContent = sec.label;
+      name.className = "easy-copy-list-name layout-arrange-name";
+      name.textContent = copyListSectionRowLabel(sec);
+      const secOpenBtn = document.createElement("button");
+      secOpenBtn.type = "button";
+      secOpenBtn.className = "layout-open-btn layout-section-open" + (sectionOpen || itemOpenHere ? " is-ok" : "");
+      secOpenBtn.textContent = sectionOpen || itemOpenHere ? "これでOK" : "開く";
+      secOpenBtn.setAttribute("aria-expanded", sectionOpen || itemOpenHere ? "true" : "false");
+      secOpenBtn.addEventListener("click", function (ev) {
+        ev.preventDefault();
+        ev.stopPropagation();
+        if (sectionOpen || itemOpenHere) {
+          if (itemOpenHere && sec.kind === "pair") {
+            setCopyListOpen({ kind: "section", sectionId: sec.id });
+            clearCopyFieldRing();
+            renderCopyListUi({ keepScroll: true });
+            scheduleSave();
+            return;
+          }
+          clearEasyCopySoloHistory();
+          setCopyListOpen(null);
+          clearCopyFieldRing();
+          renderCopyListUi({ keepScroll: true });
+          scheduleSave();
+          return;
+        }
+        if (sec.kind === "pair") {
+          setCopyListOpen({ kind: "section", sectionId: sec.id });
+          rememberEasyCopySoloOpen();
+          scrollCopyListPreview(sec.id, null);
+        } else {
+          setCopyListOpen({ kind: "item", sectionId: sec.id, itemIndex: null });
+          store.copyListFocusField = copyListDefaultFocus(sec, null);
+          rememberEasyCopySoloOpen();
+          scrollCopyListPreview(sec.id, store.copyListFocusField);
+        }
+        renderCopyListUi({ keepScroll: false });
+        scheduleSave();
+      });
       head.appendChild(handle);
       head.appendChild(name);
+      head.appendChild(secOpenBtn);
+      if (sectionOpen || itemOpenHere) {
+        /* ソロ時は掴みを出さない */
+        handle.hidden = true;
+      }
+      cell.appendChild(head);
 
-      if (sec.countId) {
+      const body = document.createElement("div");
+      body.className = "easy-copy-list-body";
+
+      if (sectionOpen && sec.kind === "pair") {
+        /* —— 2階層：件数・すき間・件の行 —— */
+        const tools = document.createElement("div");
+        tools.className = "layout-frames-tools easy-copy-section-tools";
         const countCluster = document.createElement("span");
         countCluster.className = "layout-count-cluster";
-        const n = copyListCount(sec);
+        const countLead = document.createElement("span");
+        countLead.className = "layout-count-lead";
+        countLead.textContent = "枚数";
+        const indices = copyListItemIndices(sec);
+        const n = indices.length;
         const meta = COUNT_META[sec.countId] || { min: 1, max: 3 };
         const minus = document.createElement("button");
         minus.type = "button";
         minus.className = "layout-count-btn";
         minus.textContent = "−";
+        minus.setAttribute("aria-label", "枚数を減らす");
         minus.disabled = n <= meta.min;
         const num = document.createElement("span");
         num.className = "layout-image-count-num";
-        num.textContent = String(n);
+        num.textContent = n + " / " + meta.max;
         const plus = document.createElement("button");
         plus.type = "button";
         plus.className = "layout-count-btn";
         plus.textContent = "＋";
+        plus.setAttribute("aria-label", "枚数を増やす");
         plus.disabled = n >= meta.max;
         minus.addEventListener("click", function (ev) {
           ev.stopPropagation();
-          const beforeFocus = store.copyListFocusField;
-          const beforeOpen = copyListOpenState();
           adjustDraftCount(sec.countId, -1, null);
-          if (beforeOpen && beforeOpen.sectionId === sec.id) {
-            const after = copyListCount(sec);
-            if (beforeOpen.itemIndex > after) {
-              clearEasyCopySoloHistory();
-              setCopyListOpen(null);
-              clearCopyFieldRing();
-            } else if (beforeFocus) {
-              const still = copyListItemFields(sec, beforeOpen.itemIndex).some(function (f) {
-                return f.key === beforeFocus;
-              });
-              if (!still) {
-                store.copyListFocusField = null;
-                clearCopyFieldRing();
-              }
-            }
+          const after = copyListCount(sec);
+          if (after < 1) {
+            setCopyListOpen(null);
+            clearCopyFieldRing();
           }
           renderCopyListUi({ keepScroll: true });
           scheduleSave();
@@ -12059,95 +12711,85 @@
           renderCopyListUi({ keepScroll: true });
           scheduleSave();
         });
+        countCluster.appendChild(countLead);
         countCluster.appendChild(minus);
         countCluster.appendChild(num);
         countCluster.appendChild(plus);
-        head.appendChild(countCluster);
-      }
-      cell.appendChild(head);
+        tools.appendChild(countCluster);
 
-      const body = document.createElement("div");
-      body.className = "easy-copy-list-body";
+        if (ITEM_LAYOUT_IDS.indexOf(sec.countId) >= 0) {
+          const layout = normalizeItemLayout(sec.countId);
+          const gapNow = (layout && layout.gap) || "normal";
+          const gapCluster = document.createElement("span");
+          gapCluster.className = "layout-gap-cluster";
+          const gapLead = document.createElement("span");
+          gapLead.className = "layout-gap-lead";
+          gapLead.textContent = "すき間";
+          gapCluster.appendChild(gapLead);
+          ITEM_GAP_STEPS.forEach(function (gap) {
+            const btn = document.createElement("button");
+            btn.type = "button";
+            btn.className = "layout-gap-btn" + (gap === gapNow ? " is-active" : "");
+            btn.textContent = ITEM_GAP_LABELS[gap];
+            btn.addEventListener("click", function (ev) {
+              ev.stopPropagation();
+              setItemGap(sec.countId, gap);
+              renderCopyListUi({ keepScroll: true });
+              scheduleSave();
+            });
+            gapCluster.appendChild(btn);
+          });
+          tools.appendChild(gapCluster);
+        }
+        body.appendChild(tools);
 
-      if (sec.kind === "pair") {
-        const n = copyListCount(sec);
-        for (let i = 1; i <= n; i += 1) {
+        indices.forEach(function (itemIndex) {
           const row = document.createElement("div");
-          row.className = "easy-copy-list-row layout-photo-row";
-          row.setAttribute("data-copy-item", String(i));
-          const isOpen = !!(open && open.sectionId === sec.id && Number(open.itemIndex) === i);
-          if (open && open.sectionId === sec.id && !isOpen) row.hidden = true;
-          if (isOpen) row.classList.add("is-open");
+          row.className = "easy-copy-list-row layout-photo-row layout-inner";
+          row.setAttribute("data-copy-item", String(itemIndex));
+          if (sec.countId === "works-list") row.setAttribute("data-item-id", "work_" + itemIndex);
           const line = document.createElement("div");
           line.className = "layout-closed-line";
+          if (n >= 2) {
+            const ih = document.createElement("span");
+            ih.className = "layout-inner-handle";
+            ih.textContent = "⋮⋮";
+            ih.setAttribute("aria-label", "この枠の順番を変えられます");
+            setHoverTip(ih, "押したまま上下に動かすと、順番を変えられます");
+            line.appendChild(ih);
+          }
           const label = document.createElement("p");
-          label.className = "easy-copy-list-item-label";
-          label.textContent = sec.label + i;
+          label.className = "easy-copy-list-item-label layout-frame-name";
+          label.textContent = copyListItemRowLabel(sec, itemIndex);
           const openBtn = document.createElement("button");
           openBtn.type = "button";
-          openBtn.className = "layout-open-btn" + (isOpen ? " is-ok" : "");
-          openBtn.textContent = isOpen ? "これでOK" : "開く";
-          openBtn.addEventListener("click", function () {
-            if (isOpen) {
-              clearEasyCopySoloHistory();
-              setCopyListOpen(null);
-              clearCopyFieldRing();
-            } else {
-              setCopyListOpen({ sectionId: sec.id, itemIndex: i });
-              store.copyListFocusField = copyListDefaultFocus(sec, i);
-              rememberEasyCopySoloOpen();
-              scrollCopyListPreview(sec.id, store.copyListFocusField);
-            }
-            renderCopyListUi({ keepScroll: !!isOpen });
+          openBtn.className = "layout-open-btn";
+          openBtn.textContent = "開く";
+          openBtn.addEventListener("click", function (ev) {
+            ev.stopPropagation();
+            setCopyListOpen({ kind: "item", sectionId: sec.id, itemIndex: itemIndex });
+            store.copyListFocusField = copyListDefaultFocus(sec, itemIndex);
+            rememberEasyCopySoloOpen();
+            scrollCopyListPreview(sec.id, store.copyListFocusField);
+            renderCopyListUi({ keepScroll: false });
             scheduleSave();
           });
           line.appendChild(label);
           line.appendChild(openBtn);
           row.appendChild(line);
-          if (isOpen) {
-            const editor = document.createElement("div");
-            editor.className = "easy-copy-list-editor-host";
-            editor.appendChild(buildCopyListEditor(sec, i));
-            row.appendChild(editor);
-            scrollCopyListPreview(sec.id, store.copyListFocusField);
-          }
+          if (n >= 2) bindCopyListItemDrag(row, sec, itemIndex);
           body.appendChild(row);
-        }
-      } else {
-        const row = document.createElement("div");
-        row.className = "easy-copy-list-row layout-photo-row";
-        const isOpen = !!(open && open.sectionId === sec.id);
-        if (isOpen) row.classList.add("is-open");
-        const line = document.createElement("div");
-        line.className = "layout-closed-line";
-        const openBtn = document.createElement("button");
-        openBtn.type = "button";
-        openBtn.className = "layout-open-btn" + (isOpen ? " is-ok" : "");
-        openBtn.textContent = isOpen ? "これでOK" : "開く";
-        openBtn.addEventListener("click", function () {
-          if (isOpen) {
-            clearEasyCopySoloHistory();
-            setCopyListOpen(null);
-            clearCopyFieldRing();
-          } else {
-            setCopyListOpen({ sectionId: sec.id, itemIndex: null });
-            store.copyListFocusField = copyListDefaultFocus(sec, null);
-            rememberEasyCopySoloOpen();
-            scrollCopyListPreview(sec.id, store.copyListFocusField);
-          }
-          renderCopyListUi({ keepScroll: !!isOpen });
-          scheduleSave();
         });
-        line.appendChild(openBtn);
-        row.appendChild(line);
-        if (isOpen) {
-          const editor = document.createElement("div");
-          editor.className = "easy-copy-list-editor-host";
-          editor.appendChild(buildCopyListEditor(sec, null));
-          row.appendChild(editor);
-          scrollCopyListPreview(sec.id, store.copyListFocusField);
-        }
-        body.appendChild(row);
+      } else if (itemOpenHere) {
+        /* —— 3階層：入力 —— */
+        head.hidden = true;
+        const editor = document.createElement("div");
+        editor.className = "easy-copy-list-editor-host";
+        editor.appendChild(buildCopyListEditor(sec, open.itemIndex));
+        body.appendChild(editor);
+      } else {
+        /* 一覧時は body 空（開くは head 側） */
+        body.hidden = true;
       }
 
       cell.appendChild(body);
@@ -12156,13 +12798,17 @@
 
     host.appendChild(list);
     syncEasyCopyListSolo();
-    if (!open) clearCopyFieldRing();
+    if (!open || open.kind !== "item") clearCopyFieldRing();
     updateWizardUi();
     if (keepScroll && scrollEl) {
       window.requestAnimationFrame(function () {
         scrollEl.scrollTop = savedY;
       });
+    } else if (open) {
+      const scroller = document.querySelector(".dash-body > .fill-form");
+      if (scroller) scroller.scrollTop = 0;
     }
+    scheduleHeroCopyFitCheck();
   }
 
   let copyListDrag = null;
@@ -12173,56 +12819,59 @@
       if (copyListOpenState()) return;
       ev.preventDefault();
       const host = document.getElementById("easy-copy-list-host");
-      if (!host) return;
-      copyListDrag = {
-        id: secId,
-        startY: ev.clientY,
-        order: ensureCopyListOrder().slice()
-      };
+      const list = host && host.querySelector(".easy-copy-list-wire");
+      if (!host || !list) return;
+      const startY = ev.clientY;
+      let touched = null;
+      copyListDrag = { id: secId };
       cell.classList.add("is-dragging");
-      handle.setPointerCapture(ev.pointerId);
       function onMove(ev2) {
-        if (!copyListDrag) return;
-        const cells = Array.from(host.querySelectorAll(".easy-copy-list-cell"));
-        const over = cells.find(function (c) {
-          const r = c.getBoundingClientRect();
-          return ev2.clientY >= r.top && ev2.clientY <= r.bottom;
+        cell.style.transform = "translateY(" + (ev2.clientY - startY) + "px)";
+        const mine = cell.getBoundingClientRect();
+        let best = null;
+        let bestArea = 0;
+        list.querySelectorAll(":scope > .easy-copy-list-cell").forEach(function (other) {
+          other.classList.remove("is-touch");
+          if (other === cell) return;
+          const rect = other.getBoundingClientRect();
+          const overlapW = Math.min(mine.right, rect.right) - Math.max(mine.left, rect.left);
+          const overlapH = Math.min(mine.bottom, rect.bottom) - Math.max(mine.top, rect.top);
+          const area = overlapW > 0 && overlapH > 0 ? overlapW * overlapH : 0;
+          if (area > bestArea) {
+            bestArea = area;
+            best = other;
+          }
         });
-        if (!over) return;
-        const overId = over.getAttribute("data-copy-sec");
-        if (!overId || overId === copyListDrag.id) return;
-        const from = copyListDrag.order.indexOf(copyListDrag.id);
-        const to = copyListDrag.order.indexOf(overId);
-        if (from < 0 || to < 0 || from === to) return;
-        const next = copyListDrag.order.slice();
-        next.splice(from, 1);
-        next.splice(to, 0, copyListDrag.id);
-        copyListDrag.order = next;
-        store.copyListOrder = next.slice();
-        const list = host.querySelector(".easy-copy-list-wire");
-        if (!list) return;
-        next.forEach(function (id) {
-          const node = host.querySelector('.easy-copy-list-cell[data-copy-sec="' + id + '"]');
-          if (node) list.appendChild(node);
-        });
+        if (best) best.classList.add("is-touch");
+        touched = best;
       }
       function onUp() {
-        handle.releasePointerCapture(ev.pointerId);
-        handle.removeEventListener("pointermove", onMove);
-        handle.removeEventListener("pointerup", onUp);
-        handle.removeEventListener("pointercancel", onUp);
+        window.removeEventListener("pointermove", onMove, true);
+        window.removeEventListener("pointerup", onUp, true);
+        window.removeEventListener("pointercancel", onUp, true);
+        cell.style.transform = "";
         cell.classList.remove("is-dragging");
-        if (copyListDrag) {
-          store.copyListOrder = copyListDrag.order.slice();
-          applyCopyListOrderToLayout();
-          copyListDrag = null;
-          renderCopyListUi();
-          scheduleSave();
-        }
+        list.querySelectorAll(".easy-copy-list-cell.is-touch").forEach(function (el) {
+          el.classList.remove("is-touch");
+        });
+        const overId = touched ? touched.getAttribute("data-copy-sec") : "";
+        touched = null;
+        copyListDrag = null;
+        if (!overId || overId === secId) return;
+        const order = ensureCopyListOrder().slice();
+        const from = order.indexOf(secId);
+        const to = order.indexOf(overId);
+        if (from < 0 || to < 0 || from === to) return;
+        order.splice(from, 1);
+        order.splice(to, 0, secId);
+        store.copyListOrder = order.slice();
+        applyCopyListOrderToLayout();
+        renderCopyListUi();
+        scheduleSave();
       }
-      handle.addEventListener("pointermove", onMove);
-      handle.addEventListener("pointerup", onUp);
-      handle.addEventListener("pointercancel", onUp);
+      window.addEventListener("pointermove", onMove, true);
+      window.addEventListener("pointerup", onUp, true);
+      window.addEventListener("pointercancel", onUp, true);
     });
   }
 
@@ -13330,20 +13979,6 @@
       applyEasyColorChoice();
     }
 
-    if (step.id === "easy-basics") {
-      applyEasyBasicsToForm();
-      if (store.copyPathMode === "omakase") {
-        return applyOmakaseFromDict().then(function () {
-          store.snapshots[step.id] = captureStepSnapshot(step.id);
-          store.confirmed[step.id] = true;
-          applyAllConfirmed();
-          updateConfirmUi();
-          updateZoneBadgeDoneState();
-          hideWizardFootPanel();
-          return true;
-        });
-      }
-    }
     if (step.id === "easy-copy-frame") {
       const order = activeCopyFrameOrder();
       if ((store.copyFrameIndex || 0) < order.length - 1) {
@@ -13585,7 +14220,6 @@
     const err = getStepValidationError(step.id);
     if (err) {
       showValidationNotice(err);
-      if (step.id === "easy-basics") flagEasyBrandRequired();
       return;
     }
     const revisingAfterLock =
@@ -13677,7 +14311,9 @@
           }, 6000);
         }
       }
-      showWizardStep(nextIndex);
+      const upcoming = flow[nextIndex];
+      const skipName = step.id === "easy-img-wire" && upcoming && upcoming.id === "easy-site-name" && homepageName();
+      showWizardStep(skipName ? Math.min(flow.length - 1, nextIndex + 1) : nextIndex);
     });
   }
 
@@ -13789,7 +14425,11 @@
     }
     if (step && EASY_FLOW_STEP_SET.has(step.id)) {
       if (store.confirmed[step.id]) unconfirmStep(step.id);
-      showWizardStep(Math.max(0, store.wizardStepIndex - 1));
+      let backIndex = Math.max(0, store.wizardStepIndex - 1);
+      const flow = getFlowSteps();
+      const prev = flow[backIndex];
+      if (prev && prev.id === "easy-site-name") backIndex = Math.max(0, backIndex - 1);
+      showWizardStep(backIndex);
       const status = document.getElementById("wizard-status");
       if (status) status.textContent = "";
       return;
@@ -14788,6 +15428,15 @@
     const section = document.getElementById("layout-color-section");
     if (!section) return;
     section.hidden = false;
+    const rows = document.getElementById("layout-color-rows");
+    if (!rows) return;
+    rows.querySelectorAll(":scope > .layout-color-move").forEach(function (row) {
+      const moveId = row.getAttribute("data-color-move");
+      const blockId = COLOR_MOVE_BLOCK[moveId];
+      if (!blockId) return;
+      const meta = LAYOUT_BLOCKS.find(function (b) { return b.id === blockId; });
+      row.hidden = !isLayoutBlockActive(meta);
+    });
   }
 
   function setupPresets() {
@@ -14848,6 +15497,7 @@
     root.style.setProperty("--radius", radius);
     root.style.setProperty("--heading-scale", headingScale);
     applyAccentBarToRoot();
+    scheduleHeroCopyFitCheck();
   }
 
   function applyCountToPreview(id, count) {
@@ -14862,7 +15512,11 @@
     const meta = COUNT_META[id];
     const items = Array.from(block.querySelectorAll(":scope > [data-sample-item]"));
     let n = Number(count);
-    if (meta) n = Math.min(meta.max, Math.max(meta.min, n));
+    if (id === "hero-leads" && n === 0) {
+      n = 0;
+    } else if (meta) {
+      n = Math.min(meta.max, Math.max(meta.min, n));
+    }
     block.setAttribute("data-count", String(n));
     items.forEach((item, i) => {
       item.hidden = i >= n;
@@ -16142,34 +16796,53 @@
     if (!box) return;
     const s = normalizeImageScale(scale);
     const label = box.querySelector(".layout-adjust-scale");
-    if (label) label.textContent = s + "%";
+    if (label) label.textContent = imageScaleLabel(s);
     const range = box.querySelector(".layout-zoom-range-input");
     if (range && document.activeElement !== range) {
       range.value = String(s);
     }
-    const inn = box.querySelector('[data-scale-nudge="in"]');
+    const back = box.querySelector("[data-scale-reset]");
     const out = box.querySelector('[data-scale-nudge="out"]');
-    if (inn) inn.disabled = s <= IMAGE_SCALE_MIN;
+    if (back) back.disabled = s <= IMAGE_SCALE_DEFAULT;
     if (out) out.disabled = s >= IMAGE_SCALE_MAX;
   }
 
+  function layoutFrameIsHome(blockId, slot) {
+    const center = ITEM_FOCAL_DEFAULT;
+    if (blockId === "hero") {
+      ensureHeroFocalDefaults();
+      return normalizeImageScale(store.heroImageScale) === IMAGE_SCALE_DEFAULT
+        && store.heroFocalX === center
+        && store.heroFocalY === center;
+    }
+    const layout = normalizeItemLayout(layoutImageCountId(blockId));
+    if (!layout || !slot) return false;
+    return normalizeImageScale(layout.scaleById && layout.scaleById[slot]) === IMAGE_SCALE_DEFAULT
+      && normalizeFocalX(layout.focalXById[slot]) === center
+      && normalizeFocalY(layout.focalYById[slot]) === center;
+  }
+
   function syncOpenLayoutFocalButtons() {
-    document.querySelectorAll(".layout-focal-pad").forEach((pad) => {
-      const kind = pad.getAttribute("data-focal-kind");
-      const host = pad.closest(".layout-photo-tools") || pad.closest(".layout-adjust") || pad.parentElement;
-      const zoom = host && host.querySelector(".layout-adjust-zoom");
-      if (kind === "hero") {
+    document.querySelectorAll(".layout-adjust-zoom[data-scale-block]").forEach((zoom) => {
+      const blockId = zoom.getAttribute("data-scale-block");
+      const slot = zoom.getAttribute("data-scale-slot") || "";
+      if (blockId === "hero") {
         ensureHeroFocalDefaults();
-        syncFocalNudgeButtons(pad, store.heroFocalX, store.heroFocalY);
         syncOpenLayoutScale(zoom, store.heroImageScale);
         return;
       }
-      const countId = pad.getAttribute("data-focal-for");
-      const slot = pad.getAttribute("data-item-id");
+      const countId = layoutImageCountId(blockId);
       const layout = normalizeItemLayout(countId);
       if (!layout || !slot) return;
-      syncFocalNudgeButtons(pad, layout.focalXById[slot], layout.focalYById[slot]);
       syncOpenLayoutScale(zoom, layout.scaleById && layout.scaleById[slot]);
+    });
+    document.querySelectorAll("#easy-img-layout-host .layout-frame-home").forEach((btn) => {
+      const step = btn.closest(".layout-source-step");
+      const map = step && step.querySelector(".layout-source-map");
+      const blockId = map && map.getAttribute("data-mirror-block");
+      const slot = map && map.getAttribute("data-mirror-slot");
+      if (!blockId) return;
+      btn.disabled = layoutFrameIsHome(blockId, slot);
     });
     syncLayoutMirrors();
   }
@@ -16221,7 +16894,9 @@
   }
 
   function setLayoutFrameFocal(blockId, slot, x, y, pushUndo) {
-    const nx = normalizeFocalX(x);
+    const nx = blockId === "hero"
+      ? normalizeFocalPercent(x, HERO_FOCAL_X_DEFAULT)
+      : normalizeFocalX(x);
     const ny = normalizeFocalY(y);
     if (blockId === "hero") {
       ensureHeroFocalDefaults();
@@ -16256,7 +16931,7 @@
     const frameRatio = measured > 0 ? measured : 16 / 9;
     const frameH = 100;
     const frameW = frameH * frameRatio;
-    const z = Math.max(0.5, normalizeImageScale(view.scale) / 100);
+    const z = Math.max(1, normalizeImageScale(view.scale) / 100);
     const cover = Math.max(frameW / nw, frameH / nh);
     const denomX = nw * cover - frameW + frameW * (1 - 1 / z);
     const denomY = nh * cover - frameH + frameH * (1 - 1 / z);
@@ -16307,7 +16982,13 @@
         const top = Math.max(0, Math.min(maxT, live.py - rect.top - grabY));
         win.style.left = (left / Math.max(1, rect.width)) * 100 + "%";
         win.style.top = (top / Math.max(1, rect.height)) * 100 + "%";
-        const focal = focalFromWindowRatios(map, blockId, slot, left / Math.max(1, rect.width), top / Math.max(1, rect.height));
+        const focal = focalFromWindowRatios(
+          map,
+          blockId,
+          slot,
+          left / Math.max(1, rect.width),
+          top / Math.max(1, rect.height)
+        );
         live.x = focal.x;
         live.y = focal.y;
         applyLiveFrameFocal(blockId, slot, live.x, live.y, scale);
@@ -16343,6 +17024,31 @@
       map.addEventListener("pointerup", up);
       map.addEventListener("pointercancel", up);
     });
+  }
+
+  function resetLayoutFrameHome(blockId, slot) {
+    const center = ITEM_FOCAL_DEFAULT;
+    if (layoutFrameIsHome(blockId, slot)) return false;
+    if (blockId === "hero") {
+      pushLayoutUndo();
+      store.heroImageScale = IMAGE_SCALE_DEFAULT;
+      store.heroFocalX = center;
+      store.heroFocalY = center;
+      applyHeroFocalToPreview();
+    } else {
+      const countId = layoutImageCountId(blockId);
+      const layout = normalizeItemLayout(countId);
+      if (!layout || !slot) return false;
+      pushLayoutUndo();
+      layout.scaleById[slot] = IMAGE_SCALE_DEFAULT;
+      layout.focalXById[slot] = center;
+      layout.focalYById[slot] = center;
+      applyItemLayoutToPreview(countId);
+    }
+    if (store.confirmed.finish) unconfirmFinishSoft();
+    scheduleSave();
+    syncOpenLayoutFocalButtons();
+    return true;
   }
 
   function resetLayoutFrameFocal(blockId, slot) {
@@ -16445,80 +17151,54 @@
       ev.preventDefault();
       ev.stopPropagation();
       const list = row.parentElement;
-      let overId = null;
-      let place = null;
+      if (!list) return;
       const startY = ev.clientY;
-      const face = row.querySelector(":scope > .layout-closed-line") || row;
-      const faceRect = face.getBoundingClientRect();
-      store._layoutGhostOffsetX = ev.clientX - faceRect.left;
-      store._layoutGhostOffsetY = ev.clientY - faceRect.top;
-      ensureLayoutDragGhost(row, ev.clientX, ev.clientY);
-      document.body.classList.add("is-inner-layout-dragging");
-      row.classList.add("is-holding");
-      const clearInnerDropFrames = () => {
-        if (!list) return;
-        list.querySelectorAll(".layout-inner").forEach((el) => {
-          el.classList.remove("is-drop-target");
-          el.style.boxShadow = "";
-        });
-      };
-      const showInnerDropFrame = (target) => {
-        clearInnerDropFrames();
-        if (!target) return;
-        target.classList.add("is-drop-target");
-      };
+      let touched = null;
+      row.classList.add("is-dragging");
       const onMove = (moveEv) => {
-        ensureLayoutDragGhost(row, moveEv.clientX, moveEv.clientY);
-        if (Math.abs(moveEv.clientY - startY) <= 4 || !list) {
-          overId = null;
-          place = null;
-          clearInnerDropFrames();
-          return;
-        }
-        const goingDown = moveEv.clientY >= startY;
-        const ghost = document.getElementById("layout-arrange-ghost");
-        const ghostRect = ghost ? ghost.getBoundingClientRect() : null;
-        const probeY = ghostRect
-          ? (goingDown ? ghostRect.bottom : ghostRect.top)
-          : moveEv.clientY;
-        let hit = null;
-        let hitPlace = null;
-        let bestDist = Infinity;
-        list.querySelectorAll(".layout-inner").forEach((el) => {
-          const id = el.getAttribute("data-item-id");
-          if (!id || id === slotId) return;
-          const r = el.getBoundingClientRect();
-          if (probeY < r.top || probeY > r.bottom) return;
-          const dist = goingDown ? probeY - r.top : r.bottom - probeY;
-          if (dist < bestDist) {
-            bestDist = dist;
-            hit = el;
-            hitPlace = goingDown ? "after" : "before";
+        row.style.transform = "translateY(" + (moveEv.clientY - startY) + "px)";
+        const mine = row.getBoundingClientRect();
+        let best = null;
+        let bestArea = 0;
+        list.querySelectorAll(".layout-inner").forEach((other) => {
+          other.classList.remove("is-touch");
+          if (other === row) return;
+          const rect = other.getBoundingClientRect();
+          const overlapW = Math.min(mine.right, rect.right) - Math.max(mine.left, rect.left);
+          const overlapH = Math.min(mine.bottom, rect.bottom) - Math.max(mine.top, rect.top);
+          const area = overlapW > 0 && overlapH > 0 ? overlapW * overlapH : 0;
+          if (area > bestArea) {
+            bestArea = area;
+            best = other;
           }
         });
-        overId = hit ? hit.getAttribute("data-item-id") : null;
-        place = hit ? hitPlace : null;
-        showInnerDropFrame(hit);
+        if (best) best.classList.add("is-touch");
+        touched = best;
       };
       const onUp = () => {
         window.removeEventListener("pointermove", onMove, true);
         window.removeEventListener("pointerup", onUp, true);
         window.removeEventListener("pointercancel", onUp, true);
-        const dropId = overId;
-        const dropPlace = place;
-        removeLayoutDragGhost();
-        document.body.classList.remove("is-inner-layout-dragging");
-        row.classList.remove("is-holding");
-        clearInnerDropFrames();
-        if (dropId && dropPlace) {
-          pushLayoutUndo();
-          if (moveItemOrderNear(countId, slotId, dropId, dropPlace)) {
-            applyItemLayoutToPreview(countId);
-            renderLayoutArrangeWire();
-            if (store.confirmed.finish) unconfirmFinishSoft();
-            scheduleSave();
+        row.style.transform = "";
+        row.classList.remove("is-dragging");
+        list.querySelectorAll(".layout-inner.is-touch").forEach((el) => el.classList.remove("is-touch"));
+        if (touched && touched.parentElement === list) {
+          const dropId = touched.getAttribute("data-item-id");
+          seedItemOrder(countId);
+          const order = store.itemOrders[countId] || [];
+          const from = order.indexOf(slotId);
+          const to = dropId ? order.indexOf(dropId) : -1;
+          if (dropId && dropId !== slotId && from >= 0 && to >= 0) {
+            pushLayoutUndo();
+            if (moveItemOrderNear(countId, slotId, dropId, from < to ? "after" : "before")) {
+              applyItemLayoutToPreview(countId);
+              renderLayoutArrangeWire();
+              if (store.confirmed.finish) unconfirmFinishSoft();
+              scheduleSave();
+            }
           }
         }
+        touched = null;
       };
       window.addEventListener("pointermove", onMove, true);
       window.addEventListener("pointerup", onUp, true);
@@ -16691,7 +17371,7 @@
     const frameRatio = measured > 0 ? measured : 16 / 9;
     const frameH = 100;
     const frameW = frameH * frameRatio;
-    const z = Math.max(0.5, normalizeImageScale(view.scale) / 100);
+    const z = Math.max(1, normalizeImageScale(view.scale) / 100);
     const x = normalizeFocalX(view.focalX) / 100;
     const y = normalizeFocalY(view.focalY) / 100;
     const cover = Math.max(frameW / nw, frameH / nh);
@@ -16848,6 +17528,8 @@
   }
 
   function layoutSectionPreviewSelector(blockId) {
+    const block = LAYOUT_BLOCKS.find(function (b) { return b.id === blockId; });
+    if (block && block.selector) return block.selector;
     if (blockId === "hero") return "#hero";
     if (blockId === "photos") return "#about-photos-block";
     if (blockId === "works") return "#works";
@@ -16989,12 +17671,136 @@
     scroll.style.scrollBehavior = prev;
   }
 
+  function bindPlaceMarkSwitch() {
+    const box = document.querySelector(".place-mark-switch");
+    if (!box || box.dataset.bound) return;
+    box.dataset.bound = "1";
+    box.addEventListener("click", (ev) => {
+      const btn = ev.target.closest("[data-place-mark]");
+      if (!btn || !box.contains(btn)) return;
+      placeMarkOn = btn.getAttribute("data-place-mark") === "on";
+      syncPlaceMarkSwitch();
+    });
+    syncPlaceMarkSwitch();
+  }
+
+  function syncPlaceMarkSwitch() {
+    document.body.classList.toggle("place-mark-off", !placeMarkOn);
+    document.querySelectorAll("[data-place-mark]").forEach((btn) => {
+      const lit = (btn.getAttribute("data-place-mark") === "on") === placeMarkOn;
+      btn.classList.toggle("is-lit", lit);
+      btn.setAttribute("aria-pressed", lit ? "true" : "false");
+    });
+    syncPlaceMarkFrame();
+  }
+
+  function ensurePlaceMarkFrame() {
+    let frame = document.getElementById("place-mark-frame");
+    if (frame) return frame;
+    const pane = document.querySelector(".preview-pane");
+    if (!pane) return null;
+    frame = document.createElement("div");
+    frame.id = "place-mark-frame";
+    frame.hidden = true;
+    frame.setAttribute("aria-hidden", "true");
+    pane.appendChild(frame);
+    const scroll = pane.querySelector(".preview-scroll");
+    if (scroll && !scroll.dataset.placeMarkScroll) {
+      scroll.dataset.placeMarkScroll = "1";
+      scroll.addEventListener("scroll", () => syncPlaceMarkFrame(), { passive: true });
+    }
+    if (!window.__placeMarkResize) {
+      window.__placeMarkResize = true;
+      window.addEventListener("resize", () => syncPlaceMarkFrame());
+    }
+    return frame;
+  }
+
+  function syncPlaceMarkFrame() {
+    const frame = ensurePlaceMarkFrame();
+    const pane = document.querySelector(".preview-pane");
+    const target = root && root.querySelector(".is-layout-focus");
+    const paneHidden = !pane || getComputedStyle(pane).display === "none";
+    if (!frame || !pane || !target || !placeMarkOn || paneHidden) {
+      if (frame) frame.hidden = true;
+      return;
+    }
+    const pb = pane.getBoundingClientRect();
+    const raw = target.getBoundingClientRect();
+    const zoom = previewZoomFactor();
+    const layoutW = target.offsetWidth || raw.width;
+    const rectIsLayout =
+      zoom < 0.999 &&
+      layoutW > 8 &&
+      Math.abs(raw.width - layoutW) <= Math.abs(raw.width - layoutW * zoom) + 1;
+    const scale = rectIsLayout ? zoom : 1;
+    const tb = {
+      left: raw.left * scale,
+      top: raw.top * scale,
+      width: raw.width * scale,
+      height: raw.height * scale
+    };
+    if (tb.width < 2 || tb.height < 2) {
+      frame.hidden = true;
+      return;
+    }
+    const thick = 5;
+    frame.hidden = false;
+    frame.style.left = (tb.left - pb.left - thick) + "px";
+    frame.style.top = (tb.top - pb.top - thick) + "px";
+    frame.style.width = (tb.width + thick * 2) + "px";
+    frame.style.height = (tb.height + thick * 2) + "px";
+  }
+
+  function clearPreviewPlaceMark() {
+    if (!root) return;
+    root.querySelectorAll(".is-layout-focus").forEach((el) => el.classList.remove("is-layout-focus"));
+    syncPlaceMarkFrame();
+  }
+
+  function focusPreviewBlock(blockId) {
+    const sel = layoutSectionPreviewSelector(blockId);
+    if (root) root.querySelectorAll(".is-layout-focus").forEach(function (el) { el.classList.remove("is-layout-focus"); });
+    if (!sel || !root) {
+      syncPlaceMarkFrame();
+      return;
+    }
+    const target = root.querySelector(sel);
+    if (target && !target.hidden) target.classList.add("is-layout-focus");
+    syncPlaceMarkFrame();
+  }
+
+  function focusOpenLayoutSection() {
+    const cell = document.querySelector("#easy-img-layout-host details.layout-arrange-cell[open], #layout-arrange-wire details.layout-arrange-cell[open]");
+    const id = cell && cell.getAttribute("data-layout-block");
+    if (id) focusPreviewBlock(id);
+    else clearPreviewPlaceMark();
+  }
+
+  function syncCopyPlaceMark() {
+    const flow = typeof getFlowSteps === "function" ? getFlowSteps() : [];
+    const step = flow[store.wizardStepIndex];
+    if (!step || step.id !== "easy-copy-omakase") return;
+    const open = copyListOpenState();
+    if (!open || !open.sectionId) {
+      clearPreviewPlaceMark();
+      return;
+    }
+    const sec = copyListSectionById(open.sectionId);
+    if (sec && sec.layoutId) focusPreviewBlock(sec.layoutId);
+    else clearPreviewPlaceMark();
+  }
+
   function focusPreviewLayoutFrame(blockId, slot) {
     const sel = layoutFramePreviewSelector(blockId, slot);
-    root.querySelectorAll(".is-layout-focus").forEach((el) => el.classList.remove("is-layout-focus"));
-    if (!sel) return;
+    if (root) root.querySelectorAll(".is-layout-focus").forEach((el) => el.classList.remove("is-layout-focus"));
+    if (!sel || !root) {
+      syncPlaceMarkFrame();
+      return;
+    }
     const target = root.querySelector(sel);
     if (target) target.classList.add("is-layout-focus");
+    syncPlaceMarkFrame();
   }
 
   function layoutSizeWord(size) {
@@ -17262,15 +18068,19 @@
       appendLayoutPhotoEditor(editor, blockId, slot);
       const inEasy = easyImgPhotoHostRow(row);
       const step = editor.querySelector(".layout-source-step");
-      if (inEasy && step) step.appendChild(btn);
+      const side = step && step.querySelector(".layout-photo-side");
+      if (inEasy && side) side.appendChild(btn);
+      else if (inEasy && step) step.appendChild(btn);
       else row.appendChild(btn);
       const map = editor.querySelector(".layout-source-map");
       if (map) alignOpenSourceMapToPad(map);
       syncEasyImgLevels();
+      focusPreviewLayoutFrame(blockId, slot);
       return;
     }
     line.appendChild(btn);
     syncEasyImgLevels();
+    if (!document.querySelector(".layout-photo-row.is-open")) focusOpenLayoutSection();
   }
 
   function buildLayoutClosedFace(blockId) {
@@ -17541,11 +18351,13 @@
     row.className = "layout-adjust-row";
     const zoom = document.createElement("div");
     zoom.className = "layout-adjust-zoom";
+    zoom.setAttribute("data-scale-block", blockId);
+    zoom.setAttribute("data-scale-slot", slot || "");
     const view = layoutFrameViewState(blockId, slot);
     const scaleNow = normalizeImageScale(view && view.scale);
     const rangeValue = scaleNow;
     zoom.innerHTML =
-      '<button type="button" class="layout-zoom-end layout-zoom-end--small" data-scale-nudge="in" aria-label="枠を一段小さく">縮小</button>' +
+      '<span class="layout-adjust-scale"></span>' +
       '<input class="layout-zoom-range-input" type="range" min="' +
       IMAGE_SCALE_MIN +
       '" max="' +
@@ -17554,15 +18366,7 @@
       IMAGE_SCALE_STEP +
       '" value="' +
       rangeValue +
-      '" aria-label="見ている範囲の大きさ">' +
-      '<button type="button" class="layout-zoom-end layout-zoom-end--large" data-scale-nudge="out" aria-label="枠を一段大きく">拡大</button>';
-    zoom.querySelectorAll("[data-scale-nudge]").forEach((btn) => {
-      btn.addEventListener("click", (ev) => {
-        ev.preventDefault();
-        ev.stopPropagation();
-        nudgeFrameImageScale(blockId, slot, btn.getAttribute("data-scale-nudge"));
-      });
-    });
+      '" aria-label="写真の大きさ">';
     const zoomBlock = document.createElement("div");
     zoomBlock.className = "layout-zoom-block";
     const zoomLabel = document.createElement("p");
@@ -17582,62 +18386,15 @@
         scaleUndoArmed = false;
       });
     }
-    const pad = document.createElement("div");
-    pad.className = "layout-focal-pad layout-adjust-pad";
-    pad.setAttribute("role", "group");
-    pad.setAttribute("aria-label", "画像の位置");
-    pad.innerHTML =
-      '<button type="button" class="item-focal-btn" data-focal-nudge="up" aria-label="上へ">↑</button>' +
-      '<div class="layout-adjust-mid">' +
-      '<button type="button" class="item-focal-btn" data-focal-nudge="left" aria-label="左へ">←</button>' +
-      '<button type="button" class="layout-focal-reset layout-adjust-home" data-focal-home aria-label="元の位置に戻す"></button>' +
-      '<button type="button" class="item-focal-btn" data-focal-nudge="right" aria-label="右へ">→</button>' +
-      "</div>" +
-      '<button type="button" class="item-focal-btn" data-focal-nudge="down" aria-label="下へ">↓</button>';
     if (blockId === "hero") {
-      pad.setAttribute("data-focal-kind", "hero");
       ensureHeroFocalDefaults();
-      syncFocalNudgeButtons(pad, store.heroFocalX, store.heroFocalY);
       syncOpenLayoutScale(zoom, store.heroImageScale);
     } else {
       const countId = layoutImageCountId(blockId);
       const layout = normalizeItemLayout(countId);
-      pad.setAttribute("data-focal-kind", "item");
-      pad.setAttribute("data-focal-for", countId);
-      pad.setAttribute("data-item-id", slot);
-      syncFocalNudgeButtons(
-        pad,
-        layout ? layout.focalXById[slot] : ITEM_FOCAL_DEFAULT,
-        layout ? layout.focalYById[slot] : ITEM_FOCAL_DEFAULT
-      );
       syncOpenLayoutScale(zoom, layout && layout.scaleById ? layout.scaleById[slot] : IMAGE_SCALE_DEFAULT);
     }
-    pad.querySelectorAll("[data-focal-nudge]").forEach((btn) => {
-      btn.addEventListener("click", (ev) => {
-        ev.preventDefault();
-        ev.stopPropagation();
-        const dir = btn.getAttribute("data-focal-nudge");
-        if (blockId === "hero") nudgeHeroFocal(dir);
-        else nudgeItemFocal(layoutImageCountId(blockId), slot, dir);
-      });
-    });
-    const home = pad.querySelector("[data-focal-home]");
-    if (home) {
-      home.textContent = "中央";
-      home.setAttribute("aria-label", "写真の中央に戻す");
-      home.addEventListener("click", (ev) => {
-        ev.preventDefault();
-        ev.stopPropagation();
-        resetLayoutFrameFocal(blockId, slot);
-      });
-    }
-    if (parent.closest("#easy-img-layout-host") && home && zoom) {
-      home.textContent = "中央に戻す";
-      home.classList.add("layout-focal-reset--solo");
-      zoom.appendChild(home);
-    }
     row.appendChild(zoomBlock);
-    row.appendChild(pad);
     block.appendChild(row);
     parent.appendChild(block);
   }
@@ -17768,6 +18525,23 @@
       bindSoloFrameDrag(map, blockId, slot);
     }
     mapStep.appendChild(map);
+    if (parent.closest("#easy-img-layout-host")) {
+      const side = document.createElement("div");
+      side.className = "layout-photo-side";
+      const home = document.createElement("button");
+      home.type = "button";
+      home.className = "layout-frame-home";
+      home.textContent = "元に戻す";
+      home.setAttribute("aria-label", "元に戻す");
+      home.disabled = layoutFrameIsHome(blockId, slot);
+      home.addEventListener("click", (ev) => {
+        ev.preventDefault();
+        ev.stopPropagation();
+        resetLayoutFrameHome(blockId, slot);
+      });
+      side.appendChild(home);
+      mapStep.appendChild(side);
+    }
     cluster.appendChild(mapStep);
     paintLayoutSourceMap(map);
   }
@@ -17813,7 +18587,7 @@
         order.forEach((id) => {
           const meta = LAYOUT_BLOCKS.find((b) => b.id === id);
           if (!meta) return;
-          if (imageOnly && !isLayoutImageBlock(id)) return;
+          if (imageOnly && (!isLayoutImageBlock(id) || !isLayoutBlockActive(meta))) return;
           const displayLabel = layoutBlockDisplayLabel(meta);
           const on = isLayoutBlockActive(meta);
           const cell = document.createElement("details");
@@ -17956,6 +18730,7 @@
               }
               if (body.querySelector("[data-layout-input-home]")) restoreLayoutSectionInputs();
               syncEasyImgLevels();
+              focusOpenLayoutSection();
               return;
             }
             store.layoutAccordionId = id;
@@ -17980,6 +18755,7 @@
                 }
               } else {
                 scrollPreviewFrameIntoView(layoutSectionPreviewSelector(id));
+                focusPreviewBlock(id);
                 const scroller = document.querySelector(".dash-body > .fill-form");
                 if (scroller) scroller.scrollTop = 0;
               }
@@ -17989,6 +18765,7 @@
             if (!isLayoutImageBlock(id)) {
               const sel = cell.getAttribute("data-preview-target") || meta.selector;
               scrollPreviewTo(sel);
+              focusPreviewBlock(id);
             } else {
               window.requestAnimationFrame(() => {
                 const row = cell.querySelector(".layout-photo-row.is-open");
@@ -18080,7 +18857,9 @@
           }
         } else {
           scrollDashChildToTop(openCell);
-          scrollPreviewFrameIntoView(layoutSectionPreviewSelector(openCell.getAttribute("data-layout-block") || ""));
+          const bid = openCell.getAttribute("data-layout-block") || "";
+          scrollPreviewFrameIntoView(layoutSectionPreviewSelector(bid));
+          focusPreviewBlock(bid);
         }
       }
       if (!pendingCenter) return;
@@ -18178,8 +18957,8 @@
         store.layoutOrderBeforeDrag || store.layoutOrder
       );
       document.querySelectorAll(".layout-arrange-cell").forEach((el) => {
-        el.classList.toggle("is-drop-target", el === best);
-        el.classList.remove("is-drop-deny");
+        el.classList.toggle("is-touch", el === best);
+        el.classList.remove("is-drop-target", "is-drop-deny");
       });
       store.layoutDragOverId = toId;
       store.layoutDragOverKey = toId;
@@ -18196,7 +18975,8 @@
         store.layoutDragMoved = true;
       }
       if (!store.layoutDragMoved) return;
-      ensureLayoutDragGhost(cell, ev.clientX, ev.clientY);
+      const dy = ev.clientY - (store._layoutPointerStartY || ev.clientY);
+      cell.style.transform = "translateY(" + dy + "px)";
       updateOverFromPoint(ev.clientY);
     };
     const finishPointer = (ev) => {
@@ -18239,6 +19019,7 @@
       finishOnce = false;
       closeItemGrowModal();
       removeLayoutDragGhost();
+      cell.style.transform = "";
       store.layoutDragId = id;
       store.layoutDragMoved = false;
       store.layoutDragDropped = false;
@@ -19188,6 +19969,7 @@
       if (pctEl) pctEl.textContent = pct + "%";
       if (minus) minus.disabled = pct <= 25;
       if (plus) plus.disabled = pct >= 200;
+      if (typeof syncPlaceMarkFrame === "function") syncPlaceMarkFrame();
     }
 
     function applyLookZoom(viewportEl, forcedZoom) {
@@ -20719,6 +21501,7 @@
         tab.classList.add("is-active");
         if (name === "preview") applyPendingPreviewScroll();
         placePreviewWidthControl();
+        window.requestAnimationFrame(() => syncPlaceMarkFrame());
       });
     });
     document.body.classList.add("show-preview");
@@ -20773,7 +21556,9 @@
       heroFocalY: normalizeFocalPercent(store.heroFocalY, HERO_FOCAL_Y_DEFAULT),
       heroImageScale: normalizeImageScale(store.heroImageScale),
       heroTextPlate: normalizeHeroPlate(store.heroTextPlate),
+      heroTextPlateLast: heroPlateLastShape(),
       heroTextPlateTone: normalizeHeroPlateTone(store.heroTextPlateTone),
+      heroTextPos: normalizeHeroTextPos(store.heroTextPos),
       note: "画像ファイルはZIPに含みますが、ブラウザ下書きには保存されません。"
     };
   }
@@ -20813,7 +21598,9 @@
         heroImageScale: normalizeImageScale(store.heroImageScale),
         aboutItemsDisplay: normalizeAboutItemsDisplay(store.aboutItemsDisplay),
         heroTextPlate: normalizeHeroPlate(store.heroTextPlate),
+        heroTextPlateLast: heroPlateLastShape(),
         heroTextPlateTone: normalizeHeroPlateTone(store.heroTextPlateTone),
+        heroTextPos: normalizeHeroTextPos(store.heroTextPos),
         finishLockedOnce: store.finishLockedOnce,
         guidedImageUnlocked: store.guidedImageUnlocked,
         guidedTextUnlocked: store.guidedTextUnlocked,
@@ -20830,6 +21617,7 @@
         hubEntrySource: store.hubEntrySource,
         easyFlowActive: !!store.easyFlowActive,
         easyBasicsApplied: !!store.easyBasicsApplied,
+        siteNameConfirmed: !!store.siteNameConfirmed,
         easyBasicsHints: store.easyBasicsHints
           ? {
               brand: String(store.easyBasicsHints.brand || ""),
@@ -20975,6 +21763,7 @@
       if (data.easyFlowActive != null) store.easyFlowActive = !!data.easyFlowActive;
       else if (data.easyP1Hold) store.easyFlowActive = !!data.easyP1Hold;
       store.easyBasicsApplied = !!data.easyBasicsApplied;
+      store.siteNameConfirmed = !!data.siteNameConfirmed;
       if (data.easyBasicsHints && typeof data.easyBasicsHints === "object") {
         store.easyBasicsHints = {
           brand: String(data.easyBasicsHints.brand || "").trim(),
@@ -21132,7 +21921,10 @@
       }
       if (data.aboutItemsDisplay != null) store.aboutItemsDisplay = normalizeAboutItemsDisplay(data.aboutItemsDisplay);
       if (data.heroTextPlate) store.heroTextPlate = normalizeHeroPlate(data.heroTextPlate);
+      if (data.heroTextPlateLast) store.heroTextPlateLast = normalizeHeroPlate(data.heroTextPlateLast);
+      if (store.heroTextPlateLast === "none") store.heroTextPlateLast = "round";
       if (data.heroTextPlateTone) store.heroTextPlateTone = normalizeHeroPlateTone(data.heroTextPlateTone);
+      if (data.heroTextPos) store.heroTextPos = normalizeHeroTextPos(data.heroTextPos);
       if (data.confirmed) {
         Object.assign(store.confirmed, data.confirmed);
         if (data.confirmed["global-chrome"]) {
@@ -21430,6 +22222,7 @@
 
   form.addEventListener("input", (e) => {
     if (e.target && e.target.name && isFieldVisible(e.target)) syncCharCounter(e.target);
+    if (e.target && e.target.classList && e.target.classList.contains("is-copy-frame")) growCopyField(e.target);
     updateFontPreview();
     scheduleSave();
   });

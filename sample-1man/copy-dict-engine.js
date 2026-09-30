@@ -245,11 +245,13 @@
     });
   }
 
-  function assembleSentence(parts, sectionId, axisId, keywordIds, rng, usedIds, forbid) {
+  function assembleSentence(parts, sectionId, axisId, keywordIds, rng, usedIds, forbid, maxChars) {
     usedIds = usedIds || {};
     forbid = forbid || {};
     var forbidKeywordIds = forbid.keywordIds || [];
     var forbidAxisIds = forbid.axisIds || [];
+    var limit = Number(maxChars);
+    if (!Number.isFinite(limit) || limit < 1) limit = 0;
     function pickSlot(slot) {
       function poolFor(strictAvoidSession) {
         var tries = [
@@ -294,6 +296,12 @@
       /* まず制作中の使用済みを避け、枯れたら緩和 */
       var pool = poolFor(true);
       if (!pool.length) pool = poolFor(false);
+      if (limit) {
+        pool = pool.filter(function (p) {
+          var bare = String(p.text || "").replace(/[。．.]+$/, "");
+          return bare.length > 0 && bare.length <= limit - 1;
+        });
+      }
       var pick = weightedPick(pool, rng);
       if (pick) {
         usedIds[pick.id] = true;
@@ -304,17 +312,41 @@
     var open = pickSlot("open");
     var mid = pickSlot("mid");
     var close = pickSlot("close");
-    var bits = [];
-    if (open) bits.push(String(open.text).replace(/[。．.]+$/, ""));
-    if (mid) bits.push(String(mid.text).replace(/[。．.]+$/, ""));
-    if (close) {
-      var c = String(close.text);
-      bits.push(c);
+    function piece(p) {
+      if (!p) return "";
+      return String(p.text || "").replace(/[。．.]+$/, "");
     }
-    var text = bits.join("。");
-    if (text && !/[。！？]$/.test(text)) text += "。";
-    /* quality: avoid empty / too short */
-    if (!text || text.length < 8) {
+    function joinBits(list) {
+      var bits = list.filter(Boolean);
+      if (!bits.length) return "";
+      var text = bits.join("。");
+      if (!/[。！？]$/.test(text)) text += "。";
+      return text;
+    }
+    var o = piece(open);
+    var m = piece(mid);
+    var c = piece(close);
+    var sets = [
+      [o, m, c],
+      [o, c],
+      [o, m],
+      [m, c],
+      [o],
+      [c],
+      [m]
+    ];
+    var text = "";
+    var minLen = limit && limit < 16 ? 2 : 8;
+    for (var si = 0; si < sets.length; si += 1) {
+      var joined = joinBits(sets[si]);
+      if (!joined || joined.length < minLen) continue;
+      if (limit && joined.length > limit) continue;
+      text = joined;
+      break;
+    }
+    /* quality: avoid empty / too short。上限があるときは長い代替文へ落とさない */
+    if (!text) {
+      if (limit) return null;
       if (forbidKeywordIds.length || forbidAxisIds.length) return null;
       text = fallbackLine(sectionId, axisId);
     }
@@ -396,7 +428,7 @@
         var usedIds = {};
         var candidates = [];
         axes.forEach(function (axisId) {
-          var built = assembleSentence(parts, sectionId, axisId, keywordIds, rng, usedIds, forbid);
+          var built = assembleSentence(parts, sectionId, axisId, keywordIds, rng, usedIds, forbid, opts.maxChars);
           if (!built || !built.text) return;
           candidates.push({
             label: axisLabel(meta, axisId),
@@ -416,7 +448,8 @@
               keywordIds,
               mulberry32(hashSeed(salt + "|retry|" + i + "|" + freshSalt("retry"))),
               usedIds,
-              forbid
+              forbid,
+              opts.maxChars
             );
             if (rebuilt && rebuilt.text) {
               c.text = rebuilt.text;

@@ -12,7 +12,7 @@
   <!-- メーカー親CSS（ポートフォリオ根の style.css は読まない） -->
   <link rel="stylesheet" href="maker-base.css?v=cleanup-20260922">
   <link rel="icon" href="brand/mark-favicon.png?v=logo-8" type="image/png">
-  <link rel="stylesheet" href="sample-overrides.css?v=img-hierarchy-20260929p">
+  <link rel="stylesheet" href="sample-overrides.css?v=listing-name-b-20260930">
   <link rel="stylesheet" href="free-photo-gallery/gallery.css?v=omakase-ok-20260929">
   <script>
     (function () {
@@ -65,7 +65,7 @@
   <script src="sushi-belt.js?v=sushi-replace-up-20260926" defer></script>
   <script src="free-photo-gallery/gallery.js?v=gallery-ask-20260926" defer></script>
   <script src="page-shutter.js?v=sample-only-20260929" defer></script>
-  <script src="script.js?v=img-hierarchy-20260929p" defer></script>
+  <script src="script.js?v=listing-name-b-20260930" defer></script>
   <script>
     (function () {
       var h = location.hostname;
@@ -394,6 +394,12 @@
               <button type="button" class="preview-look-btn" id="preview-scale-plus" aria-label="見本を大きく">＋</button>
             </span>
           </span>
+          <span class="preview-group-sep" aria-hidden="true">|</span>
+          <span class="place-mark-switch" role="group" aria-label="目印">
+            <span class="place-mark-label">目印</span>
+            <button type="button" class="place-mark-btn is-lit" data-place-mark="on" aria-pressed="true">オン</button>
+            <button type="button" class="place-mark-btn" data-place-mark="off" aria-pressed="false">オフ</button>
+          </span>
         </div>
       </div>
     </div>
@@ -518,40 +524,27 @@
         </details>
 
         <details class="dash-block dash-block--easy" data-step-id="easy-basics" hidden>
-          <summary>基本情報</summary>
+          <summary>記載項目</summary>
           <div class="dash-subhead-row">
-            <p class="dash-subhead" role="heading" aria-level="3">基本情報</p>
+            <p class="dash-subhead" role="heading" aria-level="3">記載項目</p>
             <span class="hub-tip-wrap">
-              <button type="button" class="hub-tip-btn" data-hub-tip aria-expanded="false" aria-label="基本情報とは">?</button>
-              <span class="hub-tip-pop" hidden>お店のページに載せる名前や連絡先です。あとから直せます。</span>
+              <button type="button" class="hub-tip-btn" data-hub-tip aria-expanded="false" aria-label="記載項目とは">?</button>
+              <span class="hub-tip-pop" hidden>見本にある枠は点いています。押すと、載せたり外したりできます。</span>
             </span>
           </div>
-          <div class="easy-basics-fields">
-            <label class="easy-field" for="easy-brand-name">
-              <span class="easy-field-label">店名 <span class="easy-field-req">必須</span></span>
-              <input type="text" id="easy-brand-name" name="easy_brand_name" maxlength="20" autocomplete="organization" placeholder="" required aria-required="true" aria-describedby="easy-brand-error">
-              <span class="easy-field-error" id="easy-brand-error" hidden role="alert">店名を入れてください。</span>
-            </label>
-            <label class="easy-field" for="easy-intro">
-              <span class="easy-field-label">紹介 <span class="easy-field-opt">任意</span></span>
-              <textarea id="easy-intro" name="easy_intro" rows="3" maxlength="200" placeholder=""></textarea>
-            </label>
-            <label class="easy-field" for="easy-email">
-              <span class="easy-field-label">連絡先メール <span class="easy-field-opt">任意</span></span>
-              <input type="email" id="easy-email" name="easy_email" maxlength="80" placeholder="">
-            </label>
-            <label class="easy-field" for="easy-phone">
-              <span class="easy-field-label">電話 <span class="easy-field-opt">任意</span></span>
-              <input type="tel" id="easy-phone" name="easy_phone" maxlength="20" placeholder="">
-            </label>
-            <label class="easy-field" for="easy-hours">
-              <span class="easy-field-label">営業時間 <span class="easy-field-opt">任意</span></span>
-              <input type="text" id="easy-hours" name="easy_hours" maxlength="60" placeholder="">
-            </label>
-            <label class="easy-field" for="easy-address">
-              <span class="easy-field-label">住所 <span class="easy-field-opt">任意</span></span>
-              <input type="text" id="easy-address" name="easy_address" maxlength="80" placeholder="">
-            </label>
+          <div id="easy-listing-host" class="easy-listing-host" aria-label="載せる項目"></div>
+        </details>
+
+        <details class="dash-block dash-block--easy" data-step-id="easy-site-name" hidden>
+          <summary>名前</summary>
+          <div class="easy-site-name-dawn">
+            <p class="easy-site-name-lead">ホームページに出す名前を、ここにどうぞ。</p>
+            <p class="easy-site-name-note">会社名でも、個人名でも、プロジェクト名でも、同じ一行。</p>
+            <input type="text" id="easy-site-name-input" class="easy-site-name-input" maxlength="20" autocomplete="organization" aria-label="ホームページに出す名前">
+            <div id="easy-site-name-ask" class="easy-site-name-ask" hidden>
+              <p>ここから、文章の入力を始めますか</p>
+              <button type="button" class="gct-btn gct-btn-primary" id="easy-site-name-ok">OK</button>
+            </div>
           </div>
         </details>
 
@@ -595,7 +588,7 @@
             <p class="dash-subhead" role="heading" aria-level="3">文章</p>
             <span class="hub-tip-wrap">
               <button type="button" class="hub-tip-btn" data-hub-tip aria-expanded="false" aria-label="文章とは">?</button>
-              <span class="hub-tip-pop" hidden>段を開いて、その文だけ候補を見比べられます。順番は点で変えられます。</span>
+              <span class="hub-tip-pop" hidden>段を開いて、その文を書けます。おまかせは参考です。直して使えます。</span>
             </span>
           </div>
           <div id="easy-copy-list-host" class="easy-copy-list-host" aria-live="polite"></div>
@@ -1273,9 +1266,9 @@
             </fieldset>
             <fieldset class="inline-fieldset layout-look-fieldset">
               <legend>タイトルの大きさ</legend>
-              <label><input type="radio" name="headingScale" value="0.8"> 小さめ</label>
-              <label><input type="radio" name="headingScale" value="1" checked> 標準</label>
-              <label><input type="radio" name="headingScale" value="1.35"> 大きめ</label>
+              <label><input type="radio" name="headingScale" value="1"> 小さめ</label>
+              <label><input type="radio" name="headingScale" value="1.15" checked> 標準</label>
+              <label><input type="radio" name="headingScale" value="2.5"> 大きめ</label>
             </fieldset>
             <div class="count-row" data-count-for="hero-leads">
               <span>サブキャッチの行数</span>
@@ -1293,7 +1286,7 @@
             <div class="hero-overlay-options detail-only-block" id="hero-text-plate-options" hidden>
               <p class="dash-note dash-field-label">文字の下地（形）</p>
               <div class="hero-overlay-row" role="group" aria-label="下地の形">
-                <button type="button" class="gct-btn" data-hero-plate="none" aria-pressed="false">なし（白抜き）</button>
+                <button type="button" class="gct-btn" data-hero-plate="none" aria-pressed="false">なし</button>
                 <button type="button" class="gct-btn" data-hero-plate="rect" aria-pressed="false">四角</button>
                 <button type="button" class="gct-btn" data-hero-plate="round" aria-pressed="true">角まる</button>
                 <button type="button" class="gct-btn" data-hero-plate="oval" aria-pressed="false">楕円</button>

@@ -8329,6 +8329,8 @@
     }
     if (step.id === "easy-site-name") {
       bindSiteNameStep();
+    } else {
+      clearSiteNameBack();
     }
     if (step.id !== "easy-copy-omakase") restoreCopyBorrowedControls();
     if (step.id !== "easy-color-stage") {
@@ -8398,6 +8400,10 @@
       revealSamplePreview();
     }
     document.body.classList.toggle("is-site-name-dawn", step.id === "easy-site-name");
+    if (step.id === "easy-site-name") {
+      placeSiteNameBack();
+      window.requestAnimationFrame(placeSiteNameBack);
+    } else clearSiteNameBack();
     syncSampleFlowPreviewVisibility(step.id);
     syncEasyCopyLaterHint(step.id);
     syncDashResumeNotice();
@@ -8697,7 +8703,6 @@
     document.body.classList.toggle("hub-shell-back", !!hubShellBack);
     const hideFootNav =
       selfList ||
-      (step && step.id === "easy-site-name") ||
       isGuidedColorTrialFootHidden() ||
       store.guidedColorPhase === "pick" ||
       (onLayout && !hubShellBack);
@@ -9158,6 +9163,38 @@
     });
   }
 
+  function placeSiteNameBack() {
+    const pane = document.querySelector(".dash-pane");
+    const back = document.getElementById("wizard-back");
+    if (!pane || !back || !document.body.classList.contains("is-site-name-dawn")) return;
+    const box = pane.getBoundingClientRect();
+    const gap = 14;
+    const height = back.offsetHeight || 45;
+    const visibleBottom = Math.min(box.bottom, window.innerHeight);
+    const center = box.left + box.width / 2;
+    back.style.position = "fixed";
+    back.style.left = Math.round(center) + "px";
+    back.style.top = Math.round(visibleBottom - gap - height) + "px";
+    back.style.right = "auto";
+    back.style.bottom = "auto";
+    back.style.transform = "translateX(-50%)";
+    back.style.zIndex = "41";
+    back.style.margin = "0";
+  }
+
+  function clearSiteNameBack() {
+    const back = document.getElementById("wizard-back");
+    if (!back || back.style.position !== "fixed") return;
+    back.style.position = "";
+    back.style.left = "";
+    back.style.top = "";
+    back.style.right = "";
+    back.style.bottom = "";
+    back.style.transform = "";
+    back.style.zIndex = "";
+    back.style.margin = "";
+  }
+
   function bindSiteNameStep() {
     const input = document.getElementById("easy-site-name-input");
     const ask = document.getElementById("easy-site-name-ask");
@@ -9169,6 +9206,7 @@
     if (!input.dataset.bound) {
       input.dataset.bound = "1";
       input.addEventListener("input", syncAsk);
+      window.addEventListener("resize", placeSiteNameBack);
       ok.addEventListener("click", function () {
         const name = String(input.value || "").trim();
         if (!name) return;
@@ -9182,8 +9220,7 @@
         if (dest >= 0) showWizardStep(dest);
       });
     }
-    const existing = String(fieldValue("brand_name") || "").trim();
-    input.value = existing && !isPlaceholderBrand(existing) ? existing : "";
+    input.value = "";
     syncAsk();
     window.setTimeout(function () {
       try { input.focus(); } catch (e) { /* ignore */ }

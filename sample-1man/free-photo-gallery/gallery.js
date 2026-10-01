@@ -212,8 +212,8 @@
           const ask =
             asking
               ? '<span class="fpg-ask">' +
-                '<button type="button" class="fpg-ask-yes" data-fpg-yes>この画像にしますか</button>' +
-                '<button type="button" class="fpg-ask-no" data-fpg-no>やめますか</button>' +
+                '<button type="button" class="fpg-ask-yes" data-fpg-yes>この画像にする</button>' +
+                '<button type="button" class="fpg-ask-no" data-fpg-no>やめる</button>' +
                 "</span>"
               : "";
           const mark = mode === "picker" ? "" : '<span class="fpg-selected-mark" aria-hidden="true"></span>';

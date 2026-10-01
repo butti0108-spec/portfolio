@@ -30,7 +30,7 @@
     },
     {
       id: "values",
-      label: "下の枠",
+      label: "メッセージ枠",
       selector: "#hero-values-block",
       links: [
         { step: "values-color", kind: "color", label: "色" },
@@ -333,6 +333,7 @@
     { id: "easy-basics", label: "記載項目", needsConfirm: true, num: 0 },
     { id: "easy-site-name", label: "名前", needsConfirm: true, num: 0 },
     { id: "easy-color", label: "配色", needsConfirm: true, num: 0 },
+    { id: "easy-catch", label: "キャッチ", needsConfirm: true, num: 0 },
     { id: "easy-color-stage", label: "色調整", needsConfirm: true, num: 0 },
     { id: "easy-copy-path", label: "文章の決め方", needsConfirm: true, num: 0 },
     { id: "easy-copy-dirs", label: "どの言葉を使いますか", needsConfirm: true, num: 0 },
@@ -355,7 +356,7 @@
     { id: "global-chrome-ink", label: "ヘッダー文字", needsConfirm: true, num: 3 },
     { id: "global-bg", label: "背景", needsConfirm: true, num: 4 },
     { id: "hero-color", label: "キャッチ色", needsConfirm: true, num: 5 },
-    { id: "values-color", label: "下の枠色", needsConfirm: true, num: 6 },
+    { id: "values-color", label: "メッセージ枠色", needsConfirm: true, num: 6 },
     { id: "global-body", label: "本文", needsConfirm: true, num: 7 },
     { id: "global-accent", label: "アクセント", needsConfirm: true, num: 8 },
     { id: "global-card", label: "カード・角", needsConfirm: true, num: 9 },
@@ -366,7 +367,7 @@
     { id: "logo-text", label: "ロゴ", needsConfirm: true, num: 14 },
     { id: "site-fonts", label: "書体", needsConfirm: true, num: 15 },
     { id: "hero-text", label: "キャッチ文", needsConfirm: true, num: 17 },
-    { id: "values-text", label: "下の枠", needsConfirm: true, num: 18 },
+    { id: "values-text", label: "メッセージ枠", needsConfirm: true, num: 18 },
     { id: "about-text", label: "開く項目", needsConfirm: true, num: 20 },
     { id: "works-text", label: "カード", needsConfirm: true, num: 21 },
     { id: "hours-text", label: "営業時間", needsConfirm: true, num: 22 },
@@ -413,7 +414,7 @@
     "global-chrome-ink": { kind: "color", displayNum: 3, label: "ヘッダー文字" },
     "global-bg": { kind: "color", displayNum: 4, label: "背景" },
     "hero-color": { kind: "color", displayNum: 5, label: "キャッチ色" },
-    "values-color": { kind: "color", displayNum: 6, label: "下の枠色" },
+    "values-color": { kind: "color", displayNum: 6, label: "メッセージ枠色" },
     "global-body": { kind: "color", displayNum: 7, label: "本文色" },
     "global-accent": { kind: "color", displayNum: 8, label: "アクセント" },
     "global-card": { kind: "color", displayNum: 9, label: "カード" },
@@ -424,7 +425,7 @@
     "logo-text": { kind: "text", displayNum: 1, label: "ロゴ" },
     "site-fonts": { kind: "text", displayNum: 2, label: "書体" },
     "hero-text": { kind: "text", displayNum: 4, label: "キャッチ文" },
-    "values-text": { kind: "text", displayNum: 5, label: "下の枠文" },
+    "values-text": { kind: "text", displayNum: 5, label: "メッセージ枠文" },
     "about-text": { kind: "text", displayNum: 7, label: "開く項目" },
     "works-text": { kind: "text", displayNum: 8, label: "カード" },
     "hours-text": { kind: "text", displayNum: 9, label: "営業時間" },
@@ -760,15 +761,16 @@
   const EASY_FLOW_STEP_IDS = [
     "easy-basics",
     "easy-color",
-    "easy-color-stage",
+    "easy-catch",
+    "easy-site-name",
     "easy-img-path",
     "easy-img-omakase",
     "easy-img-wire",
-    "easy-site-name",
     "easy-copy-path",
     "easy-copy-dirs",
     "easy-copy-omakase",
     "easy-copy-frame",
+    "easy-color-stage",
     "easy-loading",
     "easy-done"
   ];
@@ -776,6 +778,7 @@
     "easy-basics",
     "easy-site-name",
     "easy-color",
+    "easy-catch",
     "easy-color-stage",
     "easy-copy-path",
     "easy-copy-dirs",
@@ -2307,6 +2310,10 @@
     easyCopySelected: null,
     siteColorMode: "easy",
     heroTextOnPhoto: false,
+    heroImageOff: false,
+    catchPage: "imageAsk",
+    catchImageOn: null,
+    catchWordsOn: null,
     heroTextPlate: "round",
     heroTextPlateLast: "round",
     heroTextPlateTone: "white",
@@ -2340,8 +2347,9 @@
     hubReturnBlockId: null,
     hubEntryRoute: null,
     hubTaskId: null,
-    /* flat=そのまま表示 / accordion=初期全閉じの折りたたみ */
+    /* flat=そのまま表示 / accordion=初期全閉じ。見本の開閉は見るためだけで保存しない */
     aboutItemsDisplay: "accordion",
+    previewAccordionLookOpen: false,
     previewDesignWidth: 1280,
     previewFrameScale: 1
   };
@@ -3938,6 +3946,7 @@
       itemOrders: JSON.parse(JSON.stringify(store.itemOrders || {})),
       itemOrderParked: JSON.parse(JSON.stringify(store.itemOrderParked || {})),
       heroTextOnPhoto: !!store.heroTextOnPhoto,
+      heroImageOff: !!store.heroImageOff,
       heroFocalX: normalizeFocalPercent(store.heroFocalX, HERO_FOCAL_X_DEFAULT),
       heroFocalY: normalizeFocalPercent(store.heroFocalY, HERO_FOCAL_Y_DEFAULT),
       heroImageScale: normalizeImageScale(store.heroImageScale),
@@ -5801,9 +5810,13 @@
             store.snapshots[stepId] = snap;
             store.confirmed[stepId] = true;
           }
-          closeLayoutColorRow(row);
           applyLiveColors(true);
           scheduleSave();
+          if (row.closest("#easy-catch-color") && (store.catchPage || "") === "color") {
+            wizardNext();
+            return;
+          }
+          closeLayoutColorRow(row);
           return;
         }
         gctConfirmPick();
@@ -5897,7 +5910,7 @@
 
   function ensureFontsConfirmedForMode() {
     if (store.siteColorMode === "easy") {
-      applyEasyFixedFonts();
+      if (!store.keepLoadedFonts) applyEasyFixedFonts();
       return;
     }
     if (!store.confirmed[FONT_STEP_ID]) {
@@ -5931,12 +5944,19 @@
     return ["easy-copy-omakase"];
   }
 
+  function easyCatchOn() {
+    const meta = LAYOUT_BLOCKS.find(function (b) { return b.id === "hero"; });
+    return isLayoutBlockActive(meta);
+  }
+
   function getEasyFlowStepIds() {
-    const ids = ["easy-basics", "easy-color", "easy-color-stage"]
+    let ids = ["easy-basics", "easy-color"];
+    if (easyCatchOn()) ids.push("easy-catch");
+    ids.push("easy-site-name");
+    ids = ids
       .concat(getEasyImageFlowMid())
-      .concat(["easy-site-name"])
-      .concat(getEasyCopyFlowTail())
-      .concat(["easy-done"]);
+      .concat(getEasyCopyFlowTail());
+    ids.push("easy-color-stage", "easy-done");
     if (store.copyScreenReturn === "hub" && ids.indexOf("easy-copy-frame") < 0) {
       const at = ids.indexOf("easy-copy-path");
       if (at >= 0) ids.splice(at + 1, 0, "easy-copy-frame");
@@ -6105,7 +6125,12 @@
     bar.hidden = true;
   }
 
-  const EASY_FLOW_STAGE_LABELS = ["見本", "利用用途", "記載項目", "配色", "色調整", "画像", "文章", "確定"];
+  function easyFlowStageLabels() {
+    const labels = ["見本", "利用用途", "記載項目", "配色"];
+    if (easyCatchOn()) labels.push("キャッチ");
+    labels.push("画像", "文章", "色調整", "確定");
+    return labels;
+  }
 
   function easyFlowStageIndex() {
     const gate = document.getElementById("entry-gate");
@@ -6119,16 +6144,20 @@
     }
     if (store.sampleFinishNoBack && store.entryBranch === "sample") {
       const finishStep = getCurrentFlowStep();
-      if (finishStep && finishStep.id === "finish") return 8;
+      if (finishStep && finishStep.id === "finish") return easyFlowStageLabels().length;
     }
     if (!store.easyFlowActive || store.entryBranch !== "sample") return 0;
     const step = getCurrentFlowStep();
     const id = step && step.id;
     if (!id) return 0;
-    if (id === "easy-basics") return 3;
-    if (id === "easy-color") return 4;
-    if (id === "easy-color-stage") return 5;
-    if (id === "easy-img-path" || id === "easy-img-wire" || id === "easy-img-omakase" || id === "easy-site-name") return 6;
+    const at = function (name) {
+      return easyFlowStageLabels().indexOf(name) + 1;
+    };
+    if (id === "easy-basics") return at("記載項目");
+    if (id === "easy-color") return at("配色");
+    if (id === "easy-catch" || id === "easy-site-name") return easyCatchOn() || id === "easy-catch" ? at("キャッチ") : at("配色");
+    if (id === "easy-color-stage") return at("色調整");
+    if (id === "easy-img-path" || id === "easy-img-wire" || id === "easy-img-omakase") return at("画像");
     if (
       id === "easy-copy-path" ||
       id === "easy-copy-dirs" ||
@@ -6136,9 +6165,9 @@
       id === "easy-copy-frame" ||
       id.indexOf("easy-sec-") === 0
     ) {
-      return 7;
+      return at("文章");
     }
-    if (id === "easy-loading" || id === "easy-done") return 8;
+    if (id === "easy-loading" || id === "easy-done") return at("確定");
     return 0;
   }
 
@@ -6152,13 +6181,16 @@
         return;
       }
       meter.hidden = false;
-      const stageCount = EASY_FLOW_STAGE_LABELS.length;
-      if (label) label.textContent = EASY_FLOW_STAGE_LABELS[n - 1] + "\u3000" + n + " / " + stageCount;
+      const labels = easyFlowStageLabels();
+      const stageCount = labels.length;
+      meter.classList.toggle("is-wide", stageCount > 8);
+      if (label) label.textContent = labels[n - 1] + "\u3000" + n + " / " + stageCount;
       if (fill) fill.style.width = (n / stageCount) * 100 + "%";
       const names = meter.querySelector("[data-easy-flow-meter-names]");
       if (names) {
         names.textContent = "";
-        EASY_FLOW_STAGE_LABELS.forEach(function (name, i) {
+        names.style.gridTemplateColumns = "repeat(" + stageCount + ", minmax(0, 1fr))";
+        labels.forEach(function (name, i) {
           const span = document.createElement("span");
           span.className = "easy-flow-meter-name" + (i + 1 === n ? " is-now" : "");
           span.textContent = name;
@@ -6738,6 +6770,20 @@
   function applyImageSlot(name, selectorOrFn, active) {
     const el = typeof selectorOrFn === "string" ? root.querySelector(selectorOrFn) : selectorOrFn();
     if (!el) return;
+    if (name === "hero_image" && store.heroImageOff && !(active && imageUrls[name])) {
+      el.removeAttribute("src");
+      el.alt = "";
+      return;
+    }
+    if (name === "hero_image" && active && imageUrls[name]) {
+      const wasOff = store.heroImageOff;
+      store.heroImageOff = false;
+      if (wasOff) {
+        applyHeroImageOffState();
+        const step = getCurrentFlowStep();
+        if (step && step.id === "easy-catch") renderEasyCatchRest();
+      }
+    }
     if (active && imageUrls[name]) {
       el.src = imageUrls[name];
       markUserUpload(el, true);
@@ -7501,6 +7547,8 @@
       });
       colors.pageBgSoft = softFrom(colors.pageBg);
       colors.bodyMuted = softMuted(colors.bodyInk);
+    } else if (current && current.id === "easy-catch") {
+      if (store.draftColors.heroInk != null) colors.heroInk = draftColorForPreview("heroInk");
     } else if (current && (COLOR_STEP_FIELDS[current.id] || current.id === "easy-color-stage")) {
       const keys = current.id === "easy-color-stage" ? SWATCH_KEYS : COLOR_STEP_FIELDS[current.id];
       keys.forEach((key) => {
@@ -7815,9 +7863,30 @@
   }
 
   function showValidationNotice(msg) {
-    hideWizardFootPanel();
     const status = document.getElementById("wizard-status");
     if (status) status.textContent = msg;
+    const panel = document.getElementById("wizard-foot-panel");
+    if (!panel) return;
+    panel.textContent = msg;
+    panel.hidden = false;
+    const dock = document.getElementById("wizard-foot-dock");
+    if (dock) dock.classList.remove("is-foot-hidden");
+    const nextBtn = document.getElementById("wizard-next");
+    if (nextBtn) nextBtn.disabled = msg === "記載項目から、キャッチを外してください。";
+  }
+
+  function clearPlainFootNotice() {
+    const panel = document.getElementById("wizard-foot-panel");
+    const nextBtn = document.getElementById("wizard-next");
+    if (nextBtn && nextBtn.disabled && panel && panel.textContent.indexOf("記載項目から、") === 0) {
+      nextBtn.disabled = false;
+    }
+    if (!panel || panel.querySelector("button, a")) return;
+    if (!panel.textContent.trim()) return;
+    const status = document.getElementById("wizard-status");
+    if (status && status.textContent.trim() === panel.textContent.trim()) status.textContent = "";
+    panel.textContent = "";
+    panel.hidden = true;
   }
 
   function flagEasyBrandRequired() {
@@ -8261,6 +8330,7 @@
     if (step.id === "easy-site-name") {
       bindSiteNameStep();
     }
+    if (step.id !== "easy-copy-omakase") restoreCopyBorrowedControls();
     if (step.id !== "easy-color-stage") {
       document.querySelectorAll("#layout-color-rows .layout-color-row.is-open").forEach(closeLayoutColorRow);
     }
@@ -8284,11 +8354,21 @@
       clampCopyFrameIndex();
       renderCopyFrameUi();
     }
-    if (step.id === "easy-img-wire") {
-      setSampleFlowPreviewHidden(false);
-      renderEasyImageWireList();
+    if (step.id === "easy-img-wire" || step.id === "easy-catch") {
+      parkEasyImageHost(step.id);
+      if (step.id === "easy-img-wire") {
+        setSampleFlowPreviewHidden(false);
+        renderEasyImageWireList();
+      }
+      if (step.id === "easy-catch") store.layoutAccordionId = "hero";
+      if (step.id === "easy-catch" && store.catchPage === "image") {
+        if (!store.layoutInnerByBlock) store.layoutInnerByBlock = {};
+        store.layoutInnerByBlock.hero = "hero";
+      }
       mountSharedImageUi(true);
+      if (step.id === "easy-catch") renderEasyCatchRest();
     } else {
+      parkEasyImageHost("");
       mountSharedImageUi(false);
       if (step.id !== "easy-copy-omakase") clearPreviewPlaceMark();
     }
@@ -9072,6 +9152,7 @@
         commitLayoutBlockVisibility(meta.id, !isLayoutBlockActive(meta));
         renderEasyListingUi();
         syncLayoutColorRows();
+        syncEasyFlowMeter();
       });
       host.appendChild(btn);
     });
@@ -9101,7 +9182,8 @@
         if (dest >= 0) showWizardStep(dest);
       });
     }
-    input.value = "";
+    const existing = String(fieldValue("brand_name") || "").trim();
+    input.value = existing && !isPlaceholderBrand(existing) ? existing : "";
     syncAsk();
     window.setTimeout(function () {
       try { input.focus(); } catch (e) { /* ignore */ }
@@ -9470,7 +9552,7 @@
         '<p class="fpg-sample-omakase-note">ジャンルを選ぶと、参考の写真が1枚入ります。</p>' +
         "</div>" +
         '<div class="fpg-sample-genres" data-fpg-sample-genres role="group" aria-label="おまかせ"></div>' +
-        '<button type="button" class="fpg-sample-omakase-ok" data-fpg-sample-ok disabled>この画像にしますか</button>' +
+        '<button type="button" class="fpg-sample-omakase-ok" data-fpg-sample-ok disabled>この画像にする</button>' +
         '<figure class="fpg-sample-omakase-pick" data-fpg-sample-pick><img alt="" hidden></figure>';
       const mount = body.querySelector("[data-fpg-mount]");
       if (mount) body.insertBefore(strip, mount);
@@ -9704,6 +9786,270 @@
     /* 見本の枚数と itemOrders は維持する */
   }
 
+  function parkEasyImageHost(stepId) {
+    const host = document.getElementById("easy-img-layout-host");
+    if (!host) return;
+    if (!host._imgHome) host._imgHome = { parent: host.parentElement, next: host.nextSibling };
+    if (stepId === "easy-catch") {
+      const slot = document.getElementById("easy-catch-img");
+      if (slot && host.parentElement !== slot) slot.appendChild(host);
+      return;
+    }
+    if (host._imgHome && host._imgHome.parent && host.parentElement !== host._imgHome.parent) {
+      host._imgHome.parent.insertBefore(host, host._imgHome.next);
+    }
+  }
+
+  function catchFaceHasText() {
+    if (String(fieldValue("hero_title") || "").trim()) return true;
+    const leads = countForCopy("hero-leads", 1);
+    for (let i = 1; i <= leads; i += 1) {
+      if (String(fieldValue("hero_lead_" + i) || "").trim()) return true;
+    }
+    return false;
+  }
+
+  function catchFaceHasImage() {
+    if (store.heroImageOff) return false;
+    const photo = root.querySelector(".hero-photo");
+    return !!(photo && String(photo.getAttribute("src") || "").trim());
+  }
+
+  function setCatchImageChoice(on) {
+    const stage = root.querySelector(".hero-stage");
+    const photo = root.querySelector(".hero-photo");
+    store.catchImageOn = !!on;
+    if (on) {
+      store.heroImageOff = false;
+      if (stage) stage.classList.remove("is-hero-image-off");
+      const held = store.catchImageHeldSrc || "";
+      if (held) {
+        setRemoteImageUrl("hero_image", held);
+        if (photo) photo.src = held;
+        store.catchImageHeldSrc = "";
+      }
+      applyHeroFocalToPreview();
+      return;
+    }
+    if (!store.heroImageOff && photo) {
+      store.catchImageHeldSrc = photo.getAttribute("src") || photo.getAttribute("data-default-src") || "";
+    }
+    store.heroImageOff = true;
+    applyHeroImageOffState();
+  }
+
+  function renderEasyCatchRest() {
+    const colorHost = document.getElementById("easy-catch-color");
+    const copyHost = document.getElementById("easy-catch-copy");
+    if (colorHost) {
+      restoreCopyColorRows();
+      mountLayoutColorSection();
+      const unit = document.querySelector('[data-color-step="hero-color"]');
+      if (unit) {
+        if (!unit._copyColorHome) {
+          unit._copyColorHome = { parent: unit.parentElement, next: unit.nextSibling };
+        }
+        unit.hidden = false;
+        unit.setAttribute("data-copy-borrowed", "1");
+        colorHost.appendChild(unit);
+      }
+    }
+    if (copyHost) {
+      copyHost.innerHTML = "";
+      const settingsHost = document.getElementById("easy-catch-settings");
+      if (settingsHost) {
+        const reservoir = document.getElementById("site-fonts-reservoir");
+        settingsHost.querySelectorAll(".font-picker-block").forEach(function (block) {
+          if (reservoir) reservoir.appendChild(block);
+        });
+        settingsHost.innerHTML = "";
+      }
+      const sec = copyListSectionById("hero");
+      const editor = sec ? buildCopyListEditor(sec, null) : null;
+      if (editor && settingsHost) {
+        const board = editor.querySelector(".easy-copy-hero-board");
+        const extras = editor.querySelector(".easy-copy-hub-extras");
+        if (board) {
+          const catchCell = board.querySelector(".easy-copy-hero-catch");
+          if (catchCell) catchCell.remove();
+          settingsHost.appendChild(board);
+        }
+        if (extras) extras.remove();
+        while (editor.firstChild) copyHost.appendChild(editor.firstChild);
+      }
+      copyHost.querySelectorAll(".easy-copy-field").forEach(function (field) {
+        const box = field.querySelector(".easy-copy-field-box");
+        const reset = field.querySelector(".easy-copy-reset-btn");
+        const count = field.querySelector(".easy-copy-field-count");
+        if (!box || !reset) return;
+        const row = document.createElement("div");
+        row.className = "easy-catch-field-foot";
+        box.insertAdjacentElement("afterend", row);
+        row.appendChild(reset);
+        if (count) row.appendChild(count);
+      });
+      placeCopyFonts();
+    }
+    renderCatchPages();
+  }
+
+  function catchPageList() {
+    const pages = ["imageAsk"];
+    if (store.catchImageOn === true) pages.push("image");
+    pages.push("ask");
+    if (store.catchWordsOn === true) pages.push("settings", "write", "color");
+    return pages;
+  }
+
+  function renderCatchPages() {
+    clearPlainFootNotice();
+    const page = store.catchPage || "imageAsk";
+    if (page === "image") {
+      store.layoutAccordionId = "hero";
+      if (!store.layoutInnerByBlock) store.layoutInnerByBlock = {};
+      store.layoutInnerByBlock.hero = "hero";
+    }
+    const host = document.getElementById("easy-catch-host");
+    if (host) {
+      host.classList.toggle("is-catch-settings", page === "settings");
+      host.classList.toggle("is-catch-write", page === "write");
+    }
+    document.querySelectorAll("#easy-catch-host [data-catch-page]").forEach(function (el) {
+      el.hidden = el.getAttribute("data-catch-page") !== page;
+    });
+    const tags = document.getElementById("easy-catch-tags");
+    if (tags) {
+      tags.innerHTML = "";
+      const names = ["画像", "文章", "色"];
+      const now =
+        page === "imageAsk" || page === "image"
+          ? "画像"
+          : page === "ask" || page === "settings" || page === "write"
+            ? "文章"
+            : page === "color"
+              ? "色"
+              : "画像";
+      const nowAt = names.indexOf(now);
+      names.forEach(function (name, i) {
+        const span = document.createElement("span");
+        span.textContent = name;
+        if (i === nowAt) span.className = "is-now";
+        else if (i < nowAt) span.className = "is-done";
+        tags.appendChild(span);
+      });
+    }
+    const imageOnBtn = document.getElementById("easy-catch-image-on");
+    const imageNoBtn = document.getElementById("easy-catch-image-no");
+    if (imageOnBtn && !imageOnBtn.dataset.bound) {
+      imageOnBtn.dataset.bound = "1";
+      imageOnBtn.addEventListener("click", function () {
+        setCatchImageChoice(true);
+        store.catchPage = "image";
+        scheduleSave();
+        renderEasyCatchRest();
+      });
+    }
+    if (imageNoBtn && !imageNoBtn.dataset.bound) {
+      imageNoBtn.dataset.bound = "1";
+      imageNoBtn.addEventListener("click", function () {
+        setCatchImageChoice(false);
+        store.catchPage = "ask";
+        scheduleSave();
+        renderEasyCatchRest();
+      });
+    }
+    const onBtn = document.getElementById("easy-catch-words-on");
+    const offBtn = document.getElementById("easy-catch-words-off");
+    if (onBtn && !onBtn.dataset.bound) {
+      onBtn.dataset.bound = "1";
+      onBtn.addEventListener("click", function () {
+        store.catchWordsOn = true;
+        store.heroTextOnPhoto = true;
+        store.copyHeroOnPhoto = true;
+        applyHeroTextOverlay();
+        store.catchPage = "settings";
+        scheduleSave();
+        renderEasyCatchRest();
+      });
+    }
+    if (offBtn && !offBtn.dataset.bound) {
+      offBtn.dataset.bound = "1";
+      offBtn.addEventListener("click", function () {
+        store.catchWordsOn = false;
+        store.heroTextOnPhoto = false;
+        store.copyHeroOnPhoto = false;
+        applyHeroTextOverlay();
+        store.catchPage = "ask";
+        scheduleSave();
+        wizardNext();
+      });
+    }
+    if (imageOnBtn) imageOnBtn.classList.toggle("is-active", store.catchImageOn === true);
+    if (imageNoBtn) imageNoBtn.classList.toggle("is-active", store.catchImageOn === false);
+    if (onBtn) onBtn.classList.toggle("is-active", store.catchWordsOn === true);
+    if (offBtn) offBtn.classList.toggle("is-active", store.catchWordsOn === false);
+    if (page === "image") {
+      renderLayoutArrangeWire();
+      window.setTimeout(function () {
+        if ((store.catchPage || "imageAsk") !== "image") return;
+        const cell = document.querySelector("#easy-catch-img details.layout-arrange-cell");
+        if (cell && !cell.open) cell.open = true;
+      }, 0);
+    }
+    if (page === "write") {
+      document.querySelectorAll("#easy-catch-copy textarea.is-copy-frame").forEach(growCopyField);
+    }
+    if (page === "color") {
+      const unit = document.querySelector('#easy-catch-color [data-color-step="hero-color"]');
+      if (unit && !unit.classList.contains("is-open")) openLayoutColorHoney(unit);
+    }
+  }
+
+  function advanceCatchPage() {
+    const page = store.catchPage || "imageAsk";
+    if (page === "imageAsk" && store.catchImageOn == null) return true;
+    if (page === "ask") {
+      if (store.catchWordsOn == null) return true;
+      if (store.catchWordsOn !== true) return false;
+    }
+    const pages = catchPageList();
+    const at = pages.indexOf(page);
+    if (at >= 0 && at < pages.length - 1) {
+      store.catchPage = pages[at + 1];
+      if (store.catchPage === "image") {
+        if (!store.layoutInnerByBlock) store.layoutInnerByBlock = {};
+        store.layoutInnerByBlock.hero = "hero";
+      }
+      renderEasyCatchRest();
+      if (store.catchPage === "image") renderLayoutArrangeWire();
+      return true;
+    }
+    return false;
+  }
+
+  function catchSectionBefore(page) {
+    const pages = catchPageList();
+    let at = pages.indexOf(page || "imageAsk");
+    if (at < 0) at = 0;
+    for (let i = at - 1; i >= 0; i -= 1) {
+      if (pages[i] !== "imageAsk" && pages[i] !== "ask") return pages[i];
+    }
+    return "";
+  }
+
+  function retreatCatchPage() {
+    const target = catchSectionBefore(store.catchPage || "imageAsk");
+    if (!target) return false;
+    store.catchPage = target;
+    if (store.catchPage === "image") {
+      if (!store.layoutInnerByBlock) store.layoutInnerByBlock = {};
+      store.layoutInnerByBlock.hero = "hero";
+    }
+    renderEasyCatchRest();
+    if (store.catchPage === "image") renderLayoutArrangeWire();
+    return true;
+  }
+
   function mountSharedImageUi(intoSampleStep) {
     const panel = document.getElementById("layout-arrange");
     const wire = form.querySelector('.dash-block[data-step-id="easy-img-wire"]');
@@ -9831,6 +10177,7 @@
       store.easyCopySelected = null;
       store.sampleSectionCandidates = {};
       store.sampleSectionSelected = {};
+      store.keepLoadedFonts = false;
       EASY_FLOW_STEP_IDS.forEach((id) => {
         store.confirmed[id] = false;
         delete store.snapshots[id];
@@ -11578,7 +11925,7 @@
 
   const COPY_LIST_SECTIONS = [
     { id: "hero", label: "キャッチ", countId: null, layoutId: "hero" },
-    { id: "values", label: "下の枠", countId: "hero-values", layoutId: "values", kind: "pair", titleKey: "value_", textKey: "value_", titleSuffix: "_title", textSuffix: "_text", titleLabel: "見出し", textLabel: "文" },
+    { id: "values", label: "メッセージ枠", countId: "hero-values", layoutId: "values", kind: "pair", titleKey: "value_", textKey: "value_", titleSuffix: "_title", textSuffix: "_text", titleLabel: "見出し", textLabel: "文" },
     { id: "accordions", label: "開く項目", countId: "about-accordions", layoutId: "accordions", kind: "pair", titleKey: "acc_", textKey: "acc_", titleSuffix: "_title", textSuffix: "_body", titleLabel: "見出し", textLabel: "文" },
     { id: "works", label: "カード", countId: "works-list", layoutId: "works", kind: "pair", titleKey: "work_", textKey: "work_", titleSuffix: "_title", textSuffix: "_text", titleLabel: "見出し", textLabel: "文" },
     { id: "hours", label: "営業時間", layoutId: "hours", singleKey: "hours_text", singleLabel: "文" },
@@ -11589,6 +11936,7 @@
 
   function copySectionIsListed(sec) {
     if (!sec) return false;
+    if (sec.id === "hero" && easyCatchOn() && store.catchWordsOn !== false) return false;
     const blockId = sec.layoutId || sec.id;
     const meta = LAYOUT_BLOCKS.find(function (b) { return b.id === blockId; });
     if (!meta) return true;
@@ -11656,10 +12004,149 @@
   function copyListItemFields(sec, index) {
     if (!sec || sec.kind !== "pair") return [];
     const n = index;
-    return [
+    const fields = [
       { key: sec.titleKey + n + sec.titleSuffix, label: sec.titleLabel },
       { key: sec.textKey + n + sec.textSuffix, label: sec.textLabel }
     ];
+    if (sec.id === "works") {
+      fields.push({ key: "work_" + n + "_url", label: "リンク先" });
+      fields.push({ key: "work_" + n + "_link_label", label: "リンクの文字" });
+    }
+    return fields;
+  }
+
+  function copySectionSettingFields(sec) {
+    if (!sec) return [];
+    if (sec.id === "accordions") {
+      return [
+        { key: "about_section_name", label: "メニューに出す名前" },
+        { key: "about_heading", label: "大見出し" },
+        { key: "about_name", label: "名前" },
+        { key: "about_lead", label: "紹介文" }
+      ];
+    }
+    if (sec.id === "works") {
+      return [
+        { key: "works_section_name", label: "メニューに出す名前" },
+        { key: "works_heading", label: "大見出し" },
+        { key: "works_lead", label: "リード文" }
+      ];
+    }
+    return [];
+  }
+
+  function appendAccordionModeChoice(parent) {
+    const mode = normalizeAboutItemsDisplay(store.aboutItemsDisplay);
+    const panel = document.createElement("div");
+    panel.className = "easy-copy-acc-choices";
+
+    const modeCol = document.createElement("div");
+    modeCol.className = "easy-copy-acc-col";
+    const lead = document.createElement("p");
+    lead.className = "dash-note dash-field-label";
+    lead.textContent = "表示方法";
+    modeCol.appendChild(lead);
+    const row = document.createElement("div");
+    row.className = "hero-overlay-row";
+    row.setAttribute("role", "group");
+    row.setAttribute("aria-label", "開く形にするか");
+    [
+      ["accordion", "アコーディオン表示"],
+      ["flat", "そのまま表示"]
+    ].forEach(function (pair) {
+      const btn = document.createElement("button");
+      btn.type = "button";
+      btn.className = "gct-btn";
+      const on = mode === pair[0];
+      btn.classList.toggle("is-active", on);
+      btn.setAttribute("aria-pressed", on ? "true" : "false");
+      btn.textContent = pair[1];
+      btn.addEventListener("click", function (ev) {
+        ev.stopPropagation();
+        setAboutItemsDisplay(pair[0]);
+        renderCopyListUi({ keepScroll: true });
+      });
+      row.appendChild(btn);
+    });
+    modeCol.appendChild(row);
+    panel.appendChild(modeCol);
+
+    const lookCol = document.createElement("div");
+    lookCol.className = "easy-copy-acc-col";
+    if (mode === "accordion") {
+      const lookLead = document.createElement("p");
+      lookLead.className = "dash-note dash-field-label";
+      lookLead.textContent = "見本の開閉";
+      lookCol.appendChild(lookLead);
+      const lookRow = document.createElement("div");
+      lookRow.className = "hero-overlay-row";
+      lookRow.setAttribute("role", "group");
+      lookRow.setAttribute("aria-label", "見本の開閉");
+      [
+        [true, "オン"],
+        [false, "オフ"]
+      ].forEach(function (pair) {
+        const btn = document.createElement("button");
+        btn.type = "button";
+        btn.className = "gct-btn";
+        const on = !!store.previewAccordionLookOpen === pair[0];
+        btn.classList.toggle("is-active", on);
+        btn.setAttribute("aria-pressed", on ? "true" : "false");
+        btn.textContent = pair[1];
+        btn.addEventListener("click", function (ev) {
+          ev.stopPropagation();
+          store.previewAccordionLookOpen = pair[0];
+          applyAboutItemsDisplay();
+          if (pair[0]) scrollPreviewTo("#about");
+          renderCopyListUi({ keepScroll: true });
+        });
+        lookRow.appendChild(btn);
+      });
+      lookCol.appendChild(lookRow);
+      const closedNote = document.createElement("p");
+      closedNote.className = "dash-note";
+      closedNote.textContent = "最初は閉じています。オンにすると、見本で中を見られます。";
+      lookCol.appendChild(closedNote);
+    } else {
+      const flatNote = document.createElement("p");
+      flatNote.className = "dash-note dash-field-label";
+      flatNote.textContent = "そのまま表示";
+      lookCol.appendChild(flatNote);
+      const flatBody = document.createElement("p");
+      flatBody.className = "dash-note";
+      flatBody.textContent = "中は開いたままです。";
+      lookCol.appendChild(flatBody);
+    }
+    panel.appendChild(lookCol);
+    parent.appendChild(panel);
+
+    const note = document.createElement("p");
+    note.className = "dash-note easy-copy-acc-format";
+    note.textContent =
+      "内容は、1つならそのまま。分けたいときは全角の「／」で区切れます。【見出し】のあとに本文を書くと、見本でラベル付きになります。";
+    parent.appendChild(note);
+  }
+
+  function appendCopyShowToggle(parent, formName, storeKey, label) {
+    const row = document.createElement("label");
+    row.className = "check";
+    const input = document.createElement("input");
+    input.type = "checkbox";
+    input.checked = !!(store.draftContact && store.draftContact[storeKey]);
+    input.addEventListener("change", function (ev) {
+      ev.stopPropagation();
+      const formInput = form.elements.namedItem(formName);
+      if (formInput) formInput.checked = input.checked;
+      if (!store.draftContact) store.draftContact = { label: true, note1: true, note2: true };
+      store.draftContact[storeKey] = input.checked;
+      syncContactPanels();
+      applyAllConfirmed();
+      renderCopyListUi({ keepScroll: true });
+      scheduleSave();
+    });
+    row.appendChild(input);
+    row.appendChild(document.createTextNode(" " + label));
+    parent.appendChild(row);
   }
 
   function swapCopyPairItems(sec, fromIndex, toIndex) {
@@ -11816,6 +12303,26 @@
     return resolvePreviewText(fieldValue(key), key, "");
   }
 
+  function fillEmptyHeroLead(i) {
+    const key = "hero_lead_" + i;
+    if (
+      store.copyFieldSource &&
+      store.copyFieldSource[key] === "custom" &&
+      !(store.copyFieldNow && String(store.copyFieldNow[key] || "").trim())
+    ) {
+      return;
+    }
+    const fieldText = String(copyListFieldDisplayText(key) || "").trim();
+    const nodes = document.querySelectorAll("#hero-leads [data-sample-item]");
+    const previewText = nodes[i - 1] ? String(nodes[i - 1].textContent || "").trim() : "";
+    if (fieldText && previewText) return;
+    const sentence = fieldText || previewText || ("サンプル" + i + "は未入力です");
+    setFieldValue(key, sentence);
+    if (!store.copyFieldNow || typeof store.copyFieldNow !== "object") store.copyFieldNow = {};
+    store.copyFieldNow[key] = sentence;
+    paintCopyPreviewFieldText(key, sentence);
+  }
+
   function copyListItemLeadText(sec, itemIndex) {
     if (!sec) return "";
     if (sec.id === "hero") {
@@ -11844,7 +12351,15 @@
 
   function copyListSectionRowLabel(sec) {
     if (!sec) return "";
-    if (sec.kind === "pair") return sec.label;
+    if (sec.kind === "pair") {
+      const headKey =
+        sec.id === "accordions" ? "about_heading" : sec.id === "works" ? "works_heading" : "";
+      if (headKey) {
+        const lead = truncateCopyLead(copyListFieldDisplayText(headKey), 16);
+        if (lead) return lead;
+      }
+      return sec.label;
+    }
     const lead = truncateCopyLead(copyListItemLeadText(sec, null), 16);
     if (lead) return lead;
     return sec.label;
@@ -11923,6 +12438,17 @@
       if (m[2] === "title") return item.querySelector("h3");
       return item.querySelector(".work-item-copy p") || item.querySelector("p");
     }
+    if (fieldKey === "about_section_name") return rootEl.querySelector("#about-label");
+    if (fieldKey === "about_heading") return rootEl.querySelector("#about-heading");
+    if (fieldKey === "about_name") return rootEl.querySelector("#about .profile-name");
+    if (fieldKey === "about_lead") return rootEl.querySelector("#about .section-lead");
+    if (fieldKey === "works_section_name") return rootEl.querySelector("#works-label");
+    if (fieldKey === "works_heading") return rootEl.querySelector("#works-heading");
+    if (fieldKey === "works_lead") return rootEl.querySelector("#works-lead");
+    if (fieldKey === "hours_text") return rootEl.querySelector("#hours-lead");
+    if (fieldKey === "access_text") return rootEl.querySelector("#access-lead");
+    if (fieldKey === "address_text") return rootEl.querySelector("#address-lead");
+    if (fieldKey === "contact_email") return rootEl.querySelector("#contact .sample-mail");
     if (fieldKey === "contact_label") return rootEl.querySelector("#contact-label");
     if (fieldKey === "contact_note_1") return rootEl.querySelector('[data-contact-note="1"]');
     if (fieldKey === "contact_note_2") return rootEl.querySelector('[data-contact-note="2"]');
@@ -12155,6 +12681,135 @@
     pull();
   }
 
+  function copyFontRoleForSection(secId) {
+    if (secId === "hero") return "catch";
+    if (secId === "name") return "display";
+    if (secId === "values" || secId === "accordions" || secId === "works" || secId === "contact") return "body";
+    return "";
+  }
+
+  function copyColorLinksForSection(secId) {
+    if (secId === "values") return [{ id: "values-color", label: "メッセージ枠色" }];
+    if (secId === "accordions") {
+      return [
+        { id: "global-body", label: "本文色" },
+        { id: "global-accent", label: "アクセント" },
+        { id: "global-card", label: "カード" }
+      ];
+    }
+    if (secId === "works") {
+      return [
+        { id: "global-accent", label: "アクセント" },
+        { id: "global-card", label: "カード" }
+      ];
+    }
+    if (secId === "contact") return [{ id: "contact", label: "ご連絡色" }];
+    if (secId === "name") {
+      return [
+        { id: "global-chrome-bg", label: "ヘッダー背景" },
+        { id: "global-chrome-ink", label: "ヘッダー文字" }
+      ];
+    }
+    return [];
+  }
+
+  function restoreCopyColorRows() {
+    document.querySelectorAll("[data-copy-borrowed]").forEach(function (unit) {
+      if (unit.classList.contains("is-open")) {
+        if (unit.classList.contains("layout-color-group")) closeColorGroup(unit);
+        else closeLayoutColorRow(unit);
+      }
+      const home = unit._copyColorHome;
+      if (home && home.parent) home.parent.insertBefore(unit, home.next);
+      unit.removeAttribute("data-copy-borrowed");
+    });
+  }
+
+  function restoreCopyBorrowedControls() {
+    restoreCopyColorRows();
+    parkFontPickersInReservoir();
+  }
+
+  function copyColorUnit(id) {
+    mountLayoutColorSection();
+    if (id === "contact") return document.querySelector('#layout-color-rows [data-color-move="contact"]');
+    return document.querySelector('[data-color-step="' + id + '"]');
+  }
+
+  function openCopyInlineColor(id, box) {
+    restoreCopyColorRows();
+    const unit = copyColorUnit(id);
+    const host = box && box.querySelector(".easy-copy-color-host");
+    if (!unit || !host) return;
+    if (!unit._copyColorHome) {
+      unit._copyColorHome = { parent: unit.parentElement, next: unit.nextSibling };
+    }
+    unit.hidden = false;
+    unit.setAttribute("data-copy-borrowed", "1");
+    host.appendChild(unit);
+    if (unit.classList.contains("layout-color-group")) openColorGroup(unit);
+    else openLayoutColorHoney(unit);
+  }
+
+  function placeCopyFonts() {
+    const host = document.querySelector(
+      "#easy-catch-settings [data-copy-font-host], #easy-catch-copy [data-copy-font-host], #easy-copy-list-host [data-copy-font-host]"
+    );
+    const role = host ? host.getAttribute("data-copy-font-host") : "";
+    const reservoir = document.getElementById("site-fonts-reservoir");
+    document.querySelectorAll(".font-picker-block[data-font-role]").forEach(function (block) {
+      const blockRole = block.getAttribute("data-font-role");
+      if (role && blockRole === role && host) {
+        host.appendChild(block);
+        block.hidden = false;
+      } else {
+        if (reservoir) reservoir.appendChild(block);
+        block.hidden = true;
+        setFontPickerOpen(block, false);
+      }
+    });
+    syncFontPickerCurrentLabels();
+  }
+
+  function appendCopyHubExtras(parent, secId) {
+    const role = copyFontRoleForSection(secId);
+    const links = copyColorLinksForSection(secId);
+    if (!role && !links.length) return;
+    const box = document.createElement("div");
+    box.className = "easy-copy-hub-extras";
+    if (role) {
+      const embed = document.createElement("div");
+      embed.className = "step-font-embed";
+      const fontHost = document.createElement("div");
+      fontHost.setAttribute("data-copy-font-host", role);
+      embed.appendChild(fontHost);
+      box.appendChild(embed);
+    }
+    if (links.length) {
+      const note = document.createElement("p");
+      note.className = "dash-note easy-copy-color-links";
+      note.appendChild(document.createTextNode("色へ："));
+      links.forEach(function (item, i) {
+        if (i) note.appendChild(document.createTextNode(" ／ "));
+        const btn = document.createElement("button");
+        btn.type = "button";
+        btn.className = "step-cross-link";
+        btn.textContent = item.label;
+        btn.addEventListener("click", function (ev) {
+          ev.preventDefault();
+          ev.stopPropagation();
+          openCopyInlineColor(item.id, box);
+        });
+        note.appendChild(btn);
+      });
+      box.appendChild(note);
+      const colorHost = document.createElement("div");
+      colorHost.className = "easy-copy-color-host";
+      box.appendChild(colorHost);
+    }
+    parent.appendChild(box);
+  }
+
   function buildCopyListEditor(sec, itemIndex) {
     const wrap = document.createElement("div");
     wrap.className = "easy-copy-list-editor";
@@ -12218,12 +12873,14 @@
       board.appendChild(catchCell);
 
       const showText = store.copyHeroOnPhoto !== false && store.heroTextOnPhoto !== false;
-      if (!showText) {
+      const onCatchFace = getCurrentFlowStep() && getCurrentFlowStep().id === "easy-catch";
+      if (!showText && !onCatchFace) {
         wrap.appendChild(board);
         const note = document.createElement("p");
         note.className = "dash-note";
         note.textContent = "載せないあいだは、キャッチ用のおまかせは出ません。";
         wrap.appendChild(note);
+        appendCopyHubExtras(wrap, "hero");
         appendCopyListOkFoot(wrap, closeToSectionOrList);
         return wrap;
       }
@@ -12406,24 +13063,48 @@
       const fields = [{ key: "hero_title", label: "見出し" }];
       const leads = countForCopy("hero-leads", 1);
       for (let i = 1; i <= leads; i += 1) {
+        fillEmptyHeroLead(i);
         fields.push({ key: "hero_lead_" + i, label: "サブキャッチ" + i });
       }
       appendCopyListFieldUi(wrap, fields, store.copyListFocusField || "hero_title", "hero");
-      appendCopyListOkFoot(wrap, closeToSectionOrList);
+      appendCopyHubExtras(wrap, "hero");
+      if (!onCatchFace) appendCopyListOkFoot(wrap, closeToSectionOrList);
       return wrap;
     }
 
     if (sec.id === "contact") {
+      appendCopyShowToggle(wrap, "contact_show_label", "label", "小さめのラベルを出す");
+      const contactFields = [];
+      if (!store.draftContact || store.draftContact.label !== false) {
+        contactFields.push({ key: "contact_label", label: "小さめのラベル" });
+      }
+      contactFields.push({ key: "contact_section_name", label: "メニューに出す名前" });
+      contactFields.push({ key: "contact_email", label: "掲載メール" });
       appendCopyListFieldUi(
         wrap,
-        [
-          { key: "contact_label", label: "見出し" },
-          { key: "contact_note_1", label: "補足1" },
-          { key: "contact_note_2", label: "補足2" }
-        ],
-        store.copyListFocusField || "contact_label",
+        contactFields,
+        store.copyListFocusField || contactFields[0].key,
         "contact"
       );
+      appendCopyShowToggle(wrap, "contact_show_note_1", "note1", "補足1を出す");
+      if (!store.draftContact || store.draftContact.note1 !== false) {
+        appendCopyListFieldUi(
+          wrap,
+          [{ key: "contact_note_1", label: "補足1" }],
+          store.copyListFocusField || "contact_note_1",
+          "contact"
+        );
+      }
+      appendCopyShowToggle(wrap, "contact_show_note_2", "note2", "補足2を出す");
+      if (!store.draftContact || store.draftContact.note2 !== false) {
+        appendCopyListFieldUi(
+          wrap,
+          [{ key: "contact_note_2", label: "補足2" }],
+          store.copyListFocusField || "contact_note_2",
+          "contact"
+        );
+      }
+      appendCopyHubExtras(wrap, "contact");
       appendCopyListOkFoot(wrap, closeToSectionOrList);
       return wrap;
     }
@@ -12445,6 +13126,9 @@
       store.copyListFocusField || copyListDefaultFocus(sec, itemIndex),
       sec.id
     );
+    if (sec.id === "values" || sec.id === "accordions" || sec.id === "works") {
+      appendCopyHubExtras(wrap, sec.id);
+    }
     appendCopyListOkFoot(wrap, closeToSectionOrList);
     return wrap;
   }
@@ -12576,6 +13260,11 @@
   }
 
   function renderCopyListUi(opts) {
+    const stepNow = getCurrentFlowStep();
+    if (stepNow && stepNow.id === "easy-catch") {
+      renderEasyCatchRest();
+      return;
+    }
     const host = document.getElementById("easy-copy-list-host");
     if (!host) return;
     const keepScroll = !!(opts && opts.keepScroll);
@@ -12602,6 +13291,7 @@
       store.copyListOpen = null;
       open = null;
     }
+    restoreCopyBorrowedControls();
     host.innerHTML = "";
     const nameLine = document.createElement("label");
     nameLine.className = "easy-copy-name-line";
@@ -12633,6 +13323,7 @@
     nameLine.appendChild(nameInput);
     host.appendChild(nameLine);
     host.appendChild(nameWarn);
+    if (!open) appendCopyHubExtras(host, "name");
     const list = document.createElement("div");
     list.className = "easy-copy-list-wire";
     list.setAttribute("role", "list");
@@ -12710,7 +13401,22 @@
       body.className = "easy-copy-list-body";
 
       if (sectionOpen && sec.kind === "pair") {
-        /* —— 2階層：件数・すき間・件の行 —— */
+        /* —— 2階層：段の設定、その下に 1,2,3 —— */
+        const settingFields = copySectionSettingFields(sec);
+        if (sec.id === "accordions" || settingFields.length) {
+          const settings = document.createElement("div");
+          settings.className = "easy-copy-section-settings";
+          if (sec.id === "accordions") appendAccordionModeChoice(settings);
+          if (settingFields.length) {
+            appendCopyListFieldUi(
+              settings,
+              settingFields,
+              store.copyListFocusField || settingFields[0].key,
+              sec.id
+            );
+          }
+          body.appendChild(settings);
+        }
         const tools = document.createElement("div");
         tools.className = "layout-frames-tools easy-copy-section-tools";
         const countCluster = document.createElement("span");
@@ -12835,11 +13541,16 @@
         body.hidden = true;
       }
 
+      if (sectionOpen && sec.kind === "pair" && (sec.id === "values" || sec.id === "accordions" || sec.id === "works")) {
+        appendCopyHubExtras(body, sec.id);
+      }
+
       cell.appendChild(body);
       list.appendChild(cell);
     });
 
     host.appendChild(list);
+    placeCopyFonts();
     syncEasyCopyListSolo();
     if (!open || open.kind !== "item") clearCopyFieldRing();
     updateWizardUi();
@@ -14237,6 +14948,14 @@
     if (step.id === "easy-done") {
       return;
     }
+    if (step.id === "easy-catch") {
+      if (advanceCatchPage()) return;
+      if (store.catchImageOn !== true && store.catchWordsOn !== true) {
+        showValidationNotice("記載項目から、キャッチを外してください。");
+        return;
+      }
+      clearPlainFootNotice();
+    }
     if (step.id === "easy-img-wire") {
       const miss = visibleUnfilledImageSlots();
       if (miss.length) {
@@ -14250,7 +14969,7 @@
         openLayoutOmakaseNotice({
           title: "変更していない画像があります。",
           body: "このまま次へ進んでよろしいですか。",
-          confirmLabel: "はい",
+          confirmLabel: "このまま次へ",
           allowSkip: false,
           onConfirm: function () {
             adoptVisibleSampleImages(miss);
@@ -14355,8 +15074,8 @@
         }
       }
       const upcoming = flow[nextIndex];
-      const skipName = step.id === "easy-img-wire" && upcoming && upcoming.id === "easy-site-name" && homepageName();
-      showWizardStep(skipName ? Math.min(flow.length - 1, nextIndex + 1) : nextIndex);
+      if (upcoming && upcoming.id === "easy-catch") store.catchPage = "imageAsk";
+      showWizardStep(nextIndex);
     });
   }
 
@@ -14397,6 +15116,7 @@
   }
 
   function wizardBack() {
+    clearPlainFootNotice();
     const step = getCurrentFlowStep();
     if (store.sampleFinishNoBack && step && step.id === "finish") return;
     if (
@@ -14467,12 +15187,24 @@
       showWizardStep(Math.max(0, store.wizardStepIndex - 1));
       return;
     }
+    if (step && step.id === "easy-catch" && retreatCatchPage()) return;
     if (step && EASY_FLOW_STEP_SET.has(step.id)) {
       if (store.confirmed[step.id]) unconfirmStep(step.id);
       let backIndex = Math.max(0, store.wizardStepIndex - 1);
       const flow = getFlowSteps();
-      const prev = flow[backIndex];
-      if (prev && prev.id === "easy-site-name") backIndex = Math.max(0, backIndex - 1);
+      let prev = flow[backIndex];
+      if (prev && prev.id === "easy-site-name") {
+        backIndex = Math.max(0, backIndex - 1);
+        prev = flow[backIndex];
+      }
+      if (prev && prev.id === "easy-catch") {
+        const page = store.catchPage || "imageAsk";
+        if (page === "imageAsk" || page === "ask") {
+          const target = catchSectionBefore(page);
+          if (target) store.catchPage = target;
+          else backIndex = Math.max(0, backIndex - 1);
+        }
+      }
       showWizardStep(backIndex);
       const status = document.getElementById("wizard-status");
       if (status) status.textContent = "";
@@ -14552,11 +15284,11 @@
     modal.innerHTML =
       '<div class="reset-draft-modal-backdrop" data-reset-cancel tabindex="-1"></div>' +
       '<div class="reset-draft-modal-card" role="alertdialog" aria-modal="true" aria-labelledby="reset-draft-title">' +
-      '<p class="reset-draft-modal-title" id="reset-draft-title">最初に戻しますか？</p>' +
+      '<p class="reset-draft-modal-title" id="reset-draft-title">最初からやり直しますか。</p>' +
       '<p class="reset-draft-modal-text">入力した内容はすべて消え、元に戻せません。</p>' +
       '<div class="reset-draft-modal-actions">' +
       '<button type="button" class="wizard-btn" data-reset-cancel>キャンセル</button>' +
-      '<button type="button" class="wizard-btn" data-reset-ok>最初に戻す</button>' +
+      '<button type="button" class="wizard-btn" data-reset-ok>最初からやり直す</button>' +
       "</div>" +
       "</div>";
     document.body.classList.add("reset-draft-open");
@@ -14985,7 +15717,7 @@
       "global-chrome-ink": "ヘッダーの文字色",
       "global-bg": "背景の色",
       "hero-color": "キャッチの色",
-      "values-color": "下の枠の色",
+      "values-color": "メッセージ枠の色",
       "global-body": "本文の色",
       "global-accent": "アクセントの色",
       "global-card": "カードの色",
@@ -15058,7 +15790,7 @@
   };
   const COLOR_LIST_MOVES = [
     { id: "hero-color", name: "キャッチの文字", stepId: "hero-color", chipKey: "heroInk" },
-    { id: "values-color", name: "下の枠", stepId: "values-color", chipKey: "valuesBg" },
+    { id: "values-color", name: "メッセージ枠", stepId: "values-color", chipKey: "valuesBg" },
     {
       id: "contact",
       name: "ご連絡",
@@ -15480,6 +16212,7 @@
       if (!blockId) return;
       const meta = LAYOUT_BLOCKS.find(function (b) { return b.id === blockId; });
       row.hidden = !isLayoutBlockActive(meta);
+      if (moveId === "hero-color" && easyCatchOn() && !row.closest("#easy-catch-host")) row.hidden = true;
     });
   }
 
@@ -15715,14 +16448,11 @@
       syncPreviewHeaderChrome();
     }
     if (stepId === "hero-text" && snap.fields) {
-      const t = previewDefaults.text;
       const heroTitle = document.getElementById("hero-title");
-      if (heroTitle) {
-        heroTitle.textContent = resolvePreviewText(snap.fields.hero_title, "hero_title", t.heroTitle);
-      }
+      if (heroTitle) heroTitle.textContent = snap.fields.hero_title || "";
       document.querySelectorAll("#hero-leads [data-sample-item]").forEach((el, i) => {
         const key = "hero_lead_" + (i + 1);
-        el.textContent = resolvePreviewText(snap.fields[key], key, t.leads[i] || "");
+        el.textContent = snap.fields[key] || "";
       });
     }
     if (stepId === "values-text" && snap.fields) {
@@ -16462,20 +17192,25 @@
     });
   }
 
-  function applyAboutItemsDisplay(opts) {
+  function applyAboutItemsDisplay() {
     const mode = normalizeAboutItemsDisplay(store.aboutItemsDisplay);
     store.aboutItemsDisplay = mode;
     const list = document.getElementById("about-accordions");
     if (!list) return;
-    const prev = list.getAttribute("data-items-display") || "";
-    const modeChanged = prev !== mode;
-    const forceOpenState = !!(opts && opts.forceOpenState) || modeChanged || !prev;
     list.setAttribute("data-items-display", mode);
     list.classList.toggle("is-flat-items", mode === "flat");
     list.classList.toggle("is-accordion-items", mode !== "flat");
-    if (forceOpenState || mode === "flat") {
+    if (mode === "flat") {
+      store.previewAccordionLookOpen = false;
+      list.classList.remove("is-accordion-look");
       list.querySelectorAll("details.accordion").forEach((el) => {
-        el.open = mode === "flat";
+        el.open = true;
+      });
+    } else {
+      const look = !!store.previewAccordionLookOpen;
+      list.classList.toggle("is-accordion-look", look);
+      list.querySelectorAll("details.accordion").forEach((el) => {
+        el.open = look;
       });
     }
     syncAboutItemsDisplayUi();
@@ -16483,7 +17218,8 @@
 
   function setAboutItemsDisplay(mode) {
     store.aboutItemsDisplay = normalizeAboutItemsDisplay(mode);
-    applyAboutItemsDisplay({ forceOpenState: true });
+    store.previewAccordionLookOpen = false;
+    applyAboutItemsDisplay();
     scheduleSave();
   }
 
@@ -16710,6 +17446,7 @@
       const meta = LAYOUT_BLOCKS.find((b) => b.id === blockId);
       if (!isLayoutBlockActive(meta) || !isLayoutImageBlock(blockId)) return;
       if (blockId === "hero") {
+        if (easyCatchOn()) return;
         slots.push({ key: "hero_image", input: "hero_image", prefer: "wide", label: "キャッチ" });
         return;
       }
@@ -17997,15 +18734,17 @@
     const host = document.getElementById("easy-img-layout-host");
     const block = document.querySelector('[data-step-id="easy-img-wire"]');
     if (!host) return;
+    const inCatch = !!host.closest("#easy-catch-img");
     const photoOpen = !!host.querySelector(".layout-photo-row.is-open");
     const sectionOpen = !!host.querySelector("details.layout-arrange-cell[open]");
     host.classList.toggle("is-photo-solo", photoOpen);
     host.classList.toggle("is-section-solo", sectionOpen && !photoOpen);
     host.classList.toggle("is-easy-drill", sectionOpen || photoOpen);
     if (block) {
-      block.classList.toggle("is-photo-solo", photoOpen);
-      block.classList.toggle("is-section-solo", sectionOpen && !photoOpen);
-      block.classList.toggle("is-easy-drill", sectionOpen || photoOpen);
+      const drill = !inCatch && (sectionOpen || photoOpen);
+      block.classList.toggle("is-photo-solo", !inCatch && photoOpen);
+      block.classList.toggle("is-section-solo", !inCatch && sectionOpen && !photoOpen);
+      block.classList.toggle("is-easy-drill", drill);
     }
   }
 
@@ -18218,6 +18957,10 @@
         if (!store.layoutInnerByBlock) store.layoutInnerByBlock = {};
         const inEasy = easyImgPhotoHostRow(row);
         if (row.classList.contains("is-open")) {
+          if (row.closest("#easy-catch-img") && (store.catchPage || "") === "image") {
+            wizardNext();
+            return;
+          }
           if (inEasy) {
             closeEasyImgSoloPhoto();
             popEasyImgHistoryQuiet();
@@ -18628,9 +19371,13 @@
           document.getElementById("easy-img-layout-host") &&
           document.getElementById("easy-img-layout-host").contains(host)
         );
+        const faceSlot = document.getElementById("easy-catch-img");
+        const inCatchFace = !!(faceSlot && faceSlot.contains(host));
         order.forEach((id) => {
           const meta = LAYOUT_BLOCKS.find((b) => b.id === id);
           if (!meta) return;
+          if (inCatchFace && id !== "hero") return;
+          if (imageOnly && !inCatchFace && id === "hero" && easyCatchOn()) return;
           if (imageOnly && (!isLayoutImageBlock(id) || !isLayoutBlockActive(meta))) return;
           const displayLabel = layoutBlockDisplayLabel(meta);
           const on = isLayoutBlockActive(meta);
@@ -18638,7 +19385,7 @@
           cell.className = "layout-arrange-cell size-L layout-arrange-cell--structure" + (on ? "" : " is-layout-off");
           cell.setAttribute("data-layout-block", id);
           cell.setAttribute("data-preview-target", meta.selector);
-          cell.setAttribute("name", "layout-arrange-section");
+          if (!inCatchFace) cell.setAttribute("name", "layout-arrange-section");
           cell.setAttribute("draggable", "false");
           cell.setAttribute("role", "listitem");
           cell.setAttribute(
@@ -19927,6 +20674,14 @@
     document.querySelectorAll("[data-open-step]").forEach((el) => {
       el.addEventListener("click", (e) => {
         const inPreview = !!el.closest("#preview-root");
+        /* 見本の開閉は設定側のオンオフ。見本を押して開閉しない */
+        if (inPreview && e.target.closest && e.target.closest("details.accordion")) {
+          if (store.easyFlowActive) {
+            e.preventDefault();
+            e.stopPropagation();
+          }
+          return;
+        }
         /* 編集ハブ：左プレビューだけ確認専用。右の「色へ」等は開く */
         if (inPreview && store.siteColorMode === "detail") return;
         if (store.layoutDragMoved || store.previewLayoutDragging) {
@@ -21596,6 +22351,7 @@
       layoutBlockOff: Object.assign({}, store.layoutBlockOff || {}),
       fields: formToObject({ includeHidden: true }),
       heroTextOnPhoto: !!store.heroTextOnPhoto,
+      heroImageOff: !!store.heroImageOff,
       heroFocalX: normalizeFocalPercent(store.heroFocalX, HERO_FOCAL_X_DEFAULT),
       heroFocalY: normalizeFocalPercent(store.heroFocalY, HERO_FOCAL_Y_DEFAULT),
       heroImageScale: normalizeImageScale(store.heroImageScale),
@@ -21637,6 +22393,7 @@
         itemOrders: JSON.parse(JSON.stringify(store.itemOrders || {})),
         itemOrderParked: JSON.parse(JSON.stringify(store.itemOrderParked || {})),
         heroTextOnPhoto: !!store.heroTextOnPhoto,
+      heroImageOff: !!store.heroImageOff,
         heroFocalX: normalizeFocalPercent(store.heroFocalX, HERO_FOCAL_X_DEFAULT),
         heroFocalY: normalizeFocalPercent(store.heroFocalY, HERO_FOCAL_Y_DEFAULT),
         heroImageScale: normalizeImageScale(store.heroImageScale),
@@ -21956,6 +22713,10 @@
       }
       adoptItemOrders(data.itemOrders, data.itemOrderParked);
       if (data.heroTextOnPhoto != null) store.heroTextOnPhoto = !!data.heroTextOnPhoto;
+      if (data.heroImageOff != null) {
+        store.heroImageOff = !!data.heroImageOff;
+        applyHeroImageOffState();
+      }
       if (data.heroFocalX != null) {
         store.heroFocalX = normalizeFocalPercent(data.heroFocalX, HERO_FOCAL_X_DEFAULT);
       }
@@ -22076,6 +22837,9 @@
         if (data.fields.font_display) setFieldValue("font_display", data.fields.font_display);
         if (data.fields.font_catch) setFieldValue("font_catch", data.fields.font_catch);
         if (data.fields.font_body) setFieldValue("font_body", data.fields.font_body);
+        if (data.fonts || data.fields.font_display || data.fields.font_catch || data.fields.font_body) {
+          store.keepLoadedFonts = true;
+        }
         if (data.fields.brand_name) setFieldValue("brand_name", data.fields.brand_name);
       }
       fillFontPickers();

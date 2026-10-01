@@ -12,7 +12,7 @@
   <!-- メーカー親CSS（ポートフォリオ根の style.css は読まない） -->
   <link rel="stylesheet" href="maker-base.css?v=cleanup-20260922">
   <link rel="icon" href="brand/mark-favicon.png?v=logo-8" type="image/png">
-  <link rel="stylesheet" href="sample-overrides.css?v=meter-fixed-20260930">
+  <link rel="stylesheet" href="sample-overrides.css?v=catch-reset-corner-20261001">
   <link rel="stylesheet" href="free-photo-gallery/gallery.css?v=omakase-ok-20260929">
   <script>
     (function () {
@@ -63,9 +63,9 @@
   <script src="easy-copy-dict.js?v=cleanup-20260922" defer></script>
   <script src="copy-dict-engine.js?v=copy-ui-b-20260924" defer></script>
   <script src="sushi-belt.js?v=mihon-word-20260930" defer></script>
-  <script src="free-photo-gallery/gallery.js?v=gallery-ask-20260926" defer></script>
+  <script src="free-photo-gallery/gallery.js?v=gallery-act-20261001" defer></script>
   <script src="page-shutter.js?v=sample-only-20260929" defer></script>
-  <script src="script.js?v=finish-noback-20260930" defer></script>
+  <script src="script.js?v=site-name-after-catch-20261001" defer></script>
   <script>
     (function () {
       var h = location.hostname;
@@ -363,11 +363,12 @@
     <button type="button" class="atelier-tab" data-tab="dash">注文画面</button>
   </div>
 
+  <button type="button" class="dash-reset-btn" id="atelier-reset-btn" data-reset-draft>最初からやり直す</button>
+
   <div class="atelier-shell">
     <div class="atelier-chrome" id="atelier-chrome">
       <div class="atelier-chrome-left">
         <a class="chrome-help-btn" href="help.html?return=order">ヘルプ</a>
-        <button type="button" class="dash-reset-btn" id="atelier-reset-btn" data-reset-draft>最初に戻す</button>
       </div>
       <div class="atelier-chrome-center" aria-label="商品名">
         <a class="chrome-brand chrome-brand--lockup" href="index.html" aria-label="アーチデザイン工房">
@@ -562,6 +563,61 @@
             <label class="entry-choice"><input type="radio" name="entry_sample_color" value="ink"><span class="entry-color-choice"><span>墨</span><span class="entry-color-bars" aria-hidden="true"><i></i><i></i><i></i></span></span></label>
             <label class="entry-choice"><input type="radio" name="entry_sample_color" value="brick"><span class="entry-color-choice"><span>オレンジ</span><span class="entry-color-bars" aria-hidden="true"><i></i><i></i><i></i></span></span></label>
             <label class="entry-choice"><input type="radio" name="entry_sample_color" value="sakura"><span class="entry-color-choice"><span>ピンク</span><span class="entry-color-bars" aria-hidden="true"><i></i><i></i><i></i></span></span></label>
+          </div>
+        </details>
+
+        <details class="dash-block dash-block--easy" data-step-id="easy-catch" data-preview-target="#hero" hidden>
+          <summary>キャッチ</summary>
+          <div class="dash-subhead-row">
+            <p class="dash-subhead" role="heading" aria-level="3">キャッチ</p>
+          </div>
+          <div id="easy-catch-host">
+            <div id="easy-catch-tags" class="easy-catch-tags"></div>
+            <div id="easy-catch-page-image-ask" data-catch-page="imageAsk">
+              <p class="easy-catch-ask">画像を載せますか？</p>
+              <div class="easy-catch-ask-row">
+                <button type="button" class="gct-btn" id="easy-catch-image-on">載せる</button>
+                <button type="button" class="gct-btn" id="easy-catch-image-no">載せない</button>
+              </div>
+            </div>
+            <div id="easy-catch-page-image" data-catch-page="image" hidden>
+              <ol class="easy-catch-steps">
+                <li>画像を選ぶ</li>
+                <li>大きさを調整する</li>
+                <li>白い枠をドラッグして、自分のいい位置に合わせる</li>
+                <li>それでよければ OK を押す</li>
+              </ol>
+              <div id="easy-catch-img"></div>
+            </div>
+            <div id="easy-catch-page-ask" data-catch-page="ask" hidden>
+              <p class="easy-catch-ask">キャッチの写真に、言葉を載せますか？</p>
+              <div class="easy-catch-ask-row">
+                <button type="button" class="gct-btn" id="easy-catch-words-on">載せる</button>
+                <button type="button" class="gct-btn" id="easy-catch-words-off">載せない</button>
+              </div>
+            </div>
+            <div id="easy-catch-page-settings" data-catch-page="settings" hidden>
+              <ol class="easy-catch-steps">
+                <li>サブキャッチの数を決める</li>
+                <li>文字の大きさを選ぶ</li>
+                <li>下地を選ぶ</li>
+                <li>矢印で、文字の位置を合わせる</li>
+              </ol>
+              <div id="easy-catch-settings"></div>
+            </div>
+            <div id="easy-catch-page-write" data-catch-page="write" hidden>
+              <ol class="easy-catch-steps">
+                <li>おまかせを押すと、参考文が出ます。おまかせは、何回でも引き直せます。</li>
+                <li>その文章がよければ、そのまま使ってください。</li>
+                <li>少し変えたければ、部分的に編集もできます。</li>
+                <li>ご自身で書きたいときは、リセットを押して、全文を記入できます。</li>
+              </ol>
+              <p class="easy-catch-empty-note">文字が空なら、画像だけになります。</p>
+              <div id="easy-catch-copy"></div>
+            </div>
+            <div id="easy-catch-page-color" data-catch-page="color" hidden>
+              <div id="easy-catch-color"></div>
+            </div>
           </div>
         </details>
 
@@ -950,7 +1006,7 @@
         </details>
 
         <details class="dash-block" data-step-id="values-color" data-preview-target="#hero-values-block" hidden>
-          <summary>下の枠・色</summary>
+          <summary>メッセージ枠・色</summary>
           <p class="dash-note">色の変更は色選択（ハニカム）から行います。</p>
         </details>
 
@@ -1296,15 +1352,15 @@
         </details>
 
         <details class="dash-block" data-step-id="values-text" data-preview-target="#hero-values-block">
-          <summary>下の枠・文字</summary>
-          <p class="dash-note">「下の枠」＝キャッチ写真の下に並ぶ小さな枠です。</p>
+          <summary>メッセージ枠・文字</summary>
+          <p class="dash-note">「メッセージ枠」＝キャッチ写真の下に並ぶ小さな枠です。</p>
           <div class="count-row" data-count-for="hero-values">
             <span>枠の数</span>
             <button type="button" data-step="-1">−</button>
             <span data-count-label>1 / 3</span>
             <button type="button" data-step="1">＋</button>
           </div>
-          <p class="dash-note count-row-hint">＋／− … 下の枠（見出し＋文）の数です。増やすと「枠2・3」の欄と見本の枠が増えます。</p>
+          <p class="dash-note count-row-hint">＋／− … メッセージ枠（見出し＋文）の数です。増やすと「枠2・3」の欄と見本の枠が増えます。</p>
           <fieldset class="fill-block">
             <legend>記入</legend>
             <label>枠1 見出し <input name="value_1_title" type="text" value="" placeholder="例：丁寧な対応"></label>
@@ -1317,7 +1373,7 @@
           <div class="step-font-embed">
             <div data-font-host="body"></div>
           </div>
-          <p class="dash-note">色へ：<button type="button" class="step-cross-link" data-open-step="values-color">下の枠色</button></p>
+          <p class="dash-note">色へ：<button type="button" class="step-cross-link" data-open-step="values-color">メッセージ枠色</button></p>
         </details>
 
         <details class="dash-block" data-step-id="about-text" data-preview-target="#about">
@@ -1623,11 +1679,11 @@
                 </div>
               </section>
 
-              <section id="hero-values-block" class="section hero-values-block preview-hit" data-layout-block="values" data-open-step="values-text" aria-label="下の枠。タップで下の枠文を開く">
+              <section id="hero-values-block" class="section hero-values-block preview-hit" data-layout-block="values" data-open-step="values-text" aria-label="メッセージ枠。タップでメッセージ枠文を開く">
                 <div class="shell">
                   <div class="hero-values-wrap">
-                    <button type="button" class="zone-badge" data-open-step="values-color" aria-label="下の枠色を開く">6</button>
-                    <button type="button" class="zone-badge zone-badge--text" data-open-step="values-text" aria-label="下の枠文を開く">5</button>
+                    <button type="button" class="zone-badge" data-open-step="values-color" aria-label="メッセージ枠色を開く">6</button>
+                    <button type="button" class="zone-badge zone-badge--text" data-open-step="values-text" aria-label="メッセージ枠文を開く">5</button>
                     <ul id="hero-values" class="hero-value-list" data-sample-repeat data-min="1" data-max="3" data-count="1">
                       <li data-sample-item>
                         <p class="hero-value-title">見出し</p>

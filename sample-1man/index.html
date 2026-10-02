@@ -10,9 +10,9 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho:wght@500;700&family=Zen+Kaku+Gothic+New:wght@400;500;700&family=Zen+Maru+Gothic:wght@400;700&family=M+PLUS+Rounded+1c:wght@400;700&family=Noto+Sans+JP:wght@400;700&family=Noto+Serif+JP:wght@500;700&family=Sawarabi+Mincho&family=Sawarabi+Gothic&family=Kosugi+Maru&family=Kiwi+Maru:wght@500&family=Yuji+Syuku&family=Dela+Gothic+One&display=swap" rel="stylesheet">
   <!-- メーカー親CSS（ポートフォリオ根の style.css は読まない） -->
-  <link rel="stylesheet" href="maker-base.css?v=cleanup-20260922">
-  <link rel="icon" href="brand/mark-favicon.png?v=logo-8" type="image/png">
-  <link rel="stylesheet" href="sample-overrides.css?v=site-name-back-20261001">
+  <link rel="stylesheet" href="maker-base.css?v=font-heading-scope-20261002">
+  <link rel="icon" href="brand/walker-favicon.png?v=walker-20261002" type="image/png">
+  <link rel="stylesheet" href="sample-overrides.css?v=walker-ka4-20261002">
   <link rel="stylesheet" href="free-photo-gallery/gallery.css?v=omakase-ok-20260929">
   <script>
     (function () {
@@ -65,7 +65,7 @@
   <script src="sushi-belt.js?v=mihon-word-20260930" defer></script>
   <script src="free-photo-gallery/gallery.js?v=gallery-act-20261001" defer></script>
   <script src="page-shutter.js?v=sample-only-20260929" defer></script>
-  <script src="script.js?v=site-name-back-20261001" defer></script>
+  <script src="script.js?v=catch-open-align-20261002" defer></script>
   <script>
     (function () {
       var h = location.hostname;
@@ -375,6 +375,7 @@
           <img class="chrome-brand-lockup" src="brand/logo-color.png?v=logo-8" width="1024" height="896" alt="アーチデザイン工房">
         </a>
         <div class="chrome-center-name">
+          <img class="chrome-product-mark" src="brand/walker-mark.png?v=walker-ka-20261002" alt="" width="681" height="998">
           <p class="chrome-product-catch">作るも、直すも。</p>
           <h1 class="chrome-product-name">かんたんホームページ工房</h1>
         </div>
@@ -929,18 +930,23 @@
             <button type="button" data-preset="brick" data-easy-preset>オレンジ</button>
             <button type="button" data-preset="sakura" data-easy-preset>ピンク</button>
             <button type="button" data-preset="random" id="preset-random-btn" data-detail-only>ランダム</button>
-            <p class="gct-grad-note" id="gct-grad-note">下の枠から、直したい場所の色を押してください。背景色はグラデも選べます。文字色にはグラデーションは付けられません。</p>
+            <p class="gct-grad-note" id="gct-grad-note">下の枠から、直したい場所の色を押してください。背景色はグラデも選べます。</p>
           </div>
           <div id="guided-color-trial" class="guided-color-trial">
             <div class="gct-phase" data-gct-phase="preset">
-              <p class="gct-palette-lead" id="gct-palette-lead">直したい場所の色を押してください。<strong class="gct-ink-warn">文字色にはグラデーションは付けられません。</strong></p>
+              <p class="gct-palette-lead" id="gct-palette-lead">直したい場所の色を押してください。</p>
               <div class="gct-palette gct-palette--3x3" id="gct-palette" aria-label="場所の色"></div>
               <button type="button" class="gct-btn gct-btn-primary" id="gct-keep-preset">これでOK（レイアウトへ）</button>
             </div>
             <div class="gct-phase" data-gct-phase="pick" hidden>
               <p class="gct-tag gct-tag-slot" id="gct-pick-tag"></p>
               <p class="gct-hint gct-hint-inline" id="gct-pick-lead">色選択で色を選びます。クリックしたままドラッグすると、連続で色を確かめられます。</p>
-              <div class="gct-pick-layout gct-pick-layout--split">
+              <div class="gct-pick-layout gct-pick-layout--split is-mode-none">
+                <div class="color-pick-mode" id="color-pick-mode" role="group" aria-label="色の選び方">
+                  <button type="button" class="color-pick-mode-btn" data-color-pick-mode="few">いくつかから選ぶ</button>
+                  <button type="button" class="color-pick-mode-btn" data-color-pick-mode="all">全色から選ぶ</button>
+                </div>
+                <div class="color-few" id="color-few" hidden></div>
                 <div class="gct-grad-dir-pop" id="gct-grad-dir-pop" hidden>
                   <div class="gct-grad-dir-pop-card">
                     <p class="gct-grad-dir-pop-lead">2色目を選択してから、この矢印で、<br>グラデーションの向きを選べます。</p>
@@ -949,11 +955,14 @@
                   </div>
                 </div>
                 <div class="gct-pick-chooser">
-                  <p class="gct-pick-chooser-label">色選択</p>
-                  <p class="gct-pick-drag-hint" id="gct-pick-drag-hint">クリックしたままドラッグすると、色を連続で確かめられます</p>
+                  <p class="gct-pick-chooser-label">ドラッグして色を選べます</p>
+                  <p class="gct-pick-drag-hint" id="gct-pick-drag-hint" hidden>クリックしたままドラッグすると、色を連続で確かめられます</p>
                   <div class="gct-honey-wrap">
                     <div class="gct-pick-host" id="gct-pick-host"></div>
                   </div>
+                  <label class="gct-honey-shade">濃さ
+                    <input type="range" id="gct-honey-shade" min="0" max="1" step="0.001" value="0.5" aria-label="色の濃さ">
+                  </label>
                 </div>
                 <div class="gct-pick-side">
                   <div class="gct-pick-target-row" id="gct-pick-target-row" role="group" aria-label="直す色の種類">
@@ -966,7 +975,6 @@
                       <span class="gct-pick-target-label" id="gct-pick-partner-label">2色目</span>
                       <span class="gct-pick-target-swatch" id="gct-pick-partner-swatch"></span>
                     </button>
-                    <p class="gct-pick-ink-note" id="gct-pick-ink-note" hidden><strong>グラデーションは付けられません</strong><span class="gct-pick-ink-note-sub">（この場所は文字色です）</span></p>
                   </div>
                   <p class="gct-pick-grad-help" id="gct-pick-grad-help" hidden>矢印を押すと、2色のグラデーションにできます。</p>
                   <div class="gct-actions gct-actions-pick gct-actions-pick--undo">

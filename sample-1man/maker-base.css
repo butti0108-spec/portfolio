@@ -1471,7 +1471,7 @@ a {
 
 .contact-band h2 {
   margin: 0 0 1rem;
-  font-family: var(--font-display);
+  font-family: var(--font-body);
   font-weight: 700;
   font-size: clamp(1.6rem, 3vw, 2.1rem);
   line-height: 1.35;

@@ -2265,6 +2265,7 @@
     entryBranch: null,
     hubEntrySource: null,
     easyFlowActive: false,
+    colorPickMode: {},
     sampleFinishNoBack: false,
     pendingSushi: null,
     sampleFlowEntered: false,
@@ -2645,6 +2646,10 @@
     store.partnerPickMode = !!isPartner;
     if (store.guidedColorTrial) store.guidedColorTrial._pickHistory = [];
     renderGctPickUi(stepId, { forceHoney: true });
+    const nextHex = isPartner
+      ? partnerHexForSlot(stepId)
+      : (key && store.draftColors[key]) || "#ffffff";
+    syncHoneyShadeSlider(nextHex);
     scheduleSave();
   }
 
@@ -2668,6 +2673,7 @@
     const skipBox = document.getElementById("gct-grad-dir-skip");
     if (store.gradDirHintOpen && skipBox) skipBox.checked = false;
     renderGctPickUi(stepId, { forceHoney: true });
+    syncHoneyShadeSlider(partnerHexForSlot(stepId));
     scheduleSave();
   }
 
@@ -2769,7 +2775,7 @@
     const inColorRow = !!(targetPartner && targetPartner.closest(".layout-color-body"));
     const mainLabel = document.querySelector("#gct-pick-target-main .gct-pick-target-label");
     const liveNote = document.getElementById("gct-pick-live-note");
-    if (liveNote) liveNote.hidden = !inColorRow;
+    if (liveNote) liveNote.hidden = true;
     if (mainLabel) {
       mainLabel.textContent = inColorRow
         ? (slotGradStarted(stepId) ? "1色目" : "単色")
@@ -3005,6 +3011,7 @@
     updatePickPartnerSwatch(stepId);
     if (GRADIENT_BG_KEYS.has(primaryColorKeyForStep(stepId))) renderPickGradCompass(stepId);
     syncPickUndoButton();
+    syncHoneyShadeSlider(hex);
   }
 
   function gctUndoPick() {
@@ -3024,6 +3031,7 @@
     updatePickPartnerSwatch(stepId);
     if (GRADIENT_BG_KEYS.has(primaryColorKeyForStep(stepId))) renderPickGradCompass(stepId);
     syncPickUndoButton();
+    syncHoneyShadeSlider(hex);
     scheduleSave();
   }
 
@@ -3044,23 +3052,161 @@
     return size * (2 * Math.sqrt(3) * rings + 2) + 4;
   }
 
+  let honeyShadeHsv = null;
+
+  function hexToHsv(hex) {
+    const rgb = parseHexRgb(hex);
+    const r = rgb[0] / 255;
+    const g = rgb[1] / 255;
+    const b = rgb[2] / 255;
+    const max = Math.max(r, g, b);
+    const min = Math.min(r, g, b);
+    const d = max - min;
+    let h = 0;
+    if (d !== 0) {
+      if (max === r) h = ((g - b) / d) % 6;
+      else if (max === g) h = (b - r) / d + 2;
+      else h = (r - g) / d + 4;
+      h *= 60;
+      if (h < 0) h += 360;
+    }
+    return { h: h, s: max === 0 ? 0 : d / max, v: max };
+  }
+
+  let honeyShadeCenter = "#ffffff";
+
+  function syncHoneyShadeSlider(hex) {
+    if (!hex) return;
+    honeyShadeCenter = toColorInput(hex);
+    honeyShadeHsv = hexToHsv(honeyShadeCenter);
+    const input = document.getElementById("gct-honey-shade");
+    if (!input) return;
+    if (document.activeElement === input) input.blur();
+    input.value = "0.5";
+  }
+
+  function shadeHexFromSlider(t) {
+    const center = honeyShadeCenter || "#ffffff";
+    const x = Math.max(0, Math.min(1, Number(t) || 0));
+    /* 左が薄い、右が濃い。端は真っ白・真っ黒にしない */
+    const dark = mixHex("#000000", center, 0.18);
+    const light = mixHex(center, "#ffffff", 0.9);
+    if (x <= 0.5) return mixHex(light, center, x / 0.5);
+    return mixHex(center, dark, (x - 0.5) / 0.5);
+  }
+
+  function honeyShadeReserve() {
+    const layout = document.querySelector(".gct-pick-layout");
+    if (layout && layout.classList.contains("is-mode-all")) return 28;
+    const shade = document.getElementById("gct-honey-shade");
+    const shadeH = shade ? Math.max(shade.offsetHeight || 0, 22) : 0;
+    return 20 + shadeH + 12;
+  }
+
+  function paintHoneyShade(v) {
+    if (!honeyShadeCenter) {
+      const cur = currentPickHex();
+      honeyShadeCenter = cur ? toColorInput(cur) : "#ffffff";
+    }
+    const hex = shadeHexFromSlider(v);
+    const stepId = activeGctEditStepId();
+    if (!stepId) return;
+    if (store.partnerPickMode) {
+      if (!store.slotGradientPartners) store.slotGradientPartners = {};
+      store.slotGradientPartners[stepId] = hex;
+      applyLiveColors(true);
+    } else {
+      const key = primaryColorKeyForStep(stepId);
+      if (!key) return;
+      setDraftColor(key, hex);
+    }
+    updatePickMainSwatch(stepId);
+    updatePickPartnerSwatch(stepId);
+  }
+
+  function bindHoneyShade() {
+    const input = document.getElementById("gct-honey-shade");
+    if (!input || input.dataset.bound) return;
+    input.dataset.bound = "1";
+    let gesture = false;
+    const pushOnce = () => {
+      if (gesture) return;
+      gesture = true;
+      const prev = currentPickHex();
+      const trial = store.guidedColorTrial || (store.guidedColorTrial = {});
+      if (!Array.isArray(trial._pickHistory)) trial._pickHistory = [];
+      if (prev) {
+        trial._pickHistory.push(prev);
+        if (trial._pickHistory.length > 40) trial._pickHistory.shift();
+      }
+      if (!honeyShadeCenter && prev) honeyShadeCenter = toColorInput(prev);
+      syncPickUndoButton();
+    };
+    const shadeBox = input.closest(".gct-honey-shade");
+    const grabOn = () => {
+      document.documentElement.classList.add("is-shade-grab");
+      if (shadeBox) shadeBox.style.cursor = "grabbing";
+      input.style.cursor = "grabbing";
+    };
+    const grabOff = () => {
+      document.documentElement.classList.remove("is-shade-grab");
+      if (shadeBox) shadeBox.style.cursor = "";
+      input.style.cursor = "";
+    };
+    if (shadeBox) shadeBox.addEventListener("pointerdown", grabOn, true);
+    input.addEventListener("pointerdown", () => {
+      pushOnce();
+      grabOn();
+    });
+    input.addEventListener("input", () => {
+      pushOnce();
+      paintHoneyShade(Number(input.value));
+    });
+    const end = () => {
+      gesture = false;
+      grabOff();
+    };
+    document.addEventListener("pointerup", end);
+    document.addEventListener("pointercancel", end);
+    input.addEventListener("pointerup", end);
+    input.addEventListener("pointercancel", end);
+    input.addEventListener("change", end);
+  }
+
   function honeyCellSizeForHost(host, forceAvail) {
     const rings = HONEY_RINGS;
     const wrap = host && host.closest ? host.closest(".gct-honey-wrap") : null;
+    const inColorRow = !!(wrap && wrap.closest(".layout-color-body"));
+    const denom = 2 * (Math.sqrt(3) * rings + 1);
+    /* 色調整のハニカムは残り幅で縮めない。表示を拡大すると文字と同じく大きくなる */
+    if (inColorRow && !(typeof forceAvail === "number" && forceAvail > 0)) {
+      const rootPx = parseFloat(getComputedStyle(document.documentElement).fontSize) || 16;
+      return Math.max(3.2, (15.5 * rootPx) / denom);
+    }
     const hostW = Math.max(
       0,
       (typeof forceAvail === "number" && forceAvail > 0
         ? forceAvail
         : (wrap && wrap.clientWidth) || (host && host.clientWidth) || 0)
     );
-    const denom = 2 * (Math.sqrt(3) * rings + 1);
-    /* 実幅があるときは列の内側に収める。無いときは従来の大きさ */
+    /* 列の幅いっぱい。高さは画面の残りで頭打ち */
+    let size;
     if (hostW > 8) {
-      const avail = Math.min(hostW - 8, 420);
-      return Math.min(11, avail / denom);
+      size = Math.max(3.2, (hostW - 4) / denom);
+    } else {
+      const avail = Math.max(120, Math.min(272, 420));
+      size = Math.max(4.5, avail / denom);
     }
-    const avail = Math.max(120, Math.min(272, 420));
-    return Math.max(4.5, Math.min(11, avail / denom));
+    const form = document.querySelector(".dash-body > .fill-form");
+    if (form && wrap && wrap.getClientRects().length) {
+      const padB = parseFloat(getComputedStyle(form).paddingBottom) || 0;
+      const room = form.getBoundingClientRect().bottom - wrap.getBoundingClientRect().top - padB - honeyShadeReserve();
+      if (room > 80) {
+        const byH = (room - 4) / (3 * rings + 2);
+        size = Math.min(size, Math.max(3.2, byH));
+      }
+    }
+    return size;
   }
 
   function hsvToHex(h, s, v) {
@@ -3263,8 +3409,9 @@
     container.addEventListener("pointercancel", endScrub);
     container.addEventListener("lostpointercapture", endScrub);
 
-    /* 描画後にまだはみ出す場合は1回だけ縮小し直す */
-    if (forceAvail == null && container.clientWidth > 0 && map.offsetWidth > container.clientWidth + 1) {
+    /* 描画後にまだはみ出す場合は1回だけ縮小し直す。色調整のハニカムは拡大で縮めない */
+    const inColorRow = !!(container.closest && container.closest(".layout-color-body"));
+    if (!inColorRow && forceAvail == null && container.clientWidth > 0 && map.offsetWidth > container.clientWidth + 1) {
       appendHoneycomb(container, currentHex, onPick, Math.max(120, container.clientWidth - 8));
     }
   }
@@ -3281,18 +3428,39 @@
     let lastW = wrap.clientWidth;
     const ro = new ResizeObserver(() => {
       const w = wrap.clientWidth;
-      if (Math.abs(w - lastW) < 6) return;
-      lastW = w;
+      if (w <= 0) return;
       const inColorRow = !!(host.closest && host.closest(".layout-color-body"));
       if (store.guidedColorPhase !== "pick" && !inColorRow) return;
       const map = host.querySelector(".gct-honey-map");
       if (!map || host.clientWidth <= 0) return;
+      const formNow = document.querySelector(".dash-body > .fill-form");
+      let tooTall = false;
+      let tooShort = false;
+      if (inColorRow) {
+        const expected = honeyMapWidthForSize(honeyCellSizeForHost(host));
+        if (Math.abs(map.offsetWidth - expected) > 8) {
+          lastW = w;
+          const hex =
+            typeof wrap._honeyGetHex === "function" ? wrap._honeyGetHex() : currentPickHex();
+          const pick = typeof wrap._honeyOnPick === "function" ? wrap._honeyOnPick : onPick;
+          appendHoneycomb(host, hex, pick);
+        }
+        return;
+      }
+      if (formNow) {
+        const padB = parseFloat(getComputedStyle(formNow).paddingBottom) || 0;
+        const room = formNow.getBoundingClientRect().bottom - wrap.getBoundingClientRect().top - padB - honeyShadeReserve();
+        tooTall = map.offsetHeight > room + 8;
+        tooShort = room > 80 && map.offsetHeight < room - 28;
+      }
+      if (Math.abs(w - lastW) < 6 && !tooTall && !tooShort) return;
+      lastW = w;
       const hostW = host.clientWidth;
       const mapW = map.offsetWidth;
       const overflows = mapW > hostW + 1;
       const expected = honeyMapWidthForSize(honeyCellSizeForHost(host));
       const undersized = hostW > mapW + 20 && expected > mapW + 8;
-      if (!overflows && !undersized) return;
+      if (!overflows && !undersized && !tooTall && !tooShort) return;
       const hex =
         typeof wrap._honeyGetHex === "function" ? wrap._honeyGetHex() : currentPickHex();
       const pick = typeof wrap._honeyOnPick === "function" ? wrap._honeyOnPick : onPick;
@@ -3302,6 +3470,93 @@
     wrap._honeyOnPick = onPick;
     wrap._honeyRo = ro;
     ro.observe(wrap);
+    const form = document.querySelector(".dash-body > .fill-form");
+    if (form) ro.observe(form);
+  }
+
+  function colorPickModeKey() {
+    const stepId = store.guidedColorEditStepId || "";
+    const key = store.layoutColorKey || primaryColorKeyForStep(stepId) || "";
+    return stepId + ":" + key;
+  }
+
+  function colorPickModeNow() {
+    if (!store.colorPickMode || typeof store.colorPickMode !== "object") store.colorPickMode = {};
+    return store.colorPickMode[colorPickModeKey()] || "";
+  }
+
+  function fewColorChoices() {
+    const rings = HONEY_RINGS;
+    const verts = [
+      [rings, 0],
+      [0, rings],
+      [-rings, rings],
+      [-rings, 0],
+      [0, -rings],
+      [rings, -rings]
+    ];
+    const corners = verts.map(function (qr) {
+      return toColorInput(honeyColorAt(qr[0], qr[1], rings)).toLowerCase();
+    });
+    return corners.concat(["#ffffff", "#000000"]);
+  }
+
+  function renderFewColors(stepId) {
+    const box = document.getElementById("color-few");
+    if (!box) return;
+    const key = primaryColorKeyForStep(stepId);
+    const current = store.partnerPickMode
+      ? partnerHexForSlot(stepId)
+      : (key && store.draftColors[key]) || "#ffffff";
+    const colors = fewColorChoices();
+    const now = toColorInput(current).toLowerCase();
+    box.innerHTML = "";
+    colors.forEach(function (hex) {
+      const btn = document.createElement("button");
+      btn.type = "button";
+      btn.className = "color-few-swatch" + (hex === now ? " is-now" : "");
+      btn.style.background = hex;
+      btn.setAttribute("aria-label", hex);
+      btn.addEventListener("click", function () {
+        applyHoneyPick(hex);
+        renderFewColors(stepId);
+      });
+      box.appendChild(btn);
+    });
+  }
+
+  function syncColorPickModeUi(stepId) {
+    const layout = document.querySelector(".gct-pick-layout");
+    const few = document.getElementById("color-few");
+    if (!layout) return;
+    const mode = colorPickModeNow();
+    layout.classList.toggle("is-mode-none", !mode);
+    layout.classList.toggle("is-mode-few", mode === "few");
+    layout.classList.toggle("is-mode-all", mode === "all");
+    document.querySelectorAll("[data-color-pick-mode]").forEach(function (btn) {
+      btn.classList.toggle("is-now", btn.getAttribute("data-color-pick-mode") === mode);
+    });
+    if (few) few.hidden = mode !== "few";
+    if (mode === "few" && stepId) renderFewColors(stepId);
+  }
+
+  function bindColorPickMode() {
+    const box = document.getElementById("color-pick-mode");
+    if (!box || box.dataset.bound) return;
+    box.dataset.bound = "1";
+    box.addEventListener("click", function (ev) {
+      const btn = ev.target.closest("[data-color-pick-mode]");
+      if (!btn) return;
+      if (!store.colorPickMode || typeof store.colorPickMode !== "object") store.colorPickMode = {};
+      const mode = btn.getAttribute("data-color-pick-mode") || "";
+      store.colorPickMode[colorPickModeKey()] = mode;
+      const stepId = store.guidedColorEditStepId;
+      if (stepId) renderGctPickUi(stepId, { forceHoney: true });
+      if (mode === "all") {
+        const hex = currentPickHex();
+        if (hex) syncHoneyShadeSlider(hex);
+      }
+    });
   }
 
   function renderGctPickUi(stepId, opts) {
@@ -3316,10 +3571,15 @@
     const host = document.getElementById("gct-pick-host");
     const shadeHost = document.getElementById("gct-pick-shade-host");
     const gradBox = document.getElementById("gct-pick-grad");
-    const inkNote = document.getElementById("gct-pick-ink-note");
     const targetMain = document.getElementById("gct-pick-target-main");
     const targetPartner = document.getElementById("gct-pick-target-partner");
     if (!host) return;
+    syncColorPickModeUi(stepId);
+    if (colorPickModeNow() !== "all") {
+      store.partnerPickMode = false;
+      if (colorPickModeNow() === "few") syncPickUndoButton();
+      return;
+    }
     if (pickTag) {
       pickTag.textContent = partnerMode
         ? colorStepDisplayName(stepId) + "（2色目）"
@@ -3338,7 +3598,6 @@
     }
     const inColorRow = !!(host.closest && host.closest(".layout-color-body"));
     if (gradBox) gradBox.hidden = inColorRow ? !(canGrad && slotGradStarted(stepId)) : !canGrad;
-    if (inkNote) inkNote.hidden = canGrad;
     if (targetPartner) targetPartner.hidden = !canGrad;
     if (targetMain) targetMain.classList.toggle("is-active", !partnerMode);
     if (targetPartner) targetPartner.classList.toggle("is-active", partnerMode);
@@ -3354,13 +3613,13 @@
     const honeyReady =
       !!existingMap && host.getAttribute("data-gct-sig") === sig;
     /* 幅0で作られた／はみ出した map は skip せず作り直す（見えない・右切れの残留） */
+    const inColorRowHost = !!(host.closest && host.closest(".layout-color-body"));
     const honeyLayoutBad =
       !!existingMap &&
       (existingMap.offsetWidth < 40 ||
-        (host.clientWidth > 0 && existingMap.offsetWidth > host.clientWidth + 1) ||
-        (host.clientWidth > 0 &&
-          honeyMapWidthForSize(honeyCellSizeForHost(host)) >
-            existingMap.offsetWidth + 24));
+        (!inColorRowHost && host.clientWidth > 0 && existingMap.offsetWidth > host.clientWidth + 1) ||
+        honeyMapWidthForSize(honeyCellSizeForHost(host)) >
+          existingMap.offsetWidth + 24);
     if (!forceHoney && honeyReady && !honeyLayoutBad) {
       return;
     }
@@ -5824,6 +6083,8 @@
     }
     const pickUndo = document.getElementById("gct-pick-undo");
     if (pickUndo) pickUndo.addEventListener("click", gctUndoPick);
+    bindHoneyShade();
+    bindColorPickMode();
     const dirOk = document.getElementById("gct-grad-dir-ok");
     if (dirOk && !dirOk.dataset.bound) {
       dirOk.dataset.bound = "1";
@@ -5863,6 +6124,7 @@
           store.guidedColorPhase = "preset";
         }
         wizardBack();
+        scrollBackDestinationToTop();
       });
     });
   }
@@ -8265,7 +8527,14 @@
     showWizardStep(0);
   }
 
+  let catchQuietReturnTo = "";
+  let catchSavedAccordionId = null;
+  let catchSavedHeroInner = null;
+
   function showWizardStep(index) {
+    const quietReturnTo = catchQuietReturnTo;
+    catchQuietReturnTo = "";
+    let quietImageReturn = false;
     if (store.uiMode === "self") {
       const flow = getFlowSteps();
       const idx = Math.max(0, Math.min(flow.length - 1, index));
@@ -8332,7 +8601,11 @@
     } else {
       clearSiteNameBack();
     }
-    if (step.id !== "easy-copy-omakase") restoreCopyBorrowedControls();
+    const keepCatchHoney =
+      step.id === "easy-catch" ||
+      (step.id === "easy-site-name" && prevStep && prevStep.id === "easy-catch");
+    if (step.id !== "easy-copy-omakase") parkLogoCopyControls();
+    if (step.id !== "easy-copy-omakase" && !keepCatchHoney) restoreCopyBorrowedControls();
     if (step.id !== "easy-color-stage") {
       document.querySelectorAll("#layout-color-rows .layout-color-row.is-open").forEach(closeLayoutColorRow);
     }
@@ -8357,12 +8630,26 @@
       renderCopyFrameUi();
     }
     if (step.id === "easy-img-wire" || step.id === "easy-catch") {
+      quietImageReturn = quietReturnTo === "easy-img-wire" && step.id === "easy-img-wire";
+      if (quietImageReturn && catchSavedAccordionId != null) {
+        store.layoutAccordionId = catchSavedAccordionId;
+        if (!store.layoutInnerByBlock) store.layoutInnerByBlock = {};
+        store.layoutInnerByBlock.hero = catchSavedHeroInner || "";
+        catchSavedAccordionId = null;
+        catchSavedHeroInner = null;
+      }
       parkEasyImageHost(step.id);
       if (step.id === "easy-img-wire") {
         setSampleFlowPreviewHidden(false);
         renderEasyImageWireList();
       }
-      if (step.id === "easy-catch") store.layoutAccordionId = "hero";
+      if (step.id === "easy-catch") {
+        if (prevStep && prevStep.id === "easy-img-wire") {
+          catchSavedAccordionId = store.layoutAccordionId || "";
+          catchSavedHeroInner = (store.layoutInnerByBlock && store.layoutInnerByBlock.hero) || "";
+        }
+        store.layoutAccordionId = "hero";
+      }
       if (step.id === "easy-catch" && store.catchPage === "image") {
         if (!store.layoutInnerByBlock) store.layoutInnerByBlock = {};
         store.layoutInnerByBlock.hero = "hero";
@@ -8376,11 +8663,13 @@
     }
     if (step.id === "easy-img-wire") {
       syncEasyImageStatuses();
-      window.requestAnimationFrame(() => {
+      if (!quietImageReturn) {
         window.requestAnimationFrame(() => {
-          scrollPreviewFrameIntoView(currentImageFrameSelector());
+          window.requestAnimationFrame(() => {
+            scrollPreviewFrameIntoView(currentImageFrameSelector());
+          });
         });
-      });
+      }
     } else if (step.id === "easy-img-omakase") {
       setEasyPreviewFocus("easy-img-wire");
     } else {
@@ -8419,7 +8708,7 @@
 
     updateWizardUi();
     applyLiveColors(false);
-    applyAllConfirmed();
+    applyAllConfirmed(quietImageReturn ? { skipImages: true } : undefined);
 
     if (step.id !== "guide" && step.id !== "purpose") {
       const skipPresetScroll =
@@ -9879,10 +10168,12 @@
     const colorHost = document.getElementById("easy-catch-color");
     const copyHost = document.getElementById("easy-catch-copy");
     if (colorHost) {
-      restoreCopyColorRows();
-      mountLayoutColorSection();
-      const unit = document.querySelector('[data-color-step="hero-color"]');
-      if (unit) {
+      const parked = colorHost.querySelector('[data-color-step="hero-color"]');
+      const keepOpen = parked && parked.classList.contains("is-open");
+      if (!keepOpen) restoreCopyColorRows();
+      if (!keepOpen) mountLayoutColorSection();
+      const unit = keepOpen ? parked : document.querySelector('[data-color-step="hero-color"]');
+      if (unit && !keepOpen) {
         if (!unit._copyColorHome) {
           unit._copyColorHome = { parent: unit.parentElement, next: unit.nextSibling };
         }
@@ -9892,6 +10183,10 @@
       }
     }
     if (copyHost) {
+      const reservoir = document.getElementById("site-fonts-reservoir");
+      copyHost.querySelectorAll(".font-picker-block").forEach(function (block) {
+        if (reservoir) reservoir.appendChild(block);
+      });
       copyHost.innerHTML = "";
       const settingsHost = document.getElementById("easy-catch-settings");
       if (settingsHost) {
@@ -11961,6 +12256,7 @@
   }
 
   const COPY_LIST_SECTIONS = [
+    { id: "logo", label: "ロゴ" },
     { id: "hero", label: "キャッチ", countId: null, layoutId: "hero" },
     { id: "values", label: "メッセージ枠", countId: "hero-values", layoutId: "values", kind: "pair", titleKey: "value_", textKey: "value_", titleSuffix: "_title", textSuffix: "_text", titleLabel: "見出し", textLabel: "文" },
     { id: "accordions", label: "開く項目", countId: "about-accordions", layoutId: "accordions", kind: "pair", titleKey: "acc_", textKey: "acc_", titleSuffix: "_title", textSuffix: "_body", titleLabel: "見出し", textLabel: "文" },
@@ -11973,7 +12269,7 @@
 
   function copySectionIsListed(sec) {
     if (!sec) return false;
-    if (sec.id === "hero" && easyCatchOn() && store.catchWordsOn !== false) return false;
+    if (sec.id === "hero") return !!easyCatchOn();
     const blockId = sec.layoutId || sec.id;
     const meta = LAYOUT_BLOCKS.find(function (b) { return b.id === blockId; });
     if (!meta) return true;
@@ -12010,6 +12306,11 @@
       store.copyListOrder.splice(at, 0, id);
       seen[id] = 1;
     });
+    const logoAt = store.copyListOrder.indexOf("logo");
+    if (logoAt > 0) {
+      store.copyListOrder.splice(logoAt, 1);
+      store.copyListOrder.unshift("logo");
+    }
     return store.copyListOrder;
   }
 
@@ -12220,28 +12521,40 @@
       ev.stopPropagation();
       const list = row.parentElement;
       if (!list) return;
-      const startY = ev.clientY;
-      let touched = null;
+      const originY = ev.clientY;
+      let startY = ev.clientY;
+      let changed = false;
       row.classList.add("is-dragging");
       function onMove(ev2) {
-        row.style.transform = "translateY(" + (ev2.clientY - startY) + "px)";
-        const mine = row.getBoundingClientRect();
-        let best = null;
-        let bestArea = 0;
-        list.querySelectorAll(".easy-copy-list-row[data-copy-item]").forEach(function (other) {
-          other.classList.remove("is-touch");
-          if (other === row) return;
-          const rect = other.getBoundingClientRect();
-          const overlapW = Math.min(mine.right, rect.right) - Math.max(mine.left, rect.left);
-          const overlapH = Math.min(mine.bottom, rect.bottom) - Math.max(mine.top, rect.top);
-          const area = overlapW > 0 && overlapH > 0 ? overlapW * overlapH : 0;
-          if (area > bestArea) {
-            bestArea = area;
-            best = other;
+        if (Math.abs(ev2.clientY - originY) <= 4) return;
+        const y = clampDragClientY(row, ev2.clientY, startY);
+        row.style.transform = "translateY(" + (y - startY) + "px)";
+        for (let n = 0; n < 6; n += 1) {
+          const hit = thirdSwapHit(row, "easy-copy-list-row");
+          if (!hit) break;
+          const beforeTop = row.getBoundingClientRect().top;
+          const fromIndex = Number(row.getAttribute("data-copy-item"));
+          const toIndex = Number(hit.other.getAttribute("data-copy-item"));
+          let moved = false;
+          if (sec.countId === "works-list") {
+            const fromId = "work_" + fromIndex;
+            const toId = "work_" + toIndex;
+            moved = moveItemOrderNear("works-list", fromId, toId, hit.place);
+            if (moved) applyItemLayoutToPreview("works-list");
+          } else {
+            moved = swapCopyPairItems(sec, fromIndex, toIndex);
           }
-        });
-        if (best) best.classList.add("is-touch");
-        touched = best;
+          if (!moved) break;
+          if (hit.place === "after") hit.other.after(row);
+          else hit.other.before(row);
+          if (sec.countId !== "works-list") {
+            const swapped = row.getAttribute("data-copy-item");
+            row.setAttribute("data-copy-item", hit.other.getAttribute("data-copy-item"));
+            hit.other.setAttribute("data-copy-item", swapped);
+          }
+          startY = keepDragUnderPointer(row, y, beforeTop, startY);
+          changed = true;
+        }
       }
       function onUp() {
         window.removeEventListener("pointermove", onMove, true);
@@ -12249,27 +12562,10 @@
         window.removeEventListener("pointercancel", onUp, true);
         row.style.transform = "";
         row.classList.remove("is-dragging");
-        list.querySelectorAll(".easy-copy-list-row.is-touch").forEach(function (el) {
-          el.classList.remove("is-touch");
-        });
-        const toIndex = touched ? Number(touched.getAttribute("data-copy-item")) : null;
-        touched = null;
-        if (!toIndex || toIndex === itemIndex) return;
-        if (sec.countId === "works-list") {
-          const fromId = "work_" + itemIndex;
-          const toId = "work_" + toIndex;
-          if (moveItemOrderNear("works-list", fromId, toId, itemIndex < toIndex ? "after" : "before")) {
-            applyItemLayoutToPreview("works-list");
-            renderCopyListUi({ keepScroll: true });
-            scheduleSave();
-          }
-          return;
-        }
-        if (swapCopyPairItems(sec, itemIndex, toIndex)) {
-          applyAllConfirmed();
-          renderCopyListUi({ keepScroll: true });
-          scheduleSave();
-        }
+        releasePreviewDragFollow();
+        if (!changed) return;
+        renderCopyListUi({ keepScroll: true });
+        scheduleSave();
       }
       window.addEventListener("pointermove", onMove, true);
       window.addEventListener("pointerup", onUp, true);
@@ -12388,6 +12684,7 @@
 
   function copyListSectionRowLabel(sec) {
     if (!sec) return "";
+    if (sec.id === "logo") return sec.label;
     if (sec.kind === "pair") {
       const headKey =
         sec.id === "accordions" ? "about_heading" : sec.id === "works" ? "works_heading" : "";
@@ -12500,24 +12797,23 @@
   }
 
   function scrollCopyListPreview(sectionId, fieldKey) {
+    if (fieldKey) paintCopyFieldRing(fieldKey);
+    else clearCopyFieldRing();
+    const sectionTarget = copySectionPreviewEl(sectionId);
+    if (sectionTarget && parkOpenCopyPreview._held === sectionId) {
+      focusPreviewTarget(sectionTarget);
+      return;
+    }
+    if (sectionTarget) return;
+    if (sectionId === "logo") {
+      scrollPreviewTo("#preview-header");
+      return;
+    }
     const sec = copyListSectionById(sectionId);
     const meta = sec && LAYOUT_BLOCKS.find(function (b) {
       return b.id === sec.layoutId;
     });
     if (meta && meta.selector) scrollPreviewTo(meta.selector);
-    if (fieldKey) {
-      window.requestAnimationFrame(function () {
-        paintCopyFieldRing(fieldKey);
-        const node = copyPreviewNodeForField(fieldKey);
-        if (node && typeof node.scrollIntoView === "function") {
-          try {
-            node.scrollIntoView({ block: "nearest", inline: "nearest" });
-          } catch (e) { /* ignore */ }
-        }
-      });
-    } else {
-      clearCopyFieldRing();
-    }
   }
 
   function applyCopyListOrderToLayout() {
@@ -12718,13 +13014,6 @@
     pull();
   }
 
-  function copyFontRoleForSection(secId) {
-    if (secId === "hero") return "catch";
-    if (secId === "name") return "display";
-    if (secId === "values" || secId === "accordions" || secId === "works" || secId === "contact") return "body";
-    return "";
-  }
-
   function copyColorLinksForSection(secId) {
     if (secId === "values") return [{ id: "values-color", label: "メッセージ枠色" }];
     if (secId === "accordions") {
@@ -12789,11 +13078,29 @@
   }
 
   function placeCopyFonts() {
+    const onCopy = getCurrentFlowStep() && getCurrentFlowStep().id === "easy-copy-omakase";
+    const group = onCopy ? document.querySelector("#easy-copy-list-host [data-copy-font-group]") : null;
+    const reservoir = document.getElementById("site-fonts-reservoir");
+    if (group) {
+      document.querySelectorAll(".font-picker-block[data-font-role]").forEach(function (block) {
+        const role = block.getAttribute("data-font-role");
+        const host = group.querySelector('[data-copy-font-host="' + role + '"]');
+        if (host) {
+          host.appendChild(block);
+          block.hidden = false;
+        } else if (reservoir) {
+          reservoir.appendChild(block);
+          block.hidden = true;
+          setFontPickerOpen(block, false);
+        }
+      });
+      syncFontPickerCurrentLabels();
+      return;
+    }
     const host = document.querySelector(
-      "#easy-catch-settings [data-copy-font-host], #easy-catch-copy [data-copy-font-host], #easy-copy-list-host [data-copy-font-host]"
+      "#easy-catch-settings [data-copy-font-host], #easy-catch-copy [data-copy-font-host]"
     );
     const role = host ? host.getAttribute("data-copy-font-host") : "";
-    const reservoir = document.getElementById("site-fonts-reservoir");
     document.querySelectorAll(".font-picker-block[data-font-role]").forEach(function (block) {
       const blockRole = block.getAttribute("data-font-role");
       if (role && blockRole === role && host) {
@@ -12808,20 +13115,58 @@
     syncFontPickerCurrentLabels();
   }
 
+  let copyFontFrameOpen = false;
+
+  function appendCopyFontFrame(parent) {
+    const frame = document.createElement("div");
+    frame.className = "easy-copy-font-frame";
+    frame.setAttribute("data-copy-font-group", "");
+    const head = document.createElement("div");
+    head.className = "easy-copy-list-head layout-closed-head--list";
+    const name = document.createElement("p");
+    name.className = "easy-copy-list-name layout-arrange-name";
+    name.textContent = "書体";
+    const btn = document.createElement("button");
+    btn.type = "button";
+    btn.className = "layout-open-btn";
+    const syncOpen = function () {
+      const body = frame.querySelector(".easy-copy-font-frame-body");
+      if (body) body.hidden = !copyFontFrameOpen;
+      btn.textContent = copyFontFrameOpen ? "これでOK" : "開く";
+      btn.setAttribute("aria-expanded", copyFontFrameOpen ? "true" : "false");
+    };
+    btn.addEventListener("click", function (ev) {
+      ev.preventDefault();
+      ev.stopPropagation();
+      copyFontFrameOpen = !copyFontFrameOpen;
+      if (!copyFontFrameOpen) {
+        frame.querySelectorAll(".font-picker-block").forEach(function (block) {
+          setFontPickerOpen(block, false);
+        });
+      }
+      syncOpen();
+    });
+    head.appendChild(name);
+    head.appendChild(btn);
+    frame.appendChild(head);
+    const body = document.createElement("div");
+    body.className = "easy-copy-font-frame-body";
+    ["display", "body"].forEach(function (role) {
+      const host = document.createElement("div");
+      host.className = "easy-copy-font-slot";
+      host.setAttribute("data-copy-font-host", role);
+      body.appendChild(host);
+    });
+    frame.appendChild(body);
+    syncOpen();
+    parent.appendChild(frame);
+  }
+
   function appendCopyHubExtras(parent, secId) {
-    const role = copyFontRoleForSection(secId);
     const links = copyColorLinksForSection(secId);
-    if (!role && !links.length) return;
+    if (!links.length) return;
     const box = document.createElement("div");
     box.className = "easy-copy-hub-extras";
-    if (role) {
-      const embed = document.createElement("div");
-      embed.className = "step-font-embed";
-      const fontHost = document.createElement("div");
-      fontHost.setAttribute("data-copy-font-host", role);
-      embed.appendChild(fontHost);
-      box.appendChild(embed);
-    }
     if (links.length) {
       const note = document.createElement("p");
       note.className = "dash-note easy-copy-color-links";
@@ -13104,6 +13449,10 @@
         fields.push({ key: "hero_lead_" + i, label: "サブキャッチ" + i });
       }
       appendCopyListFieldUi(wrap, fields, store.copyListFocusField || "hero_title", "hero");
+      const catchFont = document.createElement("div");
+      catchFont.className = "easy-catch-font";
+      catchFont.setAttribute("data-copy-font-host", "catch");
+      wrap.appendChild(catchFont);
       appendCopyHubExtras(wrap, "hero");
       if (!onCatchFace) appendCopyListOkFoot(wrap, closeToSectionOrList);
       return wrap;
@@ -13296,6 +13645,29 @@
     }
   }
 
+  function parkLogoCopyControls() {
+    const home = document.querySelector('details.dash-block[data-step-id="logo-text"]');
+    if (!home) return;
+    document.querySelectorAll("[data-logo-copy-borrowed]").forEach(function (el) {
+      home.appendChild(el);
+    });
+  }
+
+  function mountLogoCopyControls(parent) {
+    const home = document.querySelector('details.dash-block[data-step-id="logo-text"]');
+    if (!home || !parent) return;
+    const mode = home.querySelector(".logo-mode-fieldset");
+    const text = home.querySelector('[data-logo-panel="text"]');
+    const order = home.querySelector('[data-logo-panel="order"]');
+    const image = home.querySelector('[data-logo-panel="image"]');
+    [mode, text, image, order].forEach(function (el) {
+      if (!el) return;
+      el.setAttribute("data-logo-copy-borrowed", "1");
+      parent.appendChild(el);
+    });
+    syncLogoModePanels();
+  }
+
   function renderCopyListUi(opts) {
     const stepNow = getCurrentFlowStep();
     if (stepNow && stepNow.id === "easy-catch") {
@@ -13329,6 +13701,7 @@
       open = null;
     }
     restoreCopyBorrowedControls();
+    parkLogoCopyControls();
     host.innerHTML = "";
     const nameLine = document.createElement("label");
     nameLine.className = "easy-copy-name-line";
@@ -13380,12 +13753,16 @@
       /* —— 一覧の細い行 —— */
       const head = document.createElement("div");
       head.className = "easy-copy-list-head layout-closed-head--list";
-      const handle = document.createElement("span");
-      handle.className = "layout-arrange-handle";
-      handle.textContent = "⋮⋮";
-      handle.setAttribute("aria-label", "この段の順番を変えられます");
-      setHoverTip(handle, "つかんだまま上下に動かすと、順番を変えられます");
-      if (!open) bindCopyListDrag(handle, cell, sec.id);
+      let handle = null;
+      if (sec.id !== "logo") {
+        handle = document.createElement("span");
+        handle.className = "layout-arrange-handle";
+        handle.textContent = "⋮⋮";
+        handle.setAttribute("aria-label", "この段の順番を変えられます");
+        setHoverTip(handle, "つかんだまま上下に動かすと、順番を変えられます");
+        if (!open) bindCopyListDrag(handle, cell, sec.id);
+        head.appendChild(handle);
+      }
       const name = document.createElement("p");
       name.className = "easy-copy-list-name layout-arrange-name";
       name.textContent = copyListSectionRowLabel(sec);
@@ -13397,6 +13774,10 @@
       secOpenBtn.addEventListener("click", function (ev) {
         ev.preventDefault();
         ev.stopPropagation();
+        if (sec.id === "hero") {
+          openCatchFromLayout(catchWordsAreOn() ? "write" : "ask");
+          return;
+        }
         if (sectionOpen || itemOpenHere) {
           if (itemOpenHere && sec.kind === "pair") {
             setCopyListOpen({ kind: "section", sectionId: sec.id });
@@ -13425,10 +13806,9 @@
         renderCopyListUi({ keepScroll: false });
         scheduleSave();
       });
-      head.appendChild(handle);
       head.appendChild(name);
       head.appendChild(secOpenBtn);
-      if (sectionOpen || itemOpenHere) {
+      if (handle && (sectionOpen || itemOpenHere)) {
         /* ソロ時は掴みを出さない */
         handle.hidden = true;
       }
@@ -13566,6 +13946,29 @@
           if (n >= 2) bindCopyListItemDrag(row, sec, itemIndex);
           body.appendChild(row);
         });
+      } else if (itemOpenHere && sec.id === "logo") {
+        head.hidden = true;
+        const editor = document.createElement("div");
+        editor.className = "easy-copy-list-editor-host";
+        const wrap = document.createElement("div");
+        wrap.className = "easy-copy-list-editor";
+        const itemHead = document.createElement("div");
+        itemHead.className = "easy-copy-item-head";
+        const itemTitle = document.createElement("p");
+        itemTitle.className = "easy-copy-item-title";
+        itemTitle.textContent = "ロゴ";
+        itemHead.appendChild(itemTitle);
+        wrap.appendChild(itemHead);
+        mountLogoCopyControls(wrap);
+        appendCopyListOkFoot(wrap, function () {
+          clearEasyCopySoloHistory();
+          setCopyListOpen(null);
+          clearCopyFieldRing();
+          renderCopyListUi({ keepScroll: true });
+          scheduleSave();
+        });
+        editor.appendChild(wrap);
+        body.appendChild(editor);
       } else if (itemOpenHere) {
         /* —— 3階層：入力 —— */
         head.hidden = true;
@@ -13586,6 +13989,7 @@
       list.appendChild(cell);
     });
 
+    if (!open) appendCopyFontFrame(host);
     host.appendChild(list);
     placeCopyFonts();
     syncEasyCopyListSolo();
@@ -13600,41 +14004,70 @@
       if (scroller) scroller.scrollTop = 0;
     }
     scheduleHeroCopyFitCheck();
+    if (!open) parkOpenCopyPreview._held = "";
+    if (open) {
+      window.requestAnimationFrame(function () {
+        parkOpenCopyPreview();
+      });
+    }
   }
 
   let copyListDrag = null;
 
+  function moveCopySectionNear(fromId, toId, place) {
+    if (!fromId || !toId || fromId === toId || fromId === "logo" || toId === "logo") return false;
+    const order = ensureCopyListOrder().slice();
+    const from = order.indexOf(fromId);
+    if (from < 0 || order.indexOf(toId) < 0) return false;
+    order.splice(from, 1);
+    let insert = order.indexOf(toId);
+    if (place === "after") insert += 1;
+    order.splice(insert, 0, fromId);
+    const logoAt = order.indexOf("logo");
+    if (logoAt > 0) {
+      order.splice(logoAt, 1);
+      order.unshift("logo");
+    }
+    store.copyListOrder = order;
+    applyCopyListOrderToLayout();
+    return true;
+  }
+
   function bindCopyListDrag(handle, cell, secId) {
     handle.addEventListener("pointerdown", function (ev) {
       if (ev.button != null && ev.button !== 0) return;
-      if (copyListOpenState()) return;
+      if (secId === "logo" || copyListOpenState()) return;
       ev.preventDefault();
       const host = document.getElementById("easy-copy-list-host");
       const list = host && host.querySelector(".easy-copy-list-wire");
       if (!host || !list) return;
-      const startY = ev.clientY;
-      let touched = null;
+      const originY = ev.clientY;
+      let startY = ev.clientY;
+      let changed = false;
       copyListDrag = { id: secId };
       cell.classList.add("is-dragging");
+      const target = copySectionPreviewEl(secId);
+      const edgeRows = Array.prototype.slice.call(list.querySelectorAll(":scope > .easy-copy-list-cell"));
+      if (target) {
+        centerPreviewBlock(target, rowListEdge(cell, edgeRows));
+        markPreviewStick(target);
+      }
       function onMove(ev2) {
-        cell.style.transform = "translateY(" + (ev2.clientY - startY) + "px)";
-        const mine = cell.getBoundingClientRect();
-        let best = null;
-        let bestArea = 0;
-        list.querySelectorAll(":scope > .easy-copy-list-cell").forEach(function (other) {
-          other.classList.remove("is-touch");
-          if (other === cell) return;
-          const rect = other.getBoundingClientRect();
-          const overlapW = Math.min(mine.right, rect.right) - Math.max(mine.left, rect.left);
-          const overlapH = Math.min(mine.bottom, rect.bottom) - Math.max(mine.top, rect.top);
-          const area = overlapW > 0 && overlapH > 0 ? overlapW * overlapH : 0;
-          if (area > bestArea) {
-            bestArea = area;
-            best = other;
-          }
-        });
-        if (best) best.classList.add("is-touch");
-        touched = best;
+        if (Math.abs(ev2.clientY - originY) <= 4) return;
+        const y = clampDragClientY(cell, ev2.clientY, startY);
+        cell.style.transform = "translateY(" + (y - startY) + "px)";
+        for (let n = 0; n < 6; n += 1) {
+          const hit = thirdSwapHit(cell, "easy-copy-list-cell");
+          if (!hit || hit.other.getAttribute("data-copy-sec") === "logo") break;
+          const beforeTop = cell.getBoundingClientRect().top;
+          const toId = hit.other.getAttribute("data-copy-sec");
+          if (!moveCopySectionNear(secId, toId, hit.place)) break;
+          if (hit.place === "after") hit.other.after(cell);
+          else hit.other.before(cell);
+          startY = keepDragUnderPointer(cell, y, beforeTop, startY);
+          changed = true;
+        }
+        if (target) slideAndFollowPreview(target, cell, ev2.clientY >= originY);
       }
       function onUp() {
         window.removeEventListener("pointermove", onMove, true);
@@ -13642,23 +14075,12 @@
         window.removeEventListener("pointercancel", onUp, true);
         cell.style.transform = "";
         cell.classList.remove("is-dragging");
-        list.querySelectorAll(".easy-copy-list-cell.is-touch").forEach(function (el) {
-          el.classList.remove("is-touch");
-        });
-        const overId = touched ? touched.getAttribute("data-copy-sec") : "";
-        touched = null;
+        releasePreviewDragFollow();
         copyListDrag = null;
-        if (!overId || overId === secId) return;
-        const order = ensureCopyListOrder().slice();
-        const from = order.indexOf(secId);
-        const to = order.indexOf(overId);
-        if (from < 0 || to < 0 || from === to) return;
-        order.splice(from, 1);
-        order.splice(to, 0, secId);
-        store.copyListOrder = order.slice();
-        applyCopyListOrderToLayout();
-        renderCopyListUi();
-        scheduleSave();
+        if (changed) {
+          renderCopyListUi();
+          scheduleSave();
+        }
       }
       window.addEventListener("pointermove", onMove, true);
       window.addEventListener("pointerup", onUp, true);
@@ -14636,12 +15058,14 @@
         else if (cur === "purpose") {
           if (store.entryBranch === "sample") {
             setEntryGateStep("sushi");
+            scrollBackDestinationToTop();
             return;
           }
           setEntryGateStep("branch");
         } else if (cur === "sushi" || cur === "resume" || cur === "branch") {
           setEntryGateStep(cur === "branch" ? "save" : "branch");
         }
+        scrollBackDestinationToTop();
       });
     });
     document.querySelectorAll("[data-sec-regen]").forEach((btn) => {
@@ -14969,6 +15393,29 @@
     setEntryGateStep("branch");
   }
 
+  function catchImageIsOn() {
+    if (store.catchImageOn === true) return true;
+    if (store.catchImageOn === false) return false;
+    return !store.heroImageOff;
+  }
+
+  function catchWordsAreOn() {
+    if (store.catchWordsOn === true) return true;
+    if (store.catchWordsOn === false) return false;
+    return store.copyHeroOnPhoto === true;
+  }
+
+  function openCatchFromLayout(page) {
+    const flow = getFlowSteps();
+    const cur = getCurrentFlowStep();
+    const idx = flow.findIndex(function (s) { return s.id === "easy-catch"; });
+    if (!cur || idx < 0) return;
+    if (page) store.catchPage = page;
+    store.layoutCatchReturn = cur.id;
+    showWizardStep(idx);
+    scheduleSave();
+  }
+
   function wizardNext() {
     if (colorWaveBusy) return;
     const flow = getFlowSteps();
@@ -14986,6 +15433,17 @@
       return;
     }
     if (step.id === "easy-catch") {
+      if (store.layoutCatchReturn) {
+        const backId = store.layoutCatchReturn;
+        const backAt = flow.findIndex(function (s) { return s.id === backId; });
+        if (backAt >= 0) {
+          store.layoutCatchReturn = "";
+          catchQuietReturnTo = backId;
+          showWizardStep(backAt);
+          scheduleSave();
+          return;
+        }
+      }
       if (advanceCatchPage()) return;
       if (store.catchImageOn !== true && store.catchWordsOn !== true) {
         showValidationNotice("記載項目から、キャッチを外してください。");
@@ -15152,6 +15610,21 @@
     scheduleSave();
   }
 
+  function scrollBackDestinationToTop() {
+    const apply = function () {
+      const form = document.querySelector(".dash-body > .fill-form");
+      if (form) form.scrollTop = 0;
+      const gate = document.getElementById("entry-gate");
+      if (gate && !gate.hidden) gate.scrollTop = 0;
+    };
+    apply();
+    window.requestAnimationFrame(function () {
+      window.requestAnimationFrame(function () {
+        window.requestAnimationFrame(apply);
+      });
+    });
+  }
+
   function wizardBack() {
     clearPlainFootNotice();
     const step = getCurrentFlowStep();
@@ -15223,6 +15696,18 @@
       setSampleFlowPreviewHidden(false);
       showWizardStep(Math.max(0, store.wizardStepIndex - 1));
       return;
+    }
+    if (step && step.id === "easy-catch" && store.layoutCatchReturn) {
+      const backId = store.layoutCatchReturn;
+      store.layoutCatchReturn = "";
+      const backFlow = getFlowSteps();
+      const backAt = backFlow.findIndex(function (s) { return s.id === backId; });
+      if (backAt >= 0) {
+        catchQuietReturnTo = backId;
+        showWizardStep(backAt);
+        scheduleSave();
+        return;
+      }
     }
     if (step && step.id === "easy-catch" && retreatCatchPage()) return;
     if (step && EASY_FLOW_STEP_SET.has(step.id)) {
@@ -15350,7 +15835,12 @@
   function setupWizard() {
     const backBtn = document.getElementById("wizard-back");
     const nextBtn = document.getElementById("wizard-next");
-    if (backBtn) backBtn.addEventListener("click", wizardBack);
+    if (backBtn) {
+      backBtn.addEventListener("click", function () {
+        wizardBack();
+        scrollBackDestinationToTop();
+      });
+    }
     if (nextBtn) nextBtn.addEventListener("click", wizardNext);
     document.querySelectorAll("[data-reset-draft]").forEach((btn) => {
       btn.addEventListener("click", resetAllDraft);
@@ -15775,7 +16265,22 @@
     return layoutColorHoneyHome;
   }
 
+  function placeColorShade(inRow) {
+    const shade = document.querySelector("label.gct-honey-shade");
+    if (!shade) return;
+    if (!shade._shadeHome) {
+      shade._shadeHome = { parent: shade.parentElement, next: shade.nextSibling };
+    }
+    if (inRow) {
+      const side = document.querySelector(".layout-color-body .gct-pick-side");
+      if (side && shade.parentElement !== side) side.appendChild(shade);
+    } else if (shade._shadeHome.parent && shade.parentElement !== shade._shadeHome.parent) {
+      shade._shadeHome.parent.insertBefore(shade, shade._shadeHome.next);
+    }
+  }
+
   function restoreLayoutColorHoney() {
+    placeColorShade(false);
     const home = layoutColorHoneyHome;
     if (!home || !home.layout || !home.parent) return;
     home.parent.insertBefore(home.layout, home.next);
@@ -15801,6 +16306,7 @@
     store.guidedColorTrial._pickEntryHex = startHex;
     store.guidedColorTrial._pickEntryPartner = partnerHexForSlot(stepId);
     store.guidedColorTrial._pickHistory = [];
+    syncHoneyShadeSlider(startHex);
     const paint = () => {
       renderGctPickUi(stepId, { forceHoney: true });
     };
@@ -15878,6 +16384,7 @@
     }
     const group = row.closest(".layout-color-group");
     if (group && group !== row) group.classList.remove("is-honey");
+    syncOpenColorPreview();
   }
 
   function closeColorGroup(group) {
@@ -15891,6 +16398,7 @@
       btn.textContent = "開く";
       btn.setAttribute("aria-expanded", "false");
     }
+    syncOpenColorPreview();
   }
 
   function closeOpenColorScreens() {
@@ -15918,11 +16426,13 @@
     if (!body) return;
     body.hidden = false;
     body.appendChild(home.layout);
+    placeColorShade(true);
     unit.classList.add("is-open");
     const btn = unit.querySelector(":scope > .layout-color-line > .layout-color-open");
     if (btn) btn.setAttribute("aria-expanded", "true");
     showLayoutColorHoney(stepId, colorKey || null);
     if (stepId === "global-accent") placeAccentBarField(body);
+    syncOpenColorPreview();
   }
 
   function openColorGroup(group) {
@@ -15936,6 +16446,7 @@
       btn.textContent = "開く";
       btn.setAttribute("aria-expanded", "true");
     }
+    syncOpenColorPreview();
   }
 
   function colorMoveOrder() {
@@ -15951,6 +16462,12 @@
     return out;
   }
 
+  function colorMoveBlockId(moveId) {
+    if (moveId === "catch-jump") return "hero";
+    if (moveId === "hero-color") return "";
+    return COLOR_MOVE_BLOCK[moveId] || "";
+  }
+
   function syncColorMoveRowsFromPreview() {
     const rows = document.getElementById("layout-color-rows");
     if (!rows) return;
@@ -15958,29 +16475,50 @@
     rows.querySelectorAll(":scope > .layout-color-move").forEach((el) => {
       byId[el.getAttribute("data-color-move")] = el;
     });
+    const ordered = [];
     colorMoveOrder().forEach((id) => {
+      if (id === "hero-color" && byId["catch-jump"]) ordered.push("catch-jump");
+      if (byId[id]) ordered.push(id);
+    });
+    if (byId["catch-jump"] && ordered.indexOf("catch-jump") < 0) ordered.push("catch-jump");
+    ordered.forEach((id) => {
       if (byId[id]) rows.appendChild(byId[id]);
     });
   }
 
-  function saveColorMoveOrder() {
-    const list = document.getElementById("layout-color-rows");
-    if (!list) return;
+  function writeColorMoveOrder(list) {
+    if (!list) return false;
     const moveIds = Array.from(list.querySelectorAll(":scope > .layout-color-move")).map((el) => el.getAttribute("data-color-move"));
     store.colorListOrder = moveIds;
-    const wanted = moveIds.map((id) => COLOR_MOVE_BLOCK[id]).filter(Boolean);
+    const hasCatch = moveIds.indexOf("catch-jump") >= 0;
+    const wanted = [];
+    moveIds.forEach((id) => {
+      if (hasCatch && id === "hero-color") return;
+      const block = colorMoveBlockId(id);
+      if (!block || wanted.indexOf(block) >= 0) return;
+      wanted.push(block);
+    });
     const order = normalizeLayoutOrder(store.layoutOrder).slice();
     const slots = [];
     order.forEach((id, index) => {
       if (wanted.indexOf(id) >= 0) slots.push(index);
     });
-    if (slots.length === wanted.length) {
-      wanted.forEach((id, index) => {
-        order[slots[index]] = id;
-      });
-      store.layoutOrder = order;
-      applyLayoutOrderToPreview();
-    }
+    if (slots.length !== wanted.length) return false;
+    let same = true;
+    wanted.forEach((id, index) => {
+      if (order[slots[index]] !== id) same = false;
+      order[slots[index]] = id;
+    });
+    if (same) return false;
+    store.layoutOrder = order;
+    return true;
+  }
+
+  function saveColorMoveOrder() {
+    const list = document.getElementById("layout-color-rows");
+    if (!list) return;
+    if (writeColorMoveOrder(list)) applyLayoutOrderToPreview({ skipColorSync: true });
+    syncColorMoveRowsFromPreview();
     scheduleSave();
   }
 
@@ -16059,6 +16597,10 @@
     label.className = "layout-color-name";
     label.textContent = name;
     line.appendChild(label);
+    const ask = document.createElement("p");
+    ask.className = "layout-color-ask";
+    ask.textContent = "色の選び方は、どちらですか";
+    line.appendChild(ask);
     return line;
   }
 
@@ -16165,36 +16707,43 @@
       ev.stopPropagation();
       const list = row.parentElement;
       if (!list) return;
-      const startY = ev.clientY;
-      const originTop = row.getBoundingClientRect().top;
-      let touched = null;
+      const originY = ev.clientY;
+      let startY = ev.clientY;
+      let changed = false;
       row.classList.add("is-dragging");
+      document.body.classList.add("is-color-move-dragging");
+      const target = previewEl(colorRowPreviewSelector(row));
+      const edgeRows = Array.prototype.slice.call(list.querySelectorAll(":scope > .layout-color-move"));
+      if (target) {
+        centerPreviewBlock(target, rowListEdge(row, edgeRows));
+        markPreviewStick(target);
+      }
       const onMove = (moveEv) => {
+        if (Math.abs(moveEv.clientY - originY) <= 4) return;
+        const y = clampDragClientY(row, moveEv.clientY, startY);
         const pins = list.querySelectorAll(":scope > .layout-color-pin");
         const pin = pins.length ? pins[pins.length - 1] : null;
-        let dy = moveEv.clientY - startY;
-        if (pin) {
-          const floor = pin.getBoundingClientRect().bottom - originTop;
-          if (dy < floor) dy = floor;
+        row.style.transform = "translateY(" + (y - startY) + "px)";
+        for (let n = 0; n < 6; n += 1) {
+          const hit = thirdSwapHit(row, "layout-color-move");
+          if (!hit) break;
+          const beforeTop = row.getBoundingClientRect().top;
+          if (hit.place === "after") hit.other.after(row);
+          else hit.other.before(row);
+          startY = keepDragUnderPointer(row, y, beforeTop, startY);
+          if (writeColorMoveOrder(list)) applyLayoutOrderToPreview({ skipColorSync: true });
+          changed = true;
         }
-        row.style.transform = "translateY(" + dy + "px)";
-        const mine = row.getBoundingClientRect();
-        let best = null;
-        let bestArea = 0;
-        list.querySelectorAll(":scope > .layout-color-move").forEach((other) => {
-          other.classList.remove("is-touch");
-          if (other === row) return;
-          const rect = other.getBoundingClientRect();
-          const overlapW = Math.min(mine.right, rect.right) - Math.max(mine.left, rect.left);
-          const overlapH = Math.min(mine.bottom, rect.bottom) - Math.max(mine.top, rect.top);
-          const area = overlapW > 0 && overlapH > 0 ? overlapW * overlapH : 0;
-          if (area > bestArea) {
-            bestArea = area;
-            best = other;
+        if (pin) {
+          const over = pin.getBoundingClientRect().bottom - row.getBoundingClientRect().top;
+          if (over > 0) {
+            const match = /translateY\(([-\d.]+)px\)/.exec(row.style.transform || "");
+            const applied = match ? parseFloat(match[1]) : 0;
+            row.style.transform = "translateY(" + (applied + over) + "px)";
+            startY -= over;
           }
-        });
-        if (best) best.classList.add("is-touch");
-        touched = best;
+        }
+        if (target) slideAndFollowPreview(target, row, moveEv.clientY >= originY);
       };
       const onUp = () => {
         window.removeEventListener("pointermove", onMove, true);
@@ -16202,18 +16751,9 @@
         window.removeEventListener("pointercancel", onUp, true);
         row.style.transform = "";
         row.classList.remove("is-dragging");
-        list.querySelectorAll(":scope > .layout-color-move.is-touch").forEach((el) => el.classList.remove("is-touch"));
-        if (touched && touched.parentElement === list) {
-          const moves = Array.from(list.querySelectorAll(":scope > .layout-color-move"));
-          const from = moves.indexOf(row);
-          const to = moves.indexOf(touched);
-          if (from >= 0 && to >= 0 && from !== to) {
-            if (from < to) touched.after(row);
-            else touched.before(row);
-            saveColorMoveOrder();
-          }
-        }
-        touched = null;
+        document.body.classList.remove("is-color-move-dragging");
+        releasePreviewDragFollow();
+        if (changed) saveColorMoveOrder();
       };
       window.addEventListener("pointermove", onMove, true);
       window.addEventListener("pointerup", onUp, true);
@@ -16230,9 +16770,25 @@
     COLOR_LIST_MOVES.forEach((item) => {
       byId[item.id] = item.children ? makeColorGroup(item, "move") : makeColorDirect(item);
     });
+    const catchRow = document.createElement("div");
+    catchRow.className = "layout-color-row layout-color-move";
+    catchRow.setAttribute("data-color-move", "catch-jump");
+    const catchLine = makeColorLine("キャッチ", { handle: true });
+    const catchSlot = document.createElement("span");
+    catchSlot.className = "layout-color-chips";
+    catchSlot.setAttribute("aria-hidden", "true");
+    catchLine.appendChild(catchSlot);
+    makeColorOpen(catchLine, function () {
+      openCatchFromLayout(catchWordsAreOn() ? "color" : "ask");
+    });
+    catchRow.appendChild(catchLine);
+    bindLayoutColorMoveDrag(catchRow);
+    byId["catch-jump"] = catchRow;
     colorMoveOrder().forEach((id) => {
+      if (id === "hero-color") rows.appendChild(catchRow);
       if (byId[id]) rows.appendChild(byId[id]);
     });
+    if (!catchRow.parentElement) rows.appendChild(catchRow);
     paintLayoutColorChips();
     syncLayoutColorRows();
   }
@@ -16652,7 +17208,7 @@
     "works-list": "works-images"
   };
 
-  function applyAllConfirmed() {
+  function applyAllConfirmed(opts) {
     const counts = { ...previewDefaults.counts };
     const fonts = { ...previewDefaults.fonts };
     let extras = { ...previewDefaults.extras };
@@ -16686,7 +17242,7 @@
 
     applyFontsToRoot(Object.assign({}, fonts, readDraftFonts()));
     applyLiveColors(false);
-    applyAllImages();
+    if (!opts || !opts.skipImages) applyAllImages();
 
     extras = {
       ...extras,
@@ -16903,7 +17459,7 @@
     }
   }
 
-  function applyLayoutOrderToPreview() {
+  function applyLayoutOrderToPreview(opts) {
     const main = root.querySelector("main");
     if (!main) return;
     store.layoutOrder = normalizeLayoutOrder(store.layoutOrder);
@@ -16933,7 +17489,7 @@
       access: !!(store.draftExtras && store.draftExtras.access),
       address: !!(store.draftExtras && store.draftExtras.address)
     });
-    syncColorMoveRowsFromPreview();
+    if (!opts || !opts.skipColorSync) syncColorMoveRowsFromPreview();
   }
 
   function swapLayoutBlocks(aId, bId) {
@@ -17961,6 +18517,52 @@
     return fromIndex < toIndex ? "after" : "before";
   }
 
+  function crossedDragSibling(row, siblingClass) {
+    const box = row.getBoundingClientRect();
+    const mid = box.top + box.height / 2;
+    let next = row.nextElementSibling;
+    while (next && !next.classList.contains(siblingClass)) next = next.nextElementSibling;
+    if (next && !next.hidden) {
+      const rect = next.getBoundingClientRect();
+      if (rect.height > 2 && mid > rect.top + rect.height / 2) return { other: next, place: "after" };
+    }
+    let prev = row.previousElementSibling;
+    while (prev && !prev.classList.contains(siblingClass)) prev = prev.previousElementSibling;
+    if (prev && !prev.hidden) {
+      const rect = prev.getBoundingClientRect();
+      if (rect.height > 2 && mid < rect.top + rect.height / 2) return { other: prev, place: "before" };
+    }
+    return null;
+  }
+
+  function keepDragUnderPointer(row, clientY, beforeTop, startY) {
+    const afterTop = row.getBoundingClientRect().top;
+    const nextStart = startY + (afterTop - beforeTop);
+    row.style.transform = "translateY(" + (clientY - nextStart) + "px)";
+    return nextStart;
+  }
+
+  function liveSwapImageSections(cell, clientY) {
+    if (!cell.closest("#easy-img-layout-host")) return;
+    for (let n = 0; n < 6; n += 1) {
+      const hit = crossedDragSibling(cell, "layout-arrange-cell");
+      if (!hit) break;
+      const fromId = cell.getAttribute("data-layout-block");
+      const toId = hit.other.getAttribute("data-layout-block");
+      const beforeTop = cell.getBoundingClientRect().top;
+      if (!moveLayoutIdNear(fromId, toId, hit.place)) break;
+      if (hit.place === "after") hit.other.after(cell);
+      else hit.other.before(cell);
+      applyLayoutOrderToPreview();
+      store._layoutPointerStartY = keepDragUnderPointer(
+        cell,
+        clientY,
+        beforeTop,
+        store._layoutPointerStartY || clientY
+      );
+    }
+  }
+
   function bindLayoutInnerDrag(row, countId, slotId) {
     const handle = row.querySelector(".layout-inner-handle");
     if (!handle) return;
@@ -17970,11 +18572,34 @@
       ev.stopPropagation();
       const list = row.parentElement;
       if (!list) return;
-      const startY = ev.clientY;
+      let startY = ev.clientY;
       let touched = null;
+      const frameBlock = countId === "about-photos" ? "photos" : countId === "works-list" ? "works" : "";
+      const livePhoto = !!row.closest("#easy-img-layout-host");
       row.classList.add("is-dragging");
+      const liveState = { undo: false };
+      if (!livePhoto) followInnerPhotoDrag(frameBlock, slotId, row);
       const onMove = (moveEv) => {
-        row.style.transform = "translateY(" + (moveEv.clientY - startY) + "px)";
+        const y = livePhoto ? clampDragClientY(row, moveEv.clientY, startY) : moveEv.clientY;
+        row.style.transform = "translateY(" + (y - startY) + "px)";
+        if (livePhoto) {
+          for (let n = 0; n < 6; n += 1) {
+            const hit = thirdSwapHit(row, "layout-inner");
+            if (!hit) break;
+            const fromId = row.getAttribute("data-item-id");
+            const toId = hit.other.getAttribute("data-item-id");
+            const beforeTop = row.getBoundingClientRect().top;
+            if (!liveState.undo) {
+              pushLayoutUndo();
+              liveState.undo = true;
+            }
+            if (!moveItemOrderNear(countId, fromId, toId, hit.place)) break;
+            if (hit.place === "after") hit.other.after(row);
+            else hit.other.before(row);
+            applyItemLayoutToPreview(countId);
+            startY = keepDragUnderPointer(row, y, beforeTop, startY);
+          }
+        }
         const mine = row.getBoundingClientRect();
         let best = null;
         let bestArea = 0;
@@ -17992,6 +18617,7 @@
         });
         if (best) best.classList.add("is-touch");
         touched = best;
+        if (!livePhoto) followInnerPhotoDrag(frameBlock, slotId, row);
       };
       const onUp = () => {
         window.removeEventListener("pointermove", onMove, true);
@@ -18000,6 +18626,15 @@
         row.style.transform = "";
         row.classList.remove("is-dragging");
         list.querySelectorAll(".layout-inner.is-touch").forEach((el) => el.classList.remove("is-touch"));
+        releasePreviewDragFollow();
+        if (livePhoto) {
+          if (liveState.undo) {
+            if (store.confirmed.finish) unconfirmFinishSoft();
+            scheduleSave();
+          }
+          touched = null;
+          return;
+        }
         if (touched && touched.parentElement === list) {
           const dropId = touched.getAttribute("data-item-id");
           seedItemOrder(countId);
@@ -18255,6 +18890,10 @@
       box.style.marginLeft = "0";
       box.style.marginBottom = "0";
       box.style.visibility = "visible";
+      if (sources) {
+        sources.style.width = w + "px";
+        sources.style.maxWidth = "100%";
+      }
       img.style.width = "100%";
       img.style.height = "100%";
       img.style.maxHeight = "none";
@@ -18373,20 +19012,11 @@
     return "";
   }
 
-  /* 縮んだ見本でも、最後の枠を上まで送れる余地を足す */
+  /* 見本の下に足していた空っぽは置かない。上か下に寄せて中身が見えればよい */
   function ensurePreviewScrollTail(scroll) {
-    let tail = scroll.querySelector(".preview-scroll-tail");
-    if (!tail) {
-      tail = document.createElement("div");
-      tail.className = "preview-scroll-tail";
-      tail.setAttribute("aria-hidden", "true");
-      scroll.appendChild(tail);
-    }
-    const room = Math.max(0, scroll.clientHeight - 24);
-    tail.style.flex = "0 0 auto";
-    tail.style.width = "100%";
-    tail.style.height = room + "px";
-    tail.style.pointerEvents = "none";
+    if (!scroll) return;
+    const tail = scroll.querySelector(".preview-scroll-tail");
+    if (tail) tail.remove();
   }
 
   /* 見本が zoom で縮んでいても、スクロール量は縮んだあとの画面位置で出す */
@@ -18410,7 +19040,7 @@
         Math.abs(box.height - layoutH) <= Math.abs(box.height - layoutH * zoom) + 1;
       const scale = rectIsLayout ? zoom : 1;
       const visualTop = box.top * scale;
-      const deltaScreen = visualTop - (pane.top + 12);
+      const deltaScreen = visualTop - pane.top;
       if (Math.abs(deltaScreen) <= 4) break;
       const max = Math.max(0, scroll.scrollHeight - scroll.clientHeight);
       const beforeTop = scroll.scrollTop;
@@ -18450,23 +19080,356 @@
     }
   }
 
-  function alignOpenPhotoWithPreview() {
-    const map = document.querySelector("#easy-img-layout-host .layout-photo-row.is-open .layout-source-map");
-    if (!map || !root) return;
-    const sel = layoutFramePreviewSelector(
-      map.getAttribute("data-mirror-block") || "",
-      map.getAttribute("data-mirror-slot") || ""
-    );
-    const scroll = document.querySelector(".preview-scroll");
-    const target = sel ? root.querySelector(sel) : null;
-    if (!scroll || !target) return;
-    ensurePreviewScrollTail(scroll);
+  function wizardStepId() {
+    const flow = typeof getFlowSteps === "function" ? getFlowSteps() : [];
+    const step = flow[store.wizardStepIndex];
+    return step ? step.id : "";
+  }
+
+  function previewEl(selector) {
+    if (!selector || !root) return null;
+    if (selector === "#preview-root") return root;
+    try {
+      return root.querySelector(selector);
+    } catch (err) {
+      return null;
+    }
+  }
+
+  function clearLayoutFocusClass() {
+    if (!root) return;
+    root.classList.remove("is-layout-focus");
+    root.querySelectorAll(".is-layout-focus").forEach((el) => el.classList.remove("is-layout-focus"));
+  }
+
+  function focusPreviewTarget(target) {
+    clearLayoutFocusClass();
+    if (target && !target.hidden) target.classList.add("is-layout-focus");
+    syncPlaceMarkFrame();
+  }
+
+  function ensurePreviewAlignBar() {
+    const pane = document.querySelector(".preview-pane");
+    if (!pane) return null;
+    let bar = document.getElementById("preview-align-bar");
+    if (!bar) {
+      bar = document.createElement("div");
+      bar.id = "preview-align-bar";
+      bar.hidden = true;
+      bar.setAttribute("aria-hidden", "true");
+      pane.appendChild(bar);
+    }
+    return bar;
+  }
+
+  function hidePreviewAlignBar() {
+    const bar = document.getElementById("preview-align-bar");
+    if (bar) bar.hidden = true;
+  }
+
+  function showPreviewAlignBar(anchorEl) {
+    const bar = ensurePreviewAlignBar();
+    const pane = document.querySelector(".preview-pane");
+    if (!bar || !pane || !anchorEl) return;
+    const top = anchorEl.getBoundingClientRect().top - pane.getBoundingClientRect().top;
+    bar.hidden = false;
+    bar.style.top = Math.round(top) + "px";
+  }
+
+  function clearPreviewBlockShift() {
+    if (!root) return;
+    root.querySelectorAll(".is-preview-block-shift").forEach((el) => {
+      el.style.transform = "";
+      el.classList.remove("is-preview-block-shift");
+    });
+  }
+
+  function previewVisualMetrics(el) {
     const zoom = previewZoomFactor();
-    const prev = scroll.style.scrollBehavior;
-    scroll.style.scrollBehavior = "auto";
-    let ratio = 1;
-    for (let i = 0; i < 8; i++) {
-      const mapTop = map.getBoundingClientRect().top;
+    const box = el.getBoundingClientRect();
+    const layoutH = el.offsetHeight || box.height;
+    const rectIsLayout =
+      zoom < 0.999 &&
+      layoutH > 8 &&
+      Math.abs(box.height - layoutH) <= Math.abs(box.height - layoutH * zoom) + 1;
+    const scale = rectIsLayout ? zoom : 1;
+    return { top: box.top * scale, height: Math.max(box.height, layoutH) * scale };
+  }
+
+  function nudgePreviewScroll(scroll, target, deltaScreen) {
+    const max = Math.max(0, scroll.scrollHeight - scroll.clientHeight);
+    const ratio = scroll._previewRatio || 1;
+    const before = scroll.scrollTop;
+    const visBefore = previewVisualMetrics(target).top;
+    const next = Math.max(0, Math.min(max, before + deltaScreen * ratio));
+    if (Math.abs(next - before) < 0.25) return false;
+    scroll.scrollTop = next;
+    const movedScroll = scroll.scrollTop - before;
+    const movedScreen = visBefore - previewVisualMetrics(target).top;
+    if (Math.abs(movedScreen) > 1 && Math.abs(movedScroll) > 1) {
+      const nextRatio = movedScroll / movedScreen;
+      if (nextRatio > 0.2 && nextRatio < 8) scroll._previewRatio = nextRatio;
+    }
+    return true;
+  }
+
+  function grabPreviewEdge(target) {
+    const host = document.getElementById("easy-img-layout-host");
+    if (!host || !target) return "middle";
+    const itemId = target.getAttribute && target.getAttribute("data-item-id");
+    if (itemId) {
+      const mine = Array.prototype.find.call(host.querySelectorAll(".layout-photo-row"), function (row) {
+        return row.getAttribute("data-item-id") === itemId && row.offsetParent;
+      });
+      const list = mine && mine.parentElement;
+      const siblings = list
+        ? Array.prototype.filter.call(list.children, function (el) {
+            return el.classList && el.classList.contains("layout-photo-row") && el.offsetParent;
+          })
+        : [];
+      if (mine && siblings.length) {
+        if (siblings[0] === mine) return "top";
+        if (siblings[siblings.length - 1] === mine) return "bottom";
+        return "middle";
+      }
+      return "middle";
+    }
+    const cells = Array.prototype.slice.call(host.querySelectorAll(".layout-arrange-cell"));
+    if (!cells.length) return "middle";
+    const first = previewEl(layoutSectionPreviewSelector(cells[0].getAttribute("data-layout-block")));
+    const last = previewEl(layoutSectionPreviewSelector(cells[cells.length - 1].getAttribute("data-layout-block")));
+    if (first === target) return "top";
+    if (last === target) return "bottom";
+    return "middle";
+  }
+
+  function rowListEdge(row, rows) {
+    const visible = (rows || []).filter(function (el) { return el && el.offsetParent; });
+    if (!row || !visible.length) return "middle";
+    if (visible[0] === row) return "top";
+    if (visible[visible.length - 1] === row) return "bottom";
+    return "middle";
+  }
+
+  function centerPreviewBlock(target, forceEdge) {
+    const scroll = document.querySelector(".preview-scroll");
+    if (!scroll || !target) return;
+    clearPreviewBlockShift();
+    const tail = scroll.querySelector(".preview-scroll-tail");
+    if (tail) tail.remove();
+    const alignHead = scroll.querySelector(":scope > .preview-align-head");
+    if (alignHead) {
+      const headH = alignHead.offsetHeight || 0;
+      alignHead.remove();
+      scroll.scrollTop = Math.max(0, scroll.scrollTop - headH);
+    }
+    scroll._previewRatio = 1;
+    const edge = forceEdge || grabPreviewEdge(target);
+    const maxOf = function () { return Math.max(0, scroll.scrollHeight - scroll.clientHeight); };
+    for (let n = 0; n < 4; n += 1) {
+      focusPreviewTarget(target);
+      const frame = document.getElementById("place-mark-frame");
+      const view = scroll.getBoundingClientRect();
+      if (!frame || frame.hidden || view.height < 40) break;
+      const fb = frame.getBoundingClientRect();
+      let delta = 0;
+      const card = !!(target.getAttribute && target.getAttribute("data-item-id"));
+      if (edge === "top") delta = fb.top - view.top;
+      else if (edge === "bottom") delta = fb.bottom - view.bottom;
+      else {
+        delta = (fb.top + fb.height / 2) - (view.top + view.height / 2);
+        if (fb.top - delta < view.top) delta = fb.top - view.top;
+        else if (fb.bottom - delta > view.bottom) delta = fb.bottom - view.bottom;
+        if (fb.height > view.height) delta = fb.top - view.top;
+      }
+      if (card && fb.height <= view.height) {
+        if (fb.top - delta < view.top) delta = fb.top - view.top;
+        else if (fb.bottom - delta > view.bottom) delta = fb.bottom - view.bottom;
+      }
+      if (Math.abs(delta) <= 2) break;
+      const next = Math.max(0, Math.min(maxOf(), scroll.scrollTop + delta));
+      if (Math.abs(next - scroll.scrollTop) < 0.25) break;
+      scroll.scrollTop = next;
+    }
+    focusPreviewTarget(target);
+  }
+
+  function markPreviewStick(target) {
+    const scroll = document.querySelector(".preview-scroll");
+    const frame = document.getElementById("place-mark-frame");
+    if (!scroll || !target || !frame || frame.hidden) return;
+    const view = scroll.getBoundingClientRect();
+    const fb = frame.getBoundingClientRect();
+    target._stuckBottom = Math.max(0, fb.bottom - view.bottom);
+    target._stuckTop = Math.max(0, view.top - fb.top);
+  }
+
+  function slideAndFollowPreview(target, row, goingDown) {
+    if (!target || !row) return;
+    const scroll = document.querySelector(".preview-scroll");
+    const match = /translateY\(([-\d.]+)px\)/.exec(row.style.transform || "");
+    const dy = match ? parseFloat(match[1]) : 0;
+    target.classList.add("is-preview-block-shift");
+    const zoom = previewZoomFactor();
+    const layoutH = target.offsetHeight || 0;
+    const rawH = target.getBoundingClientRect().height;
+    const rectIsLayout =
+      zoom < 0.999 &&
+      layoutH > 8 &&
+      Math.abs(rawH - layoutH) <= Math.abs(rawH - layoutH * zoom) + 1;
+    target.style.transform = "translateY(" + (rectIsLayout ? dy / zoom : dy) + "px)";
+    if (scroll) {
+      const maxOf = function () { return Math.max(0, scroll.scrollHeight - scroll.clientHeight); };
+      for (let i = 0; i < 4; i += 1) {
+        syncPlaceMarkFrame();
+        const frame = document.getElementById("place-mark-frame");
+        const view = scroll.getBoundingClientRect();
+        if (!frame || frame.hidden || view.height < 40) break;
+        const fb = frame.getBoundingClientRect();
+        const card = !!(target.getAttribute && target.getAttribute("data-item-id"));
+        let delta = 0;
+        if (card) {
+          const topOut = view.top - fb.top;
+          const bottomOut = fb.bottom - view.bottom;
+          if (topOut > 0.5 && bottomOut > 0.5) delta = goingDown ? bottomOut : -topOut;
+          else if (topOut > 0.5) delta = -topOut;
+          else if (bottomOut > 0.5) delta = bottomOut;
+        } else if (goingDown) {
+          delta = fb.bottom - view.bottom - (target._stuckBottom || 0);
+          if (delta < 0) delta = 0;
+        } else {
+          delta = fb.top - view.top;
+          if (delta > 0) delta = 0;
+        }
+        if (Math.abs(delta) < 0.5) break;
+        const next = Math.max(0, Math.min(maxOf(), scroll.scrollTop + delta));
+        if (Math.abs(next - scroll.scrollTop) < 0.25) {
+          const applied = /translateY\(([-\d.]+)px\)/.exec(target.style.transform || "");
+          const cur = applied ? parseFloat(applied[1]) : 0;
+          const unit = rectIsLayout && zoom > 0 ? 1 / zoom : 1;
+          if (fb.top < view.top - 0.5 && (card || !goingDown)) {
+            target.style.transform = "translateY(" + (cur + (view.top - fb.top) * unit) + "px)";
+            continue;
+          }
+          if (card && fb.bottom > view.bottom + 0.5) {
+            target.style.transform = "translateY(" + (cur - (fb.bottom - view.bottom) * unit) + "px)";
+            continue;
+          }
+          break;
+        }
+        scroll.scrollTop = next;
+      }
+    }
+    syncPlaceMarkFrame();
+  }
+
+  function isSwapSibling(el, siblingClass) {
+    return !!(el && el.classList.contains(siblingClass) && !el.hidden && el.offsetParent);
+  }
+
+  function thirdSwapHit(row, siblingClass) {
+    if (!row) return null;
+    const box = row.getBoundingClientRect();
+    let next = row.nextElementSibling;
+    while (next && !isSwapSibling(next, siblingClass)) next = next.nextElementSibling;
+    if (next) {
+      const rect = next.getBoundingClientRect();
+      if (rect.height > 2 && box.bottom > rect.top + rect.height / 2) return { other: next, place: "after" };
+    }
+    let prev = row.previousElementSibling;
+    while (prev && !isSwapSibling(prev, siblingClass)) prev = prev.previousElementSibling;
+    if (prev) {
+      const rect = prev.getBoundingClientRect();
+      if (rect.height > 2 && box.top < rect.bottom - rect.height / 2) return { other: prev, place: "before" };
+    }
+    return null;
+  }
+
+  function swapImageSectionByThird(cell, clientY) {
+    if (!cell.closest("#easy-img-layout-host")) return;
+    for (let n = 0; n < 6; n += 1) {
+      const hit = thirdSwapHit(cell, "layout-arrange-cell");
+      if (!hit) break;
+      const fromId = cell.getAttribute("data-layout-block");
+      const toId = hit.other.getAttribute("data-layout-block");
+      const beforeTop = cell.getBoundingClientRect().top;
+      if (!moveLayoutIdNear(fromId, toId, hit.place)) break;
+      if (hit.place === "after") hit.other.after(cell);
+      else hit.other.before(cell);
+      applyLayoutOrderToPreview();
+      store._layoutPointerStartY = keepDragUnderPointer(
+        cell,
+        clientY,
+        beforeTop,
+        store._layoutPointerStartY || clientY
+      );
+    }
+  }
+
+  function slideFramedWithRow(target, row) {
+    if (!root || !target || !row) return;
+    const scroll = document.querySelector(".preview-scroll");
+    const keep = scroll ? scroll.scrollTop : 0;
+    const match = /translateY\(([-\d.]+)px\)/.exec(row.style.transform || "");
+    const dy = match ? parseFloat(match[1]) : 0;
+    target.classList.add("is-preview-block-shift");
+    const zoom = previewZoomFactor();
+    const box = target.getBoundingClientRect();
+    const layoutH = target.offsetHeight || box.height;
+    const rectIsLayout =
+      zoom < 0.999 &&
+      layoutH > 8 &&
+      Math.abs(box.height - layoutH) <= Math.abs(box.height - layoutH * zoom) + 1;
+    target.style.transform = "translateY(" + (rectIsLayout ? dy / zoom : dy) + "px)";
+    if (scroll) scroll.scrollTop = keep;
+    syncPlaceMarkFrame();
+  }
+
+  function fullCrossTarget(row, siblingClass) {
+    if (!row || !row.parentElement) return null;
+    const match = /translateY\(([-\d.]+)px\)/.exec(row.style.transform || "");
+    const applied = match ? parseFloat(match[1]) : 0;
+    if (Math.abs(applied) < 8) return null;
+    const all = Array.prototype.filter.call(row.parentElement.children, (el) => {
+      return el.classList.contains(siblingClass) && !el.hidden && el.getBoundingClientRect().height > 2;
+    });
+    const index = all.indexOf(row);
+    if (index < 0) return null;
+    const mid = row.getBoundingClientRect().top + row.getBoundingClientRect().height / 2;
+    if (applied > 0) {
+      let after = null;
+      for (let i = index + 1; i < all.length; i += 1) {
+        const rect = all[i].getBoundingClientRect();
+        if (mid > rect.bottom) after = all[i];
+        else break;
+      }
+      return after ? { other: after, place: "after" } : null;
+    }
+    let before = null;
+    for (let i = index - 1; i >= 0; i -= 1) {
+      const rect = all[i].getBoundingClientRect();
+      if (mid < rect.top) before = all[i];
+      else break;
+    }
+    return before ? { other: before, place: "before" } : null;
+  }
+
+  function pinFramedPreviewBlock(target) {
+    const scroll = document.querySelector(".preview-scroll");
+    if (!root || !scroll || !target) return;
+    const keep = scroll.scrollTop;
+    root.querySelectorAll(".is-preview-block-shift").forEach((el) => {
+      if (el === target) return;
+      el.style.transform = "";
+      el.classList.remove("is-preview-block-shift");
+    });
+    target.classList.add("is-preview-block-shift");
+    target.style.transform = "";
+    const view = scroll.getBoundingClientRect();
+    const zoom = previewZoomFactor();
+    const want = view.top + 8;
+    let shift = 0;
+    for (let i = 0; i < 6; i += 1) {
       const box = target.getBoundingClientRect();
       const layoutH = target.offsetHeight || box.height;
       const rectIsLayout =
@@ -18475,7 +19438,115 @@
         Math.abs(box.height - layoutH) <= Math.abs(box.height - layoutH * zoom) + 1;
       const scale = rectIsLayout ? zoom : 1;
       const visualTop = box.top * scale;
-      const deltaScreen = visualTop - mapTop;
+      const delta = want - visualTop;
+      if (Math.abs(delta) <= 4) break;
+      shift += rectIsLayout ? delta / zoom : delta;
+      target.style.transform = "translateY(" + shift + "px)";
+    }
+    scroll.scrollTop = keep;
+    focusPreviewTarget(target);
+  }
+
+  function clampDragClientY(row, clientY, startY) {
+    if (!row || !row.closest) return clientY;
+    const host =
+      row.closest("#easy-img-layout-host") ||
+      row.closest("#easy-copy-list-host") ||
+      row.closest("#layout-color-rows");
+    if (!host) return clientY;
+    const step = row.closest("[data-step-id]");
+    let head = null;
+    if (step) {
+      const heads = step.querySelectorAll(".dash-subhead");
+      for (let i = 0; i < heads.length; i += 1) {
+        if (heads[i].offsetParent && heads[i].getBoundingClientRect().height > 8) {
+          head = heads[i];
+          break;
+        }
+      }
+    }
+    const pane = document.querySelector(".preview-pane");
+    const box = row.getBoundingClientRect();
+    const match = /translateY\(([-\d.]+)px\)/.exec(row.style.transform || "");
+    const applied = match ? parseFloat(match[1]) : 0;
+    const layoutTop = box.top - applied;
+    let nextTop = layoutTop + (clientY - startY);
+    const headBox = head ? head.getBoundingClientRect() : null;
+    let minTop = headBox && headBox.height > 8 ? headBox.bottom + 6 : null;
+    if (host.id === "easy-copy-list-host" && row.classList.contains("easy-copy-list-cell")) {
+      const logo = host.querySelector('.easy-copy-list-cell[data-copy-sec="logo"]');
+      const logoBox = logo && logo !== row && logo.offsetParent ? logo.getBoundingClientRect() : null;
+      if (logoBox && logoBox.height > 8) {
+        const logoStop = logoBox.bottom + 6;
+        minTop = minTop == null ? logoStop : Math.max(minTop, logoStop);
+      }
+    }
+    if (row.classList.contains("layout-photo-row") || row.classList.contains("easy-copy-list-row")) {
+      const cell = row.closest(".layout-arrange-cell, .easy-copy-list-cell");
+      const cluster = cell ? cell.querySelector(".layout-count-cluster") : null;
+      const countBox = cluster ? cluster.getBoundingClientRect() : null;
+      if (countBox && countBox.height > 8 && cluster.offsetParent) minTop = countBox.bottom + 6;
+    }
+    const hostBottom = host.getBoundingClientRect().bottom;
+    const paneBottom = pane && pane.getBoundingClientRect().height > 40 ? pane.getBoundingClientRect().bottom : hostBottom;
+    const dash = document.querySelector(".dash-pane");
+    const dashBottom = dash && dash.getBoundingClientRect().height > 40 ? dash.getBoundingClientRect().bottom : hostBottom;
+    const dock = document.getElementById("wizard-foot-dock");
+    const dockBox = dock ? dock.getBoundingClientRect() : null;
+    const dockTop = dockBox && dockBox.height > 8 ? dockBox.top : hostBottom;
+    const limitBottom = Math.min(hostBottom, paneBottom, dashBottom, dockTop);
+    let maxTop = limitBottom - box.height - 6;
+    if (minTop != null && maxTop < minTop) maxTop = minTop;
+    const delta = clientY - startY;
+    if (delta >= 0 && layoutTop > maxTop) nextTop = layoutTop;
+    else {
+      nextTop = Math.min(maxTop, layoutTop + delta);
+      if (minTop != null) nextTop = Math.max(minTop, nextTop);
+    }
+    return startY + (nextTop - layoutTop);
+  }
+
+  function ensurePreviewAlignHead(scroll) {
+    clearPreviewAlignHead();
+    if (scroll) {
+      const head = scroll.querySelector(":scope > .preview-align-head");
+      if (head) head.remove();
+    }
+    return null;
+  }
+
+  function clearPreviewAlignHead() {
+    const scroll = document.querySelector(".preview-scroll");
+    if (!scroll) return;
+    const head = scroll.querySelector(":scope > .preview-align-head");
+    if (!head) return;
+    const h = head.offsetHeight || 0;
+    head.remove();
+    scroll.scrollTop = Math.max(0, scroll.scrollTop - h);
+  }
+
+  function alignPreviewToAnchor(selectorOrEl, anchorEl) {
+    const scroll = document.querySelector(".preview-scroll");
+    const target = typeof selectorOrEl === "string" ? previewEl(selectorOrEl) : selectorOrEl;
+    if (!scroll || !target || !anchorEl) return;
+    if (scroll.clientHeight < 40 || anchorEl.getBoundingClientRect().height < 2) return;
+    ensurePreviewAlignHead(scroll);
+    ensurePreviewScrollTail(scroll);
+    const zoom = previewZoomFactor();
+    const prev = scroll.style.scrollBehavior;
+    scroll.style.scrollBehavior = "auto";
+    const anchorTop = anchorEl.getBoundingClientRect().top;
+    let ratio = 1;
+    for (let i = 0; i < 8; i++) {
+      const box = target.getBoundingClientRect();
+      const layoutH = target.offsetHeight || box.height;
+      const rectIsLayout =
+        zoom < 0.999 &&
+        layoutH > 8 &&
+        Math.abs(box.height - layoutH) <= Math.abs(box.height - layoutH * zoom) + 1;
+      const scale = rectIsLayout ? zoom : 1;
+      const visualTop = box.top * scale;
+      const deltaScreen = visualTop - anchorTop;
       if (Math.abs(deltaScreen) <= 4) break;
       const max = Math.max(0, scroll.scrollHeight - scroll.clientHeight);
       const beforeTop = scroll.scrollTop;
@@ -18484,9 +19555,212 @@
       scroll.scrollTop = next;
       const movedScroll = scroll.scrollTop - beforeTop;
       const movedScreen = visualTop - target.getBoundingClientRect().top * scale;
-      if (Math.abs(movedScreen) > 1 && Math.abs(movedScroll) > 1) ratio = movedScroll / movedScreen;
+      if (Math.abs(movedScreen) > 1 && Math.abs(movedScroll) > 1) {
+        const nextRatio = movedScroll / movedScreen;
+        ratio = nextRatio > 0.2 && nextRatio < 8 ? nextRatio : 1;
+      }
     }
     scroll.style.scrollBehavior = prev;
+    syncPlaceMarkFrame();
+  }
+
+  function followPreviewDuringDrag(target, anchorEl) {
+    if (!target || !anchorEl) return;
+    focusPreviewTarget(target);
+    alignPreviewToAnchor(target, anchorEl);
+    showPreviewAlignBar(anchorEl);
+  }
+
+  function copySectionPreviewEl(secId) {
+    if (secId === "logo") return previewEl("#preview-header");
+    const sec = copyListSectionById(secId);
+    if (!sec || !sec.layoutId) return null;
+    return previewEl(layoutSectionPreviewSelector(sec.layoutId));
+  }
+
+  function copyItemPreviewEl(sec, itemIndex) {
+    if (!root || !sec) return null;
+    const n = Number(itemIndex);
+    if (sec.id === "works") return root.querySelector('#works-list > [data-item-id="work_' + n + '"]');
+    if (sec.id === "values") return root.querySelectorAll("#hero-values [data-sample-item]")[n - 1] || null;
+    if (sec.id === "accordions") return root.querySelectorAll("#about-accordions [data-sample-item]")[n - 1] || null;
+    return null;
+  }
+
+  function parkOpenCopyPreview() {
+    if (wizardStepId() !== "easy-copy-omakase") return;
+    const open = copyListOpenState();
+    hidePreviewAlignBar();
+    if (!open) {
+      parkOpenCopyPreview._held = "";
+      return;
+    }
+    const host = document.getElementById("easy-copy-list-host");
+    const cell = host && host.querySelector('.easy-copy-list-cell[data-copy-sec="' + open.sectionId + '"]');
+    const anchor =
+      (cell && (cell.querySelector(".easy-copy-item-head") || cell.querySelector(".easy-copy-list-head"))) || cell;
+    let target = copySectionPreviewEl(open.sectionId);
+    if (!target || !anchor) return;
+    const scroll = document.querySelector(".preview-scroll");
+    const frame = document.getElementById("place-mark-frame");
+    const view = scroll ? scroll.getBoundingClientRect() : null;
+    const fb = frame && !frame.hidden ? frame.getBoundingClientRect() : null;
+    const focus = document.querySelector("#preview-root .is-layout-focus");
+    let settled = false;
+    if (fb && view && view.height > 40 && focus === target) {
+      if (fb.height > view.height) settled = Math.abs(fb.top - view.top) < 4 || Math.abs(fb.bottom - view.bottom) < 4;
+      else {
+        const mid = Math.abs((fb.top + fb.height / 2) - (view.top + view.height / 2));
+        settled = mid < 8 || Math.abs(fb.top - view.top) < 4 || Math.abs(fb.bottom - view.bottom) < 4;
+      }
+    }
+    if (parkOpenCopyPreview._held === open.sectionId && settled) {
+      focusPreviewTarget(target);
+      return;
+    }
+    parkOpenCopyPreview._held = open.sectionId;
+    centerPreviewBlock(target, "middle");
+  }
+
+  function colorRowPreviewSelector(row) {
+    if (!row) return "";
+    const stepId = row.getAttribute("data-color-step") || "";
+    if (stepId) {
+      const block = form.querySelector('.dash-block[data-step-id="' + stepId + '"]');
+      const sel = block && block.getAttribute("data-preview-target");
+      if (sel) return sel;
+    }
+    const moveId = row.getAttribute("data-color-move") || "";
+    const blockId = colorMoveBlockId(moveId) || COLOR_MOVE_BLOCK[moveId] || "";
+    if (blockId) return layoutSectionPreviewSelector(blockId);
+    if (row.classList.contains("layout-color-whole")) return "#preview-root";
+    if (row.classList.contains("layout-color-pin")) return "#preview-header";
+    return "";
+  }
+
+  function syncOpenColorPreview() {
+    if (wizardStepId() !== "easy-color-stage") return;
+    const rows = document.getElementById("layout-color-rows");
+    hidePreviewAlignBar();
+    if (!rows) return;
+    const sub = rows.querySelector(".layout-color-sub.is-open");
+    const unit = sub || rows.querySelector(":scope > .layout-color-row.is-open");
+    if (!unit) {
+      syncOpenColorPreview._held = "";
+      clearPreviewPlaceMark();
+      return;
+    }
+    const target = previewEl(colorRowPreviewSelector(unit));
+    if (!target) return;
+    const held = unit.getAttribute("data-color-move") || unit.getAttribute("data-color-step") || unit.getAttribute("data-color-key") || "";
+    const scroll = document.querySelector(".preview-scroll");
+    const frame = document.getElementById("place-mark-frame");
+    const view = scroll ? scroll.getBoundingClientRect() : null;
+    const fb = frame && !frame.hidden ? frame.getBoundingClientRect() : null;
+    const focus = document.querySelector("#preview-root .is-layout-focus");
+    let settled = false;
+    if (fb && view && view.height > 40 && focus === target) {
+      if (fb.height > view.height) settled = Math.abs(fb.top - view.top) < 4 || Math.abs(fb.bottom - view.bottom) < 4;
+      else {
+        const mid = Math.abs((fb.top + fb.height / 2) - (view.top + view.height / 2));
+        settled = mid < 8 || Math.abs(fb.top - view.top) < 4 || Math.abs(fb.bottom - view.bottom) < 4;
+      }
+    }
+    if (syncOpenColorPreview._held === held && held && settled) {
+      focusPreviewTarget(target);
+      return;
+    }
+    syncOpenColorPreview._held = held;
+    centerPreviewBlock(target, "middle");
+  }
+
+  function releasePreviewDragFollow() {
+    hidePreviewAlignBar();
+    clearPreviewBlockShift();
+    const stepId = wizardStepId();
+    if (stepId === "easy-copy-omakase") {
+      if (copyListOpenState()) parkOpenCopyPreview();
+      else clearPreviewPlaceMark();
+      return;
+    }
+    if (stepId === "easy-img-wire") {
+      const photo = document.querySelector("#easy-img-layout-host .layout-photo-row.is-open");
+      if (photo) {
+        const map = photo.querySelector(".layout-source-map");
+        const sel = map
+          ? layoutFramePreviewSelector(map.getAttribute("data-mirror-block") || "", map.getAttribute("data-mirror-slot") || "")
+          : "";
+        const target = previewEl(sel);
+        if (target) focusPreviewTarget(target);
+        return;
+      }
+      const cell = document.querySelector("#easy-img-layout-host details.layout-arrange-cell[open]");
+      if (cell) {
+        const target = previewEl(layoutSectionPreviewSelector(cell.getAttribute("data-layout-block") || ""));
+        if (target) focusPreviewTarget(target);
+        return;
+      }
+      clearPreviewPlaceMark();
+      return;
+    }
+    if (stepId === "easy-color-stage") syncOpenColorPreview();
+  }
+
+  function photoListEl(blockId) {
+    if (blockId === "photos") return previewEl("#about-photos");
+    if (blockId === "works") return previewEl("#works-list");
+    return null;
+  }
+
+  function clearPhotoListShift() {
+    if (!root) return;
+    root.querySelectorAll(".is-photo-shift").forEach((el) => {
+      el.style.transform = "";
+      el.classList.remove("is-photo-shift");
+    });
+    root.querySelectorAll(".is-photo-hold").forEach((el) => el.classList.remove("is-photo-hold"));
+  }
+
+  function shiftPhotoListToAnchor(blockId, slot, anchorEl) {
+    const list = photoListEl(blockId);
+    const item = previewEl(layoutFramePreviewSelector(blockId, slot));
+    const shell = list && list.parentElement;
+    if (!list || !item || !anchorEl || !shell) return;
+    const scroll = document.querySelector(".preview-scroll");
+    const keep = scroll ? scroll.scrollTop : 0;
+    shell.classList.add("is-photo-hold");
+    list.classList.add("is-photo-shift");
+    list.style.transform = "";
+    const zoom = previewZoomFactor();
+    let shift = 0;
+    for (let i = 0; i < 6; i++) {
+      const box = item.getBoundingClientRect();
+      const layoutH = item.offsetHeight || box.height;
+      const rectIsLayout =
+        zoom < 0.999 &&
+        layoutH > 8 &&
+        Math.abs(box.height - layoutH) <= Math.abs(box.height - layoutH * zoom) + 1;
+      const visualTop = box.top * (rectIsLayout ? zoom : 1);
+      const delta = anchorEl.getBoundingClientRect().top - visualTop;
+      if (Math.abs(delta) <= 4) break;
+      shift += rectIsLayout ? delta / zoom : delta;
+      list.style.transform = "translateY(" + shift + "px)";
+    }
+    if (scroll) scroll.scrollTop = keep;
+    syncPlaceMarkFrame();
+  }
+
+  function alignOpenPhotoWithPreview() {
+    const map = document.querySelector("#easy-img-layout-host .layout-photo-row.is-open .layout-source-map");
+    if (!map || !root) return;
+    const blockId = map.getAttribute("data-mirror-block") || "";
+    const slot = map.getAttribute("data-mirror-slot") || "";
+    if (blockId === "photos" || blockId === "works") {
+      shiftPhotoListToAnchor(blockId, slot, map);
+      return;
+    }
+    const sel = layoutFramePreviewSelector(blockId, slot);
+    if (sel) alignPreviewToAnchor(sel, map);
   }
 
   function bindPlaceMarkSwitch() {
@@ -18537,7 +19811,8 @@
   function syncPlaceMarkFrame() {
     const frame = ensurePlaceMarkFrame();
     const pane = document.querySelector(".preview-pane");
-    const target = root && root.querySelector(".is-layout-focus");
+    const target =
+      root && (root.classList.contains("is-layout-focus") ? root : root.querySelector(".is-layout-focus"));
     const paneHidden = !pane || getComputedStyle(pane).display === "none";
     if (!frame || !pane || !target || !placeMarkOn || paneHidden) {
       if (frame) frame.hidden = true;
@@ -18572,13 +19847,33 @@
 
   function clearPreviewPlaceMark() {
     if (!root) return;
-    root.querySelectorAll(".is-layout-focus").forEach((el) => el.classList.remove("is-layout-focus"));
+    clearLayoutFocusClass();
+    clearPhotoListShift();
+    clearPreviewBlockShift();
+    clearPreviewAlignHead();
+    hidePreviewAlignBar();
     syncPlaceMarkFrame();
+  }
+
+  function followInnerPhotoDrag(blockId, slot, anchorEl) {
+    const target = previewEl(layoutFramePreviewSelector(blockId, slot));
+    if (!target || !anchorEl) return;
+    if (anchorEl.closest && anchorEl.closest("#easy-img-layout-host")) {
+      focusPreviewTarget(target);
+      return;
+    }
+    focusPreviewTarget(target);
+    if (blockId === "photos" || blockId === "works") {
+      shiftPhotoListToAnchor(blockId, slot, anchorEl);
+      showPreviewAlignBar(anchorEl);
+      return;
+    }
+    followPreviewDuringDrag(target, anchorEl);
   }
 
   function focusPreviewBlock(blockId) {
     const sel = layoutSectionPreviewSelector(blockId);
-    if (root) root.querySelectorAll(".is-layout-focus").forEach(function (el) { el.classList.remove("is-layout-focus"); });
+    clearLayoutFocusClass();
     if (!sel || !root) {
       syncPlaceMarkFrame();
       return;
@@ -18611,7 +19906,7 @@
 
   function focusPreviewLayoutFrame(blockId, slot) {
     const sel = layoutFramePreviewSelector(blockId, slot);
-    if (root) root.querySelectorAll(".is-layout-focus").forEach((el) => el.classList.remove("is-layout-focus"));
+    clearLayoutFocusClass();
     if (!sel || !root) {
       syncPlaceMarkFrame();
       return;
@@ -18896,9 +20191,11 @@
       if (map) alignOpenSourceMapToPad(map);
       syncEasyImgLevels();
       focusPreviewLayoutFrame(blockId, slot);
+      alignOpenPhotoWithPreview();
       return;
     }
     line.appendChild(btn);
+    clearPhotoListShift();
     syncEasyImgLevels();
     if (!document.querySelector(".layout-photo-row.is-open")) focusOpenLayoutSection();
   }
@@ -19414,7 +20711,6 @@
           const meta = LAYOUT_BLOCKS.find((b) => b.id === id);
           if (!meta) return;
           if (inCatchFace && id !== "hero") return;
-          if (imageOnly && !inCatchFace && id === "hero" && easyCatchOn()) return;
           if (imageOnly && (!isLayoutImageBlock(id) || !isLayoutBlockActive(meta))) return;
           const displayLabel = layoutBlockDisplayLabel(meta);
           const on = isLayoutBlockActive(meta);
@@ -19503,6 +20799,10 @@
             secOpen.addEventListener("click", (ev) => {
               ev.preventDefault();
               ev.stopPropagation();
+              if (imageOnly && !inCatchFace && id === "hero") {
+                openCatchFromLayout(catchImageIsOn() ? "image" : "imageAsk");
+                return;
+              }
               if (imageOnly && cell.open) {
                 const openRow = cell.querySelector(".layout-photo-row.is-open");
                 if (openRow) return;
@@ -19577,15 +20877,18 @@
                 if (row) {
                   setOnlyLayoutFrameOpen("hero", slot);
                   applyLayoutPhotoRowOpen(row, "hero", slot, true);
-                  focusPreviewLayoutFrame("hero", slot);
                   const scroller = document.querySelector(".dash-body > .fill-form");
                   if (scroller) scroller.scrollTop = 0;
+                  focusPreviewLayoutFrame("hero", slot);
+                  alignOpenPhotoWithPreview();
                 }
               } else {
-                scrollPreviewFrameIntoView(layoutSectionPreviewSelector(id));
-                focusPreviewBlock(id);
                 const scroller = document.querySelector(".dash-body > .fill-form");
                 if (scroller) scroller.scrollTop = 0;
+                clearPhotoListShift();
+                const sectionEl = previewEl(layoutSectionPreviewSelector(id));
+                if (sectionEl) centerPreviewBlock(sectionEl, "middle");
+                else focusPreviewBlock(id);
               }
               syncEasyImgLevels();
               return;
@@ -19626,10 +20929,14 @@
               ev.preventDefault();
               return;
             }
+            if (imageOnly) {
+              ev.preventDefault();
+              return;
+            }
             if (imageBlock) {
               if (cell.open) {
                 ev.preventDefault();
-                if (imageOnly || cell.closest("#easy-img-layout-host.is-photo-solo")) return;
+                if (cell.closest("#easy-img-layout-host.is-photo-solo")) return;
                 cell.open = false;
               }
               return;
@@ -19733,8 +21040,17 @@
     };
 
     const endDrag = () => {
+      if (cell.closest("#easy-img-layout-host")) {
+        cell.style.transform = "";
+        commitDragIfChanged();
+        store._layoutPointerId = null;
+        clearLayoutDragUi();
+        releasePreviewDragFollow();
+        return;
+      }
       if (!store.layoutDragId && !store.layoutDragDropped) {
         clearLayoutDragUi();
+        releasePreviewDragFollow();
         return;
       }
       const from = store.layoutDragId;
@@ -19755,6 +21071,7 @@
       }
       store._layoutPointerId = null;
       clearLayoutDragUi();
+      releasePreviewDragFollow();
     };
 
     const updateOverFromPoint = (clientY) => {
@@ -19803,9 +21120,19 @@
         store.layoutDragMoved = true;
       }
       if (!store.layoutDragMoved) return;
-      const dy = ev.clientY - (store._layoutPointerStartY || ev.clientY);
+      const y = cell.closest("#easy-img-layout-host")
+        ? clampDragClientY(cell, ev.clientY, store._layoutPointerStartY || ev.clientY)
+        : ev.clientY;
+      const dy = y - (store._layoutPointerStartY || y);
       cell.style.transform = "translateY(" + dy + "px)";
-      updateOverFromPoint(ev.clientY);
+      if (cell.closest("#easy-img-layout-host")) {
+        swapImageSectionByThird(cell, y);
+        const framed = previewEl(layoutSectionPreviewSelector(id));
+        if (framed) slideAndFollowPreview(framed, cell, ev.clientY >= (store._layoutDragOriginY || ev.clientY));
+      } else {
+        updateOverFromPoint(ev.clientY);
+        followPreviewDuringDrag(previewEl(layoutSectionPreviewSelector(id)), cell);
+      }
     };
     const finishPointer = (ev) => {
       if (finishOnce) return;
@@ -19858,10 +21185,20 @@
       store.layoutSwapFrom = null;
       store._layoutPointerId = ev.pointerId;
       store._layoutPointerStartY = ev.clientY;
+      store._layoutDragOriginY = ev.clientY;
       const rect = cell.getBoundingClientRect();
       store._layoutGhostOffsetX = ev.clientX - rect.left;
       store._layoutGhostOffsetY = ev.clientY - rect.top;
       cell.classList.add("is-dragging");
+      if (cell.closest("#easy-img-layout-host")) {
+        const framed = previewEl(layoutSectionPreviewSelector(id));
+        if (framed) {
+          centerPreviewBlock(framed);
+          markPreviewStick(framed);
+        }
+      } else {
+        followPreviewDuringDrag(previewEl(layoutSectionPreviewSelector(id)), cell);
+      }
       const host = document.getElementById("layout-arrange-wire");
       if (host) host.classList.add("is-dragging-layout");
       document.body.classList.add("is-layout-dragging");

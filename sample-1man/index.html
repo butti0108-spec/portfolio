@@ -12,7 +12,7 @@
   <!-- メーカー親CSS（ポートフォリオ根の style.css は読まない） -->
   <link rel="stylesheet" href="maker-base.css?v=font-heading-scope-20261002">
   <link rel="icon" href="brand/walker-favicon.png?v=walker-20261002" type="image/png">
-  <link rel="stylesheet" href="sample-overrides.css?v=walker-ka4-20261002">
+  <link rel="stylesheet" href="sample-overrides.css?v=zip-copy-stack-20261004">
   <link rel="stylesheet" href="free-photo-gallery/gallery.css?v=omakase-ok-20260929">
   <script>
     (function () {
@@ -65,7 +65,7 @@
   <script src="sushi-belt.js?v=mihon-word-20260930" defer></script>
   <script src="free-photo-gallery/gallery.js?v=gallery-act-20261001" defer></script>
   <script src="page-shutter.js?v=sample-only-20260929" defer></script>
-  <script src="script.js?v=catch-open-align-20261002" defer></script>
+  <script src="script.js?v=zip-copy-stack-20261004" defer></script>
   <script>
     (function () {
       var h = location.hostname;
@@ -166,6 +166,13 @@
         <legend class="visually-hidden">保存のしかた</legend>
         <div class="entry-branch-grid" role="radiogroup" aria-label="保存のしかた">
           <label class="entry-branch-card">
+            <input type="radio" name="entry_save_mode" value="browser">
+            <span class="entry-branch-card-inner">
+              <strong role="heading" aria-level="3">残さず、そのまま作る</strong>
+              <span>残さない場合、ページを更新すると写真は消えることがあります（文章などはブラウザ内に残ることがあります）。</span>
+            </span>
+          </label>
+          <label class="entry-branch-card">
             <input type="radio" name="entry_save_mode" value="folder">
             <span class="entry-branch-card-inner">
               <strong role="heading" aria-level="3">このパソコンに残して続ける</strong>
@@ -177,13 +184,6 @@
                 </div>
                 <button type="button" class="wizard-btn" id="entry-pick-folder">この名前で保存する</button>
               </div>
-            </span>
-          </label>
-          <label class="entry-branch-card">
-            <input type="radio" name="entry_save_mode" value="browser">
-            <span class="entry-branch-card-inner">
-              <strong role="heading" aria-level="3">残さず、そのまま作る</strong>
-              <span>残さない場合、ページを更新すると写真は消えることがあります（文章などはブラウザ内に残ることがあります）。</span>
             </span>
           </label>
         </div>
@@ -210,7 +210,7 @@
             <input type="radio" name="entry_branch" value="resume">
             <span class="entry-branch-card-inner">
               <strong role="heading" aria-level="3">保存したデータから再開する</strong>
-              <span>前に残した制作データやZIPから続きを開きます</span>
+              <span>この工房で作ったデータのみ開けます。途中で残したフォルダか、最後に書き出したZIPから続きを開きます。</span>
             </span>
           </label>
         </div>
@@ -223,10 +223,12 @@
         <div class="entry-resume-sources">
           <label class="entry-resume-file">
             <span class="entry-resume-file-label">ZIPファイル</span>
+            <span class="entry-intake-note">最後まで進んで書き出したZIPそのものを選びます。</span>
             <input type="file" id="entry-resume-zip" accept=".zip,application/zip">
           </label>
           <div class="entry-resume-folder">
-            <span class="entry-resume-file-label">またはフォルダ</span>
+            <span class="entry-resume-file-label">フォルダ</span>
+            <span class="entry-intake-note">途中で「このパソコンに残して続ける」で残したフォルダを選びます。</span>
             <button type="button" class="wizard-btn" id="entry-resume-folder-pick">フォルダを選ぶ</button>
             <input type="file" id="entry-resume-folder-fallback" webkitdirectory directory multiple hidden>
             <p class="entry-intake-note entry-resume-folder-name" id="entry-resume-folder-name" hidden></p>
@@ -235,8 +237,9 @@
         <p class="entry-intake-note" id="entry-resume-status" role="status" aria-live="polite"></p>
         <div class="entry-resume-actions">
           <button type="button" class="wizard-btn" id="entry-resume-load" disabled>読み込み</button>
-          <button type="button" class="entry-step-back" data-entry-step-back>← ひとつ戻る</button>
         </div>
+        <button type="button" class="entry-step-back" data-entry-step-back>← ひとつ戻る</button>
+        <p class="entry-resume-only">このかんたんホームページ工房で作ったファイル以外は読み込めません。</p>
       </fieldset>
 
       <fieldset class="entry-intake-block sushi-shelf" id="entry-sushi-field" data-entry-step="sushi" hidden>
@@ -792,13 +795,13 @@
 
         <details class="dash-block dash-block--easy" data-step-id="easy-done" hidden>
           <summary>完成</summary>
-          <p class="dash-subhead" role="heading" aria-level="3">できあがりを確認</p>
-          <p class="step-help">右の見本がいまの内容です。このまま進みますか。直したいところがあれば、編集もできます。</p>
+          <p class="easy-done-before">直したいところがあれば、上の進捗バーの文字から行けます。</p>
+          <p class="easy-done-miss-title" id="easy-done-miss-title" hidden>ここがありません</p>
+          <ul class="easy-done-miss-list" id="easy-done-miss-list"></ul>
+          <ul class="easy-done-sample-list" id="easy-done-sample-list"></ul>
           <div class="easy-done-actions">
-            <button type="button" class="gct-btn gct-btn-primary" id="easy-done-ok" data-easy-done-ok>これでいい</button>
-            <button type="button" class="gct-btn" id="easy-done-edit" data-easy-done-edit>編集する</button>
+            <button type="button" class="gct-btn gct-btn-primary" id="easy-done-ok" data-easy-done-ok>確認へ進む</button>
           </div>
-          <p class="easy-edit-line">色・文章・画像の枚数・並びなどを直せます</p>
         </details>
 
         
@@ -1026,11 +1029,18 @@
         <details class="dash-block" data-step-id="global-accent" data-preview-target="#about" hidden>
           <summary>全体色・アクセント</summary>
           <p class="dash-note">色の変更は色選択（ハニカム）から行います。</p>
-          <fieldset class="inline-fieldset accent-bar-field" role="radiogroup" aria-label="見出し下線の長さ">
-            <legend>見出し下線の長さ</legend>
-            <label><input type="radio" name="accentBar" value="short"> 短い</label>
-            <label><input type="radio" name="accentBar" value="mid" checked> 中（半分）</label>
-            <label><input type="radio" name="accentBar" value="long"> 長い（いっぱい）</label>
+          <fieldset class="inline-fieldset accent-bar-field">
+            <legend>見出し下線</legend>
+            <div class="accent-bar-on" role="radiogroup" aria-label="見出し下線のありなし">
+              <label><input type="radio" name="accentBarOn" value="on" checked> あり</label>
+              <label><input type="radio" name="accentBarOn" value="off"> なし</label>
+            </div>
+            <div class="accent-bar-length" role="radiogroup" aria-label="見出し下線の長さ">
+              <span class="accent-bar-length-label">長さ</span>
+              <label><input type="radio" name="accentBar" value="short"> 短い</label>
+              <label><input type="radio" name="accentBar" value="mid" checked> 中（半分）</label>
+              <label><input type="radio" name="accentBar" value="long"> 長い（いっぱい）</label>
+            </div>
           </fieldset>
         </details>
 
@@ -1487,6 +1497,12 @@
           </fieldset>
         </details>
 
+        <div hidden>
+          <input name="announce_text" type="text" value="詳しくは、こちらからどうぞ。">
+          <input name="announce_label" type="text" value="こちらへ">
+          <input name="announce_url" type="text" value="">
+        </div>
+
         <details class="dash-block" data-step-id="contact-text" data-preview-target="#contact">
           <summary>ご連絡・文字</summary>
           <fieldset class="fill-block">
@@ -1509,14 +1525,106 @@
 
         <details class="dash-block" data-step-id="finish" data-preview-target="#preview-footer">
           <summary>提出</summary>
+          <div id="sample-zip-branch" hidden>
+            <div id="sample-zip-gate">
+              <button type="button" class="sample-zip-choice" id="sample-zip-pick-save">
+                <strong>作成データを保存する</strong>
+                <span>お使いの端末に無料で保存されます。</span>
+              </button>
+              <button type="button" class="sample-zip-choice" id="sample-zip-pick-order">
+                <strong>制作・公開を依頼する</strong>
+                <span>依頼ファイル（ZIP）をメールに添付してご送信いただきます。</span>
+              </button>
+            </div>
+            <div id="sample-zip-chosen" hidden>
+              <button type="button" class="sample-zip-rechoose" id="sample-zip-rechoose">選択を変更する</button>
+              <div id="sample-zip-save" hidden>
+                <p class="sample-zip-lead">お使いの端末に無料で保存されます。</p>
+                <button type="button" class="btn btn-primary" id="sample-save-zip">作成データを保存する</button>
+                <p class="sample-zip-status" id="sample-save-zip-status" aria-live="polite"></p>
+              </div>
+              <div id="sample-zip-order" hidden>
+                <section class="sample-zip-section">
+                  <h3 class="sample-zip-heading">ご注文前の最終確認</h3>
+                  <label class="check"><input type="checkbox" name="sample_order_pages" value="1"> 基本プランのホームページは、GitHub Pagesを利用して公開します。</label>
+                  <label class="check"><input type="checkbox" name="sample_order_form" value="1"> 送信できるお問い合わせフォームは基本プランに含まれません。</label>
+                  <label class="check"><input type="checkbox" name="sample_order_keep" value="1"> 公開後の継続更新・保守は基本プランに含まれません。</label>
+                  <label class="check"><input type="checkbox" name="sample_order_revision" value="1"> 公開後1か月以内の無料修正は1回までです。</label>
+                </section>
+                <section class="sample-zip-section">
+                  <details class="sample-price-accordion">
+                    <summary>
+                      <span class="sample-price-accordion-copy">
+                        <strong>追加希望</strong>
+                        <span>URL・独自レイアウト・WordPress・サポートを選べます</span>
+                      </span>
+                      <span class="sample-price-accordion-open">開く</span>
+                      <span class="sample-price-accordion-close">閉じる</span>
+                    </summary>
+                    <fieldset class="sample-price-group">
+                      <legend>URL</legend>
+                      <label class="check"><input type="radio" name="sample_price_domain" value="github" checked> GitHub PagesのURLを使う（追加料金なし）</label>
+                      <label class="check"><input type="radio" name="sample_price_domain" value="own"> 自分で用意した独自ドメインを使う（＋5,500円）</label>
+                      <label class="check"><input type="radio" name="sample_price_domain" value="managed"> 独自ドメインの取得・管理もお願いする（年11,000円＋ドメイン実費）</label>
+                    </fieldset>
+                    <fieldset class="sample-price-group">
+                      <legend>独自レイアウト</legend>
+                      <label class="check"><input type="radio" name="sample_price_custom" value="none" checked> なし</label>
+                      <label class="check"><input type="radio" name="sample_price_custom" value="partial"> 一部だけ独自にしたい（＋22,000円〜）</label>
+                      <label class="check"><input type="radio" name="sample_price_custom" value="full"> 全体を独自にしたい（個別見積もり）</label>
+                    </fieldset>
+                    <fieldset class="sample-price-group">
+                      <legend>WordPress</legend>
+                      <label class="check"><input type="radio" name="sample_price_wp" value="no" checked> なし</label>
+                      <label class="check"><input type="radio" name="sample_price_wp" value="yes"> あり（＋55,000円〜）</label>
+                    </fieldset>
+                    <fieldset class="sample-price-group">
+                      <legend>サポート</legend>
+                      <label class="check"><input type="radio" name="sample_price_support" value="none" checked> 自分で進める</label>
+                      <label class="check"><input type="radio" name="sample_price_support" value="online"> オンラインで相談しながら進めたい（＋11,000円）</label>
+                      <label class="check"><input type="radio" name="sample_price_support" value="visit"> 訪問して一緒に進めたい（55,000円〜）</label>
+                    </fieldset>
+                    <p class="sample-price-total" id="sample-price-total" aria-live="polite"></p>
+                    <ul class="sample-price-notes" id="sample-price-notes"></ul>
+                    <p class="sample-zip-links">
+                      <a href="https://butti0108-spec.github.io/arch1man.special/pricing/02_price_list_reference.html" target="_blank" rel="noopener noreferrer">料金表を見る</a>
+                      <a href="https://butti0108-spec.github.io/arch1man.special/workflow/index.html" target="_blank" rel="noopener noreferrer">ご注文から公開までの流れを見る</a>
+                    </p>
+                  </details>
+                </section>
+                <section class="sample-zip-section">
+                  <h3 class="sample-zip-heading">その他のご希望</h3>
+                  <textarea id="sample-order-notes" rows="3" placeholder=""></textarea>
+                </section>
+                <section class="sample-zip-section">
+                  <div class="sample-order-zip-wrap" id="sample-order-zip-wrap">
+                    <button type="button" class="btn btn-primary" id="sample-order-zip">依頼ファイル（ZIP）を保存する</button>
+                  </div>
+                  <p class="sample-zip-status" id="sample-order-zip-hint" aria-live="polite"></p>
+                  <div id="sample-order-mail" hidden>
+                    <button type="button" class="btn btn-primary" id="sample-order-mail-open">依頼メールを作成する</button>
+                    <p class="sample-zip-mail-note">保存したZIPファイルを、開いたメールに添付してご送信ください。</p>
+                    <p class="sample-zip-mail-note">ご依頼内容を確認後、正式なお見積もりとお振込先をご案内します。</p>
+                    <p class="sample-zip-mail-note">メールが開かなかったときは、下の送信先と本文をコピーして送れます。</p>
+                    <div class="sample-order-mail-copies">
+                      <button type="button" class="sample-zip-rechoose" id="sample-order-mail-address">送信先をコピーする</button>
+                      <p class="sample-zip-mail-to">atsushi.masubuchi.work@gmail.com</p>
+                      <button type="button" class="sample-zip-rechoose" id="sample-order-mail-copy">本文をコピーする</button>
+                    </div>
+                    <p class="sample-zip-status" id="sample-order-mail-status" aria-live="polite"></p>
+                  </div>
+                </section>
+              </div>
+            </div>
+          </div>
           <p class="step-help">依頼ファイルとプランの範囲は<a href="help.html?return=order#zip">ZIPの説明</a>、<a href="help.html?return=order#scope">プランの範囲</a>をご覧ください。</p>
           <p class="dash-note">納品目安は、内容確認後およそ1〜2週間です（日付の指定は不要です）。</p>
           <fieldset class="fill-block scope-checks">
             <legend>このプランに含まれるもの・含まれないもの（チェック必須）</legend>
-            <p class="scope-checks-lead">内容をご確認のうえ、すべてにチェックを入れてから下の<strong>確定ボタン</strong>を押してください。<br>
+            <p class="scope-checks-lead">内容をご確認のうえ、すべてにチェックを入れてから下の<strong data-scope-lead-btn>確定ボタン</strong>を押してください。<br>
             くわしくは <a href="help.html?return=order#scope">プランの範囲</a> と <a href="help.html?return=order#faq">よくある質問</a> をご覧ください。</p>
-            <label class="check"><input type="checkbox" name="scope_layout_fixed" value="1"> レイアウトは<strong>6パターンから選択</strong>します。選んだ型の中でのページ構成は固定で、色とご提供の文字・画像を載せます</label>
-            <label class="check"><input type="checkbox" name="scope_no_copy" value="1"> <strong>文章の作成・推敲</strong>は含みません（原稿どおりに載せます）</label>
+            <label class="check"><input type="checkbox" name="scope_layout_fixed" value="1"> <span data-scope-layout-text>レイアウトは<strong>6パターンから選択</strong>します。選んだ型の中でのページ構成は固定で、色とご提供の文字・画像を載せます</span></label>
+            <label class="check"><input type="checkbox" name="scope_no_copy" value="1"> <span data-scope-copy-text><strong>文章の作成・推敲</strong>は含みません（原稿どおりに載せます）</span></label>
             <label class="check"><input type="checkbox" name="scope_no_form" value="1"> <strong>送信できるお問い合わせフォーム</strong>は含みません（<a href="help.html?return=order#faq">ヘルプはこちら</a>）</label>
             <label class="check"><input type="checkbox" name="scope_update" value="1"> 公開後の<strong>継続更新・保守</strong>は含みません</label>
             <label class="check"><input type="checkbox" name="scope_revision_once" value="1"> 納品後の<strong>無料修正は1回まで</strong>です（次回以降は別料金。<a href="help.html?return=order#faq">ヘルプはこちら</a>）</label>
@@ -1554,7 +1662,7 @@
               <label data-font-wish-panel hidden>希望の書体名 <input name="font_wish_name" type="text" value="" placeholder="例：源ノ明朝"></label>
             </fieldset>
             <label class="finish-url-slug">公開URLのローマ字希望（任意）
-              <input name="url_slug_wish" id="url_slug_wish" type="text" value="" placeholder="例：aisin-cafe" autocomplete="off" spellcheck="false">
+              <input name="url_slug_wish" id="url_slug_wish" type="text" value="" placeholder="例：Arch-cafe" autocomplete="off" spellcheck="false">
             </label>
             <p class="finish-url-slug-hint dash-note" id="url-slug-wish-hint">半角の英数字・ハイフンなどだけ使えます。独自ドメイン（.com 等）ではありません。</p>
             <p class="finish-url-slug-warn" id="url-slug-wish-warn" hidden>ローマ字（半角英数字・ハイフン等）以外は使えません。</p>
@@ -1822,6 +1930,14 @@
                   <p class="section-label">Access</p>
                   <h2>アクセス</h2>
                   <p class="section-lead" id="access-lead">〇〇駅から徒歩5分（見本）</p>
+                </div>
+              </section>
+
+              <section id="announce" class="section sample-extra announce-band preview-hit" data-layout-block="announce" aria-label="案内" hidden data-extra="announce">
+                <div class="shell">
+                  <h2>案内</h2>
+                  <p class="section-lead" id="announce-lead">詳しくは、こちらからどうぞ。</p>
+                  <p class="announce-action"><a class="announce-go" id="announce-go" href="#">こちらへ</a></p>
                 </div>
               </section>
 

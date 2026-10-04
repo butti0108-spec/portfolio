@@ -490,6 +490,15 @@
       var scrollY = win.pageYOffset || doc.documentElement.scrollTop || 0;
       var rect = end.getBoundingClientRect();
       var h = Math.ceil(rect.bottom + scrollY);
+      if (root) {
+        var rootRect = root.getBoundingClientRect();
+        h = Math.max(
+          h,
+          Math.ceil(rootRect.bottom + scrollY),
+          root.scrollHeight,
+          root.offsetHeight
+        );
+      }
       var bodyStyle = win.getComputedStyle(doc.body);
       h += Math.ceil(parseFloat(bodyStyle.marginBottom) || 0);
       h = Math.max(h, 400);
@@ -552,9 +561,28 @@
     bindInner();
   }
 
+  function watchEmbedHeight(iframe) {
+    fitEmbedIframeHeight(iframe);
+    if (!iframe || iframe._sushiFitObs) return;
+    var doc = iframe.contentDocument;
+    var root = doc && doc.getElementById("preview-root");
+    if (!root || typeof ResizeObserver !== "function") return;
+    var obs = new ResizeObserver(function () {
+      fitEmbedIframeHeight(iframe);
+    });
+    obs.observe(root);
+    iframe._sushiFitObs = obs;
+  }
+
+  function stopEmbedFit(iframe) {
+    if (!iframe || !iframe._sushiFitObs) return;
+    iframe._sushiFitObs.disconnect();
+    iframe._sushiFitObs = null;
+  }
+
   function revealZoomIframe(iframe) {
     if (!iframe) return;
-    fitEmbedIframeHeight(iframe);
+    watchEmbedHeight(iframe);
     iframe.classList.add("is-ready");
     var frame = iframe.closest(".sushi-zoom-frame");
     if (frame) frame.classList.remove("is-pending");
@@ -577,7 +605,7 @@
       encodeURIComponent(folder) +
       "&brand=" +
       encodeURIComponent(sample.brand || "") +
-      "&v=sushi-zoom-live-v8";
+      "&v=sushi-zoom-live-v11";
     els.zoomInner.innerHTML =
       '<div class="sushi-zoom-frame is-pending">' +
       '<p class="sushi-zoom-pending" aria-live="polite">見本を準備しています…</p>' +
@@ -612,6 +640,7 @@
   function closeZoom() {
     if (!els.zoomLayer) return;
     isZoomed = false;
+    if (els.zoomInner) stopEmbedFit(els.zoomInner.querySelector(".sushi-zoom-iframe"));
     els.zoomLayer.classList.remove("is-open");
     window.setTimeout(function () {
       if (!isZoomed && els.zoomLayer) {

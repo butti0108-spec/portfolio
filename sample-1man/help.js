@@ -1,7 +1,7 @@
 (() => {
   const params = new URLSearchParams(window.location.search);
   const fromOrder = params.get("return") === "order";
-  const SECTION_IDS = ["start", "why", "scope", "faq", "zip", "hub", "copy", "images", "look"];
+  const SECTION_IDS = ["start", "why", "scope", "faq", "zip", "copy", "images", "look", "price"];
 
   const stickyBack = document.getElementById("help-back-sticky");
   const footBack = document.getElementById("help-back-foot");
@@ -45,7 +45,7 @@
     window.scrollTo({ top: 0, behavior: "smooth" });
   }
 
-  function showTopic(id) {
+  function showTopic(id, opts) {
     const sectionId = resolveSectionId(id);
     if (!sectionId) {
       showHome();
@@ -63,6 +63,7 @@
       card.classList.toggle("is-active", card.getAttribute("data-help-nav") === sectionId);
     });
     syncOrderBack();
+    if (opts && opts.keepScroll) return target;
     requestAnimationFrame(() => {
       window.scrollTo({ top: 0, behavior: "smooth" });
       if (id !== sectionId) {
@@ -170,7 +171,7 @@
     results.innerHTML = "";
     if (!query) {
       results.hidden = true;
-      if (hint) hint.textContent = "キーワードを入れると、関係ありそうな項目が出ます。";
+      if (hint) hint.textContent = "キーワードを入力すると、関連するヘルプ項目が表示されます。";
       return;
     }
     if (!matches.length) {
@@ -179,11 +180,11 @@
       li.className = "help-search-empty";
       li.textContent = "見つかりませんでした。別の言葉で試すか、目次から探してください。";
       results.appendChild(li);
-      if (hint) hint.textContent = "候補なし";
+      if (hint) hint.textContent = "見つかりませんでした。";
       return;
     }
     results.hidden = false;
-    if (hint) hint.textContent = matches.length + "件ヒット";
+    if (hint) hint.textContent = matches.length + "件見つかりました。";
     matches.slice(0, 12).forEach((item) => {
       const li = document.createElement("li");
       const a = document.createElement("a");
@@ -191,26 +192,164 @@
       a.textContent = item.label;
       a.addEventListener("click", (ev) => {
         ev.preventDefault();
-        openForward(item.id);
+        const host = document.getElementById(item.id);
+        const mark = host && host.querySelector("mark.help-mark");
+        if (!mark) {
+          openForward(item.id);
+          return;
+        }
+        const all = [...document.querySelectorAll(".help-panels mark.help-mark")];
+        focusMark(all.indexOf(mark), { push: true });
       });
       li.appendChild(a);
       results.appendChild(li);
     });
   }
 
+  const findBar = document.getElementById("help-find-bar");
+  const findCount = document.getElementById("help-find-count");
+  const findPrev = document.getElementById("help-find-prev");
+  const findNext = document.getElementById("help-find-next");
+  let markIndex = -1;
+
+  function syncFindBar() {
+    const marks = document.querySelectorAll(".help-panels mark.help-mark");
+    if (!findBar || !findCount) return;
+    if (!marks.length) {
+      findBar.hidden = true;
+      findCount.textContent = "";
+      return;
+    }
+    findBar.hidden = false;
+    findCount.textContent = markIndex < 0 ? marks.length + "件" : (markIndex + 1) + " / " + marks.length;
+  }
+
+  function clearMarks() {
+    document.querySelectorAll(".help-panels mark.help-mark").forEach((mark) => {
+      const parent = mark.parentNode;
+      if (!parent) return;
+      parent.replaceChild(document.createTextNode(mark.textContent), mark);
+      parent.normalize();
+    });
+    markIndex = -1;
+  }
+
+  function foldedMap(text) {
+    let folded = "";
+    const map = [];
+    for (let i = 0; i < text.length; i++) {
+      const code = text.charCodeAt(i);
+      const ch = code >= 0xff01 && code <= 0xff5e ? String.fromCharCode(code - 0xfee0) : text[i].toLowerCase();
+      folded += ch;
+      map.push(i);
+    }
+    return { folded, map };
+  }
+
+  function markNode(node, tokens) {
+    const text = node.nodeValue || "";
+    const mapped = foldedMap(text);
+    const ranges = [];
+    tokens.forEach((token) => {
+      if (!token) return;
+      let from = 0;
+      while (from <= mapped.folded.length - token.length) {
+        const at = mapped.folded.indexOf(token, from);
+        if (at < 0) break;
+        ranges.push({
+          start: mapped.map[at],
+          end: mapped.map[at + token.length - 1] + 1
+        });
+        from = at + token.length;
+      }
+    });
+    ranges.sort((a, b) => a.start - b.start || b.end - a.end);
+    const kept = [];
+    ranges.forEach((range) => {
+      const prev = kept[kept.length - 1];
+      if (prev && range.start < prev.end) return;
+      kept.push(range);
+    });
+    for (let i = kept.length - 1; i >= 0; i--) {
+      const range = document.createRange();
+      range.setStart(node, kept[i].start);
+      range.setEnd(node, kept[i].end);
+      const mark = document.createElement("mark");
+      mark.className = "help-mark";
+      range.surroundContents(mark);
+    }
+  }
+
+  function highlight(tokens) {
+    clearMarks();
+    const root = document.querySelector(".help-panels");
+    if (!root || !tokens.length) return;
+    const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, {
+      acceptNode(node) {
+        if (!node.nodeValue || !node.nodeValue.trim()) return NodeFilter.FILTER_REJECT;
+        const parent = node.parentElement;
+        if (!parent || parent.closest("mark, script, style")) return NodeFilter.FILTER_REJECT;
+        return NodeFilter.FILTER_ACCEPT;
+      }
+    });
+    const nodes = [];
+    while (walker.nextNode()) nodes.push(walker.currentNode);
+    nodes.forEach((node) => markNode(node, tokens));
+  }
+
+  function focusMark(index, opts) {
+    const marks = [...document.querySelectorAll(".help-panels mark.help-mark")];
+    if (!marks.length) return;
+    const i = ((index % marks.length) + marks.length) % marks.length;
+    marks.forEach((mark) => mark.classList.remove("is-current"));
+    const mark = marks[i];
+    mark.classList.add("is-current");
+    markIndex = i;
+    syncFindBar();
+    const section = mark.closest(".help-section");
+    if (section) {
+      const hash = "#" + section.id;
+      if (opts && opts.push) history.pushState(null, "", hash);
+      else history.replaceState(null, "", hash);
+      if (section.hidden || (home && !home.hidden)) showTopic(section.id, { keepScroll: true });
+    }
+    requestAnimationFrame(() => {
+      mark.scrollIntoView({ behavior: "smooth", block: "center" });
+    });
+  }
+
   function runSearch() {
     const q = normalize(input.value);
     if (!q) {
+      clearMarks();
+      syncFindBar();
       render([], "");
       return;
     }
     const tokens = q.split(" ").filter(Boolean);
+    highlight(tokens);
+    syncFindBar();
     const scored = entries
       .map((item) => ({ item, s: score(item.hay, tokens) }))
       .filter((row) => row.s > 0)
       .sort((a, b) => b.s - a.s || a.item.label.length - b.item.label.length)
       .map((row) => row.item);
     render(scored, q);
+  }
+
+  if (findNext) {
+    findNext.addEventListener("click", () => {
+      const marks = document.querySelectorAll(".help-panels mark.help-mark");
+      if (!marks.length) return;
+      focusMark(markIndex < 0 ? 0 : markIndex + 1);
+    });
+  }
+  if (findPrev) {
+    findPrev.addEventListener("click", () => {
+      const marks = document.querySelectorAll(".help-panels mark.help-mark");
+      if (!marks.length) return;
+      focusMark(markIndex < 0 ? marks.length - 1 : markIndex - 1);
+    });
   }
 
   input.addEventListener("input", runSearch);

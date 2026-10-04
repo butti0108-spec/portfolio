@@ -16467,6 +16467,17 @@
       reopenSampleEntryAtColor();
       return;
     }
+    if (
+      store.easyFlowActive &&
+      store.blankCanvas &&
+      store.entryBranch === "detail" &&
+      step &&
+      step.id === "easy-basics" &&
+      store.wizardStepIndex <= 0
+    ) {
+      returnFromHubToPurpose();
+      return;
+    }
     if (step && step.id === "easy-copy-frame") {
       if ((store.copyFrameIndex || 0) > 0) {
         const order = activeCopyFrameOrder();
@@ -25894,7 +25905,7 @@
   /* —— サンプル閲覧専用回路（虫眼鏡）。編集ライン・保存・入口に入らない —— */
   if (bootEmbed) {
     suppressSave = true;
-    document.documentElement.classList.add("is-embed-preview", "is-embed-pending");
+    document.documentElement.classList.add("is-embed-preview", "is-embed-pending", "dash-boot-ready");
     document.body.classList.add("is-embed-preview", "is-embed-pending");
     hideEntryGate();
     setSampleFlowPreviewHidden(false);

@@ -98,6 +98,7 @@ body.help-page {
 }
 
 .help-back-sticky {
+  margin-left: auto;
   flex-shrink: 0;
   font-size: 0.9rem;
   font-weight: 700;
@@ -644,4 +645,146 @@ body.help-topic-open .help-foot {
     font-size: 0.78rem;
     padding: 0.45rem 0.3rem;
   }
+}
+
+/* 項目名 / 中の表題 / 文章 の3段 */
+.help-section {
+  padding: 1.35rem 1.35rem 1.6rem;
+}
+.help-panel-head {
+  margin-bottom: 1.35rem;
+  padding-bottom: 1rem;
+}
+.help-panel-title {
+  font-size: 1.45rem;
+  font-weight: 700;
+  line-height: 1.35;
+}
+.help-chunk {
+  padding: 1.15rem 0 1.2rem;
+}
+.help-chunk-title {
+  margin: 0 0 0.75rem;
+  font-size: 1.2rem;
+  font-weight: 700;
+  line-height: 1.45;
+}
+.help-chunk p,
+.help-chunk li,
+.help-section-body > p:not(.help-lead-in) {
+  font-size: 0.98rem;
+  font-weight: 400;
+  line-height: 1.85;
+}
+.help-chunk p {
+  margin: 0 0 0.9rem;
+}
+.help-chunk p:last-child {
+  margin-bottom: 0;
+}
+.help-section-body > p:not(.help-lead-in) {
+  margin: 0 0 1.15rem;
+}
+.help-chunk p strong {
+  font-weight: 700;
+}
+.help-lead-in {
+  font-size: 0.98rem;
+  font-weight: 400;
+  line-height: 1.85;
+}
+
+.help-choice {
+  position: relative;
+  padding-left: 1.15em;
+}
+.help-choice::before {
+  content: "・";
+  position: absolute;
+  left: 0;
+  font-weight: 400;
+}
+
+.help-tax-note {
+  margin: 0 0 1rem;
+  font-size: 0.85rem;
+  font-weight: 400;
+  line-height: 1.6;
+  color: var(--help-muted);
+}
+.help-section-body > p.help-tax-note {
+  margin: 0 0 1rem;
+  font-size: 0.85rem;
+  font-weight: 400;
+  color: var(--help-muted);
+}
+.help-toc-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.75rem;
+  margin: 0 0 0.55rem;
+}
+.help-toc-head .help-toc-title {
+  margin: 0;
+}
+.help-tax-note--toc {
+  margin: 0 0.55rem 0 0;
+  font-size: 0.68rem;
+  font-weight: 400;
+  line-height: 1.3;
+  letter-spacing: 0.02em;
+  color: rgba(74, 85, 96, 0.85);
+  text-align: right;
+  white-space: nowrap;
+}
+
+.help-find-bar {
+  position: sticky;
+  top: 4.4rem;
+  z-index: 15;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.55rem;
+  margin: 0 0 0.85rem;
+  padding: 0.45rem 0.7rem;
+  background: rgba(255, 255, 255, 0.96);
+  border: 1px solid var(--help-border);
+  border-radius: var(--help-radius);
+}
+.help-find-bar[hidden] {
+  display: none !important;
+}
+.help-find-count {
+  margin: 0 auto 0 0;
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: #1a1f1c;
+}
+.help-find-bar button {
+  font: inherit;
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--help-accent);
+  background: #fff;
+  border: 1px solid rgba(45, 106, 54, 0.35);
+  border-radius: 999px;
+  padding: 0.28rem 0.85rem;
+  cursor: pointer;
+}
+.help-find-bar button:hover {
+  background: rgba(45, 106, 54, 0.08);
+}
+
+mark.help-mark {
+  background: #ffe566;
+  color: inherit;
+  padding: 0 0.08em;
+  border-radius: 0.12em;
+  scroll-margin-top: 6.5rem;
+}
+mark.help-mark.is-current {
+  background: #ffc107;
+  box-shadow: 0 0 0 2px #e6a100;
 }

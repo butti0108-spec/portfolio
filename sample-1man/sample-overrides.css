@@ -12200,12 +12200,17 @@ body.is-embed-preview {
   overflow: auto !important;
 }
 body.is-embed-preview .atelier-shell,
+body.is-embed-preview .atelier-split,
 body.is-embed-preview .atelier-preview-col,
-body.is-embed-preview .preview-pane {
+body.is-embed-preview .preview-pane,
+body.is-embed-preview .preview-scroll,
+body.is-embed-preview .preview-viewport,
+body.is-embed-preview #preview-root {
   height: auto !important;
   max-height: none !important;
   min-height: 0 !important;
   overflow: visible !important;
+  contain: none !important;
 }
 body.is-embed-preview .atelier-shell {
   display: block !important;

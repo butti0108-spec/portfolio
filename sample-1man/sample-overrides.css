@@ -1504,12 +1504,14 @@ body.reset-draft-open {
 
 .chrome-product-mark {
   position: absolute;
-  top: -0.45rem;
+  /* 足は今の下の線。背だけ少し縮めて、頭の丸の上に隙間を残す */
+  top: auto;
+  bottom: -0.45rem;
   right: calc(100% + 0.15rem + 0.525rem);
-  height: calc(100% + 0.9rem);
+  height: calc(100% + 0.35rem);
   width: auto;
   object-fit: contain;
-  object-position: right center;
+  object-position: right bottom;
   pointer-events: none;
 }
 

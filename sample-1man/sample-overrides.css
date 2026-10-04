@@ -674,6 +674,40 @@ body.is-easy-done-step .dash-body > .fill-form {
   margin-top: 0.15rem;
 }
 
+.entry-choice-body {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+  min-width: 0;
+}
+
+.entry-choice-name {
+  font-weight: 700;
+}
+
+.entry-choice-note {
+  font-weight: 400;
+  font-size: 0.82rem;
+  line-height: 1.5;
+  color: #3a433e;
+}
+
+.entry-purpose-hint {
+  margin: 0.85rem 0 0.7rem;
+  font-size: 0.82rem;
+  font-weight: 400;
+  line-height: 1.55;
+  color: #3a433e;
+}
+
+.entry-purpose-hint p {
+  margin: 0 0 0.7rem;
+}
+
+.entry-purpose-hint strong {
+  font-weight: 700;
+}
+
 #entry-sample-color-row {
   width: min(100%, 22rem);
   max-width: 100%;
@@ -1417,6 +1451,10 @@ body.reset-draft-open {
 .atelier-chrome-left {
   justify-content: flex-start;
   gap: 1.75rem;
+}
+
+.atelier-chrome-right {
+  justify-content: flex-end;
 }
 
 .atelier-chrome-center {
@@ -4321,6 +4359,91 @@ body.wizard-mode .dash-block.is-wizard-active {
   display: flex;
   flex-direction: column;
   overflow: hidden;
+}
+
+.after-color-guide {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow: auto;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 2.75rem 3rem 1.25rem;
+  background: #fff;
+}
+
+.after-color-guide[hidden] {
+  display: none;
+}
+
+.after-color-guide-inner {
+  width: min(100%, 34rem);
+}
+
+.after-color-guide-title {
+  margin: 0 0 3.25rem;
+  font-size: 1.55rem;
+  font-weight: 700;
+  line-height: 1.45;
+  color: #152028;
+}
+
+.after-color-guide-item {
+  margin: 0 0 2.35rem;
+}
+
+.after-color-guide-item:last-child {
+  margin-bottom: 0;
+}
+
+.after-color-guide-sub {
+  margin: 0 0 0.55rem;
+  font-size: 1.12rem;
+  font-weight: 700;
+  line-height: 1.5;
+  color: #152028;
+}
+
+.after-color-guide-item p {
+  margin: 0;
+  font-size: 1.05rem;
+  font-weight: 400;
+  line-height: 1.9;
+  color: #243038;
+}
+
+.after-color-guide-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.8rem;
+  margin-top: 3.25rem;
+}
+
+.after-color-guide-actions .wizard-btn {
+  flex: 0 0 auto;
+  min-width: 8.5rem;
+  border-radius: 999px;
+}
+
+.after-color-guide-actions .after-color-guide-next {
+  background: #2d6a36;
+  border-color: #245a2c;
+  color: #fff;
+  font-weight: 700;
+}
+
+.after-color-guide-actions .after-color-guide-next:hover {
+  background: #245a2c;
+  color: #fff;
+}
+
+body.is-after-color-guide .atelier-split {
+  --preview-pct: 50%;
+}
+
+body.is-after-color-guide #wizard-foot-dock,
+body.is-after-color-guide #order-form {
+  display: none !important;
 }
 
 .dash-body > .fill-form {
@@ -7916,31 +8039,32 @@ body.atelier.color-mode-easy .preset-row--mood6 [data-easy-preset] {
 }
 #atelier-reset-btn {
   position: fixed;
-  left: 0;
-  bottom: 0;
+  top: 5px;
+  right: 6px;
   z-index: 40;
+  pointer-events: auto;
   margin: 0;
-  padding: 0.12rem 0.2rem 0.1rem 0.08rem;
-  border: 0;
+  padding: 3px 6px;
+  border: 1px solid #c5ced6;
   border-radius: 0;
-  background: transparent;
+  background: #fff;
   color: #9aa3ab;
   font-family: inherit;
   font-size: 0.68rem;
   font-weight: 500;
-  line-height: 1.2;
+  line-height: 1;
   cursor: pointer;
   box-shadow: none;
+  box-sizing: border-box;
+  white-space: nowrap;
 }
 #atelier-reset-btn:hover {
-  background: transparent;
+  background: #fff;
+  border-color: #c5ced6;
   color: #5c6770;
 }
 body.entry-gate-open #atelier-reset-btn {
   display: none;
-}
-body:not(.entry-gate-open) .wizard-foot {
-  padding-left: 6.2rem;
 }
 body.is-easy-done-step .wizard-foot {
   padding-left: 0.65rem;
@@ -8972,8 +9096,8 @@ body.wizard-mode #easy-img-layout-host .layout-arrange-actions {
 
 .preview-site .hero-stage.is-hero-text-on.hero-plate-tone-white .hero-copy-plate h1,
 .preview-site .hero-stage.is-hero-text-on.hero-plate-tone-white .hero-copy-plate .hero-lead {
-  color: var(--hero-ink) !important;
-  -webkit-text-fill-color: var(--hero-ink) !important;
+  color: #111111 !important;
+  -webkit-text-fill-color: #111111 !important;
   text-shadow: none !important;
 }
 
@@ -12184,6 +12308,7 @@ body.is-embed-preview .preview-site summary::-webkit-details-marker {
   display: none !important;
   font-size: 0 !important;
 }
+body.is-embed-preview #chrome-preview-width,
 body.is-embed-preview .atelier-chrome,
 body.is-embed-preview .atelier-dash,
 body.is-embed-preview .atelier-menu,
@@ -13619,6 +13744,7 @@ body.wizard-mode .dash-block.is-wizard-active[data-step-id="easy-img-wire"] > su
   border: 5px solid #2d6a36;
   background: transparent;
   pointer-events: none;
+  transition: none;
 }
 #place-mark-frame[hidden] {
   display: none !important;

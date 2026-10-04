@@ -605,7 +605,7 @@
       encodeURIComponent(folder) +
       "&brand=" +
       encodeURIComponent(sample.brand || "") +
-      "&v=sushi-zoom-live-v11";
+      "&v=sushi-zoom-live-v12";
     els.zoomInner.innerHTML =
       '<div class="sushi-zoom-frame is-pending">' +
       '<p class="sushi-zoom-pending" aria-live="polite">見本を準備しています…</p>' +

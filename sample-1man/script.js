@@ -361,7 +361,7 @@
     { id: "easy-sec-works", label: "おすすめ文", needsConfirm: true, num: 0 },
     { id: "easy-sec-contact", label: "連絡文", needsConfirm: true, num: 0 },
     { id: "easy-img-path", label: "画像の決め方", needsConfirm: true, num: 0 },
-    { id: "easy-img-omakase", label: "おまかせ画像", needsConfirm: true, num: 0 },
+    { id: "easy-img-omakase", label: "ランダム選択", needsConfirm: true, num: 0 },
     { id: "easy-img-wire", label: "画像", needsConfirm: true, num: 0 },
     { id: "easy-loading", label: "作成中", needsConfirm: false, num: 0 },
     { id: "easy-done", label: "完成", needsConfirm: false, num: 0 },
@@ -6248,9 +6248,8 @@
   }
 
   function getEasyFlowStepIds() {
-    let ids = ["easy-basics", "easy-color"];
+    let ids = ["easy-basics", "easy-color", "easy-site-name"];
     if (easyCatchOn()) ids.push("easy-catch");
-    ids.push("easy-site-name");
     ids = ids
       .concat(getEasyImageFlowMid())
       .concat(getEasyCopyFlowTail());
@@ -6457,8 +6456,8 @@
       return easyFlowStageLabels().indexOf(name) + 1;
     };
     if (id === "easy-basics") return at("記載項目");
-    if (id === "easy-color") return at("配色");
-    if (id === "easy-catch" || id === "easy-site-name") return easyCatchOn() || id === "easy-catch" ? at("キャッチ") : at("配色");
+    if (id === "easy-color" || id === "easy-site-name") return at("配色");
+    if (id === "easy-catch") return at("キャッチ");
     if (id === "easy-color-stage") return at("色調整");
     if (id === "easy-img-path" || id === "easy-img-wire" || id === "easy-img-omakase") return at("画像");
     if (
@@ -6815,7 +6814,17 @@
     });
   }
 
+  function ensureEasyDirectAfterTitle() {
+    if (!store.easyFlowActive || store.uiMode !== "guided") return;
+    if (store.copyScreenReturn === "hub") return;
+    if (store.easyDirectOpen) return;
+    const flow = getFlowSteps();
+    const nameAt = flow.findIndex(function (s) { return s.id === "easy-site-name"; });
+    if (nameAt >= 0 && store.wizardStepIndex > nameAt) store.easyDirectOpen = true;
+  }
+
   function syncEasyFlowMeter() {
+    ensureEasyDirectAfterTitle();
     const n = easyFlowStageIndex();
     document.querySelectorAll("[data-easy-flow-meter]").forEach(function (meter) {
       const label = meter.querySelector("[data-easy-flow-meter-label]");
@@ -7435,7 +7444,7 @@
         if (step && step.id === "easy-catch") renderEasyCatchRest();
       }
     }
-    if (active && imageUrls[name]) {
+    if (imageUrls[name]) {
       el.src = imageUrls[name];
       markUserUpload(el, true);
       if (name === "logo_image") el.hidden = false;
@@ -8893,7 +8902,9 @@
     }
     if (store.easyFlowActive && store.uiMode === "guided") {
       store.siteColorMode = "easy";
-      store.heroTextOnPhoto = store.copyHeroOnPhoto === true;
+      if (store.copyHeroOnPhoto === true || store.copyHeroOnPhoto === false) {
+        store.heroTextOnPhoto = store.copyHeroOnPhoto === true;
+      }
       showWizardStep(resolveWizardStepIndex());
       return;
     }
@@ -8907,7 +8918,6 @@
     ) {
       store.siteColorMode = "easy";
       store.uiMode = "guided";
-      store.heroTextOnPhoto = false;
       const gate = document.getElementById("entry-gate");
       if (gate) {
         const purposeRadio = gate.querySelector(
@@ -8972,6 +8982,7 @@
   let catchSavedHeroInner = null;
 
   function showWizardStep(index) {
+    if (afterColorGuideOpen) closeAfterColorGuide();
     const quietReturnTo = catchQuietReturnTo;
     catchQuietReturnTo = "";
     let quietImageReturn = false;
@@ -9041,9 +9052,7 @@
     } else {
       clearSiteNameBack();
     }
-    const keepCatchHoney =
-      step.id === "easy-catch" ||
-      (step.id === "easy-site-name" && prevStep && prevStep.id === "easy-catch");
+    const keepCatchHoney = step.id === "easy-catch";
     if (step.id !== "easy-copy-omakase") parkLogoCopyControls();
     if (step.id !== "easy-copy-omakase" && !keepCatchHoney) restoreCopyBorrowedControls();
     if (step.id !== "easy-color-stage") {
@@ -9106,15 +9115,13 @@
       if (!quietImageReturn) {
         window.requestAnimationFrame(() => {
           window.requestAnimationFrame(() => {
-            scrollPreviewFrameIntoView(currentImageFrameSelector());
             const openRow = document.querySelector("#easy-img-layout-host .layout-photo-row.is-open");
-            if (!openRow) return;
-            const key = openRow.getAttribute("data-layout-photo") || "";
+            const key = openRow ? (openRow.getAttribute("data-layout-photo") || "") : "";
             const sep = key.indexOf(":");
-            const blockId = sep >= 0 ? key.slice(0, sep) : "";
-            const slot = sep >= 0 ? key.slice(sep + 1) : "";
-            if (!blockId || !slot) return;
-            focusPreviewLayoutFrame(blockId, slot);
+            const blockId = sep >= 0 ? key.slice(0, sep) : (store.layoutAccordionId || "");
+            if (blockId) parkSectionTop(blockId);
+            else scrollPreviewFrameIntoView(currentImageFrameSelector());
+            if (!openRow || !blockId) return;
             alignOpenPhotoWithPreview();
           });
         });
@@ -9807,8 +9814,6 @@
       window.SushiBelt.unmount();
     }
     syncEasyFlowMeter();
-    const purposeNote = document.querySelector("#entry-purpose-field .entry-intake-note");
-    if (purposeNote) purposeNote.hidden = next === "purpose" && store.entryBranch === "detail";
     if (next === "save") syncEntryFolderNamePanel();
   }
 
@@ -9847,7 +9852,6 @@
     store.guidedImageUnlocked = false;
     store.siteColorMode = "easy";
     store.uiMode = "guided";
-    store.heroTextOnPhoto = false;
     /* ゲート再表示のため、intake 確定フラグをいったん外す（中身のプレビューは残す） */
     store.confirmed.purpose = false;
     store.confirmed.layout = false;
@@ -9981,13 +9985,11 @@
         store.siteNameConfirmed = true;
         syncPreviewHeaderChrome();
         scheduleSave();
-        const flow = getFlowSteps();
-        const nameIdx = flow.findIndex(function (s) { return s.id === "easy-site-name"; });
-        const dest = nameIdx >= 0 ? nameIdx + 1 : flow.findIndex(function (s) { return s.id === "easy-copy-omakase"; });
-        if (dest >= 0) showWizardStep(dest);
+        wizardNext();
       });
     }
-    input.value = "";
+    const existing = homepageName() || String(fieldValue("brand_name") || "").trim();
+    input.value = existing && !isPlaceholderBrand(existing) ? existing : "";
     syncAsk();
     window.setTimeout(function () {
       try { input.focus(); } catch (e) { /* ignore */ }
@@ -10352,10 +10354,10 @@
       strip.setAttribute("data-fpg-sample-omakase", "");
       strip.innerHTML =
         '<div class="fpg-sample-omakase-lead">' +
-        '<p class="fpg-sample-omakase-title">おまかせ</p>' +
+        '<p class="fpg-sample-omakase-title">ランダムに選ぶ</p>' +
         '<p class="fpg-sample-omakase-note">ジャンルを選ぶと、参考の写真が1枚入ります。</p>' +
         "</div>" +
-        '<div class="fpg-sample-genres" data-fpg-sample-genres role="group" aria-label="おまかせ"></div>' +
+        '<div class="fpg-sample-genres" data-fpg-sample-genres role="group" aria-label="ランダムに選ぶ"></div>' +
         '<button type="button" class="fpg-sample-omakase-ok" data-fpg-sample-ok disabled>この画像にする</button>' +
         '<figure class="fpg-sample-omakase-pick" data-fpg-sample-pick><img alt="" hidden></figure>';
       const mount = body.querySelector("[data-fpg-mount]");
@@ -11926,13 +11928,8 @@
     } else {
       setFieldValue("accentBar", normalizeAccentBar(draft.fields.accentBar));
     }
-    /* 見本draftのキャッチ文字オンは、展示／レビュー／ハブ用。
-       サンプル easy 本線ではゲート方針どおり載せない（操作もさせない） */
-    if (sampleMainline) {
-      store.heroTextOnPhoto = false;
-    } else {
-      store.heroTextOnPhoto = draft.heroTextOnPhoto === true;
-    }
+    /* 見本のキャッチはプレビューでも出す。操作欄は本線では出さない */
+    store.heroTextOnPhoto = draft.heroTextOnPhoto === true;
     store.heroFocalX = normalizeFocalPercent(
       draft.heroFocalX != null ? draft.heroFocalX : HERO_FOCAL_X_DEFAULT,
       HERO_FOCAL_X_DEFAULT
@@ -12003,7 +12000,7 @@
     captureSampleCopySlots(draft);
     /* キャッチ枠あり・画像なし（色＋文字）— 本線でも文字オンが必要な例外 */
     store.heroImageOff = draft.heroImageOff === true;
-    if (store.heroImageOff && !sampleMainline) {
+    if (store.heroImageOff && draft.heroTextOnPhoto !== false) {
       store.heroTextOnPhoto = true;
     }
     /* 見本JSONは draftCounts。旧キー counts も受け付ける */
@@ -12034,7 +12031,11 @@
     applyHeroTextOverlay();
     applyLiveColors(true);
     applyAllConfirmed();
-    if (draft.imagePaths) applyDraftImagePaths(draft.imagePaths);
+    store.sampleFlowImagePaths =
+      draft.imagePaths && typeof draft.imagePaths === "object"
+        ? Object.assign({}, draft.imagePaths)
+        : null;
+    if (store.sampleFlowImagePaths) applyDraftImagePaths(store.sampleFlowImagePaths);
     applyHeroImageOffState();
     applyHeroFocalToPreview();
     syncPreviewHeaderChrome();
@@ -13846,7 +13847,7 @@
         wrap.appendChild(board);
         const note = document.createElement("p");
         note.className = "dash-note";
-        note.textContent = "載せないあいだは、キャッチ用のおまかせは出ません。";
+        note.textContent = "載せないあいだは、キャッチ用の文章例は出ません。";
         wrap.appendChild(note);
         appendCopyHubExtras(wrap, "hero");
         appendCopyListOkFoot(wrap, closeToSectionOrList);
@@ -14228,7 +14229,7 @@
         const omakaseBtn = document.createElement("button");
         omakaseBtn.type = "button";
         omakaseBtn.className = "layout-img-source easy-copy-omakase-btn";
-        omakaseBtn.textContent = "おまかせ";
+        omakaseBtn.textContent = "文章例を出す";
         omakaseBtn.addEventListener("click", function (ev) {
           ev.stopPropagation();
           store.copyListFocusField = field.key;
@@ -14248,12 +14249,12 @@
         omakaseTipBtn.type = "button";
         omakaseTipBtn.className = "hub-tip-btn";
         omakaseTipBtn.setAttribute("data-hub-tip", "");
-        omakaseTipBtn.setAttribute("aria-label", "おまかせとは");
+        omakaseTipBtn.setAttribute("aria-label", "文章例とは");
         omakaseTipBtn.textContent = "?";
         const omakasePop = document.createElement("span");
         omakasePop.className = "hub-tip-pop";
         omakasePop.hidden = true;
-        omakasePop.textContent = "おまかせは、何度でも出せます。こちらを参考にして、文章をご記入ください。";
+        omakasePop.textContent = "文章例は、何度でも出せます。こちらを参考にして、文章をご記入ください。";
         omakaseTip.appendChild(omakaseTipBtn);
         omakaseTip.appendChild(omakasePop);
         actions.appendChild(omakaseTip);
@@ -15292,7 +15293,6 @@
     store.copyFieldNow = {};
     store.copyHeroOnPhoto = null;
     store.copyScreenReturn = null;
-    store.heroTextOnPhoto = false;
     store.easyBasicsSeed = null;
     store.easyBasicsHints = null;
     store.easyBasicsApplied = false;
@@ -15318,6 +15318,8 @@
       window.setPreviewWidthStepById("desktop");
     }
     showWizardStep(0);
+    if (store.sampleFlowImagePaths) applyDraftImagePaths(store.sampleFlowImagePaths);
+    applyHeroTextOverlay();
     const status = document.getElementById("wizard-status");
     if (status) status.textContent = "文章の決め方を選んでください。";
     scheduleSave();
@@ -16189,8 +16191,101 @@
     scheduleSave();
   }
 
+  let afterColorGuideOpen = false;
+  let afterColorGuidePassing = false;
+
+  function afterColorGuideItems() {
+    const items = [
+      {
+        title: "そのまま順番に進む",
+        body: "「次へ」を押すと、進捗の順に進めます。"
+      },
+      {
+        title: "好きな項目から編集する",
+        body: "上の進捗名を押すと、その項目の画像・文章・色を編集できます。"
+      }
+    ];
+    if (easyCatchOn()) {
+      items.push({
+        title: "まずはキャッチで試してみる",
+        body: "キャッチでは、画像・文章・色の操作を続けて体験できます。"
+      });
+    }
+    return items;
+  }
+
+  function paintAfterColorGuide() {
+    const copy = document.getElementById("after-color-guide-copy");
+    if (!copy) return;
+    copy.textContent = "";
+    afterColorGuideItems().forEach(function (item) {
+      const block = document.createElement("section");
+      block.className = "after-color-guide-item";
+      const heading = document.createElement("h3");
+      heading.className = "after-color-guide-sub";
+      heading.textContent = item.title;
+      const p = document.createElement("p");
+      p.textContent = item.body;
+      block.appendChild(heading);
+      block.appendChild(p);
+      copy.appendChild(block);
+    });
+  }
+
+  function setGuidePreviewHalf(on) {
+    const split = document.getElementById("atelier-split");
+    const shell = document.querySelector(".atelier-shell");
+    if (!split) return;
+    if (on) {
+      split.dataset.guidePct = split.style.getPropertyValue("--preview-pct") || "";
+      if (shell) shell.dataset.guidePct = shell.style.getPropertyValue("--preview-pct") || "";
+      split.style.setProperty("--preview-pct", "50%");
+      if (shell) shell.style.setProperty("--preview-pct", "50%");
+    } else {
+      const back = split.dataset.guidePct || "45%";
+      split.style.setProperty("--preview-pct", back);
+      if (shell) shell.style.setProperty("--preview-pct", shell.dataset.guidePct || back);
+      delete split.dataset.guidePct;
+      if (shell) delete shell.dataset.guidePct;
+    }
+    if (typeof window.applyPreviewWidthFromPane === "function") {
+      window.applyPreviewWidthFromPane();
+    }
+  }
+
+  function openAfterColorGuide() {
+    afterColorGuideOpen = true;
+    store.easyDirectOpen = true;
+    scheduleSave();
+    paintAfterColorGuide();
+    const panel = document.getElementById("after-color-guide");
+    if (panel) panel.hidden = false;
+    document.body.classList.add("is-after-color-guide");
+    const formEl = document.getElementById("order-form");
+    if (formEl) formEl.hidden = true;
+    setGuidePreviewHalf(true);
+    updateWizardUi();
+  }
+
+  function closeAfterColorGuide() {
+    afterColorGuideOpen = false;
+    const panel = document.getElementById("after-color-guide");
+    if (panel) panel.hidden = true;
+    document.body.classList.remove("is-after-color-guide");
+    const formEl = document.getElementById("order-form");
+    if (formEl) formEl.hidden = false;
+    setGuidePreviewHalf(false);
+  }
+
   function wizardNext() {
     if (colorWaveBusy) return;
+    if (afterColorGuideOpen) {
+      afterColorGuidePassing = true;
+      closeAfterColorGuide();
+      wizardNextAfterConfirm(getCurrentFlowStep(), false);
+      afterColorGuidePassing = false;
+      return;
+    }
     const flow = getFlowSteps();
     const step = getCurrentFlowStep();
     if (!step) return;
@@ -16283,6 +16378,10 @@
   function wizardNextAfterConfirm(step, revisingAfterLock) {
     const flow = getFlowSteps();
     if (!step) return;
+    if (step.id === "easy-site-name" && store.easyFlowActive && !afterColorGuidePassing) {
+      openAfterColorGuide();
+      return;
+    }
     closeDraftNotice();
     if (store.uiMode === "self") {
       if (step.id === "guide") {
@@ -16328,9 +16427,6 @@
       return;
     }
     let nextIndex = store.wizardStepIndex + 1;
-    if (flow[nextIndex] && flow[nextIndex].id === "easy-site-name" && homepageName()) {
-      nextIndex += 1;
-    }
     runWithCrossShutter(function () {
       if (store.uiMode === "guided") {
         if (step.id === LAST_COLOR_STEP_ID && !store.guidedImageUnlocked) {
@@ -16409,6 +16505,10 @@
   }
 
   function wizardBack() {
+    if (afterColorGuideOpen) {
+      closeAfterColorGuide();
+      return;
+    }
     clearPlainFootNotice();
     const step = getCurrentFlowStep();
     if (store.easyGapReturn === "easy-done" && step && step.id !== "easy-done" && step.id !== "finish") {
@@ -16526,10 +16626,6 @@
       let backIndex = Math.max(0, store.wizardStepIndex - 1);
       const flow = getFlowSteps();
       let prev = flow[backIndex];
-      if (prev && prev.id === "easy-site-name") {
-        backIndex = Math.max(0, backIndex - 1);
-        prev = flow[backIndex];
-      }
       if (prev && prev.id === "easy-catch") {
         const page = store.catchPage || "imageAsk";
         if (page === "imageAsk" || page === "ask") {
@@ -16653,6 +16749,15 @@
       });
     }
     if (nextBtn) nextBtn.addEventListener("click", wizardNext);
+    const guideNext = document.getElementById("after-color-guide-next");
+    const guideBack = document.getElementById("after-color-guide-back");
+    if (guideNext) guideNext.addEventListener("click", wizardNext);
+    if (guideBack) {
+      guideBack.addEventListener("click", function () {
+        wizardBack();
+        scrollBackDestinationToTop();
+      });
+    }
     document.querySelectorAll("[data-reset-draft]").forEach((btn) => {
       btn.addEventListener("click", resetAllDraft);
     });
@@ -18957,7 +19062,7 @@
     if (!slots.length || openCount <= 0) {
       openLayoutOmakaseNotice({
         title: "この列の写真は固定中です",
-        body: "固定を外すと、おまかせで写真を替えられます。",
+        body: "固定を外すと、ランダムに選んで写真を替えられます。",
         confirmLabel: "",
         allowSkip: false
       });
@@ -18981,14 +19086,14 @@
       return;
     }
     openLayoutOmakaseNotice({
-      title: "この列をおまかせにしますか",
+      title: "この列をランダムに選びますか",
       body:
         "固定していない写真が、ギャラリーの写真に替わります。固定中の写真は変わりません。\n替わる写真：" +
         openCount +
         "枚\n固定中：" +
         locked +
         "枚",
-      confirmLabel: "この列をおまかせ",
+      confirmLabel: "この列をランダムに選ぶ",
       allowSkip: true,
       onConfirm: function (skipNext) {
         if (skipNext) {
@@ -19014,8 +19119,8 @@
   function showLayoutPhotoLockedNotice() {
     if (store.layoutLockNoticeSkip) return;
     openLayoutOmakaseNotice({
-      title: "おまかせを解除してください",
-      body: "変更したい画像のロックを解除してから、もう一度おまかせを押してください。",
+      title: "ランダム選択を止めてください",
+      body: "変更したい画像のロックを解除してから、もう一度「ランダムに選ぶ」を押してください。",
       confirmLabel: "",
       allowSkip: true,
       onClose: rememberLayoutLockNoticeSkip
@@ -20607,45 +20712,64 @@
     root.querySelectorAll(".is-photo-hold").forEach((el) => el.classList.remove("is-photo-hold"));
   }
 
-  function shiftPhotoListToAnchor(blockId, slot, anchorEl) {
+  function parkSectionTop(blockId) {
+    clearPhotoListShift();
+    const scroll = document.querySelector(".preview-scroll");
+    const vp = document.getElementById("preview-viewport");
+    const sectionEl = previewEl(layoutSectionPreviewSelector(blockId));
+    if (!scroll || !vp || !sectionEl) {
+      focusPreviewBlock(blockId);
+      return;
+    }
+    const zoom = previewZoomFactor() || 1;
+    vp.style.paddingBottom = Math.ceil(scroll.clientHeight / zoom) + "px";
+    const prev = scroll.style.scrollBehavior;
+    scroll.style.scrollBehavior = "auto";
+    let ratio = zoom;
+    for (let i = 0; i < 6; i++) {
+      const delta = sectionEl.getBoundingClientRect().top - scroll.getBoundingClientRect().top;
+      if (Math.abs(delta) <= 4) break;
+      const before = scroll.scrollTop;
+      const max = Math.max(0, scroll.scrollHeight - scroll.clientHeight);
+      const next = Math.max(0, Math.min(max, before + delta * ratio));
+      if (Math.abs(next - before) < 0.5) break;
+      scroll.scrollTop = next;
+      const movedLayout = delta - (sectionEl.getBoundingClientRect().top - scroll.getBoundingClientRect().top);
+      const movedScroll = scroll.scrollTop - before;
+      if (Math.abs(movedLayout) > 1 && Math.abs(movedScroll) > 0.5) {
+        const nextRatio = movedScroll / movedLayout;
+        if (nextRatio > 0.05 && nextRatio < 8) ratio = nextRatio;
+      }
+    }
+    scroll.style.scrollBehavior = prev;
+    focusPreviewBlock(blockId);
+  }
+
+  function shiftPhotoListToAnchor(blockId, slot) {
     const list = photoListEl(blockId);
     const item = previewEl(layoutFramePreviewSelector(blockId, slot));
     const shell = list && list.parentElement;
-    if (!list || !item || !anchorEl || !shell) return;
+    if (!list || !item || !shell) return;
     clearPhotoListShift();
-    scrollPreviewFrameIntoView(layoutFramePreviewSelector(blockId, slot));
     const zoom = previewZoomFactor();
     const box = item.getBoundingClientRect();
+    const listBox = list.getBoundingClientRect();
     const layoutH = item.offsetHeight || box.height;
     const rectIsLayout =
       zoom < 0.999 &&
       layoutH > 8 &&
       Math.abs(box.height - layoutH) <= Math.abs(box.height - layoutH * zoom) + 1;
-    const visualTop = box.top * (rectIsLayout ? zoom : 1);
-    const delta = anchorEl.getBoundingClientRect().top - visualTop;
+    const scale = rectIsLayout ? zoom : 1;
+    const delta = listBox.top * scale - box.top * scale;
     if (Math.abs(delta) <= 4) {
-      syncPlaceMarkFrame();
+      focusPreviewBlock(blockId);
       return;
     }
-    const shift = rectIsLayout ? delta / zoom : delta;
-    let base = 0;
-    let el = item;
-    while (el && el !== shell) {
-      base += el.offsetTop;
-      el = el.offsetParent;
-    }
-    const next = base + shift;
-    const h = item.offsetHeight || 0;
-    const room = shell.clientHeight || 0;
-    const inside = el === shell && next >= -4 && next + h <= room + 4;
-    if (!inside) {
-      syncPlaceMarkFrame();
-      return;
-    }
+    const shift = delta / scale;
     shell.classList.add("is-photo-hold");
     list.classList.add("is-photo-shift");
     list.style.transform = "translateY(" + shift + "px)";
-    syncPlaceMarkFrame();
+    focusPreviewBlock(blockId);
   }
 
   function alignOpenPhotoWithPreview() {
@@ -20654,7 +20778,11 @@
     const blockId = map.getAttribute("data-mirror-block") || "";
     const slot = map.getAttribute("data-mirror-slot") || "";
     if (blockId === "photos" || blockId === "works") {
-      shiftPhotoListToAnchor(blockId, slot, map);
+      shiftPhotoListToAnchor(blockId, slot);
+      return;
+    }
+    if (blockId === "hero") {
+      focusPreviewBlock("hero");
       return;
     }
     const sel = layoutFramePreviewSelector(blockId, slot);
@@ -20684,17 +20812,39 @@
     syncPlaceMarkFrame();
   }
 
+  function placeMarkHost() {
+    return document.getElementById("preview-viewport") || document.querySelector(".preview-pane");
+  }
+
+  let placeMarkMotionRaf = 0;
+  function followPlaceMarkMotion() {
+    if (placeMarkMotionRaf) cancelAnimationFrame(placeMarkMotionRaf);
+    const started = performance.now();
+    const step = function () {
+      syncPlaceMarkFrame();
+      if (performance.now() - started < 280) {
+        placeMarkMotionRaf = requestAnimationFrame(step);
+      } else {
+        placeMarkMotionRaf = 0;
+        syncPlaceMarkFrame();
+      }
+    };
+    placeMarkMotionRaf = requestAnimationFrame(step);
+  }
+
   function ensurePlaceMarkFrame() {
+    const host = placeMarkHost();
     let frame = document.getElementById("place-mark-frame");
-    if (frame) return frame;
+    if (!host) return frame;
+    if (!frame) {
+      frame = document.createElement("div");
+      frame.id = "place-mark-frame";
+      frame.hidden = true;
+      frame.setAttribute("aria-hidden", "true");
+    }
+    if (frame.parentElement !== host) host.appendChild(frame);
     const pane = document.querySelector(".preview-pane");
-    if (!pane) return null;
-    frame = document.createElement("div");
-    frame.id = "place-mark-frame";
-    frame.hidden = true;
-    frame.setAttribute("aria-hidden", "true");
-    pane.appendChild(frame);
-    const scroll = pane.querySelector(".preview-scroll");
+    const scroll = pane && pane.querySelector(".preview-scroll");
     if (scroll && !scroll.dataset.placeMarkScroll) {
       scroll.dataset.placeMarkScroll = "1";
       scroll.addEventListener("scroll", () => syncPlaceMarkFrame(), { passive: true });
@@ -20709,27 +20859,27 @@
   function syncPlaceMarkFrame() {
     const frame = ensurePlaceMarkFrame();
     const pane = document.querySelector(".preview-pane");
+    const host = placeMarkHost();
     const target =
       root && (root.classList.contains("is-layout-focus") ? root : root.querySelector(".is-layout-focus"));
     const paneHidden = !pane || getComputedStyle(pane).display === "none";
-    if (!frame || !pane || !target || !placeMarkOn || paneHidden) {
+    if (!frame || !host || !target || !placeMarkOn || paneHidden) {
       if (frame) frame.hidden = true;
       return;
     }
-    const pb = pane.getBoundingClientRect();
+    const zoom = previewZoomFactor() || 1;
+    const hb = host.getBoundingClientRect();
     const raw = target.getBoundingClientRect();
-    const zoom = previewZoomFactor();
     const layoutW = target.offsetWidth || raw.width;
-    const rectIsLayout =
+    const rectIsVisual =
       zoom < 0.999 &&
-      layoutW > 8 &&
-      Math.abs(raw.width - layoutW) <= Math.abs(raw.width - layoutW * zoom) + 1;
-    const scale = rectIsLayout ? zoom : 1;
+      Math.abs(raw.width - layoutW * zoom) + 1 < Math.abs(raw.width - layoutW);
+    const unit = rectIsVisual ? zoom : 1;
     const tb = {
-      left: raw.left * scale,
-      top: raw.top * scale,
-      width: raw.width * scale,
-      height: raw.height * scale
+      left: (raw.left - hb.left) / unit,
+      top: (raw.top - hb.top) / unit,
+      width: raw.width / unit,
+      height: raw.height / unit
     };
     if (tb.width < 2 || tb.height < 2) {
       frame.hidden = true;
@@ -20737,8 +20887,8 @@
     }
     const thick = 5;
     frame.hidden = false;
-    frame.style.left = (tb.left - pb.left - thick) + "px";
-    frame.style.top = (tb.top - pb.top - thick) + "px";
+    frame.style.left = (tb.left - thick) + "px";
+    frame.style.top = (tb.top - thick) + "px";
     frame.style.width = (tb.width + thick * 2) + "px";
     frame.style.height = (tb.height + thick * 2) + "px";
   }
@@ -20750,6 +20900,8 @@
     clearPreviewBlockShift();
     clearPreviewAlignHead();
     hidePreviewAlignBar();
+    const vp = document.getElementById("preview-viewport");
+    if (vp) vp.style.paddingBottom = "";
     syncPlaceMarkFrame();
   }
 
@@ -21131,8 +21283,11 @@
       const map = editor.querySelector(".layout-source-map");
       if (map) alignOpenSourceMapToPad(map);
       syncEasyImgLevels();
-      focusPreviewLayoutFrame(blockId, slot);
-      alignOpenPhotoWithPreview();
+      if (blockId === "photos" || blockId === "works" || blockId === "hero") alignOpenPhotoWithPreview();
+      else {
+        focusPreviewLayoutFrame(blockId, slot);
+        alignOpenPhotoWithPreview();
+      }
       syncLayoutSectionOk(row.closest("details.layout-arrange-cell"));
       return;
     }
@@ -21271,7 +21426,7 @@
         }
         setOnlyLayoutFrameOpen(openKey, slot);
         applyLayoutPhotoRowOpen(row, blockId, slot, true);
-        focusPreviewLayoutFrame(blockId, slot);
+        if (blockId !== "photos" && blockId !== "works" && blockId !== "hero") focusPreviewLayoutFrame(blockId, slot);
         if (inEasy) {
           rememberEasyImgPhotoOpen();
           const scroller = document.querySelector(".dash-body > .fill-form");
@@ -21516,7 +21671,7 @@
       const omakaseBtn = document.createElement("button");
       omakaseBtn.type = "button";
       omakaseBtn.className = "layout-img-source layout-photo-omakase";
-      omakaseBtn.textContent = "おまかせ";
+      omakaseBtn.textContent = "ランダムに選ぶ";
       omakaseBtn.addEventListener("click", (ev) => {
         ev.preventDefault();
         ev.stopPropagation();
@@ -21816,32 +21971,24 @@
                 const slot =
                   (row && (row.getAttribute("data-item-id") || "").trim()) ||
                   (layoutBlockSlots("hero")[0] || "hero");
+                const scroller = document.querySelector(".dash-body > .fill-form");
+                if (scroller) scroller.scrollTop = 0;
+                parkSectionTop("hero");
                 if (row) {
                   setOnlyLayoutFrameOpen("hero", slot);
                   applyLayoutPhotoRowOpen(row, "hero", slot, true);
-                  const scroller = document.querySelector(".dash-body > .fill-form");
-                  if (scroller) scroller.scrollTop = 0;
-                  focusPreviewLayoutFrame("hero", slot);
-                  alignOpenPhotoWithPreview();
                 }
               } else {
                 const scroller = document.querySelector(".dash-body > .fill-form");
                 if (scroller) scroller.scrollTop = 0;
+                parkSectionTop(id);
                 const countId = layoutImageCountId(id);
                 const openKey = countId || id;
                 const slot = (store.layoutInnerByBlock && store.layoutInnerByBlock[openKey]) || "";
                 const row = slot
                   ? body.querySelector('[data-layout-photo="' + id + ":" + slot + '"]')
                   : null;
-                if (row) {
-                  applyLayoutPhotoRowOpen(row, id, slot, true);
-                  focusPreviewLayoutFrame(id, slot);
-                } else {
-                  clearPhotoListShift();
-                  const sectionEl = previewEl(layoutSectionPreviewSelector(id));
-                  if (sectionEl) centerPreviewBlock(sectionEl, "middle");
-                  else focusPreviewBlock(id);
-                }
+                if (row) applyLayoutPhotoRowOpen(row, id, slot, true);
               }
               placeSectionOk();
               syncEasyImgLevels();
@@ -21857,11 +22004,12 @@
                 if (row) {
                   if (!easyImgPhotoHostRow(row)) {
                     scrollDashChildToTop(row.querySelector(".layout-photo-editor") || row);
+                    parkSectionTop(id);
                     alignOpenPhotoWithPreview();
                   }
                 } else {
                   scrollDashChildToTop(cell);
-                  scrollPreviewFrameIntoView(layoutSectionPreviewSelector(id));
+                  parkSectionTop(id);
                 }
                 cell.querySelectorAll(".layout-photo-row.is-open .layout-source-map").forEach(alignOpenSourceMapToPad);
               });
@@ -21950,13 +22098,14 @@
         if (openRow) {
           if (!easyImgPhotoHostRow(openRow)) {
             scrollDashChildToTop(openRow.querySelector(".layout-photo-editor") || openRow);
+            const bid = openCell.getAttribute("data-layout-block") || "";
+            if (bid) parkSectionTop(bid);
             alignOpenPhotoWithPreview();
           }
         } else {
           scrollDashChildToTop(openCell);
           const bid = openCell.getAttribute("data-layout-block") || "";
-          scrollPreviewFrameIntoView(layoutSectionPreviewSelector(bid));
-          focusPreviewBlock(bid);
+          if (bid) parkSectionTop(bid);
         }
       }
       if (!pendingCenter) return;
@@ -22337,7 +22486,7 @@
         if (!slots.length || openCount <= 0) {
           openLayoutOmakaseNotice({
             title: "すべての画像がロックされています",
-            body: "このままでは、おまかせを実行しても画像は変わりません。変更したい画像のロックを解除してから、もう一度おまかせを押してください。",
+            body: "このままでは、ランダムに選んでも画像は変わりません。変更したい画像のロックを解除してから、もう一度「ランダムに選ぶ」を押してください。",
             confirmLabel: "",
             allowSkip: false
           });
@@ -22361,7 +22510,7 @@
           return;
         }
         openLayoutOmakaseNotice({
-          title: "おまかせを実行しますか？",
+          title: "ランダムに選びますか？",
           body:
             "ロックしていない画像は、すべて新しい画像に変わります。ロック中の画像は変更されません。\n変更される画像：" +
             openCount +
@@ -22796,7 +22945,7 @@
     if (copyText) {
       if (!copyText.dataset.defaultHtml) copyText.dataset.defaultHtml = copyText.innerHTML;
       if (sample) {
-        copyText.textContent = "文章は、画面で書いたものを載せます。おまかせの文は参考で、直して使えます。";
+        copyText.textContent = "文章は、画面で書いたものを載せます。文章例は参考で、直して使えます。";
       } else {
         copyText.innerHTML = copyText.dataset.defaultHtml;
       }
@@ -23629,6 +23778,7 @@
       if (viewport.style.width !== requested + "px") {
         viewport.style.width = requested + "px";
       }
+      followPlaceMarkMotion();
       viewport.style.maxWidth = "none";
       viewport.classList.toggle("is-phone", requested <= 500);
       viewport.classList.toggle("is-mobile", requested <= 500);
@@ -25514,7 +25664,6 @@
       if (store.easyFlowActive && store.entryBranch === "sample") {
         store.siteColorMode = "easy";
         store.uiMode = "guided";
-        store.heroTextOnPhoto = false;
       } else if (
         store.entryBranch === "sample" &&
         !store.easyFlowActive &&
@@ -25523,7 +25672,6 @@
       ) {
         store.siteColorMode = "easy";
         store.uiMode = "guided";
-        store.heroTextOnPhoto = false;
         if (store.intakeDone && !store.confirmed.finish && !store.sampleFinishNoBack) {
           store.intakeDone = false;
         }

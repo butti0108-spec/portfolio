@@ -12,7 +12,7 @@
   <!-- メーカー親CSS（ポートフォリオ根の style.css は読まない） -->
   <link rel="stylesheet" href="maker-base.css?v=font-heading-scope-20261002">
   <link rel="icon" href="brand/walker-favicon.png?v=walker-20261002" type="image/png">
-  <link rel="stylesheet" href="sample-overrides.css?v=after-color-flow4-20261004">
+  <link rel="stylesheet" href="sample-overrides.css?v=phone-fit-20261004">
   <link rel="stylesheet" href="free-photo-gallery/gallery.css?v=omakase-ok-20260929">
   <script>
     (function () {
@@ -60,12 +60,12 @@
   </script>
   <script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js" defer></script>
   <script src="vibe-dict.js" defer></script>
-  <script src="easy-copy-dict.js?v=cleanup-20260922" defer></script>
+  <script src="easy-copy-dict.js?v=char-fit-20261004" defer></script>
   <script src="copy-dict-engine.js?v=copy-ui-b-20260924" defer></script>
-  <script src="sushi-belt.js?v=zoom-site-20261004" defer></script>
+  <script src="sushi-belt.js?v=six-fix-20261004" defer></script>
   <script src="free-photo-gallery/gallery.js?v=gallery-act-20261001" defer></script>
   <script src="page-shutter.js?v=sample-only-20260929" defer></script>
-  <script src="script.js?v=section-frame-hold3-20261004" defer></script>
+  <script src="script.js?v=phone-fit-20261004" defer></script>
   <script>
     (function () {
       var h = location.hostname;
@@ -203,7 +203,7 @@
             <input type="radio" name="entry_branch" value="detail">
             <span class="entry-branch-card-inner">
               <strong role="heading" aria-level="3">自分で作る</strong>
-              <span>用途のあと、色・枠・文字を自分で触れます</span>
+              <span>見本は選ばず、基本のページをもとに自分で内容を決めます</span>
             </span>
           </label>
           <label class="entry-branch-card">
@@ -557,9 +557,9 @@
           <div class="easy-site-name-dawn">
             <p class="easy-site-name-lead">ホームページタイトルをご記入ください。</p>
             <p class="easy-site-name-note">会社名、個人名、プロジェクト名など</p>
-            <input type="text" id="easy-site-name-input" class="easy-site-name-input" maxlength="20" autocomplete="organization" aria-label="ホームページタイトル">
+            <input type="text" id="easy-site-name-input" class="easy-site-name-input" maxlength="100" autocomplete="organization" aria-label="ホームページタイトル">
             <div id="easy-site-name-ask" class="easy-site-name-ask">
-              <button type="button" class="gct-btn gct-btn-primary" id="easy-site-name-ok">作成開始</button>
+              <button type="button" class="gct-btn gct-btn-primary" id="easy-site-name-ok">次へ</button>
             </div>
           </div>
         </details>
@@ -995,7 +995,7 @@
                   </div>
                   <p class="gct-pick-grad-help" id="gct-pick-grad-help" hidden>矢印を押すと、2色のグラデーションにできます。</p>
                   <div class="gct-actions gct-actions-pick gct-actions-pick--undo">
-                    <button type="button" class="gct-btn" id="gct-pick-undo" disabled>ひとつ戻す</button>
+                    <button type="button" class="gct-btn" id="gct-pick-undo" disabled>前の色に戻す</button>
                   </div>
                   <div class="gct-pick-grad" id="gct-pick-grad" hidden>
                     <div class="gct-grad-compass" id="gct-pick-compass" role="group" aria-label="グラデの向き"></div>

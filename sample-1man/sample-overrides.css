@@ -846,6 +846,20 @@ body.is-easy-done-step .dash-body > .fill-form {
   }
 }
 
+@media (max-width: 40rem) {
+  .easy-flow-meter-name,
+  .easy-flow-meter.is-wide .easy-flow-meter-name {
+    font-size: clamp(8px, 2.05vw, 0.62rem);
+    letter-spacing: -0.02em;
+  }
+
+  .easy-flow-meter-name.is-now::before {
+    width: 0.2rem;
+    height: 0.2rem;
+    margin-right: 0.04rem;
+  }
+}
+
 .entry-mood-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
@@ -2597,6 +2611,15 @@ html.dash-wave-out.dash-wave-squeeze .dash-shutter-band {
   }
 }
 
+/* パソコン幅は、見ている端末が狭くても見本の中はパソコンの並び */
+.preview-viewport.is-desktop .preview-nav-static {
+  display: flex;
+  position: static;
+  background: transparent;
+  border: 0;
+  padding: 0;
+}
+
 .preview-site .hero-copy h1,
 .preview-site .hero-copy .hero-lead {
   color: var(--hero-ink) !important;
@@ -2617,6 +2640,10 @@ html.dash-wave-out.dash-wave-squeeze .dash-shutter-band {
   .preview-site .hero-copy h1 {
     font-size: calc(3.15rem * var(--heading-scale, 1)) !important;
   }
+}
+
+.preview-viewport.is-desktop .hero-copy h1 {
+  font-size: calc(3.15rem * var(--heading-scale, 1)) !important;
 }
 
 .preview-site .hero-value-title,
@@ -3326,6 +3353,28 @@ body.mode-guided #wizard-back {
   top: 0.45rem;
   left: auto;
   right: 0.45rem;
+}
+
+/* 狭い端末、または狭い欄にパソコン幅を縮めたときだけ、端の目印を内側へ */
+.preview-viewport.is-phone .preview-site .zone-badge,
+.preview-viewport.is-fit-narrow .preview-site .zone-badge {
+  width: 1.4rem;
+  height: 1.4rem;
+  font-size: 0.62rem;
+}
+body:not(.hide-zone-badges) .preview-viewport.is-phone .header-inner,
+body:not(.hide-zone-badges) .preview-viewport.is-fit-narrow .header-inner {
+  padding-left: 4.2rem;
+  padding-right: 2.5rem;
+  box-sizing: border-box;
+}
+.preview-viewport.is-phone .site-header .zone-badge[data-open-step="logo-text"],
+.preview-viewport.is-fit-narrow .site-header .zone-badge[data-open-step="logo-text"],
+.preview-viewport.is-phone #hero > .zone-badge.zone-badge--heading-font,
+.preview-viewport.is-fit-narrow #hero > .zone-badge.zone-badge--heading-font {
+  top: 0.45rem;
+  left: auto;
+  right: 0.7rem;
 }
 
 .preview-site .hero-values-wrap .zone-badge[data-open-step="values-color"] {
@@ -7194,6 +7243,22 @@ body.is-layout-dragging .has-hover-tip::after {
     flex: 0 0 auto;
     flex-wrap: wrap;
     min-height: 2.85rem;
+    min-width: 0;
+  }
+
+  .atelier-chrome-left,
+  .atelier-chrome-right {
+    min-width: 0;
+    max-width: 100%;
+  }
+
+  #chrome-preview-width {
+    flex-wrap: wrap;
+    justify-content: center;
+    row-gap: 0.35rem;
+    width: 100%;
+    max-width: 100%;
+    white-space: normal;
   }
 
   .atelier-chrome-center {
@@ -9103,8 +9168,8 @@ body.wizard-mode #easy-img-layout-host .layout-arrange-actions {
 
 .preview-site .hero-stage.is-hero-text-on.hero-plate-tone-dark .hero-copy-plate h1,
 .preview-site .hero-stage.is-hero-text-on.hero-plate-tone-dark .hero-copy-plate .hero-lead {
-  color: var(--hero-ink) !important;
-  -webkit-text-fill-color: var(--hero-ink) !important;
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
   text-shadow: none !important;
 }
 
@@ -10756,6 +10821,17 @@ html.is-capture-mode body.sample-flow-hide-preview #preview-root {
   opacity: 1;
   color: rgba(21, 32, 40, 0.55);
   border-color: rgba(21, 32, 40, 0.35);
+}
+
+@media (max-width: 860px) {
+  #chrome-preview-width {
+    flex-wrap: wrap;
+    justify-content: center;
+    row-gap: 0.35rem;
+    width: 100%;
+    max-width: 100%;
+    white-space: normal;
+  }
 }
 
 .hub-preview-width-block {
@@ -14080,7 +14156,9 @@ body.wizard-mode .dash-block.is-wizard-active {
 [data-step-id="easy-img-wire"].is-easy-drill > .dash-note {
   display: none !important;
 }
-body:has([data-step-id="easy-img-wire"].is-easy-drill) .wizard-foot-dock {
+body:has([data-step-id="easy-img-wire"].is-easy-drill) .wizard-foot-dock > :not(#wizard-nav),
+body:has([data-step-id="easy-img-wire"].is-easy-drill) #wizard-next,
+body:has([data-step-id="easy-img-wire"].is-easy-drill) #btn-zip {
   display: none !important;
 }
 #easy-img-layout-host.is-section-solo .layout-arrange-cell:not([open]),
@@ -14784,7 +14862,9 @@ body:has([data-step-id="easy-copy-omakase"].is-easy-drill) #easy-copy-list-host 
   background: transparent;
   box-sizing: border-box;
 }
-body:has([data-step-id="easy-img-wire"].is-photo-solo) .wizard-foot-dock {
+body:has([data-step-id="easy-img-wire"].is-photo-solo) .wizard-foot-dock > :not(#wizard-nav),
+body:has([data-step-id="easy-img-wire"].is-photo-solo) #wizard-next,
+body:has([data-step-id="easy-img-wire"].is-photo-solo) #btn-zip {
   display: none !important;
 }
 #easy-img-layout-host.is-photo-solo .layout-photo-row.is-open {
@@ -15653,7 +15733,9 @@ body.is-color-move-dragging * {
 .layout-color-row.is-open > .layout-color-line > .layout-inner-handle {
   display: none;
 }
-body:has([data-step-id="easy-color-stage"] .layout-color-row.is-open) .wizard-foot-dock {
+body:has([data-step-id="easy-color-stage"] .layout-color-row.is-open) .wizard-foot-dock > :not(#wizard-nav),
+body:has([data-step-id="easy-color-stage"] .layout-color-row.is-open) #wizard-next,
+body:has([data-step-id="easy-color-stage"] .layout-color-row.is-open) #btn-zip {
   display: none !important;
 }
 .layout-color-body .gct-pick-side {
@@ -16341,8 +16423,15 @@ textarea.is-copy-frame,
   border: 0;
   background: transparent;
 }
-body:has([data-step-id="easy-copy-omakase"].is-copy-solo) .wizard-foot-dock,
-body:has([data-step-id="easy-copy-omakase"].is-easy-drill) .wizard-foot-dock {
+body:has([data-step-id="easy-copy-omakase"].is-copy-solo) .wizard-foot-dock > :not(#wizard-nav),
+body:has([data-step-id="easy-copy-omakase"].is-copy-solo) #wizard-next,
+body:has([data-step-id="easy-copy-omakase"].is-copy-solo) #btn-zip,
+body:has([data-step-id="easy-copy-omakase"].is-easy-drill) .wizard-foot-dock > :not(#wizard-nav),
+body:has([data-step-id="easy-copy-omakase"].is-easy-drill) #wizard-next,
+body:has([data-step-id="easy-copy-omakase"].is-easy-drill) #btn-zip,
+body.is-catch-inline .wizard-foot-dock > :not(#wizard-nav),
+body.is-catch-inline #wizard-next,
+body.is-catch-inline #btn-zip {
   display: none !important;
 }
 .easy-copy-frame-cand.is-picked {

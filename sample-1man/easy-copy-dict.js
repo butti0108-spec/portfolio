@@ -326,8 +326,8 @@
       id: "hero",
       label: "キャッチ",
       apply: (text, brand) => ({
-        hero_lead_1: text.slice(0, 40),
-        hero_lead_2: text.length > 40 ? text.slice(40, 80) : "",
+        hero_lead_1: text.slice(0, 100),
+        hero_lead_2: text.length > 100 ? text.slice(100, 200) : "",
         hero_title: brand
       })
     },
@@ -345,9 +345,9 @@
       label: "おすすめ",
       apply: (text) => ({
         works_heading: "おすすめ",
-        works_lead: text.slice(0, 80),
+        works_lead: text.slice(0, 100),
         work_1_title: "おすすめ",
-        work_1_text: text.slice(0, 80)
+        work_1_text: text.slice(0, 100)
       })
     },
     {
@@ -355,7 +355,7 @@
       label: "ご連絡",
       apply: (text) => ({
         contact_label: "ご連絡",
-        contact_note_1: text.slice(0, 40)
+        contact_note_1: text.slice(0, 100)
       })
     }
   ];
@@ -403,7 +403,7 @@
     return base.map((c, i) => {
       let text = c.text;
       if (section.id === "hero") {
-        text = text.replace(/へようこそ。/, "。").slice(0, 60);
+        text = text.replace(/へようこそ。/, "。").slice(0, 100);
       } else if (section.id === "contact") {
         text = (c.closeId ? CLOSINGS.first[i % 5].text : text).replace(/。$/, "") + " お気軽にご連絡ください。";
       }

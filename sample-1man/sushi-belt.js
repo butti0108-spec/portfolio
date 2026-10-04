@@ -490,19 +490,7 @@
       var scrollY = win.pageYOffset || doc.documentElement.scrollTop || 0;
       var rect = end.getBoundingClientRect();
       var h = Math.ceil(rect.bottom + scrollY);
-      if (root) {
-        var rootRect = root.getBoundingClientRect();
-        h = Math.max(
-          h,
-          Math.ceil(rootRect.bottom + scrollY),
-          root.scrollHeight,
-          root.offsetHeight
-        );
-      }
-      var bodyStyle = win.getComputedStyle(doc.body);
-      h += Math.ceil(parseFloat(bodyStyle.marginBottom) || 0);
-      h = Math.max(h, 400);
-      iframe.style.height = h + "px";
+      iframe.style.height = Math.max(h, 1) + "px";
       iframe.style.minHeight = "0";
     } catch (err) {
       /* ignore */

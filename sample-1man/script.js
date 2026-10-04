@@ -285,58 +285,58 @@
     });
   }
 
-  /** 各入力欄の最大文字数（ぴったりまで可） */
+  /** 各入力欄の最大文字数。100字か200字だけ */
   const FIELD_MAX = {
-    brand_name: 20,
-    font_wish_name: 80,
-    hero_title: 40,
-    hero_lead_1: 40,
-    hero_lead_2: 40,
-    hero_lead_3: 40,
-    value_1_title: 20,
-    value_1_text: 40,
-    value_2_title: 20,
-    value_2_text: 40,
-    value_3_title: 20,
-    value_3_text: 40,
-    about_section_name: 30,
-    about_heading: 30,
-    about_name: 20,
+    brand_name: 100,
+    font_wish_name: 100,
+    hero_title: 100,
+    hero_lead_1: 100,
+    hero_lead_2: 100,
+    hero_lead_3: 100,
+    value_1_title: 100,
+    value_1_text: 100,
+    value_2_title: 100,
+    value_2_text: 100,
+    value_3_title: 100,
+    value_3_text: 100,
+    about_section_name: 100,
+    about_heading: 100,
+    about_name: 100,
     about_lead: 200,
-    acc_1_title: 20,
-    acc_1_body: 160,
-    acc_2_title: 20,
-    acc_2_body: 160,
-    acc_3_title: 20,
-    acc_3_body: 160,
-    works_section_name: 30,
-    works_heading: 30,
-    works_lead: 40,
-    work_1_title: 20,
-    work_1_text: 40,
-    work_2_title: 20,
-    work_2_text: 40,
-    work_3_title: 20,
-    work_3_text: 40,
-    contact_section_name: 30,
-    contact_label: 20,
-    contact_email: 80,
-    contact_note_1: 40,
-    contact_note_2: 40,
-    hours_text: 60,
-    announce_text: 60,
-    announce_label: 20,
+    acc_1_title: 100,
+    acc_1_body: 200,
+    acc_2_title: 100,
+    acc_2_body: 200,
+    acc_3_title: 100,
+    acc_3_body: 200,
+    works_section_name: 100,
+    works_heading: 100,
+    works_lead: 100,
+    work_1_title: 100,
+    work_1_text: 100,
+    work_2_title: 100,
+    work_2_text: 100,
+    work_3_title: 100,
+    work_3_text: 100,
+    contact_section_name: 100,
+    contact_label: 100,
+    contact_email: 100,
+    contact_note_1: 100,
+    contact_note_2: 100,
+    hours_text: 100,
+    announce_text: 100,
+    announce_label: 100,
     announce_url: 200,
-    access_text: 60,
-    address_text: 80,
+    access_text: 100,
+    address_text: 100,
     extra_notes: 200,
-    url_slug_wish: 48,
+    url_slug_wish: 100,
     work_1_url: 200,
-    work_1_link_label: 30,
+    work_1_link_label: 100,
     work_2_url: 200,
-    work_2_link_label: 30,
+    work_2_link_label: 100,
     work_3_url: 200,
-    work_3_link_label: 30
+    work_3_link_label: 100
   };
 
   const IMAGE_EDGE = {
@@ -2341,6 +2341,7 @@
     heroTextOnPhoto: false,
     heroImageOff: false,
     catchPage: "imageAsk",
+    catchInline: false,
     catchImageOn: null,
     catchWordsOn: null,
     heroTextPlate: "round",
@@ -7232,12 +7233,26 @@
   function setHeroPlatePresence(on) {
     if (on) {
       store.heroTextPlate = heroPlateLastShape();
-      return;
+    } else {
+      if (store.heroTextPlate && store.heroTextPlate !== "none") {
+        store.heroTextPlateLast = store.heroTextPlate;
+      }
+      store.heroTextPlate = "none";
     }
-    if (store.heroTextPlate && store.heroTextPlate !== "none") {
-      store.heroTextPlateLast = store.heroTextPlate;
-    }
-    store.heroTextPlate = "none";
+    if (heroPlateIsOn() && (store.catchPage || "") === "color") store.catchPage = "write";
+    syncCatchColorAvailability();
+  }
+
+  function heroPlateIsOn() {
+    return normalizeHeroPlate(store.heroTextPlate) !== "none";
+  }
+
+  function syncCatchColorAvailability() {
+    const hide = heroPlateIsOn();
+    syncLayoutColorRows();
+    const unit = document.querySelector('[data-color-step="hero-color"]');
+    if (unit && hide) unit.hidden = true;
+    if (!hide && unit && unit.getAttribute("data-copy-borrowed") === "1") unit.hidden = false;
   }
 
   function normalizeHeroPlateTone(tone) {
@@ -7499,7 +7514,6 @@
     const wrap = root.querySelector(".logo-wrap");
     const img = document.getElementById("preview-logo-img");
     const text = document.getElementById("preview-logo-text");
-    const brand = fieldValue("brand_name");
     const hasImg = !!(img && img.getAttribute("src") && imageUrls.logo_image);
 
     if (wrap) {
@@ -7527,24 +7541,17 @@
           text.innerHTML =
             '<span class="logo-hint-main">ロゴ画像</span><span class="logo-hint-sub">選ぶとここに出ます</span>';
         }
-      } else if (brand) {
+      } else if (homepageName()) {
         text.hidden = false;
         text.classList.remove("is-hint");
-        text.textContent = brand;
+        text.textContent = homepageName();
       } else if (store.blankCanvas) {
         text.hidden = false;
         text.classList.remove("is-hint");
         text.textContent = "";
       } else {
-        const purposeBrand = purposeField("brand_name");
-        if (purposeBrand) {
-          text.hidden = false;
-          text.classList.remove("is-hint");
-          text.textContent = purposeBrand;
-        } else {
-          text.hidden = false;
-          renderHeaderLogoHint(text);
-        }
+        text.hidden = false;
+        renderHeaderLogoHint(text);
       }
     }
   }
@@ -7552,13 +7559,7 @@
   function syncFooterBrand() {
     const el = document.getElementById("footer-brand");
     if (!el) return;
-    const name = String(fieldValue("brand_name") || "").trim();
-    if (store.blankCanvas) {
-      el.textContent = name;
-      return;
-    }
-    const fromSample = String(store.sushiSampleBrand || "").trim();
-    el.textContent = name || fromSample || purposeField("brand_name") || "店名";
+    el.textContent = homepageName();
   }
 
   /** サンプル屋号をロゴ／フッターへ揃える（draftに brand_name が無い見本対策） */
@@ -7574,9 +7575,6 @@
     const brand = String(name || "").trim();
     if (!brand) return false;
     store.sushiSampleBrand = brand;
-    if (isPlaceholderBrand(fieldValue("brand_name"))) {
-      setFieldValue("brand_name", brand);
-    }
     syncPreviewHeaderChrome();
     return true;
   }
@@ -8982,6 +8980,11 @@
   let catchSavedHeroInner = null;
 
   function showWizardStep(index) {
+    if (store.catchInline) {
+      store.catchInline = false;
+      store.layoutCatchReturn = "";
+      document.body.classList.remove("is-catch-inline");
+    }
     if (afterColorGuideOpen) closeAfterColorGuide();
     const quietReturnTo = catchQuietReturnTo;
     catchQuietReturnTo = "";
@@ -9177,6 +9180,7 @@
     switchToDashTab();
     form.querySelectorAll(":scope > details.dash-block").forEach((d) => {
       const active = d === block;
+      d.hidden = !active;
       d.open = active;
       d.classList.toggle("is-wizard-active", active);
       d.classList.toggle("is-active-step", active);
@@ -9988,8 +9992,8 @@
         wizardNext();
       });
     }
-    const existing = homepageName() || String(fieldValue("brand_name") || "").trim();
-    input.value = existing && !isPlaceholderBrand(existing) ? existing : "";
+    const existing = homepageName();
+    input.value = existing;
     syncAsk();
     window.setTimeout(function () {
       try { input.focus(); } catch (e) { /* ignore */ }
@@ -10137,15 +10141,15 @@
     if (!hero || isPlaceholderBrand(hero)) {
       setFieldValue("hero_title", brand);
     }
-    setFieldValue("hero_lead_1", cand.text.slice(0, 40));
-    if (cand.text.length > 40) {
-      setFieldValue("hero_lead_2", cand.text.slice(40, 80));
+    setFieldValue("hero_lead_1", cand.text.slice(0, 100));
+    if (cand.text.length > 100) {
+      setFieldValue("hero_lead_2", cand.text.slice(100, 200));
     }
     setFieldValue("about_lead", cand.text.slice(0, 200));
     setFieldValue("about_heading", brand + "案内");
     setFieldValue("works_heading", "おすすめ");
     setFieldValue("value_1_title", "こだわり");
-    setFieldValue("value_1_text", cand.text.slice(0, 40));
+    setFieldValue("value_1_text", cand.text.slice(0, 100));
     applyAllConfirmed();
     syncPreviewHeaderChrome();
   }
@@ -10714,11 +10718,13 @@
     const pages = ["imageAsk"];
     if (store.catchImageOn === true) pages.push("image");
     pages.push("ask");
-    if (store.catchWordsOn === true) pages.push("settings", "write", "color");
+    if (store.catchWordsOn === true) pages.push("settings", "write");
+    if (store.catchWordsOn === true && !heroPlateIsOn()) pages.push("color");
     return pages;
   }
 
   function renderCatchPages() {
+    if (heroPlateIsOn() && (store.catchPage || "") === "color") store.catchPage = "write";
     clearPlainFootNotice();
     const page = store.catchPage || "imageAsk";
     if (page === "image") {
@@ -10737,7 +10743,7 @@
     const tags = document.getElementById("easy-catch-tags");
     if (tags) {
       tags.innerHTML = "";
-      const names = ["画像", "文章", "色"];
+      const names = heroPlateIsOn() ? ["画像", "文章"] : ["画像", "文章", "色"];
       const now =
         page === "imageAsk" || page === "image"
           ? "画像"
@@ -10816,10 +10822,11 @@
     if (page === "write") {
       document.querySelectorAll("#easy-catch-copy textarea.is-copy-frame").forEach(growCopyField);
     }
-    if (page === "color") {
+    if (page === "color" && !heroPlateIsOn()) {
       const unit = document.querySelector('#easy-catch-color [data-color-step="hero-color"]');
       if (unit && !unit.classList.contains("is-open")) openLayoutColorHoney(unit);
     }
+    syncCatchColorAvailability();
   }
 
   function advanceCatchPage() {
@@ -11629,6 +11636,26 @@
     return Math.max(1, Math.ceil(endRect.bottom - rootRect.top));
   }
 
+  function clipPreviewToFooter() {
+    const root = document.getElementById("preview-root");
+    const viewport = document.getElementById("preview-viewport");
+    if (!root) return;
+    const footer = root.querySelector("#preview-footer, .site-footer");
+    if (!footer || !footer.getClientRects().length) {
+      if (root.style.height) root.style.height = "";
+      if (root.style.overflow === "hidden") root.style.overflow = "";
+      return;
+    }
+    const next = Math.max(1, footer.offsetTop + footer.offsetHeight) + "px";
+    if (root.style.height !== next) root.style.height = next;
+    root.style.overflow = "hidden";
+    if (!viewport) return;
+    const laid = viewport.offsetHeight;
+    const seen = Math.round(viewport.getBoundingClientRect().height);
+    const mb = laid > seen + 2 ? (seen - laid) + "px" : "";
+    if (viewport.style.marginBottom !== mb) viewport.style.marginBottom = mb;
+  }
+
   window.__sample1manCaptureMeasureHeight = function () {
     return measureCaptureContentHeight();
   };
@@ -11921,6 +11948,7 @@
       if (draft.fonts.body) setFieldValue("font_body", draft.fonts.body);
     }
     if (draft.fields) applyFormObject(draft.fields);
+    if (!store.siteNameConfirmed) setFieldValue("brand_name", "");
     captureSampleCopyBaseline(draft.fields);
     /* サンプルは見出し下線の既定を短い（未指定時）。新規白紙は mid */
     if (!(draft.fields && draft.fields.accentBar)) {
@@ -12073,7 +12101,7 @@
 
   function captureEasyBasicsHintsFromSample() {
     const hints = {
-      brand: String(fieldValue("brand_name") || store.sushiSampleBrand || "").trim(),
+      brand: homepageName(),
       intro: String(fieldValue("about_lead") || "").trim(),
       email: String(fieldValue("contact_email") || "").trim(),
       phone: samplePhoneFromNote(fieldValue("contact_note_1")),
@@ -13211,6 +13239,12 @@
 
   function copyListFieldDisplayText(key) {
     if (!key) return "";
+    if (key === "hero_title" || /^hero_lead_\d+$/.test(key)) {
+      if (store.copyFieldNow && Object.prototype.hasOwnProperty.call(store.copyFieldNow, key)) {
+        return String(store.copyFieldNow[key] || "").trim();
+      }
+      return String(fieldValue(key) || "").trim();
+    }
     if (store.copyFieldNow && Object.prototype.hasOwnProperty.call(store.copyFieldNow, key)) {
       const now = store.copyFieldNow[key];
       if (now != null && String(now).trim() !== "") return String(now).trim();
@@ -13220,24 +13254,8 @@
     return resolvePreviewText(fieldValue(key), key, "");
   }
 
-  function fillEmptyHeroLead(i) {
-    const key = "hero_lead_" + i;
-    if (
-      store.copyFieldSource &&
-      store.copyFieldSource[key] === "custom" &&
-      !(store.copyFieldNow && String(store.copyFieldNow[key] || "").trim())
-    ) {
-      return;
-    }
-    const fieldText = String(copyListFieldDisplayText(key) || "").trim();
-    const nodes = document.querySelectorAll("#hero-leads [data-sample-item]");
-    const previewText = nodes[i - 1] ? String(nodes[i - 1].textContent || "").trim() : "";
-    if (fieldText && previewText) return;
-    const sentence = fieldText || previewText || ("サンプル" + i + "は未入力です");
-    setFieldValue(key, sentence);
-    if (!store.copyFieldNow || typeof store.copyFieldNow !== "object") store.copyFieldNow = {};
-    store.copyFieldNow[key] = sentence;
-    paintCopyPreviewFieldText(key, sentence);
+  function fillEmptyHeroLead() {
+    /* 空のキャッチ欄へ、見本の文は書き込まない */
   }
 
   function copyListItemLeadText(sec, itemIndex) {
@@ -13441,7 +13459,7 @@
 
   function fieldMaxLen(key) {
     const n = Number(FIELD_MAX[key]);
-    return Number.isFinite(n) && n > 0 ? n : 40;
+    return Number.isFinite(n) && n > 0 ? n : 100;
   }
 
   function renderCopyListCandidates(box, fieldKey, sectionId) {
@@ -13936,9 +13954,11 @@
         btn.setAttribute("aria-pressed", (on ? plateOn : !plateOn) ? "true" : "false");
         btn.textContent = pair[1];
         btn.addEventListener("click", function () {
+          const inCatch = !!btn.closest("#easy-catch-host");
           setHeroPlatePresence(on);
           applyHeroTextOverlay();
-          renderCopyListUi({ keepScroll: true });
+          if (inCatch) renderEasyCatchRest();
+          else renderCopyListUi({ keepScroll: true });
           scheduleSave();
         });
         presenceRow.appendChild(btn);
@@ -14341,7 +14361,7 @@
     if (store.blankCanvas && !(stepNow && stepNow.id === "easy-catch")) {
       const freeNote = document.createElement("p");
       freeNote.className = "easy-copy-free-note";
-      freeNote.textContent = "好きなように書けます。";
+      freeNote.textContent = "基本のページをもとに、文章を書けます。";
       host.appendChild(freeNote);
     }
     const nameLine = document.createElement("label");
@@ -14349,7 +14369,7 @@
     const nameInput = document.createElement("input");
     nameInput.type = "text";
     nameInput.className = "easy-copy-name-input";
-    nameInput.maxLength = 20;
+    nameInput.maxLength = 100;
     nameInput.setAttribute("aria-label", "ホームページタイトル");
     nameInput.value = homepageName();
     const nameWarn = document.createElement("p");
@@ -15268,7 +15288,12 @@
       document.querySelectorAll('.dash-block[data-step-id="easy-img-wire"] [data-easy-slot]').forEach(function (p) {
         p.classList.toggle("is-current", p.getAttribute("data-easy-slot") === slot);
       });
-      scrollPreviewFrameIntoView(previewSelectorForImageName(slot));
+      const mapped = wireSlotBlockAndItem(slot);
+      if (mapped && (mapped.blockId === "photos" || mapped.blockId === "works")) {
+        shiftPhotoListToAnchor(mapped.blockId, mapped.slot);
+      } else if (mapped && mapped.blockId === "hero") {
+        focusPreviewBlock("hero");
+      }
     });
   }
 
@@ -15429,6 +15454,26 @@
     }
   }
 
+  function applyPurposeSectionNames(purposeKey) {
+    const pack = PURPOSE_PACKS[purposeKey];
+    if (!pack || !pack.fields) return;
+    store.sitePurpose = purposeKey;
+    const purposeRadio =
+      form.querySelector('input[name="site_purpose"][value="' + purposeKey + '"]') ||
+      document.querySelector('input[name="site_purpose"][value="' + purposeKey + '"]');
+    if (purposeRadio) purposeRadio.checked = true;
+    ["about_section_name", "works_section_name"].forEach(function (name) {
+      if (pack.fields[name]) setFieldValue(name, pack.fields[name]);
+    });
+    ["about-text", "works-text"].forEach(function (stepId) {
+      if (store.confirmed[stepId] || store.snapshots[stepId]) {
+        store.snapshots[stepId] = captureStepSnapshot(stepId, formToObject({ includeHidden: true }));
+      }
+    });
+    applyAllConfirmed();
+    syncPreviewHeaderChrome();
+  }
+
   async function enterSampleAfterPurpose() {
     store.blankCanvas = false;
     document.body.classList.remove("is-blank-canvas");
@@ -15437,6 +15482,7 @@
     const purposeKey = entryPurposeKey(gate);
     if (!purposeKey) return;
     if (shouldResumeSampleFlow()) {
+      applyPurposeSectionNames(purposeKey);
       if (window.SushiBelt) window.SushiBelt.unmount();
       resumeSampleFlowAfterColor("keep");
       return;
@@ -15450,6 +15496,7 @@
     store.easyFlowActive = true;
     store.hubEntrySource = "sample";
     applySushiSampleDraft(draft);
+    applyPurposeSectionNames(purposeKey);
     if (store.pendingSushi && store.pendingSushi.sample && store.pendingSushi.sample.brand) {
       store.sushiSampleBrand = store.pendingSushi.sample.brand;
     }
@@ -15489,6 +15536,7 @@
     store.easyFlowActive = true;
     store.hubEntrySource = "sample";
     applySushiSampleDraft(draft);
+    applyPurposeSectionNames(purposeKey);
     if (colorVal !== "keep" && PRESETS[colorVal]) {
       applyPresetByKey(colorVal);
       confirmAllColorStepsFromPreset();
@@ -16185,10 +16233,46 @@
     const cur = getCurrentFlowStep();
     const idx = flow.findIndex(function (s) { return s.id === "easy-catch"; });
     if (!cur || idx < 0) return;
-    if (page) store.catchPage = page;
+    if (page) store.catchPage = page === "color" && heroPlateIsOn() ? "write" : page;
+    if (cur.id === "easy-catch") {
+      renderEasyCatchRest();
+      scheduleSave();
+      return;
+    }
     store.layoutCatchReturn = cur.id;
-    showWizardStep(idx);
+    store.catchInline = true;
+    document.body.classList.add("is-catch-inline");
+    const catchBlock = form.querySelector('.dash-block[data-step-id="easy-catch"]');
+    if (!catchBlock) return;
+    form.querySelectorAll(":scope > details.dash-block").forEach(function (d) {
+      const active = d === catchBlock;
+      d.open = active;
+      d.hidden = !active;
+      d.classList.toggle("is-wizard-active", active);
+      d.classList.toggle("is-active-step", active);
+    });
+    parkEasyImageHost("easy-catch");
+    if (store.catchPage === "image") {
+      store.layoutAccordionId = "hero";
+      if (!store.layoutInnerByBlock) store.layoutInnerByBlock = {};
+      store.layoutInnerByBlock.hero = "hero";
+    }
+    mountSharedImageUi(true);
+    renderEasyCatchRest();
+    updateWizardUi();
     scheduleSave();
+  }
+
+  function closeCatchInline() {
+    if (!store.catchInline) return;
+    const backId = store.layoutCatchReturn || "";
+    store.catchInline = false;
+    store.layoutCatchReturn = "";
+    document.body.classList.remove("is-catch-inline");
+    const flow = getFlowSteps();
+    const at = flow.findIndex(function (s) { return s.id === backId; });
+    if (at >= 0) showWizardStep(at);
+    else updateWizardUi();
   }
 
   let afterColorGuideOpen = false;
@@ -16279,6 +16363,10 @@
 
   function wizardNext() {
     if (colorWaveBusy) return;
+    if (store.catchInline) {
+      closeCatchInline();
+      return;
+    }
     if (afterColorGuideOpen) {
       afterColorGuidePassing = true;
       closeAfterColorGuide();
@@ -16505,6 +16593,10 @@
   }
 
   function wizardBack() {
+    if (store.catchInline) {
+      closeCatchInline();
+      return;
+    }
     if (afterColorGuideOpen) {
       closeAfterColorGuide();
       return;
@@ -17736,6 +17828,7 @@
     if (!catchRow.parentElement) rows.appendChild(catchRow);
     paintLayoutColorChips();
     syncLayoutColorRows();
+    syncCatchColorAvailability();
   }
 
   function syncLayoutColorRows() {
@@ -17746,7 +17839,11 @@
     if (!rows) return;
     rows.querySelectorAll(":scope > .layout-color-move").forEach(function (row) {
       const moveId = row.getAttribute("data-color-move");
-      const blockId = COLOR_MOVE_BLOCK[moveId];
+      if (moveId === "catch-jump" && heroPlateIsOn()) {
+        row.hidden = true;
+        return;
+      }
+      const blockId = colorMoveBlockId(moveId);
       if (!blockId) return;
       const meta = LAYOUT_BLOCKS.find(function (b) { return b.id === blockId; });
       row.hidden = !isLayoutBlockActive(meta);
@@ -18191,6 +18288,202 @@
     "works-list": "works-images"
   };
 
+  /**
+   * キャッチ写真の枠は固定。文がはみ出すときだけ、文字を少しずつ小さくする。
+   */
+  function fitHeroCopyToFrame() {
+    const stage = document.querySelector("#preview-root .hero-stage");
+    const plate = stage && stage.querySelector(".hero-copy-plate");
+    if (!stage || !plate) return;
+    plate.style.transform = "none";
+    const stageH = stage.clientHeight;
+    const stageW = stage.clientWidth;
+    if (!stageH || !stageW) return;
+    const pad = 8;
+    const availH = Math.max(0, stageH - pad * 2);
+    const availW = Math.max(0, stageW - pad * 2);
+    const boxH = plate.offsetHeight;
+    const boxW = plate.offsetWidth;
+    if (!boxH || !boxW || (boxH <= availH && boxW <= availW)) {
+      plate.style.transform = "";
+      return;
+    }
+    const scale = Math.max(0.28, Math.min(availH / boxH, availW / boxW));
+    plate.style.transformOrigin = "center center";
+    plate.style.transform = "scale(" + (Math.round(scale * 100) / 100) + ")";
+  }
+
+  function restoreLineFrame(el) {
+    if (!el) return;
+    el.style.fontSize = "";
+    el.style.display = "";
+    el.style.webkitLineClamp = "";
+    el.style.lineClamp = "";
+    el.style.webkitBoxOrient = "";
+    el.style.overflow = "";
+  }
+
+  function openLineFrame(el) {
+    el.style.display = "block";
+    el.style.webkitLineClamp = "unset";
+    el.style.lineClamp = "unset";
+    el.style.webkitBoxOrient = "unset";
+    el.style.overflow = "visible";
+  }
+
+  /**
+   * 見出し・カード文の枠（行数）を保ったまま、はみ出すときだけその文字を小さくする。
+   */
+  function fitElToLineFrame(el, lines) {
+    if (!el) return;
+    const text = String(el.textContent || "").replace(/\s+/g, "");
+    if (!text) {
+      restoreLineFrame(el);
+      return;
+    }
+    if (!el.getClientRects().length) return;
+    restoreLineFrame(el);
+    openLineFrame(el);
+    const base = parseFloat(window.getComputedStyle(el).fontSize) || 16;
+    let lh = parseFloat(window.getComputedStyle(el).lineHeight);
+    if (!(lh > 0)) lh = base * 1.45;
+    const budget = lh * lines + 1;
+    if (el.scrollHeight <= budget) {
+      restoreLineFrame(el);
+      return;
+    }
+    const floor = Math.max(12, base * 0.46);
+    let lo = floor;
+    let hi = base;
+    let best = floor;
+    let i;
+    for (i = 0; i < 12; i++) {
+      const mid = (lo + hi) / 2;
+      el.style.fontSize = mid + "px";
+      if (el.scrollHeight <= budget) {
+        best = mid;
+        lo = mid;
+      } else {
+        hi = mid;
+      }
+    }
+    el.style.fontSize = (Math.round(best * 10) / 10) + "px";
+  }
+
+  function fitLogoToHeader() {
+    const logo = document.getElementById("preview-logo-text");
+    const inner = document.querySelector("#preview-root .header-inner");
+    if (!logo || !inner || !logo.getClientRects().length) return;
+    logo.style.fontSize = "";
+    logo.style.whiteSpace = "";
+    const maxW = Math.max(80, inner.clientWidth * 0.62);
+    logo.style.whiteSpace = "nowrap";
+    if (logo.scrollWidth <= maxW) {
+      logo.style.whiteSpace = "";
+      return;
+    }
+    const base = parseFloat(window.getComputedStyle(logo).fontSize) || 18;
+    const floor = Math.max(11, base * 0.46);
+    let lo = floor;
+    let hi = base;
+    let best = floor;
+    let i;
+    for (i = 0; i < 12; i++) {
+      const mid = (lo + hi) / 2;
+      logo.style.fontSize = mid + "px";
+      if (logo.scrollWidth <= maxW) {
+        best = mid;
+        lo = mid;
+      } else {
+        hi = mid;
+      }
+    }
+    logo.style.fontSize = (Math.round(best * 10) / 10) + "px";
+  }
+
+  function fitPreviewTextFrames() {
+    const rootEl = document.getElementById("preview-root");
+    if (!rootEl) return;
+    fitLogoToHeader();
+    [
+      ["#about-label", 1],
+      ["#works-label", 1],
+      ["#contact-label", 1],
+      ["#about-heading", 2],
+      ["#works-heading", 2],
+      ["#contact-heading", 2],
+      ["#hours h2", 2],
+      ["#access h2", 2],
+      ["#announce h2", 2]
+    ].forEach(function (pair) {
+      fitElToLineFrame(rootEl.querySelector(pair[0]), pair[1]);
+    });
+    rootEl.querySelectorAll(".hero-value-title").forEach(function (el) {
+      fitElToLineFrame(el, 2);
+    });
+    rootEl.querySelectorAll("#hero-values > li > p:last-child").forEach(function (el) {
+      fitElToLineFrame(el, 5);
+    });
+    rootEl.querySelectorAll("#works-list h3").forEach(function (el) {
+      fitElToLineFrame(el, 2);
+    });
+    rootEl.querySelectorAll("#works-list .work-item-copy p").forEach(function (el) {
+      fitElToLineFrame(el, 4);
+    });
+    rootEl.querySelectorAll("#about-accordions summary").forEach(function (el) {
+      fitElToLineFrame(el, 2);
+    });
+    rootEl.querySelectorAll("#about .section-lead, #works-lead, #hours-lead, #access-lead, #announce-lead, #address-lead").forEach(function (el) {
+      fitElToLineFrame(el, 6);
+    });
+    rootEl.querySelectorAll("#contact .contact-band-lead").forEach(function (el) {
+      fitElToLineFrame(el, 4);
+    });
+    rootEl.querySelectorAll("#about-accordions .accordion-body").forEach(function (el) {
+      fitElToLineFrame(el, 8);
+    });
+  }
+
+  let heroFitQueued = false;
+  function queueHeroCopyFit() {
+    if (heroFitQueued) return;
+    heroFitQueued = true;
+    window.requestAnimationFrame(function () {
+      heroFitQueued = false;
+      fitPreviewTextFrames();
+      fitHeroCopyToFrame();
+      clipPreviewToFooter();
+    });
+  }
+
+  function setupHeroCopyFit() {
+    const stage = document.querySelector("#preview-root .hero-stage");
+    if (!stage || stage.dataset.fitBound === "1") return;
+    stage.dataset.fitBound = "1";
+    if (window.ResizeObserver) {
+      const ro = new ResizeObserver(function () {
+        queueHeroCopyFit();
+      });
+      ro.observe(stage);
+    } else {
+      window.addEventListener("resize", queueHeroCopyFit);
+    }
+    if (document.fonts && document.fonts.ready) {
+      document.fonts.ready.then(function () {
+        queueHeroCopyFit();
+      });
+    }
+    const preview = document.getElementById("preview-root");
+    if (preview && preview.dataset.accFit !== "1") {
+      preview.dataset.accFit = "1";
+      preview.addEventListener("toggle", function (ev) {
+        const t = ev.target;
+        if (!t || !t.classList || !t.classList.contains("accordion")) return;
+        queueHeroCopyFit();
+      }, true);
+    }
+  }
+
   function applyAllConfirmed(opts) {
     const counts = { ...previewDefaults.counts };
     const fonts = { ...previewDefaults.fonts };
@@ -18242,6 +18535,8 @@
     applyAllItemLayoutsToPreview();
     applyAboutItemsDisplay();
     syncEasyBasicsPublish();
+    setupHeroCopyFit();
+    queueHeroCopyFit();
   }
 
   function applyContactFlagsToPreview() {
@@ -20001,6 +20296,14 @@
     if (String(name).indexOf("about_image_") === 0) return "#about-photos-block";
     if (/^work_\d+_image$/.test(name)) return "#works";
     return "";
+  }
+
+  function wireSlotBlockAndItem(imageName) {
+    if (imageName === "hero_image") return { blockId: "hero", slot: "hero" };
+    if (String(imageName).indexOf("about_image_") === 0) return { blockId: "photos", slot: imageName };
+    const work = String(imageName).match(/^work_(\d+)_image$/);
+    if (work) return { blockId: "works", slot: "work_" + work[1] };
+    return null;
   }
 
   /* 見本の下に足していた空っぽは置かない。上か下に寄せて中身が見えればよい */
@@ -22663,7 +22966,8 @@
       notes.push("オンラインサポートは1回・最大3時間。超過は30分ごとに1,100円追加です。");
     }
     if (state.support === "visit") notes.push("訪問サポートは55,000円〜です。基本プランを含みます。訪問先による追加料金は別途です。");
-    return { total: total, notes: notes };
+    const from = state.custom === "partial" || state.wp || state.support === "visit";
+    return { total: total, notes: notes, from: from };
   }
 
   function samplePriceMailLabel(state) {
@@ -22692,7 +22996,7 @@
       "WordPress：" + label.wp,
       "サポート：" + label.support,
       "【シミュレーター表示額】",
-      "最低見積もり金額：" + price.total.toLocaleString("ja-JP") + "円"
+      "最低見積もり金額：" + price.total.toLocaleString("ja-JP") + "円" + (price.from ? "から" : "")
     ];
     price.notes.forEach(function (note) {
       lines.push(note);
@@ -22749,7 +23053,7 @@
     const noteList = document.getElementById("sample-price-notes");
     if (total && noteList) {
       const price = samplePriceCalculate(samplePriceState());
-      total.textContent = "最低見積もり金額　" + price.total.toLocaleString("ja-JP") + "円（税込）";
+      total.textContent = "最低見積もり金額　" + price.total.toLocaleString("ja-JP") + "円" + (price.from ? "から" : "") + "（税込）";
       noteList.innerHTML = price.notes
         .map(function (note) {
           return "<li>" + note.replace(/</g, "&lt;") + "</li>";
@@ -23665,6 +23969,8 @@
       viewportEl.style.removeProperty("margin-bottom");
       viewportEl.style.removeProperty("margin-left");
       viewportEl.style.removeProperty("margin-right");
+      viewportEl.classList.toggle("is-fit-narrow", window.innerWidth <= 860 && look < 0.98);
+      clipPreviewToFooter();
       if (scrollEl) {
         const fit = store.previewFrameScale || 1;
         scrollEl.classList.toggle("is-look-enlarged", look > fit + 0.001);
@@ -23710,7 +24016,7 @@
         return store.previewFrameScale || 1;
       }
       const placeFit = !!(opts && opts.placeFit);
-      const pad = placeFit ? 20 : 16;
+      const pad = placeFit ? 20 : (window.innerWidth <= 860 ? 28 : 16);
       const availW = Math.max(120, scrollEl.clientWidth - pad);
       const designW = Math.max(280, Number(store.previewDesignWidth) || 1280);
       let scale = Math.min(1, availW / designW);

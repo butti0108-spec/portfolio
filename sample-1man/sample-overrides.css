@@ -805,6 +805,13 @@ body.is-easy-done-step .dash-body > .fill-form {
   font-weight: 700;
 }
 
+.easy-flow-meter.is-direct .easy-flow-meter-name.is-locked {
+  cursor: default;
+  color: #6b736e;
+  font-weight: 400;
+  pointer-events: none;
+}
+
 .easy-flow-meter-name {
   font-size: 0.78rem;
   font-weight: 400;

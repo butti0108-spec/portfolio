@@ -2464,6 +2464,7 @@
     updateConfirmUi();
     if (store.confirmed.finish) unconfirmFinishSoft();
     updateFinishSummary();
+    if (blockId === "hero") syncCatchRemovalNotice();
     scheduleSave();
     return true;
   }
@@ -6503,8 +6504,13 @@
       store.entryBranch === "sample" &&
       store.sampleFinishNoBack
     );
-    if (name === "見本" || name === "利用用途") {
-      showEntryGate(name === "見本" ? "sushi" : "purpose");
+    if (name === "見本") {
+      if (store.entryBranch === "detail") return;
+      showEntryGate("sushi");
+      return;
+    }
+    if (name === "利用用途") {
+      showEntryGate("purpose");
       return;
     }
     if (fromSampleFinish) resumeSampleEasyFlow();
@@ -6656,7 +6662,7 @@
       const sec = copyListSectionById(id);
       if (!sec || !copySectionIsListed(sec)) return;
       if (sec.id === "hero") {
-        if (store.catchWordsOn === false) return;
+        if (!easyCatchOn() || store.catchWordsOn === false) return;
         const keys = ["hero_title", "hero_lead_1", "hero_lead_2", "hero_lead_3"];
         if (keys.every(function (key) { return !easyDoneCopyVisible(key); })) {
           gaps.push({ label: "キャッチの文章がありません", sectionId: "hero", focus: "hero_title" });
@@ -6765,7 +6771,7 @@
     const samples = [];
     requiredImageInputs().forEach(function (item) {
       const name = item.name;
-      if (name === "hero_image" && (store.catchImageOn === false || store.heroImageOff)) return;
+      if (name === "hero_image" && (!easyCatchOn() || store.catchImageOn === false || store.heroImageOff)) return;
       if (easyDoneImageStillSample(name)) {
         samples.push({
           name: name,
@@ -6846,10 +6852,13 @@
         names.textContent = "";
         names.style.gridTemplateColumns = "repeat(" + stageCount + ", minmax(0, 1fr))";
         labels.forEach(function (name, i) {
-          const el = document.createElement(store.easyDirectOpen ? "button" : "span");
-          el.className = "easy-flow-meter-name" + (i + 1 === n ? " is-now" : "");
+          const locked = store.entryBranch === "detail" && name === "見本";
+          const clickable = !!store.easyDirectOpen && !locked;
+          const el = document.createElement(clickable ? "button" : "span");
+          el.className = "easy-flow-meter-name" + (i + 1 === n ? " is-now" : "") + (locked ? " is-locked" : "");
           el.textContent = name;
-          if (store.easyDirectOpen) {
+          if (locked) el.setAttribute("aria-disabled", "true");
+          if (clickable) {
             el.type = "button";
             el.addEventListener("click", function () {
               openEasyStage(name);
@@ -8508,8 +8517,28 @@
     });
   }
 
+  function catchBothDeclined() {
+    return store.catchImageOn === false && store.catchWordsOn === false;
+  }
+
+  function catchRemovalBlocksNext() {
+    return !!easyCatchOn() && catchBothDeclined();
+  }
+
+  function syncCatchRemovalNotice() {
+    if (catchRemovalBlocksNext()) {
+      showValidationNotice("記載項目から、キャッチを外してください。");
+      return;
+    }
+    const panel = document.getElementById("wizard-foot-panel");
+    if (panel && panel.textContent.indexOf("記載項目から、") === 0) clearPlainFootNotice();
+  }
+
   function requiredImageInputs() {
-    const list = [{ name: "hero_image", label: "キャッチ画像" }];
+    const list = [];
+    if (easyCatchOn() && store.catchImageOn !== false && !store.heroImageOff) {
+      list.push({ name: "hero_image", label: "キャッチ画像" });
+    }
     seedItemOrder("about-photos");
     (store.itemOrders["about-photos"] || []).forEach((slot) => {
       const n = String(slot).replace("about_image_", "");
@@ -9571,6 +9600,7 @@
     if (foot && !selfList) {
       foot.classList.toggle("is-guide-step", onModePick);
     }
+    syncCatchRemovalNotice();
     placeWizardFootDock();
     updateProgressBar();
     updatePreviewGuideBtn();
@@ -16402,6 +16432,14 @@
     if (step.id === "easy-done") {
       return;
     }
+    if (step.id !== "easy-catch" && catchRemovalBlocksNext()) {
+      showValidationNotice("記載項目から、キャッチを外してください。");
+      return;
+    }
+    if (!catchRemovalBlocksNext()) {
+      const catchPanel = document.getElementById("wizard-foot-panel");
+      if (catchPanel && catchPanel.textContent.indexOf("記載項目から、") === 0) clearPlainFootNotice();
+    }
     if (step.id === "easy-catch") {
       if (store.layoutCatchReturn) {
         const backId = store.layoutCatchReturn;
@@ -16415,7 +16453,7 @@
         }
       }
       if (advanceCatchPage()) return;
-      if (store.catchImageOn !== true && store.catchWordsOn !== true) {
+      if (easyCatchOn() && store.catchImageOn !== true && store.catchWordsOn !== true) {
         showValidationNotice("記載項目から、キャッチを外してください。");
         return;
       }
@@ -19332,11 +19370,7 @@
     activeLayoutOrder(store.layoutOrder).forEach((blockId) => {
       const meta = LAYOUT_BLOCKS.find((b) => b.id === blockId);
       if (!isLayoutBlockActive(meta) || !isLayoutImageBlock(blockId)) return;
-      if (blockId === "hero") {
-        if (easyCatchOn()) return;
-        slots.push({ key: "hero_image", input: "hero_image", prefer: "wide", label: "キャッチ" });
-        return;
-      }
+      if (blockId === "hero") return;
       const countId = layoutImageCountId(blockId);
       seedItemOrder(countId);
       (store.itemOrders[countId] || []).forEach((slot) => {

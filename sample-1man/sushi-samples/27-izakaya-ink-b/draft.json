@@ -1,187 +1,206 @@
 {
-    "version":  17,
-    "savedAt":  "2026-09-19T12:28:08.880Z",
-    "uiMode":  "self",
-    "sitePurpose":  "shop",
-    "layoutPattern":  "a",
-    "layoutOrder":  [
-                        "hero",
-                        "photos",
-                        "values",
-                        "works",
-                        "hours",
-                        "access",
-                        "address",
-                        "accordions",
-                        "contact"
-                    ],
-    "layoutSelected":  true,
-    "layoutSchema":  2,
-    "itemLayouts":  {
-                        "about-photos":  {
-                                             "sizes":  [
-                                                           "H",
-                                                           "H",
-                                                           "H",
-                                                           "H"
-                                                       ],
-                                             "gap":  "tight",
-                                             "growDirs":  [
-
-                                                          ],
-                                             "focalYs":  [
-                                                             85,
-                                                             70,
-                                                             75,
-                                                             50
-                                                         ],
-                                             "focalXs":  [
-                                                             50,
-                                                             50,
-                                                             50,
-                                                             50
-                                                         ]
-                                         },
-                        "works-list":  {
-                                           "sizes":  [
-                                                         "H",
-                                                         "H",
-                                                         "L"
-                                                     ],
-                                           "gap":  "normal",
-                                           "growDirs":  [
-
-                                                        ],
-                                           "focalYs":  [
-                                                           60,
-                                                           15,
-                                                           30
-                                                       ],
-                                           "focalXs":  [
-                                                           50,
-                                                           50,
-                                                           50
-                                                       ]
-                                       }
-                    },
-    "heroTextOnPhoto":  true,
-    "heroFocalX":  50,
-    "heroFocalY":  0,
-    "aboutItemsDisplay":  "accordion",
-    "heroTextPlate":  "round",
-    "heroTextPlateTone":  "white",
-    "guidedImageUnlocked":  true,
-    "guidedTextUnlocked":  false,
-    "presetChosen":  true,
-    "chosenPresetKey":  "cafe",
-    "intakeDone":  true,
-    "entryBranch":  "detail",
-    "hubEntrySource":  "detail-entry",
-    "easyFlowActive":  false,
-    "sushiSampleId":  "27",
-    "sushiSampleKey":  "izakaya-ink-b",
-    "siteColorMode":  "detail",
-    "slotGradients":  {
-
-                      },
-    "slotGradientPartners":  {
-
-                             },
-    "draftColors":  {
-                        "pageBg":  "#f5efe4",
-                        "pageBgSoft":  "#ebe1d0",
-                        "heroInk":  "#fff6e8",
-                        "bodyInk":  "#3e2723",
-                        "bodyMuted":  "#6a5340",
-                        "chromeBg":  "#5c4033",
-                        "chromeInk":  "#fff6e8",
-                        "accent":  "#c45c26",
-                        "cardBg":  "#fff8ee",
-                        "valuesBg":  "#fff8ee",
-                        "contactBg":  "#5c4033",
-                        "contactInk":  "#fff6e8",
-                        "radius":  "0.6rem",
-                        "headingScale":  "1",
-                        "accentBar":  "mid"
-                    },
-    "draftCounts":  {
-                        "hero-leads":  2,
-                        "hero-values":  3,
-                        "about-accordions":  1,
-                        "about-photos":  4,
-                        "works-list":  3
-                    },
-    "draftExtras":  {
-                        "hours":  true,
-                        "access":  true,
-                        "address":  true
-                    },
-    "layoutBlockOff":  {
-
-                       },
-    "confirmed":  {
-                      "easy-basics":  false,
-                      "easy-sec-hero":  false,
-                      "easy-sec-about":  false,
-                      "easy-sec-works":  false,
-                      "easy-sec-contact":  false,
-                      "easy-img-wire":  false,
-                      "easy-loading":  false,
-                      "easy-done":  false,
-                      "purpose":  true,
-                      "layout":  true,
-                      "guide":  true,
-                      "global-preset":  true,
-                      "global-chrome-bg":  true,
-                      "global-chrome-ink":  true,
-                      "global-bg":  true,
-                      "hero-color":  true,
-                      "values-color":  true,
-                      "global-body":  true,
-                      "global-accent":  true,
-                      "global-card":  true,
-                      "contact-color":  true,
-                      "hero-image":  false,
-                      "about-images":  false,
-                      "works-images":  false,
-                      "logo-text":  false,
-                      "site-fonts":  true,
-                      "hero-text":  false,
-                      "values-text":  false,
-                      "about-text":  false,
-                      "works-text":  false,
-                      "hours-text":  false,
-                      "access-text":  false,
-                      "address-text":  false,
-                      "contact-text":  false,
-                      "finish":  false
-                  },
-    "fields":  {
-                   "hero_title":  "朝露と\n朝光だけの\n一晩",
-                   "headingScale":  "1",
-                   "hero_lead_1":  "主役は朝露と夜明けの光。小さな旅宿で、静かな一晩をどうぞ。",
-                   "hero_lead_2":  "食事は簡易の朝食のみ。食堂マップをお渡しするので、夕食は街歩きと一緒に。",
-                   "brand_name":  "朝露の宿"
-               },
-    "fonts":  {
-                  "display":  "Shippori Mincho",
-                  "catch":  "Shippori Mincho",
-                  "body":  "Zen Kaku Gothic New"
-              },
-    "imagePaths":  {
-                       "about_image_1":  "sushi-samples/27-izakaya-ink-b/images/about-01.jpg?v=1789820828326",
-                       "about_image_2":  "sushi-samples/27-izakaya-ink-b/images/about-02.jpg?v=1789820828326",
-                       "about_image_3":  "sushi-samples/27-izakaya-ink-b/images/about-03.jpg?v=1789820828326",
-                       "about_image_4":  "sushi-samples/27-izakaya-ink-b/images/about-04.jpg?v=1789820828326",
-                       "hero_image":  "sushi-samples/27-izakaya-ink-b/images/hero.jpg?v=1789820828326",
-                       "work_1_image":  "sushi-samples/27-izakaya-ink-b/images/work-01.jpg?v=1789820828326",
-                       "work_2_image":  "sushi-samples/27-izakaya-ink-b/images/work-02.jpg?v=1789820828326",
-                       "work_3_image":  "sushi-samples/27-izakaya-ink-b/images/work-03.jpg?v=1789820828326"
-                   },
-    "blurb":  "朝露の宿。朝露と朝光だけの一晩の旅宿",
-    "scene":  "宿・朝",
-    "layoutRecipeNote":  "rebuild-27 morning dew vs 08 hinata guest room",
-    "brushUpStructure":  "2026-09-14-v01",
-    "brushUpMeaning":  "2026-09-19-rebuild",
-    "brushUpPhoto":  "2026-09-19-title-match-fix"
+    "version": 17,
+    "savedAt": "2026-09-19T12:28:08.880Z",
+    "uiMode": "self",
+    "sitePurpose": "shop",
+    "layoutPattern": "a",
+    "layoutOrder": [
+        "hero",
+        "photos",
+        "values",
+        "works",
+        "hours",
+        "access",
+        "address",
+        "accordions",
+        "contact"
+    ],
+    "layoutSelected": true,
+    "layoutSchema": 2,
+    "itemLayouts": {
+        "about-photos": {
+            "sizes": [
+                "H",
+                "H",
+                "H",
+                "H"
+            ],
+            "gap": "tight",
+            "growDirs": [],
+            "focalYs": [
+                85,
+                70,
+                75,
+                50
+            ],
+            "focalXs": [
+                50,
+                50,
+                50,
+                50
+            ]
+        },
+        "works-list": {
+            "sizes": [
+                "H",
+                "H",
+                "L"
+            ],
+            "gap": "normal",
+            "growDirs": [],
+            "focalYs": [
+                60,
+                15,
+                30
+            ],
+            "focalXs": [
+                50,
+                50,
+                50
+            ]
+        }
+    },
+    "heroTextOnPhoto": true,
+    "heroFocalX": 50,
+    "heroFocalY": 0,
+    "aboutItemsDisplay": "accordion",
+    "heroTextPlate": "round",
+    "heroTextPlateTone": "white",
+    "guidedImageUnlocked": true,
+    "guidedTextUnlocked": false,
+    "presetChosen": true,
+    "chosenPresetKey": "cafe",
+    "intakeDone": true,
+    "entryBranch": "detail",
+    "hubEntrySource": "detail-entry",
+    "easyFlowActive": false,
+    "sushiSampleId": "27",
+    "sushiSampleKey": "izakaya-ink-b",
+    "siteColorMode": "detail",
+    "slotGradients": {},
+    "slotGradientPartners": {},
+    "draftColors": {
+        "pageBg": "#f5efe4",
+        "pageBgSoft": "#ebe1d0",
+        "heroInk": "#fff6e8",
+        "bodyInk": "#3e2723",
+        "bodyMuted": "#6a5340",
+        "chromeBg": "#5c4033",
+        "chromeInk": "#fff6e8",
+        "accent": "#c45c26",
+        "cardBg": "#fff8ee",
+        "valuesBg": "#fff8ee",
+        "contactBg": "#5c4033",
+        "contactInk": "#fff6e8",
+        "radius": "0.6rem",
+        "headingScale": "1",
+        "accentBar": "mid"
+    },
+    "draftCounts": {
+        "hero-leads": 2,
+        "hero-values": 3,
+        "about-accordions": 1,
+        "about-photos": 4,
+        "works-list": 3
+    },
+    "draftExtras": {
+        "hours": true,
+        "access": true,
+        "address": true
+    },
+    "layoutBlockOff": {},
+    "confirmed": {
+        "easy-basics": false,
+        "easy-sec-hero": false,
+        "easy-sec-about": false,
+        "easy-sec-works": false,
+        "easy-sec-contact": false,
+        "easy-img-wire": false,
+        "easy-loading": false,
+        "easy-done": false,
+        "purpose": true,
+        "layout": true,
+        "guide": true,
+        "global-preset": true,
+        "global-chrome-bg": true,
+        "global-chrome-ink": true,
+        "global-bg": true,
+        "hero-color": true,
+        "values-color": true,
+        "global-body": true,
+        "global-accent": true,
+        "global-card": true,
+        "contact-color": true,
+        "hero-image": false,
+        "about-images": false,
+        "works-images": false,
+        "logo-text": false,
+        "site-fonts": true,
+        "hero-text": false,
+        "values-text": false,
+        "about-text": false,
+        "works-text": false,
+        "hours-text": false,
+        "access-text": false,
+        "address-text": false,
+        "contact-text": false,
+        "finish": false
+    },
+    "fields": {
+        "hero_title": "朝露と\n朝光だけの\n一晩",
+        "headingScale": "1",
+        "hero_lead_1": "主役は朝露と夜明けの光。小さな旅宿で、静かな一晩をどうぞ。",
+        "hero_lead_2": "食事は簡易の朝食のみ。食堂マップをお渡しするので、夕食は街歩きと一緒に。",
+        "brand_name": "朝露の宿",
+        "works_section_name": "客室・食事",
+        "works_heading": "滞在のすすめ",
+        "work_1_title": "朝光の和室",
+        "work_2_title": "朝食・和定食",
+        "work_3_title": "朝食・パンセット",
+        "contact_email": "stay@asatsuyu-inn.example",
+        "value_1_title": "朝露の庭",
+        "value_1_text": "客室から庭の露が見えます。夜明け前の静けさを、窓を開けたまま過ごせます。",
+        "value_2_title": "小さな和室",
+        "value_2_text": "布団と小さなテーブルだけ。荷物は少なめの一泊に合わせています。",
+        "value_3_title": "簡易の朝食",
+        "value_3_text": "ご飯と味噌汁、またはパン。夕食は街の食堂マップをお渡しします。",
+        "about_section_name": "宿について",
+        "about_heading": "朝露と朝光だけの一晩",
+        "about_name": "朝露の宿",
+        "about_lead": "住宅街の奥にある、部屋数の少ない旅宿です。夜は早めに灯りを落とし、朝の光で起きていただく想定です。大浴場はなく、各室のシャワーをご利用ください。",
+        "acc_1_title": "ご宿泊について",
+        "acc_1_body": "一泊のみ。チェックインは15時以降、チェックアウトは10時です。遅れるときはメールでご連絡ください。",
+        "works_lead": "客室と朝食の組み合わせです。",
+        "work_1_text": "朝の光が長く入る和室。庭側の窓を主役にした静かな部屋です。",
+        "work_2_text": "ご飯、味噌汁、小鉢。アレルギーがあれば前日までに教えてください。",
+        "work_3_text": "近所のパンとコーヒー。軽い朝食を希望の方へ。",
+        "hours_text": "チェックイン 15:00–20:00／チェックアウト 10:00　不定休はメールでご案内",
+        "address_text": "架空市あさつゆ区露庭 2-4",
+        "access_text": "最寄駅から徒歩8分。駐車場は近隣のコインパーキングをご利用ください。",
+        "contact_section_name": "ご連絡",
+        "contact_label": "ご連絡",
+        "contact_note_1": "ご予約はメールで。人数と希望日を書いてください。",
+        "contact_note_2": "返信の目安は2営業日です。満室の日は代替日をご提案します。"
+    },
+    "fonts": {
+        "display": "Shippori Mincho",
+        "catch": "Shippori Mincho",
+        "body": "Zen Kaku Gothic New"
+    },
+    "imagePaths": {
+        "about_image_1": "sushi-samples/27-izakaya-ink-b/images/about-01.jpg?v=1789820828326",
+        "about_image_2": "sushi-samples/27-izakaya-ink-b/images/about-02.jpg?v=1789820828326",
+        "about_image_3": "sushi-samples/27-izakaya-ink-b/images/about-03.jpg?v=1789820828326",
+        "about_image_4": "sushi-samples/27-izakaya-ink-b/images/about-04.jpg?v=1789820828326",
+        "hero_image": "sushi-samples/27-izakaya-ink-b/images/hero.jpg?v=1789820828326",
+        "work_1_image": "sushi-samples/27-izakaya-ink-b/images/work-01.jpg?v=1789820828326",
+        "work_2_image": "sushi-samples/27-izakaya-ink-b/images/work-02.jpg?v=1789820828326",
+        "work_3_image": "sushi-samples/27-izakaya-ink-b/images/work-03.jpg?v=1789820828326"
+    },
+    "blurb": "朝露の宿。朝露と朝光だけの一晩の旅宿",
+    "scene": "宿・朝",
+    "layoutRecipeNote": "rebuild-27 morning dew vs 08 hinata guest room",
+    "brushUpStructure": "2026-09-14-v01",
+    "brushUpMeaning": "2026-09-19-rebuild",
+    "brushUpPhoto": "2026-09-19-title-match-fix"
 }

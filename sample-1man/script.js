@@ -7541,10 +7541,10 @@
           text.innerHTML =
             '<span class="logo-hint-main">ロゴ画像</span><span class="logo-hint-sub">選ぶとここに出ます</span>';
         }
-      } else if (homepageName()) {
+      } else if (samplePreviewBrand()) {
         text.hidden = false;
         text.classList.remove("is-hint");
-        text.textContent = homepageName();
+        text.textContent = samplePreviewBrand();
       } else if (store.blankCanvas) {
         text.hidden = false;
         text.classList.remove("is-hint");
@@ -7559,7 +7559,7 @@
   function syncFooterBrand() {
     const el = document.getElementById("footer-brand");
     if (!el) return;
-    el.textContent = homepageName();
+    el.textContent = samplePreviewBrand();
   }
 
   /** サンプル屋号をロゴ／フッターへ揃える（draftに brand_name が無い見本対策） */
@@ -9917,6 +9917,16 @@
     return name;
   }
 
+  /** 見本の画面に出す店名。自分のタイトル確定前は、見本の屋号を出す */
+  function samplePreviewBrand() {
+    const own = homepageName();
+    if (own) return own;
+    if (store.blankCanvas) return "";
+    const brand = String(store.sushiSampleBrand || "").trim();
+    if (!brand || isPlaceholderBrand(brand)) return "";
+    return brand;
+  }
+
   function renderEasyListingUi() {
     const host = document.getElementById("easy-listing-host");
     if (!host) return;
@@ -11902,6 +11912,9 @@
 
   function applySushiSampleDraft(draft) {
     if (!draft || typeof draft !== "object") return;
+    if (draft.sitePurpose && PURPOSE_PACKS[draft.sitePurpose]) {
+      store.sitePurpose = draft.sitePurpose;
+    }
     store.sushiSampleId = draft.sushiSampleId || null;
     store.sushiSampleKey = draft.sushiSampleKey || null;
     if (draft.layoutPattern) {
@@ -15463,6 +15476,7 @@
       document.querySelector('input[name="site_purpose"][value="' + purposeKey + '"]');
     if (purposeRadio) purposeRadio.checked = true;
     ["about_section_name", "works_section_name"].forEach(function (name) {
+      if (String(fieldValue(name) || "").trim()) return;
       if (pack.fields[name]) setFieldValue(name, pack.fields[name]);
     });
     ["about-text", "works-text"].forEach(function (stepId) {
@@ -26060,6 +26074,12 @@
       syncFontPickers();
       syncHueSelectFromDraft();
       syncLogoModePanels();
+      if (!store.siteNameConfirmed && !store.blankCanvas && (store.sushiSampleId || store.sushiSampleKey)) {
+        ensureSampleBrandName({
+          sushiSampleId: store.sushiSampleId,
+          fields: data.fields || {}
+        });
+      }
       syncLogoPresentation();
       restoreKeptSampleImages();
       suppressSave = false;

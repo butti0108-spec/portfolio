@@ -1,179 +1,201 @@
 {
-    "version":  17,
-    "savedAt":  "2026-09-19T11:57:36.379Z",
-    "uiMode":  "self",
-    "sitePurpose":  "shop",
-    "layoutPattern":  "a",
-    "layoutOrder":  [
-                        "hero",
-                        "values",
-                        "works",
-                        "photos",
-                        "accordions",
-                        "hours",
-                        "access",
-                        "address",
-                        "contact"
-                    ],
-    "layoutSelected":  true,
-    "layoutSchema":  2,
-    "itemLayouts":  {
-                        "about-photos":  {
-                                             "sizes":  [
-                                                           "L",
-                                                           "H",
-                                                           "H"
-                                                       ],
-                                             "gap":  "normal",
-                                             "growDirs":  [
-
-                                                          ],
-                                             "focalYs":  [
-                                                             60,
-                                                             60,
-                                                             60
-                                                         ],
-                                             "focalXs":  [
-                                                             50,
-                                                             50,
-                                                             50
-                                                         ]
-                                         },
-                        "works-list":  {
-                                           "sizes":  [
-                                                         "L",
-                                                         "L",
-                                                         "L"
-                                                     ],
-                                           "gap":  "loose",
-                                           "growDirs":  [
-
-                                                        ],
-                                           "focalYs":  [
-                                                           20,
-                                                           25,
-                                                           60
-                                                       ],
-                                           "focalXs":  [
-                                                           50,
-                                                           50,
-                                                           50
-                                                       ]
-                                       }
-                    },
-    "heroTextOnPhoto":  false,
-    "heroFocalX":  50,
-    "heroFocalY":  70,
-    "aboutItemsDisplay":  "accordion",
-    "heroTextPlate":  "round",
-    "heroTextPlateTone":  "white",
-    "guidedImageUnlocked":  true,
-    "guidedTextUnlocked":  false,
-    "presetChosen":  true,
-    "chosenPresetKey":  "cafe",
-    "intakeDone":  true,
-    "entryBranch":  "detail",
-    "hubEntrySource":  "detail-entry",
-    "easyFlowActive":  false,
-    "sushiSampleId":  "15",
-    "sushiSampleKey":  "ramen-ink-a",
-    "siteColorMode":  "detail",
-    "slotGradients":  {
-
-                      },
-    "slotGradientPartners":  {
-
-                             },
-    "draftColors":  {
-                        "pageBg":  "#f5efe4",
-                        "pageBgSoft":  "#ebe1d0",
-                        "heroInk":  "#fff6e8",
-                        "bodyInk":  "#3e2723",
-                        "bodyMuted":  "#6a5340",
-                        "chromeBg":  "#5c4033",
-                        "chromeInk":  "#fff6e8",
-                        "accent":  "#c45c26",
-                        "cardBg":  "#fff8ee",
-                        "valuesBg":  "#fff8ee",
-                        "contactBg":  "#5c4033",
-                        "contactInk":  "#fff6e8",
-                        "radius":  "0.6rem",
-                        "headingScale":  "1",
-                        "accentBar":  "mid"
-                    },
-    "draftCounts":  {
-                        "hero-leads":  2,
-                        "hero-values":  3,
-                        "about-accordions":  1,
-                        "about-photos":  3,
-                        "works-list":  3
-                    },
-    "draftExtras":  {
-                        "hours":  true,
-                        "access":  true,
-                        "address":  true
-                    },
-    "layoutBlockOff":  {
-
-                       },
-    "confirmed":  {
-                      "easy-basics":  false,
-                      "easy-sec-hero":  false,
-                      "easy-sec-about":  false,
-                      "easy-sec-works":  false,
-                      "easy-sec-contact":  false,
-                      "easy-img-wire":  false,
-                      "easy-loading":  false,
-                      "easy-done":  false,
-                      "purpose":  true,
-                      "layout":  true,
-                      "guide":  true,
-                      "global-preset":  true,
-                      "global-chrome-bg":  true,
-                      "global-chrome-ink":  true,
-                      "global-bg":  true,
-                      "hero-color":  true,
-                      "values-color":  true,
-                      "global-body":  true,
-                      "global-accent":  true,
-                      "global-card":  true,
-                      "contact-color":  true,
-                      "hero-image":  false,
-                      "about-images":  false,
-                      "works-images":  false,
-                      "logo-text":  false,
-                      "site-fonts":  true,
-                      "hero-text":  false,
-                      "values-text":  false,
-                      "about-text":  false,
-                      "works-text":  false,
-                      "hours-text":  false,
-                      "access-text":  false,
-                      "address-text":  false,
-                      "contact-text":  false,
-                      "finish":  false
-                  },
-    "fields":  {
-                   "brand_name":  "朝焼パン ひかり屋"
-               },
-    "fonts":  {
-                  "display":  "Zen Maru Gothic",
-                  "catch":  "Kiwi Maru",
-                  "body":  "M PLUS Rounded 1c"
-              },
-    "imagePaths":  {
-                       "about_image_1":  "sushi-samples/15-ramen-ink-a/images/about-01.jpg?v=1789818944124",
-                       "about_image_2":  "sushi-samples/15-ramen-ink-a/images/about-02.jpg?v=1789818944124",
-                       "about_image_3":  "sushi-samples/15-ramen-ink-a/images/about-03.jpg?v=1789818944124",
-                       "hero_image":  "sushi-samples/15-ramen-ink-a/images/hero.jpg?v=1789818944124",
-                       "work_1_image":  "sushi-samples/15-ramen-ink-a/images/work-01.jpg?v=1789818944124",
-                       "work_2_image":  "sushi-samples/15-ramen-ink-a/images/work-02.jpg?v=1789818944124",
-                       "work_3_image":  "sushi-samples/15-ramen-ink-a/images/work-03.jpg?v=1789818944124"
-                   },
-    "blurb":  "パン屋・朝",
-    "scene":  "パン屋・朝",
-    "layoutRecipeNote":  "rebuild-2026-09-19 開店ベルと焼きたてが揃う",
-    "brushUpStructure":  "2026-09-14-v01",
-    "brushUpMeaning":  "2026-09-19-rebuild",
-    "brushUpPhoto":  "2026-09-19-title-match-fix"
+    "version": 17,
+    "savedAt": "2026-09-19T11:57:36.379Z",
+    "uiMode": "self",
+    "sitePurpose": "shop",
+    "layoutPattern": "a",
+    "layoutOrder": [
+        "hero",
+        "values",
+        "works",
+        "photos",
+        "accordions",
+        "hours",
+        "access",
+        "address",
+        "contact"
+    ],
+    "layoutSelected": true,
+    "layoutSchema": 2,
+    "itemLayouts": {
+        "about-photos": {
+            "sizes": [
+                "L",
+                "H",
+                "H"
+            ],
+            "gap": "normal",
+            "growDirs": [],
+            "focalYs": [
+                60,
+                60,
+                60
+            ],
+            "focalXs": [
+                50,
+                50,
+                50
+            ]
+        },
+        "works-list": {
+            "sizes": [
+                "L",
+                "L",
+                "L"
+            ],
+            "gap": "loose",
+            "growDirs": [],
+            "focalYs": [
+                20,
+                25,
+                60
+            ],
+            "focalXs": [
+                50,
+                50,
+                50
+            ]
+        }
+    },
+    "heroTextOnPhoto": false,
+    "heroFocalX": 50,
+    "heroFocalY": 70,
+    "aboutItemsDisplay": "accordion",
+    "heroTextPlate": "round",
+    "heroTextPlateTone": "white",
+    "guidedImageUnlocked": true,
+    "guidedTextUnlocked": false,
+    "presetChosen": true,
+    "chosenPresetKey": "cafe",
+    "intakeDone": true,
+    "entryBranch": "detail",
+    "hubEntrySource": "detail-entry",
+    "easyFlowActive": false,
+    "sushiSampleId": "15",
+    "sushiSampleKey": "ramen-ink-a",
+    "siteColorMode": "detail",
+    "slotGradients": {},
+    "slotGradientPartners": {},
+    "draftColors": {
+        "pageBg": "#f5efe4",
+        "pageBgSoft": "#ebe1d0",
+        "heroInk": "#fff6e8",
+        "bodyInk": "#3e2723",
+        "bodyMuted": "#6a5340",
+        "chromeBg": "#5c4033",
+        "chromeInk": "#fff6e8",
+        "accent": "#c45c26",
+        "cardBg": "#fff8ee",
+        "valuesBg": "#fff8ee",
+        "contactBg": "#5c4033",
+        "contactInk": "#fff6e8",
+        "radius": "0.6rem",
+        "headingScale": "1",
+        "accentBar": "mid"
+    },
+    "draftCounts": {
+        "hero-leads": 2,
+        "hero-values": 3,
+        "about-accordions": 1,
+        "about-photos": 3,
+        "works-list": 3
+    },
+    "draftExtras": {
+        "hours": true,
+        "access": true,
+        "address": true
+    },
+    "layoutBlockOff": {},
+    "confirmed": {
+        "easy-basics": false,
+        "easy-sec-hero": false,
+        "easy-sec-about": false,
+        "easy-sec-works": false,
+        "easy-sec-contact": false,
+        "easy-img-wire": false,
+        "easy-loading": false,
+        "easy-done": false,
+        "purpose": true,
+        "layout": true,
+        "guide": true,
+        "global-preset": true,
+        "global-chrome-bg": true,
+        "global-chrome-ink": true,
+        "global-bg": true,
+        "hero-color": true,
+        "values-color": true,
+        "global-body": true,
+        "global-accent": true,
+        "global-card": true,
+        "contact-color": true,
+        "hero-image": false,
+        "about-images": false,
+        "works-images": false,
+        "logo-text": false,
+        "site-fonts": true,
+        "hero-text": false,
+        "values-text": false,
+        "about-text": false,
+        "works-text": false,
+        "hours-text": false,
+        "access-text": false,
+        "address-text": false,
+        "contact-text": false,
+        "finish": false
+    },
+    "fields": {
+        "brand_name": "朝焼パン ひかり屋",
+        "hero_title": "開店ベルと、焼きたてが揃う。",
+        "hero_lead_1": "通勤前に立ち寄れる、朝だけのパン屋。紙袋の焼きたてが、改札までの道に合います。",
+        "hero_lead_2": "食パンと塩パンが中心。焼き上がりは黒板に。売り切れ次第終了です。",
+        "value_1_title": "開店同時の焼き上がり",
+        "value_1_text": "いちばん熱いうちにお渡しします。昼までの持ちは想定していません。",
+        "value_2_title": "片手で持てる紙袋",
+        "value_2_text": "改札向きの小さめ袋。コーヒーとの同時持ちも想定した形です。",
+        "value_3_title": "短い滞在で選ぶ",
+        "value_3_text": "イートインは立ち飲みスペースのみ。朝の人流れを止めない動線です。",
+        "about_section_name": "お店について",
+        "about_heading": "駅までの、朝の一袋",
+        "about_name": "朝焼パン ひかり屋",
+        "about_lead": "架空市あさやけ区の駅前通りにある朝営業のパン屋です。午後は仕込みのため閉店。予約パンは前日15時まで受け付けます。",
+        "acc_1_title": "はじめての方へ",
+        "acc_1_body": "行列時は番号札。カード可。アレルギー表示はケース下の札をご確認ください。",
+        "works_section_name": "今朝の定番",
+        "works_heading": "まずはこの袋から",
+        "works_lead": "売り切れは空の棚のままにします。",
+        "work_1_title": "ひかり食パン（1斤）",
+        "work_1_text": "耳までやわらかめ。トースト向き。",
+        "work_2_title": "通勤塩パン",
+        "work_2_text": "片手サイズ。バター控えめ。",
+        "work_3_title": "今日の黒板パン",
+        "work_3_text": "その日だけ焼ける総菜や菓子パン。",
+        "hours_text": "火〜金 7:00–11:30／土 7:30–12:00　日月定休",
+        "address_text": "架空市あさやけ区ステーション前 1-3",
+        "access_text": "駅改札から徒歩2分。駐輪場は駅側をご利用ください。",
+        "contact_section_name": "ご連絡",
+        "contact_label": "ご連絡",
+        "contact_email": "hello@asayaki-hikariya.example",
+        "contact_note_1": "予約パンのご依頼はメールで。受け取り時間を書いてください。",
+        "contact_note_2": "営業中は店頭優先のため返信が遅れることがあります。"
+    },
+    "fonts": {
+        "display": "Zen Maru Gothic",
+        "catch": "Kiwi Maru",
+        "body": "M PLUS Rounded 1c"
+    },
+    "imagePaths": {
+        "about_image_1": "sushi-samples/15-ramen-ink-a/images/about-01.jpg?v=1789818944124",
+        "about_image_2": "sushi-samples/15-ramen-ink-a/images/about-02.jpg?v=1789818944124",
+        "about_image_3": "sushi-samples/15-ramen-ink-a/images/about-03.jpg?v=1789818944124",
+        "hero_image": "sushi-samples/15-ramen-ink-a/images/hero.jpg?v=1789818944124",
+        "work_1_image": "sushi-samples/15-ramen-ink-a/images/work-01.jpg?v=1789818944124",
+        "work_2_image": "sushi-samples/15-ramen-ink-a/images/work-02.jpg?v=1789818944124",
+        "work_3_image": "sushi-samples/15-ramen-ink-a/images/work-03.jpg?v=1789818944124"
+    },
+    "blurb": "パン屋・朝",
+    "scene": "パン屋・朝",
+    "layoutRecipeNote": "rebuild-2026-09-19 開店ベルと焼きたてが揃う",
+    "brushUpStructure": "2026-09-14-v01",
+    "brushUpMeaning": "2026-09-19-rebuild",
+    "brushUpPhoto": "2026-09-19-title-match-fix"
 }

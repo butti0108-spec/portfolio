@@ -1,179 +1,203 @@
 {
-    "version":  17,
-    "savedAt":  "2026-09-19T11:55:42.702Z",
-    "uiMode":  "self",
-    "sitePurpose":  "shop",
-    "layoutPattern":  "a",
-    "layoutOrder":  [
-                        "hero",
-                        "photos",
-                        "values",
-                        "works",
-                        "accordions",
-                        "hours",
-                        "access",
-                        "address",
-                        "contact"
-                    ],
-    "layoutSelected":  true,
-    "layoutSchema":  2,
-    "itemLayouts":  {
-                        "about-photos":  {
-                                             "sizes":  [
-                                                           "L",
-                                                           "L",
-                                                           "L"
-                                                       ],
-                                             "gap":  "normal",
-                                             "growDirs":  [
-
-                                                          ],
-                                             "focalYs":  [
-                                                             40,
-                                                             85,
-                                                             90
-                                                         ],
-                                             "focalXs":  [
-                                                             50,
-                                                             50,
-                                                             50
-                                                         ]
-                                         },
-                        "works-list":  {
-                                           "sizes":  [
-                                                         "H",
-                                                         "H",
-                                                         "L"
-                                                     ],
-                                           "gap":  "normal",
-                                           "growDirs":  [
-
-                                                        ],
-                                           "focalYs":  [
-                                                           20,
-                                                           25,
-                                                           5
-                                                       ],
-                                           "focalXs":  [
-                                                           50,
-                                                           50,
-                                                           50
-                                                       ]
-                                       }
-                    },
-    "heroTextOnPhoto":  false,
-    "heroFocalX":  50,
-    "heroFocalY":  45,
-    "aboutItemsDisplay":  "accordion",
-    "heroTextPlate":  "round",
-    "heroTextPlateTone":  "white",
-    "guidedImageUnlocked":  true,
-    "guidedTextUnlocked":  false,
-    "presetChosen":  true,
-    "chosenPresetKey":  "ink",
-    "intakeDone":  true,
-    "entryBranch":  "detail",
-    "hubEntrySource":  "detail-entry",
-    "easyFlowActive":  false,
-    "sushiSampleId":  "14",
-    "sushiSampleKey":  "ramen-brick-b",
-    "siteColorMode":  "detail",
-    "slotGradients":  {
-
-                      },
-    "slotGradientPartners":  {
-
-                             },
-    "draftColors":  {
-                        "pageBg":  "#2e3333",
-                        "pageBgSoft":  "#3a4040",
-                        "heroInk":  "#ffffff",
-                        "bodyInk":  "#f5f5f5",
-                        "bodyMuted":  "#c8c8c8",
-                        "chromeBg":  "#111111",
-                        "chromeInk":  "#f5f5f5",
-                        "accent":  "#c9a227",
-                        "cardBg":  "#1f2424",
-                        "valuesBg":  "#1f2424",
-                        "contactBg":  "#111111",
-                        "contactInk":  "#f5f5f5",
-                        "radius":  "0.6rem",
-                        "headingScale":  "1",
-                        "accentBar":  "mid"
-                    },
-    "draftCounts":  {
-                        "hero-leads":  2,
-                        "hero-values":  3,
-                        "about-accordions":  2,
-                        "about-photos":  3,
-                        "works-list":  3
-                    },
-    "draftExtras":  {
-                        "hours":  true,
-                        "access":  true,
-                        "address":  true
-                    },
-    "layoutBlockOff":  {
-
-                       },
-    "confirmed":  {
-                      "easy-basics":  false,
-                      "easy-sec-hero":  false,
-                      "easy-sec-about":  false,
-                      "easy-sec-works":  false,
-                      "easy-sec-contact":  false,
-                      "easy-img-wire":  false,
-                      "easy-loading":  false,
-                      "easy-done":  false,
-                      "purpose":  true,
-                      "layout":  true,
-                      "guide":  true,
-                      "global-preset":  true,
-                      "global-chrome-bg":  true,
-                      "global-chrome-ink":  true,
-                      "global-bg":  true,
-                      "hero-color":  true,
-                      "values-color":  true,
-                      "global-body":  true,
-                      "global-accent":  true,
-                      "global-card":  true,
-                      "contact-color":  true,
-                      "hero-image":  false,
-                      "about-images":  false,
-                      "works-images":  false,
-                      "logo-text":  false,
-                      "site-fonts":  true,
-                      "hero-text":  false,
-                      "values-text":  false,
-                      "about-text":  false,
-                      "works-text":  false,
-                      "hours-text":  false,
-                      "access-text":  false,
-                      "address-text":  false,
-                      "contact-text":  false,
-                      "finish":  false
-                  },
-    "fields":  {
-                   "brand_name":  "壁のギャラリー 余白"
-               },
-    "fonts":  {
-                  "display":  "Dela Gothic One",
-                  "catch":  "Zen Kaku Gothic New",
-                  "body":  "Zen Kaku Gothic New"
-              },
-    "imagePaths":  {
-                       "about_image_1":  "sushi-samples/14-ramen-brick-b/images/about-01.jpg?v=1789818861241",
-                       "about_image_2":  "sushi-samples/14-ramen-brick-b/images/about-02.jpg?v=1789818861241",
-                       "about_image_3":  "sushi-samples/14-ramen-brick-b/images/about-03.jpg?v=1789818861241",
-                       "hero_image":  "sushi-samples/14-ramen-brick-b/images/hero.jpg?v=1789818861241",
-                       "work_1_image":  "sushi-samples/14-ramen-brick-b/images/work-01.jpg?v=1789818861241",
-                       "work_2_image":  "sushi-samples/14-ramen-brick-b/images/work-02.jpg?v=1789818861241",
-                       "work_3_image":  "sushi-samples/14-ramen-brick-b/images/work-03.jpg?v=1789818861241"
-                   },
-    "blurb":  "ギャラリー・壁",
-    "scene":  "ギャラリー・壁",
-    "layoutRecipeNote":  "rebuild-2026-09-19 白い壁に作品だけを残す",
-    "brushUpStructure":  "2026-09-14-v01",
-    "brushUpMeaning":  "2026-09-19-rebuild",
-    "brushUpPhoto":  "2026-09-19-title-match-fix"
+    "version": 17,
+    "savedAt": "2026-09-19T11:55:42.702Z",
+    "uiMode": "self",
+    "sitePurpose": "shop",
+    "layoutPattern": "a",
+    "layoutOrder": [
+        "hero",
+        "photos",
+        "values",
+        "works",
+        "accordions",
+        "hours",
+        "access",
+        "address",
+        "contact"
+    ],
+    "layoutSelected": true,
+    "layoutSchema": 2,
+    "itemLayouts": {
+        "about-photos": {
+            "sizes": [
+                "L",
+                "L",
+                "L"
+            ],
+            "gap": "normal",
+            "growDirs": [],
+            "focalYs": [
+                40,
+                85,
+                90
+            ],
+            "focalXs": [
+                50,
+                50,
+                50
+            ]
+        },
+        "works-list": {
+            "sizes": [
+                "H",
+                "H",
+                "L"
+            ],
+            "gap": "normal",
+            "growDirs": [],
+            "focalYs": [
+                20,
+                25,
+                5
+            ],
+            "focalXs": [
+                50,
+                50,
+                50
+            ]
+        }
+    },
+    "heroTextOnPhoto": false,
+    "heroFocalX": 50,
+    "heroFocalY": 45,
+    "aboutItemsDisplay": "accordion",
+    "heroTextPlate": "round",
+    "heroTextPlateTone": "white",
+    "guidedImageUnlocked": true,
+    "guidedTextUnlocked": false,
+    "presetChosen": true,
+    "chosenPresetKey": "ink",
+    "intakeDone": true,
+    "entryBranch": "detail",
+    "hubEntrySource": "detail-entry",
+    "easyFlowActive": false,
+    "sushiSampleId": "14",
+    "sushiSampleKey": "ramen-brick-b",
+    "siteColorMode": "detail",
+    "slotGradients": {},
+    "slotGradientPartners": {},
+    "draftColors": {
+        "pageBg": "#2e3333",
+        "pageBgSoft": "#3a4040",
+        "heroInk": "#ffffff",
+        "bodyInk": "#f5f5f5",
+        "bodyMuted": "#c8c8c8",
+        "chromeBg": "#111111",
+        "chromeInk": "#f5f5f5",
+        "accent": "#c9a227",
+        "cardBg": "#1f2424",
+        "valuesBg": "#1f2424",
+        "contactBg": "#111111",
+        "contactInk": "#f5f5f5",
+        "radius": "0.6rem",
+        "headingScale": "1",
+        "accentBar": "mid"
+    },
+    "draftCounts": {
+        "hero-leads": 2,
+        "hero-values": 3,
+        "about-accordions": 2,
+        "about-photos": 3,
+        "works-list": 3
+    },
+    "draftExtras": {
+        "hours": true,
+        "access": true,
+        "address": true
+    },
+    "layoutBlockOff": {},
+    "confirmed": {
+        "easy-basics": false,
+        "easy-sec-hero": false,
+        "easy-sec-about": false,
+        "easy-sec-works": false,
+        "easy-sec-contact": false,
+        "easy-img-wire": false,
+        "easy-loading": false,
+        "easy-done": false,
+        "purpose": true,
+        "layout": true,
+        "guide": true,
+        "global-preset": true,
+        "global-chrome-bg": true,
+        "global-chrome-ink": true,
+        "global-bg": true,
+        "hero-color": true,
+        "values-color": true,
+        "global-body": true,
+        "global-accent": true,
+        "global-card": true,
+        "contact-color": true,
+        "hero-image": false,
+        "about-images": false,
+        "works-images": false,
+        "logo-text": false,
+        "site-fonts": true,
+        "hero-text": false,
+        "values-text": false,
+        "about-text": false,
+        "works-text": false,
+        "hours-text": false,
+        "access-text": false,
+        "address-text": false,
+        "contact-text": false,
+        "finish": false
+    },
+    "fields": {
+        "brand_name": "壁のギャラリー 余白",
+        "hero_title": "白い壁に、作品だけを残す。",
+        "hero_lead_1": "装飾を置かない小さなギャラリー。作品と壁の余白を、いちばん大切にしています。",
+        "hero_lead_2": "企画展は月替わり。開始の時間だけ短くご案内します。静かに見て帰れる場所です。",
+        "value_1_title": "壁が主役の展示",
+        "value_1_text": "額の間隔と高さを揃え、視線が作品だけに着く配置にしています。",
+        "value_2_title": "短い会期の企画",
+        "value_2_text": "作家ひとり／グループの小さな企画。会期中の作品入替は原則しません。",
+        "value_3_title": "静かな見学の約束",
+        "value_3_text": "大きな声での通話はご遠慮ください。撮影ルールは展ごとに受付でお伝えします。",
+        "about_section_name": "ギャラリーについて",
+        "about_heading": "余白のための、白い箱",
+        "about_name": "壁のギャラリー 余白",
+        "about_lead": "架空市しろかべ区の路面にあるワンルームのギャラリーです。販売は展による有無があります。在廊作家へのご連絡は受付経由でお取り次ぎします。",
+        "acc_1_title": "見学のお願い",
+        "acc_1_body": "開廊時間内は予約不要。団体はメールで事前連絡をお願いします。車椅子可・段差なし。",
+        "acc_2_title": "出展のご相談",
+        "acc_2_body": "ポートフォリオを添付のうえメールで。審査には2週間ほどいただきます。",
+        "works_section_name": "いまの展示",
+        "works_heading": "壁に残るもの",
+        "works_lead": "会期は店頭とサイトでご案内します。",
+        "work_1_title": "今月の企画壁",
+        "work_1_text": "正面の大きな壁に、ひとつのシリーズだけを並べます。",
+        "work_2_title": "小壁の連作",
+        "work_2_text": "横並びの小さな作品群。間近で見てください。",
+        "work_3_title": "図録コーナー",
+        "work_3_text": "過去展の薄い図録を、受付横に置いています。",
+        "hours_text": "水〜日 12:00–19:00　月火休廊（展替期間は別途）",
+        "address_text": "架空市しろかべ区ギャラリ通り 4-1",
+        "access_text": "最寄駅から徒歩4分。路上駐車はご遠慮ください。",
+        "contact_section_name": "ご連絡",
+        "contact_label": "ご連絡",
+        "contact_email": "hello@yohaku-gallery.example",
+        "contact_note_1": "出展・取材のご相談はメールで。",
+        "contact_note_2": "開廊中は来場者対応を優先するため、返信は翌日以降になることがあります。"
+    },
+    "fonts": {
+        "display": "Dela Gothic One",
+        "catch": "Zen Kaku Gothic New",
+        "body": "Zen Kaku Gothic New"
+    },
+    "imagePaths": {
+        "about_image_1": "sushi-samples/14-ramen-brick-b/images/about-01.jpg?v=1789818861241",
+        "about_image_2": "sushi-samples/14-ramen-brick-b/images/about-02.jpg?v=1789818861241",
+        "about_image_3": "sushi-samples/14-ramen-brick-b/images/about-03.jpg?v=1789818861241",
+        "hero_image": "sushi-samples/14-ramen-brick-b/images/hero.jpg?v=1789818861241",
+        "work_1_image": "sushi-samples/14-ramen-brick-b/images/work-01.jpg?v=1789818861241",
+        "work_2_image": "sushi-samples/14-ramen-brick-b/images/work-02.jpg?v=1789818861241",
+        "work_3_image": "sushi-samples/14-ramen-brick-b/images/work-03.jpg?v=1789818861241"
+    },
+    "blurb": "ギャラリー・壁",
+    "scene": "ギャラリー・壁",
+    "layoutRecipeNote": "rebuild-2026-09-19 白い壁に作品だけを残す",
+    "brushUpStructure": "2026-09-14-v01",
+    "brushUpMeaning": "2026-09-19-rebuild",
+    "brushUpPhoto": "2026-09-19-title-match-fix"
 }

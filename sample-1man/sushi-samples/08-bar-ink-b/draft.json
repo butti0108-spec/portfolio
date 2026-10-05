@@ -1,184 +1,205 @@
 {
-    "version":  17,
-    "savedAt":  "2026-09-19T12:18:16.192Z",
-    "uiMode":  "self",
-    "sitePurpose":  "shop",
-    "layoutPattern":  "a",
-    "layoutOrder":  [
-                        "photos",
-                        "works",
-                        "contact",
-                        "hours",
-                        "access",
-                        "address",
-                        "hero",
-                        "values",
-                        "accordions"
-                    ],
-    "layoutSelected":  true,
-    "layoutSchema":  2,
-    "itemLayouts":  {
-                        "about-photos":  {
-                                             "sizes":  [
-                                                           "H",
-                                                           "H",
-                                                           "L"
-                                                       ],
-                                             "gap":  "normal",
-                                             "growDirs":  [
-
-                                                          ],
-                                             "focalYs":  [
-                                                             55,
-                                                             85,
-                                                             65
-                                                         ],
-                                             "focalXs":  [
-                                                             50,
-                                                             50,
-                                                             50
-                                                         ]
-                                         },
-                        "works-list":  {
-                                           "sizes":  [
-                                                         "L",
-                                                         "H",
-                                                         "H"
-                                                     ],
-                                           "gap":  "normal",
-                                           "growDirs":  [
-
-                                                        ],
-                                           "focalYs":  [
-                                                           45,
-                                                           45,
-                                                           10
-                                                       ],
-                                           "focalXs":  [
-                                                           50,
-                                                           50,
-                                                           50
-                                                       ]
-                                       }
-                    },
-    "heroTextOnPhoto":  true,
-    "heroFocalX":  50,
-    "heroFocalY":  0,
-    "aboutItemsDisplay":  "accordion",
-    "heroTextPlate":  "none",
-    "heroTextPlateTone":  "white",
-    "guidedImageUnlocked":  true,
-    "guidedTextUnlocked":  false,
-    "presetChosen":  true,
-    "chosenPresetKey":  "cafe",
-    "intakeDone":  true,
-    "entryBranch":  "detail",
-    "hubEntrySource":  "detail-entry",
-    "easyFlowActive":  false,
-    "sushiSampleId":  "08",
-    "sushiSampleKey":  "bar-ink-b",
-    "siteColorMode":  "detail",
-    "slotGradients":  {
-
-                      },
-    "slotGradientPartners":  {
-
-                             },
-    "draftColors":  {
-                        "pageBg":  "#f5efe4",
-                        "pageBgSoft":  "#ebe1d0",
-                        "heroInk":  "#fff6e8",
-                        "bodyInk":  "#3e2723",
-                        "bodyMuted":  "#6a5340",
-                        "chromeBg":  "#5c4033",
-                        "chromeInk":  "#fff6e8",
-                        "accent":  "#c45c26",
-                        "cardBg":  "#fff8ee",
-                        "valuesBg":  "#fff8ee",
-                        "contactBg":  "#5c4033",
-                        "contactInk":  "#fff6e8",
-                        "radius":  "0.6rem",
-                        "headingScale":  "1",
-                        "accentBar":  "mid"
-                    },
-    "draftCounts":  {
-                        "hero-leads":  2,
-                        "hero-values":  3,
-                        "about-accordions":  1,
-                        "about-photos":  3,
-                        "works-list":  3
-                    },
-    "draftExtras":  {
-                        "hours":  true,
-                        "access":  true,
-                        "address":  true
-                    },
-    "layoutBlockOff":  {
-                           "values":  true,
-                           "accordions":  true
-                       },
-    "confirmed":  {
-                      "easy-basics":  false,
-                      "easy-sec-hero":  false,
-                      "easy-sec-about":  false,
-                      "easy-sec-works":  false,
-                      "easy-sec-contact":  false,
-                      "easy-img-wire":  false,
-                      "easy-loading":  false,
-                      "easy-done":  false,
-                      "purpose":  true,
-                      "layout":  true,
-                      "guide":  true,
-                      "global-preset":  true,
-                      "global-chrome-bg":  true,
-                      "global-chrome-ink":  true,
-                      "global-bg":  true,
-                      "hero-color":  true,
-                      "values-color":  true,
-                      "global-body":  true,
-                      "global-accent":  true,
-                      "global-card":  true,
-                      "contact-color":  true,
-                      "hero-image":  false,
-                      "about-images":  false,
-                      "works-images":  false,
-                      "logo-text":  false,
-                      "site-fonts":  true,
-                      "hero-text":  false,
-                      "values-text":  false,
-                      "about-text":  false,
-                      "works-text":  false,
-                      "hours-text":  false,
-                      "access-text":  false,
-                      "address-text":  false,
-                      "contact-text":  false,
-                      "finish":  false
-                  },
-    "fields":  {
-                   "hero_title":  "窓辺の光が、\n客室の主役。",
-                   "headingScale":  "1",
-                   "hero_lead_1":  "布団の白と木の床だけの、小さな宿。廊下の足音が少ない静けさを大切にしています。",
-                   "hero_lead_2":  "食事は朝のみ。近所のパンとコーヒーを、部屋の小さなテーブルへ運びます。",
-                   "brand_name":  "客室宿 ひなた畳"
-               },
-    "fonts":  {
-                  "display":  "Shippori Mincho",
-                  "catch":  "Shippori Mincho",
-                  "body":  "Zen Kaku Gothic New"
-              },
-    "imagePaths":  {
-                       "about_image_3":  "sushi-samples/08-bar-ink-b/images/about-03.jpg?v=1789820249614",
-                       "about_image_2":  "sushi-samples/08-bar-ink-b/images/about-02.jpg?v=1789820249614",
-                       "about_image_1":  "sushi-samples/08-bar-ink-b/images/about-01.jpg?v=1789820249614",
-                       "hero_image":  "sushi-samples/08-bar-ink-b/images/hero.jpg?v=1789820249614",
-                       "work_1_image":  "sushi-samples/08-bar-ink-b/images/work-01.jpg?v=1789820249614",
-                       "work_2_image":  "sushi-samples/08-bar-ink-b/images/work-02.jpg?v=1789820249614",
-                       "work_3_image":  "sushi-samples/08-bar-ink-b/images/work-03.jpg?v=1789820249614"
-                   },
-    "blurb":  "小さな客室宿。泊まりたい。畳・窓光",
-    "scene":  "宿・客室",
-    "layoutRecipeNote":  "rebuild inn room light cafe-mincho",
-    "brushUpStructure":  "2026-09-14-v01",
-    "brushUpMeaning":  "2026-09-15-v01",
-    "brushUpPhoto":  "2026-09-19-title-match-fix"
+    "version": 17,
+    "savedAt": "2026-09-19T12:18:16.192Z",
+    "uiMode": "self",
+    "sitePurpose": "shop",
+    "layoutPattern": "a",
+    "layoutOrder": [
+        "photos",
+        "works",
+        "contact",
+        "hours",
+        "access",
+        "address",
+        "hero",
+        "values",
+        "accordions"
+    ],
+    "layoutSelected": true,
+    "layoutSchema": 2,
+    "itemLayouts": {
+        "about-photos": {
+            "sizes": [
+                "H",
+                "H",
+                "L"
+            ],
+            "gap": "normal",
+            "growDirs": [],
+            "focalYs": [
+                55,
+                85,
+                65
+            ],
+            "focalXs": [
+                50,
+                50,
+                50
+            ]
+        },
+        "works-list": {
+            "sizes": [
+                "L",
+                "H",
+                "H"
+            ],
+            "gap": "normal",
+            "growDirs": [],
+            "focalYs": [
+                45,
+                45,
+                10
+            ],
+            "focalXs": [
+                50,
+                50,
+                50
+            ]
+        }
+    },
+    "heroTextOnPhoto": true,
+    "heroFocalX": 50,
+    "heroFocalY": 0,
+    "aboutItemsDisplay": "accordion",
+    "heroTextPlate": "none",
+    "heroTextPlateTone": "white",
+    "guidedImageUnlocked": true,
+    "guidedTextUnlocked": false,
+    "presetChosen": true,
+    "chosenPresetKey": "cafe",
+    "intakeDone": true,
+    "entryBranch": "detail",
+    "hubEntrySource": "detail-entry",
+    "easyFlowActive": false,
+    "sushiSampleId": "08",
+    "sushiSampleKey": "bar-ink-b",
+    "siteColorMode": "detail",
+    "slotGradients": {},
+    "slotGradientPartners": {},
+    "draftColors": {
+        "pageBg": "#f5efe4",
+        "pageBgSoft": "#ebe1d0",
+        "heroInk": "#fff6e8",
+        "bodyInk": "#3e2723",
+        "bodyMuted": "#6a5340",
+        "chromeBg": "#5c4033",
+        "chromeInk": "#fff6e8",
+        "accent": "#c45c26",
+        "cardBg": "#fff8ee",
+        "valuesBg": "#fff8ee",
+        "contactBg": "#5c4033",
+        "contactInk": "#fff6e8",
+        "radius": "0.6rem",
+        "headingScale": "1",
+        "accentBar": "mid"
+    },
+    "draftCounts": {
+        "hero-leads": 2,
+        "hero-values": 3,
+        "about-accordions": 1,
+        "about-photos": 3,
+        "works-list": 3
+    },
+    "draftExtras": {
+        "hours": true,
+        "access": true,
+        "address": true
+    },
+    "layoutBlockOff": {
+        "values": true,
+        "accordions": true
+    },
+    "confirmed": {
+        "easy-basics": false,
+        "easy-sec-hero": false,
+        "easy-sec-about": false,
+        "easy-sec-works": false,
+        "easy-sec-contact": false,
+        "easy-img-wire": false,
+        "easy-loading": false,
+        "easy-done": false,
+        "purpose": true,
+        "layout": true,
+        "guide": true,
+        "global-preset": true,
+        "global-chrome-bg": true,
+        "global-chrome-ink": true,
+        "global-bg": true,
+        "hero-color": true,
+        "values-color": true,
+        "global-body": true,
+        "global-accent": true,
+        "global-card": true,
+        "contact-color": true,
+        "hero-image": false,
+        "about-images": false,
+        "works-images": false,
+        "logo-text": false,
+        "site-fonts": true,
+        "hero-text": false,
+        "values-text": false,
+        "about-text": false,
+        "works-text": false,
+        "hours-text": false,
+        "access-text": false,
+        "address-text": false,
+        "contact-text": false,
+        "finish": false
+    },
+    "fields": {
+        "hero_title": "窓辺の光が、\n客室の主役。",
+        "headingScale": "1",
+        "hero_lead_1": "布団の白と木の床だけの、小さな宿。廊下の足音が少ない静けさを大切にしています。",
+        "hero_lead_2": "食事は朝のみ。近所のパンとコーヒーを、部屋の小さなテーブルへ運びます。",
+        "brand_name": "客室宿 ひなた畳",
+        "value_1_title": "客室は光と余白",
+        "value_1_text": "テレビは置かず、カーテンは薄い一枚。朝日で自然に目が覚める明るさです。",
+        "value_2_title": "朝だけの控えめな膳",
+        "value_2_text": "ごはん派とパン派を選べる簡易朝食。食事の好みは予約時に一言ください。",
+        "value_3_title": "四室だけの静けさ",
+        "value_3_text": "大浴場はありません。各室シャワー付き。遅めの到着もスマートロックです。",
+        "about_section_name": "宿について",
+        "about_heading": "通りから一歩入った、四室の宿",
+        "about_name": "客室宿 ひなた畳",
+        "about_lead": "全四室の小さな宿です。チェックインは15時以降、フロントは夕方まで。鍵はスマートロックで、遅い到着にも対応します。",
+        "acc_1_title": "ご滞在の流れ",
+        "acc_1_body": "予約確定後に入室用コードをお送りします。荷物の預かりはフロント営業時間内のみ。近隣にコインパーキングがあります（提携割引なし）。",
+        "works_section_name": "客室タイプ",
+        "works_heading": "選べる部屋",
+        "works_lead": "いずれも禁煙です。",
+        "work_1_title": "ひなた和室（二名まで）",
+        "work_1_text": "畳敷きに低いテーブル。窓は南向きで、午前中がいちばん明るい部屋です。",
+        "work_2_title": "庭側の静かな部屋",
+        "work_2_text": "朝の光が長く入る客室。読書と仮眠向けの静かな配置です。",
+        "work_3_title": "布団セットの客室",
+        "work_3_text": "白い布団を丁寧に敷いた定番の泊まり方。チェックイン後すぐ休めます。",
+        "hours_text": "チェックイン 15:00–20:00／チェックアウト 10:00　通年（不定休・カレンダー確認）",
+        "address_text": "架空市ひなた区畳小路 7-3",
+        "access_text": "最寄駅から徒歩5分。駐車場は近隣コインパーキングをご利用ください。",
+        "contact_section_name": "ご連絡",
+        "contact_label": "ご連絡",
+        "contact_email": "stay@hinata-tatami.example",
+        "contact_note_1": "ご予約・到着が遅れる場合はメールで。人数と泊数を明記してください。",
+        "contact_note_2": "キャンセル規定は返信メールに記載します。"
+    },
+    "fonts": {
+        "display": "Shippori Mincho",
+        "catch": "Shippori Mincho",
+        "body": "Zen Kaku Gothic New"
+    },
+    "imagePaths": {
+        "about_image_3": "sushi-samples/08-bar-ink-b/images/about-03.jpg?v=1789820249614",
+        "about_image_2": "sushi-samples/08-bar-ink-b/images/about-02.jpg?v=1789820249614",
+        "about_image_1": "sushi-samples/08-bar-ink-b/images/about-01.jpg?v=1789820249614",
+        "hero_image": "sushi-samples/08-bar-ink-b/images/hero.jpg?v=1789820249614",
+        "work_1_image": "sushi-samples/08-bar-ink-b/images/work-01.jpg?v=1789820249614",
+        "work_2_image": "sushi-samples/08-bar-ink-b/images/work-02.jpg?v=1789820249614",
+        "work_3_image": "sushi-samples/08-bar-ink-b/images/work-03.jpg?v=1789820249614"
+    },
+    "blurb": "小さな客室宿。泊まりたい。畳・窓光",
+    "scene": "宿・客室",
+    "layoutRecipeNote": "rebuild inn room light cafe-mincho",
+    "brushUpStructure": "2026-09-14-v01",
+    "brushUpMeaning": "2026-09-15-v01",
+    "brushUpPhoto": "2026-09-19-title-match-fix"
 }

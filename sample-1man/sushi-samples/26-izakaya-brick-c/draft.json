@@ -1,183 +1,202 @@
 {
-    "version":  17,
-    "savedAt":  "2026-09-19T12:27:04.920Z",
-    "uiMode":  "self",
-    "sitePurpose":  "shop",
-    "layoutPattern":  "a",
-    "layoutOrder":  [
-                        "hero",
-                        "works",
-                        "photos",
-                        "values",
-                        "access",
-                        "address",
-                        "hours",
-                        "accordions",
-                        "contact"
-                    ],
-    "layoutSelected":  true,
-    "layoutSchema":  2,
-    "itemLayouts":  {
-                        "about-photos":  {
-                                             "sizes":  [
-                                                           "L",
-                                                           "L",
-                                                           "L"
-                                                       ],
-                                             "gap":  "normal",
-                                             "growDirs":  [
-
-                                                          ],
-                                             "focalYs":  [
-                                                             30,
-                                                             50,
-                                                             35
-                                                         ],
-                                             "focalXs":  [
-                                                             50,
-                                                             50,
-                                                             50
-                                                         ]
-                                         },
-                        "works-list":  {
-                                           "sizes":  [
-                                                         "H",
-                                                         "H",
-                                                         "L"
-                                                     ],
-                                           "gap":  "tight",
-                                           "growDirs":  [
-
-                                                        ],
-                                           "focalYs":  [
-                                                           25,
-                                                           15,
-                                                           45
-                                                       ],
-                                           "focalXs":  [
-                                                           50,
-                                                           50,
-                                                           50
-                                                       ]
-                                       }
-                    },
-    "heroTextOnPhoto":  true,
-    "heroFocalX":  50,
-    "heroFocalY":  0,
-    "aboutItemsDisplay":  "accordion",
-    "heroTextPlate":  "round",
-    "heroTextPlateTone":  "dark",
-    "guidedImageUnlocked":  true,
-    "guidedTextUnlocked":  false,
-    "presetChosen":  true,
-    "chosenPresetKey":  "ink",
-    "intakeDone":  true,
-    "entryBranch":  "detail",
-    "hubEntrySource":  "detail-entry",
-    "easyFlowActive":  false,
-    "sushiSampleId":  "26",
-    "sushiSampleKey":  "izakaya-brick-c",
-    "siteColorMode":  "detail",
-    "slotGradients":  {
-
-                      },
-    "slotGradientPartners":  {
-
-                             },
-    "draftColors":  {
-                        "pageBg":  "#2e3333",
-                        "pageBgSoft":  "#3a4040",
-                        "heroInk":  "#ffffff",
-                        "bodyInk":  "#f5f5f5",
-                        "bodyMuted":  "#c8c8c8",
-                        "chromeBg":  "#111111",
-                        "chromeInk":  "#f5f5f5",
-                        "accent":  "#c9a227",
-                        "cardBg":  "#1f2424",
-                        "valuesBg":  "#1f2424",
-                        "contactBg":  "#111111",
-                        "contactInk":  "#f5f5f5",
-                        "radius":  "0.6rem",
-                        "headingScale":  "1",
-                        "accentBar":  "mid"
-                    },
-    "draftCounts":  {
-                        "hero-leads":  2,
-                        "hero-values":  3,
-                        "about-accordions":  1,
-                        "about-photos":  3,
-                        "works-list":  3
-                    },
-    "draftExtras":  {
-                        "hours":  true,
-                        "access":  true,
-                        "address":  true
-                    },
-    "layoutBlockOff":  {
-
-                       },
-    "confirmed":  {
-                      "easy-basics":  false,
-                      "easy-sec-hero":  false,
-                      "easy-sec-about":  false,
-                      "easy-sec-works":  false,
-                      "easy-sec-contact":  false,
-                      "easy-img-wire":  false,
-                      "easy-loading":  false,
-                      "easy-done":  false,
-                      "purpose":  true,
-                      "layout":  true,
-                      "guide":  true,
-                      "global-preset":  true,
-                      "global-chrome-bg":  true,
-                      "global-chrome-ink":  true,
-                      "global-bg":  true,
-                      "hero-color":  true,
-                      "values-color":  true,
-                      "global-body":  true,
-                      "global-accent":  true,
-                      "global-card":  true,
-                      "contact-color":  true,
-                      "hero-image":  false,
-                      "about-images":  false,
-                      "works-images":  false,
-                      "logo-text":  false,
-                      "site-fonts":  true,
-                      "hero-text":  false,
-                      "values-text":  false,
-                      "about-text":  false,
-                      "works-text":  false,
-                      "hours-text":  false,
-                      "access-text":  false,
-                      "address-text":  false,
-                      "contact-text":  false,
-                      "finish":  false
-                  },
-    "fields":  {
-                   "hero_title":  "墨と白だけで、\n静かに切り取る。",
-                   "headingScale":  "1",
-                   "hero_lead_1":  "提案の中心はモノクロ。光と影だけで、表情を組み立てます。",
-                   "hero_lead_2":  "宣材・ポートレート・作品撮りに対応。簡単なレタッチまで含みます。",
-                   "brand_name":  "墨白フォト"
-               },
-    "fonts":  {
-                  "display":  "Dela Gothic One",
-                  "catch":  "Zen Kaku Gothic New",
-                  "body":  "Zen Kaku Gothic New"
-              },
-    "imagePaths":  {
-                       "about_image_1":  "sushi-samples/26-izakaya-brick-c/images/about-01.jpg?v=1789820808932",
-                       "about_image_2":  "sushi-samples/26-izakaya-brick-c/images/about-02.jpg?v=1789820808932",
-                       "about_image_3":  "sushi-samples/26-izakaya-brick-c/images/about-03.jpg?v=1789820808932",
-                       "hero_image":  "sushi-samples/26-izakaya-brick-c/images/hero.jpg?v=1789820808932",
-                       "work_1_image":  "sushi-samples/26-izakaya-brick-c/images/work-01.jpg?v=1789820808932",
-                       "work_2_image":  "sushi-samples/26-izakaya-brick-c/images/work-02.jpg?v=1789820808932",
-                       "work_3_image":  "sushi-samples/26-izakaya-brick-c/images/work-03.jpg?v=1789820808932"
-                   },
-    "blurb":  "写真館。モノクロ",
-    "scene":  "写真館・モノクロ",
-    "layoutRecipeNote":  "rebuild-26 mono vs 18 color yohaku",
-    "brushUpStructure":  "2026-09-14-v01",
-    "brushUpMeaning":  "2026-09-19-rebuild",
-    "brushUpPhoto":  "2026-09-19-title-match-fix"
+    "version": 17,
+    "savedAt": "2026-09-19T12:27:04.920Z",
+    "uiMode": "self",
+    "sitePurpose": "shop",
+    "layoutPattern": "a",
+    "layoutOrder": [
+        "hero",
+        "works",
+        "photos",
+        "values",
+        "access",
+        "address",
+        "hours",
+        "accordions",
+        "contact"
+    ],
+    "layoutSelected": true,
+    "layoutSchema": 2,
+    "itemLayouts": {
+        "about-photos": {
+            "sizes": [
+                "L",
+                "L",
+                "L"
+            ],
+            "gap": "normal",
+            "growDirs": [],
+            "focalYs": [
+                30,
+                50,
+                35
+            ],
+            "focalXs": [
+                50,
+                50,
+                50
+            ]
+        },
+        "works-list": {
+            "sizes": [
+                "H",
+                "H",
+                "L"
+            ],
+            "gap": "tight",
+            "growDirs": [],
+            "focalYs": [
+                25,
+                15,
+                45
+            ],
+            "focalXs": [
+                50,
+                50,
+                50
+            ]
+        }
+    },
+    "heroTextOnPhoto": true,
+    "heroFocalX": 50,
+    "heroFocalY": 0,
+    "aboutItemsDisplay": "accordion",
+    "heroTextPlate": "round",
+    "heroTextPlateTone": "dark",
+    "guidedImageUnlocked": true,
+    "guidedTextUnlocked": false,
+    "presetChosen": true,
+    "chosenPresetKey": "ink",
+    "intakeDone": true,
+    "entryBranch": "detail",
+    "hubEntrySource": "detail-entry",
+    "easyFlowActive": false,
+    "sushiSampleId": "26",
+    "sushiSampleKey": "izakaya-brick-c",
+    "siteColorMode": "detail",
+    "slotGradients": {},
+    "slotGradientPartners": {},
+    "draftColors": {
+        "pageBg": "#2e3333",
+        "pageBgSoft": "#3a4040",
+        "heroInk": "#ffffff",
+        "bodyInk": "#f5f5f5",
+        "bodyMuted": "#c8c8c8",
+        "chromeBg": "#111111",
+        "chromeInk": "#f5f5f5",
+        "accent": "#c9a227",
+        "cardBg": "#1f2424",
+        "valuesBg": "#1f2424",
+        "contactBg": "#111111",
+        "contactInk": "#f5f5f5",
+        "radius": "0.6rem",
+        "headingScale": "1",
+        "accentBar": "mid"
+    },
+    "draftCounts": {
+        "hero-leads": 2,
+        "hero-values": 3,
+        "about-accordions": 1,
+        "about-photos": 3,
+        "works-list": 3
+    },
+    "draftExtras": {
+        "hours": true,
+        "access": true,
+        "address": true
+    },
+    "layoutBlockOff": {},
+    "confirmed": {
+        "easy-basics": false,
+        "easy-sec-hero": false,
+        "easy-sec-about": false,
+        "easy-sec-works": false,
+        "easy-sec-contact": false,
+        "easy-img-wire": false,
+        "easy-loading": false,
+        "easy-done": false,
+        "purpose": true,
+        "layout": true,
+        "guide": true,
+        "global-preset": true,
+        "global-chrome-bg": true,
+        "global-chrome-ink": true,
+        "global-bg": true,
+        "hero-color": true,
+        "values-color": true,
+        "global-body": true,
+        "global-accent": true,
+        "global-card": true,
+        "contact-color": true,
+        "hero-image": false,
+        "about-images": false,
+        "works-images": false,
+        "logo-text": false,
+        "site-fonts": true,
+        "hero-text": false,
+        "values-text": false,
+        "about-text": false,
+        "works-text": false,
+        "hours-text": false,
+        "access-text": false,
+        "address-text": false,
+        "contact-text": false,
+        "finish": false
+    },
+    "fields": {
+        "hero_title": "墨と白だけで、\n静かに切り取る。",
+        "headingScale": "1",
+        "hero_lead_1": "提案の中心はモノクロ。光と影だけで、表情を組み立てます。",
+        "hero_lead_2": "宣材・ポートレート・作品撮りに対応。簡単なレタッチまで含みます。",
+        "brand_name": "墨白フォト",
+        "value_1_title": "モノクロ基調",
+        "value_1_text": "カラーも撮れますが、提案の中心はモノクロです。あとから色に頼らない写真にします。",
+        "value_2_title": "暗い壁の部屋",
+        "value_2_text": "墨色の壁と白い床。照明はスポット中心で、輪郭だけを浮かせます。",
+        "value_3_title": "撮りやすい距離感",
+        "value_3_text": "初めての撮影でも、トーンの好みを一緒に決められます。",
+        "about_section_name": "スタジオについて",
+        "about_heading": "墨と白で残す写真",
+        "about_name": "墨白フォト",
+        "about_lead": "モノクロームのポートレートを得意とする写真スタジオです。アーティスト宣材、作家プロフィール、静かな家族写真まで。派手な小道具は使わず、光の当て方で一枚を決めます。",
+        "acc_1_title": "撮影メモ",
+        "acc_1_body": "服装は無地の黒・白・グレーが映えます。データはモノクロ仕上げが基本で、カラー版はオプション。予約は一枠一組、見学は平日のみ受け付けます。",
+        "works_section_name": "プラン",
+        "works_heading": "撮影メニュー",
+        "works_lead": "影と輪郭のための枠",
+        "work_1_title": "墨白ポートレート",
+        "work_1_text": "50分。半身〜バストアップ中心。データ15カット目安。",
+        "work_2_title": "宣材モノクロセット",
+        "work_2_text": "70分。立ち・座り・横顔。Web用と印刷用の解像度を分けて納品。",
+        "work_3_title": "データ納品のみ",
+        "work_3_text": "プリントなしで、補正済みデータを当日中にお渡しします。",
+        "hours_text": "木〜月 11:00–19:00（予約制）／火水定休",
+        "address_text": "架空市墨町8-3-7 地下1F",
+        "access_text": "最寄駅から徒歩5分。駐車場は近隣コインパーキングをご利用ください。",
+        "contact_section_name": "ご連絡",
+        "contact_label": "ご連絡",
+        "contact_email": "shoot@sumishiro-photo.example",
+        "contact_note_1": "ご予約は用途と希望トーンを添えてメールで。",
+        "contact_note_2": "キャンセルは3日前まで無料。"
+    },
+    "fonts": {
+        "display": "Dela Gothic One",
+        "catch": "Zen Kaku Gothic New",
+        "body": "Zen Kaku Gothic New"
+    },
+    "imagePaths": {
+        "about_image_1": "sushi-samples/26-izakaya-brick-c/images/about-01.jpg?v=1789820808932",
+        "about_image_2": "sushi-samples/26-izakaya-brick-c/images/about-02.jpg?v=1789820808932",
+        "about_image_3": "sushi-samples/26-izakaya-brick-c/images/about-03.jpg?v=1789820808932",
+        "hero_image": "sushi-samples/26-izakaya-brick-c/images/hero.jpg?v=1789820808932",
+        "work_1_image": "sushi-samples/26-izakaya-brick-c/images/work-01.jpg?v=1789820808932",
+        "work_2_image": "sushi-samples/26-izakaya-brick-c/images/work-02.jpg?v=1789820808932",
+        "work_3_image": "sushi-samples/26-izakaya-brick-c/images/work-03.jpg?v=1789820808932"
+    },
+    "blurb": "写真館。モノクロ",
+    "scene": "写真館・モノクロ",
+    "layoutRecipeNote": "rebuild-26 mono vs 18 color yohaku",
+    "brushUpStructure": "2026-09-14-v01",
+    "brushUpMeaning": "2026-09-19-rebuild",
+    "brushUpPhoto": "2026-09-19-title-match-fix"
 }

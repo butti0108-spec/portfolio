@@ -23277,7 +23277,7 @@
     if (delivery) {
       if (!delivery.dataset.defaultText) delivery.dataset.defaultText = delivery.textContent;
       delivery.textContent = sample
-        ? "納品目安は、内容確認後3日以内です（日付の指定はできません）。"
+        ? "納品目安は、内容確認後5日以内です（日付の指定はできません）。"
         : delivery.dataset.defaultText;
     }
     const zipName = "依頼ファイル（ZIP）を保存する";

@@ -22992,28 +22992,35 @@
     };
   }
 
+  function formatTaxPrice(amount) {
+    const n = Math.round(amount);
+    if (n >= 10000 && n % 10000 === 0) return (n / 10000) + "万円";
+    if (n > 10000) return Math.floor(n / 10000) + "万" + (n % 10000) + "円";
+    return n + "円";
+  }
+
   function samplePriceCalculate(state) {
-    let total = state.support === "visit" ? 55000 : 11000;
+    let total = state.support === "visit" ? 50000 : 10000;
     const notes = [];
-    if (state.domain === "own") total += 5500;
+    if (state.domain === "own") total += 5000;
     if (state.domain === "managed") {
-      total += 11000;
-      notes.push("ドメイン取得・管理の初年度11,000円を含みます。ドメイン実費は別途必要です。");
+      total += 10000;
+      notes.push("ドメイン取得・管理の初年度1万円を含みます。ドメイン実費は別途必要です。");
     }
     if (state.custom === "partial") {
-      total += 22000;
-      notes.push("一部カスタマイズは22,000円〜です。内容により金額が変わります。");
+      total += 20000;
+      notes.push("一部カスタマイズは2万円〜です。内容により金額が変わります。");
     }
     if (state.custom === "full") notes.push("全体の独自構成は個別見積もりです。その費用は上の金額に含まれていません。");
     if (state.wp) {
-      total += 55000;
-      notes.push("WordPress対応は55,000円〜です。別途サーバー実費が必要です。追加機能・プラグインは別途見積もりです。");
+      total += 50000;
+      notes.push("WordPress対応は5万円〜です。別途サーバー実費が必要です。追加機能・プラグインは別途見積もりです。");
     }
     if (state.support === "online") {
-      total += 11000;
-      notes.push("オンラインサポートは1回・最大3時間。超過は30分ごとに1,100円追加です。");
+      total += 10000;
+      notes.push("オンラインサポートは1回・最大3時間。超過は30分ごとに1000円追加です。");
     }
-    if (state.support === "visit") notes.push("訪問サポートは55,000円〜です。基本プランを含みます。訪問先による追加料金は別途です。");
+    if (state.support === "visit") notes.push("訪問サポートは5万円〜です。基本プランを含みます。訪問先による追加料金は別途です。");
     const from = state.custom === "partial" || state.wp || state.support === "visit";
     return { total: total, notes: notes, from: from };
   }
@@ -23044,7 +23051,7 @@
       "WordPress：" + label.wp,
       "サポート：" + label.support,
       "【シミュレーター表示額】",
-      "最低見積もり金額：" + price.total.toLocaleString("ja-JP") + "円" + (price.from ? "から" : "")
+      "最低見積もり金額：" + formatTaxPrice(price.total) + (price.from ? "から" : "")
     ];
     price.notes.forEach(function (note) {
       lines.push(note);
@@ -23101,7 +23108,7 @@
     const noteList = document.getElementById("sample-price-notes");
     if (total && noteList) {
       const price = samplePriceCalculate(samplePriceState());
-      total.textContent = "最低見積もり金額　" + price.total.toLocaleString("ja-JP") + "円" + (price.from ? "から" : "") + "（税込）";
+      total.textContent = "最低見積もり金額　" + formatTaxPrice(price.total) + (price.from ? "から" : "") + "（税込）";
       noteList.innerHTML = price.notes
         .map(function (note) {
           return "<li>" + note.replace(/</g, "&lt;") + "</li>";

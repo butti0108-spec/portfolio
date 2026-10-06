@@ -65,7 +65,7 @@
   <script src="sushi-belt.js?v=six-fix-20261004" defer></script>
   <script src="free-photo-gallery/gallery.js?v=gallery-act-20261001" defer></script>
   <script src="page-shutter.js?v=sample-only-20260929" defer></script>
-  <script src="script.js?v=price-man-20261005" defer></script>
+  <script src="script.js?v=order-checks-20261006" defer></script>
   <script>
     (function () {
       var h = location.hostname;
@@ -1561,8 +1561,9 @@
                 <section class="sample-zip-section">
                   <h3 class="sample-zip-heading">ご注文前の最終確認</h3>
                   <label class="check"><input type="checkbox" name="sample_order_pages" value="1"> 基本プランのホームページは、GitHub Pagesを利用して公開します。</label>
-                  <label class="check"><input type="checkbox" name="sample_order_form" value="1"> 送信できるお問い合わせフォームは基本プランに含まれません。</label>
+                  <label class="check"><input type="checkbox" name="sample_order_form" value="1"> 名前や用件を書いて送る欄は付きません。メールアドレスの掲載と、コピーできるところまでです。</label>
                   <label class="check"><input type="checkbox" name="sample_order_keep" value="1"> 公開後の継続更新・保守は基本プランに含まれません。</label>
+                  <label class="check"><input type="checkbox" name="sample_order_as_sent" value="1"> 送られてきた画像や文字に誤字脱字や間違いがあっても、確認や編集はせず、送られてきた情報のまま掲載します。</label>
                   <label class="check"><input type="checkbox" name="sample_order_revision" value="1"> 公開後1か月以内の無料修正は1回までです。</label>
                 </section>
                 <section class="sample-zip-section">
@@ -1639,8 +1640,9 @@
             くわしくは <a href="help.html?return=order#scope">プランの範囲</a> と <a href="help.html?return=order#faq">よくある質問</a> をご覧ください。</p>
             <label class="check"><input type="checkbox" name="scope_layout_fixed" value="1"> <span data-scope-layout-text>レイアウトは<strong>6パターンから選択</strong>します。選んだ型の中でのページ構成は固定で、色とご提供の文字・画像を載せます</span></label>
             <label class="check"><input type="checkbox" name="scope_no_copy" value="1"> <span data-scope-copy-text><strong>文章の作成・推敲</strong>は含みません（原稿どおりに載せます）</span></label>
-            <label class="check"><input type="checkbox" name="scope_no_form" value="1"> <strong>送信できるお問い合わせフォーム</strong>は含みません（<a href="help.html?return=order#faq">ヘルプはこちら</a>）</label>
+            <label class="check"><input type="checkbox" name="scope_no_form" value="1"> 名前や用件を書いて送る欄は付きません。メールアドレスの掲載と、コピーできるところまでです。</label>
             <label class="check"><input type="checkbox" name="scope_update" value="1"> 公開後の<strong>継続更新・保守</strong>は含みません</label>
+            <label class="check"><input type="checkbox" name="scope_as_sent" value="1"> 送られてきた画像や文字に誤字脱字や間違いがあっても、確認や編集はせず、送られてきた情報のまま掲載します。</label>
             <label class="check"><input type="checkbox" name="scope_revision_once" value="1"> 納品後の<strong>無料修正は1回まで</strong>です（次回以降は別料金。<a href="help.html?return=order#faq">ヘルプはこちら</a>）</label>
           </fieldset>
           <div class="finish-summary" id="finish-summary" aria-live="polite">

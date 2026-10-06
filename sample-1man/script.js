@@ -2139,6 +2139,7 @@
     "scope_no_copy",
     "scope_no_form",
     "scope_update",
+    "scope_as_sent",
     "scope_revision_once"
   ];
 
@@ -18734,6 +18735,7 @@
         scope_no_copy: fields.scope_no_copy || "",
         scope_no_form: fields.scope_no_form || "",
         scope_update: fields.scope_update || "",
+        scope_as_sent: fields.scope_as_sent || "",
         scope_revision_once: fields.scope_revision_once || ""
       };
     }
@@ -22969,7 +22971,7 @@
     return !!(store.sampleFinishNoBack && store.entryBranch === "sample");
   }
 
-  var SAMPLE_ORDER_CHECKS = ["sample_order_pages", "sample_order_form", "sample_order_keep", "sample_order_revision"];
+  var SAMPLE_ORDER_CHECKS = ["sample_order_pages", "sample_order_form", "sample_order_keep", "sample_order_as_sent", "sample_order_revision"];
   var SAMPLE_ORDER_MAIL = "atsushi.masubuchi.work@gmail.com";
 
   function sampleOrderChecksDone() {

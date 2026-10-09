@@ -9447,10 +9447,6 @@ body.wizard-mode #easy-img-layout-host .layout-arrange-actions {
   display: none !important;
 }
 
-.entry-hero-text-note {
-  margin-top: 0.75rem;
-}
-
 body.atelier.mode-detail .easy-only-note,
 body.atelier.color-mode-detail .easy-only-note {
   display: none !important;

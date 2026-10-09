@@ -16781,16 +16781,6 @@
     if (step && EASY_FLOW_STEP_SET.has(step.id)) {
       if (store.confirmed[step.id]) unconfirmStep(step.id);
       let backIndex = Math.max(0, store.wizardStepIndex - 1);
-      const flow = getFlowSteps();
-      let prev = flow[backIndex];
-      if (prev && prev.id === "easy-catch") {
-        const page = store.catchPage || "imageAsk";
-        if (page === "imageAsk" || page === "ask") {
-          const target = catchSectionBefore(page);
-          if (target) store.catchPage = target;
-          else backIndex = Math.max(0, backIndex - 1);
-        }
-      }
       showWizardStep(backIndex);
       const status = document.getElementById("wizard-status");
       if (status) status.textContent = "";

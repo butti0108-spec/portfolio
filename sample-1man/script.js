@@ -23255,23 +23255,21 @@
   function samplePriceCalculate(state) {
     let total = state.support === "visit" ? 50000 : 10000;
     const notes = [];
-    if (state.domain === "own") total += 5000;
-    if (state.domain === "managed") {
-      total += 10000;
-      notes.push("ドメイン取得・管理の初年度1万円を含みます。ドメイン実費は別途必要です。");
+    if (state.domain === "own" || state.domain === "managed") {
+      notes.push("独自ドメインの接続料金は無料です。向き先の設定はお客様が行います。設定方法が分からないときは、画面共有サポート（30分1,500円）を利用できます。");
     }
     if (state.custom === "partial") {
       total += 20000;
-      notes.push("一部カスタマイズは2万円〜です。内容により金額が変わります。");
+      notes.push("一部オリジナル対応は2万円〜で、基本の1万円に加わります。内容により金額が変わります。");
     }
     if (state.custom === "full") notes.push("全体の独自構成は個別見積もりです。その費用は上の金額に含まれていません。");
     if (state.wp) {
       total += 50000;
-      notes.push("WordPress対応は5万円〜です。別途サーバー実費が必要です。追加機能・プラグインは別途見積もりです。");
+      notes.push("WordPress化は5万円〜で、基本の1万円に加わります。管理画面と問い合わせフォームが基本範囲です。追加機能は別途見積です。");
     }
     if (state.support === "online") {
-      total += 10000;
-      notes.push("オンラインサポートは1回・最大3時間。超過は30分ごとに1000円追加です。");
+      total += 1500;
+      notes.push("画面共有サポートは30分1,500円です。それを超える場合は、内容を確認してから金額をご案内します。");
     }
     if (state.support === "visit") notes.push("訪問サポートは5万円〜です。基本プランを含みます。訪問先による追加料金は別途です。");
     const from = state.custom === "partial" || state.wp || state.support === "visit";
@@ -23279,9 +23277,9 @@
   }
 
   function samplePriceMailLabel(state) {
-    const domain = { github: "GitHub Pages", own: "自分の独自ドメイン", managed: "独自ドメインの取得・管理も依頼" };
+    const domain = { github: "GitHub Pages", own: "独自ドメイン（接続料金なし）", managed: "独自ドメイン（接続料金なし）" };
     const custom = { none: "なし", partial: "一部", full: "全体" };
-    const support = { none: "自分で進める", online: "オンラインサポート", visit: "訪問サポート" };
+    const support = { none: "自分で進める", online: "画面共有サポート（30分）", visit: "訪問サポート" };
     return {
       domain: domain[state.domain] || "GitHub Pages",
       custom: custom[state.custom] || "なし",

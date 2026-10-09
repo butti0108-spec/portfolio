@@ -8312,6 +8312,17 @@ body.is-sample-zip-step details[data-step-id="finish"] > :not(summary):not(#samp
   opacity: 0.45;
   cursor: not-allowed;
 }
+.sample-own-domain {
+  margin: 0.35rem 0 0.7rem 1.6rem;
+}
+.sample-own-domain label {
+  display: block;
+}
+.sample-own-domain input {
+  display: block;
+  width: min(100%, 22rem);
+  margin-top: 0.3rem;
+}
 .sample-price-group legend {
   margin-bottom: 0.45rem;
   font-size: 1rem;

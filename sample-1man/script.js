@@ -23232,6 +23232,22 @@
     });
   }
 
+  function sampleOwnDomainName() {
+    const el = document.getElementById("sample-own-domain-name");
+    return el ? el.value.trim() : "";
+  }
+
+  function sampleOrderReady() {
+    if (!sampleOrderChecksDone()) return false;
+    if (samplePriceState().domain === "own" && !sampleOwnDomainName()) return false;
+    return true;
+  }
+
+  function syncOwnDomainField() {
+    const box = document.getElementById("sample-own-domain");
+    if (box) box.hidden = samplePriceState().domain !== "own";
+  }
+
   function samplePriceState() {
     function picked(name, fallback) {
       const el = form.querySelector('input[name="' + name + '"]:checked');
@@ -23256,7 +23272,7 @@
     let total = state.support === "visit" ? 50000 : 10000;
     const notes = [];
     if (state.domain === "own" || state.domain === "managed") {
-      notes.push("独自ドメインの接続料金は無料です。向き先の設定はお客様が行います。設定方法が分からないときは、画面共有サポート（30分1,500円）を利用できます。");
+      notes.push("独自ドメインの接続料金は無料です。やり方が分からなければ、画面共有サポート（30分1,500円）を利用できます。");
     }
     if (state.custom === "partial") {
       total += 20000;
@@ -23297,13 +23313,16 @@
     const lines = [
       "ホームページの制作・公開を希望します。",
       "【希望内容】",
-      "URL：" + label.domain,
+      "URL：" + label.domain
+    ];
+    if (state.domain === "own") lines.push("使いたいアドレス：" + sampleOwnDomainName());
+    lines.push(
       "独自レイアウト：" + label.custom,
       "WordPress：" + label.wp,
       "サポート：" + label.support,
       "【シミュレーター表示額】",
       "最低見積もり金額：" + formatTaxPrice(price.total) + (price.from ? "から" : "")
-    ];
+    );
     price.notes.forEach(function (note) {
       lines.push(note);
     });
@@ -23330,6 +23349,7 @@
   }
 
   function renderSampleZipBranch() {
+    syncOwnDomainField();
     const root = document.getElementById("sample-zip-branch");
     if (!root) return;
     const sample = isSampleZipScreen();
@@ -23345,13 +23365,16 @@
     if (save) save.hidden = route !== "save";
     if (order) order.hidden = route !== "order";
     const checksOk = sampleOrderChecksDone();
+    const ready = sampleOrderReady();
     const orderBtn = document.getElementById("sample-order-zip");
     const zipWrap = document.getElementById("sample-order-zip-wrap");
     const hint = document.getElementById("sample-order-zip-hint");
-    if (orderBtn) orderBtn.disabled = !checksOk;
-    if (zipWrap) zipWrap.classList.toggle("is-locked", route === "order" && !checksOk);
+    if (orderBtn) orderBtn.disabled = !ready;
+    if (zipWrap) zipWrap.classList.toggle("is-locked", route === "order" && !ready);
     if (hint && route === "order" && !store.sampleOrderMailReady) {
-      hint.textContent = checksOk ? "" : "全ての最終確認にチェックを入れてください。";
+      if (!checksOk) hint.textContent = "全ての最終確認にチェックを入れてください。";
+      else if (samplePriceState().domain === "own" && !sampleOwnDomainName()) hint.textContent = "使いたいアドレスを入れてください。";
+      else hint.textContent = "";
     }
     const mail = document.getElementById("sample-order-mail");
     if (mail) mail.hidden = !(route === "order" && store.sampleOrderMailReady);
@@ -23412,7 +23435,7 @@
     }
     if (orderBtn) {
       orderBtn.addEventListener("click", function () {
-        if (!sampleOrderChecksDone()) {
+        if (!sampleOrderReady()) {
           renderSampleZipBranch();
           return;
         }
@@ -23433,6 +23456,8 @@
         el.addEventListener("change", renderSampleZipBranch);
       });
     });
+    const ownDomainInput = document.getElementById("sample-own-domain-name");
+    if (ownDomainInput) ownDomainInput.addEventListener("input", renderSampleZipBranch);
     if (mailOpen) {
       mailOpen.addEventListener("click", function () {
         openSampleOrderMail();
@@ -26408,6 +26433,7 @@
     const meta = collectSettings();
     meta.colorFinalAck = true;
     meta.freeRevisionNote = "作成後の無料修正は1回のみ";
+    if (samplePriceState().domain === "own") meta.ownDomain = sampleOwnDomainName();
     const zip = new JSZip();
     zip.file("order.json", JSON.stringify(meta, null, 2));
 
@@ -26425,6 +26451,7 @@
       "画像・文字の確定: " + JSON.stringify(meta.confirmed),
       "色最終確認: はい",
       "無料修正: 作成後1回のみ",
+      "使いたいアドレス: " + (meta.ownDomain || "(なし)"),
       "URLローマ字希望: " + ((meta.fields && meta.fields.url_slug_wish) || "(なし)"),
       "",
       "—— 入力欄 ——",

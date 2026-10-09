@@ -65,7 +65,7 @@
   <script src="sushi-belt.js?v=sushi-select-20261009" defer></script>
   <script src="free-photo-gallery/gallery.js?v=gallery-act-20261001" defer></script>
   <script src="page-shutter.js?v=sample-only-20260929" defer></script>
-  <script src="script.js?v=price-after-color-20261009" defer></script>
+  <script src="script.js?v=own-domain-20261009" defer></script>
   <script>
     (function () {
       var h = location.hostname;
@@ -1586,7 +1586,11 @@
                     <fieldset class="sample-price-group">
                       <legend>URL</legend>
                       <label class="check"><input type="radio" name="sample_price_domain" value="github" checked> GitHub PagesのURLを使う（追加料金なし）</label>
-                      <label class="check"><input type="radio" name="sample_price_domain" value="own"> 独自ドメインを使う（接続料金なし。向き先の設定はお客様）</label>
+                      <label class="check"><input type="radio" name="sample_price_domain" value="own"> 独自ドメインを使う（接続料金なし）</label>
+                      <div id="sample-own-domain" class="sample-own-domain" hidden>
+                        <label>使いたいアドレス <input type="text" id="sample-own-domain-name" name="sample_own_domain" placeholder="example.com" autocomplete="off"></label>
+                        <p class="dash-note">やり方が分からなければ、画面を見ながら案内できます。</p>
+                      </div>
                     </fieldset>
                     <fieldset class="sample-price-group">
                       <legend>独自レイアウト</legend>

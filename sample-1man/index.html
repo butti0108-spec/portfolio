@@ -12,7 +12,7 @@
   <!-- メーカー親CSS（ポートフォリオ根の style.css は読まない） -->
   <link rel="stylesheet" href="maker-base.css?v=font-heading-scope-20261002">
   <link rel="icon" href="brand/walker-favicon.png?v=walker-20261002" type="image/png">
-  <link rel="stylesheet" href="sample-overrides.css?v=catch-off-meter-20261005">
+  <link rel="stylesheet" href="sample-overrides.css?v=listing-move-20261009">
   <link rel="stylesheet" href="free-photo-gallery/gallery.css?v=omakase-ok-20260929">
   <script>
     (function () {
@@ -61,11 +61,11 @@
   <script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js" defer></script>
   <script src="vibe-dict.js" defer></script>
   <script src="easy-copy-dict.js?v=char-fit-20261004" defer></script>
-  <script src="copy-dict-engine.js?v=scene-map-20261009" defer></script>
-  <script src="sushi-belt.js?v=six-fix-20261004" defer></script>
+  <script src="copy-dict-engine.js?v=purpose-scene-20261009" defer></script>
+  <script src="sushi-belt.js?v=sushi-select-20261009" defer></script>
   <script src="free-photo-gallery/gallery.js?v=gallery-act-20261001" defer></script>
   <script src="page-shutter.js?v=sample-only-20260929" defer></script>
-  <script src="script.js?v=img-back2-20261009" defer></script>
+  <script src="script.js?v=color-bars-imgback-20261009" defer></script>
   <script>
     (function () {
       var h = location.hostname;
@@ -256,21 +256,29 @@
           </div>
           <div class="sushi-upper-band">
             <div class="sushi-side sushi-side--add">
+              <ul class="sushi-sample-note">
+                <li>見本は、<strong class="sushi-note-em">レイアウトと色合い</strong>の見本となります。</li>
+                <li><strong class="sushi-note-em">業種関係なく</strong>見た目のイメージでお選びください。</li>
+              </ul>
               <p class="sushi-flow-guide sushi-flow-guide--add">
-                <span class="sushi-flow-line"><span class="sushi-flow-num" aria-hidden="true">①</span><span class="sushi-flow-words">クリックして見本追加</span></span>
+                <span class="sushi-flow-line"><span class="sushi-flow-num" aria-hidden="true">①</span><span class="sushi-flow-words">選択して見本追加</span></span>
                 <span class="sushi-flow-arrow sushi-flow-arrow--down" aria-hidden="true"></span>
               </p>
             </div>
             <div class="sushi-stock-bar" id="sushi-stock-bar" aria-label="上の枠（最大3）"></div>
             <div class="sushi-side sushi-side--confirm">
               <p class="sushi-flow-guide sushi-flow-guide--confirm">
-                <span class="sushi-flow-line"><span class="sushi-flow-arrow sushi-flow-arrow--left" aria-hidden="true"></span><span class="sushi-flow-num" aria-hidden="true">②</span><span class="sushi-flow-words">クリックして確定</span></span>
+                <span class="sushi-flow-line"><span class="sushi-flow-arrow sushi-flow-arrow--left" aria-hidden="true"></span><span class="sushi-flow-num" aria-hidden="true">②</span><span class="sushi-flow-words">選択して確定</span></span>
               </p>
+              <ul class="sushi-sample-note">
+                <li>作成画面の画像と文章は、<strong class="sushi-note-em">自身でご用意</strong>ください。</li>
+                <li>見本の画像は、<strong class="sushi-note-em">ギャラリー</strong>からもご利用いただけます。</li>
+              </ul>
             </div>
           </div>
         </div>
         <div class="sushi-lane-wrap">
-          <div class="sushi-lane" id="sushi-lane" aria-label="見本の列（短くクリックで上の枠へ。ドラッグで送れます）">
+          <div class="sushi-lane" id="sushi-lane" aria-label="見本の列（短く選択で上の枠へ。ドラッグで送れます）">
             <div class="sushi-lane-track" id="sushi-lane-track"></div>
           </div>
         </div>
@@ -299,11 +307,11 @@
             <div class="sushi-guide-body">
               <section class="sushi-guide-block">
                 <h3 class="sushi-guide-heading">① 見本を追加する</h3>
-                <p class="sushi-guide-text">下の見本をクリックすると、上の枠に入ります。</p>
+                <p class="sushi-guide-text">見本を選択すると、上の枠に入ります。</p>
               </section>
               <section class="sushi-guide-block">
                 <h3 class="sushi-guide-heading">② 見本を確定する</h3>
-                <p class="sushi-guide-text">上の枠をクリックすると、その見本で進められます。</p>
+                <p class="sushi-guide-text">上の枠を選択すると、その見本で進められます。</p>
               </section>
               <section class="sushi-guide-block">
                 <h3 class="sushi-guide-heading">大きく見たいとき</h3>

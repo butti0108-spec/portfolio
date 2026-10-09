@@ -99,8 +99,7 @@
       return map[purpose];
     }
     if (opts.sceneTag) return opts.sceneTag;
-    var fromSample = sceneFromSampleKey(opts.sampleKey);
-    if (fromSample) return fromSample;
+    /* 見本の業種は文章例に使わない。店は寄せ先が空なのでカフェの文 */
     return (cache.meta && cache.meta.fallbackScene) || "cafe";
   }
 

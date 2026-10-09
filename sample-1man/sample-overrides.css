@@ -9102,6 +9102,12 @@ body.wizard-mode #easy-img-layout-host .layout-arrange-actions {
   object-fit: cover;
   object-position: 50% 0%;
 }
+/* 写真が無いタグは、ブラウザの雲と山（画像なし印）を出さない */
+.preview-site img.hero-photo:not([src]),
+.preview-site img.skill-card-img:not([src]),
+.preview-site img.work-thumb:not([src]) {
+  visibility: hidden;
+}
 .preview-site .hero-copy {
   min-width: 0;
   min-height: 0;
@@ -9555,6 +9561,29 @@ body.atelier.color-mode-easy .zone-badge[data-open-step="site-fonts"] {
   margin-bottom: 0.85rem;
 }
 
+.sushi-sample-note {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-size: 0.78rem;
+  line-height: 1.55;
+  color: #152028;
+  text-align: left;
+}
+.sushi-sample-note li::before {
+  content: "・";
+}
+.sushi-note-em {
+  font-weight: 700;
+}
+.sushi-sample-note-more {
+  margin: 0;
+  font-size: 0.84rem;
+  line-height: 1.55;
+  color: #152028;
+  text-align: left;
+}
+
 /* ?1?2?3??????????????????? */
 .sushi-chrome {
   display: flex;
@@ -9592,31 +9621,36 @@ body.atelier.color-mode-easy .zone-badge[data-open-step="site-fonts"] {
 */
 .sushi-upper-band {
   display: grid;
-  grid-template-columns: minmax(11.5rem, 1.1fr) auto minmax(11.5rem, 1.1fr);
-  align-items: center;
-  /* ?????????????? padding ??1??? */
-  column-gap: 0.25rem;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
+  align-items: stretch;
+  column-gap: 0.7rem;
   row-gap: 0;
   padding: 0.45rem 0.35rem 0;
   min-width: 0;
 }
 .sushi-side {
   display: flex;
-  align-items: center;
+  flex-direction: column;
+  align-items: flex-start;
+  align-self: stretch;
+  justify-content: space-between;
+  text-align: left;
+  gap: 0.7rem;
   min-width: 0;
-  padding-inline: 0.35rem;
+  max-width: 100%;
 }
 .sushi-side--add {
-  /* ??3????????????? */
-  align-self: center;
-  justify-content: center;
-  padding-bottom: 0;
+  justify-self: end;
+  padding: 0.6rem 0.15rem 0.6rem 0;
 }
 .sushi-side--confirm {
-  /* ??????????padding ?1?????? */
-  justify-content: flex-start;
-  padding-left: 1.45rem;
-  padding-right: 0.35rem;
+  justify-self: start;
+  padding: 0.6rem 0.15rem 0.6rem 0.35rem;
+}
+.sushi-side .sushi-sample-note {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
 }
 
 .sushi-stock-bar {
@@ -9711,18 +9745,17 @@ body.atelier.color-mode-easy .zone-badge[data-open-step="site-fonts"] {
   line-height: 1.35;
   letter-spacing: 0.01em;
 }
-.sushi-flow-guide--add {
+.sushi-flow-guide--add,
+.sushi-flow-guide--confirm {
   display: flex;
   flex-direction: column;
-  align-items: stretch;
+  align-items: flex-start;
   text-align: left;
   width: max-content;
   max-width: 100%;
 }
-.sushi-flow-guide--confirm {
-  text-align: left;
-  width: max-content;
-  max-width: 100%;
+.sushi-flow-guide--add {
+  align-items: center;
 }
 .sushi-flow-line {
   display: inline-flex;
@@ -9752,7 +9785,7 @@ body.atelier.color-mode-easy .zone-badge[data-open-step="site-fonts"] {
   display: block;
   width: 0;
   height: 0;
-  margin: 0.15rem auto 0;
+  margin: 0.12rem 0 0 0.2rem;
   border-style: solid;
   border-width: 0.72em 0.48em 0;
   border-color: currentColor transparent transparent;
@@ -9762,6 +9795,16 @@ body.atelier.color-mode-easy .zone-badge[data-open-step="site-fonts"] {
   width: 0;
   margin-left: auto;
   margin-right: auto;
+}
+.sushi-flow-arrow--up {
+  display: block;
+  width: 0;
+  height: 0;
+  margin: 0 auto 0.15rem;
+  border-style: solid;
+  border-width: 0 0.48em 0.72em;
+  border-color: transparent transparent currentColor;
+  font-size: 0.95rem;
 }
 .sushi-flow-arrow--left {
   display: inline-block;
@@ -9777,17 +9820,8 @@ body.atelier.color-mode-easy .zone-badge[data-open-step="site-fonts"] {
 
 @media (max-width: 720px) {
   .sushi-upper-band {
-    grid-template-columns: 1fr 1fr;
-    grid-template-areas:
-      "stock stock"
-      "add confirm";
-    row-gap: 0.45rem;
-    column-gap: 0.4rem;
     padding: 0.3rem 0.2rem;
   }
-  .sushi-stock-bar { grid-area: stock; }
-  .sushi-side--add { grid-area: add; padding-inline: 0.2rem; }
-  .sushi-side--confirm { grid-area: confirm; padding-inline: 0.2rem; }
   .sushi-flow-guide {
     font-size: 1.15rem;
   }
@@ -11911,7 +11945,7 @@ body.is-blank-canvas .preview-site .skill-card:not(.is-user-upload) .skill-card-
 body.is-blank-canvas .preview-site .work-item:not(:has(.is-user-upload)) .work-thumb {
   opacity: 0;
 }
-body.is-blank-canvas .preview-site .work-link[hidden] {
+body:not(.is-embed-preview) .preview-site .work-link[hidden] {
   display: none !important;
 }
 body.is-blank-canvas .preview-site .profile-name:empty,
@@ -16478,6 +16512,9 @@ body.is-catch-inline #btn-zip {
   border-color: #c5ced6;
   outline: 1px solid #3d8a48;
   outline-offset: 3px;
+}
+.easy-listing-btn.is-off-start {
+  margin-top: 0.85rem;
 }
 .easy-copy-name-line {
   display: block;

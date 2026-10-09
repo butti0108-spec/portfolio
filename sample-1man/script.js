@@ -2287,6 +2287,7 @@
     saveMode: null,
     entryBranch: null,
     blankCanvas: false,
+    sampleWordsReleased: false,
     hubEntrySource: null,
     easyFlowActive: false,
     easyDirectOpen: false,
@@ -4259,6 +4260,7 @@
       projectFolderName: store.projectFolderName || "",
       entryBranch: store.entryBranch,
       blankCanvas: !!store.blankCanvas,
+      sampleWordsReleased: !!store.sampleWordsReleased,
       hubEntrySource: store.hubEntrySource,
       easyFlowActive: !!store.easyFlowActive,
       easyDirectOpen: !!store.easyDirectOpen,
@@ -7478,7 +7480,7 @@
       if (name === "logo_image") {
         el.hidden = true;
         el.removeAttribute("src");
-      } else if (store.blankCanvas) {
+      } else if (store.blankCanvas || store.sampleWordsReleased) {
         el.removeAttribute("src");
         el.alt = "";
       } else if (IMAGE_DEFAULTS[name]) {
@@ -7590,6 +7592,7 @@
   }
 
   function ensureSampleBrandName(draft) {
+    if (store.sampleWordsReleased) return Promise.resolve("");
     const current = String(fieldValue("brand_name") || "").trim();
     if (!isPlaceholderBrand(current)) {
       store.sushiSampleBrand = current;
@@ -8001,7 +8004,14 @@
   }
 
   function purposeField(name) {
-    if (store.blankCanvas) return "";
+    if (
+      name !== "about_section_name" &&
+      name !== "works_section_name" &&
+      name !== "contact_section_name" &&
+      name !== "contact_label"
+    ) {
+      return "";
+    }
     const pack = store.sitePurpose && PURPOSE_PACKS[store.sitePurpose];
     if (!pack || !pack.fields) return "";
     return String(pack.fields[name] || "");
@@ -8017,14 +8027,9 @@
   /** 入力があれば入力、空なら用途の例文、それもなければハードフォールバック */
   function resolvePreviewText(raw, fieldName, hardFallback) {
     if (raw != null && String(raw).trim() !== "") return String(raw).trim();
-    if (store.blankCanvas) {
-      if (BLANK_SECTION_TITLES[fieldName] && hardFallback != null && String(hardFallback).trim() !== "") {
-        return String(hardFallback).trim();
-      }
-      return "";
-    }
     const purpose = purposeField(fieldName);
     if (purpose) return purpose;
+    if (store.blankCanvas || store.sampleWordsReleased) return "";
     if (hardFallback != null && String(hardFallback).trim() !== "") return String(hardFallback).trim();
     return "";
   }
@@ -8476,7 +8481,7 @@
   }
 
   function sampleDefaultSrc(name) {
-    if (store.blankCanvas) return "";
+    if (store.blankCanvas || store.sampleWordsReleased) return "";
     const src = IMAGE_DEFAULTS[name];
     if (src == null) return "";
     const text = String(src).trim();
@@ -9963,31 +9968,186 @@
   function samplePreviewBrand() {
     const own = homepageName();
     if (own) return own;
-    if (store.blankCanvas) return "";
+    if (store.blankCanvas || store.sampleWordsReleased) return "";
     const brand = String(store.sushiSampleBrand || "").trim();
     if (!brand || isPlaceholderBrand(brand)) return "";
     return brand;
+  }
+
+  function listingFaceLabel(meta) {
+    const purposeKey = {
+      accordions: "about_section_name",
+      works: "works_section_name",
+      contact: "contact_section_name"
+    }[meta.id];
+    if (purposeKey) {
+      const live = resolvePreviewText(fieldValue(purposeKey), purposeKey, "");
+      if (live) return live;
+    }
+    const idMap = {
+      accordions: "about-label",
+      photos: "about-photos-label",
+      works: "works-label",
+      contact: "contact-label"
+    };
+    const elId = idMap[meta.id];
+    if (elId) {
+      const el = document.getElementById(elId);
+      const text = el && String(el.textContent || "").trim();
+      if (text) return text;
+    }
+    if (meta.extraKey) {
+      const sec = root.querySelector(meta.selector);
+      const heading = sec && sec.querySelector("h2");
+      const text = heading && String(heading.textContent || "").trim();
+      if (text) return text;
+    }
+    return meta.label;
+  }
+
+  function listingInsertNeighbors(blockId) {
+    const order = normalizeLayoutOrder(store.layoutOrder);
+    const idx = order.indexOf(blockId);
+    let prev = null;
+    let next = null;
+    for (let i = idx - 1; i >= 0; i -= 1) {
+      const meta = LAYOUT_BLOCKS.find(function (b) { return b.id === order[i]; });
+      if (meta && isLayoutBlockActive(meta)) {
+        prev = meta;
+        break;
+      }
+    }
+    for (let i = idx + 1; i < order.length; i += 1) {
+      const meta = LAYOUT_BLOCKS.find(function (b) { return b.id === order[i]; });
+      if (meta && isLayoutBlockActive(meta)) {
+        next = meta;
+        break;
+      }
+    }
+    return { prev: prev, next: next };
+  }
+
+  function animatePreviewAlign(el, place) {
+    return new Promise(function (resolve) {
+      const scroll = document.querySelector(".preview-scroll");
+      const vp = document.getElementById("preview-viewport");
+      const pane = document.querySelector(".preview-pane");
+      const reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      if (!scroll || !el || (pane && getComputedStyle(pane).display === "none") || reduce) {
+        resolve();
+        return;
+      }
+      const zoom = previewZoomFactor() || 1;
+      if (vp) vp.style.paddingBottom = Math.ceil(scroll.clientHeight / zoom) + "px";
+      const start = performance.now();
+      let ratio = zoom;
+      function aimFor() {
+        const scrollRect = scroll.getBoundingClientRect();
+        return scrollRect.top + (place === "bottom" ? Math.min(168, scrollRect.height * 0.32) : 16);
+      }
+      function targetDelta() {
+        const rect = el.getBoundingClientRect();
+        const edge = place === "bottom" ? rect.bottom : rect.top;
+        return edge - aimFor();
+      }
+      function step(now) {
+        const delta = targetDelta();
+        if (Math.abs(delta) <= 10 || now - start > 780) {
+          resolve();
+          return;
+        }
+        const before = scroll.scrollTop;
+        const max = Math.max(0, scroll.scrollHeight - scroll.clientHeight);
+        const move = delta * ratio * 0.38;
+        scroll.scrollTop = Math.max(0, Math.min(max, before + move));
+        const movedLayout = delta - targetDelta();
+        const movedScroll = scroll.scrollTop - before;
+        if (Math.abs(movedLayout) > 0.5 && Math.abs(movedScroll) > 0.5) {
+          const nextRatio = movedScroll / movedLayout;
+          if (nextRatio > 0.05 && nextRatio < 12) ratio = nextRatio;
+        }
+        if (max <= 1 || Math.abs(scroll.scrollTop - before) < 0.5) {
+          resolve();
+          return;
+        }
+        window.requestAnimationFrame(step);
+      }
+      window.requestAnimationFrame(step);
+    });
+  }
+
+  function previewSectionEl(blockId) {
+    const meta = LAYOUT_BLOCKS.find(function (b) { return b.id === blockId; });
+    if (!meta) return null;
+    return root.querySelector(meta.selector);
+  }
+
+  function finishListingToggle(meta, turningOn) {
+    commitLayoutBlockVisibility(meta.id, turningOn);
+    renderEasyListingUi();
+    syncLayoutColorRows();
+    syncEasyFlowMeter();
+    const shown = previewSectionEl(meta.id);
+    if (!turningOn || !shown) return Promise.resolve();
+    const scroll = document.querySelector(".preview-scroll");
+    if (!scroll) return Promise.resolve();
+    const rect = shown.getBoundingClientRect();
+    const box = scroll.getBoundingClientRect();
+    if (rect.top >= box.top + 8 && rect.top <= box.bottom - 48) return Promise.resolve();
+    return animatePreviewAlign(shown, "top");
   }
 
   function renderEasyListingUi() {
     const host = document.getElementById("easy-listing-host");
     if (!host) return;
     host.innerHTML = "";
-    LAYOUT_BLOCKS.forEach(function (meta) {
+    const onList = [];
+    const offList = [];
+    normalizeLayoutOrder(store.layoutOrder).forEach(function (id) {
+      const meta = LAYOUT_BLOCKS.find(function (b) { return b.id === id; });
+      if (!meta) return;
+      if (isLayoutBlockActive(meta)) onList.push(meta);
+      else offList.push(meta);
+    });
+    function addButton(meta, offStart) {
       const on = isLayoutBlockActive(meta);
+      const label = listingFaceLabel(meta);
       const btn = document.createElement("button");
       btn.type = "button";
-      btn.className = "easy-listing-btn" + (on ? " is-on" : "");
-      btn.textContent = meta.label;
+      btn.className = "easy-listing-btn" + (on ? " is-on" : "") + (offStart ? " is-off-start" : "");
+      btn.textContent = label;
       btn.setAttribute("aria-pressed", on ? "true" : "false");
       btn.addEventListener("click", function () {
-        commitLayoutBlockVisibility(meta.id, !isLayoutBlockActive(meta));
-        renderEasyListingUi();
-        syncLayoutColorRows();
-        syncEasyFlowMeter();
+        if (host.dataset.busy === "1") return;
+        const turningOn = !isLayoutBlockActive(meta);
+        if (!turningOn && countVisibleLayoutBlocks() <= 1) {
+          commitLayoutBlockVisibility(meta.id, false);
+          return;
+        }
+        host.dataset.busy = "1";
+        const section = previewSectionEl(meta.id);
+        let move = Promise.resolve();
+        if (!turningOn && section) move = animatePreviewAlign(section, "top");
+        else if (turningOn) {
+          const near = listingInsertNeighbors(meta.id);
+          if (near.prev) move = animatePreviewAlign(previewSectionEl(near.prev.id), "bottom");
+          else if (near.next) move = animatePreviewAlign(previewSectionEl(near.next.id), "top");
+        }
+        move.then(function () {
+          return new Promise(function (resolve) {
+            window.setTimeout(resolve, 520);
+          });
+        }).then(function () {
+          return finishListingToggle(meta, turningOn);
+        }).then(function () {
+          const again = document.getElementById("easy-listing-host");
+          if (again) delete again.dataset.busy;
+        });
       });
       host.appendChild(btn);
-    });
+    }
+    onList.forEach(function (meta) { addButton(meta, false); });
+    offList.forEach(function (meta, i) { addButton(meta, i === 0 && onList.length > 0); });
   }
 
   function placeSiteNameBack() {
@@ -14216,7 +14376,6 @@
   }
 
   function copyFieldSkipsOmakase(key) {
-    if (store.blankCanvas) return true;
     if (key === "contact_email" || key === "address_text" || key === "access_text" || key === "about_name") return true;
     if (key === "announce_label" || key === "announce_url") return true;
     if (/^work_\d+_url$/.test(key) || /^work_\d+_link_label$/.test(key)) return true;
@@ -15481,6 +15640,20 @@
     return !!(store.pendingSushi && store.pendingSushi.draft);
   }
 
+  function easyPreviewColorBars(preset) {
+    const keys = ["pageBg", "chromeBg", "accent", "cardBg", "valuesBg", "contactBg"];
+    const out = [];
+    const seen = {};
+    keys.forEach(function (key) {
+      const raw = String(preset[key] || "").trim();
+      const hex = raw.toLowerCase();
+      if (!hex || seen[hex]) return;
+      seen[hex] = true;
+      out.push(raw);
+    });
+    return out;
+  }
+
   function paintEasyColorBars() {
     const row = document.getElementById("entry-sample-color-row");
     if (!row) return;
@@ -15488,11 +15661,12 @@
       const label = bars.closest("label");
       const input = label && label.querySelector('input[name="entry_sample_color"]');
       const preset = input && PRESETS[input.value];
+      bars.textContent = "";
       if (!preset) return;
-      const keys = ["pageBg", "chromeBg", "accent"];
-      const marks = bars.querySelectorAll("i");
-      keys.forEach(function (key, i) {
-        if (marks[i] && preset[key]) marks[i].style.background = preset[key];
+      easyPreviewColorBars(preset).forEach(function (hex) {
+        const mark = document.createElement("i");
+        mark.style.background = hex;
+        bars.appendChild(mark);
       });
     });
   }
@@ -15509,6 +15683,33 @@
     }
   }
 
+  function releaseSampleWordsAndImages(purposeKey) {
+    store.sampleWordsReleased = true;
+    clearBlankCanvasFields();
+    applyPurposeSectionNames(purposeKey);
+    if (typeof LIVE_IMAGE_INPUT_NAMES !== "undefined" && LIVE_IMAGE_INPUT_NAMES.forEach) {
+      LIVE_IMAGE_INPUT_NAMES.forEach(function (name) {
+        if (imageUrls[name]) {
+          try { URL.revokeObjectURL(imageUrls[name]); } catch (e) { /* ignore */ }
+          delete imageUrls[name];
+        }
+        const input = form.elements.namedItem(name);
+        if (input) input.value = "";
+      });
+    }
+    store.sampleFlowImagePaths = null;
+    store.sampleKeptImagePaths = {};
+    store.heroTextOnPhoto = false;
+    store.copyHeroOnPhoto = false;
+    store.catchWordsOn = false;
+    setFieldValue("brand_name", "");
+    store.siteNameConfirmed = false;
+    store.sushiSampleBrand = "";
+    applyAllConfirmed();
+    applyHeroImageOffState();
+    applyHeroTextOverlay();
+  }
+
   function applyPurposeSectionNames(purposeKey) {
     const pack = PURPOSE_PACKS[purposeKey];
     if (!pack || !pack.fields) return;
@@ -15517,7 +15718,7 @@
       form.querySelector('input[name="site_purpose"][value="' + purposeKey + '"]') ||
       document.querySelector('input[name="site_purpose"][value="' + purposeKey + '"]');
     if (purposeRadio) purposeRadio.checked = true;
-    ["about_section_name", "works_section_name"].forEach(function (name) {
+    ["about_section_name", "works_section_name", "contact_section_name", "contact_label"].forEach(function (name) {
       if (String(fieldValue(name) || "").trim()) return;
       if (pack.fields[name]) setFieldValue(name, pack.fields[name]);
     });
@@ -15551,8 +15752,9 @@
     store.entryBranch = "sample";
     store.easyFlowActive = true;
     store.hubEntrySource = "sample";
+    store.sampleWordsReleased = true;
     applySushiSampleDraft(draft);
-    applyPurposeSectionNames(purposeKey);
+    releaseSampleWordsAndImages(purposeKey);
     if (store.pendingSushi && store.pendingSushi.sample && store.pendingSushi.sample.brand) {
       store.sushiSampleBrand = store.pendingSushi.sample.brand;
     }
@@ -15591,8 +15793,9 @@
     store.entryBranch = "sample";
     store.easyFlowActive = true;
     store.hubEntrySource = "sample";
+    store.sampleWordsReleased = true;
     applySushiSampleDraft(draft);
-    applyPurposeSectionNames(purposeKey);
+    releaseSampleWordsAndImages(purposeKey);
     if (colorVal !== "keep" && PRESETS[colorVal]) {
       applyPresetByKey(colorVal);
       confirmAllColorStepsFromPreset();
@@ -15681,6 +15884,7 @@
     if (keep) keep.checked = true;
 
     clearBlankCanvasFields();
+    applyPurposeSectionNames(purpose);
     LIVE_IMAGE_INPUT_NAMES.forEach(function (name) {
       if (imageUrls[name]) {
         try { URL.revokeObjectURL(imageUrls[name]); } catch (e) { /* ignore */ }
@@ -18041,9 +18245,8 @@
   function applyFilledText(el, value, fallback) {
     if (!el) return;
     const typed = value != null && String(value).trim() !== "" ? String(value).trim() : "";
-    if (store.blankCanvas) {
-      const keep = typed || (["開く項目", "カード", "ご連絡"].indexOf(String(fallback || "").trim()) >= 0 ? String(fallback).trim() : "");
-      el.textContent = keep;
+    if (store.blankCanvas || store.sampleWordsReleased) {
+      el.textContent = typed;
       return;
     }
     const v = typed || fallback;
@@ -25709,9 +25912,10 @@
         projectFolderName: store.projectFolderName || "",
         entryBranch: store.entryBranch,
         blankCanvas: !!store.blankCanvas,
+        sampleWordsReleased: !!store.sampleWordsReleased,
         hubEntrySource: store.hubEntrySource,
         easyFlowActive: !!store.easyFlowActive,
-      easyDirectOpen: !!store.easyDirectOpen,
+        easyDirectOpen: !!store.easyDirectOpen,
         easyKusudamaPlayed: !!store.easyKusudamaPlayed,
         announceLinkOn: !!store.announceLinkOn,
         workLinkOn: Object.assign({}, store.workLinkOn || {}),
@@ -25856,6 +26060,7 @@
         store.entryBranch = data.entryBranch === "easy" ? "sample" : data.entryBranch;
       }
       store.blankCanvas = !!data.blankCanvas;
+      store.sampleWordsReleased = !!data.sampleWordsReleased;
       if (
         data.hubEntrySource === "detail-entry" ||
         data.hubEntrySource === "easy-done" ||

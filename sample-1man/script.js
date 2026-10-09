@@ -9120,6 +9120,17 @@
         catchSavedAccordionId = null;
         catchSavedHeroInner = null;
       }
+      if (
+        step.id === "easy-img-wire" &&
+        prevStep &&
+        prevStep.id === "easy-catch" &&
+        !quietImageReturn
+      ) {
+        if (!store.layoutInnerByBlock) store.layoutInnerByBlock = {};
+        store.layoutInnerByBlock.hero = "";
+        if (store.layoutAccordionId === "hero") store.layoutAccordionId = "";
+        easyImgHistoryDepth = 0;
+      }
       parkEasyImageHost(step.id);
       if (step.id === "easy-img-wire") {
         setSampleFlowPreviewHidden(false);
@@ -16666,6 +16677,7 @@
       openEasyStage("確定");
       return;
     }
+    if (retreatEasyImageDrill()) return;
     if (store.sampleFinishNoBack && step && step.id === "finish" && store.entryBranch === "sample") {
       resumeSampleEasyFlow();
       store.easyGapReturn = "";
@@ -21537,6 +21549,52 @@
   function closeEasyImgSection(cell) {
     if (!cell) return;
     cell.open = false;
+  }
+
+  function closeEasyImgSectionToList(cell) {
+    if (!cell) return;
+    const id = cell.getAttribute("data-layout-block") || "";
+    const secBtn = cell.querySelector(".layout-section-open");
+    cell.open = false;
+    if (secBtn) {
+      secBtn.textContent = "開く";
+      secBtn.hidden = false;
+      secBtn.classList.remove("is-ok");
+      secBtn.setAttribute("aria-expanded", "false");
+    }
+    if (isLayoutImageBlock(id)) {
+      const countId = layoutImageCountId(id);
+      const openKey = countId || id;
+      if (!store.layoutInnerByBlock) store.layoutInnerByBlock = {};
+      store.layoutInnerByBlock[openKey] = "";
+      const body = cell.querySelector(".layout-arrange-body");
+      if (body) body.innerHTML = "";
+    }
+    if (store.layoutAccordionId === id) store.layoutAccordionId = "";
+    syncEasyImgLevels();
+  }
+
+  function retreatEasyImageDrill() {
+    const step = getCurrentFlowStep();
+    if (!step || step.id !== "easy-img-wire") return false;
+    const host = document.getElementById("easy-img-layout-host");
+    if (!host || host.closest("#easy-catch-img")) return false;
+    const openRow = host.querySelector(".layout-photo-row.is-open");
+    const openCellBefore = host.querySelector("details.layout-arrange-cell[open]");
+    if (!openRow && !openCellBefore) return false;
+    if (openRow) {
+      closeEasyImgSoloPhoto();
+      popEasyImgHistoryQuiet();
+    }
+    const openCell = host.querySelector("details.layout-arrange-cell[open]");
+    if (openCell) {
+      closeEasyImgSectionToList(openCell);
+      popEasyImgHistoryQuiet();
+    } else if (openRow && openCellBefore) {
+      popEasyImgHistoryQuiet();
+    }
+    updateWizardUi();
+    return true;
   }
 
   function closeEasyImgSoloPhoto() {

@@ -8,7 +8,7 @@
 |------|------|
 | `meta.json` | axis・section・keyword（方向チップ）対応 |
 | `presets.json` | おまかせ用。完成文は持たない。枠ごとの `axisId` 並び |
-| `scenes/_index.json` | scene → ファイル名。無い scene は `fallback` |
+| `scenes/scene-map.json` | scene → ファイル名。無い scene は `fallback` |
 | `scenes/<scene>.json` | 部品配列 |
 
 ## 部品フィールド

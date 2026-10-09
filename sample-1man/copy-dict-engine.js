@@ -66,7 +66,7 @@
 
   function ensureIndex() {
     if (cache.index) return Promise.resolve(cache.index);
-    return fetchJson(BASE + "scenes/_index.json").then(function (j) {
+    return fetchJson(BASE + "scenes/scene-map.json").then(function (j) {
       cache.index = j;
       return j;
     });

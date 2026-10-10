@@ -14225,7 +14225,9 @@ body.wizard-mode .dash-block.is-wizard-active {
 }
 body:has([data-step-id="easy-img-wire"].is-easy-drill) .wizard-foot-dock > :not(#wizard-nav),
 body:has([data-step-id="easy-img-wire"].is-easy-drill) #wizard-next,
-body:has([data-step-id="easy-img-wire"].is-easy-drill) #btn-zip {
+body:has([data-step-id="easy-img-wire"].is-easy-drill) #btn-zip,
+body:has([data-step-id="easy-img-wire"].is-section-solo) #wizard-back,
+body:has([data-step-id="easy-img-wire"].is-section-solo) .wizard-foot-dock {
   display: none !important;
 }
 #easy-img-layout-host.is-section-solo .layout-arrange-cell:not([open]),

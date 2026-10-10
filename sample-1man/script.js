@@ -1051,7 +1051,7 @@
       focalYById[slot] = ITEM_FOCAL_DEFAULT;
       scaleById[slot] = IMAGE_SCALE_DEFAULT;
     });
-    const gap = src && ITEM_GAP_STEPS.indexOf(src.gap) >= 0 ? src.gap : "normal";
+    const gap = "normal";
     const hasIdMap = src && src.sizeById && typeof src.sizeById === "object" && !Array.isArray(src.sizeById);
     if (hasIdMap) {
       slots.forEach((slot) => {
@@ -14759,30 +14759,6 @@
         countCluster.appendChild(plus);
         tools.appendChild(countCluster);
 
-        if (ITEM_LAYOUT_IDS.indexOf(sec.countId) >= 0) {
-          const layout = normalizeItemLayout(sec.countId);
-          const gapNow = (layout && layout.gap) || "normal";
-          const gapCluster = document.createElement("span");
-          gapCluster.className = "layout-gap-cluster";
-          const gapLead = document.createElement("span");
-          gapLead.className = "layout-gap-lead";
-          gapLead.textContent = "すき間";
-          gapCluster.appendChild(gapLead);
-          ITEM_GAP_STEPS.forEach(function (gap) {
-            const btn = document.createElement("button");
-            btn.type = "button";
-            btn.className = "layout-gap-btn" + (gap === gapNow ? " is-active" : "");
-            btn.textContent = ITEM_GAP_LABELS[gap];
-            btn.addEventListener("click", function (ev) {
-              ev.stopPropagation();
-              setItemGap(sec.countId, gap);
-              renderCopyListUi({ keepScroll: true });
-              scheduleSave();
-            });
-            gapCluster.appendChild(btn);
-          });
-          tools.appendChild(gapCluster);
-        }
         body.appendChild(tools);
 
         indices.forEach(function (itemIndex) {
@@ -19244,34 +19220,10 @@
   }
 
 
-  function buildLayoutGapRow(countId) {
-    if (ITEM_LAYOUT_IDS.indexOf(countId) < 0) return null;
-    const layout = normalizeItemLayout(countId);
-    const row = document.createElement("div");
-    row.className = "layout-gap-row";
-    row.setAttribute("data-gap-for", countId);
-    row.setAttribute("role", "group");
-    const gapKind = countId === "works-list" ? "カード同士のすき間" : "写真同士のすき間";
-    row.setAttribute("aria-label", gapKind);
-    const lead = document.createElement("span");
-    lead.className = "layout-gap-lead";
-    lead.textContent = "すき間";
-    row.appendChild(lead);
-    ITEM_GAP_STEPS.forEach((gap) => {
-      const btn = document.createElement("button");
-      btn.type = "button";
-      btn.className = "layout-gap-btn" + (layout && layout.gap === gap ? " is-active" : "");
-      btn.setAttribute("data-gap", gap);
-      btn.textContent = ITEM_GAP_LABELS[gap] || gap;
-      btn.addEventListener("click", (ev) => {
-        ev.preventDefault();
-        ev.stopPropagation();
-        setItemGap(countId, gap);
-      });
-      row.appendChild(btn);
-    });
-    return row;
+  function buildLayoutGapRow() {
+    return null;
   }
+
   function textStepHasEmptyRequired(stepId) {
     const block = form.querySelector('.dash-block[data-step-id="' + stepId + '"]');
     if (!block) return false;
@@ -21574,7 +21526,6 @@
   function appendLayoutHeadCountGap(head, blockId) {
     const countId = layoutImageCountId(blockId);
     const order = countId ? layoutBlockSlots(blockId) : [];
-    const layout = countId ? normalizeItemLayout(countId) : null;
     const meta = countId ? (COUNT_META[countId] || { min: 1, max: order.length || 1 }) : null;
     const minus = document.createElement("button");
     minus.type = "button";
@@ -21619,37 +21570,7 @@
       ev.preventDefault();
       ev.stopPropagation();
     });
-    const gapNow = (layout && layout.gap) || "normal";
-    const gapCluster = document.createElement("span");
-    gapCluster.className = "layout-gap-cluster";
-    if (countId) gapCluster.setAttribute("data-gap-for", countId);
-    const gapLead = document.createElement("span");
-    gapLead.className = "layout-gap-lead";
-    gapLead.textContent = "すき間調整";
-    gapCluster.appendChild(gapLead);
-    ITEM_GAP_STEPS.forEach((gap) => {
-      const btn = document.createElement("button");
-      btn.type = "button";
-      btn.className = "layout-gap-btn" + (countId && gap === gapNow ? " is-active" : "");
-      btn.setAttribute("data-gap", gap);
-      btn.textContent = ITEM_GAP_LABELS[gap];
-      if (!countId) {
-        btn.disabled = true;
-      } else {
-        btn.addEventListener("click", (ev) => {
-          stopSummaryToggle(ev);
-          setItemGap(countId, gap);
-        });
-      }
-      gapCluster.appendChild(btn);
-    });
-    gapCluster.addEventListener("click", (ev) => {
-      if (ev.target.closest(".layout-gap-btn:not(:disabled)")) return;
-      ev.preventDefault();
-      ev.stopPropagation();
-    });
     head.appendChild(countCluster);
-    head.appendChild(gapCluster);
   }
 
   let easyImgHistoryDepth = 0;
@@ -22066,8 +21987,7 @@
     const order = layoutBlockSlots(blockId);
     const layout = normalizeItemLayout(countId);
     const sizes = order.map((slot) => layoutSizeWord(layout && layout.sizeById ? layout.sizeById[slot] : "L"));
-    const gap = ITEM_GAP_LABELS[(layout && layout.gap) || "normal"] || "ふつう";
-    return "写真" + order.length + "枚　並び：" + (sizes.join("・") || "—") + "　すき間：" + gap;
+    return "写真" + order.length + "枚　並び：" + (sizes.join("・") || "—");
   }
 
   function buildLayoutClosedThumbs(blockId) {

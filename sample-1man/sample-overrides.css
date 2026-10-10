@@ -12810,6 +12810,69 @@ body.wizard-mode .dash-block.is-wizard-active .easy-copy-frame > .easy-copy-late
   gap: 1.15rem;
   margin: 0.85rem 0 0.8rem;
 }
+.easy-copy-ask-count {
+  margin: 0;
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #3d4a44;
+}
+.easy-copy-ask-q {
+  margin: 0.35rem 0 0;
+  font-size: 1.05rem;
+  line-height: 1.5;
+}
+.easy-copy-ask-word,
+.easy-copy-dir-row-word {
+  margin: 0.45rem 0 0.75rem;
+  font-size: clamp(1.7rem, 6vw, 2.5rem);
+  font-weight: 700;
+  line-height: 1.3;
+  color: #121816;
+}
+.easy-copy-dir-row-word {
+  font-size: 1.15rem;
+  margin: 0;
+}
+.easy-copy-ask-actions,
+.easy-copy-dir-row-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+.easy-copy-ask-btn {
+  flex: 1 1 calc(33.33% - 0.5rem);
+  min-width: 5.5rem;
+  min-height: 2.75rem;
+  padding: 0.55rem 0.75rem;
+  border: 1px solid #c5cdd4;
+  border-radius: 0.55rem;
+  background: #fff;
+  color: #121816;
+  font-size: 1rem;
+  font-weight: 700;
+  line-height: 1.3;
+}
+.easy-copy-ask-btn.is-picked {
+  border-color: #1f3d18;
+  background: #e8f2e6;
+}
+.easy-copy-dir-list-title {
+  margin: 1rem 0 0.35rem;
+  font-size: 1rem;
+  font-weight: 700;
+}
+.easy-copy-dir-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.easy-copy-dir-row {
+  display: flex;
+  flex-direction: column;
+  gap: 0.45rem;
+  padding: 0.7rem 0;
+  border-bottom: 1px solid #e6ebe8;
+}
 .easy-copy-dir-legend {
   display: inline-flex;
   flex-wrap: wrap;

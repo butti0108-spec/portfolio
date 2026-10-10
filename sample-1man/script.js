@@ -2319,6 +2319,8 @@
     sampleKeptImagePaths: null,
     copyDirIds: [],
     copyDirForbid: [],
+    copyDirAnswered: [],
+    copyDirCursor: 0,
     copyFieldSource: {},
     copyHeroOnPhoto: null,
     copyScreenReturn: null,
@@ -6245,10 +6247,7 @@
   }
 
   function getEasyCopyFlowTail() {
-    /* 一覧が本線。一括おまかせ画面は出さない。キーワード時だけ言葉選びを挟む */
-    if (store.copyPathMode === "keyword") {
-      return ["easy-copy-dirs", "easy-copy-omakase"];
-    }
+    /* 言葉は記載項目の前に一度だけ。文章の前には重ねない */
     return ["easy-copy-omakase"];
   }
 
@@ -6278,12 +6277,21 @@
     const flow = getEasyFlowStepIds();
     if (!flow.length) return;
     const saved = data && typeof data.easyFlowStepId === "string" ? data.easyFlowStepId : "";
-    let id = "";
-    if (saved && flow.indexOf(saved) >= 0) id = saved;
-    else if (store.copyPathMode === "omakase") id = "easy-basics";
-    else id = "easy-copy-dirs";
-    const idx = flow.indexOf(id);
-    if (idx >= 0) store.wizardStepIndex = idx;
+    if (saved && flow.indexOf(saved) >= 0) {
+      store.wizardStepIndex = flow.indexOf(saved);
+      return;
+    }
+    /* 工程IDが無い古い保存。言葉を先頭へ足した分だけ番号を進めて、以前の画面に戻す */
+    let idx = Number(data && data.wizardStepIndex);
+    if (!Number.isFinite(idx) || idx < 0) idx = 0;
+    if (flow[0] === "easy-copy-dirs") idx += 1;
+    if (idx >= flow.length) idx = flow.length - 1;
+    /* keyword で言葉が文章の前にあった保存は、言葉画面を二重に出さない */
+    if (store.copyPathMode === "keyword" && flow[idx] === "easy-copy-dirs") {
+      const basicsAt = flow.indexOf("easy-basics");
+      if (basicsAt >= 0) idx = basicsAt;
+    }
+    store.wizardStepIndex = idx;
   }
 
   function getFlowSteps() {
@@ -9642,6 +9650,7 @@
         onLayout ||
         onCopyPath ||
         onImgPath ||
+        (step && step.id === "easy-copy-dirs" && !copyDirOnList()) ||
         isGuidedColorTrialFootHidden() ||
         store.guidedColorPhase === "pick";
       if (step && EASY_FLOW_STEP_SET.has(step.id)) {
@@ -12201,7 +12210,8 @@
   }
 
   function syncSampleFlowPreviewVisibility(stepId) {
-    setSampleFlowPreviewHidden(false);
+    /* 言葉の画面は選んでも見本が変わらないので、右の見本は出さない */
+    setSampleFlowPreviewHidden(stepId === "easy-copy-dirs");
   }
 
   function revealSamplePreview() {
@@ -12902,65 +12912,152 @@
     return "";
   }
 
+  function copyDirWords() {
+    const list = [];
+    COPY_DIR_GROUPS.forEach(function (g) {
+      (g.options || []).forEach(function (o) {
+        list.push(o);
+      });
+    });
+    return list;
+  }
+
+  function copyDirOnList() {
+    return (Number(store.copyDirCursor) || 0) >= copyDirWords().length;
+  }
+
+  function copyDirAnswerOf(id) {
+    if ((store.copyDirIds || []).indexOf(id) >= 0) return "want";
+    if ((store.copyDirForbid || []).indexOf(id) >= 0) return "forbid";
+    return "either";
+  }
+
+  function setCopyDirAnswer(id, state, advance) {
+    const want = new Set(store.copyDirIds || []);
+    const ban = new Set(store.copyDirForbid || []);
+    want.delete(id);
+    ban.delete(id);
+    if (state === "want") want.add(id);
+    else if (state === "forbid") ban.add(id);
+    store.copyDirIds = Array.from(want);
+    store.copyDirForbid = Array.from(ban);
+    const answered = new Set(store.copyDirAnswered || []);
+    answered.add(id);
+    store.copyDirAnswered = Array.from(answered);
+    /* 候補だけ作り直す。文章欄と写真は残す */
+    store.copyOmakaseAxes = null;
+    store.copyFrameCandidates = {};
+    store.copyFrameSelected = {};
+    if (advance) {
+      const words = copyDirWords();
+      const at = words.findIndex(function (o) { return o.id === id; });
+      store.copyDirCursor = at >= 0 ? at + 1 : (Number(store.copyDirCursor) || 0) + 1;
+    }
+    renderCopyDirsUi();
+    scheduleSave();
+  }
+
+  function retreatCopyDirAsk() {
+    const words = copyDirWords();
+    const cursor = Number(store.copyDirCursor) || 0;
+    if (cursor >= words.length || cursor <= 0) return false;
+    store.copyDirCursor = cursor - 1;
+    renderCopyDirsUi();
+    scheduleSave();
+    return true;
+  }
+
+  function copyDirAnswerButtons(id, picked) {
+    const items = [
+      ["want", "使いたい"],
+      ["forbid", "使いたくない"],
+      ["either", "どちらでもいい"]
+    ];
+    return items
+      .map(function (pair) {
+        const on = picked === pair[0];
+        return (
+          '<button type="button" class="easy-copy-ask-btn' +
+          (on ? " is-picked" : "") +
+          '" data-copy-dir="' +
+          escapeHtml(id) +
+          '" data-copy-answer="' +
+          pair[0] +
+          '" aria-pressed="' +
+          (on ? "true" : "false") +
+          '">' +
+          escapeHtml(pair[1]) +
+          "</button>"
+        );
+      })
+      .join("");
+  }
+
   function renderCopyDirsUi() {
     const root = document.getElementById("easy-copy-dirs-root");
     if (!root) return;
-    const selected = new Set(store.copyDirIds || []);
-    const forbidden = new Set(store.copyDirForbid || []);
-    root.innerHTML = COPY_DIR_GROUPS.map(function (g) {
-      const chips = g.options
-        .map(function (o) {
-          const want = selected.has(o.id);
-          const ban = forbidden.has(o.id);
-          const cls = want ? " is-on" : ban ? " is-forbid" : "";
-          const mark = ban ? '<span class="easy-copy-dir-x" aria-hidden="true">×</span>' : "";
+    const words = copyDirWords();
+    let cursor = Number(store.copyDirCursor) || 0;
+    if (cursor < 0) cursor = 0;
+    if (cursor > words.length) cursor = words.length;
+    store.copyDirCursor = cursor;
+    if (cursor >= words.length) {
+      const groups = [
+        ["want", "使いたい"],
+        ["forbid", "使いたくない"],
+        ["either", "どちらでもいい"]
+      ];
+      root.innerHTML = groups
+        .map(function (group) {
+          const rows = words.filter(function (o) {
+            return copyDirAnswerOf(o.id) === group[0];
+          });
+          if (!rows.length) return "";
+          const body = rows
+            .map(function (o) {
+              return (
+                '<li class="easy-copy-dir-row"><p class="easy-copy-dir-row-word">' +
+                escapeHtml(o.label) +
+                '</p><div class="easy-copy-dir-row-actions">' +
+                copyDirAnswerButtons(o.id, group[0]) +
+                "</div></li>"
+              );
+            })
+            .join("");
           return (
-            '<button type="button" class="easy-copy-dir-chip' +
-            cls +
-            '" data-copy-dir="' +
-            o.id +
-            '" aria-pressed="' +
-            (want ? "true" : "false") +
-            (ban ? ' aria-label="' + escapeHtml(o.label) + '、入れない"' : "") +
-            '"><span class="easy-copy-dir-chip-label">' +
-            escapeHtml(o.label) +
-            "</span>" +
-            mark +
-            "</button>"
+            '<section class="easy-copy-dir-list-group"><h3 class="easy-copy-dir-list-title">' +
+            escapeHtml(group[1]) +
+            "</h3><ul class=\"easy-copy-dir-list\">" +
+            body +
+            "</ul></section>"
           );
         })
         .join("");
-      return (
-        '<div class="easy-copy-dir-group"><p class="easy-copy-dir-heading">' +
-        escapeHtml(g.label) +
-        '</p><div class="easy-copy-dir-chips">' +
-        chips +
-        "</div></div>"
-      );
-    }).join("");
-    root.querySelectorAll("[data-copy-dir]").forEach(function (btn) {
+    } else {
+      const word = words[cursor];
+      const picked = (store.copyDirAnswered || []).indexOf(word.id) >= 0 ? copyDirAnswerOf(word.id) : "";
+      root.innerHTML =
+        '<div class="easy-copy-ask">' +
+        '<p class="easy-copy-ask-count">質問 ' +
+        (cursor + 1) +
+        " / " +
+        words.length +
+        "</p>" +
+        '<p class="easy-copy-ask-q">この言葉はどうですか？</p>' +
+        '<p class="easy-copy-ask-word">' +
+        escapeHtml(word.label) +
+        '</p><div class="easy-copy-ask-actions" role="group" aria-label="この言葉の答え">' +
+        copyDirAnswerButtons(word.id, picked) +
+        "</div></div>";
+    }
+    root.querySelectorAll("[data-copy-answer]").forEach(function (btn) {
       btn.addEventListener("click", function () {
         const id = btn.getAttribute("data-copy-dir");
-        const want = new Set(store.copyDirIds || []);
-        const ban = new Set(store.copyDirForbid || []);
-        if (ban.has(id)) {
-          ban.delete(id);
-        } else if (want.has(id)) {
-          want.delete(id);
-          ban.add(id);
-        } else {
-          want.add(id);
-          ban.delete(id);
-        }
-        store.copyDirIds = Array.from(want);
-        store.copyDirForbid = Array.from(ban);
-        store.copyOmakaseAxes = null;
-        store.copyFrameCandidates = {};
-        store.copyFrameSelected = {};
-        renderCopyDirsUi();
-        scheduleSave();
+        const state = btn.getAttribute("data-copy-answer");
+        setCopyDirAnswer(id, state, !copyDirOnList());
       });
     });
+    if (typeof updateWizardUi === "function") updateWizardUi();
   }
 
   const OMAKASE_AXIS_IDS = ["ease", "bright", "craft", "warm", "clear", "invite"];
@@ -15608,6 +15705,8 @@
     store.imgOmakaseSalt = 0;
     store.copyDirIds = [];
     store.copyDirForbid = [];
+    store.copyDirAnswered = [];
+    store.copyDirCursor = 0;
     store.copyFieldSource = {};
     store.copyFieldNow = {};
     store.copyHeroOnPhoto = null;
@@ -16005,6 +16104,8 @@
     store.imgOmakaseSalt = 0;
     store.copyDirIds = [];
     store.copyDirForbid = [];
+    store.copyDirAnswered = [];
+    store.copyDirCursor = 0;
     store.copyFieldSource = {};
     store.copyFieldNow = {};
     store.copyHeroOnPhoto = null;
@@ -16716,6 +16817,7 @@
     const flow = getFlowSteps();
     const step = getCurrentFlowStep();
     if (!step) return;
+    if (step.id === "easy-copy-dirs" && !copyDirOnList()) return;
     if (step.id === "easy-loading") {
       if (!store.easyLoadingPaused) return;
       store.easyLoadingPaused = false;
@@ -16947,6 +17049,7 @@
     }
     clearPlainFootNotice();
     const step = getCurrentFlowStep();
+    if (step && step.id === "easy-copy-dirs" && retreatCopyDirAsk()) return;
     if (store.easyGapReturn === "easy-done" && step && step.id !== "easy-done" && step.id !== "finish") {
       store.easyGapReturn = "";
       setCopyListOpen(null);
@@ -26011,6 +26114,8 @@
         copyFrameIndex: Number(store.copyFrameIndex) || 0,
         copyDirIds: Array.isArray(store.copyDirIds) ? store.copyDirIds.slice() : [],
         copyDirForbid: Array.isArray(store.copyDirForbid) ? store.copyDirForbid.slice() : [],
+        copyDirAnswered: Array.isArray(store.copyDirAnswered) ? store.copyDirAnswered.slice() : [],
+        copyDirCursor: Number(store.copyDirCursor) || 0,
         copyFieldSource: store.copyFieldSource && typeof store.copyFieldSource === "object" ? store.copyFieldSource : {},
         copyHeroOnPhoto: store.copyHeroOnPhoto === true ? true : store.copyHeroOnPhoto === false ? false : null,
         hubImgPathMode: store.hubImgPathMode && typeof store.hubImgPathMode === "object" ? store.hubImgPathMode : {},
@@ -26203,6 +26308,26 @@
       }
       if (Array.isArray(data.copyDirIds)) store.copyDirIds = data.copyDirIds.slice();
       if (Array.isArray(data.copyDirForbid)) store.copyDirForbid = data.copyDirForbid.slice();
+      if (Array.isArray(data.copyDirAnswered)) {
+        store.copyDirAnswered = data.copyDirAnswered.slice();
+        const words = copyDirWords();
+        let cursor = Number(data.copyDirCursor);
+        if (!Number.isFinite(cursor)) {
+          const answered = new Set(store.copyDirAnswered);
+          cursor = words.findIndex(function (o) { return !answered.has(o.id); });
+          if (cursor < 0) cursor = words.length;
+        }
+        if (cursor < 0) cursor = 0;
+        if (cursor > words.length) cursor = words.length;
+        store.copyDirCursor = cursor;
+      } else if ((store.copyDirIds || []).length || (store.copyDirForbid || []).length) {
+        /* 古い保存は、残りをどちらでもいいとして一覧から開く */
+        store.copyDirAnswered = copyDirWords().map(function (o) { return o.id; });
+        store.copyDirCursor = copyDirWords().length;
+      } else {
+        store.copyDirAnswered = [];
+        store.copyDirCursor = 0;
+      }
       if (data.copyFieldSource && typeof data.copyFieldSource === "object") {
         store.copyFieldSource = data.copyFieldSource;
       }

@@ -9307,6 +9307,10 @@
     document.body.classList.remove("mode-guided", "mode-self", "wizard-mode", "mode-detail", "mode-easy");
     document.body.classList.add(store.siteColorMode === "detail" ? "mode-detail" : "mode-easy");
     document.body.classList.toggle("is-blank-canvas", !!store.blankCanvas);
+    document.body.classList.toggle(
+      "is-empty-image-frames",
+      !!(store.blankCanvas || store.sampleWordsReleased)
+    );
     document.body.classList.add("hide-zone-badges");
     if (typeof applyHeroFocalToPreview === "function") applyHeroFocalToPreview();
 

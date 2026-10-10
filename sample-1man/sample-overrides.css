@@ -11962,12 +11962,43 @@ body.is-blank-canvas .preview-site .hero-mock-notice {
 }
 body.is-blank-canvas .preview-site .hero-stage.is-hero-image-off {
   min-height: 12rem;
-  border: 5px solid #2d6a36;
   box-sizing: border-box;
 }
-body.is-blank-canvas .preview-site .skill-card:not(.is-user-upload),
-body.is-blank-canvas .preview-site .work-item:not(:has(.is-user-upload)) {
-  box-shadow: inset 0 0 0 5px #2d6a36;
+body.is-empty-image-frames #preview-root .hero-stage:not(.is-user-upload) {
+  background: #fff;
+  border: 1px solid rgba(20, 28, 36, 0.35);
+  box-shadow: none;
+  box-sizing: border-box;
+}
+body.is-empty-image-frames #preview-root #about-photos .skill-card:not(.is-user-upload) {
+  background: #fff;
+  border: 1px solid rgba(20, 28, 36, 0.35);
+  box-shadow: none;
+  border-radius: 0.2rem;
+  box-sizing: border-box;
+}
+body.is-empty-image-frames #preview-root .work-item:not(:has(.is-user-upload)) {
+  box-shadow: none;
+}
+body.is-empty-image-frames #preview-root .work-item:not(:has(.is-user-upload)) .work-item-link {
+  position: relative;
+}
+body.is-empty-image-frames #preview-root .work-item:not(:has(.is-user-upload)) .work-item-link::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  right: 0;
+  top: 0;
+  height: 220px;
+  background: #fff;
+  border: 1px solid rgba(20, 28, 36, 0.35);
+  box-sizing: border-box;
+  pointer-events: none;
+}
+body.is-empty-image-frames #preview-root:is([data-layout="b"], [data-layout="c"]) .work-item:not(:has(.is-user-upload)) .work-item-link::before {
+  height: auto;
+  aspect-ratio: 4 / 3;
+  max-height: 180px;
 }
 body.is-blank-canvas .preview-site .skill-card:not(.is-user-upload) .skill-card-img,
 body.is-blank-canvas .preview-site .work-item:not(:has(.is-user-upload)) .work-thumb {

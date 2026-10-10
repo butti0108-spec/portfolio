@@ -4223,8 +4223,13 @@
     return {
       version: 17,
       savedAt: new Date().toISOString(),
-      wizardStepIndex: store.wizardStepIndex,
-      selfEditingStepId: store.selfEditingStepId,
+        wizardStepIndex: store.wizardStepIndex,
+        easyFlowStepId: (function () {
+          const flow = getFlowSteps();
+          const step = flow[store.wizardStepIndex];
+          return step && step.id ? step.id : null;
+        })(),
+        selfEditingStepId: store.selfEditingStepId,
       uiMode: store.uiMode,
       sitePurpose: store.sitePurpose,
       layoutPattern: store.layoutPattern,
@@ -6253,18 +6258,32 @@
   }
 
   function getEasyFlowStepIds() {
-    let ids = ["easy-basics", "easy-color", "easy-site-name"];
+    /* 言葉は先頭側へ直接入れる。getEasyCopyFlowTail では重ねない */
+    const ids = [];
+    if (store.copyPathMode !== "omakase") ids.push("easy-copy-dirs");
+    ids.push("easy-basics", "easy-color", "easy-color-stage");
     if (easyCatchOn()) ids.push("easy-catch");
-    ids = ids
-      .concat(getEasyImageFlowMid())
-      .concat(getEasyCopyFlowTail());
-    ids.push("easy-color-stage", "easy-done");
+    ids.push("easy-img-wire", "easy-site-name", "easy-copy-omakase", "easy-done");
     if (store.copyScreenReturn === "hub" && ids.indexOf("easy-copy-frame") < 0) {
-      const at = ids.indexOf("easy-copy-path");
+      const at = ids.indexOf("easy-copy-omakase");
       if (at >= 0) ids.splice(at + 1, 0, "easy-copy-frame");
       else ids.push("easy-copy-frame");
     }
     return ids;
+  }
+
+  function placeEasyFlowResume(data) {
+    if (!store.easyFlowActive || store.uiMode !== "guided") return;
+    if (store.entryBranch !== "sample" && !store.blankCanvas) return;
+    const flow = getEasyFlowStepIds();
+    if (!flow.length) return;
+    const saved = data && typeof data.easyFlowStepId === "string" ? data.easyFlowStepId : "";
+    let id = "";
+    if (saved && flow.indexOf(saved) >= 0) id = saved;
+    else if (store.copyPathMode === "omakase") id = "easy-basics";
+    else id = "easy-copy-dirs";
+    const idx = flow.indexOf(id);
+    if (idx >= 0) store.wizardStepIndex = idx;
   }
 
   function getFlowSteps() {
@@ -6428,9 +6447,11 @@
   }
 
   function easyFlowStageLabels() {
-    const labels = ["見本", "利用用途", "記載項目", "配色"];
+    const labels = ["見本", "利用用途"];
+    if (store.copyPathMode !== "omakase") labels.push("どの言葉を使いますか");
+    labels.push("記載項目", "配色", "色調整");
     if (easyCatchOn()) labels.push("キャッチ");
-    labels.push("画像", "文章", "色調整", "確定");
+    labels.push("画像", "文章", "確定");
     return labels;
   }
 
@@ -6460,11 +6481,13 @@
     const at = function (name) {
       return easyFlowStageLabels().indexOf(name) + 1;
     };
+    if (id === "easy-copy-dirs") return at("どの言葉を使いますか");
     if (id === "easy-basics") return at("記載項目");
-    if (id === "easy-color" || id === "easy-site-name") return at("配色");
-    if (id === "easy-catch") return at("キャッチ");
+    if (id === "easy-color") return at("配色");
     if (id === "easy-color-stage") return at("色調整");
+    if (id === "easy-catch") return at("キャッチ");
     if (id === "easy-img-path" || id === "easy-img-wire" || id === "easy-img-omakase") return at("画像");
+    if (id === "easy-site-name") return at("文章");
     if (
       id === "easy-copy-path" ||
       id === "easy-copy-dirs" ||
@@ -6479,6 +6502,7 @@
   }
 
   function easyStageTargetId(name) {
+    if (name === "どの言葉を使いますか") return "easy-copy-dirs";
     if (name === "記載項目") return "easy-basics";
     if (name === "配色") return "easy-color";
     if (name === "キャッチ") return "easy-catch";
@@ -10109,14 +10133,52 @@
     renderEasyListingUi();
     syncLayoutColorRows();
     syncEasyFlowMeter();
-    const shown = previewSectionEl(meta.id);
-    if (!turningOn || !shown) return Promise.resolve();
+  }
+
+  function placePreviewAfterListing(meta, turningOn) {
+    const vp = document.getElementById("preview-viewport");
+    if (vp) vp.style.paddingBottom = "";
+    if (typeof window.applyPreviewFrameScale === "function") window.applyPreviewFrameScale();
     const scroll = document.querySelector(".preview-scroll");
-    if (!scroll) return Promise.resolve();
-    const rect = shown.getBoundingClientRect();
-    const box = scroll.getBoundingClientRect();
-    if (rect.top >= box.top + 8 && rect.top <= box.bottom - 48) return Promise.resolve();
-    return animatePreviewAlign(shown, "top");
+    if (!scroll) return;
+    let el = null;
+    let place = "top";
+    if (turningOn) {
+      el = previewSectionEl(meta.id);
+    } else {
+      const near = listingInsertNeighbors(meta.id);
+      if (near.prev) {
+        el = previewSectionEl(near.prev.id);
+        place = "bottom";
+      } else if (near.next) {
+        el = previewSectionEl(near.next.id);
+      }
+    }
+    if (!el) return;
+    let ratio = (typeof previewZoomFactor === "function" ? previewZoomFactor() : 1) || 1;
+    for (let i = 0; i < 8; i += 1) {
+      const scrollRect = scroll.getBoundingClientRect();
+      const rect = el.getBoundingClientRect();
+      const edge = place === "bottom" ? rect.bottom : rect.top;
+      const aim = scrollRect.top + (place === "bottom" ? Math.min(168, scrollRect.height * 0.32) : 16);
+      const delta = edge - aim;
+      if (Math.abs(delta) <= 10) break;
+      const before = scroll.scrollTop;
+      const max = Math.max(0, scroll.scrollHeight - scroll.clientHeight);
+      const next = Math.max(0, Math.min(max, before + delta * ratio));
+      if (Math.abs(next - before) < 0.5) break;
+      scroll.scrollTop = next;
+      const scrollRect2 = scroll.getBoundingClientRect();
+      const rect2 = el.getBoundingClientRect();
+      const edge2 = place === "bottom" ? rect2.bottom : rect2.top;
+      const aim2 = scrollRect2.top + (place === "bottom" ? Math.min(168, scrollRect2.height * 0.32) : 16);
+      const movedLayout = delta - (edge2 - aim2);
+      const movedScroll = scroll.scrollTop - before;
+      if (Math.abs(movedLayout) > 0.5 && Math.abs(movedScroll) > 0.5) {
+        const nextRatio = movedScroll / movedLayout;
+        if (nextRatio > 0.05 && nextRatio < 12) ratio = nextRatio;
+      }
+    }
   }
 
   function renderEasyListingUi() {
@@ -10147,24 +10209,19 @@
           return;
         }
         host.dataset.busy = "1";
-        const section = previewSectionEl(meta.id);
-        let move = Promise.resolve();
-        if (!turningOn && section) move = animatePreviewAlign(section, "top");
-        else if (turningOn) {
-          const near = listingInsertNeighbors(meta.id);
-          if (near.prev) move = animatePreviewAlign(previewSectionEl(near.prev.id), "bottom");
-          else if (near.next) move = animatePreviewAlign(previewSectionEl(near.next.id), "top");
+        const pane = document.querySelector(".preview-pane");
+        if (pane) {
+          pane.classList.add("is-listing-hold");
+          pane.setAttribute("aria-busy", "true");
         }
-        move.then(function () {
-          return new Promise(function (resolve) {
-            window.setTimeout(resolve, 520);
-          });
-        }).then(function () {
-          return finishListingToggle(meta, turningOn);
-        }).then(function () {
-          const again = document.getElementById("easy-listing-host");
-          if (again) delete again.dataset.busy;
-        });
+        finishListingToggle(meta, turningOn);
+        placePreviewAfterListing(meta, turningOn);
+        if (pane) {
+          pane.classList.remove("is-listing-hold");
+          pane.removeAttribute("aria-busy");
+        }
+        const again = document.getElementById("easy-listing-host");
+        if (again) delete again.dataset.busy;
       });
       host.appendChild(btn);
     }
@@ -15583,7 +15640,7 @@
     if (store.sampleFlowImagePaths) applyDraftImagePaths(store.sampleFlowImagePaths);
     applyHeroTextOverlay();
     const status = document.getElementById("wizard-status");
-    if (status) status.textContent = "文章の決め方を選んでください。";
+    if (status) status.textContent = "使いたい言葉を選べます。";
     scheduleSave();
   }
 
@@ -16754,12 +16811,9 @@
   }
 
   function wizardNextAfterConfirm(step, revisingAfterLock) {
+    if (step && step.id === "easy-copy-dirs") store.copyPathMode = "keyword";
     const flow = getFlowSteps();
     if (!step) return;
-    if (step.id === "easy-site-name" && store.easyFlowActive && !afterColorGuidePassing) {
-      openAfterColorGuide();
-      return;
-    }
     closeDraftNotice();
     if (store.uiMode === "self") {
       if (step.id === "guide") {
@@ -24203,11 +24257,11 @@
       { id: "desktop", label: "PC", width: 1280 }
     ];
     let stepIndex = 2;
-    /* 100%は選んだ幅の実寸。開いた直後の見本は25%で固定する */
+    /* 100%は選んだ幅の実寸。開いた直後は枠の高さに合わせ、見本の下を空けない */
     const LOOK_MIN = 0.25;
     const LOOK_MAX = 2;
-    let lookScale = LOOK_MIN;
-    let lookTouched = true;
+    let lookScale = 1;
+    let lookTouched = false;
 
     function clampLook(n) {
       return Math.min(LOOK_MAX, Math.max(LOOK_MIN, n));
@@ -24321,12 +24375,35 @@
         const availH = Math.max(120, scrollEl.clientHeight - pad);
         const fullH = Math.max(1, root.scrollHeight);
         scale = Math.min(scale, availH / fullH, 1);
+      } else if (root) {
+        const availH = Math.max(120, scrollEl.clientHeight);
+        const footer = root.querySelector("#preview-footer, .site-footer");
+        const fullH = Math.max(
+          1,
+          footer && footer.offsetHeight ? footer.offsetTop + footer.offsetHeight : root.scrollHeight
+        );
+        scale = Math.min(1, Math.max(scale, availH / fullH));
       }
       store.previewFrameScale = scale;
-      /* 100%は幅の実寸。開いた直後だけ、枠に収まる倍率を％にする */
-      if (!lookTouched) lookScale = clampLook(scale);
+      /* 手で％を変えるまでは、枠の高さに合わせて見本の下を空けない */
+      if (!lookTouched) lookScale = Math.min(LOOK_MAX, Math.max(0.05, scale));
       viewport.style.removeProperty("--hub-place-fit-scale");
       applyLookZoom(viewport);
+      if (!lookTouched && !placeFit && root) {
+        const availH2 = Math.max(120, scrollEl.clientHeight);
+        const footer2 = root.querySelector("#preview-footer, .site-footer");
+        const fullH2 = Math.max(
+          1,
+          footer2 && footer2.offsetHeight ? footer2.offsetTop + footer2.offsetHeight : root.scrollHeight
+        );
+        const scale2 = Math.min(1, Math.max(Math.min(1, availW / designW), availH2 / fullH2));
+        if (Math.abs(scale2 - scale) > 0.01) {
+          scale = scale2;
+          store.previewFrameScale = scale;
+          lookScale = Math.min(LOOK_MAX, Math.max(0.05, scale));
+          applyLookZoom(viewport);
+        }
+      }
       syncPreviewLookControl();
       scrollEl.scrollLeft = 0;
       if (placeFit) scrollEl.scrollTop = 0;
@@ -25865,6 +25942,11 @@
         version: 17,
         savedAt: new Date().toISOString(),
         wizardStepIndex: store.wizardStepIndex,
+        easyFlowStepId: (function () {
+          const flow = getFlowSteps();
+          const step = flow[store.wizardStepIndex];
+          return step && step.id ? step.id : null;
+        })(),
         selfEditingStepId: store.selfEditingStepId,
         uiMode: store.uiMode,
         sitePurpose: store.sitePurpose,
@@ -26367,6 +26449,7 @@
       }
       syncLogoPresentation();
       restoreKeptSampleImages();
+      placeEasyFlowResume(data);
       suppressSave = false;
       return true;
     } catch (e) {

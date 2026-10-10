@@ -7251,7 +7251,6 @@
       }
       store.heroTextPlate = "none";
     }
-    if (heroPlateIsOn() && (store.catchPage || "") === "color") store.catchPage = "write";
     syncCatchColorAvailability();
   }
 
@@ -7263,8 +7262,13 @@
     const hide = heroPlateIsOn();
     syncLayoutColorRows();
     const unit = document.querySelector('[data-color-step="hero-color"]');
-    if (unit && hide) unit.hidden = true;
-    if (!hide && unit && unit.getAttribute("data-copy-borrowed") === "1") unit.hidden = false;
+    if (!unit) return;
+    if (unit.closest("#easy-catch-color")) {
+      unit.hidden = false;
+      return;
+    }
+    if (hide) unit.hidden = true;
+    else if (unit.getAttribute("data-copy-borrowed") === "1") unit.hidden = false;
   }
 
   function normalizeHeroPlateTone(tone) {
@@ -8075,7 +8079,21 @@
       return;
     }
     if (el.type === "file") return;
-    el.value = value == null ? "" : String(value);
+    const str = value == null ? "" : String(value);
+    if (el.tagName === "INPUT" && el.type === "text" && /[\r\n]/.test(str)) {
+      const area = document.createElement("textarea");
+      area.name = el.name;
+      if (el.id) area.id = el.id;
+      area.placeholder = el.placeholder || "";
+      area.className = el.className;
+      area.rows = 2;
+      const max = el.getAttribute("maxlength");
+      if (max) area.setAttribute("maxlength", max);
+      el.replaceWith(area);
+      area.value = str;
+      return;
+    }
+    el.value = str;
   }
 
   function formToObject(opts) {
@@ -9215,7 +9233,7 @@
       if (congrats) congrats.remove();
     }
     document.body.classList.toggle("is-site-name-dawn", step.id === "easy-site-name");
-    if (step.id === "easy-site-name") {
+    if (step.id === "easy-site-name" && !afterColorGuideOpen) {
       placeSiteNameBack();
       window.requestAnimationFrame(placeSiteNameBack);
     } else clearSiteNameBack();
@@ -10151,6 +10169,7 @@
   }
 
   function placeSiteNameBack() {
+    if (afterColorGuideOpen) return;
     const pane = document.querySelector(".dash-pane");
     const back = document.getElementById("wizard-back");
     if (!pane || !back || !document.body.classList.contains("is-site-name-dawn")) return;
@@ -10900,6 +10919,10 @@
         if (board) {
           const catchCell = board.querySelector(".easy-copy-hero-catch");
           if (catchCell) catchCell.remove();
+          const leads = board.querySelector(".easy-copy-hero-leads");
+          const size = board.querySelector(".easy-copy-hero-size");
+          if (leads) copyHost.appendChild(leads);
+          if (size) copyHost.appendChild(size);
           settingsHost.appendChild(board);
         }
         if (extras) extras.remove();
@@ -10922,6 +10945,9 @@
         if (count) row.appendChild(count);
       });
       placeCopyFonts();
+      if ((store.catchPage || "") === "write" && store.catchImageOn !== true && !store.catchInline) {
+        copyHost.querySelectorAll(".easy-copy-list-ok-foot").forEach(function (el) { el.remove(); });
+      }
     }
     renderCatchPages();
   }
@@ -10929,15 +10955,22 @@
   function catchPageList() {
     const pages = ["imageAsk"];
     if (store.catchImageOn === true) pages.push("image");
-    pages.push("ask");
-    if (store.catchWordsOn === true) pages.push("settings", "write");
-    if (store.catchWordsOn === true && !heroPlateIsOn()) pages.push("color");
+    if (catchWordsAreOn()) pages.push("write", "color", "settings");
+    else pages.push("ask");
     return pages;
   }
 
   function renderCatchPages() {
-    if (heroPlateIsOn() && (store.catchPage || "") === "color") store.catchPage = "write";
     clearPlainFootNotice();
+    if ((store.catchPage || "imageAsk") === "ask" && catchWordsAreOn()) {
+      store.catchPage = "write";
+      if (store.catchWordsOn !== true) {
+        store.catchWordsOn = true;
+        store.heroTextOnPhoto = true;
+        store.copyHeroOnPhoto = true;
+        applyHeroTextOverlay();
+      }
+    }
     const page = store.catchPage || "imageAsk";
     if (page === "image") {
       store.layoutAccordionId = "hero";
@@ -10955,15 +10988,17 @@
     const tags = document.getElementById("easy-catch-tags");
     if (tags) {
       tags.innerHTML = "";
-      const names = heroPlateIsOn() ? ["画像", "文章"] : ["画像", "文章", "色"];
+      const names = ["画像", "文章", "色", "下地"];
       const now =
         page === "imageAsk" || page === "image"
           ? "画像"
-          : page === "ask" || page === "settings" || page === "write"
+          : page === "ask" || page === "write"
             ? "文章"
             : page === "color"
               ? "色"
-              : "画像";
+              : page === "settings"
+                ? "下地"
+                : "画像";
       const nowAt = names.indexOf(now);
       names.forEach(function (name, i) {
         const span = document.createElement("span");
@@ -11002,7 +11037,7 @@
         store.heroTextOnPhoto = true;
         store.copyHeroOnPhoto = true;
         applyHeroTextOverlay();
-        store.catchPage = "settings";
+        store.catchPage = "write";
         scheduleSave();
         renderEasyCatchRest();
       });
@@ -11034,7 +11069,7 @@
     if (page === "write") {
       document.querySelectorAll("#easy-catch-copy textarea.is-copy-frame").forEach(growCopyField);
     }
-    if (page === "color" && !heroPlateIsOn()) {
+    if (page === "color") {
       const unit = document.querySelector('#easy-catch-color [data-color-step="hero-color"]');
       if (unit && !unit.classList.contains("is-open")) openLayoutColorHoney(unit);
     }
@@ -14016,6 +14051,14 @@
     const wrap = document.createElement("div");
     wrap.className = "easy-copy-list-editor";
     const closeToSectionOrList = function () {
+      if (store.catchInline) {
+        closeCatchInline();
+        return;
+      }
+      if (wrap.closest("#easy-catch-host")) {
+        retreatCatchPage();
+        return;
+      }
       clearEasyCopySoloHistory();
       if (sec.kind === "pair") {
         setCopyListOpen({ kind: "section", sectionId: sec.id });
@@ -14276,7 +14319,7 @@
       catchFont.setAttribute("data-copy-font-host", "catch");
       wrap.appendChild(catchFont);
       appendCopyHubExtras(wrap, "hero");
-      if (!onCatchFace) appendCopyListOkFoot(wrap, closeToSectionOrList);
+      appendCopyListOkFoot(wrap, closeToSectionOrList);
       return wrap;
     }
 
@@ -15678,12 +15721,27 @@
     store.heroTextOnPhoto = false;
     store.copyHeroOnPhoto = false;
     store.catchWordsOn = false;
+    store.heroFocalX = HERO_FOCAL_X_DEFAULT;
+    store.heroFocalY = HERO_FOCAL_Y_DEFAULT;
+    store.heroImageScale = IMAGE_SCALE_DEFAULT;
+    setFieldValue("headingScale", DEFAULTS.headingScale);
+    if (COUNT_META["hero-leads"]) {
+      store.draftCounts["hero-leads"] = COUNT_META["hero-leads"].defaultCount;
+    }
+    setFieldValue("font_catch", "Shippori Mincho");
+    store.heroTextPlate = "round";
+    store.heroTextPlateLast = "round";
+    store.heroTextPlateTone = "white";
+    store.heroTextPos = "center";
     setFieldValue("brand_name", "");
     store.siteNameConfirmed = false;
     store.sushiSampleBrand = "";
     applyAllConfirmed();
     applyHeroImageOffState();
     applyHeroTextOverlay();
+    applyHeroFocalToPreview();
+    applyCountToPreview("hero-leads", store.draftCounts["hero-leads"]);
+    syncFontPickers();
   }
 
   function applyPurposeSectionNames(purposeKey) {
@@ -16459,6 +16517,7 @@
   }
 
   function catchWordsAreOn() {
+    if (catchFaceHasText()) return true;
     if (store.catchWordsOn === true) return true;
     if (store.catchWordsOn === false) return false;
     return store.copyHeroOnPhoto === true;
@@ -16469,7 +16528,8 @@
     const cur = getCurrentFlowStep();
     const idx = flow.findIndex(function (s) { return s.id === "easy-catch"; });
     if (!cur || idx < 0) return;
-    if (page) store.catchPage = page === "color" && heroPlateIsOn() ? "write" : page;
+    if (page === "ask" && catchWordsAreOn()) page = "write";
+    if (page) store.catchPage = page;
     if (cur.id === "easy-catch") {
       renderEasyCatchRest();
       scheduleSave();
@@ -16552,27 +16612,6 @@
     });
   }
 
-  function setGuidePreviewHalf(on) {
-    const split = document.getElementById("atelier-split");
-    const shell = document.querySelector(".atelier-shell");
-    if (!split) return;
-    if (on) {
-      split.dataset.guidePct = split.style.getPropertyValue("--preview-pct") || "";
-      if (shell) shell.dataset.guidePct = shell.style.getPropertyValue("--preview-pct") || "";
-      split.style.setProperty("--preview-pct", "50%");
-      if (shell) shell.style.setProperty("--preview-pct", "50%");
-    } else {
-      const back = split.dataset.guidePct || "45%";
-      split.style.setProperty("--preview-pct", back);
-      if (shell) shell.style.setProperty("--preview-pct", shell.dataset.guidePct || back);
-      delete split.dataset.guidePct;
-      if (shell) delete shell.dataset.guidePct;
-    }
-    if (typeof window.applyPreviewWidthFromPane === "function") {
-      window.applyPreviewWidthFromPane();
-    }
-  }
-
   function openAfterColorGuide() {
     afterColorGuideOpen = true;
     store.easyDirectOpen = true;
@@ -16581,9 +16620,9 @@
     const panel = document.getElementById("after-color-guide");
     if (panel) panel.hidden = false;
     document.body.classList.add("is-after-color-guide");
+    clearSiteNameBack();
     const formEl = document.getElementById("order-form");
     if (formEl) formEl.hidden = true;
-    setGuidePreviewHalf(true);
     updateWizardUi();
   }
 
@@ -16594,7 +16633,10 @@
     document.body.classList.remove("is-after-color-guide");
     const formEl = document.getElementById("order-form");
     if (formEl) formEl.hidden = false;
-    setGuidePreviewHalf(false);
+    if (document.body.classList.contains("is-site-name-dawn")) {
+      placeSiteNameBack();
+      window.requestAnimationFrame(placeSiteNameBack);
+    }
   }
 
   function wizardNext() {

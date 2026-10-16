@@ -17088,3 +17088,112 @@ body.is-after-color-guide.is-site-name-dawn #wizard-next {
 .easy-site-name-ask.is-ready .gct-btn {
   visibility: visible;
 }
+
+/* クン試作。?kun=1 のときだけ左欄を会話にする。工程の中身は残す。 */
+body.is-kun-experiment.entry-gate-open {
+  overflow: auto;
+}
+body.is-kun-experiment.entry-gate-open .atelier-shell {
+  visibility: visible;
+  pointer-events: auto;
+}
+body.is-kun-experiment #entry-gate {
+  display: none !important;
+}
+#kun-panel[hidden] {
+  display: none !important;
+}
+.kun-panel {
+  display: none;
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow: auto;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 1rem;
+  margin: 0.5rem 1.25rem 1.5rem;
+  padding: 1.25rem 1.25rem 1.5rem;
+  background: #fff;
+  color: #141c24;
+}
+body.is-kun-experiment #kun-panel {
+  display: flex;
+}
+body.is-kun-experiment:not(.is-kun-manual) #order-form,
+body.is-kun-experiment:not(.is-kun-manual) #wizard-foot-dock,
+body.is-kun-experiment:not(.is-kun-manual) .easy-flow-meter {
+  display: none !important;
+}
+body.is-kun-experiment.is-kun-manual #kun-panel .kun-ask,
+body.is-kun-experiment.is-kun-manual #kun-panel .kun-reply,
+body.is-kun-experiment.is-kun-manual #kun-panel .kun-choices,
+body.is-kun-experiment.is-kun-manual #kun-panel .kun-free,
+body.is-kun-experiment.is-kun-manual #kun-panel .kun-candidates,
+body.is-kun-experiment.is-kun-manual #kun-panel .kun-exit {
+  display: none;
+}
+body.is-kun-experiment.is-kun-manual #wizard-nav {
+  display: none;
+}
+.kun-kicker {
+  margin: 0;
+  font-size: 0.95rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+}
+.kun-ask,
+.kun-reply,
+.kun-manual-note,
+.kun-exit {
+  margin: 0;
+  line-height: 1.6;
+}
+.kun-ask {
+  font-size: 1.35rem;
+  font-weight: 700;
+}
+.kun-choices,
+.kun-candidates {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 0.75rem;
+}
+.kun-choice,
+.kun-return {
+  min-height: 3rem;
+  padding: 0.75rem 1rem;
+  border: 1px solid #c5ced6;
+  border-radius: 999px;
+  background: #fff;
+  color: #141c24;
+  font: inherit;
+  font-weight: 700;
+  text-align: center;
+  cursor: pointer;
+}
+.kun-choice--quiet {
+  font-weight: 500;
+  background: #f6f8f9;
+}
+.kun-free {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+.kun-free-label {
+  font-weight: 700;
+}
+.kun-free-input {
+  min-height: 3rem;
+  padding: 0.75rem 1rem;
+  border: 1px solid #c5ced6;
+  border-radius: 0.75rem;
+  font: inherit;
+}
+.kun-return {
+  align-self: flex-start;
+}
+.kun-exit a {
+  color: #1a4d8c;
+}

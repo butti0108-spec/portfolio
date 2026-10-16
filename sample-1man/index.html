@@ -12,7 +12,7 @@
   <!-- メーカー親CSS（ポートフォリオ根の style.css は読まない） -->
   <link rel="stylesheet" href="maker-base.css?v=font-heading-scope-20261002">
   <link rel="icon" href="brand/walker-favicon.png?v=walker-20261002" type="image/png">
-  <link rel="stylesheet" href="sample-overrides.css?v=words-ask-20261010">
+  <link rel="stylesheet" href="sample-overrides.css?v=kun-shop-20261016">
   <link rel="stylesheet" href="free-photo-gallery/gallery.css?v=omakase-ok-20260929">
   <script>
     (function () {
@@ -65,7 +65,9 @@
   <script src="sushi-belt.js?v=sushi-select-20261009" defer></script>
   <script src="free-photo-gallery/gallery.js?v=gallery-act-20261001" defer></script>
   <script src="page-shutter.js?v=sample-only-20260929" defer></script>
-  <script src="script.js?v=words-ask-20261010" defer></script>
+  <script src="kun-dialogue.js?v=kun-shop-20261016" defer></script>
+  <script src="script.js?v=kun-shop-20261016" defer></script>
+  <script src="kun-ui.js?v=kun-shop-20261016" defer></script>
   <script>
     (function () {
       var h = location.hostname;
@@ -491,6 +493,21 @@
       </div>
 
       <div class="dash-body">
+        <section id="kun-panel" class="kun-panel" hidden aria-label="クンとの会話">
+          <p class="kun-kicker">クン</p>
+          <p class="kun-ask" id="kun-ask"></p>
+          <p class="kun-reply" id="kun-reply" hidden></p>
+          <div class="kun-choices" id="kun-choices"></div>
+          <form class="kun-free" id="kun-free" hidden>
+            <label class="kun-free-label" for="kun-free-input">言葉を書けます</label>
+            <input id="kun-free-input" class="kun-free-input" type="text" maxlength="80" autocomplete="off">
+            <button type="submit" class="kun-choice">この内容で見る</button>
+          </form>
+          <div class="kun-candidates" id="kun-candidates"></div>
+          <p class="kun-manual-note" id="kun-manual-note" hidden>この画面で直せます。終わったら、会話に戻れます。</p>
+          <button type="button" class="kun-return" id="kun-return" hidden>会話に戻る</button>
+          <p class="kun-exit"><a id="kun-exit" href="index.html">今の制作画面に戻る</a></p>
+        </section>
         <div id="after-color-guide" class="after-color-guide" hidden>
           <div class="after-color-guide-inner">
             <h2 class="after-color-guide-title">このあとの進め方</h2>

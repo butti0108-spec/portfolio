@@ -26866,6 +26866,8 @@
   });
 
   const bootParams = new URLSearchParams(location.search);
+  const bootKun = bootParams.get("kun") === "1";
+  if (bootKun) document.body.classList.add("is-kun-experiment");
   const bootReview = bootParams.get("review") === "1";
   const bootCapture = bootParams.get("capture") === "1";
   const bootEmbed = bootParams.get("embedPreview") === "1";
@@ -27013,4 +27015,62 @@
       window.setPreviewWidthStepById("desktop");
     }
   }
+
+  /* クン試作。会話の進みはここへ書かない。見本への反映だけ既存の保存に乗せる。 */
+  let kunManualReturnIndex = null;
+
+  function kunOpenManual(stepId) {
+    if (kunManualReturnIndex == null) kunManualReturnIndex = store.wizardStepIndex;
+    const back = kunManualReturnIndex;
+    document.body.classList.add("is-kun-manual");
+    const flow = getFlowSteps();
+    const idx = flow.findIndex(function (s) { return s.id === stepId; });
+    if (idx >= 0) {
+      showWizardStep(idx);
+      return { ok: true, wizardReturnIndex: back };
+    }
+    const block = form.querySelector('.dash-block[data-step-id="' + stepId + '"]');
+    if (!block) return { ok: false, wizardReturnIndex: back };
+    block.hidden = false;
+    block.open = true;
+    block.classList.add("is-kun-manual-step");
+    if (stepId === "easy-basics") renderEasyListingUi();
+    if (stepId === "easy-color-stage") syncLayoutColorRows();
+    if (stepId === "easy-copy-omakase") renderCopyListUi();
+    return { ok: true, wizardReturnIndex: back };
+  }
+
+  function kunCloseManual(index) {
+    document.body.classList.remove("is-kun-manual");
+    form.querySelectorAll(".is-kun-manual-step").forEach(function (block) {
+      block.classList.remove("is-kun-manual-step");
+      block.open = false;
+      block.hidden = true;
+    });
+    const back = index == null ? kunManualReturnIndex : index;
+    kunManualReturnIndex = null;
+    const flow = getFlowSteps();
+    if (back != null && store.uiMode !== "self" && flow.length) {
+      showWizardStep(Math.max(0, Math.min(flow.length - 1, back)));
+      scheduleSave();
+    }
+    return { ok: true };
+  }
+
+  window.Sample1manKun = {
+    enabled: bootKun,
+    applyPreset: function (key) {
+      return applyPresetByKey(key);
+    },
+    setBlockVisible: function (blockId, visible) {
+      return commitLayoutBlockVisibility(blockId, !!visible);
+    },
+    applyText: function (key, text) {
+      applyCopyTextToField(key, text);
+      scheduleSave();
+      return true;
+    },
+    openManual: kunOpenManual,
+    closeManual: kunCloseManual
+  };
 })();
